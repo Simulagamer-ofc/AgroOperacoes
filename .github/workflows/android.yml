@@ -9,8 +9,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      HAS_KEYSTORE: ${{ secrets.AGRO_KEYSTORE_BASE64 != '' }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Web tests
+        run: npm test
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -19,9 +26,27 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
       - name: Build debug APK
         run: ./gradlew :app:assembleDebug --stacktrace
-      - name: Upload APK
+      - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: Agro-Operacoes-0.1.0-beta2
+          name: Agro-Operacoes-0.2.0-beta1-debug
           path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+      - name: Build signed release APK
+        if: env.HAS_KEYSTORE == 'true' && github.event_name != 'pull_request'
+        env:
+          AGRO_KEYSTORE_BASE64: ${{ secrets.AGRO_KEYSTORE_BASE64 }}
+          AGRO_KEYSTORE_PASSWORD: ${{ secrets.AGRO_KEYSTORE_PASSWORD }}
+          AGRO_KEY_ALIAS: ${{ secrets.AGRO_KEY_ALIAS }}
+          AGRO_KEY_PASSWORD: ${{ secrets.AGRO_KEY_PASSWORD }}
+        run: |
+          echo "$AGRO_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/agro-release.jks"
+          AGRO_KEYSTORE_PATH="$RUNNER_TEMP/agro-release.jks" ./gradlew :app:assembleRelease --stacktrace
+          rm -f "$RUNNER_TEMP/agro-release.jks"
+      - name: Upload release APK
+        if: env.HAS_KEYSTORE == 'true' && github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Agro-Operacoes-0.2.0-beta1-release
+          path: app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error

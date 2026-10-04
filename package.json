@@ -1,0 +1,9 @@
+{
+  "name": "agro-operacoes-web",
+  "private": true,
+  "type": "module",
+  "description": "Testes da parte web do Agro Operações (app/src/main/assets/www).",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  }
+}
