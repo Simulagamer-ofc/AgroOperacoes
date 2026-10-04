@@ -1,8 +1,10 @@
 import { openDatabase } from './db.js';
+import { createSync, SyncError } from './sync.js';
+import { SITE_URL } from './config.js';
 import * as L from './logic.js';
 import { ENTITIES, DATA_STORES, OP_STATUS, MACHINE_STATUS, MAINT_KINDS, MAINT_STATUS, PROD_STATUS, LOT_STATUS, MOVE_KINDS, optionList } from './schemas.js';
 
-const APP_VERSION = '0.2.0-beta1';
+const APP_VERSION = '0.3.0-beta1';
 const insideApp = location.hostname === 'appassets.androidplatform.net';
 // Página publicada dentro de outro site (ex.: claude.ai): sem download, impressão nem service worker.
 const embedded = window.AGRO_EMBED === true;
@@ -13,6 +15,8 @@ const today = () => L.localDate();
 const state = Object.fromEntries(DATA_STORES.map(s => [s, []]));
 let settings = { id: 'app', farmName: '', userName: '' };
 let db = null;
+let sync = null;
+let syncInfo = { enabled: false, linked: false, configured: false, status: 'idle', pending: 0 };
 
 const TONE = {
   programada: 'blue', andamento: 'green', concluida: 'gray', cancelada: 'red', aberta: 'orange',
@@ -64,6 +68,7 @@ async function saveRecord(store, data) {
   const now = new Date().toISOString();
   const record = { ...data, id: data.id || L.uid(), createdAt: data.createdAt || now, updatedAt: now };
   await db.put(store, record);
+  if (sync?.isLinked()) await sync.queue(store, record);
   const list = state[store];
   const index = list.findIndex(r => r.id === record.id);
   if (index >= 0) list[index] = record; else list.push(record);
@@ -80,17 +85,55 @@ async function removeRecord(store, id) {
   }
   if (!await confirmDialog(`Excluir ${ENTITIES[store].singular} “${L.recordTitle(store, record, state)}”? Essa ação não pode ser desfeita.`)) return;
   await db.remove(store, id);
+  if (sync?.isLinked()) await sync.queue(store, { id }, true);
   state[store] = state[store].filter(r => r.id !== id);
   toast('Registro excluído');
   render();
 }
 
-async function replaceAllData(data, newSettings) {
+// Troca todos os dados do aparelho. Com a fazenda sincronizada, envia a diferença
+// (o que sumiu vira exclusão e o resto é regravado) para os outros aparelhos.
+async function replaceAllData(data, newSettings, { share = true } = {}) {
   const payload = Object.fromEntries(DATA_STORES.map(s => [s, data[s] || []]));
   payload.settings = [{ ...settings, ...(newSettings || {}), id: 'app' }];
+  if (share && sync?.isLinked()) {
+    for (const s of DATA_STORES) {
+      const keep = new Set(payload[s].map(r => r.id));
+      for (const r of state[s]) if (!keep.has(r.id)) await sync.queue(s, { id: r.id }, true);
+      for (const r of payload[s]) await sync.queue(s, r);
+    }
+  }
   await db.replaceAll(payload);
   for (const s of DATA_STORES) state[s] = payload[s].slice();
   settings = payload.settings[0];
+}
+
+// ---------- Alterações vindas de outros aparelhos
+const stableJson = v => JSON.stringify(v, (k, val) => (val && typeof val === 'object' && !Array.isArray(val) ? Object.fromEntries(Object.entries(val).sort(([a], [b]) => a.localeCompare(b))) : val));
+let renderPending = false;
+const typingInView = () => { const a = document.activeElement; return !!(a && $('#view').contains(a) && a.matches('input, textarea, select')); };
+function renderSoon() {
+  if (typingInView()) { renderPending = true; return; }
+  render();
+}
+
+$('#view').addEventListener('focusout', () => setTimeout(() => { if (renderPending && !typingInView()) render(); }, 0));
+
+async function applyRemote(rows) {
+  let changed = false;
+  for (const r of rows) {
+    const list = state[r.store];
+    const index = list.findIndex(x => x.id === r.id);
+    if (r.deleted) {
+      if (index >= 0) { await db.remove(r.store, r.id); list.splice(index, 1); changed = true; }
+      continue;
+    }
+    if (index >= 0 && stableJson(list[index]) === stableJson(r.data)) continue;
+    await db.put(r.store, r.data);
+    if (index >= 0) list[index] = r.data; else list.push(r.data);
+    changed = true;
+  }
+  if (changed) renderSoon();
 }
 
 // ---------- Formulários
@@ -222,7 +265,7 @@ function viewDashboard() {
   const alerts = L.computeAlerts(state, t);
   const ops = state.operations.filter(o => o.date === t).sort(byOpOrder);
   const empty = DATA_STORES.every(s => !state[s].length);
-  const onboarding = empty ? `<section class="card card-section"><h3>Comece por aqui</h3><p>Cadastre talhões, máquinas e itens de estoque, ou carregue dados de exemplo para conhecer o aplicativo. Tudo fica salvo neste dispositivo.</p><div class="button-row"><a class="secondary" href="#/cadastros">Ir para Cadastros</a><button class="primary" data-act="sample">Carregar dados de exemplo</button></div></section>` : '';
+  const onboarding = empty ? `<section class="card card-section"><h3>Comece por aqui</h3><p>Cadastre talhões, máquinas e itens de estoque, ou carregue dados de exemplo para conhecer o aplicativo. Tudo fica salvo neste dispositivo.</p><div class="button-row"><a class="secondary" href="#/cadastros">Ir para Cadastros</a>${syncInfo.linked ? '' : '<button class="primary" data-act="sample">Carregar dados de exemplo</button>'}</div></section>` : '';
   const demo = settings.demo && !empty ? `<section class="card card-section demo-note"><h3>Você está vendo dados de exemplo</h3><p>Explore à vontade: tudo o que você mudar fica salvo só neste navegador. Quando quiser usar com os dados da sua fazenda, apague os exemplos e comece do zero.</p><div class="button-row"><button class="primary" data-act="wipe">Apagar exemplos e começar</button></div></section>` : '';
   return `${pageHeader(settings.farmName || 'Operações da fazenda', 'Acompanhe o trabalho do campo e os registros salvos neste dispositivo.', newButton('operations'))}
     ${demo}${onboarding}
@@ -439,22 +482,141 @@ function viewReports(params) {
 
 function viewSettings() {
   const basics = ['fields', 'machines', 'stockItems', 'productions'].map(s => `<div class="list-row"><div><strong>${esc(ENTITIES[s].plural)}</strong><small>${L.plural(state[s].length, 'registro', 'registros')}</small></div><div class="row-actions"><a class="link" href="#/${ENTITIES[s].route}">Ver</a>${newButton(s, 'Novo', undefined, 'link')}</div></div>`).join('');
-  return `${pageHeader('Cadastros e dados', 'Informações da fazenda, cadastros básicos e cópia de segurança.')}
+  return `${pageHeader('Cadastros e dados', 'Sincronização, informações da fazenda, cadastros básicos e cópia de segurança.')}
+    ${syncSectionHtml()}
     <section class="card card-section"><h3>Fazenda</h3>
       <form id="settingsForm" class="settings-form">
-        <div class="field"><label for="s-farm">Nome da fazenda</label><input id="s-farm" name="farmName" value="${esc(settings.farmName)}" placeholder="Ex.: Fazenda Santa Rita"></div>
+        <div class="field"><label for="s-farm">Nome da fazenda${syncInfo.linked ? ' (para toda a equipe)' : ''}</label><input id="s-farm" name="farmName" value="${esc(settings.farmName)}" placeholder="Ex.: Fazenda Santa Rita"></div>
         <div class="field"><label for="s-user">Seu nome</label><input id="s-user" name="userName" value="${esc(settings.userName)}" placeholder="Usado no avatar"></div>
         <div class="actions" style="grid-column:1/-1;margin:0"><button class="primary" type="submit">Salvar</button></div>
       </form></section>
     <section class="card card-section"><h3>Cadastros básicos</h3><div class="list-rows">${basics}</div></section>
     <section class="card card-section"><h3>Cópia de segurança</h3>
-      <p>Os dados ficam só neste dispositivo. Exporte um backup com frequência e guarde em outro lugar (Drive, e-mail, computador). Se o aplicativo for desinstalado ou os dados forem limpos, só o backup recupera as informações.</p>
+      <p>${syncInfo.linked ? 'Os dados da fazenda estão guardados no servidor e nos aparelhos da equipe. Um backup de vez em quando protege contra exclusões feitas por engano.' : 'Os dados ficam só neste dispositivo. Exporte um backup com frequência e guarde em outro lugar (Drive, e-mail, computador). Se o aplicativo for desinstalado ou os dados forem limpos, só o backup recupera as informações.'}</p>
       <div class="button-row"><button class="primary" data-act="backup-export">Exportar backup</button><label class="secondary" style="cursor:pointer">Importar arquivo de backup<input type="file" accept=".json,application/json" data-act="backup-import" hidden></label><button class="secondary" data-act="backup-paste">Colar backup</button></div>
       <p class="muted" id="storageInfo" style="margin:12px 0 0;font-size:.85rem"></p></section>
-    <section class="card card-section"><h3>Dados de exemplo</h3><p>Carregue um conjunto de dados fictícios para conhecer o aplicativo, ou apague tudo para recomeçar.</p>
-      <div class="button-row"><button class="secondary" data-act="sample">Carregar dados de exemplo</button><button class="danger" data-act="wipe">Apagar todos os dados</button></div></section>
-    <section class="card card-section"><h3>Sobre</h3><p>Agro Operações ${APP_VERSION} • funciona sem internet.</p></section>`;
+    <section class="card card-section"><h3>${syncInfo.linked ? 'Apagar dados' : 'Dados de exemplo'}</h3><p>${syncInfo.linked ? 'Apaga todos os registros da fazenda, para toda a equipe.' : 'Carregue um conjunto de dados fictícios para conhecer o aplicativo, ou apague tudo para recomeçar.'}</p>
+      <div class="button-row">${syncInfo.linked ? '' : '<button class="secondary" data-act="sample">Carregar dados de exemplo</button>'}<button class="danger" data-act="wipe">${syncInfo.linked ? 'Apagar todos os dados da fazenda' : 'Apagar todos os dados'}</button></div></section>
+    <section class="card card-section"><h3>Sobre</h3><p>Agro Operações ${APP_VERSION} • funciona sem internet e sincroniza quando a conexão volta.</p></section>`;
 }
+
+// ---------- Sincronização (tela de Cadastros)
+function syncSectionHtml() {
+  const i = syncInfo;
+  if (embedded) {
+    return `<section class="card card-section"><h3>Sincronização com a equipe</h3><p>Esta página de demonstração guarda os dados só neste navegador. Para usar com a equipe, com os mesmos dados no celular, no navegador e no computador, abra o site: <a href="${esc(SITE_URL)}" target="_blank" rel="noopener">${esc(SITE_URL)}</a></p></section>`;
+  }
+  const server = `<details class="server-box"${i.configured ? '' : ' open'}><summary>Servidor${i.configured ? `: ${esc(i.url)}` : ''}</summary>
+    <form id="serverForm" class="settings-form" style="margin-top:12px">
+      <div class="field"><label for="srv-url">Endereço do projeto (Project URL)</label><input id="srv-url" name="url" type="url" value="${esc(i.url || '')}" placeholder="https://xxxx.supabase.co"></div>
+      <div class="field"><label for="srv-key">Chave pública (anon public)</label><input id="srv-key" name="anonKey" value="${esc(i.anonKey || '')}" placeholder="eyJhbGciOi..."></div>
+      <div class="actions" style="grid-column:1/-1;margin:0"><button class="secondary" type="submit">Salvar servidor</button></div>
+    </form></details>`;
+  if (!i.configured) {
+    return `<section class="card card-section"><h3>Sincronização com a equipe</h3><p>Ligue um servidor Supabase para ter os mesmos dados no celular, no navegador e no computador, com várias pessoas da fazenda. Sem servidor, o app continua funcionando só neste aparelho.</p>${server}</section>`;
+  }
+  if (!i.user) {
+    return `<section class="card card-section"><h3>Sincronização com a equipe</h3><p>Entre na sua conta para sincronizar os dados da fazenda entre aparelhos e pessoas.${i.error && i.farm ? ` <strong>${esc(i.error)}</strong>` : ''}</p>
+      <form id="authForm" class="settings-form">
+        <div class="field"><label for="auth-email">E-mail</label><input id="auth-email" name="email" type="email" autocomplete="username" required></div>
+        <div class="field"><label for="auth-pass">Senha</label><input id="auth-pass" name="password" type="password" autocomplete="current-password" minlength="6" required></div>
+        <div class="actions" style="grid-column:1/-1;margin:0"><button class="secondary" type="button" data-act="sync-signup">Criar conta</button><button class="primary" type="submit">Entrar</button></div>
+      </form>${server}</section>`;
+  }
+  if (!i.farm) {
+    return `<section class="card card-section"><h3>Escolha a fazenda</h3><p>Conectado como <strong>${esc(i.user.email)}</strong>. Crie a fazenda (os dados deste aparelho vão junto) ou entre numa fazenda existente com o código que o responsável passar.</p>
+      <div id="farmList" class="list-rows"><p class="muted">Carregando suas fazendas…</p></div>
+      <div class="settings-form" style="margin-top:14px">
+        <div class="field"><label for="new-farm">Nova fazenda</label><input id="new-farm" value="${esc(settings.demo ? '' : settings.farmName)}" placeholder="Nome da fazenda"></div>
+        <div class="field"><label for="join-code">Código de uma fazenda existente</label><input id="join-code" placeholder="Ex.: 4F9A2C1B" autocapitalize="characters"></div>
+        <div class="actions" style="margin:0"><button class="primary" data-act="sync-create">Criar fazenda</button></div>
+        <div class="actions" style="margin:0"><button class="secondary" data-act="sync-join">Entrar com código</button></div>
+      </div>
+      <div class="actions"><button class="link" data-act="sync-signout">Sair da conta</button></div></section>`;
+  }
+  const last = i.lastSyncAt ? new Date(i.lastSyncAt).toLocaleString('pt-BR') : 'ainda não';
+  const statusText = i.status === 'error' ? `Erro: ${i.error}` : i.status === 'offline' ? 'Sem conexão com o servidor; as alterações ficam guardadas e sobem quando a internet voltar.' : i.status === 'syncing' ? 'Sincronizando…' : 'Em dia.';
+  return `<section class="card card-section"><h3>Sincronização com a equipe</h3>
+    <div class="list-rows">
+      <div class="list-row"><div><strong>${esc(i.farm.name)}</strong><small>Conectado como ${esc(i.user.email)}</small></div>${chip(i.status === 'error' ? 'Erro' : i.status === 'offline' ? 'Sem internet' : 'Sincronizada', i.status === 'error' ? 'cancelada' : i.status === 'offline' ? 'aberta' : 'aprovado')}</div>
+      <div class="list-row"><div><strong>Código da fazenda: <span class="code">${esc(i.farm.join_code)}</span></strong><small>Passe este código para quem vai usar o sistema. A pessoa cria a conta e escolhe “Entrar com código”.</small></div><button class="link" data-act="sync-copy-code">Copiar</button></div>
+      <div class="list-row"><div><strong>Situação</strong><small>${esc(statusText)} Última sincronização: ${esc(last)}. ${L.plural(i.pending, 'alteração pendente', 'alterações pendentes')}.</small></div><button class="secondary" data-act="sync-now">Sincronizar agora</button></div>
+    </div>
+    <div class="actions"><button class="link danger-text" data-act="sync-signout">Sair da conta</button></div></section>`;
+}
+
+async function fillFarmList() {
+  const box = $('#farmList');
+  if (!box) return;
+  let html;
+  try {
+    const farms = await sync.listFarms();
+    html = farms.length
+      ? farms.map(f => `<div class="list-row"><div><strong>${esc(f.name)}</strong><small>Código ${esc(f.join_code)}</small></div><button class="secondary" data-act="sync-use" data-farm="${esc(JSON.stringify(f))}">Usar esta fazenda</button></div>`).join('')
+      : '<p class="muted">Você ainda não participa de nenhuma fazenda.</p>';
+  } catch (err) {
+    html = `<p class="muted">${esc(err.message)}</p>`;
+  }
+  if ($('#farmList') === box) box.innerHTML = html;
+}
+
+const hasOwnData = () => !settings.demo && DATA_STORES.some(s => state[s].length);
+
+// Liga o aparelho a uma fazenda. "upload": os dados daqui vão para a fazenda (fazenda nova).
+// "replace": os dados daqui são trocados pelos da fazenda (fazenda existente).
+async function linkToFarm(farm, mode) {
+  if (mode === 'replace' && hasOwnData() && !await confirmDialog(`Os dados deste aparelho serão substituídos pelos da fazenda “${farm.name}”. Exporte um backup antes se quiser guardá-los.`, 'Continuar', false)) return false;
+  await sync.clearQueue();
+  if (mode === 'replace' || settings.demo) await replaceAllData({}, { demo: false }, { share: false });
+  if (mode === 'upload') for (const s of DATA_STORES) for (const r of state[s]) await sync.queue(s, r);
+  settings = { ...settings, farmName: farm.name, demo: false };
+  await db.put('settings', settings);
+  await sync.linkFarm(farm);
+  toast(mode === 'upload' ? 'Fazenda criada. Os dados deste aparelho foram enviados.' : `Conectado à fazenda ${farm.name}`);
+  render();
+  return true;
+}
+
+function authValues() {
+  const email = $('#auth-email')?.value.trim() || '';
+  const password = $('#auth-pass')?.value || '';
+  if (!email || !password) { toast('Preencha e-mail e senha.'); return null; }
+  return { email, password };
+}
+
+const syncActions = {
+  'sync-signup': async () => {
+    const v = authValues();
+    if (!v) return;
+    const result = await sync.signUp(v.email, v.password);
+    toast(result.confirm ? 'Conta criada. Abra o e-mail de confirmação que enviamos e depois toque em “Entrar”.' : 'Conta criada');
+    render();
+  },
+  'sync-signout': async () => {
+    const pending = syncInfo.pending;
+    const msg = pending ? `Há ${L.plural(pending, 'alteração', 'alterações')} ainda não enviada(s) e ela(s) não irá(ão) para a equipe. Sair mesmo assim? Os dados continuam neste aparelho.` : 'Sair da conta? Os dados continuam neste aparelho, mas param de sincronizar.';
+    if (!await confirmDialog(msg, 'Sair', !!pending)) return;
+    await sync.signOut();
+    toast('Você saiu da conta');
+    render();
+  },
+  'sync-create': async () => {
+    const name = $('#new-farm')?.value.trim();
+    if (!name) { toast('Digite o nome da nova fazenda.'); return; }
+    await linkToFarm(await sync.createFarm(name), 'upload');
+  },
+  'sync-join': async () => {
+    const code = $('#join-code')?.value.trim();
+    if (!code) { toast('Digite o código da fazenda.'); return; }
+    await linkToFarm(await sync.joinFarm(code), 'replace');
+  },
+  'sync-use': async el => linkToFarm(JSON.parse(el.dataset.farm), 'replace'),
+  'sync-now': async () => { await sync.syncNow(); toast(syncInfo.status === 'idle' ? 'Sincronizado' : syncInfo.error || 'Não foi possível sincronizar agora'); },
+  'sync-copy-code': async () => {
+    const code = syncInfo.farm?.join_code || '';
+    try { await navigator.clipboard.writeText(code); toast(`Código ${code} copiado`); } catch { toast(`Código da fazenda: ${code}`); }
+  },
+};
 
 function searchResultsHtml(query) {
   if (!query.trim()) return '<div class="empty">Digite para pesquisar em operações, máquinas, talhões, lotes, estoque e manutenções.</div>';
@@ -504,7 +666,8 @@ function updateChrome() {
   const badge = $('#bellBadge');
   badge.hidden = !alerts.length;
   badge.textContent = alerts.length > 99 ? '99+' : String(alerts.length);
-  $('#farmLabel').textContent = settings.farmName || 'Configure em Cadastros';
+  $('#farmLabel').textContent = (syncInfo.linked && syncInfo.farm?.name) || settings.farmName || 'Configure em Cadastros';
+  updateSyncStatus();
   const avatar = $('#avatar');
   avatar.textContent = L.initials(settings.userName || settings.farmName);
   avatar.title = settings.userName || '';
@@ -519,7 +682,8 @@ function render() {
   $('#view').innerHTML = route.view(params);
   document.querySelectorAll('[data-route]').forEach(a => a.classList.toggle('active', a.dataset.route === name));
   updateChrome();
-  if (name === 'cadastros') fillStorageInfo();
+  if (name === 'cadastros') { fillStorageInfo(); if (syncInfo.user && !syncInfo.farm) fillFarmList(); }
+  renderPending = false;
 }
 
 async function fillStorageInfo() {
@@ -550,7 +714,12 @@ function togglePopover(force) {
 }
 
 async function guarded(fn) {
-  try { await fn(); } catch (err) { console.error(err); toast(`Erro: ${err?.message || err}`); }
+  try { await fn(); } catch (err) {
+    // Erros esperados (senha errada, sem internet...) já vêm com mensagem para o usuário.
+    if (err instanceof SyncError) { toast(err.message); return; }
+    console.error(err);
+    toast(`Erro: ${err?.message || err}`);
+  }
 }
 
 // ---------- Ações
@@ -587,7 +756,8 @@ const clickActions = {
     render();
   },
   wipe: async () => {
-    if (!await confirmDialog('Apagar todos os dados deste dispositivo? Essa ação não pode ser desfeita. Exporte um backup antes se quiser guardá-los.', 'Apagar tudo')) return;
+    const where = sync?.isLinked() ? 'da fazenda em todos os aparelhos da equipe' : 'deste dispositivo';
+    if (!await confirmDialog(`Apagar todos os dados ${where}? Essa ação não pode ser desfeita. Exporte um backup antes se quiser guardá-los.`, 'Apagar tudo')) return;
     await replaceAllData({}, { farmName: '', userName: '', demo: false });
     toast('Todos os dados foram apagados');
     render();
@@ -628,6 +798,8 @@ const clickActions = {
   },
 };
 
+Object.assign(clickActions, syncActions);
+
 const changeActions = {
   'op-status': async el => {
     const r = findRecord('operations', el.dataset.id);
@@ -655,7 +827,8 @@ async function importBackupText(text) {
     const result = L.validateBackup(parsed);
     if (!result.ok) { toast(result.error); return; }
     const when = result.exportedAt ? ` de ${new Date(result.exportedAt).toLocaleString('pt-BR')}` : '';
-    if (!await confirmDialog(`Substituir todos os dados atuais pelo backup${when} (${L.plural(result.count, 'registro', 'registros')})?`, 'Importar', false)) return;
+    const scope = sync?.isLinked() ? ' Os dados da fazenda serão trocados em todos os aparelhos da equipe.' : '';
+    if (!await confirmDialog(`Substituir todos os dados atuais pelo backup${when} (${L.plural(result.count, 'registro', 'registros')})?${scope}`, 'Importar', false)) return;
     await replaceAllData(result.data, { ...(result.settings || {}), demo: false });
     toast('Backup importado');
     render();
@@ -682,11 +855,31 @@ document.addEventListener('change', event => {
 });
 
 document.addEventListener('submit', event => {
+  if (event.target.id === 'authForm') {
+    event.preventDefault();
+    const v = authValues();
+    if (v) guarded(async () => { await sync.signIn(v.email, v.password); toast('Conta conectada'); render(); });
+    return;
+  }
+  if (event.target.id === 'serverForm') {
+    event.preventDefault();
+    const data = Object.fromEntries(new FormData(event.target));
+    guarded(async () => {
+      const url = String(data.url || '').trim();
+      if (url && !/^https:\/\/|^http:\/\/(localhost|127\.0\.0\.1)/.test(url)) { toast('O endereço precisa começar com https://'); return; }
+      await sync.setServer(url, String(data.anonKey || ''));
+      toast(url ? 'Servidor salvo. Agora entre na sua conta.' : 'Servidor removido');
+      render();
+    });
+    return;
+  }
   if (event.target.id !== 'settingsForm') return;
   event.preventDefault();
   const data = Object.fromEntries(new FormData(event.target));
   guarded(async () => {
-    settings = { ...settings, farmName: String(data.farmName || '').trim(), userName: String(data.userName || '').trim(), id: 'app' };
+    const farmName = String(data.farmName || '').trim();
+    if (sync?.isLinked() && farmName && farmName !== syncInfo.farm?.name) await sync.renameFarm(farmName);
+    settings = { ...settings, farmName, userName: String(data.userName || '').trim(), id: 'app' };
     await db.put('settings', settings);
     toast('Dados da fazenda salvos');
     render();
@@ -727,10 +920,22 @@ window.addEventListener('hashchange', () => {
 });
 
 // ---------- Rede e instalação
-const setNetwork = () => { $('#netStatus').textContent = navigator.onLine ? 'Disponível offline' : 'Modo offline ativo'; };
-addEventListener('online', setNetwork);
-addEventListener('offline', setNetwork);
-setNetwork();
+function updateSyncStatus() {
+  const i = syncInfo;
+  let text, state;
+  if (!i.linked) { text = navigator.onLine ? 'Salvo neste aparelho' : 'Modo offline ativo'; state = 'local'; }
+  else if (i.status === 'syncing') { text = 'Sincronizando…'; state = 'syncing'; }
+  else if (i.status === 'offline') { text = i.pending ? `Sem internet • ${L.plural(i.pending, 'alteração pendente', 'alterações pendentes')}` : 'Sem internet'; state = 'offline'; }
+  else if (i.status === 'error') { text = 'Erro na sincronização'; state = 'error'; }
+  else { text = i.pending ? L.plural(i.pending, 'alteração pendente', 'alterações pendentes') : 'Sincronizado'; state = 'ok'; }
+  $('#netStatus').textContent = text;
+  const box = $('#netStatus').parentElement;
+  box.dataset.state = state;
+  box.title = i.status === 'error' && i.error ? i.error : text;
+}
+addEventListener('online', updateSyncStatus);
+addEventListener('offline', updateSyncStatus);
+updateSyncStatus();
 let installPrompt = null;
 addEventListener('beforeinstallprompt', event => { event.preventDefault(); installPrompt = event; $('#installBtn').classList.add('show'); });
 addEventListener('appinstalled', () => toast('Aplicativo instalado com sucesso'));
@@ -760,6 +965,18 @@ async function boot() {
       await replaceAllData(L.sampleData(today()), { farmName: 'Fazenda Exemplo', demo: true, demoSeen: true });
     }
     navigator.storage?.persist?.().catch(() => {});
+    sync = createSync({
+      db,
+      enabled: !embedded,
+      onRemote: applyRemote,
+      onChange: info => {
+        const relevant = info.linked !== syncInfo.linked || info.user?.id !== syncInfo.user?.id || info.farm?.id !== syncInfo.farm?.id;
+        syncInfo = info;
+        updateChrome();
+        if (relevant || currentRoute().name === 'cadastros') renderSoon();
+      },
+    });
+    await sync.init();
     render();
   } catch (err) {
     console.error(err);

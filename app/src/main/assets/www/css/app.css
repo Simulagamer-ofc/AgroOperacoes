@@ -77,3 +77,7 @@ table.data td .row-actions{width:100%}
 .machine .row-actions{justify-content:flex-start;margin:0 -8px}
 .copy-text{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px;background:var(--bg);color:var(--text);font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical}
 .demo-note{border-color:var(--green);background:linear-gradient(0deg,rgba(24,166,106,.07),rgba(24,166,106,.07)),var(--panel)}
+.offline[data-state="syncing"]{color:var(--blue)}.offline[data-state="offline"]{color:var(--orange)}.offline[data-state="error"]{color:var(--red)}.offline[data-state="local"]{color:var(--muted)}
+.server-box{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}.server-box summary{cursor:pointer;color:var(--muted);font-size:.9rem}
+.code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.08em;background:var(--bg);padding:2px 6px;border-radius:6px}
+@media(max-width:760px){.topbar .offline{display:flex;margin-left:auto}.topbar .offline #netStatus{display:none}.search-btn{margin-left:0}}

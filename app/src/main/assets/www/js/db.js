@@ -1,8 +1,12 @@
 // Armazenamento local: IndexedDB, com localStorage como alternativa se ele não abrir.
 import { STORES } from './schemas.js';
 
+// Guardados só neste aparelho: fila de alterações a enviar e estado da sincronização.
+export const LOCAL_STORES = ['outbox', 'meta'];
+const ALL_STORES = [...STORES, ...LOCAL_STORES];
+
 const DB_NAME = 'agro-operacoes';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 const request = r => new Promise((resolve, reject) => { r.onsuccess = () => resolve(r.result); r.onerror = () => reject(r.error); });
 const finished = tx => new Promise((resolve, reject) => {
@@ -16,7 +20,7 @@ function openIndexedDb() {
     if (!globalThis.indexedDB) { reject(new Error('IndexedDB indisponível')); return; }
     const open = indexedDB.open(DB_NAME, DB_VERSION);
     open.onupgradeneeded = () => {
-      for (const store of STORES) if (!open.result.objectStoreNames.contains(store)) open.result.createObjectStore(store, { keyPath: 'id' });
+      for (const store of ALL_STORES) if (!open.result.objectStoreNames.contains(store)) open.result.createObjectStore(store, { keyPath: 'id' });
     };
     open.onerror = () => reject(open.error);
     open.onblocked = () => reject(new Error('Banco de dados bloqueado por outra aba'));
@@ -28,6 +32,12 @@ function openIndexedDb() {
           const tx = db.transaction(STORES, 'readonly');
           const lists = await Promise.all(STORES.map(s => request(tx.objectStore(s).getAll())));
           return Object.fromEntries(STORES.map((s, i) => [s, lists[i]]));
+        },
+        async get(store, id) {
+          return (await request(db.transaction(store, 'readonly').objectStore(store).get(id))) ?? null;
+        },
+        getAll(store) {
+          return request(db.transaction(store, 'readonly').objectStore(store).getAll());
         },
         put(store, record) {
           const tx = db.transaction(store, 'readwrite');
@@ -62,6 +72,8 @@ function localStorageBackend() {
   return {
     kind: 'armazenamento simples do navegador',
     async loadAll() { return Object.fromEntries(STORES.map(s => [s, read(s)])); },
+    async get(store, id) { return read(store).find(r => r.id === id) ?? null; },
+    async getAll(store) { return read(store); },
     async put(store, record) { write(store, [...read(store).filter(r => r.id !== record.id), record]); },
     async remove(store, id) { write(store, read(store).filter(r => r.id !== id)); },
     async replaceAll(data) { for (const store of STORES) write(store, data[store] || []); },

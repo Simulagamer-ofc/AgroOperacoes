@@ -29,7 +29,7 @@ jobs:
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: Agro-Operacoes-0.2.0-beta1-debug
+          name: Agro-Operacoes-0.3.0-beta1-debug
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
       - name: Build signed release APK
@@ -47,6 +47,6 @@ jobs:
         if: env.HAS_KEYSTORE == 'true' && github.event_name != 'pull_request'
         uses: actions/upload-artifact@v4
         with:
-          name: Agro-Operacoes-0.2.0-beta1-release
+          name: Agro-Operacoes-0.3.0-beta1-release
           path: app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error
