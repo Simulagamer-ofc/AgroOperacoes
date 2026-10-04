@@ -4,102 +4,65 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0b1f36">
-  <meta name="description" content="Painel offline para operações agrícolas, máquinas, talhões, sementes e estoque.">
-  <title>Operações Agrícolas</title>
-  <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%230b1f36'/%3E%3Cpath d='M13 45c11-1 18-7 20-18 7 2 13 7 18 15-12 10-26 11-38 3Z' fill='%2334d399'/%3E%3Cpath d='M16 48c9-13 19-19 34-24' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
-  <style>
-    :root{--navy:#08182b;--navy2:#102b49;--bg:#f3f6fa;--panel:#fff;--text:#182230;--muted:#667085;--line:#e4e9f0;--green:#18a66a;--blue:#2c75db;--orange:#f59e0b;--red:#e05252;--purple:#7c5ce7;--shadow:0 12px 30px rgba(25,44,74,.08)}
-    [data-theme="dark"]{--bg:#07111f;--panel:#0e1c2d;--text:#ecf4ff;--muted:#9db0c6;--line:#20334a;--shadow:0 12px 30px rgba(0,0,0,.28)}
-    *{box-sizing:border-box} body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);font-size:16px} button,input,select,textarea{font:inherit} button{cursor:pointer}
-    .app{min-height:100vh;display:grid;grid-template-columns:260px 1fr}.sidebar{background:linear-gradient(180deg,var(--navy),#071321);color:#dce9f6;padding:20px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column}.brand{display:flex;align-items:center;gap:12px;padding:4px 10px 22px}.brand-mark{width:42px;height:42px;border-radius:12px;background:#123b5d;display:grid;place-items:center}.brand-mark svg{width:28px}.brand strong{font-size:1.05rem;letter-spacing:.02em}.brand small{display:block;color:#8ea8c2;margin-top:2px}.group-label{font-size:.75rem;color:#6f8da9;padding:14px 12px 7px;letter-spacing:.09em;font-weight:700}.nav{display:grid;gap:4px}.nav button{border:0;background:transparent;color:#b8cce0;border-radius:9px;padding:11px 12px;text-align:left;display:flex;gap:11px;align-items:center}.nav button:hover,.nav button.active{background:#173653;color:#fff}.nav button.active{box-shadow:inset 3px 0 #34d399}.nav .icon{width:22px;text-align:center}.sidebar-foot{margin-top:auto;padding:12px 8px;border-top:1px solid #1d3851;display:flex;align-items:center;justify-content:space-between}.theme-btn{border:1px solid #29465f;background:#122a42;color:#fff;border-radius:9px;padding:8px 11px}
-    main{min-width:0}.topbar{height:72px;background:var(--panel);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:0 24px;position:sticky;top:0;z-index:4}.menu-btn{display:none;border:0;background:transparent;color:var(--text);font-size:1.35rem}.topbar h1{font-size:1.2rem;margin:0}.topbar .date{color:var(--muted);font-size:.85rem}.search{margin-left:auto;min-width:280px;position:relative}.search input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 14px 10px 38px;color:var(--text)}.search span{position:absolute;left:13px;top:10px;color:var(--muted)}.offline{display:flex;align-items:center;gap:7px;color:var(--green);font-size:.86rem;font-weight:650}.dot{width:8px;height:8px;border-radius:50%;background:currentColor}.install-btn{display:none;border:1px solid var(--green);background:rgba(24,166,106,.1);color:var(--green);border-radius:9px;padding:9px 12px;font-weight:750}.install-btn.show{display:block}.bell{border:0;background:var(--bg);color:var(--text);width:40px;height:40px;border-radius:10px}.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--navy2);color:#fff;font-weight:700}
-    .content{padding:24px;max-width:1700px;margin:auto}.welcome{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:20px}.welcome h2{margin:0 0 5px;font-size:1.45rem}.welcome p{margin:0;color:var(--muted)}.primary{border:0;border-radius:10px;background:var(--green);color:white;padding:12px 17px;font-weight:750;box-shadow:0 8px 20px rgba(24,166,106,.22)}
-    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow)}.kpi{padding:17px;position:relative;overflow:hidden}.kpi .label{color:var(--muted);font-size:.86rem}.kpi .value{font-size:1.75rem;font-weight:800;margin:7px 0 2px}.kpi .hint{font-size:.78rem;color:var(--muted)}.kpi .badge{position:absolute;right:14px;top:14px;width:39px;height:39px;border-radius:11px;display:grid;place-items:center;color:white}.green{background:var(--green)}.blue{background:var(--blue)}.orange{background:var(--orange)}.red{background:var(--red)}.purple{background:var(--purple)}
-    .section-title{display:flex;align-items:center;justify-content:space-between;margin:25px 2px 12px}.section-title h3{font-size:1rem;margin:0}.section-title button{border:0;background:transparent;color:var(--blue)}.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.quick button{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:13px;padding:15px;text-align:left;min-height:88px;box-shadow:var(--shadow);display:flex;gap:12px;align-items:center}.quick button:hover{border-color:#80aee8;transform:translateY(-1px)}.quick .qicon{width:42px;height:42px;border-radius:11px;color:white;display:grid;place-items:center;font-size:1.15rem}.quick strong{display:block;font-size:.9rem}.quick small{color:var(--muted);display:block;margin-top:3px}
-    .grid{display:grid;grid-template-columns:1.45fr 1fr;gap:16px;margin-top:24px}.panel{padding:18px}.panel h3{font-size:1rem;margin:0 0 16px}.operation{display:grid;grid-template-columns:10px 1fr auto;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);align-items:center}.operation:last-child{border:0}.operation .status{width:9px;height:38px;border-radius:8px}.operation strong{font-size:.9rem}.operation small{display:block;color:var(--muted);margin-top:3px}.chip{border-radius:999px;padding:6px 9px;background:var(--bg);font-size:.76rem;color:var(--muted)}.alert{padding:12px;border:1px solid var(--line);border-radius:11px;margin-bottom:10px;display:flex;gap:11px;align-items:flex-start}.alert strong{font-size:.87rem}.alert small{display:block;color:var(--muted);margin-top:3px}.alert-icon{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;color:white;flex:none}.progress{height:8px;background:var(--bg);border-radius:9px;overflow:hidden;margin-top:9px}.progress span{display:block;height:100%;background:var(--green);border-radius:9px}
-    .mobile-nav{display:none}.overlay{display:none}.modal{position:fixed;inset:0;background:rgba(2,10,20,.62);z-index:20;display:none;place-items:center;padding:18px}.modal.open{display:grid}.dialog{width:min(560px,100%);background:var(--panel);border-radius:16px;padding:22px;box-shadow:0 30px 80px rgba(0,0,0,.35)}.dialog h3{margin:0 0 16px}.form{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:.82rem;color:var(--muted)}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px;background:var(--bg);color:var(--text)}.actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}.secondary{border:1px solid var(--line);background:var(--panel);color:var(--text);padding:10px 14px;border-radius:9px}.toast{position:fixed;right:24px;bottom:24px;background:#102b49;color:#fff;padding:13px 16px;border-radius:10px;box-shadow:var(--shadow);display:none;z-index:30}.toast.show{display:block}
-    @media(max-width:1100px){.app{grid-template-columns:220px 1fr}.kpis{grid-template-columns:repeat(2,1fr)}.quick{grid-template-columns:repeat(2,1fr)}.search{min-width:190px}}
-    @media(max-width:760px){.app{display:block}.sidebar{position:fixed;left:-280px;z-index:12;width:270px;transition:left .2s}.sidebar.open{left:0}.overlay.show{display:block;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:11}.topbar{height:64px;padding:0 14px}.menu-btn{display:block}.topbar .date,.search,.offline,.avatar{display:none}.topbar h1{font-size:1rem}.content{padding:16px 14px 88px}.welcome{align-items:flex-start}.welcome h2{font-size:1.2rem}.welcome .primary{border-radius:50%;width:48px;height:48px;padding:0;font-size:0}.welcome .primary:after{content:'+';font-size:1.6rem}.kpis{grid-template-columns:repeat(2,1fr);gap:10px}.kpi{padding:14px}.kpi .value{font-size:1.45rem}.quick{grid-template-columns:1fr 1fr;gap:10px}.quick button{padding:12px;min-height:78px}.quick small{display:none}.grid{grid-template-columns:1fr}.mobile-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);z-index:8;padding:7px 3px max(7px,env(safe-area-inset-bottom))}.mobile-nav button{border:0;background:transparent;color:var(--muted);font-size:.7rem;display:grid;gap:2px;place-items:center}.mobile-nav span{font-size:1.1rem}.form{grid-template-columns:1fr}}
-  </style>
+  <meta name="description" content="Gestão offline de operações agrícolas, máquinas, talhões, sementes e estoque.">
+  <title>Agro Operações</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="stylesheet" href="css/app.css">
+  <script>
+    // Aplica o tema antes de desenhar a página, para não piscar.
+    (function(){var t=null;try{t=localStorage.getItem('agro-theme')}catch(e){}if(!t&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)t='dark';if(t)document.documentElement.dataset.theme=t})();
+  </script>
 </head>
 <body>
 <div class="app">
   <aside class="sidebar" id="sidebar">
-    <div class="brand"><div class="brand-mark"><svg viewBox="0 0 64 64"><path d="M10 46c12-1 20-8 22-20 8 3 15 8 21 17-13 11-29 12-43 3Z" fill="#34d399"/><path d="M14 50c10-15 22-22 39-28" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/></svg></div><div><strong>AGRO OPERAÇÕES</strong><small>nome provisório</small></div></div>
-    <div class="nav">
-      <button class="active"><span class="icon">▦</span>Visão Geral</button>
-      <button><span class="icon">◷</span>Operações do Dia</button>
-      <button><span class="icon">⚙</span>Máquinas e Manutenção</button>
-      <button><span class="icon">▤</span>Talhões</button>
-    </div>
+    <div class="brand"><div class="brand-mark"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M10 46c12-1 20-8 22-20 8 3 15 8 21 17-13 11-29 12-43 3Z" fill="#34d399"/><path d="M14 50c10-15 22-22 39-28" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/></svg></div><div><strong>AGRO OPERAÇÕES</strong><small id="farmLabel">Configure em Cadastros</small></div></div>
+    <nav class="nav" aria-label="Principal">
+      <a href="#/" data-route=""><span class="icon">▦</span>Visão Geral</a>
+      <a href="#/operacoes" data-route="operacoes"><span class="icon">◷</span>Operações do Dia</a>
+      <a href="#/maquinas" data-route="maquinas"><span class="icon">⚙</span>Máquinas e Manutenção</a>
+      <a href="#/talhoes" data-route="talhoes"><span class="icon">▤</span>Talhões</a>
+    </nav>
     <div class="group-label">PRODUÇÃO</div>
-    <div class="nav">
-      <button><span class="icon">◉</span>Produção de Sementes</button>
-      <button><span class="icon">⌁</span>Lotes e Rastreabilidade</button>
-      <button><span class="icon">□</span>Estoque e Insumos</button>
-    </div>
+    <nav class="nav" aria-label="Produção">
+      <a href="#/sementes" data-route="sementes"><span class="icon">◉</span>Produção de Sementes</a>
+      <a href="#/lotes" data-route="lotes"><span class="icon">⌁</span>Lotes e Rastreabilidade</a>
+      <a href="#/estoque" data-route="estoque"><span class="icon">□</span>Estoque e Insumos</a>
+    </nav>
     <div class="group-label">INTELIGÊNCIA</div>
-    <div class="nav"><button><span class="icon">▥</span>Relatórios</button><button><span class="icon">☷</span>Cadastros</button></div>
-    <div class="sidebar-foot"><span>☀︎ / ☾</span><button class="theme-btn" id="themeBtn">Alternar tema</button></div>
+    <nav class="nav" aria-label="Inteligência">
+      <a href="#/relatorios" data-route="relatorios"><span class="icon">▥</span>Relatórios</a>
+      <a href="#/cadastros" data-route="cadastros"><span class="icon">☷</span>Cadastros</a>
+    </nav>
+    <div class="sidebar-foot"><span>☀︎ / ☾</span><button class="theme-btn" data-act="theme">Alternar tema</button></div>
   </aside>
-  <div class="overlay" id="overlay"></div>
+  <div class="overlay" id="overlay" data-act="close-menu"></div>
   <main>
-    <header class="topbar"><button class="menu-btn" id="menuBtn">☰</button><div><h1>Visão Geral</h1><div class="date" id="date"></div></div><div class="search"><span>⌕</span><input aria-label="Pesquisar" placeholder="Pesquisar operações, máquinas, lotes..."></div><div class="offline"><span class="dot"></span><span id="netStatus">Disponível offline</span></div><button class="install-btn" id="installBtn">⬇ Instalar aplicativo</button><button class="bell" aria-label="Notificações">♢</button><div class="avatar">SR</div></header>
-    <div class="content">
-      <section class="welcome"><div><h2>Operações da fazenda</h2><p>Acompanhe o trabalho do campo e os registros salvos neste dispositivo.</p></div><button class="primary" data-open>+ Nova operação</button></section>
-      <section class="kpis">
-        <article class="card kpi"><div class="badge blue">◷</div><div class="label">Programadas hoje</div><div class="value" id="scheduledCount">6</div><div class="hint">2 aguardando início</div></article>
-        <article class="card kpi"><div class="badge green">▶</div><div class="label">Em andamento</div><div class="value">3</div><div class="hint">Plantio, aplicação e transporte</div></article>
-        <article class="card kpi"><div class="badge orange">⚙</div><div class="label">Máquinas em manutenção</div><div class="value">2</div><div class="hint">1 preventiva vence amanhã</div></article>
-        <article class="card kpi"><div class="badge red">!</div><div class="label">Pendências importantes</div><div class="value">4</div><div class="hint">Estoque, lote e manutenção</div></article>
-      </section>
-      <div class="section-title"><h3>Ações rápidas</h3><button>Personalizar</button></div>
-      <section class="quick">
-        <button data-open><span class="qicon green">＋</span><span><strong>Nova operação</strong><small>Registrar atividade no campo</small></span></button>
-        <button data-action="Horímetro registrado"><span class="qicon blue">◷</span><span><strong>Registrar horímetro</strong><small>Máquina e horas trabalhadas</small></span></button>
-        <button data-action="Manutenção aberta"><span class="qicon orange">⚙</span><span><strong>Abrir manutenção</strong><small>Preventiva ou corretiva</small></span></button>
-        <button data-action="Movimentação iniciada"><span class="qicon purple">⇄</span><span><strong>Movimentar estoque</strong><small>Entrada, saída ou consumo</small></span></button>
-      </section>
-      <section class="grid">
-        <article class="card panel"><div class="section-title" style="margin:0 0 4px"><h3>Operações do dia</h3><button>Ver todas</button></div><div id="operations">
-          <div class="operation"><span class="status green"></span><div><strong>Plantio de soja — Talhão 07</strong><small>Trator 7230J • Plantadeira 30 linhas • início 07:10</small></div><span class="chip">Em andamento</span></div>
-          <div class="operation"><span class="status blue"></span><div><strong>Tratamento de sementes — Lote SM-026</strong><small>Unidade de beneficiamento • previsto 09:00</small></div><span class="chip">Programada</span></div>
-          <div class="operation"><span class="status orange"></span><div><strong>Manutenção preventiva — Colheitadeira 01</strong><small>Troca de filtros e inspeção • oficina</small></div><span class="chip">Pendente</span></div>
-          <div class="operation"><span class="status green"></span><div><strong>Aplicação — Talhão 12</strong><small>Pulverizador 4730 • concluída 10:35</small></div><span class="chip">Concluída</span></div>
-        </div></article>
-        <article class="card panel"><h3>Alertas e pendências</h3>
-          <div class="alert"><span class="alert-icon red">!</span><div><strong>Estoque baixo: Tratamento TS-04</strong><small>Saldo suficiente para aproximadamente 2 lotes.</small></div></div>
-          <div class="alert"><span class="alert-icon orange">⚙</span><div><strong>Revisão em 8 horas</strong><small>Trator 7230J está com 1.492 h.</small><div class="progress"><span style="width:82%"></span></div></div></div>
-          <div class="alert"><span class="alert-icon purple">⌁</span><div><strong>Lote aguardando análise</strong><small>SM-024 precisa do registro de germinação.</small></div></div>
-        </article>
-      </section>
-    </div>
+    <header class="topbar">
+      <button class="menu-btn" data-act="menu" aria-label="Abrir menu">☰</button>
+      <div><h1 id="pageTitle">Visão Geral</h1><div class="date" id="date"></div></div>
+      <div class="search"><span>⌕</span><input id="topSearch" type="search" aria-label="Pesquisar" placeholder="Pesquisar operações, máquinas, lotes..."></div>
+      <a class="search-btn" href="#/busca" aria-label="Pesquisar">⌕</a>
+      <div class="offline"><span class="dot"></span><span id="netStatus">Disponível offline</span></div>
+      <button class="install-btn" id="installBtn" data-act="install">⬇ Instalar aplicativo</button>
+      <button class="bell" data-act="bell" aria-label="Alertas" aria-expanded="false" aria-controls="alertsPopover">🔔<span class="bell-badge" id="bellBadge" hidden></span></button>
+      <div class="avatar" id="avatar" title="">AO</div>
+    </header>
+    <div class="content" id="view" aria-live="polite"></div>
   </main>
 </div>
-<nav class="mobile-nav"><button><span>⌂</span>Início</button><button><span>◷</span>Operações</button><button><span>⚙</span>Máquinas</button><button><span>▤</span>Talhões</button><button><span>•••</span>Mais</button></nav>
-<div class="modal" id="modal"><div class="dialog"><h3>Nova operação</h3><form id="operationForm"><div class="form"><div class="field full"><label>Tipo de operação</label><select id="opType" required><option>Plantio</option><option>Aplicação</option><option>Colheita</option><option>Manutenção</option><option>Transporte</option><option>Beneficiamento de sementes</option></select></div><div class="field"><label>Talhão ou local</label><input id="opPlace" placeholder="Ex.: Talhão 08" required></div><div class="field"><label>Horário</label><input type="time" id="opTime" required></div><div class="field full"><label>Observações</label><textarea id="opNotes" rows="3" placeholder="Máquina, equipe, insumos ou observações"></textarea></div></div><div class="actions"><button type="button" class="secondary" data-close>Cancelar</button><button class="primary" type="submit">Salvar no dispositivo</button></div></form></div></div>
-<div class="toast" id="toast"></div>
-<script>
-  const root=document.documentElement,sidebar=document.getElementById('sidebar'),overlay=document.getElementById('overlay'),modal=document.getElementById('modal'),toast=document.getElementById('toast');
-  const showToast=message=>{toast.textContent=message;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2600)};
-  const savedTheme=localStorage.getItem('agro-theme');if(savedTheme)root.dataset.theme=savedTheme;
-  document.getElementById('themeBtn').onclick=()=>{const next=root.dataset.theme==='dark'?'light':'dark';root.dataset.theme=next;localStorage.setItem('agro-theme',next)};
-  const closeMenu=()=>{sidebar.classList.remove('open');overlay.classList.remove('show')};
-  document.getElementById('menuBtn').onclick=()=>{sidebar.classList.add('open');overlay.classList.add('show')};overlay.onclick=closeMenu;
-  document.querySelectorAll('[data-open]').forEach(el=>el.onclick=()=>modal.classList.add('open'));document.querySelectorAll('[data-close]').forEach(el=>el.onclick=()=>modal.classList.remove('open'));modal.onclick=e=>{if(e.target===modal)modal.classList.remove('open')};
-  document.querySelectorAll('[data-action]').forEach(el=>el.onclick=()=>showToast(el.dataset.action+' — salvo no dispositivo'));
-  const now=new Date();document.getElementById('date').textContent=now.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'});
-  const stored=JSON.parse(localStorage.getItem('agro-operations')||'[]');
-  const renderStored=()=>{const box=document.getElementById('operations');stored.slice().reverse().forEach(op=>{const row=document.createElement('div');row.className='operation';row.innerHTML='<span class="status blue"></span><div><strong></strong><small></small></div><span class="chip">Programada</span>';row.querySelector('strong').textContent=op.type+' — '+op.place;row.querySelector('small').textContent='Salva neste dispositivo • '+op.time+(op.notes?' • '+op.notes:'');box.prepend(row)});document.getElementById('scheduledCount').textContent=6+stored.length};renderStored();
-  document.getElementById('operationForm').onsubmit=e=>{e.preventDefault();const op={type:opType.value,place:opPlace.value,time:opTime.value,notes:opNotes.value};stored.push(op);localStorage.setItem('agro-operations',JSON.stringify(stored));modal.classList.remove('open');showToast('Operação salva no dispositivo');setTimeout(()=>location.reload(),650)};
-  const setNetwork=()=>{document.getElementById('netStatus').textContent=navigator.onLine?'Disponível offline':'Modo offline ativo'};addEventListener('online',setNetwork);addEventListener('offline',setNetwork);setNetwork();
-  let installPrompt=null;const installBtn=document.getElementById('installBtn');
-  addEventListener('beforeinstallprompt',event=>{event.preventDefault();installPrompt=event;installBtn.classList.add('show')});
-  installBtn.onclick=async()=>{if(!installPrompt){showToast('Abra o menu do navegador e escolha “Instalar aplicativo”');return}installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;installBtn.classList.remove('show')};
-  addEventListener('appinstalled',()=>showToast('Aplicativo instalado com sucesso'));
-  if(matchMedia('(display-mode: standalone)').matches)installBtn.style.display='none';
-  if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('/sw.js',{updateViaCache:'none'}));
-</script>
+<div class="card popover" id="alertsPopover" role="dialog" aria-label="Alertas"></div>
+<nav class="mobile-nav" aria-label="Atalhos">
+  <a href="#/" data-route=""><span>⌂</span>Início</a>
+  <a href="#/operacoes" data-route="operacoes"><span>◷</span>Operações</a>
+  <a href="#/maquinas" data-route="maquinas"><span>⚙</span>Máquinas</a>
+  <a href="#/estoque" data-route="estoque"><span>□</span>Estoque</a>
+  <button data-act="menu"><span>•••</span>Mais</button>
+</nav>
+<div class="modal" id="modal" data-act="modal-backdrop"><div class="dialog" id="dialog" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" role="status"></div>
+<noscript><p style="padding:24px">Ative o JavaScript para usar o Agro Operações.</p></noscript>
+<script type="module" src="js/app.js"></script>
 </body>
 </html>
