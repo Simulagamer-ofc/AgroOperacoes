@@ -22,7 +22,7 @@ const safeStorage = {
 
 // ---------- Banco de dados local ----------
 const DB_KEY = 'agro-db-v1';
-const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements'];
+const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes'];
 const emptyDb = () => ({version: 1, settings: {farm: '', owner: ''}, ...Object.fromEntries(COLLECTIONS.map(c => [c, []]))});
 
 function loadDb() {
@@ -432,8 +432,8 @@ VIEWS.maquinas = () => {
       const warn = Number(m.nextService) > 0 ? (left <= 0 ? chip('Revisão vencida', 'red') : left <= SERVICE_WARN_HOURS ? chip(`Revisão em ${num(left)} h`, 'orange') : '') : '';
       return `<article class="card item-card"><header><div><h4>${esc(m.name)}</h4><div class="meta">${esc([m.type, m.model].filter(Boolean).join(' • '))}</div></div>${chip(st, color)}</header>
         <div class="big">${num(m.hours)} h</div>
-        <div class="meta"><span>Próxima revisão: ${Number(m.nextService) > 0 ? num(m.nextService) + ' h' : '—'} ${warn}</span><span>Último registro: ${fmtDate(db.hourLogs.filter(h => h.machineId === m.id).sort(byDateDesc)[0]?.date)}</span></div>
-        <div class="row-actions" style="justify-content:flex-start">${mini('◷ Horímetro', 'hour-new', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}</div></article>`;
+        <div class="meta"><span>Próxima revisão: ${Number(m.nextService) > 0 ? num(m.nextService) + ' h' : '—'} ${warn}</span><span>Último registro: ${fmtDate(db.hourLogs.filter(h => h.machineId === m.id).sort(byDateDesc)[0]?.date)}</span>${m.catalogo ? `<span>Catálogo: ${esc(m.catalogo.marca)} ${esc(m.catalogo.nome)}${m.catalogo.codigoFiname ? ' • FINAME ' + esc(m.catalogo.codigoFiname) : ''}</span>` : ''}${(() => { const u = db.afericoes.filter(a => a.maquina?.id === m.id).sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora))[0]; return u ? `<span>Última aferição: ${fmtDate(u.data)} — ${esc({OK: 'dentro da referência', ATENCAO: 'atenção', FORA_DO_PADRAO: 'fora da referência', SEM_REFERENCIA: 'não avaliada', DADOS_INSUFICIENTES: 'dados insuficientes'}[u.resultado.status] || '')}</span>` : ''; })()}</div>
+        <div class="row-actions" style="justify-content:flex-start">${mini('◷ Horímetro', 'hour-new', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}${mini('◎ Aferição', 'af-nova', m.id)}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${mini(m.catalogo ? 'Catálogo ✓' : 'Vincular catálogo', 'mc-cat', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}</div></article>`;
     }).join('')}</section>` : `<section class="card">${empty('Nenhuma máquina cadastrada', 'Cadastre tratores, colheitadeiras e implementos para controlar horímetro e revisões.', {act: 'mc-new', label: '+ Nova máquina'})}</section>`) +
     `<div class="section-title"><h3>Ordens de manutenção</h3></div><section class="card list">${mts.length ? mts.map(mt => {
       const color = mt.status === 'Concluída' ? 'gray' : mt.status === 'Em execução' ? 'blue' : 'orange';
@@ -696,7 +696,8 @@ function render(anchor = pendingAnchor) {
 let lastRoute = '';
 addEventListener('hashchange', () => { const r = location.hash; if (r !== lastRoute) { lastRoute = r; render(); scrollTo(0, 0); } });
 lastRoute = location.hash;
-render();
+// Renderiza depois que todos os scripts (inclusive afericao.js) foram carregados
+addEventListener('DOMContentLoaded', () => render());
 
 // ---------- Rede, instalação e service worker ----------
 const setNetwork = () => { $('#netStatus').textContent = navigator.onLine ? 'Disponível offline' : 'Modo offline ativo'; };

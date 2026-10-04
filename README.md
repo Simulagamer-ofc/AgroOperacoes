@@ -4,7 +4,7 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.2.0-beta1` — módulos funcionais com dados salvos no próprio aparelho.
+`0.3.0-beta1` — aferição e calibragem com referências técnicas validadas e catálogo de máquinas offline.
 
 ### Funcionalidades
 
@@ -15,13 +15,17 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 - **Produção de sementes / lotes**: etapas do lote (campo → análise → expedição), germinação e vigor, e linha do tempo de rastreabilidade (eventos do lote + operações e insumos do talhão de origem).
 - **Estoque**: itens com estoque mínimo, entradas, saídas (com bloqueio de saldo negativo), ajuste de inventário e consumo por talhão.
 - **Relatórios**: operações por tipo, horas por máquina, consumo de insumos e custo de manutenção (7/30/90 dias ou 12 meses); exportação CSV (compatível com Excel).
+- **Aferição e calibragem** (fluxo em 4 etapas: equipamento → condições → medições → resultado): vazão de bicos, taxa de aplicação, sensor de velocidade/fluxômetro, distribuição de sementes, dose (kg/ha), CV de distribuidor a lanço e perdas na colheita. O resultado só é concluído quando existe referência validada aplicável (ver `referencias/`); caso contrário mostra "Não foi possível avaliar" e o que falta. Cada registro guarda o resultado, a regra, a versão e os limites do momento, e gera relatório de medição e comparação (imprimir/PDF).
+- **Catálogo de máquinas offline**: 1.243 modelos com fichas técnicas e manuais dos sites dos fabricantes e 11.107 produtos agrícolas da lista oficial BNDES/FINAME. Máquinas da frota podem ser vinculadas a um modelo do catálogo.
 - **Cadastros e backup**: dados da propriedade, exportação/restauração de backup JSON, dados de exemplo e limpeza.
 - **Pesquisa** global (sem acentos) e tema claro/escuro.
 
 ### Estrutura
 
 - `app/src/main/assets/www/` — interface web (`index.html`, `styles.css`, `app.js`), também utilizável como PWA.
-- `app/src/main/java/.../MainActivity.kt` — WebView que carrega os arquivos do APK e expõe `AndroidBridge.saveFile` para salvar backups/CSV pelo seletor de arquivos do Android.
+- `app/src/main/assets/www/afericao.js` — catálogo e aferição; `avaliador.js` e `dados/` são gerados a partir de `referencias/` por `python3 referencias/ferramentas/gerar_dados_app.py`.
+- `app/src/main/java/.../MainActivity.kt` — WebView que carrega os arquivos do APK e expõe `AndroidBridge.saveFile` (backup/CSV) e `AndroidBridge.printPage` (relatório em PDF).
+- `referencias/` — regras de aferição com fontes conferidas, avaliador, catálogos e ferramentas de coleta (ver `referencias/README.md`). Testes: `node --test referencias/tests/*.test.js`.
 
 Os dados ficam em `localStorage` (chave `agro-db-v1`). Registros da versão `0.1.0-beta1` são migrados automaticamente.
 

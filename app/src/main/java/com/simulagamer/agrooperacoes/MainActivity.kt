@@ -2,9 +2,12 @@ package com.simulagamer.agrooperacoes
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.print.PrintAttributes
+import android.print.PrintManager
 import android.webkit.JavascriptInterface
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
@@ -57,6 +60,19 @@ class MainActivity : AppCompatActivity() {
                     putExtra(Intent.EXTRA_TITLE, name)
                 }
                 createDocument.launch(intent)
+            }
+        }
+
+        /** Imprime a página atual (relatório de aferição) ou salva como PDF pelo serviço de impressão do Android. */
+        @JavascriptInterface
+        fun printPage() {
+            runOnUiThread {
+                val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
+                printManager.print(
+                    "Relatório Agro Operações",
+                    webView.createPrintDocumentAdapter("relatorio-afericao"),
+                    PrintAttributes.Builder().build()
+                )
             }
         }
     }

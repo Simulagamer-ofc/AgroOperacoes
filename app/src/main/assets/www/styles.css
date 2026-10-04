@@ -25,3 +25,11 @@ table.tbl{width:100%;border-collapse:collapse;font-size:.88rem}.tbl th,.tbl td{t
 .alert.clickable{cursor:pointer}.alert.clickable:hover{border-color:#80aee8}
 .mobile-nav button.active{color:var(--green)}
 @media(max-width:760px){.settings{grid-template-columns:1fr}.row{grid-template-columns:8px 1fr}.row .row-actions,.row>.chip{grid-column:2;justify-content:flex-start}.view-head .btns .primary{border-radius:10px;width:auto;height:auto;padding:11px 14px;font-size:inherit}.tbl th,.tbl td{padding:8px 5px}}
+/* Aferição, catálogo e relatório */
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin:-6px 0 14px}.steps span{font-size:.8rem;padding:6px 10px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--muted)}.steps span.on{background:var(--navy2);border-color:var(--navy2);color:#fff}.steps span.done{color:var(--green);border-color:var(--green)}
+.resultado{border-radius:12px;padding:16px;display:grid;gap:4px;border:2px solid var(--line)}.resultado small{font-size:.72rem;letter-spacing:.08em;color:var(--muted);font-weight:700}.resultado strong{font-size:1.35rem;margin-bottom:8px}
+.resultado.green{border-color:var(--green);background:rgba(24,166,106,.08)}.resultado.red{border-color:var(--red);background:rgba(224,82,82,.08)}.resultado.orange{border-color:var(--orange);background:rgba(245,158,11,.1)}.resultado.gray{border-color:var(--muted);background:var(--bg)}
+.nota{font-size:.8rem;color:var(--muted);margin:12px 0 0;line-height:1.45}.nota a{color:var(--blue);word-break:break-all}.pend{margin:6px 0;padding-left:20px;font-size:.88rem}.pend li{margin:3px 0}
+.relatorio h3{margin:22px 0 10px;font-size:1rem;border-bottom:1px solid var(--line);padding-bottom:6px}.rel-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:6px}
+.row a.secondary{text-decoration:none;font-size:.85rem}
+@media print{.sidebar,.topbar,.mobile-nav,.no-print,.toast,.overlay{display:none!important}.app{display:block}.content{padding:0;max-width:none}body{background:#fff;color:#000}.card{box-shadow:none;border:0}:root,[data-theme="dark"]{--panel:#fff;--bg:#fff;--text:#000;--muted:#444;--line:#ccc}}

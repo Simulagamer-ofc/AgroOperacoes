@@ -208,3 +208,15 @@ test('lista BNDES/FINAME: estrutura, CNPJ e códigos válidos', () => {
   const tatu = cat.fabricantes.find(f => f.nome === 'Tatu Marchesan');
   assert.equal(tatu.cnpj, '52311289000163'); // mesmo CNPJ usado pelo site da Tatu no link do BNDES
 });
+
+test('dados do aplicativo sincronizados com referencias/ (rode ferramentas/gerar_dados_app.py)', () => {
+  const fs = require('node:fs'), path = require('node:path');
+  const www = path.join(__dirname, '..', '..', 'app', 'src', 'main', 'assets', 'www');
+  assert.equal(fs.readFileSync(path.join(www, 'avaliador.js'), 'utf8'), fs.readFileSync(path.join(__dirname, '..', 'avaliador.js'), 'utf8'));
+  assert.equal(fs.readFileSync(path.join(www, 'dados', 'regras-afericao.json'), 'utf8'), fs.readFileSync(path.join(__dirname, '..', 'regras-afericao.json'), 'utf8'));
+  const cat = JSON.parse(fs.readFileSync(path.join(www, 'dados', 'catalogo-modelos.json'), 'utf8'));
+  const indice = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'modelos', 'indice.json'), 'utf8'));
+  assert.equal(cat.modelos.length, indice.marcas.reduce((s, m) => s + m.totalModelos, 0));
+  const fin = JSON.parse(fs.readFileSync(path.join(www, 'dados', 'finame.json'), 'utf8'));
+  assert.equal(fin.produtos.length, JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'bndes', 'produtos-agricolas-finame.json'), 'utf8')).totalProdutos);
+});
