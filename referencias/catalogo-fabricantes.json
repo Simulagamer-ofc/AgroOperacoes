@@ -1,0 +1,5561 @@
+{
+ "catalogo": "Nexus Agro — fabricantes de máquinas e implementos agrícolas (Brasil)",
+ "versao": "0.1.0",
+ "data": "2026-10-04",
+ "fontes": [
+  {
+   "id": "CSMIA",
+   "organizacao": "ABIMAQ — Câmara Setorial de Máquinas e Implementos Agrícolas",
+   "url": "https://camaras.abimaq.org.br/camaras/33/camara-setorial-de-maquinas-e-implementos-agricolas",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Lista pública 'Associadas da CSMIA'. Inclui fabricantes de componentes, peças, avicultura, armazenagem etc."
+  }
+ ],
+ "statusSite": {
+  "confirmado_pelo_titulo": "Site respondeu e o título da página identifica o fabricante.",
+  "acessivel_nao_confirmado": "Site respondeu, mas a identidade não foi confirmada.",
+  "erro_certificado": "Certificado TLS do site falhou; não acessado.",
+  "nao_localizado": "Domínio provável pertence a outra empresa ou não existe.",
+  "nao_verificado": "Ainda não verificado."
+ },
+ "observacaoGeral": "Camada de IDENTIFICAÇÃO (quem fabrica). Não contém parâmetros técnicos; nada deste arquivo é usado para preencher regulagem. 'segmentos' fica vazio até ser conferido no site/catálogo do fabricante. 'marcas' de grupos (AGCO, CNH) por conhecimento público, a conferir.",
+ "fabricantes": [
+  {
+   "id": "57-194-990-daniel-fernando-de-lima-me",
+   "nome": null,
+   "razaoSocial": "57.194.990 DANIEL FERNANDO DE LIMA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "a-a-de-almeida-equipamentos-agro-industrial",
+   "nome": null,
+   "razaoSocial": "A.A. DE ALMEIDA EQUIPAMENTOS AGRO INDUSTRIAL",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "acefibras-industria-de-maquinas-agricolas-ltda-epp",
+   "nome": null,
+   "razaoSocial": "ACEFIBRAS INDÚSTRIA DE MÁQUINAS AGRÍCOLAS LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "acj-industria-e-comercio-de-pecas-e-maquinas-agricolas-de-it",
+   "nome": null,
+   "razaoSocial": "ACJ INDÚSTRIA E COMÉRCIO DE PEÇAS E MÁQUINAS AGRÍCOLAS DE ITAPIRA LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "acogiga-industrias-mecanicas-ltda",
+   "nome": null,
+   "razaoSocial": "AÇOGIGA INDÚSTRIAS MECÂNICAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "acotubo-industria-e-comercio-ltda",
+   "nome": null,
+   "razaoSocial": "AÇOTUBO INDÚSTRIA E COMÉRCIO LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "adr-brasil-eixos-ltda",
+   "nome": null,
+   "razaoSocial": "ADR BRASIL EIXOS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "ag-metal-metalurgica-ltda",
+   "nome": null,
+   "razaoSocial": "AG METAL METALÚRGICA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "agco",
+   "nome": "AGCO",
+   "razaoSocial": "AGCO DO BRASIL SOLUÇÕES AGRÍCOLAS LTDA",
+   "marcas": [
+    "Massey Ferguson",
+    "Valtra",
+    "Fendt"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.valtra.com.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Temos o Agro no nosso DNA | Valtra",
+    "dataVerificacao": "2026-10-04",
+    "observacao": "Site da marca Valtra. Massey Ferguson (www.masseyferguson.com) e Fendt (www.fendt.com) responderam com páginas internacionais."
+   },
+   "segmentos": [],
+   "observacao": "Marcas do grupo por conhecimento público; conferir a linha vendida no Brasil em cada site."
+  },
+  {
+   "id": "agi-brasil-industria-e-comercio-s-a",
+   "nome": null,
+   "razaoSocial": "AGI BRASIL INDÚSTRIA E COMÉRCIO S.A.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "agres",
+   "nome": "Agres",
+   "razaoSocial": "AGRES SISTEMAS ELETRÔNICOS S/A.",
+   "marcas": [
+    "Agres"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "agrimec",
+   "nome": "Agrimec",
+   "razaoSocial": "AGRIMEC AGRO INDUSTRIAL E MECÂNICA LTDA",
+   "marcas": [
+    "Agrimec"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.agrimec.com.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Agrimec - Implementos Agrícolas Agrimec",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "lavrale",
+   "nome": "Lavrale",
+   "razaoSocial": "AGRITECH LAVRALE INDÚSTRIA DE MAQUINÁRIO AGRÍCOLA E COMPONENTES LTDA.",
+   "marcas": [
+    "Lavrale"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.lavrale.com.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Início - Lavrale",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "agroaves-industria-e-comercio-de-equipamentos-avicolas-ltda-",
+   "nome": null,
+   "razaoSocial": "AGROAVES INDÚSTRIA E COMÉRCIO DE EQUIPAMENTOS AVICOLAS LTDA.- EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "agrohall-inovacao-e-tecnologia-ltda",
+   "nome": null,
+   "razaoSocial": "AGROHALL INOVAÇÃO E TECNOLOGIA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "agroleite-cabinas-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "AGROLEITE CABINAS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "agromelca-maquinas-agricolas-do-brasil-ltda",
+   "nome": null,
+   "razaoSocial": "AGROMELCA MÁQUINAS AGRÍCOLAS DO BRASIL LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "agross-do-brasil-ltda",
+   "nome": null,
+   "razaoSocial": "AGROSS DO BRASIL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "agrosystem-industria-comercio-importacao-e-exportacao-ltda",
+   "nome": null,
+   "razaoSocial": "AGROSYSTEM INDÚSTRIA, COMÉRCIO, IMPORTAÇÃO E EXPORTAÇÃO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "agrovec-industria-de-equipamentos-ltda-epp",
+   "nome": null,
+   "razaoSocial": "AGROVEC INDÚSTRIA DE EQUIPAMENTOS LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "akj-industria-e-comercio-de-pecas-e-equipamentos-ltda-epp",
+   "nome": null,
+   "razaoSocial": "AKJ INDÚSTRIA E COMÉRCIO DE PEÇAS E EQUIPAMENTOS LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "albrecht-equipamentos-industriais-ltda",
+   "nome": null,
+   "razaoSocial": "ALBRECHT EQUIPAMENTOS INDUSTRIAIS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "crucianelli-piccin",
+   "nome": "Crucianelli Piccin",
+   "razaoSocial": "ALIANÇA CRUCIANELLI PICCIN LTDA",
+   "marcas": [
+    "Crucianelli"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "alliance-industria-mecanica-ltda",
+   "nome": null,
+   "razaoSocial": "ALLIANCE INDÚSTRIA MECÂNICA LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "allikon-equipamentos-agricolas-ltda-me",
+   "nome": null,
+   "razaoSocial": "ALLIKON EQUIPAMENTOS AGRÍCOLAS LTDA. ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "amaquel-implementos-agricolas-ltda-me",
+   "nome": null,
+   "razaoSocial": "AMAQUEL IMPLEMENTOS AGRICOLAS LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "antoniosi",
+   "nome": "Antoniosi",
+   "razaoSocial": "ANTONIOSI TECNOLOGIA AGROINDUSTRIAL LTDA.",
+   "marcas": [
+    "Antoniosi"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "arag",
+   "nome": "ARAG",
+   "razaoSocial": "ARAG DO BRASIL S.A.",
+   "marcas": [
+    "ARAG"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "artabas-artefatos-de-arame-bastos-ltda",
+   "nome": null,
+   "razaoSocial": "ARTABAS ARTEFATOS DE ARAME BASTOS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "arvus-tecnologia-ltda",
+   "nome": null,
+   "razaoSocial": "ARVUS TECNOLOGIA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "asa-implementos-ltda",
+   "nome": null,
+   "razaoSocial": "ASA IMPLEMENTOS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "asus-industria-de-maquinas-agricolas-ltda-me",
+   "nome": null,
+   "razaoSocial": "ASUS - INDÚSTRIA DE MÁQUINAS AGRÍCOLAS LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "atilla-torradores-inteligentes-ltda-epp",
+   "nome": null,
+   "razaoSocial": "ATILLA TORRADORES INTELIGENTES LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "atlanta-industria-e-com-de-acessorios-e-equipamentos-ltda",
+   "nome": null,
+   "razaoSocial": "ATLANTA INDÚSTRIA E COM DE ACESSÓRIOS E EQUIPAMENTOS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "atlanta-maquinas-agricolas-ltda-me",
+   "nome": null,
+   "razaoSocial": "ATLANTA MÁQUINAS AGRÍCOLAS LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "atomizer-do-brasil-ltda",
+   "nome": null,
+   "razaoSocial": "ATOMIZER DO BRASIL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "automacao-agroindustrial-rdt-ltda-epp",
+   "nome": null,
+   "razaoSocial": "AUTOMAÇÃO AGROINDUSTRIAL RDT LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "ave-clima-climatizacao-aviaria-ltda",
+   "nome": null,
+   "razaoSocial": "AVE CLIMA CLIMATIZAÇÃO AVIÁRIA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "avenida-agricola-ltda-epp",
+   "nome": null,
+   "razaoSocial": "AVENIDA AGRÍCOLA LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "avibrasil-industria-e-comercio-de-equipamentos-avicolas-ltda",
+   "nome": null,
+   "razaoSocial": "AVIBRASIL INDÚSTRIA E COMÉRCIO DE EQUIPAMENTOS AVÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "awz-industria-ltda",
+   "nome": null,
+   "razaoSocial": "AWZ INDUSTRIA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "azus-industria-e-comercio-de-maquinas-ltda",
+   "nome": null,
+   "razaoSocial": "AZUS INDÚSTRIA E COMÉRCIO DE MÁQUINAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "b-r-automacao-industrial-ltda",
+   "nome": null,
+   "razaoSocial": "B&R AUTOMAÇÃO INDUSTRIAL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "b-r-a-industria-e-comercio-de-balancas-ltda-epp-balancas-aco",
+   "nome": null,
+   "razaoSocial": "B.R.A. INDÚSTRIA E COMÉRCIO DE BALANÇAS LTDA.- EPP (BALANÇAS AÇORES)",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "baculere-equipamentos-s-a",
+   "nome": null,
+   "razaoSocial": "BACULERÊ EQUIPAMENTOS S/A.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "baldan",
+   "nome": "Baldan",
+   "razaoSocial": "BALDAN IMPLEMENTOS AGRICOLAS S/A.",
+   "marcas": [
+    "Baldan"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.baldan.com.br/",
+    "status": "erro_certificado",
+    "tituloPagina": null,
+    "dataVerificacao": "2026-10-04",
+    "observacao": "Certificado TLS do site falhou na verificação."
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "ballottin-maquinas-ltda",
+   "nome": null,
+   "razaoSocial": "BALLOTTIN MÁQUINAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "bambozzi-alternadores-ltda",
+   "nome": null,
+   "razaoSocial": "BAMBOZZI ALTERNADORES LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "baumer-do-brasil-aut-de-fab-proc-com-imp-e-reprs-ltda",
+   "nome": null,
+   "razaoSocial": "BAUMER DO BRASIL AUT. DE FAB. PROC. COM. IMP. E REPRS. LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "bbc-industria-de-carrocerias-ltda-epp",
+   "nome": null,
+   "razaoSocial": "BBC INDÚSTRIA DE CARROCERIAS LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "becker-s-a",
+   "nome": null,
+   "razaoSocial": "BECKER S.A.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "bergamini-industria-de-maquinas-ltda",
+   "nome": null,
+   "razaoSocial": "BERGAMINI INDÚSTRIA DE MÁQUINAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "big-dutchman-brasil-ltda",
+   "nome": null,
+   "razaoSocial": "BIG DUTCHMAN BRASIL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "bonfiglioli-redutores-do-brasil-industria-e-comercio-ltda",
+   "nome": null,
+   "razaoSocial": "BONFIGLIOLI REDUTORES DO BRASIL INDÚSTRIA E COMÉRCIO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "bosch-rexroth-ltda",
+   "nome": null,
+   "razaoSocial": "BOSCH REXROTH LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "bouwman-tecnologia-agropecuaria-ltda",
+   "nome": null,
+   "razaoSocial": "BOUWMAN TECNOLOGIA AGROPECUARIA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "bransilos-industria-e-comercio-de-maquinas-ltda-epp",
+   "nome": null,
+   "razaoSocial": "BRANSILOS INDÚSTRIA E COMÉRCIO DE MÁQUINAS LTDA. EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "braselio-industria-e-comercio-de-maquinas-ltda",
+   "nome": null,
+   "razaoSocial": "BRASÉLIO INDÚSTRIA E COMÉRCIO DE MÁQUINAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "braslux-industria-de-auto-pecas-ltda",
+   "nome": null,
+   "razaoSocial": "BRASLUX INDÚSTRIA DE AUTO PEÇAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "brutale-maquinas-e-equipamentos-ltda",
+   "nome": null,
+   "razaoSocial": "BRUTALE MÁQUINAS E EQUIPAMENTOS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "budny-industria-e-comercio-ltda",
+   "nome": null,
+   "razaoSocial": "BUDNY INDÚSTRIA E COMÉRCIO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "busa-industrial-e-comercial-ltda",
+   "nome": null,
+   "razaoSocial": "BUSA INDUSTRIAL E COMERCIAL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "bussola-ferramentas-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "BUSSOLA FERRAMENTAS AGRÍCOLAS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "cadioli-implementos-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "CADIOLI IMPLEMENTOS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "canello-equipamentos-agricolas-ltda-me",
+   "nome": null,
+   "razaoSocial": "CANELLO EQUIPAMENTOS AGRÍCOLAS LTDA. ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "canoas-manufatura-de-maquinas-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "CANOAS MANUFATURA DE MÁQUINAS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "capri-industria-e-comercio-de-maquinas-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "CAPRI INDÚSTRIA E COMÉRCIO DE MÁQUINAS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "carderoli-industria-e-comercio-ltda-me",
+   "nome": null,
+   "razaoSocial": "CARDEROLI INDÚSTRIA E COMÉRCIO LTDA-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "carrocerias-e-troncos-giordano-ltda-me",
+   "nome": null,
+   "razaoSocial": "CARROCERIAS E TRONCOS GIORDANO LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "casale",
+   "nome": "Casale",
+   "razaoSocial": "CASALE EQUIPAMENTOS LTDA.",
+   "marcas": [
+    "Casale"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "casp",
+   "nome": "Casp",
+   "razaoSocial": "CASP INDÚSTRIA E COMÉRCIO LTDA",
+   "marcas": [
+    "Casp"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "cataratas-do-iguacu-produtos-organicos-ltda",
+   "nome": null,
+   "razaoSocial": "CATARATAS DO IGUAÇU PRODUTOS ORGÂNICOS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "ccm-maquinas-e-motores-ltda",
+   "nome": null,
+   "razaoSocial": "CCM MÁQUINAS E MOTORES LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "cemag-ceara-maquinas-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "CEMAG - CEARA MÁQUINAS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "cirelli-industria-e-comercio-ltda-me",
+   "nome": null,
+   "razaoSocial": "CIRELLI INDÚSTRIA E COMÉRCIO LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "civemasa",
+   "nome": "Civemasa",
+   "razaoSocial": "CIVEMASA IMPLEMENTOS AGRÍCOLAS LTDA.",
+   "marcas": [
+    "Civemasa"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.civemasa.com.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Civemasa",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "cnh",
+   "nome": "CNH",
+   "razaoSocial": "CNH INDUSTRIAL BRASIL LTDA.",
+   "marcas": [
+    "Case IH",
+    "New Holland"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.newholland.com/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Welcome to our World | New Holland World Wide",
+    "dataVerificacao": "2026-10-04",
+    "observacao": "Case IH (www.caseih.com) respondeu com página dos EUA."
+   },
+   "segmentos": [],
+   "observacao": "Marcas do grupo por conhecimento público; conferir a linha vendida no Brasil."
+  },
+  {
+   "id": "coimma-com-ind-madeiras-e-metal-sao-cristovao-ltda",
+   "nome": null,
+   "razaoSocial": "COIMMA COM.IND.MADEIRAS E METAL.SÃO CRISTÓVÃO LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "comare-industria-ltda-me",
+   "nome": null,
+   "razaoSocial": "COMARE INDÚSTRIA LTDA-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "comber-industria-ltda",
+   "nome": null,
+   "razaoSocial": "COMBER INDÚSTRIA LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "combine-industria-e-comercio-de-maquinas-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "COMBINE INDÚSTRIA E COMÉRCIO DE MÁQUINAS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "comil",
+   "nome": "Comil",
+   "razaoSocial": "COMIL SILOS E SECADORES LTDA.",
+   "marcas": [
+    "Comil"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "comill-industria-e-comercio-de-maquinas-e-implementos-lubian",
+   "nome": null,
+   "razaoSocial": "COMILL INDÚSTRIA E COMÉRCIO DE MÁQUINAS E IMPLEMENTOS LUBIANA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "consilos-industrial-ltda",
+   "nome": null,
+   "razaoSocial": "CONSILOS INDUSTRIAL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "construsui-metalurgica-ltda-me",
+   "nome": null,
+   "razaoSocial": "CONSTRUSUI METALÚRGICA LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "cool-seed-industria-e-comercio-de-equipamentos-agricolas-ltd",
+   "nome": null,
+   "razaoSocial": "COOL SEED INDÚSTRIA E COMÉRCIO DE EQUIPAMENTOS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "cummins-brasil-limitada",
+   "nome": null,
+   "razaoSocial": "CUMMINS BRASIL LIMITADA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "daido-industrial-e-comercial-ltda",
+   "nome": null,
+   "razaoSocial": "DAIDO INDUSTRIAL E COMERCIAL LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "danfoss-do-brasil-industria-e-comercio-ltda",
+   "nome": null,
+   "razaoSocial": "DANFOSS DO BRASIL INDÚSTRIA E COMÉRCIO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "david-mezzavilla-pereira-me",
+   "nome": null,
+   "razaoSocial": "DAVID MEZZAVILLA PEREIRA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "de-rossi-ind-e-com-de-maquinas-e-implementos-agricolas-ltda-",
+   "nome": null,
+   "razaoSocial": "DE ROSSI IND. E COM. DE MÁQUINAS E IMPLEMENTOS AGRÍCOLAS LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "dinamika-industria-e-comercio-de-equipamentos-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "DINAMIKA INDÚSTRIA E COMÉRCIO DE EQUIPAMENTOS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "dmb",
+   "nome": "DMB",
+   "razaoSocial": "DMB MÁQUINAS E IMPLEMENTOS AGRÍCOLAS LTDA.",
+   "marcas": [
+    "DMB"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.dmb.com.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "DMB | Máquinas e Implementos Agrícolas Ltda",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "doble-tt-do-brasil-ltda",
+   "nome": null,
+   "razaoSocial": "DOBLE TT DO BRASIL LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "doma-tecnologia-em-equipamentos-industriais-s-a",
+   "nome": null,
+   "razaoSocial": "DOMA TECNOLOGIA EM EQUIPAMENTOS INDUSTRIAIS S.A.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "domo-industria-de-maquinas-ltda-me",
+   "nome": null,
+   "razaoSocial": "DOMO INDÚSTRIA DE MÁQUINAS LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "domus-coberturas-inflaveis-e-industriais-ltda",
+   "nome": null,
+   "razaoSocial": "DOMUS COBERTURAS INFLÁVEIS E INDUSTRIAIS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "drop-agricultura-ltda-me",
+   "nome": null,
+   "razaoSocial": "DROP AGRICULTURA LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "e-politi-cia-ltda",
+   "nome": null,
+   "razaoSocial": "E. POLITI & CIA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "eco-mach-tech-do-brasil-produtos-eletronicos-ltda",
+   "nome": null,
+   "razaoSocial": "ECO MACH TECH DO BRASIL PRODUTOS ELETRONICOS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "ecoagricola-industria-e-comercio-de-equipamentos-ltda",
+   "nome": null,
+   "razaoSocial": "ECOAGRÍCOLA INDÚSTRIA E COMÉRCIO DE EQUIPAMENTOS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "ecoserra-industria-de-serrarias-ltda",
+   "nome": null,
+   "razaoSocial": "ECOSERRA INDÚSTRIA DE SERRARIAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "edag-do-brasil-ltda",
+   "nome": null,
+   "razaoSocial": "EDAG DO BRASIL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "edege-industria-de-equipamentos-agropecuarios-ltda",
+   "nome": null,
+   "razaoSocial": "EDEGE INDÚSTRIA DE EQUIPAMENTOS AGROPECUÁRIOS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "eirene-projetos-e-consultoria-s-a",
+   "nome": null,
+   "razaoSocial": "EIRENE PROJETOS E CONSULTORIA S/A.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "eirich-industrial-ltda",
+   "nome": null,
+   "razaoSocial": "EIRICH INDUSTRIAL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "electro-aco-altona-s-a",
+   "nome": null,
+   "razaoSocial": "ELECTRO AÇO ALTONA S/A.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "elinox-central-de-aco-inoxidavel-ltda",
+   "nome": null,
+   "razaoSocial": "ELINOX CENTRAL DE AÇO INOXIDÁVEL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "elipal-industria-e-comercio-de-equipamentos-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "ELIPAL INDÚSTRIA E COMÉRCIO DE EQUIPAMENTOS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "eng-maq-equipamentos-industriais-ltda-epp",
+   "nome": null,
+   "razaoSocial": "ENG-MAQ EQUIPAMENTOS INDUSTRIAIS LTDA. EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "entrisilos-industrial-ltda-epp",
+   "nome": null,
+   "razaoSocial": "ENTRISILOS INDUSTRIAL LTDA. EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "eurolatte-do-brasil-industria-e-comercio-de-maquinas-ltda",
+   "nome": null,
+   "razaoSocial": "EUROLATTE DO BRASIL INDÚSTRIA E COMÉRCIO DE MÁQUINAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "excel-produtos-eletronicos-ltda",
+   "nome": null,
+   "razaoSocial": "EXCEL PRODUTOS ELETRÔNICOS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "fabrica-de-maquinas-copling-ltda",
+   "nome": null,
+   "razaoSocial": "FÁBRICA DE MÁQUINAS COPLING LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "fabrica-de-maquinas-spielmann-ltda-me",
+   "nome": null,
+   "razaoSocial": "FÁBRICA DE MÁQUINAS SPIELMANN LTDA - ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "farenzena-serralheria-e-ferragens-ltda",
+   "nome": null,
+   "razaoSocial": "FARENZENA SERRALHERIA E FERRAGENS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "fernando-spode-cia-ltda-me",
+   "nome": null,
+   "razaoSocial": "FERNANDO SPODE & CIA. LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "ferronato-maquinas-e-equipamentos-agricolas-ltda-epp",
+   "nome": null,
+   "razaoSocial": "FERRONATO MÁQUINAS E EQUIPAMENTOS AGRÍCOLAS LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "fido-construtora-montagens-industriais-importacao-e-exportac",
+   "nome": null,
+   "razaoSocial": "FIDO CONSTRUTORA MONTAGENS INDUSTRIAIS, IMPORTAÇÃO E EXPORTACÃO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "fockink",
+   "nome": "Fockink",
+   "razaoSocial": "FOCKINK INDÚSTRIAS ELÉTRICAS LTDA.",
+   "marcas": [
+    "Fockink"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.fockink.ind.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Fockink",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "fornari-ltda",
+   "nome": null,
+   "razaoSocial": "FORNARI LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "francomaq-pecas-agricolas-ltda-epp",
+   "nome": null,
+   "razaoSocial": "FRANCOMAQ PEÇAS AGRICOLAS LTDA-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "franzoni-maquinas-ltda-epp",
+   "nome": null,
+   "razaoSocial": "FRANZONI MÁQUINAS LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "fravi-industria-e-comercio-de-equipamentos-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "FRAVI INDÚSTRIA E COMÉRCIO DE EQUIPAMENTOS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "friese-equipamentos-industriais-ltda",
+   "nome": null,
+   "razaoSocial": "FRIESE EQUIPAMENTOS INDUSTRIAIS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "fumajet-tecnologias-ltda",
+   "nome": null,
+   "razaoSocial": "FUMAJET TECNOLOGIAS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "fundicao-jacui-s-a-com-e-ind-de-maquinas-agricolas",
+   "nome": null,
+   "razaoSocial": "FUNDIÇÃO JACUI S/A.COM.E IND.DE MÁQUINAS AGRÍCOLAS",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "g-a-tecnologia-ltda",
+   "nome": null,
+   "razaoSocial": "G.A. TECNOLOGIA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "gallus-industria-e-com-de-maqs-e-equipamentos-para-avicultur",
+   "nome": null,
+   "razaoSocial": "GALLUS INDÚSTRIA E COM. DE MÁQS. E EQUIPAMENTOS PARA AVICULTURA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "garthen-industria-e-comercio-de-maquinas-ltda",
+   "nome": null,
+   "razaoSocial": "GARTHEN INDÚSTRIA E COMÉRCIO DE MÁQUINAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "gear-tecnologia-industrial-ltda",
+   "nome": null,
+   "razaoSocial": "GEAR TECNOLOGIA INDUSTRIAL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "geraldo-n-recktenwald-cia-ltda-sao-jose-industrial",
+   "nome": null,
+   "razaoSocial": "GERALDO N RECKTENWALD & CIA LTDA. (SÃO JOSÉ INDUSTRIAL)",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "ginegar-industria-de-plasticos-ltda",
+   "nome": null,
+   "razaoSocial": "GINEGAR INDÚSTRIA DE PLÁSTICOS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "granfinale-sistemas-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "GRANFINALE SISTEMAS AGRÍCOLAS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "grazmec",
+   "nome": "Grazmec",
+   "razaoSocial": "GRAZMEC INDÚSTRIA E COMÉRCIO LTDA.",
+   "marcas": [
+    "Grazmec"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.grazmec.com.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Grazmec⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "green-house-estufas-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "GREEN HOUSE ESTUFAS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "greenpecas-industria-e-comercio-de-maquinas-e-equipamentos-l",
+   "nome": null,
+   "razaoSocial": "GREENPEÇAS INDÚSTRIA E COMÉRCIO DE MÁQUINAS E EQUIPAMENTOS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "grunner-tecnologia-agricola-ltda",
+   "nome": null,
+   "razaoSocial": "GRUNNER TECNOLOGIA AGRÍCOLA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "gsi",
+   "nome": "GSI",
+   "razaoSocial": "GSI BRASIL INDÚSTRIA E COMÉRCIO DE EQUIPAMENTOS AGROPECUÁRIOS LTDA.",
+   "marcas": [
+    "GSI"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "gtm-tecnologia-em-equipamentos-de-poda-ltda",
+   "nome": null,
+   "razaoSocial": "GTM TECNOLOGIA EM EQUIPAMENTOS DE PODA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "gts",
+   "nome": "GTS",
+   "razaoSocial": "GTS DO BRASIL LTDA.",
+   "marcas": [
+    "GTS"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "guarany",
+   "nome": "Guarany",
+   "razaoSocial": "GUARANY INDÚSTRIA E COMÉRCIO LTDA.",
+   "marcas": [
+    "Guarany"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "haramaq-industria-e-comercio-de-maquinas-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "HARAMAQ INDÚSTRIA E COMÉRCIO DE MÁQUINAS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "harting-ltda",
+   "nome": null,
+   "razaoSocial": "HARTING LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "hd-construction-equipment-brasil-ind-e-com-de-equips-de-cons",
+   "nome": null,
+   "razaoSocial": "HD CONSTRUCTION EQUIPMENT BRASIL-IND. E COM. DE EQUIPS. DE CONST. S.A.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "herbicat",
+   "nome": "Herbicat",
+   "razaoSocial": "HERBICAT LTDA",
+   "marcas": [
+    "Herbicat"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "herts-eletromecanica-ltda-me",
+   "nome": null,
+   "razaoSocial": "HERTS ELETROMECÂNICA LTDA. ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "hidrogood-horticultura-moderna-ltda",
+   "nome": null,
+   "razaoSocial": "HIDROGOOD HORTICULTURA MODERNA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "hmv-fabricacao-de-trituradores-maquinas-e-veiculos-ltda",
+   "nome": null,
+   "razaoSocial": "HMV FABRICAÇÃO DE TRITURADORES, MÁQUINAS E VEÍCULOS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "horsch",
+   "nome": "Horsch",
+   "razaoSocial": "HORSCH DO BRASIL INDÚSTRIA COMÉRCIO E IMPORTAÇÃO DE MÁQUINAS LTDA.",
+   "marcas": [
+    "Horsch"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.horsch.com/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Landmaschinen und Landtechnik | HORSCH",
+    "dataVerificacao": "2026-10-04",
+    "observacao": "Site internacional (alemão)."
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "hubber-innovation-tech-industria-e-comercio-de-borrachas-ltd",
+   "nome": null,
+   "razaoSocial": "HUBBER INNOVATION TECH INDÚSTRIA E COMÉRCIO DE BORRACHAS LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "husqvarna-do-brasil-ind-e-com-de-prodts-para-floresta-e-jard",
+   "nome": null,
+   "razaoSocial": "HUSQVARNA DO BRASIL IND. E COM. DE PRODTS PARA FLORESTA E JARDIM LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "hydac-tecnologia-ltda",
+   "nome": null,
+   "razaoSocial": "HYDAC TECNOLOGIA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "i-n-w-solucoes-ind-de-maq-e-equips-agricolas-e-rodoviarios-l",
+   "nome": null,
+   "razaoSocial": "I.N.W. SOLUÇÕES IND. DE MÁQ. E EQUIPS. AGRÍCOLAS E RODOVIÁRIOS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "ikeda",
+   "nome": "Ikeda",
+   "razaoSocial": "IKEDA EMPRESARIAL LTDA.",
+   "marcas": [
+    "Ikeda"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_localizado",
+    "tituloPagina": null,
+    "dataVerificacao": "2026-10-04",
+    "observacao": "www.ikeda.com.br é um domínio à venda; não pertence ao fabricante."
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "imbriani-equipamentos-ltda",
+   "nome": null,
+   "razaoSocial": "IMBRIANI EQUIPAMENTOS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "imep-industria-mecanica-pompeia-limitada",
+   "nome": null,
+   "razaoSocial": "IMEP INDÚSTRIA MECÂNICA POMPÉIA LIMITADA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "imepar-industria-de-maquinas-ltda",
+   "nome": null,
+   "razaoSocial": "IMEPAR INDÚSTRIA DE MÁQUINAS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "implemaster-industria-de-equipamentos-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "IMPLEMASTER INDÚSTRIA DE EQUIPAMENTOS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "implementos-agricolas-do-nordeste-ind-e-comercio-de-maquinas",
+   "nome": null,
+   "razaoSocial": "IMPLEMENTOS AGRÍCOLAS DO NORDESTE IND. E COMÉRCIO DE MÁQUINAS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "jan",
+   "nome": "Jan",
+   "razaoSocial": "IMPLEMENTOS AGRÍCOLAS JAN S/A",
+   "marcas": [
+    "Jan"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "marispan",
+   "nome": "Marispan",
+   "razaoSocial": "IMPLEMENTOS AGRÍCOLAS MARISPAN LTDA.",
+   "marcas": [
+    "Marispan"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "incomagri-ind-e-com-de-maquinas-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "INCOMAGRI IND.E COM.DE MÁQUINAS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "indusbelt-industria-e-comercio-de-correias-ltda",
+   "nome": null,
+   "razaoSocial": "INDUSBELT INDÚSTRIA E COMÉRCIO DE CORREIAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "siltomac",
+   "nome": "Siltomac",
+   "razaoSocial": "INDÚSTRIA DE IMPLEMENTOS AGRÍCOLAS SILTOMAC LTDA.",
+   "marcas": [
+    "Siltomac"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "vence-tudo",
+   "nome": "Vence Tudo",
+   "razaoSocial": "INDÚSTRIA DE IMPLEMENTOS AGRÍCOLAS VENCE TUDO IMP. E EXP. LTDA.",
+   "marcas": [
+    "Vence Tudo"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "industria-de-maquinas-agricolas-viapiana-ltda-epp",
+   "nome": null,
+   "razaoSocial": "INDÚSTRIA DE MÁQUINAS AGRÍCOLAS VIAPIANA LTDA - EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "industria-de-maquinas-e-implementos-agricolas-k-f-ltda",
+   "nome": null,
+   "razaoSocial": "INDÚSTRIA DE MÁQUINAS E IMPLEMENTOS AGRÍCOLAS K.F. LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "industria-de-maquinas-yamasa-ltda",
+   "nome": null,
+   "razaoSocial": "INDÚSTRIA DE MÁQUINAS YAMASA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "industria-de-troncos-e-balancas-rondonia-ltda-epp",
+   "nome": null,
+   "razaoSocial": "INDÚSTRIA DE TRONCOS E BALANÇAS RONDONIA LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "gehaka",
+   "nome": "Gehaka",
+   "razaoSocial": "INDÚSTRIA E COM.ELETRO ELETRÔNICA GEHAKA LTDA.",
+   "marcas": [
+    "Gehaka"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": "Medidores de umidade de grãos — relevante para aferição de instrumentos."
+  },
+  {
+   "id": "industria-e-comercio-mecmaq-ltda",
+   "nome": null,
+   "razaoSocial": "INDÚSTRIA E COMÉRCIO MECMAQ LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "industria-mecanica-knapik-ltda-epp",
+   "nome": null,
+   "razaoSocial": "INDÚSTRIA MECÂNICA KNAPIK LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "industria-metalurgica-metalred-ltda-me",
+   "nome": null,
+   "razaoSocial": "INDÚSTRIA METALÚRGICA METALRED LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "industrial-busse-maquinas-e-implementos-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "INDUSTRIAL BUSSE MÁQUINAS E IMPLEMENTOS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "page",
+   "nome": "Pagé",
+   "razaoSocial": "INDUSTRIAL PAGÉ LTDA.",
+   "marcas": [
+    "Pagé"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.page.ind.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Industrial Pagé | Implementos Agrícolas - Silos, Secadores, Armazenagem, Unidade de Secage",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "colombo",
+   "nome": "Colombo",
+   "razaoSocial": "INDÚSTRIAS COLOMBO S.A.",
+   "marcas": [
+    "Colombo"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "industrias-machina-zaccaria-s-a",
+   "nome": null,
+   "razaoSocial": "INDÚSTRIAS MACHINA ZACCARIA S/A.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "indutar-tecno-metal-ltda",
+   "nome": null,
+   "razaoSocial": "INDUTAR TECNO METAL LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "inelca-industria-eletronica-ltda-me",
+   "nome": null,
+   "razaoSocial": "INELCA INDÚSTRIA ELETRÔNICA LTDA. ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "inmacis-industria-e-comercio-ltda-me",
+   "nome": null,
+   "razaoSocial": "INMACIS INDÚSTRIA E COMÉRCIO LTDA-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "inroda-industria-de-rocadeiras-desbravador-avare-ltda",
+   "nome": null,
+   "razaoSocial": "INRODA INDÚSTRIA DE ROÇADEIRAS DESBRAVADOR AVARÉ LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "ipacol-maquinas-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "IPACOL MÁQUINAS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "j-c-puver-ind-e-com-de-maq-agr-ltda-epp",
+   "nome": null,
+   "razaoSocial": "J C PUVER IND. E COM. DE MAQ. AGR. LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "j-c-triciclos-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "J C TRICICLOS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "j-marcos-de-oliveira-serralheria-epp",
+   "nome": null,
+   "razaoSocial": "J MARCOS DE OLIVEIRA SERRALHERIA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "j-r-equipamentos-agricolas-ltda-epp",
+   "nome": null,
+   "razaoSocial": "J. R. EQUIPAMENTOS AGRÍCOLAS LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "j-s-industria-de-carrocerias-ltda-epp",
+   "nome": null,
+   "razaoSocial": "J.S. INDÚSTRIA DE CARROCERIAS LTDA - EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "jackson-leandro-twardowski-dremher-epp",
+   "nome": null,
+   "razaoSocial": "JACKSON LEANDRO TWARDOWSKI DREMHER-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "jaguar-maquinas-ltda",
+   "nome": null,
+   "razaoSocial": "JAGUAR MÁQUINAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "januario-maquinas-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "JANUÁRIO MÁQUINAS AGRÍCOLAS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "jcb",
+   "nome": "JCB",
+   "razaoSocial": "JCB DO BRASIL LTDA.",
+   "marcas": [
+    "JCB"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "jenc-maquinas-e-implementos-ltda-me",
+   "nome": null,
+   "razaoSocial": "JENC MÁQUINAS E IMPLEMENTOS LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "jls-maquinas-ltda",
+   "nome": null,
+   "razaoSocial": "JLS MÁQUINAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "jmk-industria-de-equipamentos-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "JMK - INDÚSTRIA DE EQUIPAMENTOS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "john-deere",
+   "nome": "John Deere",
+   "razaoSocial": "JOHN DEERE BRASIL LTDA.",
+   "marcas": [
+    "John Deere"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.deere.com.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "John Deere BR | Equipamentos industriais | Máquinas e implementos agrícolas",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "jose-murilia-bozza-comercio-e-industria-ltda",
+   "nome": null,
+   "razaoSocial": "JOSÉ MURÍLIA BOZZA COMÉRCIO E INDÚSTRIA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "jost-agriculture-construction-south-america-ltda",
+   "nome": null,
+   "razaoSocial": "JOST AGRICULTURE & CONSTRUCTION SOUTH AMÉRICA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "jumil",
+   "nome": "Jumil",
+   "razaoSocial": "JUMIL-JUSTINO DE MORAIS, IRMÃOS S/A.",
+   "marcas": [
+    "Jumil"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "jv-irmaos-ltda-me",
+   "nome": null,
+   "razaoSocial": "JV IRMÃOS LTDA. ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "k-o-maquinas-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "K.O. MÁQUINAS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "kamaq",
+   "nome": "Kamaq",
+   "razaoSocial": "KAMAQ MÁQUINAS E IMPLEMENTOS AGRÍCOLAS LTDA.",
+   "marcas": [
+    "Kamaq"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "kbm-equipamentos-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "KBM EQUIPAMENTOS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "kepler-weber",
+   "nome": "Kepler Weber",
+   "razaoSocial": "KEPLER WEBER S/A.",
+   "marcas": [
+    "Kepler Weber"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.kepler.com.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Kepler Weber: Soluções para Armazenagem Agrícola e Movimentação de Granéis Sólidos",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "khrin-do-brasil-solucoes-eco-inteligentes-ltda",
+   "nome": null,
+   "razaoSocial": "KHRIN DO BRASIL SOLUÇÕES ECO INTELIGENTES LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "kilbra-trading-equipamentos-para-avicultura-ltda",
+   "nome": null,
+   "razaoSocial": "KILBRA TRADING EQUIPAMENTOS PARA AVICULTURA LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "komatsu-do-brasil-ltda",
+   "nome": null,
+   "razaoSocial": "KOMATSU DO BRASIL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "kuhn",
+   "nome": "Kuhn",
+   "razaoSocial": "KUHN DO BRASIL S.A.",
+   "marcas": [
+    "Kuhn"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.kuhn.com.br/",
+    "status": "erro_certificado",
+    "tituloPagina": null,
+    "dataVerificacao": "2026-10-04",
+    "observacao": "Certificado TLS do site falhou na verificação."
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "l-flex-industria-e-comercio-ltda-me",
+   "nome": null,
+   "razaoSocial": "L.FLEX INDÚSTRIA E COMÉRCIO LTDA. ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "l5-hd-industria-e-comercio-ltda-me",
+   "nome": null,
+   "razaoSocial": "L5 HD INDÚSTRIA E COMÉRCIO LTDA - ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "la-zanchetta-industria-metalurgica-ltda-me",
+   "nome": null,
+   "razaoSocial": "LA ZANCHETTA INDÚSTRIA METALÚRGICA LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "laboremus-ind-e-com-de-maquinas-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "LABOREMUS IND.E COM.DE MÁQUINAS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "landini",
+   "nome": "Landini",
+   "razaoSocial": "LANDINI TRATORES DO BRASIL LTDA.",
+   "marcas": [
+    "Landini"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "leandro-pilati-wachholz-me",
+   "nome": null,
+   "razaoSocial": "LEANDRO PILATI WACHHOLZ. ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "leogap-industria-e-comercio-de-maquinas-ltda",
+   "nome": null,
+   "razaoSocial": "LEOGAP INDÚSTRIA E COMÉRCIO DE MÁQUINAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "lightera-latam-s-a",
+   "nome": null,
+   "razaoSocial": "LIGHTERA LATAM S.A.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "logimatec-maquinas-ltda-epp",
+   "nome": null,
+   "razaoSocial": "LOGIMATEC MÁQUINAS LTDA.EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "lp-manutencoes-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "LP MANUTENÇÕES AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "ls-tractor",
+   "nome": "LS Tractor",
+   "razaoSocial": "LS MTRON INDÚSTRIA DE MÁQUINAS AGRÍCOLAS LTDA.",
+   "marcas": [
+    "LS Tractor"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "lubing-do-brasil-ltda",
+   "nome": null,
+   "razaoSocial": "LUBING DO BRASIL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "luma-implementos-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "LUMA IMPLEMENTOS AGRÍCOLAS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "mac-lub-industria-metalurgica-ltda",
+   "nome": null,
+   "razaoSocial": "MAC LUB INDÚSTRIA METALÚRGICA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "maggion-industrias-de-pneus-e-maquinas-ltda",
+   "nome": null,
+   "razaoSocial": "MAGGION INDÚSTRIAS DE PNEUS E MÁQUINAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "magma-engenharia-do-brasil-ltda",
+   "nome": null,
+   "razaoSocial": "MAGMA ENGENHARIA DO BRASIL LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "magnani-implementos-para-suinocultura-ltda-epp",
+   "nome": null,
+   "razaoSocial": "MAGNANI - IMPLEMENTOS PARA SUINOCULTURA LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "magneto-do-brasil-ltda-me",
+   "nome": null,
+   "razaoSocial": "MAGNETO DO BRASIL LTDA. - ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "magnojet",
+   "nome": "Magnojet",
+   "razaoSocial": "MAGNO JET INDÚSTRIA LTDA.",
+   "marcas": [
+    "Magnojet"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "magsten-mecanizacao-agricola-sustentavel-ltda",
+   "nome": null,
+   "razaoSocial": "MAGSTEN MECANIZAÇÃO AGRÍCOLA SUSTENTÁVEL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "mahindra",
+   "nome": "Mahindra",
+   "razaoSocial": "MAHINDRA DO BRASIL INDUSTRIAL LTDA.",
+   "marcas": [
+    "Mahindra"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "makreis-industria-e-comercio-de-maquinas-ltda-me",
+   "nome": null,
+   "razaoSocial": "MAKREIS INDÚSTRIA E COMÉRCIO DE MÁQUINAS LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "manitou-brasil-importacao-e-comercio-de-maquinas-de-elevacao",
+   "nome": null,
+   "razaoSocial": "MANITOU BRASIL IMPORTAÇÃO E COMÉRCIO DE MÁQUINAS DE ELEVAÇÃO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "maqesfera-maquinas-e-equipamentos-ltda",
+   "nome": null,
+   "razaoSocial": "MAQESFERA MÁQUINAS E EQUIPAMENTOS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "maqtron-importacao-e-exportacao-ltda",
+   "nome": null,
+   "razaoSocial": "MAQTRON IMPORTAÇÃO E EXPORTAÇÃO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "jacto",
+   "nome": "Jacto",
+   "razaoSocial": "MÁQUINAS AGRÍCOLAS JACTO S/A.",
+   "marcas": [
+    "Jacto"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://jacto.com/",
+    "status": "acessivel_nao_confirmado",
+    "tituloPagina": null,
+    "dataVerificacao": "2026-10-04",
+    "observacao": "Respondeu, mas sem título legível."
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "maquinas-agricolas-santana-ltda-me",
+   "nome": null,
+   "razaoSocial": "MÁQUINAS AGRÍCOLAS SANTANA LTDA. - ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "marcelo-lawall-epp",
+   "nome": null,
+   "razaoSocial": "MARCELO LAWALL - EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "marcelo-schmidt-cia-ltda-me",
+   "nome": null,
+   "razaoSocial": "MARCELO SCHMIDT & CIA LTDA. - ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "marcher-brasil-agroindustrial-s-a",
+   "nome": null,
+   "razaoSocial": "MARCHER BRASIL AGROINDUSTRIAL S.A.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "tatu-marchesan",
+   "nome": "Tatu Marchesan",
+   "razaoSocial": "MARCHESAN IMPLEMENTOS E MÁQUINAS AGRÍCOLAS TATU S.A.",
+   "marcas": [
+    "Tatu"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_localizado",
+    "tituloPagina": null,
+    "dataVerificacao": "2026-10-04",
+    "observacao": "ATENÇÃO: www.tatu.com.br pertence a outra empresa (Tatu PreMoldados, concreto). Site correto ainda não confirmado."
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "marionice-casa-de-oliveira-cia-ltda-me",
+   "nome": null,
+   "razaoSocial": "MARIONICE CASA DE OLIVEIRA & CIA LTDA. ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "markal-industria-e-comercio-de-equipamentos-agricolas-ltda-e",
+   "nome": null,
+   "razaoSocial": "MARKAL INDÚSTRIA E COMÉRCIO DE EQUIPAMENTOS AGRÍCOLAS LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "marvitubos-tubos-e-pecas-hidraulicas-ltda",
+   "nome": null,
+   "razaoSocial": "MARVITUBOS TUBOS E PEÇAS HIDRÁULICAS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "matao-equipamentos-industriais-e-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "MATÃO EQUIPAMENTOS INDUSTRIAIS E AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "matisa-maquinas-de-costura-e-empacotamento-ltda",
+   "nome": null,
+   "razaoSocial": "MATISA MÁQUINAS DE COSTURA E EMPACOTAMENTO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "matsuda-equipamentos-ltda",
+   "nome": null,
+   "razaoSocial": "MATSUDA EQUIPAMENTOS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "maxxforte-industria-de-implementos-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "MAXXFORTE INDÚSTRIA DE IMPLEMENTOS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "megatec-equipamentos-rodoviarios-ltda",
+   "nome": null,
+   "razaoSocial": "MEGATEC EQUIPAMENTOS RODOVIÁRIOS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "menegon-automotivos-ltda-me",
+   "nome": null,
+   "razaoSocial": "MENEGON AUTOMOTIVOS LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "menta",
+   "nome": "Menta",
+   "razaoSocial": "MENTA MÁQUINAS AGRÍCOLAS LTDA.",
+   "marcas": [
+    "Menta"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.menta.com.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Menta Maquinas Agricolas",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "mepai-agroindustrial-ltda-epp",
+   "nome": null,
+   "razaoSocial": "MEPAI AGROINDUSTRIAL LTDA - EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "mepel",
+   "nome": "Mepel",
+   "razaoSocial": "MEPEL MÁQUINAS E EQUIPAMENTOS LTDA.",
+   "marcas": [
+    "Mepel"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "metalme-industria-e-comercio-de-equipamentos-agropecuarios-l",
+   "nome": null,
+   "razaoSocial": "METALME - INDÚSTRIA E COMÉRCIO DE EQUIPAMENTOS AGROPECUÁRIOS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "metalurgica-262-ltda",
+   "nome": null,
+   "razaoSocial": "METALÚRGICA 262 LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "metalurgica-adams-ltda",
+   "nome": null,
+   "razaoSocial": "METALÚRGICA ADAMS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "metalurgica-imbriani-ltda-epp",
+   "nome": null,
+   "razaoSocial": "METALÚRGICA IMBRIANI LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "metalurgica-joseense-ltda",
+   "nome": null,
+   "razaoSocial": "METALÚRGICA JOSEENSE LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "metalurgica-tapajos-ltda-me",
+   "nome": null,
+   "razaoSocial": "METALÚRGICA TAPAJÓS LTDA-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "metalurgica-trapp-ltda",
+   "nome": null,
+   "razaoSocial": "METALÚRGICA TRAPP LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "methal-c-maquinas-e-pecas-ltda",
+   "nome": null,
+   "razaoSocial": "METHAL C - MÁQUINAS E PEÇAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "m-extend-do-brasil-ltda",
+   "nome": null,
+   "razaoSocial": "M-EXTEND DO BRASIL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "mga-industria-e-comercio-de-maquinas-e-pecas-agricolas-ltda-",
+   "nome": null,
+   "razaoSocial": "MGA INDÚSTRIA E COMÉRCIO DE MÁQUINAS E PEÇAS AGRÍCOLAS LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "michigan-do-brasil-ltda",
+   "nome": null,
+   "razaoSocial": "MICHIGAN DO BRASIL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "minami-industria-de-aparelhos-para-a-lavoura-ltda",
+   "nome": null,
+   "razaoSocial": "MINAMI INDÚSTRIA DE APARELHOS PARA A LAVOURA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "mocelin-servicos-integrados-em-engenharia-e-agroinovacao-ltd",
+   "nome": null,
+   "razaoSocial": "MOCELIN SERVIÇOS INTEGRADOS EM ENGENHARIA E AGROINOVAÇÃO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "moldemaq-maquinas-e-implementos-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "MOLDEMAQ MÁQUINAS E IMPLEMENTOS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "momesso-industria-de-maquinas-ltda",
+   "nome": null,
+   "razaoSocial": "MOMESSO INDÚSTRIA DE MÁQUINAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "moraes-equipamentos-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "MORAES EQUIPAMENTOS AGRÍCOLAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "morcelli-amorim-cabines-ltda",
+   "nome": null,
+   "razaoSocial": "MORCELLI & AMORIM CABINES LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "moto-honda-da-amazonia-ltda",
+   "nome": null,
+   "razaoSocial": "MOTO HONDA DA AMAZÔNIA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "mp-agro-maquinas-agricolas-ltda-me",
+   "nome": null,
+   "razaoSocial": "MP AGRO MÁQUINAS AGRÍCOLAS LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "mr-solucoes-comerciais-industriais-e-servicos-ltda-me",
+   "nome": null,
+   "razaoSocial": "MR SOLUÇÕES COMERCIAIS, INDUSTRIAIS E SERVIÇOS LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "mundo-novo-maquinas-agricolas-ltda-me",
+   "nome": null,
+   "razaoSocial": "MUNDO NOVO MÁQUINAS AGRÍCOLAS LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "munters-brasil-industria-e-comercio-ltda",
+   "nome": null,
+   "razaoSocial": "MUNTERS BRASIL INDÚSTRIA E COMÉRCIO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "muxo-servicos-e-industria-de-equipamentos-ltda-me",
+   "nome": null,
+   "razaoSocial": "MUXO SERVIÇOS E INDÚSTRIA DE EQUIPAMENTOS LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "nb-maquinas-ltda",
+   "nome": null,
+   "razaoSocial": "NB MÁQUINAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "netzsch-ind-e-com-de-equipamentos-de-moagem-ltda",
+   "nome": null,
+   "razaoSocial": "NETZSCH IND.E COM.DE EQUIPAMENTOS DE MOAGEM LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "nonino-equipamentos-agricolas-e-rodoviarios-limitada",
+   "nome": null,
+   "razaoSocial": "NONINO EQUIPAMENTOS AGRÍCOLAS E RODOVIÁRIOS LIMITADA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "ns-importacao-e-comercio-ltda",
+   "nome": null,
+   "razaoSocial": "NS IMPORTAÇÃO E COMÉRCIO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "ordemilk-ltda",
+   "nome": null,
+   "razaoSocial": "ORDEMILK LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "palini-alves-ltda",
+   "nome": null,
+   "razaoSocial": "PALINI & ALVES LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "parker-hannifin-industria-e-comercio-ltda",
+   "nome": null,
+   "razaoSocial": "PARKER HANNIFIN INDÚSTRIA E COMÉRCIO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "perozin-industria-metalurgica-ltda",
+   "nome": null,
+   "razaoSocial": "PEROZIN INDÚSTRIA METALÚRGICA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "phoenix-contact-industria-e-comercio-limitada",
+   "nome": null,
+   "razaoSocial": "PHOENIX CONTACT INDÚSTRIA E COMÉRCIO LIMITADA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "piccin",
+   "nome": "Piccin",
+   "razaoSocial": "PICCIN MÁQUINAS AGRÍCOLAS LTDA.",
+   "marcas": [
+    "Piccin"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "pieralisi-do-brasil-ltda",
+   "nome": null,
+   "razaoSocial": "PIERALISI DO BRASIL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "pinhalense-s-a-maquinas-agricolas",
+   "nome": null,
+   "razaoSocial": "PINHALENSE S/A. MÁQUINAS AGRÍCOLAS",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "plantfort-estufas-agricolas-ltda-epp",
+   "nome": null,
+   "razaoSocial": "PLANTFORT ESTUFAS AGRÍCOLAS LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "plasson-do-brasil-ltda",
+   "nome": null,
+   "razaoSocial": "PLASSON DO BRASIL LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "plasson-do-brasil-ltda-2",
+   "nome": null,
+   "razaoSocial": "PLASSON DO BRASIL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "plastireal-industria-e-comercio-de-plasticos-ltda",
+   "nome": null,
+   "razaoSocial": "PLASTIREAL INDÚSTRIA E COMÉRCIO DE PLÁSTICOS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "postes-panucci-pre-fabricados-de-concretos-ltda-epp",
+   "nome": null,
+   "razaoSocial": "POSTES PANUCCI PRE-FABRICADOS DE CONCRETOS LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "pro-solus-do-brasil-s-a",
+   "nome": null,
+   "razaoSocial": "PRO SOLUS DO BRASIL S/A",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "procer-automacao-s-a",
+   "nome": null,
+   "razaoSocial": "PROCER AUTOMAÇÃO S/A.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "progresso-industria-de-equipamentos-agricolas-e-agropecuario",
+   "nome": null,
+   "razaoSocial": "PROGRESSO INDÚSTRIA DE EQUIPAMENTOS AGRÍCOLAS E AGROPECUARIOS LTDA. ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "promarking-tecnologia-e-automacao-industrial-ltda-epp",
+   "nome": null,
+   "razaoSocial": "PROMARKING TECNOLOGIA E AUTOMAÇÃO INDUSTRIAL LTDA - EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "pulsfog",
+   "nome": "Pulsfog",
+   "razaoSocial": "PULSFOG PULVERIZADORES LTDA.",
+   "marcas": [
+    "Pulsfog"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "realmaq-maquinas-agricolas-ltda-epp",
+   "nome": null,
+   "razaoSocial": "REALMAQ MÁQUINAS AGRÍCOLAS LTDA.- EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "refribrasil-industria-e-comercio-ltda",
+   "nome": null,
+   "razaoSocial": "REFRIBRASIL INDÚSTRIA E COMÉRCIO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "renato-vedana-me",
+   "nome": null,
+   "razaoSocial": "RENATO VEDANA. ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "robert-bosch-limitada",
+   "nome": null,
+   "razaoSocial": "ROBERT BOSCH LIMITADA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "rodimaq-comercio-de-maquinas-agricolas-ltda-me",
+   "nome": null,
+   "razaoSocial": "RODIMAQ COMÉRCIO DE MÁQUINAS AGRICOLAS LTDA-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "rohr-maquinas-ltda",
+   "nome": null,
+   "razaoSocial": "ROHR MÁQUINAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "rondon-industria-e-comercio-de-equipamentos-para-avicultura-",
+   "nome": null,
+   "razaoSocial": "RONDON INDÚSTRIA E COMÉRCIO DE EQUIPAMENTOS PARA AVICULTURA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "roster-industria-de-maquinas-e-equipamentos-ltda-epp",
+   "nome": null,
+   "razaoSocial": "ROSTER INDÚSTRIA DE MÁQUINAS E EQUIPAMENTOS LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "rubemaq-industria-e-comercio-ltda",
+   "nome": null,
+   "razaoSocial": "RUBEMAQ INDÚSTRIA E COMÉRCIO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "rugeri-mec-rul-s-a",
+   "nome": null,
+   "razaoSocial": "RUGERI MEC-RUL S/A.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "ruralmac-industria-e-comercio-de-maquinas-ltda",
+   "nome": null,
+   "razaoSocial": "RURALMAC INDÚSTRIA E COMÉRCIO DE MÁQUINAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "sagra-industria-e-comercio-de-equipamentos-ltda",
+   "nome": null,
+   "razaoSocial": "SAGRA INDÚSTRIA E COMÉRCIO DE EQUIPAMENTOS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "sansuy-s-a-industria-de-plasticos",
+   "nome": null,
+   "razaoSocial": "SANSUY S/A. INDÚSTRIA DE PLÁSTICOS",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "santa-izabel-agro-industria-ltda",
+   "nome": null,
+   "razaoSocial": "SANTA IZABEL AGRO INDÚSTRIA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "saur-equipamentos-s-a",
+   "nome": null,
+   "razaoSocial": "SAUR EQUIPAMENTOS S.A.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "sc-maquinas-e-implementos-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "SC MÁQUINAS E IMPLEMENTOS AGRÍCOLAS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "sc3-gomes-industria-e-comercio-ltda",
+   "nome": null,
+   "razaoSocial": "SC3 GOMES INDÚSTRIA E COMÉRCIO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "schumacher-industrial-ltda",
+   "nome": null,
+   "razaoSocial": "SCHUMACHER INDUSTRIAL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "semecat-serralheria-e-metalurgica-catanduva-ltda",
+   "nome": null,
+   "razaoSocial": "SEMECAT - SERRALHERIA E METALÚRGICA CATANDUVA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "sergio-knorst-filho-ltda",
+   "nome": null,
+   "razaoSocial": "SÉRGIO KNORST & FILHO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "sidinei-aparecido-delefrate-epp",
+   "nome": null,
+   "razaoSocial": "SIDINEI APARECIDO DELEFRATE - EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "siemens-brasil-ltda",
+   "nome": null,
+   "razaoSocial": "SIEMENS BRASIL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "silva-lara-equipamentos-agricolas-industria-e-metalurgica-lt",
+   "nome": null,
+   "razaoSocial": "SILVA & LARA EQUIPAMENTOS AGRÍCOLAS INDÚSTRIA E METALÚRGICA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "simionato-ind-e-com-de-maq-e-equips-para-agricultura-ltda-me",
+   "nome": null,
+   "razaoSocial": "SIMIONATO IND. E COM. DE MAQ. E EQUIPS PARA AGRICULTURA LTDA. - ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "skf-industrial-brasil-ltda",
+   "nome": null,
+   "razaoSocial": "SKF INDUSTRIAL BRASIL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "sma-metalurgica-ltda",
+   "nome": null,
+   "razaoSocial": "SMA METALÚRGICA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "sollus-mecanizacao-agricola-ltda",
+   "nome": null,
+   "razaoSocial": "SOLLUS MECANIZAÇÃO AGRÍCOLA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "solomaq-ltda-epp",
+   "nome": null,
+   "razaoSocial": "SOLOMAQ LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "specialty-product-technologies-comercio-e-industria-de-equip",
+   "nome": null,
+   "razaoSocial": "SPECIALTY PRODUCT TECHNOLOGIES COMÉRCIO E INDÚSTRIA DE EQUIPS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "stara",
+   "nome": "Stara",
+   "razaoSocial": "STARA S/A. INDÚSTRIA DE IMPLEMENTOS AGRÍCOLAS",
+   "marcas": [
+    "Stara"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.stara.com.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Máquinas e Implementos Agrícolas | Stara",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "stauff-brasil-ltda",
+   "nome": null,
+   "razaoSocial": "STAUFF BRASIL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "stihl-ferramentas-motorizadas-ltda",
+   "nome": null,
+   "razaoSocial": "STIHL FERRAMENTAS MOTORIZADAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "suigam-industria-agropecuaria-ltda",
+   "nome": null,
+   "razaoSocial": "SUIGAM INDÚSTRIA AGROPECUÁRIA LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "supportronics-ltda",
+   "nome": null,
+   "razaoSocial": "SUPPORTRONICS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "swz-industria-ltda",
+   "nome": null,
+   "razaoSocial": "SWZ INDÚSTRIA LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "tdi-maquinas-agricolas-industria-e-comercio-ltda",
+   "nome": null,
+   "razaoSocial": "TDI MÁQUINAS AGRÍCOLAS INDÚSTRIA E COMÉRCIO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "teciam-solucoes-em-telas-metalicas-ltda",
+   "nome": null,
+   "razaoSocial": "TECIAM SOLUÇÕES EM TELAS METÁLICAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "tecmesteel-industria-metalurgica-ltda",
+   "nome": null,
+   "razaoSocial": "TECMESTEEL INDÚSTRIA METALÚRGICA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "tecnoesse-industria-e-comercio-ltda",
+   "nome": null,
+   "razaoSocial": "TECNOESSE INDÚSTRIA E COMÉRCIO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "tecpron-automacao-industrial-ltda-epp",
+   "nome": null,
+   "razaoSocial": "TECPRON AUTOMAÇÃO INDUSTRIAL LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "tecsoil-automacao-e-sistemas-s-a",
+   "nome": null,
+   "razaoSocial": "TECSOIL AUTOMAÇÃO E SISTEMAS S.A.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "telas-botinha-ltda-me",
+   "nome": null,
+   "razaoSocial": "TELAS BOTINHA LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "thermoval-industria-de-valvulas-ltda",
+   "nome": null,
+   "razaoSocial": "THERMOVAL INDÚSTRIA DE VÁLVULAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "thk-brasil-industria-e-comercio-ltda",
+   "nome": null,
+   "razaoSocial": "THK BRASIL INDÚSTRIA E COMÉRCIO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "tiago-miranda-de-figueiredo-ltda-me",
+   "nome": null,
+   "razaoSocial": "TIAGO MIRANDA DE FIGUEIREDO LTDA.-ME",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "toledo",
+   "nome": "Toledo",
+   "razaoSocial": "TOLEDO DO BRASIL INDÚSTRIA DE BALANÇAS LTDA.",
+   "marcas": [
+    "Toledo"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": "Balanças — relevante para aferição de instrumentos."
+  },
+  {
+   "id": "tornearia-e-mecanica-masiero-ltda",
+   "nome": null,
+   "razaoSocial": "TORNEARIA E MECÂNICA MASIERO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "tramontini-maquinas-ltda",
+   "nome": null,
+   "razaoSocial": "TRAMONTINI MÁQUINAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "trevisan-equipamentos-agro-industriais-ltda",
+   "nome": null,
+   "razaoSocial": "TREVISAN EQUIPAMENTOS AGRO-INDUSTRIAIS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "triton-fertilance-maquinas-agricolas-ltda",
+   "nome": null,
+   "razaoSocial": "TRITON FERTILANCE MÁQUINAS AGRÍCOLAS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "triton",
+   "nome": "Triton",
+   "razaoSocial": "TRITON MÁQUINAS AGRÍCOLAS LTDA.",
+   "marcas": [
+    "Triton"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.triton.com.br/",
+    "status": "acessivel_nao_confirmado",
+    "tituloPagina": "Loja em manutenção",
+    "dataVerificacao": "2026-10-04",
+    "observacao": "Página 'Loja em manutenção'; identidade não confirmada."
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "tuzzi-sistemas-automotivos-s-a",
+   "nome": null,
+   "razaoSocial": "TUZZI SISTEMAS AUTOMOTIVOS S.A.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "tytan-agriculture-ltda",
+   "nome": null,
+   "razaoSocial": "TYTAN AGRICULTURE LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "utipec-utilidades-agropecuarias-ltda",
+   "nome": null,
+   "razaoSocial": "UTIPEC-UTILIDADES AGROPECUÁRIAS LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "veigro-industria-de-maquinas-e-equipamentos-ltda-epp",
+   "nome": null,
+   "razaoSocial": "VEIGRO INDÚSTRIA DE MÁQUINAS E EQUIPAMENTOS LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "vencomatic-south-america-ltda",
+   "nome": null,
+   "razaoSocial": "VENCOMATIC SOUTH AMÉRICA LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "veneto-industria-de-maquinas-ltda-epp",
+   "nome": null,
+   "razaoSocial": "VENETO INDÚSTRIA DE MÁQUINAS LTDA. - EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "versatil-industrial-agricola-ltda-epp",
+   "nome": null,
+   "razaoSocial": "VERSÁTIL INDUSTRIAL AGRÍCOLA LTDA.-EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "vicon",
+   "nome": "Vicon",
+   "razaoSocial": "VICON MÁQUINAS AGRÍCOLAS LTDA.",
+   "marcas": [
+    "Vicon"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": "https://www.vicon.com.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Vicon Máquinas Agrícolas",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "vn-maquinas-industria-e-comercio-ltda",
+   "nome": null,
+   "razaoSocial": "VN MÁQUINAS INDÚSTRIA E COMÉRCIO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "volvo-equipamentos-de-construcao-latin-america-ltda",
+   "nome": null,
+   "razaoSocial": "VOLVO EQUIPAMENTOS DE CONSTRUÇÃO LATIN AMERICA LTDA",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "vosser-industria-e-comercio-de-geradores-de-calor-ltda",
+   "nome": null,
+   "razaoSocial": "VOSSER INDÚSTRIA E COMÉRCIO DE GERADORES DE CALOR LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "waig-industrial-ltda",
+   "nome": null,
+   "razaoSocial": "WAIG INDUSTRIAL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "walfriedo-mugge-ltda-epp",
+   "nome": null,
+   "razaoSocial": "WALFRIEDO MUGGE LTDA.- EPP",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "watanabe-industria-e-comercio-de-maquinas-ltda",
+   "nome": null,
+   "razaoSocial": "WATANABE INDÚSTRIA E COMÉRCIO DE MÁQUINAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "wd-master-industria-e-comercio-ltda",
+   "nome": null,
+   "razaoSocial": "WD MASTER INDÚSTRIA E COMÉRCIO LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "weg-equipamentos-eletricos-s-a-motores",
+   "nome": null,
+   "razaoSocial": "WEG EQUIPAMENTOS ELÉTRICOS S/A - MOTORES",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "weidmuller-conexel-do-brasil-conexoes-eletricas-ltda",
+   "nome": null,
+   "razaoSocial": "WEIDMULLER CONEXEL DO BRASIL CONEXÕES ELÉTRICAS LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "weizur-do-brasil-ltda",
+   "nome": null,
+   "razaoSocial": "WEIZUR DO BRASIL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "wipro-do-brasil-industrial-ltda",
+   "nome": null,
+   "razaoSocial": "WIPRO DO BRASIL INDUSTRIAL LTDA.",
+   "marcas": [],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "yanmar",
+   "nome": "Yanmar",
+   "razaoSocial": "YANMAR SOUTH AMERICA INDÚSTRIA DE MÁQUINAS LTDA.",
+   "marcas": [
+    "Yanmar",
+    "Solis"
+   ],
+   "associadaCSMIA": true,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": null
+   },
+   "segmentos": [],
+   "observacao": "Solis comercializada pela Yanmar no Brasil segundo pesquisa; conferir."
+  },
+  {
+   "id": "semeato",
+   "nome": "Semeato",
+   "razaoSocial": null,
+   "marcas": [
+    "Semeato"
+   ],
+   "associadaCSMIA": false,
+   "site": {
+    "url": "https://www.semeato.com.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Semeato",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "agrale",
+   "nome": "Agrale",
+   "razaoSocial": null,
+   "marcas": [
+    "Agrale"
+   ],
+   "associadaCSMIA": false,
+   "site": {
+    "url": "https://www.agrale.com.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Agrale - Tratores, Caminhões, Chassis, Utilitários e Motores",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": "Também fabrica caminhões e motores."
+  },
+  {
+   "id": "imasa",
+   "nome": "Imasa",
+   "razaoSocial": null,
+   "marcas": [
+    "Imasa"
+   ],
+   "associadaCSMIA": false,
+   "site": {
+    "url": "https://www.imasa.com.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Indústria de Máquinas Agrícolas, Plantadeiras - IMASA",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "nogueira",
+   "nome": "Nogueira",
+   "razaoSocial": null,
+   "marcas": [
+    "Nogueira"
+   ],
+   "associadaCSMIA": false,
+   "site": {
+    "url": "https://www.nogueira.com.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Nogueira - Essencial no Campo",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "kubota",
+   "nome": "Kubota",
+   "razaoSocial": null,
+   "marcas": [
+    "Kubota"
+   ],
+   "associadaCSMIA": false,
+   "site": {
+    "url": "https://www.kubotatratores.com.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Kubota - For Earth, For Life",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": "Importada/representada no Brasil pela Tratores Mercosul Importadora (TMI)."
+  },
+  {
+   "id": "lindsay",
+   "nome": "Lindsay",
+   "razaoSocial": null,
+   "marcas": [
+    "Lindsay"
+   ],
+   "associadaCSMIA": false,
+   "site": {
+    "url": "https://www.lindsay.com/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Global Partner For Irrigation & Infrastructure - Lindsay",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "precision-planting",
+   "nome": "Precision Planting",
+   "razaoSocial": null,
+   "marcas": [
+    "Precision Planting"
+   ],
+   "associadaCSMIA": false,
+   "site": {
+    "url": "https://www.precisionplanting.com/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Precision Planting | Upgrade Your Farm Equipment",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "tym",
+   "nome": "TYM",
+   "razaoSocial": null,
+   "marcas": [
+    "TYM"
+   ],
+   "associadaCSMIA": false,
+   "site": {
+    "url": "https://www.tym.world/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Designed for your world - TYM",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": null
+  },
+  {
+   "id": "fankhauser",
+   "nome": "Fankhauser",
+   "razaoSocial": null,
+   "marcas": [
+    "Fankhauser"
+   ],
+   "associadaCSMIA": false,
+   "site": {
+    "url": "https://www.fankhauser.com.br/",
+    "status": "confirmado_pelo_titulo",
+    "tituloPagina": "Fankhauser | Peças Originais para Plantadeiras e Semeadeiras Grunder",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": "Site de peças para plantadeiras e semeadeiras Grunder."
+  },
+  {
+   "id": "claas",
+   "nome": "Claas",
+   "razaoSocial": null,
+   "marcas": [
+    "Claas"
+   ],
+   "associadaCSMIA": false,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": "Marca com atuação no Brasil; site não confirmado nesta consulta."
+  },
+  {
+   "id": "montana",
+   "nome": "Montana",
+   "razaoSocial": null,
+   "marcas": [
+    "Montana"
+   ],
+   "associadaCSMIA": false,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": "Marca com atuação no Brasil; site não confirmado nesta consulta."
+  },
+  {
+   "id": "valmont",
+   "nome": "Valmont",
+   "razaoSocial": null,
+   "marcas": [
+    "Valmont"
+   ],
+   "associadaCSMIA": false,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": "Marca com atuação no Brasil; site não confirmado nesta consulta."
+  },
+  {
+   "id": "amazone",
+   "nome": "Amazone",
+   "razaoSocial": null,
+   "marcas": [
+    "Amazone"
+   ],
+   "associadaCSMIA": false,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": "Marca com atuação no Brasil; site não confirmado nesta consulta."
+  },
+  {
+   "id": "lemken",
+   "nome": "Lemken",
+   "razaoSocial": null,
+   "marcas": [
+    "Lemken"
+   ],
+   "associadaCSMIA": false,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": "Marca com atuação no Brasil; site não confirmado nesta consulta."
+  },
+  {
+   "id": "kverneland",
+   "nome": "Kverneland",
+   "razaoSocial": null,
+   "marcas": [
+    "Kverneland"
+   ],
+   "associadaCSMIA": false,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": "Marca com atuação no Brasil; site não confirmado nesta consulta."
+  },
+  {
+   "id": "metalfor",
+   "nome": "Metalfor",
+   "razaoSocial": null,
+   "marcas": [
+    "Metalfor"
+   ],
+   "associadaCSMIA": false,
+   "site": {
+    "url": null,
+    "status": "nao_verificado",
+    "dataVerificacao": "2026-10-04"
+   },
+   "segmentos": [],
+   "observacao": "Marca com atuação no Brasil; site não confirmado nesta consulta."
+  }
+ ]
+}

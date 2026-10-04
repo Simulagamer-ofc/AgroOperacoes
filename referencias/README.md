@@ -6,6 +6,7 @@ Módulo independente da interface. Pode ser incorporado ao Nexus Agro 2.23 ou ao
 |---|---|
 | `regras-afericao.json` | Regras com escopo, limites, condições, fontes e status de validação; tabela ISO 10625; fórmulas |
 | `avaliador.js` | Avaliação (`avaliar`) e fluxos compostos; funciona no navegador (`window.NexusAvaliador`) e no Node |
+| `catalogo-fabricantes.json` | Fabricantes de máquinas e implementos atuantes no Brasil (identificação; sem parâmetros técnicos) |
 | `tests/avaliador.test.js` | Testes: `node --test referencias/tests/*.test.js` |
 
 ## Como o avaliador decide
@@ -50,3 +51,11 @@ Sem referência no banco (o sistema não avalia): perdas de milho, trigo, feijã
 4. Rodar os testes. A auditoria rejeita regra validada sem responsável, data, trecho conferido ou limite.
 
 Para retirar uma regra de uso, marcar `statusValidacao: "suspensa"`. Não apagar, para manter a rastreabilidade dos registros antigos.
+
+## Catálogo de fabricantes (versão 0.1.0)
+
+Base: lista pública de associadas da **CSMIA/ABIMAQ** (consulta em 04/10/2026), mais marcas relevantes não associadas cujo site foi confirmado. Total: 383 registros.
+
+- **Site do fabricante:** só é registrado quando o título da página confirma a empresa. Alguns endereços óbvios pertencem a outras empresas: `www.tatu.com.br` é uma fábrica de pré-moldados e `www.ikeda.com.br` é um domínio à venda.
+- **Segmentos e modelos:** começam vazios e são preenchidos fabricante por fabricante, a partir do site ou catálogo oficial.
+- **Uso na regulagem:** este arquivo identifica quem fabrica. Nenhum parâmetro de regulagem vem dele.
