@@ -13,9 +13,13 @@ function bancoValidado(ids) {
   return b;
 }
 
-test('banco publicado passa na auditoria e nenhuma regra está validada sem conferência', () => {
+test('banco publicado passa na auditoria; só regras com trecho conferido estão validadas', () => {
   assert.deepEqual(A.auditarBanco(BANCO), []);
-  assert.ok(BANCO.regras.every(r => r.statusValidacao !== 'validada'));
+  const validadas = BANCO.regras.filter(r => r.statusValidacao === 'validada').map(r => r.id).sort();
+  assert.deepEqual(validadas, ['COLH-PERDA-SOJA-01', 'PULV-BICO-CAT-01']);
+  const iso = BANCO.tabelasReferencia.find(t => t.id === 'ISO10625-CORES');
+  assert.equal(iso.linhas.find(l => l.cor === 'amarela').vazao, 0.8);
+  assert.equal(iso.linhas.length, 19);
 });
 
 test('cálculos de conversão', () => {
@@ -35,10 +39,19 @@ test('cálculos de conversão', () => {
   assert.throws(() => C.cv([5]));
 });
 
-test('regras pendentes nunca geram conformidade: bicos dentro de 10% → SEM_REFERENCIA', () => {
-  const r = A.avaliarBicos({vazoes: [0.80, 0.82, 0.79, 0.81], vazaoCatalogo: 0.8, pressaoColetaIgualCatalogo: true, mesmoTempoColeta: true, pontasMesmoModelo: true}, BANCO);
+test('banco real: bicos avaliados pela tabela do fabricante (Embrapa); média da barra só informativa', () => {
+  const r = A.avaliarBicos({vazoes: [0.80, 0.82, 0.79, 0.86], vazaoCatalogo: 0.8, pressaoColetaIgualCatalogo: true, mesmoTempoColeta: true, pontasMesmoModelo: true}, BANCO);
+  assert.equal(r.status, STATUS.OK);
+  assert.equal(r.bicos[3].avaliacaoCatalogo.regraId, 'PULV-BICO-CAT-01');
+  assert.equal(r.bicos[3].avaliacaoMedia.status, STATUS.SEM_REFERENCIA); // pendente: não pesa no resultado
+  assert.ok(r.bicos[3].avaliacaoCatalogo.fontes[0].trechoLiteral.includes('10%'));
+  const gasto = A.avaliarBicos({vazoes: [0.80, 0.89], vazaoCatalogo: 0.8, pressaoColetaIgualCatalogo: true, mesmoTempoColeta: true, pontasMesmoModelo: true}, BANCO);
+  assert.equal(gasto.bicos[1].status, STATUS.FORA_DO_PADRAO);
+});
+
+test('regras pendentes nunca geram conformidade', () => {
+  const r = A.avaliarDistribuicaoTransversal({valoresSobrepostos: [100, 101, 99], fertilizanteNitrogenado: true, cvComSobreposicao: true}, BANCO);
   assert.equal(r.status, STATUS.SEM_REFERENCIA);
-  assert.equal(r.bicos[0].avaliacaoCatalogo.referenciasCandidatas[0].regraId, 'PULV-BICO-CAT-01');
   assert.ok(r.pendencias.some(p => p.includes('não conferida')));
 });
 
@@ -62,20 +75,25 @@ test('sem vazão de catálogo ou com pressão diferente não conclui comparaçã
   assert.equal(naoInformado.bicos[0].avaliacaoCatalogo.status, STATUS.DADOS_INSUFICIENTES);
 });
 
-test('perdas: regra da soja não se aplica ao milho', () => {
-  const b = bancoValidado();
-  const base = {massaG: 36, areaM2: 2, metodo: 'armacao_2m2', incluiGraosEmVagens: true};
-  const soja = A.avaliarPerdas({...base, produto: 'soja'}, b);
-  quase(soja.sc60Ha, 3); assert.equal(soja.status, STATUS.FORA_DO_PADRAO);
-  const sojaBoa = A.avaliarPerdas({...base, massaG: 10, produto: 'soja'}, b);
-  assert.equal(sojaBoa.status, STATUS.OK);
-  const milho = A.avaliarPerdas({...base, produto: 'milho'}, b);
+test('perdas (banco real): média de 5 pontos, 60 kg/ha, só soja', () => {
+  const base = {areaM2: 2, incluiGraosEmVagens: true, produto: 'soja'};
+  const boa = A.avaliarPerdas({...base, massasG: [10, 12, 8, 11, 9]}, BANCO); // média 10 g/2 m² = 50 kg/ha
+  assert.equal(boa.status, STATUS.OK); quase(boa.pttKgHa, 50);
+  const ruim = A.avaliarPerdas({...base, massasG: [15, 14, 13, 16, 12], massasPlataformaG: [9, 8, 10, 9, 9]}, BANCO);
+  quase(ruim.pttKgHa, 70); quase(ruim.ppcKgHa, 45); quase(ruim.pmiKgHa, 25);
+  assert.equal(ruim.status, STATUS.FORA_DO_PADRAO); quase(ruim.avaliacao.diferenca, 10);
+  const poucos = A.avaliarPerdas({...base, massasG: [10, 10, 10]}, BANCO);
+  assert.equal(poucos.status, STATUS.SEM_REFERENCIA);
+  assert.ok(poucos.pendencias.some(p => p.includes('cinco pontos')));
+  const plataformaLarga = A.avaliarPerdas({...base, areaM2: 0.22 * 9.1, massasG: [10, 10, 10, 10, 10]}, BANCO);
+  assert.equal(plataformaLarga.status, STATUS.OK);
+  const milho = A.avaliarPerdas({...base, produto: 'milho', massasG: [10, 10, 10, 10, 10]}, BANCO);
   assert.equal(milho.status, STATUS.SEM_REFERENCIA);
   assert.ok(milho.pendencias.some(p => p.includes('milho')));
-  const semProduto = A.avaliarPerdas(base, b);
+  const semProduto = A.avaliarPerdas({areaM2: 2, incluiGraosEmVagens: true, massasG: [10, 10, 10, 10, 10]}, BANCO);
   assert.equal(semProduto.status, STATUS.DADOS_INSUFICIENTES);
-  const outroMetodo = A.avaliarPerdas({...base, produto: 'soja', metodo: 'visual'}, b);
-  assert.equal(outroMetodo.status, STATUS.SEM_REFERENCIA);
+  const semVagens = A.avaliarPerdas({...base, incluiGraosEmVagens: undefined, massasG: [10, 10, 10, 10, 10]}, BANCO);
+  assert.equal(semVagens.status, STATUS.DADOS_INSUFICIENTES);
 });
 
 test('distribuidor a lanço: escolhe limite pela condição nitrogenado', () => {
@@ -122,36 +140,36 @@ test('sensor: ponto obrigatório, unidade e escopo verificados', () => {
 
 test('unidade diferente não é convertida nem comparada', () => {
   const b = bancoValidado();
-  const r = A.avaliar({equipamentoFamilia: 'colhedora', produto: 'soja', etapa: 'colheita', ponto: 'atras_colhedora', variavel: 'perda_total', unidade: 'kg/ha', valor: 30, condicoes: {metodo: 'armacao_2m2', incluiGraosEmVagens: true}}, b);
+  const r = A.avaliar({equipamentoFamilia: 'colhedora', produto: 'soja', etapa: 'colheita', ponto: 'atras_colhedora', variavel: 'perda_total', unidade: 'sc60/ha', valor: 0.5, condicoes: {areaAmostralM2: 2, numeroPontos: 5, incluiGraosEmVagens: true}}, b);
   assert.equal(r.status, STATUS.SEM_REFERENCIA);
 });
 
 test('variável sem regra e valor ausente', () => {
   assert.equal(A.avaliar({variavel: 'temperatura_ar_entrada', unidade: '°C', valor: 160}, BANCO).status, STATUS.SEM_REFERENCIA);
-  assert.equal(A.avaliar({variavel: 'perda_total', unidade: 'sc60/ha'}, BANCO).status, STATUS.DADOS_INSUFICIENTES);
+  assert.equal(A.avaliar({variavel: 'perda_total', unidade: 'kg/ha'}, BANCO).status, STATUS.DADOS_INSUFICIENTES);
 });
 
 test('regras validadas conflitantes não concluem', () => {
   const b = bancoValidado();
-  b.regras.push({...b.regras.find(r => r.id === 'COLH-PERDA-SOJA-01'), id: 'COLH-PERDA-SOJA-X', limiteMax: 2});
-  const r = A.avaliarPerdas({massaG: 10, areaM2: 2, produto: 'soja', metodo: 'armacao_2m2', incluiGraosEmVagens: true}, b);
+  b.regras.push({...b.regras.find(r => r.id === 'COLH-PERDA-SOJA-01'), id: 'COLH-PERDA-SOJA-X', limiteMax: 90});
+  const r = A.avaliarPerdas({massasG: [10, 10, 10, 10, 10], areaM2: 2, produto: 'soja', incluiGraosEmVagens: true}, b);
   assert.equal(r.status, STATUS.SEM_REFERENCIA);
   assert.ok(r.pendencias[0].includes('conflitantes'));
 });
 
 test('resultado congelado preserva regra, versão e limites mesmo se o banco mudar', () => {
   const b = bancoValidado();
-  const r = A.avaliarPerdas({massaG: 10, areaM2: 2, produto: 'soja', metodo: 'armacao_2m2', incluiGraosEmVagens: true}, b, {dataAnalise: '2026-10-04T12:00:00Z'});
+  const r = A.avaliarPerdas({massasG: [10, 10, 10, 10, 10], areaM2: 2, produto: 'soja', incluiGraosEmVagens: true}, b, {dataAnalise: '2026-10-04T12:00:00Z'});
   const salvo = A.congelar(r.avaliacao);
-  b.regras.find(x => x.id === 'COLH-PERDA-SOJA-01').limiteMax = 0.1;
-  assert.equal(salvo.limiteMax, 1); assert.equal(salvo.regraVersao, '1.0.0'); assert.equal(salvo.dataAnalise, '2026-10-04T12:00:00Z');
+  b.regras.find(x => x.id === 'COLH-PERDA-SOJA-01').limiteMax = 1;
+  assert.equal(salvo.limiteMax, 60); assert.equal(salvo.regraVersao, '1.1.0'); assert.equal(salvo.dataAnalise, '2026-10-04T12:00:00Z');
   assert.ok(Object.isFrozen(salvo) && Object.isFrozen(salvo.fontes));
 });
 
 test('regra suspensa é ignorada; validada sem responsável é apontada na auditoria', () => {
   const b = bancoValidado(['COLH-PERDA-SOJA-01']);
   b.regras.find(r => r.id === 'COLH-PERDA-SOJA-01').statusValidacao = 'suspensa';
-  assert.equal(A.avaliarPerdas({massaG: 10, areaM2: 2, produto: 'soja', metodo: 'armacao_2m2', incluiGraosEmVagens: true}, b).status, STATUS.SEM_REFERENCIA);
-  const c = JSON.parse(JSON.stringify(BANCO)); c.regras[0].statusValidacao = 'validada';
+  assert.equal(A.avaliarPerdas({massasG: [10, 10, 10, 10, 10], areaM2: 2, produto: 'soja', incluiGraosEmVagens: true}, b).status, STATUS.SEM_REFERENCIA);
+  const c = JSON.parse(JSON.stringify(BANCO)); c.regras.find(r => r.id === 'ADUB-CV-N-01').statusValidacao = 'validada';
   assert.ok(A.auditarBanco(c).some(p => p.includes('validadoPor')));
 });

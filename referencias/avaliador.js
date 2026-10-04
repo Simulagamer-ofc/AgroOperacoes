@@ -95,6 +95,7 @@
         case 'em': ok = lista(c.valor).includes(v); break;
         case 'maior_igual': ok = finito(v) && v >= c.valor; break;
         case 'menor_igual': ok = finito(v) && v <= c.valor; break;
+        case 'entre': ok = finito(v) && v >= c.valor[0] && v <= c.valor[1]; break;
         default: ok = false; divergente.push(`operador desconhecido "${c.operador}" na regra ${regra.id}`); continue;
       }
       if (ok) aplicadas.push(c.descricao); else divergente.push(`Condição não satisfeita: ${c.descricao}`);
@@ -232,7 +233,10 @@
       } else {
         aCat = {...resultadoBase({unidade: '%'}, banco, opcoes.dataAnalise || new Date().toISOString()), status: STATUS.DADOS_INSUFICIENTES, pendencias: ['Vazão de catálogo do modelo exato da ponta não informada.'], acaoRecomendada: 'Informar a vazão de catálogo da ponta na pressão de coleta.'};
       }
-      return {bico: i + 1, vazao: q, desvioMedia: arred(dm, 2), desvioCatalogo: temCatalogo ? arred(calculos.desvio(q, dados.vazaoCatalogo), 2) : null, avaliacaoMedia: aMedia, avaliacaoCatalogo: aCat, status: resumir([aMedia.status, aCat.status])};
+      // A comparação com a tabela do fabricante é o critério principal; a média só pesa quando a regra dela concluir.
+      const conclusivos = [STATUS.OK, STATUS.ATENCAO, STATUS.FORA_DO_PADRAO];
+      const status = resumir([aCat.status, ...(conclusivos.includes(aMedia.status) ? [aMedia.status] : [])]);
+      return {bico: i + 1, vazao: q, desvioMedia: arred(dm, 2), desvioCatalogo: temCatalogo ? arred(calculos.desvio(q, dados.vazaoCatalogo), 2) : null, avaliacaoMedia: aMedia, avaliacaoCatalogo: aCat, status};
     });
     return {status: resumir(bicos.map(b => b.status)), media: arred(media), cv: arred(cv, 2), bicos, pendencias: [...new Set(bicos.flatMap(b => [...b.avaliacaoMedia.pendencias, ...b.avaliacaoCatalogo.pendencias]))]};
   }
@@ -257,14 +261,25 @@
     return {status: avaliacao.status, xrefCm: arred(xref, 2), ...cls, avaliacao, pendencias: avaliacao.pendencias};
   }
 
-  /** Colhedora: perdas (massa coletada em gramas na área amostrada). */
+  /**
+   * Colhedora: perdas. Uma massa (g) por ponto de coleta, todos com a mesma área amostral.
+   * dados: {massasG:[g], areaM2, massasPlataformaG?:[g], produto, incluiGraosEmVagens}
+   * Avalia a média da perda total (PTT); se houver coletas na plataforma (PPC), calcula PMI = PTT − PPC.
+   */
   function avaliarPerdas(dados, banco, opcoes = {}) {
-    if (!finito(dados.massaG) || dados.massaG < 0 || !finito(dados.areaM2) || dados.areaM2 <= 0) {
-      return {status: STATUS.DADOS_INSUFICIENTES, pendencias: ['Informar a massa coletada (g) e a área amostrada (m²).']};
+    const ms = dados.massasG;
+    if (!Array.isArray(ms) || !ms.length || !ms.every(m => finito(m) && m >= 0) || !finito(dados.areaM2) || dados.areaM2 <= 0) {
+      return {status: STATUS.DADOS_INSUFICIENTES, pendencias: ['Informar a massa coletada (g) em cada ponto e a área amostral (m²).']};
     }
-    const p = calculos.perda(dados.massaG, dados.areaM2);
-    const avaliacao = avaliar({equipamentoFamilia: 'colhedora', produto: dados.produto, destino: dados.destino, etapa: 'colheita', ponto: 'atras_colhedora', posicao: dados.posicao, variavel: 'perda_total', unidade: 'sc60/ha', valor: arred(p.sc60Ha, 3), condicoes: {metodo: dados.metodo, incluiGraosEmVagens: dados.incluiGraosEmVagens}}, banco, opcoes);
-    return {status: avaliacao.status, kgHa: arred(p.kgHa, 2), sc60Ha: arred(p.sc60Ha, 3), avaliacao, pendencias: avaliacao.pendencias};
+    const pontos = ms.map(m => calculos.perda(m, dados.areaM2).kgHa);
+    const ptt = calculos.media(pontos);
+    let ppc = null, pmi = null;
+    const mp = dados.massasPlataformaG;
+    if (Array.isArray(mp) && mp.length && mp.every(m => finito(m) && m >= 0)) {
+      ppc = calculos.media(mp.map(m => calculos.perda(m, dados.areaM2).kgHa)); pmi = ptt - ppc;
+    }
+    const avaliacao = avaliar({equipamentoFamilia: 'colhedora', produto: dados.produto, destino: dados.destino, etapa: 'colheita', ponto: 'atras_colhedora', posicao: dados.posicao, variavel: 'perda_total', unidade: 'kg/ha', valor: arred(ptt, 2), condicoes: {areaAmostralM2: dados.areaM2, numeroPontos: ms.length, incluiGraosEmVagens: dados.incluiGraosEmVagens}}, banco, opcoes);
+    return {status: avaliacao.status, pttKgHa: arred(ptt, 2), pttSc60Ha: arred(ptt / 60, 3), pontosKgHa: pontos.map(v => arred(v, 2)), ppcKgHa: arred(ppc, 2), pmiKgHa: arred(pmi, 2), avaliacao, pendencias: avaliacao.pendencias};
   }
 
   /** Distribuidor a lanço: CV transversal a partir dos valores das bandejas JÁ sobrepostos na largura efetiva. */
@@ -308,7 +323,7 @@
       for (const c of ['versao', 'variavel', 'unidade', 'statusValidacao', ...ESCOPO.map(e => e[0])]) if (vazio(r[c])) problemas.push(`${r.id}: campo "${c}" vazio`);
       if (r.statusValidacao === 'validada') {
         if (!r.validadoPor || !r.dataValidacao) problemas.push(`${r.id}: validada sem validadoPor/dataValidacao`);
-        if (!(r.fontes || []).length) problemas.push(`${r.id}: validada sem fonte`);
+        if (!(r.fontes || []).some(f => f.conferido === true && f.trechoLiteral)) problemas.push(`${r.id}: validada sem fonte conferida (trechoLiteral)`);
         if (!temLimite(r)) problemas.push(`${r.id}: validada sem limite`);
       }
       if (finito(r.limiteMin) && finito(r.limiteMax) && r.limiteMin > r.limiteMax) problemas.push(`${r.id}: limiteMin maior que limiteMax`);

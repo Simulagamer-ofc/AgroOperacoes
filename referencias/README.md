@@ -23,21 +23,22 @@ Escopo `"*"` na regra significa que ela **declara** não depender daquele campo 
 
 `congelar(resultado)` gera a cópia imutável a ser gravada no registro (regra, versão, limites, fonte, data da análise). Mudanças futuras no banco não alteram registros antigos.
 
-## Situação das regras (versão 1.0.0 do banco)
+## Situação das regras (versão 1.1.0 do banco)
 
-**Nenhuma regra está validada.** As fontes foram localizadas por pesquisa, mas o acesso direto aos documentos estava bloqueado no ambiente em que o banco foi montado. Por isso todas estão `pendente_conferencia`, e o sistema devolve `SEM_REFERENCIA` mostrando a referência candidata.
+Conferência documental feita em 04/10/2026 a partir dos documentos originais. O trecho literal e a página ficam em `fontes[].trechoLiteral`. Recomenda-se revisão por responsável técnico.
 
-| ID | Avaliação | Limite candidato | Fonte principal | Confiança |
+| ID | Avaliação | Limite | Fonte | Status |
 |---|---|---|---|---|
-| PULV-BICO-CAT-01 | Vazão do bico × catálogo | ±10% | Embrapa Documentos 102; ISO 16122-2 | alta |
-| PULV-BICO-MED-01 | Vazão do bico × média da barra | ±10% | Embrapa Documentos 102 | alta |
-| PULV-SENSOR-01 | Sensor de velocidade / fluxômetro × referência | ±5% | ISO 16122-2 | média |
-| SEM-ESPAC-01 | % espaçamentos aceitáveis (0,5–1,5 Xref) | ≥ 90% (mín. 50 espaçamentos) | ABNT (1984); Kurachi et al. (1989) | média |
-| ADUB-CV-N-01 | CV transversal, fertilizante nitrogenado | ≤ 15% | Spreadmark (NZ); método ISO 5690-1 | média |
-| ADUB-CV-OUT-01 | CV transversal, não nitrogenado/calcário | ≤ 25% | Spreadmark (NZ) | média |
-| COLH-PERDA-SOJA-01 | Perdas na colheita — **somente soja** | ≤ 1 sc 60 kg/ha | Embrapa Soja (copo medidor) | alta |
-| PULV-TAXA-01 | Taxa medida × planejada | **sem fonte** | — | — |
-| DOSE-PLAN-01 | Dose adubo/semente × planejada | **sem fonte** | — | — |
+| PULV-BICO-CAT-01 | Vazão do bico × tabela do fabricante | ±10% | Embrapa Agroindústria Tropical, Documentos 102 (2006), p. 30 | **validada** |
+| COLH-PERDA-SOJA-01 | Perda total na colheita — **somente soja**, média de ≥ 5 pontos, armação de 2,0 m² | ≤ 60 kg/ha | Embrapa Soja, manual do copo medidor (2013) | **validada** |
+| ISO10625-CORES (tabela) | Cor da ponta × vazão nominal a 300 kPa (19 classes, tolerância ±5%) | — | ISO 10625:2018, Tabela 1 | **validada** |
+| SEM-ESPAC-01 | % de espaçamentos aceitáveis | ≥ 90% (sem fonte) | Classes 0,5/1,5 × Xref conferidas: Embrapa Soja; ABNT (1994) apud Kurachi (1989) | pendente: falta fonte para o limite de 90% |
+| PULV-BICO-MED-01 | Vazão do bico × média da barra | ±10% | **Não consta do Doc. 102**; visto só em portal comercial | pendente (só informativa) |
+| PULV-SENSOR-01 | Sensor de velocidade / fluxômetro | ±5% | ISO 16122-2: a revisão de 2024 alterou o erro máximo dos fluxômetros | pendente: falta o texto vigente |
+| ADUB-CV-N-01 / ADUB-CV-OUT-01 | CV transversal do distribuidor | ≤ 15% / ≤ 25% | Spreadmark (NZ); acesso às fontes bloqueado | pendente |
+| PULV-TAXA-01 / DOSE-PLAN-01 | Taxa ou dose × planejada | **sem fonte** | — | pendente |
+
+Fórmulas conferidas: classes de espaçamento (F-ESPAC-CLASSES) e perdas internas PMI = PTT − PPC (F-PERDA-PMI). As demais fórmulas são conversões de unidade.
 
 Sem referência no banco (o sistema não avalia): perdas de milho, trigo, feijão e outras culturas; pressão do manômetro; tamanho de gota; condições climáticas de aplicação.
 
@@ -45,7 +46,7 @@ Sem referência no banco (o sistema não avalia): perdas de milho, trigo, feijã
 
 1. Abrir o documento da fonte (URL na regra) e localizar o trecho.
 2. Conferir valor, unidade, escopo e condições. Se o documento disser algo diferente, corrigir a regra e **subir a `versao`**.
-3. Preencher `statusValidacao: "validada"`, `validadoPor` e `dataValidacao`.
-4. Rodar os testes. A auditoria rejeita regra validada sem responsável, data, fonte ou limite.
+3. Preencher `statusValidacao: "validada"`, `validadoPor`, `dataValidacao` e, na fonte, `conferido: true`, `pagina` e `trechoLiteral`.
+4. Rodar os testes. A auditoria rejeita regra validada sem responsável, data, trecho conferido ou limite.
 
 Para retirar uma regra de uso, marcar `statusValidacao: "suspensa"`. Não apagar, para manter a rastreabilidade dos registros antigos.
