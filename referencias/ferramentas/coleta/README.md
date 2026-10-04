@@ -9,6 +9,8 @@ Scripts usados para gerar `referencias/modelos/*.json`. Rodam com Python 3 e `cu
 | `agco.py massey-ferguson` / `agco.py valtra` | Sitemaps e tabelas de modelos (células mescladas expandidas por `tabelas.py`) |
 | `caseih.py` | Sitemap `caseih.com/pt-br/brasil` e dados estruturados `ProductModelSpecifications` da página |
 | `jacto.py` | Catálogo público usado pelo próprio site (`jacto.com/api/v1/products`), filtrado para mercado Brasil e produtos ativos |
+| `generico.py` | Coletor genérico (Lavrale, DMB, Imasa, Agrimec): sitemap, robots.txt, tabelas normais ou transpostas, pares campo:valor, links de manual |
+| `tatu.py` | Catálogo usado pelo site da Tatu (`api.marchesan.com.br`); verifica cada link de manual, folheto e ficha técnica |
 | `consolidar.py` | Padroniza, junta duplicatas e grava `referencias/modelos/` |
 
 Regras seguidas:

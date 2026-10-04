@@ -8,7 +8,7 @@ DEST = '/home/user/AgroOperacoes/referencias/modelos'
 os.makedirs(DEST, exist_ok=True)
 MARCAS = [('stara.json', 'stara'), ('john-deere.json', 'john-deere'), ('massey-ferguson.json', 'agco'), ('valtra.json', 'agco'),
           ('case-ih.json', 'cnh'), ('jacto.json', 'jacto'),
-          ('lavrale.json', 'lavrale'), ('dmb.json', 'dmb'), ('imasa.json', 'imasa'), ('agrimec.json', 'agrimec')]
+          ('lavrale.json', 'lavrale'), ('dmb.json', 'dmb'), ('imasa.json', 'imasa'), ('agrimec.json', 'agrimec'), ('tatu-marchesan.json', 'tatu-marchesan')]
 
 
 def familia_pulv(m):
@@ -71,7 +71,7 @@ for arq, fab in MARCAS:
         docs = [x for x in m.get('documentos') or [] if x.get('titulo') or x['url'].lower().endswith('.pdf')]
         if docs:
             item['documentos'] = docs
-        for k in ('lastmodSitemap', 'atualizadoNoFabricante', 'prospectos', 'observacao'):
+        for k in ('lastmodSitemap', 'atualizadoNoFabricante', 'prospectos', 'observacao', 'descricaoFabricante'):
             if m.get(k):
                 item[k] = m[k]
         chave = nome.lower()
@@ -100,7 +100,7 @@ for arq, fab in MARCAS:
                'O site pode não refletir variações por ano-modelo, mercado ou opcionais.'],
            'totalModelos': len(saida), 'comEspecificacoes': sum(1 for x in saida if x['especificacoes']),
            'modelos': saida, 'descartados': descartados}
-    for k in ('redirecionadas', 'paginasSemEspecificacao', 'tabelasRejeitadas', 'erros'):
+    for k in ('redirecionadas', 'paginasSemEspecificacao', 'tabelasRejeitadas', 'erros', 'documentosNaoEncontrados'):
         if d.get(k):
             doc[k] = d[k]
     salvar(os.path.join(DEST, nome_arq), doc)
@@ -109,8 +109,9 @@ for arq, fab in MARCAS:
 
 salvar(os.path.join(DEST, 'indice.json'), {'dataConsulta': DATA, 'marcas': indice,
     'pendentes': [
-        {'marca': 'New Holland', 'motivo': 'O robots.txt de www.newholland.com proíbe a coleta automática de /pt-br/southamerica; o site de agricultura (agriculture.newholland.com) não está liberado no ambiente.'},
-        {'marca': 'Tatu Marchesan', 'motivo': 'Site oficial www.marchesan.com.br não liberado no ambiente.'},
+        {'marca': 'New Holland', 'motivo': 'O robots.txt de www.newholland.com proíbe a coleta automática de /pt-br/southamerica.'},
         {'marca': 'Fendt', 'motivo': 'Site respondeu apenas com página da América do Norte; linha brasileira não verificada.'},
+        {'marca': 'Semeato, Agrale, Menta, Kubota, Grazmec, Civemasa, Vicon, Nogueira', 'motivo': 'Sem sitemap utilizável; precisam de coletor próprio.'},
+        {'marca': 'Kuhn, Baldan', 'motivo': 'Certificado TLS dos sites falhou na verificação.'},
     ]})
 print('total', sum(x['totalModelos'] for x in indice))

@@ -76,13 +76,13 @@ Base: lista pública de associadas da **CSMIA/ABIMAQ** (consulta em 04/10/2026),
 | DMB | 36 | 33 | pares campo/valor da página + links de manual e catálogo de peças |
 | Imasa | 15 | 0 | só identificação (páginas sem tabela) |
 | Agrimec | 81 | 72 | tabelas transpostas (modelos nas colunas), detectadas automaticamente |
-| **Total** | **1050** | **905** | |
+| Tatu Marchesan | 193 | 0 | catálogo do site; especificações só em imagem/PDF — links verificados para 180 manuais, 190 folhetos e 192 fichas técnicas |
+| **Total** | **1243** | **905** | |
 
 - **Valores:** copiados como texto literal. A releitura de 60 modelos mostrou 99,4% dos valores idênticos à página; o restante são diferenças de formatação.
 - **Uso na regulagem:** as especificações servem para identificar e consultar. Para preencher sozinho um parâmetro de regulagem, o sistema exige confirmação no manual ou folheto do modelo e do ano.
 - **Manuais:** quando a página do produto tem link para manual, catálogo de peças ou folheto, ele fica em `documentos`. São a fonte a usar para confirmar parâmetros de regulagem.
 - **Pendentes:**
   - New Holland: o robots.txt proíbe a coleta automática da seção Brasil.
-  - Tatu Marchesan: o site (`marchesan.com.br`) busca o catálogo em `api.marchesan.com.br`, que precisa ser liberado no ambiente.
   - Fendt: linha brasileira não verificada.
   - Semeato, Agrale, Menta, Kubota, Grazmec, Civemasa, Vicon e Nogueira: o site não tem sitemap utilizável ou usa endereços sem padrão. Precisam de um coletor próprio.

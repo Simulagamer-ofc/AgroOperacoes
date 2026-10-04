@@ -70,20 +70,31 @@
    "arquivo": "modelos/agrimec.json",
    "totalModelos": 81,
    "comEspecificacoes": 72
+  },
+  {
+   "marca": "Tatu Marchesan",
+   "fabricanteId": "tatu-marchesan",
+   "arquivo": "modelos/tatu-marchesan.json",
+   "totalModelos": 193,
+   "comEspecificacoes": 0
   }
  ],
  "pendentes": [
   {
    "marca": "New Holland",
-   "motivo": "O robots.txt de www.newholland.com proíbe a coleta automática de /pt-br/southamerica; o site de agricultura (agriculture.newholland.com) não está liberado no ambiente."
-  },
-  {
-   "marca": "Tatu Marchesan",
-   "motivo": "Site oficial www.marchesan.com.br não liberado no ambiente."
+   "motivo": "O robots.txt de www.newholland.com proíbe a coleta automática de /pt-br/southamerica."
   },
   {
    "marca": "Fendt",
    "motivo": "Site respondeu apenas com página da América do Norte; linha brasileira não verificada."
+  },
+  {
+   "marca": "Semeato, Agrale, Menta, Kubota, Grazmec, Civemasa, Vicon, Nogueira",
+   "motivo": "Sem sitemap utilizável; precisam de coletor próprio."
+  },
+  {
+   "marca": "Kuhn, Baldan",
+   "motivo": "Certificado TLS dos sites falhou na verificação."
   }
  ]
 }
