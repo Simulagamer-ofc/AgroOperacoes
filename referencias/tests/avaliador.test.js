@@ -193,3 +193,18 @@ test('catálogo de modelos: estrutura, ids únicos e origem declarada', () => {
   }
   assert.ok(total > 700);
 });
+
+test('lista BNDES/FINAME: estrutura, CNPJ e códigos válidos', () => {
+  const fs = require('node:fs'), path = require('node:path');
+  const d = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'bndes', 'produtos-agricolas-finame.json'), 'utf8'));
+  assert.ok(d.fonte.dataFechamentoLista && d.totalProdutos > 10000);
+  let n = 0;
+  for (const f of d.fabricantes) {
+    assert.match(f.cnpj, /^\d{14}$/);
+    for (const p of f.produtos) { assert.match(p.codigoFiname, /^\d{7}$/); assert.ok(p.nome && p.classificacoes.length); n++; }
+  }
+  assert.equal(n, d.totalProdutos);
+  const cat = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'catalogo-fabricantes.json'), 'utf8'));
+  const tatu = cat.fabricantes.find(f => f.nome === 'Tatu Marchesan');
+  assert.equal(tatu.cnpj, '52311289000163'); // mesmo CNPJ usado pelo site da Tatu no link do BNDES
+});

@@ -8,6 +8,7 @@ Módulo independente da interface. Pode ser incorporado ao Nexus Agro 2.23 ou ao
 | `avaliador.js` | Avaliação (`avaliar`) e fluxos compostos; funciona no navegador (`window.NexusAvaliador`) e no Node |
 | `catalogo-fabricantes.json` | Fabricantes de máquinas e implementos atuantes no Brasil (identificação; sem parâmetros técnicos) |
 | `modelos/` | Modelos por marca, com especificações copiadas do site do fabricante (`indice.json` lista as marcas) |
+| `bndes/produtos-agricolas-finame.json` | Lista oficial do BNDES: 11.107 produtos agrícolas credenciados no FINAME, de 1.891 fabricantes (identificação + código FINAME) |
 | `ferramentas/coleta/` | Scripts de coleta e consolidação dos modelos |
 | `tests/avaliador.test.js` | Testes: `node --test referencias/tests/*.test.js` |
 
@@ -86,3 +87,13 @@ Base: lista pública de associadas da **CSMIA/ABIMAQ** (consulta em 04/10/2026),
   - New Holland: o robots.txt proíbe a coleta automática da seção Brasil.
   - Fendt: linha brasileira não verificada.
   - Semeato, Agrale, Menta, Kubota, Grazmec, Civemasa, Vicon e Nogueira: o site não tem sitemap utilizável ou usa endereços sem padrão. Precisam de um coletor próprio.
+
+## Lista oficial BNDES/FINAME (fechamento 01/10/2026)
+
+Fonte: arquivo público [`listasno.zip`](https://www.bndes.gov.br/arquivos/produtos-credenciados/listasno.zip) do credenciamento de equipamentos do BNDES. Foram selecionadas as classificações 1 (máquinas e implementos agrícolas), 55 (plataforma de corte), 91 (armazenagem) e 92 (irrigação): **11.107 produtos de 1.891 fabricantes**.
+
+- **Conteúdo:** fabricante (CNPJ, cidade, UF), nome do produto, modelo e **código FINAME**. Não traz especificações técnicas.
+- **Cobertura:** inclui marcas que os sites não permitiram coletar, como New Holland e Case IH (CNH), Kuhn, Baldan, Jumil, Vence Tudo, Piccin, Semeato e Agrale, além de centenas de fabricantes regionais e de armazenagem (Kepler Weber, Comil, Pagé, GSI…).
+- **Fora da lista:** máquinas importadas não credenciadas, como a Kubota.
+- **Catálogo de fabricantes:** foi cruzado pela razão social e passou a ter 2.014 registros. 261 já existiam e ganharam CNPJ; 1.631 foram incluídos pelo BNDES. A marca só é vinculada automaticamente quando identifica uma única empresa.
+- **Limite do arquivo:** o nome do produto é cortado em 60 caracteres e o modelo em 45. Textos maiores aparecem truncados.
