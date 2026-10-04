@@ -1,0 +1,157 @@
+'use strict';
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const A = require('../avaliador.js');
+const BANCO = require('../regras-afericao.json');
+
+const {STATUS, calculos: C} = A;
+const quase = (a, b, tol = 1e-3) => assert.ok(Math.abs(a - b) <= tol, `${a} ≠ ${b}`);
+// Cópia do banco com regras marcadas como validadas — SOMENTE para testar a lógica.
+function bancoValidado(ids) {
+  const b = JSON.parse(JSON.stringify(BANCO));
+  b.regras.forEach(r => { if (!ids || ids.includes(r.id)) Object.assign(r, {statusValidacao: 'validada', validadoPor: 'teste', dataValidacao: '2026-10-04'}); });
+  return b;
+}
+
+test('banco publicado passa na auditoria e nenhuma regra está validada sem conferência', () => {
+  assert.deepEqual(A.auditarBanco(BANCO), []);
+  assert.ok(BANCO.regras.every(r => r.statusValidacao !== 'validada'));
+});
+
+test('cálculos de conversão', () => {
+  quase(C.taxaAplicacao(0.8, 6, 0.5), 160);
+  quase(C.vazaoNecessaria(160, 6, 0.5), 0.8);
+  quase(C.vazaoNaPressao(0.8, 3, 4), 0.9238);
+  quase(C.velocidade(50, 30), 6);
+  quase(C.populacao(14, 0.5), 280000);
+  quase(C.xref(14), 7.1429);
+  quase(C.doseKgHa(2.5, 50, 0.5), 1000);
+  const p = C.perda(30, 2); quase(p.kgHa, 150); quase(p.sc60Ha, 2.5);
+  quase(C.cv([10, 12, 14]), 16.6667);
+  quase(C.desvio(0.88, 0.8), 10);
+  const cls = C.classificarEspacamentos([1, 5, 7, 10, 12], 7); // 3.5 e 10.5 são os limites
+  assert.deepEqual([cls.duplos, cls.aceitaveis, cls.falhos], [1, 3, 1]);
+  assert.throws(() => C.taxaAplicacao(0.8, 0, 0.5));
+  assert.throws(() => C.cv([5]));
+});
+
+test('regras pendentes nunca geram conformidade: bicos dentro de 10% → SEM_REFERENCIA', () => {
+  const r = A.avaliarBicos({vazoes: [0.80, 0.82, 0.79, 0.81], vazaoCatalogo: 0.8, pressaoColetaIgualCatalogo: true, mesmoTempoColeta: true, pontasMesmoModelo: true}, BANCO);
+  assert.equal(r.status, STATUS.SEM_REFERENCIA);
+  assert.equal(r.bicos[0].avaliacaoCatalogo.referenciasCandidatas[0].regraId, 'PULV-BICO-CAT-01');
+  assert.ok(r.pendencias.some(p => p.includes('não conferida')));
+});
+
+test('com regra validada: bico desgastado fora do padrão, demais OK', () => {
+  const b = bancoValidado();
+  const r = A.avaliarBicos({vazoes: [0.80, 0.81, 0.79, 0.92], vazaoCatalogo: 0.8, pressaoColetaIgualCatalogo: true, mesmoTempoColeta: true, pontasMesmoModelo: true}, b);
+  assert.equal(r.bicos[0].status, STATUS.OK);
+  assert.equal(r.bicos[3].avaliacaoCatalogo.status, STATUS.FORA_DO_PADRAO); // +15% do catálogo
+  quase(r.bicos[3].avaliacaoCatalogo.diferenca, 5);
+  assert.equal(r.bicos[3].avaliacaoCatalogo.regraId, 'PULV-BICO-CAT-01');
+  assert.equal(r.status, STATUS.FORA_DO_PADRAO);
+});
+
+test('sem vazão de catálogo ou com pressão diferente não conclui comparação com catálogo', () => {
+  const b = bancoValidado();
+  const semCat = A.avaliarBicos({vazoes: [0.8, 0.8], mesmoTempoColeta: true, pontasMesmoModelo: true}, b);
+  assert.equal(semCat.bicos[0].avaliacaoCatalogo.status, STATUS.DADOS_INSUFICIENTES);
+  const pressaoDif = A.avaliarBicos({vazoes: [0.8, 0.8], vazaoCatalogo: 0.8, pressaoColetaIgualCatalogo: false, mesmoTempoColeta: true, pontasMesmoModelo: true}, b);
+  assert.equal(pressaoDif.bicos[0].avaliacaoCatalogo.status, STATUS.SEM_REFERENCIA);
+  const naoInformado = A.avaliarBicos({vazoes: [0.8, 0.8], vazaoCatalogo: 0.8, mesmoTempoColeta: true, pontasMesmoModelo: true}, b);
+  assert.equal(naoInformado.bicos[0].avaliacaoCatalogo.status, STATUS.DADOS_INSUFICIENTES);
+});
+
+test('perdas: regra da soja não se aplica ao milho', () => {
+  const b = bancoValidado();
+  const base = {massaG: 36, areaM2: 2, metodo: 'armacao_2m2', incluiGraosEmVagens: true};
+  const soja = A.avaliarPerdas({...base, produto: 'soja'}, b);
+  quase(soja.sc60Ha, 3); assert.equal(soja.status, STATUS.FORA_DO_PADRAO);
+  const sojaBoa = A.avaliarPerdas({...base, massaG: 10, produto: 'soja'}, b);
+  assert.equal(sojaBoa.status, STATUS.OK);
+  const milho = A.avaliarPerdas({...base, produto: 'milho'}, b);
+  assert.equal(milho.status, STATUS.SEM_REFERENCIA);
+  assert.ok(milho.pendencias.some(p => p.includes('milho')));
+  const semProduto = A.avaliarPerdas(base, b);
+  assert.equal(semProduto.status, STATUS.DADOS_INSUFICIENTES);
+  const outroMetodo = A.avaliarPerdas({...base, produto: 'soja', metodo: 'visual'}, b);
+  assert.equal(outroMetodo.status, STATUS.SEM_REFERENCIA);
+});
+
+test('distribuidor a lanço: escolhe limite pela condição nitrogenado', () => {
+  const b = bancoValidado();
+  const vals = [100, 120, 80, 110, 90]; // CV ≈ 15,8%
+  const n = A.avaliarDistribuicaoTransversal({valoresSobrepostos: vals, fertilizanteNitrogenado: true, cvComSobreposicao: true}, b);
+  assert.equal(n.status, STATUS.FORA_DO_PADRAO); assert.equal(n.avaliacao.regraId, 'ADUB-CV-N-01');
+  const k = A.avaliarDistribuicaoTransversal({valoresSobrepostos: vals, fertilizanteNitrogenado: false, cvComSobreposicao: true}, b);
+  assert.equal(k.status, STATUS.OK); assert.equal(k.avaliacao.regraId, 'ADUB-CV-OUT-01');
+  const sem = A.avaliarDistribuicaoTransversal({valoresSobrepostos: vals, cvComSobreposicao: true}, b);
+  assert.equal(sem.status, STATUS.DADOS_INSUFICIENTES);
+});
+
+test('semeadora: classifica e exige amostra mínima', () => {
+  const b = bancoValidado();
+  const boa = Array.from({length: 60}, () => 7.1);
+  const r = A.avaliarDistribuicaoLongitudinal({sementesPorMetro: 14, espacamentos: boa}, b);
+  assert.equal(r.status, STATUS.OK); assert.equal(r.pctAceitaveis, 100);
+  const pouca = A.avaliarDistribuicaoLongitudinal({sementesPorMetro: 14, espacamentos: boa.slice(0, 20)}, b);
+  assert.equal(pouca.status, STATUS.SEM_REFERENCIA);
+  const ruim = A.avaliarDistribuicaoLongitudinal({sementesPorMetro: 14, espacamentos: [...boa.slice(0, 45), ...Array(15).fill(2)]}, b);
+  assert.equal(ruim.status, STATUS.FORA_DO_PADRAO); assert.equal(ruim.duplos, 15);
+});
+
+test('taxa e dose sem tolerância documentada: calcula, mas não conclui', () => {
+  const b = bancoValidado();
+  const t = A.avaliarTaxaAplicacao({vazaoMediaBico: 0.8, velocidadeKmH: 6, espacamentoBicosM: 0.5, taxaPlanejada: 150}, b);
+  quase(t.taxaLHa, 160); quase(t.desvio, 6.67, 0.01); assert.equal(t.status, STATUS.SEM_REFERENCIA);
+  const d = A.avaliarDose({massaKg: 2.5, distanciaM: 50, larguraM: 0.5, dosePlanejada: 1000, equipamentoFamilia: 'adubadora_linha'}, b);
+  quase(d.doseKgHa, 1000); assert.equal(d.status, STATUS.SEM_REFERENCIA);
+});
+
+test('sensor: ponto obrigatório, unidade e escopo verificados', () => {
+  const b = bancoValidado();
+  const ok = A.avaliarSensor({ponto: 'sensor_velocidade', leituraControlador: 6.2, referencia: 6.0, comparadoComInstrumentoReferencia: true}, b);
+  assert.equal(ok.status, STATUS.OK); quase(ok.valorMedido, 3.33, 0.01);
+  const fora = A.avaliarSensor({ponto: 'fluxometro', leituraControlador: 10.8, referencia: 10, comparadoComInstrumentoReferencia: true}, b);
+  assert.equal(fora.status, STATUS.FORA_DO_PADRAO);
+  const semPonto = A.avaliarSensor({leituraControlador: 6.2, referencia: 6.0, comparadoComInstrumentoReferencia: true}, b);
+  assert.equal(semPonto.status, STATUS.DADOS_INSUFICIENTES);
+  const outraMaquina = A.avaliarSensor({equipamentoFamilia: 'semeadora_precisao', ponto: 'sensor_velocidade', leituraControlador: 6.2, referencia: 6, comparadoComInstrumentoReferencia: true}, b);
+  assert.equal(outraMaquina.status, STATUS.SEM_REFERENCIA);
+});
+
+test('unidade diferente não é convertida nem comparada', () => {
+  const b = bancoValidado();
+  const r = A.avaliar({equipamentoFamilia: 'colhedora', produto: 'soja', etapa: 'colheita', ponto: 'atras_colhedora', variavel: 'perda_total', unidade: 'kg/ha', valor: 30, condicoes: {metodo: 'armacao_2m2', incluiGraosEmVagens: true}}, b);
+  assert.equal(r.status, STATUS.SEM_REFERENCIA);
+});
+
+test('variável sem regra e valor ausente', () => {
+  assert.equal(A.avaliar({variavel: 'temperatura_ar_entrada', unidade: '°C', valor: 160}, BANCO).status, STATUS.SEM_REFERENCIA);
+  assert.equal(A.avaliar({variavel: 'perda_total', unidade: 'sc60/ha'}, BANCO).status, STATUS.DADOS_INSUFICIENTES);
+});
+
+test('regras validadas conflitantes não concluem', () => {
+  const b = bancoValidado();
+  b.regras.push({...b.regras.find(r => r.id === 'COLH-PERDA-SOJA-01'), id: 'COLH-PERDA-SOJA-X', limiteMax: 2});
+  const r = A.avaliarPerdas({massaG: 10, areaM2: 2, produto: 'soja', metodo: 'armacao_2m2', incluiGraosEmVagens: true}, b);
+  assert.equal(r.status, STATUS.SEM_REFERENCIA);
+  assert.ok(r.pendencias[0].includes('conflitantes'));
+});
+
+test('resultado congelado preserva regra, versão e limites mesmo se o banco mudar', () => {
+  const b = bancoValidado();
+  const r = A.avaliarPerdas({massaG: 10, areaM2: 2, produto: 'soja', metodo: 'armacao_2m2', incluiGraosEmVagens: true}, b, {dataAnalise: '2026-10-04T12:00:00Z'});
+  const salvo = A.congelar(r.avaliacao);
+  b.regras.find(x => x.id === 'COLH-PERDA-SOJA-01').limiteMax = 0.1;
+  assert.equal(salvo.limiteMax, 1); assert.equal(salvo.regraVersao, '1.0.0'); assert.equal(salvo.dataAnalise, '2026-10-04T12:00:00Z');
+  assert.ok(Object.isFrozen(salvo) && Object.isFrozen(salvo.fontes));
+});
+
+test('regra suspensa é ignorada; validada sem responsável é apontada na auditoria', () => {
+  const b = bancoValidado(['COLH-PERDA-SOJA-01']);
+  b.regras.find(r => r.id === 'COLH-PERDA-SOJA-01').statusValidacao = 'suspensa';
+  assert.equal(A.avaliarPerdas({massaG: 10, areaM2: 2, produto: 'soja', metodo: 'armacao_2m2', incluiGraosEmVagens: true}, b).status, STATUS.SEM_REFERENCIA);
+  const c = JSON.parse(JSON.stringify(BANCO)); c.regras[0].statusValidacao = 'validada';
+  assert.ok(A.auditarBanco(c).some(p => p.includes('validadoPor')));
+});

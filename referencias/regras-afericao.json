@@ -1,0 +1,244 @@
+{
+  "banco": "Nexus Agro — referências de aferição e calibragem de máquinas e implementos",
+  "versaoBanco": "1.0.0",
+  "dataBanco": "2026-10-04",
+  "observacaoGeral": "Somente regras com statusValidacao = 'validada' são usadas para concluir uma avaliação. Regras 'pendente_conferencia' tiveram a fonte localizada, mas o texto ainda não foi conferido no documento original; o avaliador as mostra como referência candidata e devolve SEM_REFERENCIA. Escopo '*' significa que a regra declara expressamente não depender daquele campo.",
+  "statusPossiveis": {
+    "validada": "Valor conferido no documento original por um responsável (validadoPor/dataValidacao preenchidos).",
+    "pendente_conferencia": "Fonte localizada; valor ainda não conferido no documento original. Não usar para concluir.",
+    "suspensa": "Regra retirada de uso (ex.: fonte revisada). Mantida para rastreabilidade de registros antigos."
+  },
+  "regras": [
+    {
+      "id": "PULV-BICO-CAT-01",
+      "versao": "1.0.0",
+      "titulo": "Vazão individual do bico em relação ao catálogo do fabricante",
+      "equipamentoFamilia": ["pulverizador_barra"],
+      "avaliacao": "vazao_bicos",
+      "produto": "*", "destino": "*", "etapa": "afericao",
+      "ponto": "bico", "posicao": "*",
+      "variavel": "desvio_vazao_catalogo", "unidade": "%",
+      "limiteMin": -10, "limiteMax": 10, "alvo": 0,
+      "condicoes": [
+        {"campo": "pressaoColetaIgualCatalogo", "operador": "igual", "valor": true, "descricao": "A coleta foi feita na mesma pressão da vazão de catálogo usada como base (ou a vazão de catálogo foi convertida para a pressão de coleta)."},
+        {"campo": "vazaoCatalogoInformada", "operador": "igual", "valor": true, "descricao": "A vazão de catálogo do modelo exato da ponta foi informada (não apenas a cor)."}
+      ],
+      "acaoForaDoPadrao": "Substituir a ponta (desgaste ou entupimento) e repetir a coleta.",
+      "fontes": [
+        {"organizacao": "Embrapa", "titulo": "Tecnologia de Aplicação de Defensivos Agrícolas (Documentos 102, ISSN 1677-1915)", "url": "https://www.infoteca.cnptia.embrapa.br/bitstream/doc/426350/1/Dc102.pdf", "tipo": "publicacao_tecnica", "trechoLocalizado": "Variações dentro da faixa de 10% em relação ao valor da tabela do fabricante são aceitáveis."},
+        {"organizacao": "ISO", "titulo": "ISO 16122-2 — Inspection of sprayers in use — Part 2: Horizontal boom sprayers", "url": "https://standards.iteh.ai/catalog/standards/iso/e8a2566e-9fe1-4c86-b3d9-da09225be691/iso-fdis-16122-2", "tipo": "norma", "trechoLocalizado": "Vazão de cada bico não deve desviar mais de ±10% da tabela do fabricante."}
+      ],
+      "observacaoTecnica": "Desvio = (vazão medida − vazão de catálogo) / vazão de catálogo × 100. A cor da ponta (ISO 10625) identifica a classe de vazão, mas o catálogo do modelo exato deve prevalecer.",
+      "confianca": "alta",
+      "statusValidacao": "pendente_conferencia", "validadoPor": null, "dataValidacao": null
+    },
+    {
+      "id": "PULV-BICO-MED-01",
+      "versao": "1.0.0",
+      "titulo": "Vazão individual do bico em relação à média da barra",
+      "equipamentoFamilia": ["pulverizador_barra"],
+      "avaliacao": "vazao_bicos",
+      "produto": "*", "destino": "*", "etapa": "afericao",
+      "ponto": "bico", "posicao": "*",
+      "variavel": "desvio_vazao_media", "unidade": "%",
+      "limiteMin": -10, "limiteMax": 10, "alvo": 0,
+      "condicoes": [
+        {"campo": "mesmoTempoColeta", "operador": "igual", "valor": true, "descricao": "Todos os bicos foram coletados no mesmo intervalo de tempo e na mesma pressão."},
+        {"campo": "pontasMesmoModelo", "operador": "igual", "valor": true, "descricao": "Todas as pontas da seção avaliada são do mesmo modelo."}
+      ],
+      "acaoForaDoPadrao": "Ponta com problema (desgastada ou entupida): limpar ou substituir e repetir a coleta.",
+      "fontes": [
+        {"organizacao": "Embrapa", "titulo": "Tecnologia de Aplicação de Defensivos Agrícolas (Documentos 102, ISSN 1677-1915)", "url": "https://www.infoteca.cnptia.embrapa.br/bitstream/doc/426350/1/Dc102.pdf", "tipo": "publicacao_tecnica", "trechoLocalizado": "Se a vazão de algum bico variar mais de 10% (para mais ou para menos) em relação à média, esse bico apresenta problemas e deve ser substituído."}
+      ],
+      "observacaoTecnica": "A média deve ser calculada com todos os bicos da mesma seção/modelo. Não substitui a comparação com o catálogo: uma barra inteira desgastada pode ter bicos próximos da média e ainda assim acima do catálogo.",
+      "confianca": "alta",
+      "statusValidacao": "pendente_conferencia", "validadoPor": null, "dataValidacao": null
+    },
+    {
+      "id": "PULV-SENSOR-01",
+      "versao": "1.0.0",
+      "titulo": "Erro do sensor de velocidade ou do fluxômetro do controlador",
+      "equipamentoFamilia": ["pulverizador_barra"],
+      "avaliacao": "sensor_controlador",
+      "produto": "*", "destino": "*", "etapa": "afericao",
+      "ponto": ["sensor_velocidade", "fluxometro"], "posicao": "*",
+      "variavel": "erro_relativo_instrumento", "unidade": "%",
+      "limiteMin": -5, "limiteMax": 5, "alvo": 0,
+      "condicoes": [
+        {"campo": "comparadoComInstrumentoReferencia", "operador": "igual", "valor": true, "descricao": "A leitura foi comparada com um instrumento de referência (ex.: trena + cronômetro para velocidade, coleta volumétrica/gravimétrica para vazão)."}
+      ],
+      "acaoForaDoPadrao": "Recalibrar a constante do sensor no controlador (pulsos por metro / pulsos por litro) e repetir o teste.",
+      "fontes": [
+        {"organizacao": "ISO", "titulo": "ISO 16122-2 — Inspection of sprayers in use — Part 2: Horizontal boom sprayers", "url": "https://standards.iteh.ai/catalog/standards/iso/e8a2566e-9fe1-4c86-b3d9-da09225be691/iso-fdis-16122-2", "tipo": "norma", "trechoLocalizado": "Dispositivos de medição (fluxômetros e sensores de velocidade) usados para controlar a taxa por hectare devem medir com erro máximo de ±5% do valor do instrumento de referência."}
+      ],
+      "observacaoTecnica": "Erro = (leitura do controlador − referência) / referência × 100.",
+      "confianca": "media",
+      "statusValidacao": "pendente_conferencia", "validadoPor": null, "dataValidacao": null
+    },
+    {
+      "id": "PULV-TAXA-01",
+      "versao": "1.0.0",
+      "titulo": "Taxa de aplicação medida em relação à taxa planejada",
+      "equipamentoFamilia": ["pulverizador_barra"],
+      "avaliacao": "taxa_aplicacao",
+      "produto": "*", "destino": "*", "etapa": "calibracao",
+      "ponto": "barra", "posicao": "*",
+      "variavel": "desvio_taxa_planejada", "unidade": "%",
+      "limiteMin": null, "limiteMax": null, "alvo": 0,
+      "condicoes": [],
+      "acaoForaDoPadrao": "",
+      "fontes": [],
+      "observacaoTecnica": "Tolerância ainda não definida por fonte técnica aplicável. Deve vir da bula do produto, da recomendação agronômica ou de norma específica. Enquanto isso, o sistema calcula o desvio mas devolve SEM_REFERENCIA.",
+      "confianca": "nenhuma",
+      "statusValidacao": "pendente_conferencia", "validadoPor": null, "dataValidacao": null
+    },
+    {
+      "id": "SEM-ESPAC-01",
+      "versao": "1.0.0",
+      "titulo": "Distribuição longitudinal — percentual de espaçamentos aceitáveis (0,5 a 1,5 × Xref)",
+      "equipamentoFamilia": ["semeadora_precisao"],
+      "avaliacao": "distribuicao_longitudinal",
+      "produto": "*", "destino": "*", "etapa": "afericao",
+      "ponto": "linha_semeadura", "posicao": "*",
+      "variavel": "percentual_espacamentos_aceitaveis", "unidade": "%",
+      "limiteMin": 90, "limiteMax": 100, "alvo": 100,
+      "faixasClassificacao": [
+        {"rotulo": "Ótimo", "min": 90, "max": 100}
+      ],
+      "condicoes": [
+        {"campo": "xrefDefinido", "operador": "igual", "valor": true, "descricao": "O espaçamento de referência (Xref) foi definido pela regulagem planejada (100 / sementes por metro, em cm)."},
+        {"campo": "minimoEspacamentosMedidos", "operador": "maior_igual", "valor": 50, "descricao": "Pelo menos 50 espaçamentos medidos na linha avaliada (amostra mínima adotada pelo sistema)."}
+      ],
+      "acaoForaDoPadrao": "Verificar disco/dosador, velocidade de trabalho, vácuo (se pneumática), tratamento/fluidez das sementes e repetir a avaliação.",
+      "fontes": [
+        {"organizacao": "ABNT", "titulo": "Projeto de norma 04:015.06-004 — Semeadoras de precisão: ensaio de laboratório (1984)", "url": "", "tipo": "norma", "trechoLocalizado": "Espaçamentos duplos < 0,5·Xref; aceitáveis 0,5–1,5·Xref; falhos > 1,5·Xref."},
+        {"organizacao": "Kurachi et al. (1989), Bragantia/IAC", "titulo": "Avaliação tecnológica de semeadoras e/ou adubadoras: tratamento de dados de ensaios e regularidade de distribuição longitudinal de sementes", "url": "", "tipo": "artigo_cientifico", "trechoLocalizado": "Classificação de espaçamentos em duplos, aceitáveis e falhos."}
+      ],
+      "observacaoTecnica": "Os limites de classe (0,5 e 1,5 × Xref) são de uso consolidado na pesquisa brasileira. O limite de 90% (ótimo) e o mínimo de 50 espaçamentos precisam ser conferidos na fonte antes da validação. Os percentuais de duplos e falhos são calculados e mostrados sempre.",
+      "confianca": "media",
+      "statusValidacao": "pendente_conferencia", "validadoPor": null, "dataValidacao": null
+    },
+    {
+      "id": "ADUB-CV-N-01",
+      "versao": "1.0.0",
+      "titulo": "Coeficiente de variação transversal — distribuidor a lanço, fertilizante nitrogenado",
+      "equipamentoFamilia": ["distribuidor_lanco"],
+      "avaliacao": "distribuicao_transversal",
+      "produto": "*", "destino": "*", "etapa": "afericao",
+      "ponto": "faixa_aplicacao", "posicao": "*",
+      "variavel": "cv_transversal", "unidade": "%",
+      "limiteMin": null, "limiteMax": 15, "alvo": null,
+      "condicoes": [
+        {"campo": "fertilizanteNitrogenado", "operador": "igual", "valor": true, "descricao": "O produto contém nitrogênio."},
+        {"campo": "cvComSobreposicao", "operador": "igual", "valor": true, "descricao": "O CV foi calculado com a sobreposição das passadas na largura de trabalho efetiva (método de bandejas transversais)."}
+      ],
+      "acaoForaDoPadrao": "Ajustar largura de trabalho, palhetas/ponto de queda e rotação dos discos conforme o manual do fabricante e repetir o teste de bandejas.",
+      "fontes": [
+        {"organizacao": "ISO", "titulo": "ISO 5690-1 — Equipment for distributing fertilizers — Test methods — Part 1: Full width fertilizer distributors", "url": "", "tipo": "norma", "trechoLocalizado": "Método de bandejas transversais e cálculo do CV com sobreposição."},
+        {"organizacao": "Fertiliser Quality Council (NZ) — Spreadmark", "titulo": "Spreadmark Code of Practice", "url": "https://flrc.massey.ac.nz/workshops/24/Manuscripts/Holmes_Allister.pdf", "tipo": "programa_qualidade", "trechoLocalizado": "CV transversal de 15% para fertilizantes nitrogenados e 25% para os demais e calcário."}
+      ],
+      "observacaoTecnica": "O limite de 15% vem de programa de qualidade (Spreadmark, Nova Zelândia) e é citado como critério internacional; a ISO 5690-1 define o método, não necessariamente o limite. Confirmar aplicabilidade antes de validar.",
+      "confianca": "media",
+      "statusValidacao": "pendente_conferencia", "validadoPor": null, "dataValidacao": null
+    },
+    {
+      "id": "ADUB-CV-OUT-01",
+      "versao": "1.0.0",
+      "titulo": "Coeficiente de variação transversal — distribuidor a lanço, fertilizante não nitrogenado ou calcário",
+      "equipamentoFamilia": ["distribuidor_lanco"],
+      "avaliacao": "distribuicao_transversal",
+      "produto": "*", "destino": "*", "etapa": "afericao",
+      "ponto": "faixa_aplicacao", "posicao": "*",
+      "variavel": "cv_transversal", "unidade": "%",
+      "limiteMin": null, "limiteMax": 25, "alvo": null,
+      "condicoes": [
+        {"campo": "fertilizanteNitrogenado", "operador": "igual", "valor": false, "descricao": "O produto não contém nitrogênio (ou é calcário)."},
+        {"campo": "cvComSobreposicao", "operador": "igual", "valor": true, "descricao": "O CV foi calculado com a sobreposição das passadas na largura de trabalho efetiva (método de bandejas transversais)."}
+      ],
+      "acaoForaDoPadrao": "Ajustar largura de trabalho, palhetas/ponto de queda e rotação dos discos conforme o manual do fabricante e repetir o teste de bandejas.",
+      "fontes": [
+        {"organizacao": "Fertiliser Quality Council (NZ) — Spreadmark", "titulo": "Spreadmark Code of Practice", "url": "https://flrc.massey.ac.nz/workshops/24/Manuscripts/Holmes_Allister.pdf", "tipo": "programa_qualidade", "trechoLocalizado": "CV transversal de 15% para fertilizantes nitrogenados e 25% para os demais e calcário."}
+      ],
+      "observacaoTecnica": "Mesma ressalva da regra ADUB-CV-N-01.",
+      "confianca": "media",
+      "statusValidacao": "pendente_conferencia", "validadoPor": null, "dataValidacao": null
+    },
+    {
+      "id": "DOSE-PLAN-01",
+      "versao": "1.0.0",
+      "titulo": "Dose aplicada (adubo/semente) em relação à dose planejada",
+      "equipamentoFamilia": ["semeadora_precisao", "semeadora_fluxo_continuo", "adubadora_linha", "distribuidor_lanco"],
+      "avaliacao": "dose_aplicada",
+      "produto": "*", "destino": "*", "etapa": "calibracao",
+      "ponto": "*", "posicao": "*",
+      "variavel": "desvio_dose_planejada", "unidade": "%",
+      "limiteMin": null, "limiteMax": null, "alvo": 0,
+      "condicoes": [],
+      "acaoForaDoPadrao": "",
+      "fontes": [],
+      "observacaoTecnica": "Nenhuma tolerância com fonte técnica aplicável foi localizada. O sistema calcula dose e desvio, mas devolve SEM_REFERENCIA até que uma fonte (manual do fabricante, recomendação agronômica ou norma) seja cadastrada.",
+      "confianca": "nenhuma",
+      "statusValidacao": "pendente_conferencia", "validadoPor": null, "dataValidacao": null
+    },
+    {
+      "id": "COLH-PERDA-SOJA-01",
+      "versao": "1.0.0",
+      "titulo": "Perdas totais na colheita de soja (método do copo medidor Embrapa)",
+      "equipamentoFamilia": ["colhedora"],
+      "avaliacao": "perdas_colheita",
+      "produto": ["soja"], "destino": "*", "etapa": "colheita",
+      "ponto": "atras_colhedora", "posicao": "*",
+      "variavel": "perda_total", "unidade": "sc60/ha",
+      "limiteMin": null, "limiteMax": 1, "alvo": null,
+      "condicoes": [
+        {"campo": "metodo", "operador": "igual", "valor": "armacao_2m2", "descricao": "Coleta com armação de 2 m² (4,0 m × 0,5 m) colocada transversalmente às linhas após a passagem da colhedora."},
+        {"campo": "incluiGraosEmVagens", "operador": "igual", "valor": true, "descricao": "Foram recolhidos os grãos soltos e os grãos dentro de vagens na área da armação."}
+      ],
+      "acaoForaDoPadrao": "Identificar a origem da perda (plataforma × trilha/separação/limpeza) e regular a colhedora conforme o manual; repetir a avaliação.",
+      "fontes": [
+        {"organizacao": "Embrapa Soja", "titulo": "Determinação de perdas na colheita de soja: copo medidor da Embrapa", "url": "https://www.infoteca.cnptia.embrapa.br/bitstream/doc/979883/1/ManualCopoMedidorbaixacompleto.pdf", "tipo": "publicacao_tecnica", "trechoLocalizado": "Nível tolerável de perdas: até 1 saca de 60 kg por hectare; armação de 4,0 m × 0,5 m (2,0 m²)."},
+        {"organizacao": "Embrapa", "titulo": "Copo medidor para a determinação das perdas de grãos na colheita de soja", "url": "https://www.embrapa.br/busca-de-solucoes-tecnologicas/-/produto-servico/11018/copo-medidor-para-a-determinacao-das-perdas-de-graos-na-colheita-de-soja", "tipo": "pagina_institucional", "trechoLocalizado": "Nível aceitável de perdas de até 1,0 saca de 60 kg/ha."}
+      ],
+      "observacaoTecnica": "Válido somente para soja. Não aplicar a milho, trigo, feijão ou outras culturas.",
+      "confianca": "alta",
+      "statusValidacao": "pendente_conferencia", "validadoPor": null, "dataValidacao": null
+    }
+  ],
+  "tabelasReferencia": [
+    {
+      "id": "ISO10625-CORES",
+      "versao": "1.0.0",
+      "titulo": "Código de cores de pontas de pulverização — vazão nominal a 300 kPa (3 bar)",
+      "uso": "Somente identificação da classe de vazão. Não substitui o catálogo do modelo exato da ponta.",
+      "unidade": "L/min", "pressaoBase_kPa": 300,
+      "linhas": [
+        {"cor": "laranja", "vazao": 0.4, "conferido": true},
+        {"cor": "verde", "vazao": 0.6, "conferido": true},
+        {"cor": "amarela", "vazao": 0.8, "conferido": true},
+        {"cor": "violeta (lilás)", "vazao": 1.0, "conferido": true},
+        {"cor": "azul", "vazao": 1.2, "conferido": false},
+        {"cor": "vermelha", "vazao": 1.6, "conferido": false},
+        {"cor": "marrom", "vazao": 2.0, "conferido": false},
+        {"cor": "cinza", "vazao": 2.4, "conferido": false},
+        {"cor": "branca", "vazao": 3.2, "conferido": false}
+      ],
+      "fontes": [
+        {"organizacao": "ISO", "titulo": "ISO 10625:2018 — Equipment for crop protection — Sprayer nozzles — Colour coding for identification", "url": "https://www.iso.org/standard/70624.html", "tipo": "norma"}
+      ],
+      "observacaoTecnica": "'conferido: true' = valor visto em trecho da norma durante a pesquisa; os demais são valores de uso corrente que ainda precisam ser conferidos na tabela 1 da norma.",
+      "statusValidacao": "pendente_conferencia", "validadoPor": null, "dataValidacao": null
+    }
+  ],
+  "formulas": [
+    {"id": "F-TAXA-LHA", "descricao": "Taxa de aplicação (L/ha) = 600 × q (L/min por bico) ÷ [v (km/h) × e (m entre bicos)]", "origem": "Conversão de unidades: 1 km/h × 1 m = 1000/60 m²/min; 10 000 m²/ha ÷ (1000/60) = 600.", "tipo": "calculo"},
+    {"id": "F-VAZAO-BICO", "descricao": "Vazão necessária por bico (L/min) = Q (L/ha) × v (km/h) × e (m) ÷ 600", "origem": "Inversão de F-TAXA-LHA.", "tipo": "calculo"},
+    {"id": "F-VAZAO-PRESSAO", "descricao": "q2 = q1 × √(p2 ÷ p1)", "origem": "Lei do orifício (vazão proporcional à raiz quadrada da pressão). Válida para pontas de jato plano/cone sem pré-orifício; para pontas com indução de ar ou pré-orifício, usar a tabela do fabricante.", "tipo": "estimativa"},
+    {"id": "F-VELOCIDADE", "descricao": "Velocidade (km/h) = 3,6 × distância (m) ÷ tempo (s)", "origem": "Conversão de unidades.", "tipo": "calculo"},
+    {"id": "F-POPULACAO", "descricao": "População (plantas ou sementes/ha) = n por metro × 10 000 ÷ espaçamento entre linhas (m)", "origem": "Conversão de unidades.", "tipo": "calculo"},
+    {"id": "F-XREF", "descricao": "Xref (cm) = 100 ÷ sementes por metro planejadas", "origem": "Definição do espaçamento de referência.", "tipo": "calculo"},
+    {"id": "F-DOSE-KGHA", "descricao": "Dose (kg/ha) = massa coletada (kg) × 10 000 ÷ [distância percorrida (m) × largura coletada (m)]", "origem": "Conversão de unidades.", "tipo": "calculo"},
+    {"id": "F-PERDA", "descricao": "Perda (kg/ha) = massa coletada (g) × 10 ÷ área amostrada (m²); sacas/ha = kg/ha ÷ 60", "origem": "Conversão de unidades (1 g/m² = 10 kg/ha).", "tipo": "calculo"},
+    {"id": "F-CV", "descricao": "CV (%) = desvio-padrão amostral ÷ média × 100", "origem": "Estatística descritiva.", "tipo": "calculo"},
+    {"id": "F-DESVIO", "descricao": "Desvio (%) = (medido − referência) ÷ referência × 100", "origem": "Definição.", "tipo": "calculo"}
+  ]
+}
