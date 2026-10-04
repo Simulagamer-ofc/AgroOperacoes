@@ -75,14 +75,14 @@ Base: lista pública de associadas da **CSMIA/ABIMAQ** (consulta em 04/10/2026),
 | Lavrale | 128 | 126 | tabelas de modelos (coletor genérico) |
 | DMB | 36 | 33 | pares campo/valor da página + links de manual e catálogo de peças |
 | Imasa | 15 | 0 | só identificação (páginas sem tabela) |
-| **Total** | **966** | **831** | |
+| Agrimec | 81 | 72 | tabelas transpostas (modelos nas colunas), detectadas automaticamente |
+| **Total** | **1050** | **905** | |
 
 - **Valores:** copiados como texto literal. A releitura de 60 modelos mostrou 99,4% dos valores idênticos à página; o restante são diferenças de formatação.
 - **Uso na regulagem:** as especificações servem para identificar e consultar. Para preencher sozinho um parâmetro de regulagem, o sistema exige confirmação no manual ou folheto do modelo e do ano.
 - **Manuais:** quando a página do produto tem link para manual, catálogo de peças ou folheto, ele fica em `documentos`. São a fonte a usar para confirmar parâmetros de regulagem.
 - **Pendentes:**
   - New Holland: o robots.txt proíbe a coleta automática da seção Brasil.
-  - Tatu Marchesan: domínio `www.marchesan.com.br` não liberado no ambiente.
+  - Tatu Marchesan: o site (`marchesan.com.br`) busca o catálogo em `api.marchesan.com.br`, que precisa ser liberado no ambiente.
   - Fendt: linha brasileira não verificada.
-  - Agrimec: o site redireciona para `agrimec.com.br` (sem www), que não está liberado.
   - Semeato, Agrale, Menta, Kubota, Grazmec, Civemasa, Vicon e Nogueira: o site não tem sitemap utilizável ou usa endereços sem padrão. Precisam de um coletor próprio.

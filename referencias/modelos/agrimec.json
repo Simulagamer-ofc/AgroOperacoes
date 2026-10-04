@@ -1,0 +1,5424 @@
+{
+ "catalogo": "Nexus Agro — modelos de máquinas e implementos",
+ "marca": "Agrimec",
+ "fabricanteId": "agrimec",
+ "fonte": "sitemap de agrimec.com.br",
+ "dataConsulta": "2026-10-04",
+ "regras": [
+  "Especificações copiadas como texto literal do site oficial do fabricante, sem conversão nem interpretação.",
+  "Valores servem para identificação e consulta. Para preencher automaticamente um parâmetro de regulagem, o valor precisa ser confirmado no manual/folheto do modelo e ano.",
+  "O site pode não refletir variações por ano-modelo, mercado ou opcionais."
+ ],
+ "totalModelos": 81,
+ "comEspecificacoes": 72,
+ "modelos": [
+  {
+   "id": "agrimec-cata-pietra",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "CATA PIETRA",
+   "linha": "Caçamba Recolhedora de Pedras CATA PIETRA",
+   "familia": null,
+   "categoriaFabricante": "1",
+   "url": "https://agrimec.com.br/implemento/1/cacamba-recolhedora-de-pedras-cata-pietra",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "6.030"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "2.350"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "1.940"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "2.250"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "3.380"
+    },
+    {
+     "campo": "Volume da caçamba (m³)",
+     "valor": "3"
+    },
+    {
+     "campo": "Volume do recolhedor (m³)",
+     "valor": "1.5"
+    },
+    {
+     "campo": "Altura da descarga (mm)",
+     "valor": "2.060"
+    },
+    {
+     "campo": "Profundidade do recolhimento (mm)",
+     "valor": "60"
+    },
+    {
+     "campo": "Acoplamento ao trator",
+     "valor": "Barra de tração"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "Hidráulico remoto"
+    },
+    {
+     "campo": "Pneus 1.400x24 16 Lonas",
+     "valor": "2"
+    },
+    {
+     "campo": "Potência mínima",
+     "valor": "150"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/1-9B2EDF51C41240E"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-fecha-taipa-arrozeiro-fta-2-400",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Fecha Taipa Arrozeiro FTA 2.400",
+   "linha": "Fecha Taipa Arrozeiro FTA",
+   "familia": null,
+   "categoriaFabricante": "10",
+   "url": "https://agrimec.com.br/implemento/10/fecha-taipa-arrozeiro-fta",
+   "especificacoes": [
+    {
+     "campo": "Comprimento total (mm)",
+     "valor": "6.900"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "4.600"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "2.400"
+    },
+    {
+     "campo": "Diâmetro x largura (mm)",
+     "valor": "1.050 x 1.455"
+    },
+    {
+     "campo": "Diâmetro dos discos (mm)",
+     "valor": "26” recortado"
+    },
+    {
+     "campo": "Rolos compactadores (un.)",
+     "valor": "2"
+    },
+    {
+     "campo": "Pentes de discos (un.)",
+     "valor": "2 pentes - 5 discos"
+    },
+    {
+     "campo": "Mancais com rolamentos (un.)",
+     "valor": "2 em cada pente"
+    },
+    {
+     "campo": "Peso do rolo lastreado com água (kg)",
+     "valor": "1.300 por rolo"
+    },
+    {
+     "campo": "Capacidade de lastro com água (l)",
+     "valor": "1.055 por rolo"
+    },
+    {
+     "campo": "Peso líquido aproximado (kg)",
+     "valor": "2.970"
+    },
+    {
+     "campo": "Peso lastreado (kg)",
+     "valor": "4.970"
+    },
+    {
+     "campo": "Altura da taipa (mm)",
+     "valor": "130"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "140"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/10-5956C5FFCC98479"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-60l",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Valetadeira Rotativa AGRIVAL — 60L",
+   "linha": "Valetadeira Rotativa AGRIVAL",
+   "familia": null,
+   "categoriaFabricante": "11",
+   "url": "https://agrimec.com.br/implemento/11/valetadeira-rotativa-lateral-agrival-60-l",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "2.370"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "1.440"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.320"
+    },
+    {
+     "campo": "Diâmetro do rotor com facas (mm)",
+     "valor": "580"
+    },
+    {
+     "campo": "Número de lâminas (un)",
+     "valor": "12"
+    },
+    {
+     "campo": "Paralamas (posições)",
+     "valor": "4 posições"
+    },
+    {
+     "campo": "Posição do rotor",
+     "valor": "Longitudinal"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Transmissão (ABNT/ASA)",
+     "valor": "Corrente (80/2)"
+    },
+    {
+     "campo": "Rotação da TDP (RPM)",
+     "valor": "540"
+    },
+    {
+     "campo": "Acoplamento",
+     "valor": "3 pontos"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "318"
+    },
+    {
+     "campo": "Valeta (profundidade x largura) (mm)",
+     "valor": "50x50"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "60"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/11-A554FF75DA745A4"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-90l",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Valetadeira Rotativa AGRIVAL — 90L",
+   "linha": "Valetadeira Rotativa AGRIVAL",
+   "familia": null,
+   "categoriaFabricante": "11",
+   "url": "https://agrimec.com.br/implemento/11/valetadeira-rotativa-lateral-agrival-60-l",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "2.370"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "1.440"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.470"
+    },
+    {
+     "campo": "Diâmetro do rotor com facas (mm)",
+     "valor": "580"
+    },
+    {
+     "campo": "Número de lâminas (un)",
+     "valor": "12"
+    },
+    {
+     "campo": "Paralamas (posições)",
+     "valor": "4 posições"
+    },
+    {
+     "campo": "Posição do rotor",
+     "valor": "Longitudinal"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Transmissão (ABNT/ASA)",
+     "valor": "Corrente (80/2)"
+    },
+    {
+     "campo": "Rotação da TDP (RPM)",
+     "valor": "540"
+    },
+    {
+     "campo": "Acoplamento",
+     "valor": "3 pontos"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "350"
+    },
+    {
+     "campo": "Valeta (profundidade x largura) (mm)",
+     "valor": "50x50"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "60"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/11-A554FF75DA745A4"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-aplicador-e-recolhedor-de-mangueira-macanico-600",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Aplicador e Recolhedor de Mangueira MAÇANICO 600",
+   "linha": "Aplicador e Recolhedor de Mangueira MAÇANICO",
+   "familia": null,
+   "categoriaFabricante": "12",
+   "url": "https://agrimec.com.br/implemento/12/aplicador-e-recolhedor-de-mangueiras-macanico",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "1.180"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "1.120"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.440"
+    },
+    {
+     "campo": "Largura da mangueira (mm)",
+     "valor": "400 à 600"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Acionamento hidráulico",
+     "valor": "Recolhedor"
+    },
+    {
+     "campo": "Regulador de profundidade do cobridor",
+     "valor": "Variável"
+    },
+    {
+     "campo": "Acoplamento",
+     "valor": "3 pontos"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "260"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "40"
+    },
+    {
+     "campo": "Velocidade de trabalho (km/h)",
+     "valor": "2"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/12-A8FCBBD0BBD55F3"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-aplicador-e-recolhedor-de-mangueira-macanico-800",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Aplicador e Recolhedor de Mangueira MAÇANICO 800",
+   "linha": "Aplicador e Recolhedor de Mangueira MAÇANICO",
+   "familia": null,
+   "categoriaFabricante": "12",
+   "url": "https://agrimec.com.br/implemento/12/aplicador-e-recolhedor-de-mangueiras-macanico",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "1.200"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "1.320"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.440"
+    },
+    {
+     "campo": "Largura da mangueira (mm)",
+     "valor": "600 à 800"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Acionamento hidráulico",
+     "valor": "Recolhedor"
+    },
+    {
+     "campo": "Regulador de profundidade do cobridor",
+     "valor": "Variável"
+    },
+    {
+     "campo": "Acoplamento",
+     "valor": "3 pontos"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "300"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "40"
+    },
+    {
+     "campo": "Velocidade de trabalho (km/h)",
+     "valor": "2"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/12-A8FCBBD0BBD55F3"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-3l",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Sulcador Camalhoneiro XIMANGO — 3L",
+   "linha": "Sulcador Camalhoneiro XIMANGO",
+   "familia": null,
+   "categoriaFabricante": "13",
+   "url": "https://agrimec.com.br/implemento/13/sulcador-camalhoneiro-ximango",
+   "especificacoes": [
+    {
+     "campo": "Quantidade de linhas",
+     "valor": "3"
+    },
+    {
+     "campo": "Quantidade de sulcadores",
+     "valor": "3"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "3.030"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "5.440"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.260"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "2.020"
+    },
+    {
+     "campo": "Capacidade de lastro (água -kg)",
+     "valor": "430"
+    },
+    {
+     "campo": "Peso de lastro (kg)",
+     "valor": "2.450"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "160"
+    },
+    {
+     "campo": "Espaçamento variável entre sulcos (mm)",
+     "valor": "1.200 a 1.800"
+    },
+    {
+     "campo": "Acoplamento",
+     "valor": "3 pontos"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/13-6F368AD21DAD011"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-3l-duplo",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Sulcador Camalhoneiro XIMANGO — 3L (DUPLO)",
+   "linha": "Sulcador Camalhoneiro XIMANGO",
+   "familia": null,
+   "categoriaFabricante": "13",
+   "url": "https://agrimec.com.br/implemento/13/sulcador-camalhoneiro-ximango",
+   "especificacoes": [
+    {
+     "campo": "Quantidade de linhas",
+     "valor": "3"
+    },
+    {
+     "campo": "Quantidade de sulcadores",
+     "valor": "6"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "3.750"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "5.440"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.260"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "2.650"
+    },
+    {
+     "campo": "Capacidade de lastro (água -kg)",
+     "valor": "430"
+    },
+    {
+     "campo": "Peso de lastro (kg)",
+     "valor": "3.080"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "200"
+    },
+    {
+     "campo": "Espaçamento variável entre sulcos (mm)",
+     "valor": "1.200 a 1.800"
+    },
+    {
+     "campo": "Acoplamento",
+     "valor": "3 pontos"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/13-6F368AD21DAD011"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-5l",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Sulcador Camalhoneiro XIMANGO — 5L",
+   "linha": "Sulcador Camalhoneiro XIMANGO",
+   "familia": null,
+   "categoriaFabricante": "13",
+   "url": "https://agrimec.com.br/implemento/13/sulcador-camalhoneiro-ximango",
+   "especificacoes": [
+    {
+     "campo": "Quantidade de linhas",
+     "valor": "5"
+    },
+    {
+     "campo": "Quantidade de sulcadores",
+     "valor": "5"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "3.030"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "6.815"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.260"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "2.600"
+    },
+    {
+     "campo": "Capacidade de lastro (água -kg)",
+     "valor": "600"
+    },
+    {
+     "campo": "Peso de lastro (kg)",
+     "valor": "3.200"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "200"
+    },
+    {
+     "campo": "Espaçamento variável entre sulcos (mm)",
+     "valor": "1.200 a 1.300"
+    },
+    {
+     "campo": "Acoplamento",
+     "valor": "3 pontos"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/13-6F368AD21DAD011"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-5l-duplo",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Sulcador Camalhoneiro XIMANGO — 5L (DUPLO)",
+   "linha": "Sulcador Camalhoneiro XIMANGO",
+   "familia": null,
+   "categoriaFabricante": "13",
+   "url": "https://agrimec.com.br/implemento/13/sulcador-camalhoneiro-ximango",
+   "especificacoes": [
+    {
+     "campo": "Quantidade de linhas",
+     "valor": "5"
+    },
+    {
+     "campo": "Quantidade de sulcadores",
+     "valor": "10"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "3.750"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "6.815"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.260"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "3.470"
+    },
+    {
+     "campo": "Capacidade de lastro (água -kg)",
+     "valor": "600"
+    },
+    {
+     "campo": "Peso de lastro (kg)",
+     "valor": "4.070"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "270"
+    },
+    {
+     "campo": "Espaçamento variável entre sulcos (mm)",
+     "valor": "1.200 a 1.300"
+    },
+    {
+     "campo": "Acoplamento",
+     "valor": "3 pontos"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/13-6F368AD21DAD011"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-taipadeira-de-base-larga-ta",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Taipadeira de Base Larga TA",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "14",
+   "url": "https://agrimec.com.br/implemento/14/taipadeira-de-base-larga-ta",
+   "especificacoes": [],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/14-99DD3858D0052EA"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-bomba-centrifuga-de-irrigacao-bci-200",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Bomba Centrífuga de Irrigação BCI 200",
+   "linha": "Bomba Centrífuga de Irrigação BCI",
+   "familia": null,
+   "categoriaFabricante": "15",
+   "url": "https://agrimec.com.br/implemento/15/bomba-centrifuga-de-irrigacao-bci",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "1.100"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "850"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.250"
+    },
+    {
+     "campo": "Tubulação de sucção (mm)",
+     "valor": "200"
+    },
+    {
+     "campo": "Tubulação de recalque (mm)",
+     "valor": "200"
+    },
+    {
+     "campo": "Válvula em pé (mm)",
+     "valor": "240"
+    },
+    {
+     "campo": "Levante limite",
+     "valor": "8"
+    },
+    {
+     "campo": "Levante máximo a 940 RPM",
+     "valor": "20"
+    },
+    {
+     "campo": "Vazão máxima* (m³/h) (l/s)",
+     "valor": "400 (111)"
+    },
+    {
+     "campo": "Sucção máxima (mCA)",
+     "valor": "7"
+    },
+    {
+     "campo": "Capacidade de Irrigação (hectares)",
+     "valor": "70"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "160"
+    },
+    {
+     "campo": "Rotação nominal (RPM)**",
+     "valor": "540"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Potência mínima (cv) (kw)",
+     "valor": "40 (30)"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/15-14AA4E9667E458C"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-bomba-centrifuga-de-irrigacao-bci-250",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Bomba Centrífuga de Irrigação BCI 250",
+   "linha": "Bomba Centrífuga de Irrigação BCI",
+   "familia": null,
+   "categoriaFabricante": "15",
+   "url": "https://agrimec.com.br/implemento/15/bomba-centrifuga-de-irrigacao-bci",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "1.200"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "900"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.350"
+    },
+    {
+     "campo": "Tubulação de sucção (mm)",
+     "valor": "250"
+    },
+    {
+     "campo": "Tubulação de recalque (mm)",
+     "valor": "250"
+    },
+    {
+     "campo": "Válvula em pé (mm)",
+     "valor": "320"
+    },
+    {
+     "campo": "Levante limite",
+     "valor": "8"
+    },
+    {
+     "campo": "Levante máximo a 940 RPM",
+     "valor": "20"
+    },
+    {
+     "campo": "Vazão máxima* (m³/h) (l/s)",
+     "valor": "650 (180)"
+    },
+    {
+     "campo": "Sucção máxima (mCA)",
+     "valor": "7"
+    },
+    {
+     "campo": "Capacidade de Irrigação (hectares)",
+     "valor": "114"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "190"
+    },
+    {
+     "campo": "Rotação nominal (RPM)**",
+     "valor": "540"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Potência mínima (cv) (kw)",
+     "valor": "65 (49)"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/15-14AA4E9667E458C"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-bomba-centrifuga-de-irrigacao-bci-300",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Bomba Centrífuga de Irrigação BCI 300",
+   "linha": "Bomba Centrífuga de Irrigação BCI",
+   "familia": null,
+   "categoriaFabricante": "15",
+   "url": "https://agrimec.com.br/implemento/15/bomba-centrifuga-de-irrigacao-bci",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "1.200"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "900"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.400"
+    },
+    {
+     "campo": "Tubulação de sucção (mm)",
+     "valor": "300"
+    },
+    {
+     "campo": "Tubulação de recalque (mm)",
+     "valor": "300"
+    },
+    {
+     "campo": "Válvula em pé (mm)",
+     "valor": "380"
+    },
+    {
+     "campo": "Levante limite",
+     "valor": "8"
+    },
+    {
+     "campo": "Levante máximo a 940 RPM",
+     "valor": "20"
+    },
+    {
+     "campo": "Vazão máxima* (m³/h) (l/s)",
+     "valor": "800 (222)"
+    },
+    {
+     "campo": "Sucção máxima (mCA)",
+     "valor": "7"
+    },
+    {
+     "campo": "Capacidade de Irrigação (hectares)",
+     "valor": "140"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "210"
+    },
+    {
+     "campo": "Rotação nominal (RPM)**",
+     "valor": "540"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Potência mínima (cv) (kw)",
+     "valor": "80 (59)"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/15-14AA4E9667E458C"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-bomba-centrifuga-de-irrigacao-bci-400",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Bomba Centrífuga de Irrigação BCI 400",
+   "linha": "Bomba Centrífuga de Irrigação BCI",
+   "familia": null,
+   "categoriaFabricante": "15",
+   "url": "https://agrimec.com.br/implemento/15/bomba-centrifuga-de-irrigacao-bci",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "1.330"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "1.050"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.500"
+    },
+    {
+     "campo": "Tubulação de sucção (mm)",
+     "valor": "400"
+    },
+    {
+     "campo": "Tubulação de recalque (mm)",
+     "valor": "400"
+    },
+    {
+     "campo": "Válvula em pé (mm)",
+     "valor": "550"
+    },
+    {
+     "campo": "Levante limite",
+     "valor": "8"
+    },
+    {
+     "campo": "Levante máximo a 940 RPM",
+     "valor": "20"
+    },
+    {
+     "campo": "Vazão máxima* (m³/h) (l/s)",
+     "valor": "1.200 (333)"
+    },
+    {
+     "campo": "Sucção máxima (mCA)",
+     "valor": "7"
+    },
+    {
+     "campo": "Capacidade de Irrigação (hectares)",
+     "valor": "210"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "290"
+    },
+    {
+     "campo": "Rotação nominal (RPM)**",
+     "valor": "540"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Potência mínima (cv) (kw)",
+     "valor": "130 (97)"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/15-14AA4E9667E458C"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-bomba-centrifuga-de-irrigacao-bci-500",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Bomba Centrífuga de Irrigação BCI 500",
+   "linha": "Bomba Centrífuga de Irrigação BCI",
+   "familia": null,
+   "categoriaFabricante": "15",
+   "url": "https://agrimec.com.br/implemento/15/bomba-centrifuga-de-irrigacao-bci",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "1.480"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "1.350"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.800"
+    },
+    {
+     "campo": "Tubulação de sucção (mm)",
+     "valor": "500"
+    },
+    {
+     "campo": "Tubulação de recalque (mm)",
+     "valor": "500"
+    },
+    {
+     "campo": "Válvula em pé (mm)",
+     "valor": "660"
+    },
+    {
+     "campo": "Levante limite",
+     "valor": "8"
+    },
+    {
+     "campo": "Levante máximo a 940 RPM",
+     "valor": "18"
+    },
+    {
+     "campo": "Vazão máxima* (m³/h) (l/s)",
+     "valor": "1.980 (550)"
+    },
+    {
+     "campo": "Sucção máxima (mCA)",
+     "valor": "7"
+    },
+    {
+     "campo": "Capacidade de Irrigação (hectares)",
+     "valor": "330"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "560"
+    },
+    {
+     "campo": "Rotação nominal (RPM)**",
+     "valor": "540"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Potência mínima (cv) (kw)",
+     "valor": "160 (120)"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/15-14AA4E9667E458C"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-cacamba-raspotransportadora-scraper-2",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Caçamba Raspotransportadora SCRAPER 2",
+   "linha": "Caçamba Raspotransportadora SCRAPER",
+   "familia": null,
+   "categoriaFabricante": "16",
+   "url": "https://agrimec.com.br/implemento/16/cacamba-raspotransportadora-scraper",
+   "especificacoes": [
+    {
+     "campo": "Comprimento total (mm)",
+     "valor": "3.390"
+    },
+    {
+     "campo": "Comprimento da caçamba (mm)",
+     "valor": "1.760"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "2.420"
+    },
+    {
+     "campo": "Largura da caçamba (mm)",
+     "valor": "1.490"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.430"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "890"
+    },
+    {
+     "campo": "Volume da caçamba (m3)",
+     "valor": "2"
+    },
+    {
+     "campo": "Volume coroado (m3)",
+     "valor": "2,3"
+    },
+    {
+     "campo": "Capacidade máx. de carga (kg)",
+     "valor": "4.800"
+    },
+    {
+     "campo": "Acionamento hidráulico",
+     "valor": "Remoto"
+    },
+    {
+     "campo": "Pressão do sistema hidráulico (bar)",
+     "valor": "150"
+    },
+    {
+     "campo": "Vazão do óleo hidráulico (l/min)",
+     "valor": "35"
+    },
+    {
+     "campo": "Aros",
+     "valor": "2x16,5”"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "70"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/16-208E5F2C0028BBE"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-cacamba-raspotransportadora-scraper-3",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Caçamba Raspotransportadora SCRAPER 3",
+   "linha": "Caçamba Raspotransportadora SCRAPER",
+   "familia": null,
+   "categoriaFabricante": "16",
+   "url": "https://agrimec.com.br/implemento/16/cacamba-raspotransportadora-scraper",
+   "especificacoes": [
+    {
+     "campo": "Comprimento total (mm)",
+     "valor": "3.920"
+    },
+    {
+     "campo": "Comprimento da caçamba (mm)",
+     "valor": "2.180"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "2.580"
+    },
+    {
+     "campo": "Largura da caçamba (mm)",
+     "valor": "1.690"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.730"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "1.480"
+    },
+    {
+     "campo": "Volume da caçamba (m3)",
+     "valor": "3"
+    },
+    {
+     "campo": "Volume coroado (m3)",
+     "valor": "3,5"
+    },
+    {
+     "campo": "Capacidade máx. de carga (kg)",
+     "valor": "6.000"
+    },
+    {
+     "campo": "Acionamento hidráulico",
+     "valor": "Remoto"
+    },
+    {
+     "campo": "Pressão do sistema hidráulico (bar)",
+     "valor": "150"
+    },
+    {
+     "campo": "Vazão do óleo hidráulico (l/min)",
+     "valor": "35"
+    },
+    {
+     "campo": "Aros",
+     "valor": "2x22,5”"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "80"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/16-208E5F2C0028BBE"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-cacamba-raspotransportadora-scraper-4",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Caçamba Raspotransportadora SCRAPER 4*",
+   "linha": "Caçamba Raspotransportadora SCRAPER",
+   "familia": null,
+   "categoriaFabricante": "16",
+   "url": "https://agrimec.com.br/implemento/16/cacamba-raspotransportadora-scraper",
+   "especificacoes": [
+    {
+     "campo": "Comprimento total (mm)",
+     "valor": "4.030"
+    },
+    {
+     "campo": "Comprimento da caçamba (mm)",
+     "valor": "2.180"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "2.580"
+    },
+    {
+     "campo": "Largura da caçamba (mm)",
+     "valor": "1.690"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.840"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "1.500"
+    },
+    {
+     "campo": "Volume da caçamba (m3)",
+     "valor": "4"
+    },
+    {
+     "campo": "Volume coroado (m3)",
+     "valor": "4,5"
+    },
+    {
+     "campo": "Capacidade máx. de carga (kg)",
+     "valor": "8.000"
+    },
+    {
+     "campo": "Acionamento hidráulico",
+     "valor": "Remoto"
+    },
+    {
+     "campo": "Pressão do sistema hidráulico (bar)",
+     "valor": "150"
+    },
+    {
+     "campo": "Vazão do óleo hidráulico (l/min)",
+     "valor": "35"
+    },
+    {
+     "campo": "Aros",
+     "valor": "2x22,5”"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "90"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/16-208E5F2C0028BBE"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-cacamba-raspotransportadora-scraper-5",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Caçamba Raspotransportadora SCRAPER 5*",
+   "linha": "Caçamba Raspotransportadora SCRAPER",
+   "familia": null,
+   "categoriaFabricante": "16",
+   "url": "https://agrimec.com.br/implemento/16/cacamba-raspotransportadora-scraper",
+   "especificacoes": [
+    {
+     "campo": "Comprimento total (mm)",
+     "valor": "4.510"
+    },
+    {
+     "campo": "Comprimento da caçamba (mm)",
+     "valor": "2.420"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "2.810"
+    },
+    {
+     "campo": "Largura da caçamba (mm)",
+     "valor": "1.690"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "2.160"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "2.100"
+    },
+    {
+     "campo": "Volume da caçamba (m3)",
+     "valor": "5"
+    },
+    {
+     "campo": "Volume coroado (m3)",
+     "valor": "5,5"
+    },
+    {
+     "campo": "Capacidade máx. de carga (kg)",
+     "valor": "10.000"
+    },
+    {
+     "campo": "Acionamento hidráulico",
+     "valor": "Remoto"
+    },
+    {
+     "campo": "Pressão do sistema hidráulico (bar)",
+     "valor": "150"
+    },
+    {
+     "campo": "Vazão do óleo hidráulico (l/min)",
+     "valor": "50"
+    },
+    {
+     "campo": "Aros",
+     "valor": "2x24”"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "150"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/16-208E5F2C0028BBE"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-cacamba-raspotransportadora-scraper-7",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Caçamba Raspotransportadora SCRAPER 7*",
+   "linha": "Caçamba Raspotransportadora SCRAPER",
+   "familia": null,
+   "categoriaFabricante": "16",
+   "url": "https://agrimec.com.br/implemento/16/cacamba-raspotransportadora-scraper",
+   "especificacoes": [
+    {
+     "campo": "Comprimento total (mm)",
+     "valor": "4.510"
+    },
+    {
+     "campo": "Comprimento da caçamba (mm)",
+     "valor": "2.440"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "3.250"
+    },
+    {
+     "campo": "Largura da caçamba (mm)",
+     "valor": "2.090"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "2.280"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "2.470"
+    },
+    {
+     "campo": "Volume da caçamba (m3)",
+     "valor": "7"
+    },
+    {
+     "campo": "Volume coroado (m3)",
+     "valor": "7,7"
+    },
+    {
+     "campo": "Capacidade máx. de carga (kg)",
+     "valor": "13.500"
+    },
+    {
+     "campo": "Acionamento hidráulico",
+     "valor": "Remoto"
+    },
+    {
+     "campo": "Pressão do sistema hidráulico (bar)",
+     "valor": "150"
+    },
+    {
+     "campo": "Vazão do óleo hidráulico (l/min)",
+     "valor": "50"
+    },
+    {
+     "campo": "Aros",
+     "valor": "2x24”"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "180"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/16-208E5F2C0028BBE"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-tracer",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "TRACER",
+   "linha": "Plaina Niveladora Raspotransportadora TRACER",
+   "familia": null,
+   "categoriaFabricante": "17",
+   "url": "https://agrimec.com.br/implemento/17/plaina-niveladora-raspotransportadora-a-laser-tracer",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "6.700"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "5.300"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "4.850"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "5.250"
+    },
+    {
+     "campo": "Capacidade máx. de carga (m3)",
+     "valor": "10"
+    },
+    {
+     "campo": "Sistema de levante",
+     "valor": "2 cilindros"
+    },
+    {
+     "campo": "Pressão sistema hidráulico (bar)",
+     "valor": "180"
+    },
+    {
+     "campo": "Pneus",
+     "valor": "400/60 – 15,5 18 lonas (4 un.)"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "220"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/17-70D11F71AC21AE2"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-carreta-graneleira-granbox-35-000",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Carreta Graneleira GRANBOX 35.000",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "18",
+   "url": "https://agrimec.com.br/implemento/18/granbox-carreta-graneleira-strandard",
+   "especificacoes": [
+    {
+     "campo": "Modelos GRÃOS",
+     "valor": "35.000 c/ ROSCA VARREDORA"
+    },
+    {
+     "campo": "Medidas c/pneus",
+     "valor": "800.50x30,5"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "9.600"
+    },
+    {
+     "campo": "Largura com pneus (mm)",
+     "valor": "4.365"
+    },
+    {
+     "campo": "Altura com pneus (mm)",
+     "valor": "3.750"
+    },
+    {
+     "campo": "Altura de descarga (mm)",
+     "valor": "4.260"
+    },
+    {
+     "campo": "Diâmetro do tubo (mm)",
+     "valor": "500"
+    },
+    {
+     "campo": "Capacidade (l)",
+     "valor": "35.000"
+    },
+    {
+     "campo": "Capacidade coroada sacas (soja)",
+     "valor": "460"
+    },
+    {
+     "campo": "Tempo médio de descarga (min) *",
+     "valor": "3min40s"
+    },
+    {
+     "campo": "Peso (kg) **",
+     "valor": "7.050"
+    },
+    {
+     "campo": "Rotação (rpm)",
+     "valor": "540"
+    },
+    {
+     "campo": "Aros (pol)",
+     "valor": "26 a 34"
+    },
+    {
+     "campo": "Quantidade de rodas",
+     "valor": "4"
+    },
+    {
+     "campo": "Eixos",
+     "valor": "2"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "280"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/18-12691E5DF432A40"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-carreta-graneleira-granbox-graos-front",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Carreta Graneleira GRANBOX GRÃOS FRONT",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "19",
+   "url": "https://agrimec.com.br/implemento/19/granbox-carreta-graneleira-strandard",
+   "especificacoes": [],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/19-D87B5F90D40F360"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-transporte",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Enleirador Rotativo de Pedras ERP — TRANSPORTE",
+   "linha": "Enleirador Rotativo de Pedras ERP",
+   "familia": null,
+   "categoriaFabricante": "2",
+   "url": "https://agrimec.com.br/implemento/2/enleirador-rotativo-de-pedras-erp-3500",
+   "especificacoes": [
+    {
+     "campo": "Ângulo",
+     "valor": "45º"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "3.790"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "5.000"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "-"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/2-3E1AF86924EC84B"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-posicao-de-trabalho",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Enleirador Rotativo de Pedras ERP — POSIÇÃO DE TRABALHO",
+   "linha": "Enleirador Rotativo de Pedras ERP",
+   "familia": null,
+   "categoriaFabricante": "2",
+   "url": "https://agrimec.com.br/implemento/2/enleirador-rotativo-de-pedras-erp-3500",
+   "especificacoes": [
+    {
+     "campo": "Ângulo",
+     "valor": "10º"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "4.700"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "4.900"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "3.660"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.270"
+    },
+    {
+     "campo": "Profundidade máx. de trabalho (mm)",
+     "valor": "40"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "1.680"
+    },
+    {
+     "campo": "Acoplamento ao trator",
+     "valor": "Barra de tração"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Princípio de funcionamento",
+     "valor": "Rotor espiral"
+    },
+    {
+     "campo": "Aros",
+     "valor": "8\"x15\""
+    },
+    {
+     "campo": "Pneus",
+     "valor": "11L15"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "80"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/2-3E1AF86924EC84B"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-posicao-de-trabalho-2",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Enleirador Rotativo de Pedras ERP — POSIÇÃO DE TRABALHO (20º)",
+   "linha": "Enleirador Rotativo de Pedras ERP",
+   "familia": null,
+   "categoriaFabricante": "2",
+   "url": "https://agrimec.com.br/implemento/2/enleirador-rotativo-de-pedras-erp-3500",
+   "especificacoes": [
+    {
+     "campo": "Ângulo",
+     "valor": "20º"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "4.600"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "5.160"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "3.500"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.270"
+    },
+    {
+     "campo": "Profundidade máx. de trabalho (mm)",
+     "valor": "40"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "1.680"
+    },
+    {
+     "campo": "Acoplamento ao trator",
+     "valor": "Barra de tração"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Princípio de funcionamento",
+     "valor": "Rotor espiral"
+    },
+    {
+     "campo": "Aros",
+     "valor": "8\"x15\""
+    },
+    {
+     "campo": "Pneus",
+     "valor": "11L15"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "80"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/2-3E1AF86924EC84B"
+    }
+   ],
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "agrimec-posicao-de-trabalho-3",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Enleirador Rotativo de Pedras ERP — POSIÇÃO DE TRABALHO (30º)",
+   "linha": "Enleirador Rotativo de Pedras ERP",
+   "familia": null,
+   "categoriaFabricante": "2",
+   "url": "https://agrimec.com.br/implemento/2/enleirador-rotativo-de-pedras-erp-3500",
+   "especificacoes": [
+    {
+     "campo": "Ângulo",
+     "valor": "30º"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "4.370"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "5.350"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "3.300"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.270"
+    },
+    {
+     "campo": "Profundidade máx. de trabalho (mm)",
+     "valor": "40"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "1.680"
+    },
+    {
+     "campo": "Acoplamento ao trator",
+     "valor": "Barra de tração"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Princípio de funcionamento",
+     "valor": "Rotor espiral"
+    },
+    {
+     "campo": "Aros",
+     "valor": "8\"x15\""
+    },
+    {
+     "campo": "Pneus",
+     "valor": "11L15"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "80"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/2-3E1AF86924EC84B"
+    }
+   ],
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "agrimec-carreta-graneleira-granbox-flex-lateral",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Carreta Graneleira Granbox FLEX LATERAL",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "20",
+   "url": "https://agrimec.com.br/implemento/20/granbox-carreta-graneleira-flex",
+   "especificacoes": [],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/20-07159CF3A2C20E5"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-200h",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Abastecedor de Plantadeira APA — 200H",
+   "linha": "Abastecedor de Plantadeira APA",
+   "familia": null,
+   "categoriaFabricante": "21",
+   "url": "https://agrimec.com.br/implemento/21/abastecedor-de-plantadeira-apa",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "4.630"
+    },
+    {
+     "campo": "Diâmetro (mm)",
+     "valor": "206"
+    },
+    {
+     "campo": "Altura da descarga (mm)",
+     "valor": "Variável"
+    },
+    {
+     "campo": "Descarga por minuto (kg)",
+     "valor": "200"
+    },
+    {
+     "campo": "Rotação (rpm)",
+     "valor": "Variável"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "210"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/21-0459036694AFA66"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-carreta-graneleira-granbox-triflex",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Carreta Graneleira GRANBOX TRIFLEX",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "22",
+   "url": "https://agrimec.com.br/implemento/22/granbox-carreta-graneleira-triflex",
+   "especificacoes": [],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/22-8B8C79CDBD0E94E"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-6l",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Capinadeira Rotativa ROTACARP — 6L",
+   "linha": "Capinadeira Rotativa ROTACARP",
+   "familia": null,
+   "categoriaFabricante": "23",
+   "url": "https://agrimec.com.br/implemento/23/capinadeira-rotativa-rotacarp",
+   "especificacoes": [
+    {
+     "campo": "Largura total (mm)",
+     "valor": "3.100"
+    },
+    {
+     "campo": "Altura total (mm)",
+     "valor": "1.230"
+    },
+    {
+     "campo": "Altura útil (mm)",
+     "valor": "500"
+    },
+    {
+     "campo": "Nº de conjuntos de corte (cm)",
+     "valor": "6"
+    },
+    {
+     "campo": "Largura de corte (cm)",
+     "valor": "27 a 75"
+    },
+    {
+     "campo": "Diâmetro dos helicoidais (cm)",
+     "valor": "24"
+    },
+    {
+     "campo": "Profundidade máx. de corte (cm)",
+     "valor": "10"
+    },
+    {
+     "campo": "Profundidade aconselhável (cm)",
+     "valor": "6"
+    },
+    {
+     "campo": "Nº de conjuntos helicoidais",
+     "valor": "12"
+    },
+    {
+     "campo": "Nº de lâminas",
+     "valor": "48"
+    },
+    {
+     "campo": "Nº Ideal de Linhas Plantadas",
+     "valor": "5"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "60"
+    },
+    {
+     "campo": "Peso Aproximado (kg)",
+     "valor": "360"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/23-5E62C5F8B59CF22"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-outros",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Capinadeira Rotativa ROTACARP — Outros",
+   "linha": "Capinadeira Rotativa ROTACARP",
+   "familia": null,
+   "categoriaFabricante": "23",
+   "url": "https://agrimec.com.br/implemento/23/capinadeira-rotativa-rotacarp",
+   "especificacoes": [
+    {
+     "campo": "Largura total (mm)",
+     "valor": "Variável"
+    },
+    {
+     "campo": "Altura total (mm)",
+     "valor": "1.230"
+    },
+    {
+     "campo": "Altura útil (mm)",
+     "valor": "500"
+    },
+    {
+     "campo": "Nº de conjuntos de corte (cm)",
+     "valor": "2 a 10"
+    },
+    {
+     "campo": "Largura de corte (cm)",
+     "valor": "27 a 75"
+    },
+    {
+     "campo": "Diâmetro dos helicoidais (cm)",
+     "valor": "24"
+    },
+    {
+     "campo": "Profundidade máx. de corte (cm)",
+     "valor": "10"
+    },
+    {
+     "campo": "Profundidade aconselhável (cm)",
+     "valor": "6"
+    },
+    {
+     "campo": "Nº de conjuntos helicoidais",
+     "valor": "Variável"
+    },
+    {
+     "campo": "Nº de lâminas",
+     "valor": "Variável"
+    },
+    {
+     "campo": "Nº Ideal de Linhas Plantadas",
+     "valor": "Variável"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "Proporcional"
+    },
+    {
+     "campo": "Peso Aproximado (kg)",
+     "valor": "Variável"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/23-5E62C5F8B59CF22"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-1l",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Transplantadora de mudas de cana TUPI — 1L",
+   "linha": "Transplantadora de mudas de cana TUPI",
+   "familia": null,
+   "categoriaFabricante": "24",
+   "url": "https://agrimec.com.br/implemento/24/transplantadora-de-mudas-tupi",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "4.700"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "1.700"
+    },
+    {
+     "campo": "Distância entre linhas (mm)",
+     "valor": "-"
+    },
+    {
+     "campo": "Distância entre mudas (mm)",
+     "valor": "Variável (375, 500, 600 e múltiplos)"
+    },
+    {
+     "campo": "Capacidade de plantio (mudas/hora)",
+     "valor": "2.520**"
+    },
+    {
+     "campo": "Número de linhas (un.)",
+     "valor": "1"
+    },
+    {
+     "campo": "Capacidade de defensivo líquido (l)",
+     "valor": "300"
+    },
+    {
+     "campo": "Capacidades de fertilizante sólido NPK",
+     "valor": "300 litros / 250 kg"
+    },
+    {
+     "campo": "Capacidades de fertilizante sólido Uréia",
+     "valor": "~210 Kg"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "1.850"
+    },
+    {
+     "campo": "Acionamento TDP (RPM)",
+     "valor": "540"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "Com sulcador: 120 Sem sulcador: 80"
+    },
+    {
+     "campo": "Velocidade de plantio (km/h)",
+     "valor": "2"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/24-06C2D3F2365DA5E"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-2l",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Transplantadora de mudas de cana TUPI — 2L",
+   "linha": "Transplantadora de mudas de cana TUPI",
+   "familia": null,
+   "categoriaFabricante": "24",
+   "url": "https://agrimec.com.br/implemento/24/transplantadora-de-mudas-tupi",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "4.700"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "3.600*"
+    },
+    {
+     "campo": "Distância entre linhas (mm)",
+     "valor": "1.500"
+    },
+    {
+     "campo": "Distância entre mudas (mm)",
+     "valor": "Variável (375, 500, 600 e múltiplos)"
+    },
+    {
+     "campo": "Capacidade de plantio (mudas/hora)",
+     "valor": "5040**"
+    },
+    {
+     "campo": "Número de linhas (un.)",
+     "valor": "2"
+    },
+    {
+     "campo": "Capacidade de defensivo líquido (l)",
+     "valor": "300"
+    },
+    {
+     "campo": "Capacidades de fertilizante sólido NPK",
+     "valor": "600 litros / 500 kg"
+    },
+    {
+     "campo": "Capacidades de fertilizante sólido Uréia",
+     "valor": "~420 Kg"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "2.640*"
+    },
+    {
+     "campo": "Acionamento TDP (RPM)",
+     "valor": "540"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "Com sulcador: 160 Sem sulcador: 120"
+    },
+    {
+     "campo": "Velocidade de plantio (km/h)",
+     "valor": "2"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/24-06C2D3F2365DA5E"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-2l-2",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Plantadora Multifuncional de Cana-de-açucar BROTAS — 2L",
+   "linha": "Plantadora Multifuncional de Cana-de-açucar BROTAS",
+   "familia": null,
+   "categoriaFabricante": "25",
+   "url": "https://agrimec.com.br/implemento/25/plantadora-combinada-de-toletes-brotas",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento entre linhas (mm)",
+     "valor": "0,9 a 1,0m"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "570l. / 650Kg"
+    },
+    {
+     "campo": "Capacidade de cana",
+     "valor": "4,5m³"
+    },
+    {
+     "campo": "Capacidade calda defensivo",
+     "valor": "200l"
+    },
+    {
+     "campo": "Profundidade máxima sulcador",
+     "valor": "500 mm"
+    },
+    {
+     "campo": "Velocidade de operação",
+     "valor": "3,5 km/h"
+    },
+    {
+     "campo": "Acionamento cortadores",
+     "valor": "Hidráulico remoto*"
+    },
+    {
+     "campo": "Acionamento pulverizador",
+     "valor": "Hidráulico remoto*"
+    },
+    {
+     "campo": "Tamanho do tolete cortado",
+     "valor": "30 a 50 cm"
+    },
+    {
+     "campo": "Rotação máxima recomendada p/ cortadores",
+     "valor": "60 RPM"
+    },
+    {
+     "campo": "Capacidade corte toletes p/ cortador*",
+     "valor": "240/min"
+    },
+    {
+     "campo": "Capacidade operacional teórica",
+     "valor": "0,6 ha/h"
+    },
+    {
+     "campo": "Pneus",
+     "valor": "04 - 12x16,5\""
+    },
+    {
+     "campo": "Largura pneu",
+     "valor": "300 mm"
+    },
+    {
+     "campo": "Bitola rodado",
+     "valor": "2400 mm"
+    },
+    {
+     "campo": "Sistena levante dianteiro",
+     "valor": "1 cilindro hidráulico"
+    },
+    {
+     "campo": "Comprimento cil. dianteiro (fechado/aberto)",
+     "valor": "500/682 mm"
+    },
+    {
+     "campo": "Sistema levante traseiro",
+     "valor": "2 cilindros hidráulicos"
+    },
+    {
+     "campo": "Comprimento cil. traseiro (fechado/aberto)",
+     "valor": "809/1250 mm"
+    },
+    {
+     "campo": "Potência requerida operação",
+     "valor": "200cv"
+    },
+    {
+     "campo": "Peso líquido",
+     "valor": "4100Kg"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "3220 mm"
+    },
+    {
+     "campo": "Comprimento",
+     "valor": "6520 mm"
+    },
+    {
+     "campo": "Altura c/ cabine/proteção bag retraída",
+     "valor": "3700 mm"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/25-B4BD68582BEEA0E"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rc-35",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Replantadora de Mudas MOTUCA — RC 35",
+   "linha": "Replantadora de Mudas MOTUCA",
+   "familia": null,
+   "categoriaFabricante": "26",
+   "url": "https://agrimec.com.br/implemento/26/replantadora-de-mudas-motuca",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "1.230"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "970"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.620"
+    },
+    {
+     "campo": "Diâmetro do rotor sem facas (mm)",
+     "valor": "880"
+    },
+    {
+     "campo": "Diâmetro do rotor com facas (mm)",
+     "valor": "700"
+    },
+    {
+     "campo": "Número de lâminas (un.)",
+     "valor": "10"
+    },
+    {
+     "campo": "Posição do rotor",
+     "valor": "Vertical"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Rotação da TDP (RPM)",
+     "valor": "540"
+    },
+    {
+     "campo": "Acoplamento",
+     "valor": "3 pontos"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "310"
+    },
+    {
+     "campo": "Valeta (profundidade x largura) (mm)",
+     "valor": "350 x 85/130"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "50"
+    },
+    {
+     "campo": "Velocidade de operação (m/h)",
+     "valor": "2.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/26-763EA45A95FB47F"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-2l-3",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Cultivador Rotativo Quebra-lombo JAÚ — 2L",
+   "linha": "Cultivador Rotativo Quebra-lombo JAÚ",
+   "familia": null,
+   "categoriaFabricante": "27",
+   "url": "https://agrimec.com.br/implemento/27/cultivador-rotativo-quebra-lombo-jau",
+   "especificacoes": [
+    {
+     "campo": "Largura total (mm)",
+     "valor": "2.530"
+    },
+    {
+     "campo": "Altura total (mm)",
+     "valor": "2.300"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "2.450 ~ 3.000"
+    },
+    {
+     "campo": "Volume do reservatório de herbicida (l)",
+     "valor": "300 ou 600"
+    },
+    {
+     "campo": "Diâmetro dos rotores de lâminas helicoidais",
+     "valor": "300"
+    },
+    {
+     "campo": "Rotação dos rotores (RPM)",
+     "valor": "360"
+    },
+    {
+     "campo": "Espaçamento variável entre linhas (mm)",
+     "valor": "1.400 ~ 1.500"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "Hidráulico ou TDP"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "1.400"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "80"
+    },
+    {
+     "campo": "Nº de lâminas helicoidais (un.)",
+     "valor": "16 esquerdas e 16 direitas"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/27-2DAE9083312599D"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-3l-2",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Cultivador Rotativo Quebra-lombo JAÚ — 3L",
+   "linha": "Cultivador Rotativo Quebra-lombo JAÚ",
+   "familia": null,
+   "categoriaFabricante": "27",
+   "url": "https://agrimec.com.br/implemento/27/cultivador-rotativo-quebra-lombo-jau",
+   "especificacoes": [
+    {
+     "campo": "Largura total (mm)",
+     "valor": "4.200"
+    },
+    {
+     "campo": "Altura total (mm)",
+     "valor": "3.400"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "2.450 ~ 3.000"
+    },
+    {
+     "campo": "Volume do reservatório de herbicida (l)",
+     "valor": "600"
+    },
+    {
+     "campo": "Diâmetro dos rotores de lâminas helicoidais",
+     "valor": "300"
+    },
+    {
+     "campo": "Rotação dos rotores (RPM)",
+     "valor": "360"
+    },
+    {
+     "campo": "Espaçamento variável entre linhas (mm)",
+     "valor": "1.500"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "Hidráulico ou TDP"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "3.700"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "210"
+    },
+    {
+     "campo": "Nº de lâminas helicoidais (un.)",
+     "valor": "24 esquerdas e 24 direitas"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/27-2DAE9083312599D"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-nsa-8",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Plaina Niveladora Multilâminas ROBUST — NSA 8",
+   "linha": "Plaina Niveladora Multilâminas ROBUST",
+   "familia": null,
+   "categoriaFabricante": "3",
+   "url": "https://agrimec.com.br/implemento/3/plaina-niveladora-multilaminas-robust",
+   "especificacoes": [
+    {
+     "campo": "Largura total (mm)",
+     "valor": "3.985"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "3.860"
+    },
+    {
+     "campo": "Largura carro traseiro (mm)***",
+     "valor": "2.530"
+    },
+    {
+     "campo": "Largura mín. transp. (mm)****",
+     "valor": "3.985"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "9.900"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "920"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "1.580"
+    },
+    {
+     "campo": "Altura das lâminas (mm)",
+     "valor": "345"
+    },
+    {
+     "campo": "Conjunto de lâminas",
+     "valor": "3 ou 5"
+    },
+    {
+     "campo": "Sistema de levante",
+     "valor": "1 cil. hid."
+    },
+    {
+     "campo": "Pneus dianteiros",
+     "valor": "185 ou 195 / 70x14"
+    },
+    {
+     "campo": "Pneus traseiros",
+     "valor": "11Lx15 12L"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "90"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "agrimec-nsa-10",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Plaina Niveladora Multilâminas ROBUST — NSA 10",
+   "linha": "Plaina Niveladora Multilâminas ROBUST",
+   "familia": null,
+   "categoriaFabricante": "3",
+   "url": "https://agrimec.com.br/implemento/3/plaina-niveladora-multilaminas-robust",
+   "especificacoes": [
+    {
+     "campo": "Largura total (mm)",
+     "valor": "4.780"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "4.350"
+    },
+    {
+     "campo": "Largura carro traseiro (mm)***",
+     "valor": "3.150"
+    },
+    {
+     "campo": "Largura mín. transp. (mm)****",
+     "valor": "4.000"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "10.800"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.145"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "3.125"
+    },
+    {
+     "campo": "Altura das lâminas (mm)",
+     "valor": "400"
+    },
+    {
+     "campo": "Conjunto de lâminas",
+     "valor": "5"
+    },
+    {
+     "campo": "Sistema de levante",
+     "valor": "2 cil. hid."
+    },
+    {
+     "campo": "Pneus dianteiros",
+     "valor": "235 / 75 R 15"
+    },
+    {
+     "campo": "Pneus traseiros",
+     "valor": "400/60x 15.5 14L"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "110"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "agrimec-robust-440",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "ROBUST 440 *",
+   "linha": "Plaina Niveladora Multilâminas ROBUST",
+   "familia": null,
+   "categoriaFabricante": "3",
+   "url": "https://agrimec.com.br/implemento/3/plaina-niveladora-multilaminas-robust",
+   "especificacoes": [
+    {
+     "campo": "Largura total (mm)",
+     "valor": "4.840"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "4.400"
+    },
+    {
+     "campo": "Largura carro traseiro (mm)***",
+     "valor": "3.150"
+    },
+    {
+     "campo": "Largura mín. transp. (mm)****",
+     "valor": "3.970"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "11.900"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.190"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "3.518"
+    },
+    {
+     "campo": "Altura das lâminas (mm)",
+     "valor": "450"
+    },
+    {
+     "campo": "Conjunto de lâminas",
+     "valor": "5"
+    },
+    {
+     "campo": "Sistema de levante",
+     "valor": "2 cil. hid."
+    },
+    {
+     "campo": "Pneus dianteiros",
+     "valor": "11Lx15"
+    },
+    {
+     "campo": "Pneus traseiros",
+     "valor": "400/60x15,5 14L"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "140"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "agrimec-robust480",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Plaina Niveladora Multilâminas ROBUST — ROBUST480 *",
+   "linha": "Plaina Niveladora Multilâminas ROBUST",
+   "familia": null,
+   "categoriaFabricante": "3",
+   "url": "https://agrimec.com.br/implemento/3/plaina-niveladora-multilaminas-robust",
+   "especificacoes": [
+    {
+     "campo": "Largura total (mm)",
+     "valor": "5.270"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "4.800"
+    },
+    {
+     "campo": "Largura carro traseiro (mm)***",
+     "valor": "3.150"
+    },
+    {
+     "campo": "Largura mín. transp. (mm)****",
+     "valor": "3.770"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "12.820"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.190"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "3.824"
+    },
+    {
+     "campo": "Altura das lâminas (mm)",
+     "valor": "450"
+    },
+    {
+     "campo": "Conjunto de lâminas",
+     "valor": "5"
+    },
+    {
+     "campo": "Sistema de levante",
+     "valor": "2 cil. hid."
+    },
+    {
+     "campo": "Pneus dianteiros",
+     "valor": "11Lx15"
+    },
+    {
+     "campo": "Pneus traseiros",
+     "valor": "400/60x15,5 14L"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "180"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "agrimec-robust-500",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "ROBUST 500*",
+   "linha": "Plaina Niveladora Multilâminas ROBUST",
+   "familia": null,
+   "categoriaFabricante": "3",
+   "url": "https://agrimec.com.br/implemento/3/plaina-niveladora-multilaminas-robust",
+   "especificacoes": [
+    {
+     "campo": "Largura total (mm)",
+     "valor": "5.550"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "5.000"
+    },
+    {
+     "campo": "Largura carro traseiro (mm)***",
+     "valor": "4.600 (3.650**)"
+    },
+    {
+     "campo": "Larg. Mín. transporte(mm)****",
+     "valor": "4.600 (3.650**)"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "14.900"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.310"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "6.970"
+    },
+    {
+     "campo": "Altura das lâminas (mm)",
+     "valor": "500"
+    },
+    {
+     "campo": "Conjunto de lâminas",
+     "valor": "5"
+    },
+    {
+     "campo": "Sistema de levante",
+     "valor": "2 cil. hid."
+    },
+    {
+     "campo": "Pneus dianteiros",
+     "valor": "400/60x15,5"
+    },
+    {
+     "campo": "Pneus traseiros",
+     "valor": "500/60x22,5 16 LONAS (2)"
+    },
+    {
+     "campo": "Potência minima (cv)",
+     "valor": "200"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "agrimec-robust-540",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "ROBUST 540",
+   "linha": "Plaina Niveladora Multilâminas ROBUST",
+   "familia": null,
+   "categoriaFabricante": "3",
+   "url": "https://agrimec.com.br/implemento/3/plaina-niveladora-multilaminas-robust",
+   "especificacoes": [
+    {
+     "campo": "Largura total (mm)",
+     "valor": "6.045"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "5.400"
+    },
+    {
+     "campo": "Largura carro traseiro (mm)***",
+     "valor": "4.600"
+    },
+    {
+     "campo": "Larg. Mín. transporte(mm)****",
+     "valor": "4.740"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "16.900"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.500"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "7.480"
+    },
+    {
+     "campo": "Altura das lâminas (mm)",
+     "valor": "600"
+    },
+    {
+     "campo": "Conjunto de lâminas",
+     "valor": "5"
+    },
+    {
+     "campo": "Sistema de levante",
+     "valor": "2 cil. hid"
+    },
+    {
+     "campo": "Pneus dianteiros",
+     "valor": "400/60x15,5"
+    },
+    {
+     "campo": "Pneus traseiros",
+     "valor": "500/60x22,5 16 LONAS (2)"
+    },
+    {
+     "campo": "Potência minima (cv)",
+     "valor": "240"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "agrimec-robust-600",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "ROBUST 600",
+   "linha": "Plaina Niveladora Multilâminas ROBUST",
+   "familia": null,
+   "categoriaFabricante": "3",
+   "url": "https://agrimec.com.br/implemento/3/plaina-niveladora-multilaminas-robust",
+   "especificacoes": [
+    {
+     "campo": "Largura total (mm)",
+     "valor": "6.565"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "6.000"
+    },
+    {
+     "campo": "Largura carro traseiro (mm)***",
+     "valor": "4.600"
+    },
+    {
+     "campo": "Larg. Mín. transporte(mm)****",
+     "valor": "4.690"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "16.900"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.500"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "7.740"
+    },
+    {
+     "campo": "Altura das lâminas (mm)",
+     "valor": "600"
+    },
+    {
+     "campo": "Conjunto de lâminas",
+     "valor": "5"
+    },
+    {
+     "campo": "Sistema de levante",
+     "valor": "2 cil. hid."
+    },
+    {
+     "campo": "Pneus dianteiros",
+     "valor": "400/60x15,5"
+    },
+    {
+     "campo": "Pneus traseiros",
+     "valor": "500/60x22,5 16 LONAS (2)"
+    },
+    {
+     "campo": "Potência minima (cv)",
+     "valor": "260"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "agrimec-robust-800",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "ROBUST 800",
+   "linha": "Plaina Niveladora Multilâminas ROBUST",
+   "familia": null,
+   "categoriaFabricante": "3",
+   "url": "https://agrimec.com.br/implemento/3/plaina-niveladora-multilaminas-robust",
+   "especificacoes": [
+    {
+     "campo": "Largura total (mm)",
+     "valor": "8.120"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "8.000"
+    },
+    {
+     "campo": "Largura carro traseiro (mm)***",
+     "valor": "5.320"
+    },
+    {
+     "campo": "Larg. Mín. transporte(mm)****",
+     "valor": "6.450"
+    },
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "17.040"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.500"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "9.660"
+    },
+    {
+     "campo": "Altura das lâminas (mm)",
+     "valor": "600"
+    },
+    {
+     "campo": "Conjunto de lâminas",
+     "valor": "5"
+    },
+    {
+     "campo": "Sistema de levante",
+     "valor": "2 cil. hid."
+    },
+    {
+     "campo": "Pneus dianteiros",
+     "valor": "400/60x15,5"
+    },
+    {
+     "campo": "Pneus traseiros",
+     "valor": "600/50x22,5 18 LONAS (2)"
+    },
+    {
+     "campo": "Potência minima (cv)",
+     "valor": "340"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "agrimec-cafezinho",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Cafezinho",
+   "linha": "Plaina Niveladora Multilâminas ROBUST CAFEZINHO",
+   "familia": null,
+   "categoriaFabricante": "30",
+   "url": "https://agrimec.com.br/implemento/30/plaina-niveladora-multil-minas-robust-cafezinho",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "3.450"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "2.520"
+    },
+    {
+     "campo": "Largura variável de trabalho (mm)",
+     "valor": "2.000, 2.200 e 2.400"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "800"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "900"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "50"
+    },
+    {
+     "campo": "Conjunto de lâminas",
+     "valor": "5"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/30-CDA5A08F802321E"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-agrimec",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Agrimec",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "31",
+   "url": "https://agrimec.com.br/implemento/31/plantadora-de-mudas-de-cafe-tupi-cafezinho",
+   "especificacoes": [],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "agrimec-plaina-niveladora-pna",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Plaina Niveladora PNA",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "32",
+   "url": "https://agrimec.com.br/implemento/32/plaina-niveladora-a-laser-pna",
+   "especificacoes": [],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/32-7E358AA9FAA704A"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-bomba-de-irrigacao-estendida-bci-e-250",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Bomba de Irrigação Estendida BCI-E 250",
+   "linha": "Bomba de Irrigação Estendida BCI-E",
+   "familia": null,
+   "categoriaFabricante": "33",
+   "url": "https://agrimec.com.br/implemento/33/bomba-centrifuga-de-irrigacao-estentida-bci-e",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "3.500"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "900"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.500"
+    },
+    {
+     "campo": "Diâmetro da tubulação de recalque (mm)",
+     "valor": "250"
+    },
+    {
+     "campo": "Tubulação de recalque (mm)",
+     "valor": "2700"
+    },
+    {
+     "campo": "Vazão máxima* (m³/h)(l/s)",
+     "valor": "650 (180)"
+    },
+    {
+     "campo": "Capacidade de Irrigação (hectares)",
+     "valor": "114"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "350"
+    },
+    {
+     "campo": "Rotação nominal (RPM)",
+     "valor": "540"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Potência mínima (cv) (kw)",
+     "valor": "65 (49)"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/33-3915779CDE33649"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-bomba-de-irrigacao-estendida-bci-e-300",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Bomba de Irrigação Estendida BCI-E 300",
+   "linha": "Bomba de Irrigação Estendida BCI-E",
+   "familia": null,
+   "categoriaFabricante": "33",
+   "url": "https://agrimec.com.br/implemento/33/bomba-centrifuga-de-irrigacao-estentida-bci-e",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "3.500"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "950"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.500"
+    },
+    {
+     "campo": "Diâmetro da tubulação de recalque (mm)",
+     "valor": "300"
+    },
+    {
+     "campo": "Tubulação de recalque (mm)",
+     "valor": "3000"
+    },
+    {
+     "campo": "Vazão máxima* (m³/h)(l/s)",
+     "valor": "800 (222)"
+    },
+    {
+     "campo": "Capacidade de Irrigação (hectares)",
+     "valor": "140"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "380"
+    },
+    {
+     "campo": "Rotação nominal (RPM)",
+     "valor": "540"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Potência mínima (cv) (kw)",
+     "valor": "80 (59)"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/33-3915779CDE33649"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-carreta-graneleira-granbox-25-000-25-000",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Carreta Graneleira GRANBOX 25.000 25.000",
+   "linha": "Carreta Graneleira GRANBOX 25.000",
+   "familia": null,
+   "categoriaFabricante": "34",
+   "url": "https://agrimec.com.br/implemento/34/carreta-graneleira-granbox-25000",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "7.540"
+    },
+    {
+     "campo": "Largura com pneus (mm)",
+     "valor": "3.890"
+    },
+    {
+     "campo": "Altura com pneus (mm)",
+     "valor": "4.000"
+    },
+    {
+     "campo": "Altura de descarga (mm)",
+     "valor": "4.200"
+    },
+    {
+     "campo": "Diâmetro do cano (mm)",
+     "valor": "500"
+    },
+    {
+     "campo": "Capacidade (l)",
+     "valor": "25.000"
+    },
+    {
+     "campo": "Capac. coroada (sacas soja)*",
+     "valor": "330"
+    },
+    {
+     "campo": "Tempo de descarga (min)*",
+     "valor": "3min"
+    },
+    {
+     "campo": "Peso aproximado(kg)**",
+     "valor": "5.645"
+    },
+    {
+     "campo": "Rotação (rpm)",
+     "valor": "540"
+    },
+    {
+     "campo": "Aros",
+     "valor": "20x26,5 ou 28x26,5"
+    },
+    {
+     "campo": "Pneu sugerido***",
+     "valor": "600/55-26,5"
+    },
+    {
+     "campo": "Potência min. (cv)",
+     "valor": "200"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/34-6F051013A47FCD4"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rf-1120",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca RF CAFEZINHO — RF 1120",
+   "linha": "Rolo Faca RF CAFEZINHO",
+   "familia": null,
+   "categoriaFabricante": "35",
+   "url": "https://agrimec.com.br/implemento/35/rolo-faca-cafezinho",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "4.150"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "1.460"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "1.200"
+    },
+    {
+     "campo": "Diâmetro do rotor com facas (mm)",
+     "valor": "995"
+    },
+    {
+     "campo": "Facas por rolo (un.)",
+     "valor": "16"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "100"
+    },
+    {
+     "campo": "Espaçamento entre facas (mm)",
+     "valor": "194"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "950"
+    },
+    {
+     "campo": "Peso lastreado (kg)",
+     "valor": "1.465"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "515"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "90"
+    },
+    {
+     "campo": "Velocidade de trabalho (km/h)",
+     "valor": "10"
+    },
+    {
+     "campo": "Velocidade de transporte (km/h)",
+     "valor": "12"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/35-90A94091AB8DA74"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rf-1135",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca RF CAFEZINHO — RF 1135",
+   "linha": "Rolo Faca RF CAFEZINHO",
+   "familia": null,
+   "categoriaFabricante": "35",
+   "url": "https://agrimec.com.br/implemento/35/rolo-faca-cafezinho",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "4.150"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "1.600"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "1.350"
+    },
+    {
+     "campo": "Diâmetro do rotor com facas (mm)",
+     "valor": "995"
+    },
+    {
+     "campo": "Facas por rolo (un.)",
+     "valor": "16"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "100"
+    },
+    {
+     "campo": "Espaçamento entre facas (mm)",
+     "valor": "194"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "1.050"
+    },
+    {
+     "campo": "Peso lastreado (kg)",
+     "valor": "1.630"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "580"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "90"
+    },
+    {
+     "campo": "Velocidade de trabalho (km/h)",
+     "valor": "10"
+    },
+    {
+     "campo": "Velocidade de transporte (km/h)",
+     "valor": "12"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/35-90A94091AB8DA74"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rf-1155",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca RF CAFEZINHO — RF 1155",
+   "linha": "Rolo Faca RF CAFEZINHO",
+   "familia": null,
+   "categoriaFabricante": "35",
+   "url": "https://agrimec.com.br/implemento/35/rolo-faca-cafezinho",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "4.150"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "1.800"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "1.550"
+    },
+    {
+     "campo": "Diâmetro do rotor com facas (mm)",
+     "valor": "995"
+    },
+    {
+     "campo": "Facas por rolo (un.)",
+     "valor": "16"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "100"
+    },
+    {
+     "campo": "Espaçamento entre facas (mm)",
+     "valor": "194"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "1.195"
+    },
+    {
+     "campo": "Peso lastreado (kg)",
+     "valor": "1.860"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "665"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "90"
+    },
+    {
+     "campo": "Velocidade de trabalho (km/h)",
+     "valor": "10"
+    },
+    {
+     "campo": "Velocidade de transporte (km/h)",
+     "valor": "12"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/35-90A94091AB8DA74"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rf-1170",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca RF CAFEZINHO — RF 1170",
+   "linha": "Rolo Faca RF CAFEZINHO",
+   "familia": null,
+   "categoriaFabricante": "35",
+   "url": "https://agrimec.com.br/implemento/35/rolo-faca-cafezinho",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "4.150"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "1.950"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "1.700"
+    },
+    {
+     "campo": "Diâmetro do rotor com facas (mm)",
+     "valor": "995"
+    },
+    {
+     "campo": "Facas por rolo (un.)",
+     "valor": "16"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "100"
+    },
+    {
+     "campo": "Espaçamento entre facas (mm)",
+     "valor": "194"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "1.250"
+    },
+    {
+     "campo": "Peso lastreado (kg)",
+     "valor": "1.980"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "730"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "90"
+    },
+    {
+     "campo": "Velocidade de trabalho (km/h)",
+     "valor": "10"
+    },
+    {
+     "campo": "Velocidade de transporte (km/h)",
+     "valor": "12"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/35-90A94091AB8DA74"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-carreta-graneleira-granbox-graos-lateral",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Carreta Graneleira GRANBOX GRÃOS LATERAL",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "39",
+   "url": "https://agrimec.com.br/implemento/39/carreta-graneleira-granbox-graos",
+   "especificacoes": [],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/39-6383957B40F8250"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rolo-destorroador-compactador-rdc",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo destorroador compactador RDC",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "4",
+   "url": "https://agrimec.com.br/implemento/4/rolo-destorroador-compactador-rdc",
+   "especificacoes": [],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/4-23275D6162824EE"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-carreta-graneleira-granbox-flex-front",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Carreta Graneleira GRANBOX FLEX FRONT",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "40",
+   "url": "https://agrimec.com.br/implemento/40/carreta-graneleira-granbox-flex-front",
+   "especificacoes": [],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/40-598F7777529F8EA"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-cobridor-de-rastros-raster",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Cobridor de Rastros RASTER",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "42",
+   "url": "https://agrimec.com.br/implemento/42/cobridor-de-rastros-raster",
+   "especificacoes": [
+    {
+     "campo": "RASTER",
+     "valor": "RA10"
+    },
+    {
+     "campo": "Pente de discos",
+     "valor": "2 x 5 discos"
+    },
+    {
+     "campo": "Comp. eixos dos discos (mm)",
+     "valor": "1.135"
+    },
+    {
+     "campo": "Diâmetro dos discos",
+     "valor": "1º 22” R 2º 24” R 3º 24” R 4º 22” L 5º 20” L"
+    },
+    {
+     "campo": "Dist. Entre seção de discos D/E (mm)",
+     "valor": "540"
+    },
+    {
+     "campo": "Largura média de trabalho",
+     "valor": "2500"
+    },
+    {
+     "campo": "Potência mínima requerida (CV)",
+     "valor": "60"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "680"
+    },
+    {
+     "campo": "Altura total (mm)",
+     "valor": "1200"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/42-3405A986E2FFFDC"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rolo-faca-rf-1300",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca RF 1300",
+   "linha": "Rolo Faca RF",
+   "familia": null,
+   "categoriaFabricante": "5",
+   "url": "https://agrimec.com.br/implemento/5/rolo-faca-rf",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "4.100"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "3.550"
+    },
+    {
+     "campo": "Largura de transporte (mm)",
+     "valor": "3.550"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "1x3.000"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "3.000"
+    },
+    {
+     "campo": "Diâmetro do rolo com faca (mm)",
+     "valor": "1.000"
+    },
+    {
+     "campo": "Total de facas (un)",
+     "valor": "48"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "125"
+    },
+    {
+     "campo": "Espaçamento entre facas (mm)",
+     "valor": "190"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "1.995"
+    },
+    {
+     "campo": "Peso lastreado (kg))",
+     "valor": "3.220"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "1.225"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "75"
+    },
+    {
+     "campo": "Veloc. trabalho (km/h)",
+     "valor": "8"
+    },
+    {
+     "campo": "Veloc. transporte (km/h)",
+     "valor": "10"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/5-0E7B4927E22FC48"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-1300c",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca RF — 1300C",
+   "linha": "Rolo Faca RF",
+   "familia": null,
+   "categoriaFabricante": "5",
+   "url": "https://agrimec.com.br/implemento/5/rolo-faca-rf",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "3.800"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "3.550"
+    },
+    {
+     "campo": "Largura de transporte (mm)",
+     "valor": "3.550"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "1x3.000"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "3.000"
+    },
+    {
+     "campo": "Diâmetro do rolo com faca (mm)",
+     "valor": "800"
+    },
+    {
+     "campo": "Total de facas (un)",
+     "valor": "36"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "120"
+    },
+    {
+     "campo": "Espaçamento entre facas (mm)",
+     "valor": "198"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "1.630"
+    },
+    {
+     "campo": "Peso lastreado (kg))",
+     "valor": "2.330"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "700"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "75"
+    },
+    {
+     "campo": "Veloc. trabalho (km/h)",
+     "valor": "8"
+    },
+    {
+     "campo": "Veloc. transporte (km/h)",
+     "valor": "10"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/5-0E7B4927E22FC48"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rolo-faca-rf-1400",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca RF 1400",
+   "linha": "Rolo Faca RF",
+   "familia": null,
+   "categoriaFabricante": "5",
+   "url": "https://agrimec.com.br/implemento/5/rolo-faca-rf",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "4.270"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "4.550"
+    },
+    {
+     "campo": "Largura de transporte (mm)",
+     "valor": "4.550"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "1x4.000"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "4.000"
+    },
+    {
+     "campo": "Diâmetro do rolo com faca (mm)",
+     "valor": "1.000"
+    },
+    {
+     "campo": "Total de facas (un)",
+     "valor": "64"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "125"
+    },
+    {
+     "campo": "Espaçamento entre facas (mm)",
+     "valor": "190"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "2.480"
+    },
+    {
+     "campo": "Peso lastreado (kg))",
+     "valor": "4.170"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "1.690"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "120"
+    },
+    {
+     "campo": "Veloc. trabalho (km/h)",
+     "valor": "8"
+    },
+    {
+     "campo": "Veloc. transporte (km/h)",
+     "valor": "10"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/5-0E7B4927E22FC48"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-1400c",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca RF — 1400C",
+   "linha": "Rolo Faca RF",
+   "familia": null,
+   "categoriaFabricante": "5",
+   "url": "https://agrimec.com.br/implemento/5/rolo-faca-rf",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "3.850"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "4.550"
+    },
+    {
+     "campo": "Largura de transporte (mm)",
+     "valor": "4.550"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "1x4.000"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "4.000"
+    },
+    {
+     "campo": "Diâmetro do rolo com faca (mm)",
+     "valor": "800"
+    },
+    {
+     "campo": "Total de facas (un)",
+     "valor": "48"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "120"
+    },
+    {
+     "campo": "Espaçamento entre facas (mm)",
+     "valor": "198"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "1.720"
+    },
+    {
+     "campo": "Peso lastreado (kg))",
+     "valor": "2.640"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "920"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "120"
+    },
+    {
+     "campo": "Veloc. trabalho (km/h)",
+     "valor": "8"
+    },
+    {
+     "campo": "Veloc. transporte (km/h)",
+     "valor": "10"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/5-0E7B4927E22FC48"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rolo-faca-rf-3500",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca RF 3500",
+   "linha": "Rolo Faca RF",
+   "familia": null,
+   "categoriaFabricante": "5",
+   "url": "https://agrimec.com.br/implemento/5/rolo-faca-rf",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "6.300"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "5.550"
+    },
+    {
+     "campo": "Largura de transporte (mm)",
+     "valor": "4.210"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "1x2.100 2x1.500"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "5.000"
+    },
+    {
+     "campo": "Diâmetro do rolo com faca (mm)",
+     "valor": "1.000"
+    },
+    {
+     "campo": "Total de facas (un)",
+     "valor": "160"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "125"
+    },
+    {
+     "campo": "Espaçamento entre facas (mm)",
+     "valor": "190"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "4.500"
+    },
+    {
+     "campo": "Peso lastreado (kg))",
+     "valor": "6.800"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "2.300"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "125"
+    },
+    {
+     "campo": "Veloc. trabalho (km/h)",
+     "valor": "8"
+    },
+    {
+     "campo": "Veloc. transporte (km/h)",
+     "valor": "10"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/5-0E7B4927E22FC48"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rolo-faca-rf-3750",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca RF 3750",
+   "linha": "Rolo Faca RF",
+   "familia": null,
+   "categoriaFabricante": "5",
+   "url": "https://agrimec.com.br/implemento/5/rolo-faca-rf",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "5.230"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "8.020"
+    },
+    {
+     "campo": "Largura de transporte (mm)",
+     "valor": "4.620"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "1x1.500 2x3.000"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "7.500"
+    },
+    {
+     "campo": "Diâmetro do rolo com faca (mm)",
+     "valor": "1.000"
+    },
+    {
+     "campo": "Total de facas (un)",
+     "valor": "144"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "125"
+    },
+    {
+     "campo": "Espaçamento entre facas (mm)",
+     "valor": "190"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "5.400"
+    },
+    {
+     "campo": "Peso lastreado (kg))",
+     "valor": "8.435"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "3.035"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "150"
+    },
+    {
+     "campo": "Veloc. trabalho (km/h)",
+     "valor": "8"
+    },
+    {
+     "campo": "Veloc. transporte (km/h)",
+     "valor": "10"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/5-0E7B4927E22FC48"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rolo-faca-rf-3900",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca RF 3900",
+   "linha": "Rolo Faca RF",
+   "familia": null,
+   "categoriaFabricante": "5",
+   "url": "https://agrimec.com.br/implemento/5/rolo-faca-rf",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "6.400"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "9.550"
+    },
+    {
+     "campo": "Largura de transporte (mm)",
+     "valor": "6.110"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "3x3.000"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "9.000"
+    },
+    {
+     "campo": "Diâmetro do rolo com faca (mm)",
+     "valor": "1.000"
+    },
+    {
+     "campo": "Total de facas (un)",
+     "valor": "144"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "125"
+    },
+    {
+     "campo": "Espaçamento entre facas (mm)",
+     "valor": "190"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "6.200"
+    },
+    {
+     "campo": "Peso lastreado (kg))",
+     "valor": "9.875"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "3.675"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "180"
+    },
+    {
+     "campo": "Veloc. trabalho (km/h)",
+     "valor": "8"
+    },
+    {
+     "campo": "Veloc. transporte (km/h)",
+     "valor": "10"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/5-0E7B4927E22FC48"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rolo-faca-rfa-1360",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca RFA 1360",
+   "linha": "Rolo Faca RFA",
+   "familia": null,
+   "categoriaFabricante": "6",
+   "url": "https://agrimec.com.br/implemento/6/rolo-faca-arrozeira-rfa",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "2.900"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "4.190"
+    },
+    {
+     "campo": "Largura de transporte (mm)",
+     "valor": "4.190"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "1x3.600"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "3.600"
+    },
+    {
+     "campo": "Diâmetro do rolo com facas (mm)",
+     "valor": "995"
+    },
+    {
+     "campo": "Total de facas (un)",
+     "valor": "14"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "130"
+    },
+    {
+     "campo": "Espaçamento entre facas",
+     "valor": "220"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "1.615"
+    },
+    {
+     "campo": "Peso lastreado (kg)",
+     "valor": "3.025"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "1x1.410"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "110"
+    },
+    {
+     "campo": "Velocidade de trabalho (km/h)",
+     "valor": "10"
+    },
+    {
+     "campo": "Velocidade de transporte (km/h)",
+     "valor": "12"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/6-BD05E9D9AB53CCF"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rolo-faca-rfa-1480",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca RFA 1480",
+   "linha": "Rolo Faca RFA",
+   "familia": null,
+   "categoriaFabricante": "6",
+   "url": "https://agrimec.com.br/implemento/6/rolo-faca-arrozeira-rfa",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "4.880"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "5.380"
+    },
+    {
+     "campo": "Largura de transporte (mm)",
+     "valor": "5.380"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "1x4.800"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "4.800"
+    },
+    {
+     "campo": "Diâmetro do rolo com facas (mm)",
+     "valor": "995"
+    },
+    {
+     "campo": "Total de facas (un)",
+     "valor": "14"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "130"
+    },
+    {
+     "campo": "Espaçamento entre facas",
+     "valor": "220"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "2.800"
+    },
+    {
+     "campo": "Peso lastreado (kg)",
+     "valor": "4.750"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "1x1.950"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "150"
+    },
+    {
+     "campo": "Velocidade de trabalho (km/h)",
+     "valor": "10"
+    },
+    {
+     "campo": "Velocidade de transporte (km/h)",
+     "valor": "12"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/6-BD05E9D9AB53CCF"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rolo-faca-rfa-3900",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca RFA 3900",
+   "linha": "Rolo Faca RFA",
+   "familia": null,
+   "categoriaFabricante": "6",
+   "url": "https://agrimec.com.br/implemento/6/rolo-faca-arrozeira-rfa",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "6.700"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "9.570"
+    },
+    {
+     "campo": "Largura de transporte (mm)",
+     "valor": "5.415"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "3x3.000"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "9.000"
+    },
+    {
+     "campo": "Diâmetro do rolo com facas (mm)",
+     "valor": "1.000"
+    },
+    {
+     "campo": "Total de facas (un)",
+     "valor": "126"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "130"
+    },
+    {
+     "campo": "Espaçamento entre facas",
+     "valor": "220"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "3.450"
+    },
+    {
+     "campo": "Peso lastreado (kg)",
+     "valor": "7.050"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "3x1.200"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "180"
+    },
+    {
+     "campo": "Velocidade de trabalho (km/h)",
+     "valor": "10"
+    },
+    {
+     "campo": "Velocidade de transporte (km/h)",
+     "valor": "12"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/6-BD05E9D9AB53CCF"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-1480-max",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca RFA — 1480 MAX",
+   "linha": "Rolo Faca RFA",
+   "familia": null,
+   "categoriaFabricante": "6",
+   "url": "https://agrimec.com.br/implemento/6/rolo-faca-arrozeira-rfa",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "5.245"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "5.410"
+    },
+    {
+     "campo": "Largura de transporte (mm)",
+     "valor": "5.410"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "1x4.800"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "4.800"
+    },
+    {
+     "campo": "Diâmetro do rolo com facas (mm)",
+     "valor": "1.300"
+    },
+    {
+     "campo": "Total de facas (un)",
+     "valor": "90"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "130"
+    },
+    {
+     "campo": "Espaçamento entre facas",
+     "valor": "220"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "3.540"
+    },
+    {
+     "campo": "Peso lastreado (kg)",
+     "valor": "7.410"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "1x3.870"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "180"
+    },
+    {
+     "campo": "Velocidade de trabalho (km/h)",
+     "valor": "10"
+    },
+    {
+     "campo": "Velocidade de transporte (km/h)",
+     "valor": "12"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/6-BD05E9D9AB53CCF"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rolo-faca-crotalaria-rfc-1240",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca Crotalária RFC 1240",
+   "linha": "Rolo Faca Crotalária RFC",
+   "familia": null,
+   "categoriaFabricante": "7",
+   "url": "https://agrimec.com.br/implemento/7/rolo-faca-crotalaria-rfc",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "4.400"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "3.010"
+    },
+    {
+     "campo": "Largura de transporte (mm)",
+     "valor": "3.010"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "1x2.400"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "2.400"
+    },
+    {
+     "campo": "Diâmetro do rolo com facas (mm)",
+     "valor": "1.200"
+    },
+    {
+     "campo": "Total de facas (un)",
+     "valor": "12"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "200"
+    },
+    {
+     "campo": "Espaçamento entre facas",
+     "valor": "310"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "2.250"
+    },
+    {
+     "campo": "Peso lastreado (kg)",
+     "valor": "3.300"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "1.050"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "120"
+    },
+    {
+     "campo": "Velocidade de trabalho (km/h)",
+     "valor": "8"
+    },
+    {
+     "campo": "Velocidade de transporte (km/h)",
+     "valor": "10"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/7-8D69D7A9663E7B1"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rolo-faca-crotalaria-rfc-1300",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca Crotalária RFC 1300",
+   "linha": "Rolo Faca Crotalária RFC",
+   "familia": null,
+   "categoriaFabricante": "7",
+   "url": "https://agrimec.com.br/implemento/7/rolo-faca-crotalaria-rfc",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "3.535"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "5.015"
+    },
+    {
+     "campo": "Largura de transporte (mm)",
+     "valor": "3.730"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "1x3.000"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "3.000"
+    },
+    {
+     "campo": "Diâmetro do rolo com facas (mm)",
+     "valor": "1.200"
+    },
+    {
+     "campo": "Total de facas (un)",
+     "valor": "12"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "200"
+    },
+    {
+     "campo": "Espaçamento entre facas",
+     "valor": "310"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "2.430"
+    },
+    {
+     "campo": "Peso lastreado (kg)",
+     "valor": "3.930"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "1.500"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "130"
+    },
+    {
+     "campo": "Velocidade de trabalho (km/h)",
+     "valor": "8"
+    },
+    {
+     "campo": "Velocidade de transporte (km/h)",
+     "valor": "10"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/7-8D69D7A9663E7B1"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rolo-faca-crotalaria-rfc-3720",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca Crotalária RFC 3720",
+   "linha": "Rolo Faca Crotalária RFC",
+   "familia": null,
+   "categoriaFabricante": "7",
+   "url": "https://agrimec.com.br/implemento/7/rolo-faca-crotalaria-rfc",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "7.950"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "7.800"
+    },
+    {
+     "campo": "Largura de transporte (mm)",
+     "valor": "5.015"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "3x2.400"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "7.200"
+    },
+    {
+     "campo": "Diâmetro do rolo com facas (mm)",
+     "valor": "1.200"
+    },
+    {
+     "campo": "Total de facas (un)",
+     "valor": "36"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "200"
+    },
+    {
+     "campo": "Espaçamento entre facas",
+     "valor": "310"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "6.700"
+    },
+    {
+     "campo": "Peso lastreado (kg)",
+     "valor": "9.850"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "3.150"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "180"
+    },
+    {
+     "campo": "Velocidade de trabalho (km/h)",
+     "valor": "8"
+    },
+    {
+     "campo": "Velocidade de transporte (km/h)",
+     "valor": "10"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/7-8D69D7A9663E7B1"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rolo-faca-articulado-rexter-3650",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca Articulado REXTER 3650",
+   "linha": "Rolo Faca Articulado REXTER",
+   "familia": null,
+   "categoriaFabricante": "8",
+   "url": "https://agrimec.com.br/implemento/8/rolo-faca-articulado",
+   "especificacoes": [
+    {
+     "campo": "Comprimento de trabalho (mm)",
+     "valor": "5.590"
+    },
+    {
+     "campo": "Comprimento de transporte (mm)",
+     "valor": "8.500"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "9.190"
+    },
+    {
+     "campo": "Largura de transporte (mm)",
+     "valor": "2.450"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "3x2.200"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "6.500"
+    },
+    {
+     "campo": "Diâmetro do rolo com faca (mm)",
+     "valor": "1.015"
+    },
+    {
+     "campo": "Total de facas (un)",
+     "valor": "190"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "135"
+    },
+    {
+     "campo": "Espaçamento entre facas (mm)",
+     "valor": "190"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "5.500"
+    },
+    {
+     "campo": "Peso lastreado (kg)",
+     "valor": "6.500"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "3x1.000"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "150"
+    },
+    {
+     "campo": "Velocidade de trabalho* (km/h)",
+     "valor": "12"
+    },
+    {
+     "campo": "Velocidade de transporte (km/h)",
+     "valor": "10"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/8-D357D3843139C8F"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-rolo-faca-articulado-rexter-3900",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca Articulado REXTER 3900",
+   "linha": "Rolo Faca Articulado REXTER",
+   "familia": null,
+   "categoriaFabricante": "8",
+   "url": "https://agrimec.com.br/implemento/8/rolo-faca-articulado",
+   "especificacoes": [
+    {
+     "campo": "Comprimento de trabalho (mm)",
+     "valor": "5.970"
+    },
+    {
+     "campo": "Comprimento de transporte (mm)",
+     "valor": "10.670"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "9.850"
+    },
+    {
+     "campo": "Largura de transporte (mm)",
+     "valor": "2.450"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "1x 2.200 2x 3.400"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "9.000"
+    },
+    {
+     "campo": "Diâmetro do rolo com faca (mm)",
+     "valor": "1.015"
+    },
+    {
+     "campo": "Total de facas (un)",
+     "valor": "190"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "135"
+    },
+    {
+     "campo": "Espaçamento entre facas (mm)",
+     "valor": "190"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "8.200"
+    },
+    {
+     "campo": "Peso lastreado (kg)",
+     "valor": "12.000"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "1x1.000 2x1.480"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "180"
+    },
+    {
+     "campo": "Velocidade de trabalho* (km/h)",
+     "valor": "12"
+    },
+    {
+     "campo": "Velocidade de transporte (km/h)",
+     "valor": "10"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/8-D357D3843139C8F"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-3900-compact",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Rolo Faca Articulado REXTER — 3900 Compact",
+   "linha": "Rolo Faca Articulado REXTER",
+   "familia": null,
+   "categoriaFabricante": "8",
+   "url": "https://agrimec.com.br/implemento/8/rolo-faca-articulado",
+   "especificacoes": [
+    {
+     "campo": "Comprimento de trabalho (mm)",
+     "valor": "5.100"
+    },
+    {
+     "campo": "Comprimento de transporte (mm)",
+     "valor": "9.865"
+    },
+    {
+     "campo": "Largura total (mm)",
+     "valor": "9.843"
+    },
+    {
+     "campo": "Largura de transporte (mm)",
+     "valor": "2.450"
+    },
+    {
+     "campo": "Largura dos rolos (mm)",
+     "valor": "1x 2.200 2x 3.400"
+    },
+    {
+     "campo": "Largura de trabalho (mm)",
+     "valor": "9.000"
+    },
+    {
+     "campo": "Diâmetro do rolo com faca (mm)",
+     "valor": "830"
+    },
+    {
+     "campo": "Total de facas (un)",
+     "valor": "185"
+    },
+    {
+     "campo": "Altura das facas (mm)",
+     "valor": "135"
+    },
+    {
+     "campo": "Espaçamento entre facas (mm)",
+     "valor": "185"
+    },
+    {
+     "campo": "Peso líquido (kg)",
+     "valor": "6.380"
+    },
+    {
+     "campo": "Peso lastreado (kg)",
+     "valor": "8.600"
+    },
+    {
+     "campo": "Volume dos rolos (l)",
+     "valor": "1x540 2x840"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "150"
+    },
+    {
+     "campo": "Velocidade de trabalho* (km/h)",
+     "valor": "12"
+    },
+    {
+     "campo": "Velocidade de transporte (km/h)",
+     "valor": "10"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/8-D357D3843139C8F"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-40l",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Valetadeira Rotativa Lateral VA — 40L",
+   "linha": "Valetadeira Rotativa Lateral VA",
+   "familia": null,
+   "categoriaFabricante": "9",
+   "url": "https://agrimec.com.br/implemento/9/valetadeira-rotativa-lateral-va",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "2.150"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "1.380"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.620"
+    },
+    {
+     "campo": "Diâmetro do rotor com facas (mm)",
+     "valor": "990"
+    },
+    {
+     "campo": "Diâmetro do rotor sem facas (mm)",
+     "valor": "850"
+    },
+    {
+     "campo": "Número de lâminas (un.)",
+     "valor": "20"
+    },
+    {
+     "campo": "Paralamas (posições)",
+     "valor": "Variável"
+    },
+    {
+     "campo": "Posição do rotor",
+     "valor": "Vertical"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Rotação da TDP (RPM)",
+     "valor": "540"
+    },
+    {
+     "campo": "Acoplamento",
+     "valor": "3 pontos"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "435"
+    },
+    {
+     "campo": "Valeta (profundidade x largura)(mm)",
+     "valor": "A 400x90/130 B 400x190/230"
+    },
+    {
+     "campo": "Potência mínima (cv)**",
+     "valor": "60"
+    },
+    {
+     "campo": "Velocidade de operação (m/h)",
+     "valor": "2.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/9-1E28C9EFAB7EE80"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-55l",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Valetadeira Rotativa Lateral VA — 55L",
+   "linha": "Valetadeira Rotativa Lateral VA",
+   "familia": null,
+   "categoriaFabricante": "9",
+   "url": "https://agrimec.com.br/implemento/9/valetadeira-rotativa-lateral-va",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "2.150"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "1.380"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "1.620"
+    },
+    {
+     "campo": "Diâmetro do rotor com facas (mm)",
+     "valor": "1.200"
+    },
+    {
+     "campo": "Diâmetro do rotor sem facas (mm)",
+     "valor": "1.060"
+    },
+    {
+     "campo": "Número de lâminas (un.)",
+     "valor": "20"
+    },
+    {
+     "campo": "Paralamas (posições)",
+     "valor": "Variável"
+    },
+    {
+     "campo": "Posição do rotor",
+     "valor": "Vertical"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Rotação da TDP (RPM)",
+     "valor": "540"
+    },
+    {
+     "campo": "Acoplamento",
+     "valor": "3 pontos"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "500"
+    },
+    {
+     "campo": "Valeta (profundidade x largura)(mm)",
+     "valor": "A 550x90/130 B 550x190/230"
+    },
+    {
+     "campo": "Potência mínima (cv)**",
+     "valor": "70"
+    },
+    {
+     "campo": "Velocidade de operação (m/h)",
+     "valor": "2.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/9-1E28C9EFAB7EE80"
+    }
+   ]
+  },
+  {
+   "id": "agrimec-75l",
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "modelo": "Valetadeira Rotativa Lateral VA — 75L",
+   "linha": "Valetadeira Rotativa Lateral VA",
+   "familia": null,
+   "categoriaFabricante": "9",
+   "url": "https://agrimec.com.br/implemento/9/valetadeira-rotativa-lateral-va",
+   "especificacoes": [
+    {
+     "campo": "Comprimento (mm)",
+     "valor": "2.700"
+    },
+    {
+     "campo": "Largura (mm)",
+     "valor": "1.350"
+    },
+    {
+     "campo": "Altura (mm)",
+     "valor": "2.350"
+    },
+    {
+     "campo": "Diâmetro do rotor com facas (mm)",
+     "valor": "1.805"
+    },
+    {
+     "campo": "Diâmetro do rotor sem facas (mm)",
+     "valor": "1.650"
+    },
+    {
+     "campo": "Número de lâminas (un.)",
+     "valor": "24"
+    },
+    {
+     "campo": "Paralamas (posições)",
+     "valor": "Variável"
+    },
+    {
+     "campo": "Posição do rotor",
+     "valor": "Vertical"
+    },
+    {
+     "campo": "Acionamento",
+     "valor": "TDP"
+    },
+    {
+     "campo": "Rotação da TDP (RPM)",
+     "valor": "540"
+    },
+    {
+     "campo": "Acoplamento",
+     "valor": "3 pontos*"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "870"
+    },
+    {
+     "campo": "Valeta (profundidade x largura)(mm)",
+     "valor": "A 750x90/130 B 750x190/230"
+    },
+    {
+     "campo": "Potência mínima (cv)**",
+     "valor": "120"
+    },
+    {
+     "campo": "Velocidade de operação (m/h)",
+     "valor": "800"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Folheto do Implemento",
+     "url": "https://agrimec.com.br/geral/download-folheto/9-1E28C9EFAB7EE80"
+    }
+   ]
+  }
+ ],
+ "descartados": []
+}

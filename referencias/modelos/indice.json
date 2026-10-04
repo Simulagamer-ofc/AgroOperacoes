@@ -47,8 +47,8 @@
    "marca": "Lavrale",
    "fabricanteId": "lavrale",
    "arquivo": "modelos/lavrale.json",
-   "totalModelos": 128,
-   "comEspecificacoes": 126
+   "totalModelos": 131,
+   "comEspecificacoes": 129
   },
   {
    "marca": "DMB",
@@ -63,6 +63,13 @@
    "arquivo": "modelos/imasa.json",
    "totalModelos": 15,
    "comEspecificacoes": 0
+  },
+  {
+   "marca": "Agrimec",
+   "fabricanteId": "agrimec",
+   "arquivo": "modelos/agrimec.json",
+   "totalModelos": 81,
+   "comEspecificacoes": 72
   }
  ],
  "pendentes": [

@@ -8,7 +8,7 @@ DEST = '/home/user/AgroOperacoes/referencias/modelos'
 os.makedirs(DEST, exist_ok=True)
 MARCAS = [('stara.json', 'stara'), ('john-deere.json', 'john-deere'), ('massey-ferguson.json', 'agco'), ('valtra.json', 'agco'),
           ('case-ih.json', 'cnh'), ('jacto.json', 'jacto'),
-          ('lavrale.json', 'lavrale'), ('dmb.json', 'dmb'), ('imasa.json', 'imasa')]
+          ('lavrale.json', 'lavrale'), ('dmb.json', 'dmb'), ('imasa.json', 'imasa'), ('agrimec.json', 'agrimec')]
 
 
 def familia_pulv(m):
@@ -25,6 +25,18 @@ def familia_pulv(m):
 
 
 indice = []
+GENERICOS = ('lavrale', 'dmb', 'imasa', 'agrimec')
+CONTATO = re.compile(r'(?i)^(contato|telefone|fone|e-?mail|whatsapp|endere[çc]o)$')
+
+
+def com_contexto(nome, linha):
+    if not linha:
+        return nome
+    pal = lambda t: {w for w in re.findall(r'[a-zà-ú0-9]{4,}', t.lower())}
+    if nome.lower() in linha.lower() or linha.lower() in nome.lower() or pal(nome) & pal(linha):
+        return nome
+    return f'{linha} — {nome}'
+
 for arq, fab in MARCAS:
     d = json.load(open(arq))
     marca = d['marca']
@@ -38,6 +50,9 @@ for arq, fab in MARCAS:
             descartados.append({'nome': nome[:120], 'url': m.get('url'), 'motivo': 'nota de rodapé ou nome inválido'}); continue
         if fab == 'dmb' and nome.lower().startswith('linha '):
             descartados.append({'nome': nome, 'url': m.get('url'), 'motivo': 'página de categoria'}); continue
+        if fab in GENERICOS:
+            nome = com_contexto(nome, m.get('linha'))
+            m['especificacoes'] = [e for e in m.get('especificacoes') or [] if not CONTATO.match(e.get('campo', '').strip())]
         fam = m.get('familia')
         if fam == 'pulverizador':
             fam = familia_pulv(m)
@@ -50,7 +65,7 @@ for arq, fab in MARCAS:
         for e in item['especificacoes']:
             if not e.get('campo') and e.get('secao'):
                 e['campo'] = e.pop('secao')
-        if not item['categoriaFabricante'] and fab in ('lavrale', 'dmb', 'imasa'):
+        if not item['categoriaFabricante'] and fab in GENERICOS:
             partes = [p for p in (item['url'] or '').split('/')[3:] if p]
             item['categoriaFabricante'] = partes[-2] if len(partes) >= 2 else None
         docs = [x for x in m.get('documentos') or [] if x.get('titulo') or x['url'].lower().endswith('.pdf')]

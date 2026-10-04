@@ -10,6 +10,12 @@ fid, marca, dom = sys.argv[1:4]
 padrao = re.compile(sys.argv[4] if len(sys.argv) > 4 else r'/(produtos?|products?|maquinas|implementos|tratores|linha|equipamentos)/[^/]+', re.I)
 EXCL = re.compile(r'/(category|categoria|tag|page|blog|noticias?|news|wp-content|autor|author|feed|eventos?|imprensa)/|\.(jpg|png|pdf|webp)$', re.I)
 base = f'https://{dom}'
+CAMPO = re.compile(r'(?i)\((mm|m|cm|kg|cv|hp|l|m³|m3|t|kw|rpm|km/h|%|pol)\)|pot[êe]ncia|capacidade|largura|peso|comprimento|altura|n[úu]mero|n[ºo°]\b|di[âa]metro|volume|espa[çc]amento|profundidade|pneus|acoplamento|acionamento|rota[çc][ãa]o|vaz[ãa]o')
+
+
+def transposta(cols, dados):
+    return sum(bool(CAMPO.search(r[0])) for r in dados) > sum(bool(CAMPO.search(c)) for c in cols[1:])
+
 
 rp = urllib.robotparser.RobotFileParser()
 rob = baixar(base + '/robots.txt') or ''
@@ -53,8 +59,13 @@ for u in urls:
     for g in tabelas(s, com_th=True):
         cols, dados, probs = tabela_modelos(g)
         if cols and re.match(r'(?i)\s*(modelos?|models?)\b', cols[0] or '') and dados and not probs:
-            for r in dados:
-                itens.append((r[0], [{'campo': cols[i], 'valor': r[i]} for i in range(1, len(cols)) if r[i]]))
+            if transposta(cols, dados):
+                for j in range(1, len(cols)):
+                    n = cols[j] if re.search(r'[A-Za-zÀ-ú]', cols[j] or '') else f'{nome} {cols[j]}'.strip()
+                    itens.append((n, [{'campo': r[0], 'valor': r[j]} for r in dados if r[j]]))
+            else:
+                for r in dados:
+                    itens.append((r[0], [{'campo': cols[i], 'valor': r[i]} for i in range(1, len(cols)) if r[i]]))
         else:
             for row in g:
                 vals = [x['txt'] for x in row]
