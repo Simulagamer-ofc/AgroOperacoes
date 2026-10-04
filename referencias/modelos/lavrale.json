@@ -1,0 +1,5786 @@
+{
+ "catalogo": "Nexus Agro — modelos de máquinas e implementos",
+ "marca": "Lavrale",
+ "fabricanteId": "lavrale",
+ "fonte": "sitemap de www.lavrale.com.br",
+ "dataConsulta": "2026-10-04",
+ "regras": [
+  "Especificações copiadas como texto literal do site oficial do fabricante, sem conversão nem interpretação.",
+  "Valores servem para identificação e consulta. Para preencher automaticamente um parâmetro de regulagem, o valor precisa ser confirmado no manual/folheto do modelo e ano.",
+  "O site pode não refletir variações por ano-modelo, mercado ou opcionais."
+ ],
+ "totalModelos": 128,
+ "comEspecificacoes": 126,
+ "modelos": [
+  {
+   "id": "lavrale-ar-2x26-4118",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "AR 2X26”/4118",
+   "linha": "Arado de Discos AR",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/arado-de-discos",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 18"
+    },
+    {
+     "campo": "Nº de discos",
+     "valor": "2"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "0,30 – 0,45"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "197"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Arado-de-Discos.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/05/Arado-de-Disco-AR-4118-TL-TM-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-ar-2x26tl",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "AR 2X26”TL",
+   "linha": "Arado de Discos AR",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/arado-de-discos",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "25 – 45"
+    },
+    {
+     "campo": "Nº de discos",
+     "valor": "2"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "0,50 – 0,60"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "261"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Arado-de-Discos.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/05/Arado-de-Disco-AR-4118-TL-TM-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-ar-3x26-28-tm",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "AR 3X26”/28” TM",
+   "linha": "Arado de Discos AR",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/arado-de-discos",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "45 – 75"
+    },
+    {
+     "campo": "Nº de discos",
+     "valor": "3"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "0,70 – 0,90"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "410"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Arado-de-Discos.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/05/Arado-de-Disco-AR-4118-TL-TM-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-ar-3x26-28-tm-hid",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "AR 3X26”/28” TM HID",
+   "linha": "Arado de Discos AR",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/arado-de-discos",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "45 – 75"
+    },
+    {
+     "campo": "Nº de discos",
+     "valor": "3"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "0,70 – 0,90"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "440"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Arado-de-Discos.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/05/Arado-de-Disco-AR-4118-TL-TM-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-cv-80",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "CV 80",
+   "linha": "Capinadeira Varredora CV 80",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/capinadeira-varredora",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "30 – 60"
+    },
+    {
+     "campo": "Largura do corte (m)",
+     "valor": "0,80"
+    },
+    {
+     "campo": "Largura de transporte (m)",
+     "valor": "1,70"
+    },
+    {
+     "campo": "Comprimento de transporte (m)",
+     "valor": "1,96"
+    },
+    {
+     "campo": "Altura de transporte (m)",
+     "valor": "1,20"
+    },
+    {
+     "campo": "Número de cerdas",
+     "valor": "20"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Capinadeira-Varredora.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/05/Capinadeira-Varredora-CV80-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-cb-2",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "CB 2",
+   "linha": "Carreta CB",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/carreta-cb",
+   "especificacoes": [
+    {
+     "campo": "Capacidade de carga",
+     "valor": "2 ton."
+    },
+    {
+     "campo": "Freio estacionário",
+     "valor": "Sim / Yes / Sí"
+    },
+    {
+     "campo": "Pneus",
+     "valor": "6.00×16″ 6 lonas"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "297"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Carreta.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/05/Carreta-CB-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-cb-3",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "CB 3",
+   "linha": "Carreta CB",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/carreta-cb",
+   "especificacoes": [
+    {
+     "campo": "Capacidade de carga",
+     "valor": "2 ton."
+    },
+    {
+     "campo": "Freio estacionário",
+     "valor": "Sim / Yes / Sí"
+    },
+    {
+     "campo": "Pneus",
+     "valor": "6.00×16″ 6 lonas"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "335"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Carreta.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/05/Carreta-CB-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-dc-650",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "DC 650",
+   "linha": "Distribuidor Centrífugo DC 650",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/distribuidor-centrifugo-dc",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "40 – 75"
+    },
+    {
+     "campo": "Capacidade do reservatório (L e Kg)",
+     "valor": "650 / 450"
+    },
+    {
+     "campo": "Largura de distribuição (m)",
+     "valor": "Máximo 15"
+    },
+    {
+     "campo": "Rotação do disco (rpm)",
+     "valor": "540"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "120"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Distribuidor-DC-650.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Distribuidor-DC-650-Rev.01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-dc-1300",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "DC 1300",
+   "linha": "Distribuidor Centrífugo DC 1300",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/distribuidor-centrifugo-dc-1300",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "75"
+    },
+    {
+     "campo": "Capacidade do reservatório (L e Kg)",
+     "valor": "1300 / 900"
+    },
+    {
+     "campo": "Largura de distribuição (m)",
+     "valor": "24 à 32"
+    },
+    {
+     "campo": "Rotação do disco (rpm)",
+     "valor": "810"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "280"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Distribuidor-DC-1300.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Distribuidor-DC-1300L-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rcb-200",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RCB 200",
+   "linha": "Enxada Rotativa Compost Barn RCB",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-compost-barn",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "75"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "2,00"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "0,25"
+    },
+    {
+     "campo": "Nº de hastes",
+     "valor": "5"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "60"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "700"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxada-Compost-Barn.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Compost-Barn-RCB-300-Rev.-00.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rcb-300",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RCB 300",
+   "linha": "Enxada Rotativa Compost Barn RCB",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-compost-barn",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "100"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "2,94"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "0,25"
+    },
+    {
+     "campo": "Nº de hastes",
+     "valor": "6"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "84"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "185/208"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "910"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxada-Compost-Barn.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Compost-Barn-RCB-300-Rev.-00.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rl-90",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RL 90",
+   "linha": "Enxada Rotativa Deslocável RL/RLE",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-deslocavel",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "25 – 45"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "0,90"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "–"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "–"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,20"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,31"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "16"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "185/215"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "220"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RL-e-RLE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rle-90",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RLE 90",
+   "linha": "Enxada Rotativa Deslocável RL/RLE",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-deslocavel",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "25 – 45"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "0,90"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "0,70"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "0,90"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,16"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "12"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "185/215"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "270"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RL-e-RLE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rl-125",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RL 125",
+   "linha": "Enxada Rotativa Deslocável RL/RLE",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-deslocavel",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "25 – 45"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,25"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "–"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "–"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,43"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "24"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "185/215/255"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "305"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RL-e-RLE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rle-125",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RLE 125",
+   "linha": "Enxada Rotativa Deslocável RL/RLE",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-deslocavel",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "25 – 45"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,25"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "1,10"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "1,30"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,16"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "20"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "185/215/255"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "355"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RL-e-RLE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rsfe-125",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RSFE 125",
+   "linha": "Enxada Rotativa Super Forte Encanteiradora RSFE/A/B/C/CA",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-encanteiradora",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "40 – 65"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,25"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,23"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "1,10"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "1,30"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "30"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "515"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RSF-RSFE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rsfe-150",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RSFE 150",
+   "linha": "Enxada Rotativa Super Forte Encanteiradora RSFE/A/B/C/CA",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-encanteiradora",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "50 – 75"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,28"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "1,30"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "1,60"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "36"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "550"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RSF-RSFE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rsfeb-125",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RSFEB 125",
+   "linha": "Enxada Rotativa Super Forte Encanteiradora RSFE/A/B/C/CA",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-encanteiradora",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "40 – 65"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,25"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,23"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "1,10"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "1,25"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "36"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "535"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RSF-RSFE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rsfeb-150",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RSFEB 150",
+   "linha": "Enxada Rotativa Super Forte Encanteiradora RSFE/A/B/C/CA",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-encanteiradora",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "50 – 75"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,28"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "1,30"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "1,55"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "42"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "555"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RSF-RSFE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rsfea-125",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RSFEA 125",
+   "linha": "Enxada Rotativa Super Forte Encanteiradora RSFE/A/B/C/CA",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-encanteiradora",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "40 – 65"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,25"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "–"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "1,10"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "1,30"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "30"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "565"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RSF-RSFE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rsfea-150",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RSFEA 150",
+   "linha": "Enxada Rotativa Super Forte Encanteiradora RSFE/A/B/C/CA",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-encanteiradora",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "50 – 75"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "–"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "1,30"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "1,60"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "36"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "600"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RSF-RSFE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rsfec-125",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RSFEC 125",
+   "linha": "Enxada Rotativa Super Forte Encanteiradora RSFE/A/B/C/CA",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-encanteiradora",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "40 – 65"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,25"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,23"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "1,10"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "1,30"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,30"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "36"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "520"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RSF-RSFE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rsfec-150",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RSFEC 150",
+   "linha": "Enxada Rotativa Super Forte Encanteiradora RSFE/A/B/C/CA",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-encanteiradora",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "50 – 75"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,28"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "1,30"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,30"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "42"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "555"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RSF-RSFE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rsfeca-125",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RSFECA 125",
+   "linha": "Enxada Rotativa Super Forte Encanteiradora RSFE/A/B/C/CA",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-encanteiradora",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "40 – 65"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,25"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "–"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "1,10"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "1,30"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,30"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "36"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "581"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RSF-RSFE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rsfeca-150",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RSFECA 150",
+   "linha": "Enxada Rotativa Super Forte Encanteiradora RSFE/A/B/C/CA",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-encanteiradora",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "50 – 75"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "–"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "1,30"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,30"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "42"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "622"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RSF-RSFE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rf-125-e",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RF 125/E",
+   "linha": "Enxada Rotativa Fixa Encanteiradora RFE",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-encanteiradora-fixa",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "40 – 65"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,25"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "1,10"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "1,30"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "30"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "470"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas-Fixas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-Rotativa-Fixa-RF-RFE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rf-150-e",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RF 150/E",
+   "linha": "Enxada Rotativa Fixa Encanteiradora RFE",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-encanteiradora-fixa",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "50 – 75"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "1,30"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "1,60"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "36"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "495"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas-Fixas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-Rotativa-Fixa-RF-RFE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rf-170-e",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RF 170/E",
+   "linha": "Enxada Rotativa Fixa Encanteiradora RFE",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-encanteiradora-fixa",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "55 – 80"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,70"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "1,80"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "42"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "525"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas-Fixas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-Rotativa-Fixa-RF-RFE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-yanmar-125",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "YANMAR 125",
+   "linha": "Enxada Rotativa Encanteiradora Supported By YANMAR",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-encanteiradora-supported-by-yanmar",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "45 – 55"
+    },
+    {
+     "campo": "Largura base do canteiro (m)",
+     "valor": "1,20 – 1,30"
+    },
+    {
+     "campo": "Largura topo do canteiro (m)",
+     "valor": "0,85 – 0,95"
+    },
+    {
+     "campo": "Altura do canteiro (m)",
+     "valor": "0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "26"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "247"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "360"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxada-Yanmar.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-Yanmar-Rev.-00.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-yanmar-150",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "YANMAR 150",
+   "linha": "Enxada Rotativa Encanteiradora Supported By YANMAR",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-encanteiradora-supported-by-yanmar",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "45 – 55"
+    },
+    {
+     "campo": "Largura base do canteiro (m)",
+     "valor": "1,45 – 1,55"
+    },
+    {
+     "campo": "Largura topo do canteiro (m)",
+     "valor": "1,10 – 1,20"
+    },
+    {
+     "campo": "Altura do canteiro (m)",
+     "valor": "0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "30"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "247"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "380"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxada-Yanmar.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-Yanmar-Rev.-00.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rf-125",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RF 125",
+   "linha": "Enxada Rotativa Fixa RF",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-fixa-rf",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "40 – 65"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,25"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "36"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "405"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas-Fixas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-Rotativa-Fixa-RF-RFE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rf-150",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RF 150",
+   "linha": "Enxada Rotativa Fixa RF",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-fixa-rf",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "50 – 75"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "42"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "435"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas-Fixas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-Rotativa-Fixa-RF-RFE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rf-170",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RF 170",
+   "linha": "Enxada Rotativa Fixa RF",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-fixa-rf",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "55 – 80"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,70"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "48"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "460"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas-Fixas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-Rotativa-Fixa-RF-RFE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-l-90",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "L 90",
+   "linha": "Enxada Rotativa Deslocável L/LE",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-l-le-1000rpm",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 18"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "0,90"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "–"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "–"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,20"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,31"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "16"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "185/215"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "215"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-L-90-e-LE-90-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-le-90",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "LE 90",
+   "linha": "Enxada Rotativa Deslocável L/LE",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-l-le-1000rpm",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 18"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "0,90"
+    },
+    {
+     "campo": "Largura topo (m)",
+     "valor": "0,70"
+    },
+    {
+     "campo": "Largura base (m)",
+     "valor": "0,90"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,16"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "12"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "185/215"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "265"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-L-90-e-LE-90-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rs-230",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RS 230",
+   "linha": "Enxada Rotativa RS",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-rs",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "75 – 100"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "2,31"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "66"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "185/208"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "615"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RS-300-MC-Rev.00.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rs-250",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RS 250",
+   "linha": "Enxada Rotativa RS",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-rs",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "80 – 110"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "2,52"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "72"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "185/208"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "645"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RS-300-MC-Rev.00.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rs-275",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RS 275",
+   "linha": "Enxada Rotativa RS",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-rs",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "90 – 120"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "2,75"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "78"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "185/208"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "655"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RS-300-MC-Rev.00.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rs-300",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RS 300",
+   "linha": "Enxada Rotativa RS",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-rs",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "100 – 130"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "2,94"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "84"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "185/208"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "715"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RS-300-MC-Rev.00.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rs-300-m-c",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RS 300 M/C",
+   "linha": "Enxada Rotativa RS",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-rs",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "100 – 130"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "2,94"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "84"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "185/208"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "780"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RS-300-MC-Rev.00.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rsf-125",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RSF 125",
+   "linha": "Enxada Rotativa Super Forte RSF",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-super-forte-rsf",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "40 – 65"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,25"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,40"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "36"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "415"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RS-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rsf-150",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RSF 150",
+   "linha": "Enxada Rotativa Super Forte RSF",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-super-forte-rsf",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "50 – 75"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,45"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "42"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "445"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RS-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rsf-170",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RSF 170",
+   "linha": "Enxada Rotativa Super Forte RSF",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-super-forte-rsf",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "55 – 80"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,70"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,55"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "48"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "485"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RS-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rsf-200",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RSF 200",
+   "linha": "Enxada Rotativa Super Forte RSF",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/enxada-rotativa-super-forte-rsf",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "65 – 85"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "2,00"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,65"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "até 0,25"
+    },
+    {
+     "campo": "Nº enxadas",
+     "valor": "60"
+    },
+    {
+     "campo": "Rotação rotor (rpm)",
+     "valor": "170/230"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "550"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Enxadas-Rotativas.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Enxada-RS-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-gva-1218-4118",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "GVA 12×18″ 4118",
+   "linha": "Grade de discos GVA/GVU/GXU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/grade-de-discos-gva-gvu-gxu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 18"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,00"
+    },
+    {
+     "campo": "Nº diâmetro de discos",
+     "valor": "12X18″"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "185"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Grade-de-Discos-GVU-GVA-GXU-Rev.01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-gva-14x18-4118",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "GVA 14X18″ 4118",
+   "linha": "Grade de discos GVA/GVU/GXU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/grade-de-discos-gva-gvu-gxu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 18"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,20"
+    },
+    {
+     "campo": "Nº diâmetro de discos",
+     "valor": "14X18″"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "215"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Grade-de-Discos-GVU-GVA-GXU-Rev.01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-gvu-12x18",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "GVU 12X18″",
+   "linha": "Grade de discos GVA/GVU/GXU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/grade-de-discos-gva-gvu-gxu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 25"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,00"
+    },
+    {
+     "campo": "Nº diâmetro de discos",
+     "valor": "12X18″"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "185"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Grade-de-Discos-GVU-GVA-GXU-Rev.01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-gvu-14x18",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "GVU 14X18″",
+   "linha": "Grade de discos GVA/GVU/GXU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/grade-de-discos-gva-gvu-gxu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 25"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,20"
+    },
+    {
+     "campo": "Nº diâmetro de discos",
+     "valor": "14X18″"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "215"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Grade-de-Discos-GVU-GVA-GXU-Rev.01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-gvu-18x18",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "GVU 18X18″",
+   "linha": "Grade de discos GVA/GVU/GXU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/grade-de-discos-gva-gvu-gxu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "25 – 45"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,55"
+    },
+    {
+     "campo": "Nº diâmetro de discos",
+     "valor": "18X18″"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "257"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Grade-de-Discos-GVU-GVA-GXU-Rev.01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-gxu-20x18",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "GXU 20X18″",
+   "linha": "Grade de discos GVA/GVU/GXU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/grade-de-discos-gva-gvu-gxu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "25 – 45"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,90"
+    },
+    {
+     "campo": "Nº diâmetro de discos",
+     "valor": "20X18″"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "308"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Grade-de-Discos-GVU-GVA-GXU-Rev.01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-concha",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "Concha",
+   "linha": "Pá Frontal Leve PFL",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pa-frontal-leve-pfl",
+   "especificacoes": [
+    {
+     "campo": "Volume (m²)",
+     "valor": "–"
+    },
+    {
+     "campo": "Largura (m)",
+     "valor": "1,20"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "90"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Pa-Frontal-Leve-PFL.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Pa-Frontal-Leve-PFL-Rev.-00.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-lamina",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "Lâmina",
+   "linha": "Pá Frontal Leve PFL",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pa-frontal-leve-pfl",
+   "especificacoes": [
+    {
+     "campo": "Volume (m²)",
+     "valor": "–"
+    },
+    {
+     "campo": "Largura (m)",
+     "valor": "1,40"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "90"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Pa-Frontal-Leve-PFL.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Pa-Frontal-Leve-PFL-Rev.-00.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-pad-concha-c1",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PAD – CONCHA C1",
+   "linha": "Pá Frontal PAD/PADU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pa-frontal-pad-padu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "40 – 60"
+    },
+    {
+     "campo": "Volume de carga (m³)",
+     "valor": "0,18"
+    },
+    {
+     "campo": "Aplicação (m)",
+     "valor": "1,50"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Pa-Frontal-PAD-PADU.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Plaina-PADU.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-pad-lamina-l",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PAD – LÂMINA L",
+   "linha": "Pá Frontal PAD/PADU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pa-frontal-pad-padu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "–"
+    },
+    {
+     "campo": "Volume de carga (m³)",
+     "valor": "–"
+    },
+    {
+     "campo": "Aplicação (m)",
+     "valor": "1,70"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Pa-Frontal-PAD-PADU.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Plaina-PADU.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-padu-concha-ce",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PADU – CONCHA CE",
+   "linha": "Pá Frontal PAD/PADU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pa-frontal-pad-padu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "70 – 90"
+    },
+    {
+     "campo": "Volume de carga (m³)",
+     "valor": "0,50"
+    },
+    {
+     "campo": "Aplicação (m)",
+     "valor": "1,90"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Pa-Frontal-PAD-PADU.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Plaina-PADU.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-concha-estreita-c9",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "CONCHA ESTREITA C9",
+   "linha": "Pá Frontal PAFU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pa-frontal-pafu",
+   "especificacoes": [
+    {
+     "campo": "Volume de carga",
+     "valor": "0,40 m³"
+    },
+    {
+     "campo": "Aplicação",
+     "valor": "1,50 m"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Pa-Frontal-PAFU.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Plaina-PAFU-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-lamina-l",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "LÂMINA L",
+   "linha": "Pá Frontal PAFU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pa-frontal-pafu",
+   "especificacoes": [
+    {
+     "campo": "Volume de carga",
+     "valor": "–"
+    },
+    {
+     "campo": "Aplicação",
+     "valor": "1,70 m"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Pa-Frontal-PAFU.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Plaina-PAFU-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-guincho-bag-gi",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "GUINCHO BAG GI",
+   "linha": "Pá Frontal PAFU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pa-frontal-pafu",
+   "especificacoes": [
+    {
+     "campo": "Volume de carga",
+     "valor": "300 kg"
+    },
+    {
+     "campo": "Aplicação",
+     "valor": "–"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Pa-Frontal-PAFU.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Plaina-PAFU-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-concha-c6",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "CONCHA C6",
+   "linha": "Pá Frontal PAFU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pa-frontal-pafu",
+   "especificacoes": [
+    {
+     "campo": "Volume de carga",
+     "valor": "0,40 m³"
+    },
+    {
+     "campo": "Aplicação",
+     "valor": "1,80 m"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Pa-Frontal-PAFU.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Plaina-PAFU-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-escavo-c8",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "ESCAVO C8",
+   "linha": "Pá Frontal PAFU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pa-frontal-pafu",
+   "especificacoes": [
+    {
+     "campo": "Volume de carga",
+     "valor": "0,20 m³"
+    },
+    {
+     "campo": "Aplicação",
+     "valor": "1,50 m"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Pa-Frontal-PAFU.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Plaina-PAFU-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-pecas-originais-para-reposicao",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "Peças originais para Reposição",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pecas-originais-para-reposicao",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "lavrale-ps-4118",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PS/4118",
+   "linha": "Perfurador de Solo PS TL/TM",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/perfurador-de-solo",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 18"
+    },
+    {
+     "campo": "Diâmetro",
+     "valor": "–"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "101"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PERFURADOR_DE_SOLO_-_PS_TLTM-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Perfurador-PS.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-ps-tl",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PS TL",
+   "linha": "Perfurador de Solo PS TL/TM",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/perfurador-de-solo",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "25 – 45"
+    },
+    {
+     "campo": "Diâmetro",
+     "valor": "–"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "111"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PERFURADOR_DE_SOLO_-_PS_TLTM-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Perfurador-PS.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-ps-tm",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PS TM",
+   "linha": "Perfurador de Solo PS TL/TM",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/perfurador-de-solo",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "50 – 75"
+    },
+    {
+     "campo": "Diâmetro",
+     "valor": "–"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "127"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PERFURADOR_DE_SOLO_-_PS_TLTM-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Perfurador-PS.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-bps-25",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "BPS – 25",
+   "linha": "Perfurador de Solo PS TL/TM",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/perfurador-de-solo",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "–"
+    },
+    {
+     "campo": "Diâmetro",
+     "valor": "25 cm (10″)"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "15"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PERFURADOR_DE_SOLO_-_PS_TLTM-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Perfurador-PS.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-bps-30",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "BPS – 30",
+   "linha": "Perfurador de Solo PS TL/TM",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/perfurador-de-solo",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "–"
+    },
+    {
+     "campo": "Diâmetro",
+     "valor": "30 cm (12″)"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "20"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PERFURADOR_DE_SOLO_-_PS_TLTM-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Perfurador-PS.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-bps-40",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "BPS – 40",
+   "linha": "Perfurador de Solo PS TL/TM",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/perfurador-de-solo",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "–"
+    },
+    {
+     "campo": "Diâmetro",
+     "valor": "40 cm (16″)"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "26"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PERFURADOR_DE_SOLO_-_PS_TLTM-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Perfurador-PS.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-broca-250",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "BROCA Ø250",
+   "linha": "Perfurador de Solo para RHA",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/perfurador-de-solo-2",
+   "especificacoes": [
+    {
+     "campo": "Rotação de trabalho (rpm)",
+     "valor": "150"
+    },
+    {
+     "campo": "Comprimento de transporte (m)",
+     "valor": "1,85"
+    },
+    {
+     "campo": "Largura de transporte (m)",
+     "valor": "0,40"
+    },
+    {
+     "campo": "Altura de transporte (m)",
+     "valor": "0,40"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "101"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Perfurador-de-Solo.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Perfurador-de-Solo-RHA-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-broca-300",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "BROCA Ø300",
+   "linha": "Perfurador de Solo para RHA",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/perfurador-de-solo-2",
+   "especificacoes": [
+    {
+     "campo": "Rotação de trabalho (rpm)",
+     "valor": "150"
+    },
+    {
+     "campo": "Comprimento de transporte (m)",
+     "valor": "1,85"
+    },
+    {
+     "campo": "Largura de transporte (m)",
+     "valor": "0,40"
+    },
+    {
+     "campo": "Altura de transporte (m)",
+     "valor": "0,40"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "106"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Perfurador-de-Solo.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Perfurador-de-Solo-RHA-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-broca-400",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "BROCA Ø400",
+   "linha": "Perfurador de Solo para RHA",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/perfurador-de-solo-2",
+   "especificacoes": [
+    {
+     "campo": "Rotação de trabalho (rpm)",
+     "valor": "150"
+    },
+    {
+     "campo": "Comprimento de transporte (m)",
+     "valor": "1,85"
+    },
+    {
+     "campo": "Largura de transporte (m)",
+     "valor": "0,40"
+    },
+    {
+     "campo": "Altura de transporte (m)",
+     "valor": "0,40"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "112"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Perfurador-de-Solo.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Perfurador-de-Solo-RHA-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-pta-ptu-130",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PTA/PTU 130",
+   "linha": "Plaina Agrícola Traseira PTA/PTU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/plaina-traseira-pta-ptu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 25"
+    },
+    {
+     "campo": "Largura (m)",
+     "valor": "1,30"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,35"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "175"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PLAINA_TRASEIRA_-_PTAPTU.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Plaina-Traseira-PTU-1.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-pta-ptu-150",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PTA/PTU 150",
+   "linha": "Plaina Agrícola Traseira PTA/PTU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/plaina-traseira-pta-ptu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "25 – 45"
+    },
+    {
+     "campo": "Largura (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,45"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "200"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PLAINA_TRASEIRA_-_PTAPTU.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Plaina-Traseira-PTU-1.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-ptu-180",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PTU 180",
+   "linha": "Plaina Agrícola Traseira PTA/PTU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/plaina-traseira-pta-ptu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "45 – 60"
+    },
+    {
+     "campo": "Largura (m)",
+     "valor": "1,80"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,60"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "220"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PLAINA_TRASEIRA_-_PTAPTU.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Plaina-Traseira-PTU-1.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-ptu-200",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PTU 200",
+   "linha": "Plaina Agrícola Traseira PTA/PTU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/plaina-traseira-pta-ptu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "45 – 60"
+    },
+    {
+     "campo": "Largura (m)",
+     "valor": "2,00"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,70"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "240"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PLAINA_TRASEIRA_-_PTAPTU.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Plaina-Traseira-PTU-1.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-ptu-240",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PTU 240",
+   "linha": "Plaina Agrícola Traseira PTA/PTU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/plaina-traseira-pta-ptu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "60 – 75"
+    },
+    {
+     "campo": "Largura (m)",
+     "valor": "2,40"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,85"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "260"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PLAINA_TRASEIRA_-_PTAPTU.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Plaina-Traseira-PTU-1.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-pb-110",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PB 110",
+   "linha": "Plataforma Basculante PB",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/plataforma-basculante",
+   "especificacoes": [
+    {
+     "campo": "Dimensões (m)",
+     "valor": "1,00 x 1,10 x 0,40"
+    },
+    {
+     "campo": "Capacidade de carga (kg)",
+     "valor": "500"
+    },
+    {
+     "campo": "Largura total (m)",
+     "valor": "1,10"
+    },
+    {
+     "campo": "Acoplamento",
+     "valor": "CAT I"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "175"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PLATAFORMA_BASCULANTE_PB.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-pb-130",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PB 130",
+   "linha": "Plataforma Basculante PB",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/plataforma-basculante",
+   "especificacoes": [
+    {
+     "campo": "Dimensões (m)",
+     "valor": "1,00 x 1,30 x 0,40"
+    },
+    {
+     "campo": "Capacidade de carga (kg)",
+     "valor": "500"
+    },
+    {
+     "campo": "Largura total (m)",
+     "valor": "1,30"
+    },
+    {
+     "campo": "Acoplamento",
+     "valor": "CAT I / II"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "200"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PLATAFORMA_BASCULANTE_PB.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-pb-170",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PB 170",
+   "linha": "Plataforma Basculante PB",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/plataforma-basculante",
+   "especificacoes": [
+    {
+     "campo": "Dimensões (m)",
+     "valor": "1,00 x 1,70 x 0,40"
+    },
+    {
+     "campo": "Capacidade de carga (kg)",
+     "valor": "1000"
+    },
+    {
+     "campo": "Largura total (m)",
+     "valor": "1,70"
+    },
+    {
+     "campo": "Acoplamento",
+     "valor": "CAT II"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "230"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PLATAFORMA_BASCULANTE_PB.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-pb-200",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PB 200",
+   "linha": "Plataforma Basculante PB",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/plataforma-basculante",
+   "especificacoes": [
+    {
+     "campo": "Dimensões (m)",
+     "valor": "1,00 x 2,00 x 0,40"
+    },
+    {
+     "campo": "Capacidade de carga (kg)",
+     "valor": "1000"
+    },
+    {
+     "campo": "Largura total (m)",
+     "valor": "2,00"
+    },
+    {
+     "campo": "Acoplamento",
+     "valor": "CAT II"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "270"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PLATAFORMA_BASCULANTE_PB.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-pva-pvu-200",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PVA/PVU 200",
+   "linha": "Pulverizador Aplicador de Herbicida PVA/PVU 200/300 PVU 400",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pulverizador-aplic-herbicida",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 45"
+    },
+    {
+     "campo": "Capacidade (L)",
+     "valor": "200"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "2,40"
+    },
+    {
+     "campo": "Porta bicos",
+     "valor": "12"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "170"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PULVERIZADOR_APLIC_HERBICIDA_-_PVAPVU_200300__PVU_400.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Pulverizador-PVA-PVU-200-300.pdf"
+    }
+   ],
+   "urlsAdicionais": [
+    "https://www.lavrale.com.br/produtos/pulverizador-com-enrolador-pva-pvu-200-300-pvu-400"
+   ]
+  },
+  {
+   "id": "lavrale-pva-pvu-300",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PVA/PVU 300",
+   "linha": "Pulverizador Aplicador de Herbicida PVA/PVU 200/300 PVU 400",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pulverizador-aplic-herbicida",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 45"
+    },
+    {
+     "campo": "Capacidade (L)",
+     "valor": "300"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "3,20"
+    },
+    {
+     "campo": "Porta bicos",
+     "valor": "12"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "190"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PULVERIZADOR_APLIC_HERBICIDA_-_PVAPVU_200300__PVU_400.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Pulverizador-PVA-PVU-200-300.pdf"
+    }
+   ],
+   "urlsAdicionais": [
+    "https://www.lavrale.com.br/produtos/pulverizador-com-enrolador-pva-pvu-200-300-pvu-400"
+   ]
+  },
+  {
+   "id": "lavrale-pvu-400",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PVU 400",
+   "linha": "Pulverizador Aplicador de Herbicida PVA/PVU 200/300 PVU 400",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pulverizador-aplic-herbicida",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "45 – 75"
+    },
+    {
+     "campo": "Capacidade (L)",
+     "valor": "400"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "3,20"
+    },
+    {
+     "campo": "Porta bicos",
+     "valor": "24"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "215"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PULVERIZADOR_APLIC_HERBICIDA_-_PVAPVU_200300__PVU_400.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Pulverizador-PVA-PVU-200-300.pdf"
+    }
+   ],
+   "urlsAdicionais": [
+    "https://www.lavrale.com.br/produtos/pulverizador-com-enrolador-pva-pvu-200-300-pvu-400"
+   ]
+  },
+  {
+   "id": "lavrale-pva-pvu-500",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PVA/PVU 500",
+   "linha": "Pulverizador de Arraste PVA/PVU 500 / PVU 750",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pulverizador-de-arraste-pva-pvu-500-pvu-750",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 45"
+    },
+    {
+     "campo": "Capacidade (L)",
+     "valor": "500"
+    },
+    {
+     "campo": "Bomba (rpm/pressão)",
+     "valor": "540/580"
+    },
+    {
+     "campo": "Consumo da bomba (CV)",
+     "valor": "5,2"
+    },
+    {
+     "campo": "Vazão da bomba (L)",
+     "valor": "51"
+    },
+    {
+     "campo": "Comando (modelo)",
+     "valor": "Comet HPR"
+    },
+    {
+     "campo": "Pneus",
+     "valor": "165/7D/R14"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "220"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PULVERIZADOR_DE_ARRASTE_-_PVAPVU_500__PVU_750-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Pulverizador-PVU-500-750.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-pvu-750",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PVU 750",
+   "linha": "Pulverizador de Arraste PVA/PVU 500 / PVU 750",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pulverizador-de-arraste-pva-pvu-500-pvu-750",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "45 – 75"
+    },
+    {
+     "campo": "Capacidade (L)",
+     "valor": "750"
+    },
+    {
+     "campo": "Bomba (rpm/pressão)",
+     "valor": "540/580"
+    },
+    {
+     "campo": "Consumo da bomba (CV)",
+     "valor": "5,2"
+    },
+    {
+     "campo": "Vazão da bomba (L)",
+     "valor": "51"
+    },
+    {
+     "campo": "Comando (modelo)",
+     "valor": "Comet HPR"
+    },
+    {
+     "campo": "Pneus",
+     "valor": "165/7D/R14"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "270"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PULVERIZADOR_DE_ARRASTE_-_PVAPVU_500__PVU_750-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Pulverizador-PVU-500-750.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-pvu-1000",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PVU 1000",
+   "linha": "Pulverizador de Arraste PVU 1000",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pulverizador-de-arraste-pvu-1000-1500",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "45 – 75"
+    },
+    {
+     "campo": "Capacidade (L)",
+     "valor": "1000"
+    },
+    {
+     "campo": "Bomba (rpm/pressão)",
+     "valor": "540/580"
+    },
+    {
+     "campo": "Consumo da bomba (CV)",
+     "valor": "9,5"
+    },
+    {
+     "campo": "Vazão da bomba (L)",
+     "valor": "96"
+    },
+    {
+     "campo": "Comando (modelo)",
+     "valor": "Comet HPR"
+    },
+    {
+     "campo": "Pneus",
+     "valor": "600/R16/6 lonas"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "430"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PULVERIZADOR__DE_ARRASTE_-_PVU_10001500-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Pulverizador-PVU-1000-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-pva-pvu-200-2",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PVA/PVU 200 (Pulverizador de Barra PVU 200/300/400)",
+   "linha": "Pulverizador de Barra PVU 200/300/400",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pulverizador-de-barra",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 45"
+    },
+    {
+     "campo": "Abertura da barra",
+     "valor": "Manual"
+    },
+    {
+     "campo": "Capacidade (L)",
+     "valor": "200"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "9,00"
+    },
+    {
+     "campo": "Porta-bicos",
+     "valor": "18"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "165"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PULVERIZADOR_DE_BARRA_-_PVAPVU_200300__PVU_400.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PULVERIZADOR_DE_BARRA_-_PVAPVU_200300__PVU_400-1.pdf"
+    }
+   ],
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "lavrale-pva-pvu-300-2",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PVA/PVU 300 (Pulverizador de Barra PVU 200/300/400)",
+   "linha": "Pulverizador de Barra PVU 200/300/400",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pulverizador-de-barra",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 45"
+    },
+    {
+     "campo": "Abertura da barra",
+     "valor": "Manual"
+    },
+    {
+     "campo": "Capacidade (L)",
+     "valor": "300"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "9,00"
+    },
+    {
+     "campo": "Porta-bicos",
+     "valor": "18"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "170"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PULVERIZADOR_DE_BARRA_-_PVAPVU_200300__PVU_400.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PULVERIZADOR_DE_BARRA_-_PVAPVU_200300__PVU_400-1.pdf"
+    }
+   ],
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "lavrale-pvu-400-2",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PVU 400 (Pulverizador de Barra PVU 200/300/400)",
+   "linha": "Pulverizador de Barra PVU 200/300/400",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pulverizador-de-barra",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "45 – 75"
+    },
+    {
+     "campo": "Abertura da barra",
+     "valor": "Catraca"
+    },
+    {
+     "campo": "Capacidade (L)",
+     "valor": "400"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "10,50"
+    },
+    {
+     "campo": "Porta-bicos",
+     "valor": "21"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "195"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PULVERIZADOR_DE_BARRA_-_PVAPVU_200300__PVU_400.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PULVERIZADOR_DE_BARRA_-_PVAPVU_200300__PVU_400-1.pdf"
+    }
+   ],
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "lavrale-pvu-600",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PVU 600",
+   "linha": "Pulverizador de Barra PVU 600",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pulverizador-de-barra-pvu-600-800",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "55"
+    },
+    {
+     "campo": "Capacidade (L)",
+     "valor": "600"
+    },
+    {
+     "campo": "Bomba (rpm/pressão)",
+     "valor": "540/217"
+    },
+    {
+     "campo": "Consumo da bomba (CV)",
+     "valor": "5,2"
+    },
+    {
+     "campo": "Vazão da bomba (L)",
+     "valor": "75"
+    },
+    {
+     "campo": "Agitadores",
+     "valor": "Hidráulica"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "286"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PULVERIZADOR_DE_BARRA_-_PVU_600800-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Pulverizador-PVU-600-Barra-Rev-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-jet-2000",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "JET 2000",
+   "linha": "Pulverizador Jet 2000",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pulverizador-jet-2000",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "75"
+    },
+    {
+     "campo": "Capacidade (L)",
+     "valor": "2200"
+    },
+    {
+     "campo": "Bomba (L)",
+     "valor": "100"
+    },
+    {
+     "campo": "Consumo da bomba (CV)",
+     "valor": "8,7"
+    },
+    {
+     "campo": "Vazão da bomba (L)",
+     "valor": "100"
+    },
+    {
+     "campo": "Nº de pistões da bomba",
+     "valor": "4"
+    },
+    {
+     "campo": "Pneus",
+     "valor": "11Lx15”"
+    },
+    {
+     "campo": "Agitadores",
+     "valor": "Hidráulico"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "960"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Pulverizador-JET-2000-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-pvu-400-3",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "PVU 400 (Pulverizador de Pastagem PVU 400)",
+   "linha": "Pulverizador de Pastagem PVU 400",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/pulverizador-para-pastagem-pvu-400",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "45 – 75"
+    },
+    {
+     "campo": "Capacidade (L)",
+     "valor": "400"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "Até 1,92"
+    },
+    {
+     "campo": "Porta bicos",
+     "valor": "3"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "110"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/PULVERIZADOR_PARA_PASTAGEM_-_PVU_400.pdf"
+    }
+   ],
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "lavrale-re-25",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RE 25",
+   "linha": "Retroescavadeira 25 CV",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/retroescavadeira-25-cv",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "25"
+    },
+    {
+     "campo": "Alcance máxima (m)",
+     "valor": "2,15"
+    },
+    {
+     "campo": "Altura máxima (m)",
+     "valor": "2,00"
+    },
+    {
+     "campo": "Profundidade de escavo (m)",
+     "valor": "0,92"
+    },
+    {
+     "campo": "Giro da torre",
+     "valor": "160º"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "456"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/RETROESCAVADEIRA_RE.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Retroescavadeira-RE-25-Rev.-00.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-re",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RE",
+   "linha": "Retroescavadeira RE",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/retroescavadeira-re",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "30 – 75"
+    },
+    {
+     "campo": "Alcance máxima (m)",
+     "valor": "2,80"
+    },
+    {
+     "campo": "Altura máxima (m)",
+     "valor": "2,45"
+    },
+    {
+     "campo": "Profundidade de escavo (m)",
+     "valor": "2,40"
+    },
+    {
+     "campo": "Giro da torre",
+     "valor": "180°"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "632"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/RETROESCAVADEIRA_RE.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Retroescavadeira-RE.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-at-150-4118",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "AT 150/4118",
+   "linha": "Roçadeira Corte Leve AT",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/rocadeira-corte-leve-at",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 18"
+    },
+    {
+     "campo": "Altura de corte (m)",
+     "valor": "0,01 – 0,11"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "245"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/ROCADEIRA_CORTE_LEVE_AT-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/ROCADEIRA_CORTE_LEVE_AT.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-at-150-540",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "AT 150/540",
+   "linha": "Roçadeira Corte Leve AT",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/rocadeira-corte-leve-at",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 75"
+    },
+    {
+     "campo": "Altura de corte (m)",
+     "valor": "0,01 – 0,11"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "245"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/ROCADEIRA_CORTE_LEVE_AT-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/ROCADEIRA_CORTE_LEVE_AT.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-at-180-540",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "AT 180/540",
+   "linha": "Roçadeira Corte Leve AT",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/rocadeira-corte-leve-at",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 75"
+    },
+    {
+     "campo": "Altura de corte (m)",
+     "valor": "0,01 – 0,11"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,80"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "260"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/ROCADEIRA_CORTE_LEVE_AT-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/ROCADEIRA_CORTE_LEVE_AT.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-at-8110-glp-er",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "AT 8110/GLP ER",
+   "linha": "Roçadeira Deslocável AT",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/rocadeira-deslocavel-at-glp-er",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 25"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,10"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,30"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "200"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/ROCADEIRA_DESLOCAVEL_AT-GLPER-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Rocadeira-AT-GLP-ER.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-at-8130-glp-er",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "AT 8130/GLP ER",
+   "linha": "Roçadeira Deslocável AT",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/rocadeira-deslocavel-at-glp-er",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "25 – 75"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,30"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,40"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "283"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/ROCADEIRA_DESLOCAVEL_AT-GLPER-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Rocadeira-AT-GLP-ER.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-at-8160-s2",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "AT 8160/S2",
+   "linha": "Roçadeira Deslocável AT S2",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/rocadeira-deslocavel-at-s2",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "45 – 100"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,60"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,49"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "345"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/ROCADEIRA_DESLOCAVEL_AT_S2-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/ROCADEIRA_DESLOCAVEL_AT_S2.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-at-8180-s2",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "AT 8180/S2",
+   "linha": "Roçadeira Deslocável AT S2",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/rocadeira-deslocavel-at-s2",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "45 – 100"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,80"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,55"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "415"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/ROCADEIRA_DESLOCAVEL_AT_S2-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/ROCADEIRA_DESLOCAVEL_AT_S2.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-atd-8260",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "ATD 8260",
+   "linha": "Roçadeira Dupla ATD",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/rocadeira-dupla-atd",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "65 – 100"
+    },
+    {
+     "campo": "Altura de corte (m)",
+     "valor": "0,04 – 0,14"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "2,60"
+    },
+    {
+     "campo": "N° de navalhas",
+     "valor": "4"
+    },
+    {
+     "campo": "Rotação das navalhas (rpm)",
+     "valor": "1115"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "680"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/ROCADEIRA_DUPLA_ATD-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/ROCADEIRA_DUPLA_ATD.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-atd-8300",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "ATD 8300",
+   "linha": "Roçadeira Dupla ATD",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/rocadeira-dupla-atd",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "70 – 100"
+    },
+    {
+     "campo": "Altura de corte (m)",
+     "valor": "0,04 – 0,14"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "3,00"
+    },
+    {
+     "campo": "N° de navalhas",
+     "valor": "4"
+    },
+    {
+     "campo": "Rotação das navalhas (rpm)",
+     "valor": "1115"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "780"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/ROCADEIRA_DUPLA_ATD-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/ROCADEIRA_DUPLA_ATD.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rha-150",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RHA 150",
+   "linha": "Roçadeira Hidráulica Articulada RHA",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/rocadeira-hidraulica-articulada",
+   "especificacoes": [
+    {
+     "campo": "Largura de corte (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Nº de navalhas",
+     "valor": "02"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "1050"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/ROCADEIRA_HIDRAULICA_ARTICULADA_RHA-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/ROCADEIRA_HIDRAULICA_ARTICULADA_RHA.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rha-140-rot",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RHA 140 ROT",
+   "linha": "Roçadeira Hidráulica Articulada RHA",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/rocadeira-hidraulica-articulada",
+   "especificacoes": [
+    {
+     "campo": "Largura de corte (m)",
+     "valor": "1,40"
+    },
+    {
+     "campo": "Nº de navalhas",
+     "valor": "36"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "1080"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/ROCADEIRA_HIDRAULICA_ARTICULADA_RHA-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/01/ROCADEIRA_HIDRAULICA_ARTICULADA_RHA.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rha-7-5",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RHA 7.5",
+   "linha": "Roçadeira Hidráulica Articulada RHA 750",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/rocadeira-hidraulica-articulada-rha-750",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "Mínimo 120"
+    },
+    {
+     "campo": "TDP (RPM)",
+     "valor": "540"
+    },
+    {
+     "campo": "Largura de corte (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Altura máxima (m)",
+     "valor": "7,50"
+    },
+    {
+     "campo": "Nº de navalhas",
+     "valor": "02"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "1250"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/05/RHA.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-rda-110-er",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "RDA 110/ER",
+   "linha": "Roçadeira RDA-ER",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/rocadeira-rda-er",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "4118 Agrale"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,10"
+    },
+    {
+     "campo": "Deslocamento lateral (m)",
+     "valor": "0,36"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "250"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/ROCADEIRA_RDA-ER.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Rocadeira-RDA-130.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-sd-9165",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "SD 9165",
+   "linha": "Segadeira de Discos SD",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/segadeira-de-discos-sd",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "40 – 85"
+    },
+    {
+     "campo": "Capacidade de produção teórica a 10 km/h",
+     "valor": "1,6 ha/h"
+    },
+    {
+     "campo": "Largura de corte (m)",
+     "valor": "1,65"
+    },
+    {
+     "campo": "N° de discos de corte",
+     "valor": "4"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "320"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Segadeira-de-Discos.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Segadeira-de-Discos-Rev.01_Otm.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-sd-9205",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "SD 9205",
+   "linha": "Segadeira de Discos SD",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/segadeira-de-discos-sd",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "45 – 85"
+    },
+    {
+     "campo": "Capacidade de produção teórica a 10 km/h",
+     "valor": "2,0 ha/h"
+    },
+    {
+     "campo": "Largura de corte (m)",
+     "valor": "2,05"
+    },
+    {
+     "campo": "N° de discos de corte",
+     "valor": "5"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "370"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Segadeira-de-Discos.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Segadeira-de-Discos-Rev.01_Otm.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-sd-9245",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "SD 9245",
+   "linha": "Segadeira de Discos SD",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/segadeira-de-discos-sd",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "55 – 85"
+    },
+    {
+     "campo": "Capacidade de produção teórica a 10 km/h",
+     "valor": "2,4 ha/h"
+    },
+    {
+     "campo": "Largura de corte (m)",
+     "valor": "2,40"
+    },
+    {
+     "campo": "N° de discos de corte",
+     "valor": "6"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "400"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Segadeira-de-Discos.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Segadeira-de-Discos-Rev.01_Otm.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-st-170",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "ST 170",
+   "linha": "Segadeira de Tambor ST",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/segadeira-de-tambor-st",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "30 – 75"
+    },
+    {
+     "campo": "Capacidade de produção teórica a 10 km/h",
+     "valor": "1,7 ha/h"
+    },
+    {
+     "campo": "Largura de corte (m)",
+     "valor": "1,70"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "362"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Manual-Segadeira-de-Tambor.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Segadeira-de-Tambor-ST-170-Rev.-02.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-ss-3-tl",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "SS 3/TL",
+   "linha": "Subsolador SS TL",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/subsolador-ss-tl-tm",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "25 – 45"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,20"
+    },
+    {
+     "campo": "Nº de hastes",
+     "valor": "3"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "130"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/SUBSOLADOR_-_SS_TLTM-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Subsolador-SS_TL-Rev.-02.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-ss-5-tl",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "SS 5/TL",
+   "linha": "Subsolador SS TL",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/subsolador-ss-tl-tm",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "25 – 45"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,20"
+    },
+    {
+     "campo": "Nº de hastes",
+     "valor": "5"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "160"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/SUBSOLADOR_-_SS_TLTM-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/07/Subsolador-SS_TL-Rev.-02.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-sla-1-50-4118",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "SLA 1/50 (4118)",
+   "linha": "Sulcador SLA / SLU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/sulcador-sla-slu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 18"
+    },
+    {
+     "campo": "Barra (m)",
+     "valor": "0,50 – Simples"
+    },
+    {
+     "campo": "Nº de linhas",
+     "valor": "1"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "44"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/SULCADOR_-_SLASLU-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Sulcador-SLA-SLU-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-slu-1-85",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "SLU 1/85",
+   "linha": "Sulcador SLA / SLU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/sulcador-sla-slu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 45"
+    },
+    {
+     "campo": "Barra (m)",
+     "valor": "0,85 – Simples"
+    },
+    {
+     "campo": "Nº de linhas",
+     "valor": "1"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "50"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/SULCADOR_-_SLASLU-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Sulcador-SLA-SLU-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-sla-2-150-4118",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "SLA 2/150 (4118)",
+   "linha": "Sulcador SLA / SLU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/sulcador-sla-slu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 18"
+    },
+    {
+     "campo": "Barra (m)",
+     "valor": "1,50 – Simples"
+    },
+    {
+     "campo": "Nº de linhas",
+     "valor": "2"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "84"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/SULCADOR_-_SLASLU-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Sulcador-SLA-SLU-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-slu-2-150",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "SLU 2/150",
+   "linha": "Sulcador SLA / SLU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/sulcador-sla-slu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "15 – 45"
+    },
+    {
+     "campo": "Barra (m)",
+     "valor": "1,50 – Simples"
+    },
+    {
+     "campo": "Nº de linhas",
+     "valor": "2"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "86"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/SULCADOR_-_SLASLU-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Sulcador-SLA-SLU-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-slu-3-250",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "SLU 3/250",
+   "linha": "Sulcador SLA / SLU",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/sulcador-sla-slu",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "25 – 45"
+    },
+    {
+     "campo": "Barra (m)",
+     "valor": "2,50 – Dupla"
+    },
+    {
+     "campo": "Nº de linhas",
+     "valor": "3"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "142"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/SULCADOR_-_SLASLU-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Sulcador-SLA-SLU-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-tas-150",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "TAS 150",
+   "linha": "Triturador Avícola TAS",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/triturador-avicola-tas-150",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "65 – 75"
+    },
+    {
+     "campo": "Largura de corte (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "0,25"
+    },
+    {
+     "campo": "Velocidade de trabalho (km/h)",
+     "valor": "1,5 a 2,5"
+    },
+    {
+     "campo": "Rotação mínima do rotor (rpm)",
+     "valor": "850"
+    },
+    {
+     "campo": "Número de facas",
+     "valor": "28"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "465"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/TRITURADOR_AVICOLA_TAS_150-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Triturador-TAS-150-Rev.-01.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-tcp-140",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "TCP 140",
+   "linha": "Triturador Central TCP",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/triturador-central-tcp",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "55"
+    },
+    {
+     "campo": "Torre com deslocamento",
+     "valor": "TCP 140 DH"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,40"
+    },
+    {
+     "campo": "N° de martelos",
+     "valor": "10"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "664"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/TRITURADOR_CENTRAL_TCP-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/TRITURADOR_CENTRAL_TCP.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-tcp-160",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "TCP 160",
+   "linha": "Triturador Central TCP",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/triturador-central-tcp",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "70"
+    },
+    {
+     "campo": "Torre com deslocamento",
+     "valor": "TCP 160 DH"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,60"
+    },
+    {
+     "campo": "N° de martelos",
+     "valor": "12"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "719"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/TRITURADOR_CENTRAL_TCP-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/TRITURADOR_CENTRAL_TCP.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-tcp-180",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "TCP 180",
+   "linha": "Triturador Central TCP",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/triturador-central-tcp",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "80"
+    },
+    {
+     "campo": "Torre com deslocamento",
+     "valor": "TCP 180 DH"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,80"
+    },
+    {
+     "campo": "N° de martelos",
+     "valor": "15"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "758"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/TRITURADOR_CENTRAL_TCP-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/TRITURADOR_CENTRAL_TCP.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-tdh-1-0",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "TDH 1.0",
+   "linha": "Triturador Deslocável Hidráulico TDH",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/triturador-deslocavel-hidraulico-tdh",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "25"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,00"
+    },
+    {
+     "campo": "Largura total (m)",
+     "valor": "1,27"
+    },
+    {
+     "campo": "Deslocamento (m)",
+     "valor": "0,20"
+    },
+    {
+     "campo": "N° de martelos",
+     "valor": "8"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "400"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/TRITURADOR_DESLOCAVEL_HIDRAULICO_TDH-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/TRITURADOR_DESLOCAVEL_HIDRAULICO_TDH.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-tdh-1-2",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "TDH 1.2",
+   "linha": "Triturador Deslocável Hidráulico TDH",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/triturador-deslocavel-hidraulico-tdh",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "30"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,20"
+    },
+    {
+     "campo": "Largura total (m)",
+     "valor": "1,46"
+    },
+    {
+     "campo": "Deslocamento (m)",
+     "valor": "0,37"
+    },
+    {
+     "campo": "N° de martelos",
+     "valor": "10"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "487"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/TRITURADOR_DESLOCAVEL_HIDRAULICO_TDH-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/TRITURADOR_DESLOCAVEL_HIDRAULICO_TDH.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-tdh-1-4",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "TDH 1.4",
+   "linha": "Triturador Deslocável Hidráulico TDH",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/triturador-deslocavel-hidraulico-tdh",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "45"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,40"
+    },
+    {
+     "campo": "Largura total (m)",
+     "valor": "1,66"
+    },
+    {
+     "campo": "Deslocamento (m)",
+     "valor": "0,55"
+    },
+    {
+     "campo": "N° de martelos",
+     "valor": "12"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "524"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/TRITURADOR_DESLOCAVEL_HIDRAULICO_TDH-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/TRITURADOR_DESLOCAVEL_HIDRAULICO_TDH.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-tdh-1-6",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "TDH 1.6",
+   "linha": "Triturador Deslocável Hidráulico TDH",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/triturador-deslocavel-hidraulico-tdh",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "55"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,60"
+    },
+    {
+     "campo": "Largura total (m)",
+     "valor": "1,86"
+    },
+    {
+     "campo": "Deslocamento (m)",
+     "valor": "0,66"
+    },
+    {
+     "campo": "N° de martelos",
+     "valor": "14"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "552"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/TRITURADOR_DESLOCAVEL_HIDRAULICO_TDH-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/TRITURADOR_DESLOCAVEL_HIDRAULICO_TDH.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-ta-90",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "TA 90",
+   "linha": "Triturador Avícola TA",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/triturador-ta-90-150",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "25"
+    },
+    {
+     "campo": "Largura de corte (m)",
+     "valor": "0,90"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "0,20"
+    },
+    {
+     "campo": "Velocidade de trabalho (km/h)",
+     "valor": "1,5 a 2,5"
+    },
+    {
+     "campo": "Rotação mínima do rotor (rpm)",
+     "valor": "1200"
+    },
+    {
+     "campo": "Número de facas",
+     "valor": "16"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "205"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/TRITURADOR_TA_90150-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Triturador-TA-90-TA-150-Rev.-03.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-ta-150",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "TA 150",
+   "linha": "Triturador Avícola TA",
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/triturador-ta-90-150",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "40"
+    },
+    {
+     "campo": "Largura de corte (m)",
+     "valor": "1,50"
+    },
+    {
+     "campo": "Profundidade de trabalho (m)",
+     "valor": "0,20"
+    },
+    {
+     "campo": "Velocidade de trabalho (km/h)",
+     "valor": "1,5 a 2,5"
+    },
+    {
+     "campo": "Rotação mínima do rotor (rpm)",
+     "valor": "1180"
+    },
+    {
+     "campo": "Número de facas",
+     "valor": "28"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "275"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/TRITURADOR_TA_90150-1.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Triturador-TA-90-TA-150-Rev.-03.pdf"
+    }
+   ]
+  },
+  {
+   "id": "lavrale-valetadeira-para-rha",
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "modelo": "Valetadeira para RHA",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "produtos",
+   "url": "https://www.lavrale.com.br/produtos/valetadeira-enxada",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/02/VALETADEIRA_ENXADA.pdf"
+    },
+    {
+     "titulo": "Catálogo",
+     "url": "https://www.lavrale.com.br/wp-content/uploads/2026/06/Valetadeira-RHA-Rev.-00.pdf"
+    }
+   ]
+  }
+ ],
+ "descartados": []
+}

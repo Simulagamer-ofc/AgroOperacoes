@@ -42,6 +42,27 @@
    "arquivo": "modelos/jacto.json",
    "totalModelos": 187,
    "comEspecificacoes": 158
+  },
+  {
+   "marca": "Lavrale",
+   "fabricanteId": "lavrale",
+   "arquivo": "modelos/lavrale.json",
+   "totalModelos": 128,
+   "comEspecificacoes": 126
+  },
+  {
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "arquivo": "modelos/dmb.json",
+   "totalModelos": 36,
+   "comEspecificacoes": 33
+  },
+  {
+   "marca": "Imasa",
+   "fabricanteId": "imasa",
+   "arquivo": "modelos/imasa.json",
+   "totalModelos": 15,
+   "comEspecificacoes": 0
   }
  ],
  "pendentes": [

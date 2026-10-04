@@ -7,7 +7,8 @@ from comum import slug, salvar, DATA
 DEST = '/home/user/AgroOperacoes/referencias/modelos'
 os.makedirs(DEST, exist_ok=True)
 MARCAS = [('stara.json', 'stara'), ('john-deere.json', 'john-deere'), ('massey-ferguson.json', 'agco'), ('valtra.json', 'agco'),
-          ('case-ih.json', 'cnh'), ('jacto.json', 'jacto')]
+          ('case-ih.json', 'cnh'), ('jacto.json', 'jacto'),
+          ('lavrale.json', 'lavrale'), ('dmb.json', 'dmb'), ('imasa.json', 'imasa')]
 
 
 def familia_pulv(m):
@@ -31,8 +32,12 @@ for arq, fab in MARCAS:
     descartados = []
     for m in d['modelos']:
         nome = (m.get('modelo') or '').strip()
-        if not nome or nome.startswith('*') or len(nome) > 90:
+        if not nome or nome.startswith('|'):
+            descartados.append({'nome': nome[:120], 'url': m.get('url'), 'motivo': 'página sem conteúdo (produto retirado do site, URL ainda no sitemap)'}); continue
+        if nome.startswith('*') or len(nome) > 90:
             descartados.append({'nome': nome[:120], 'url': m.get('url'), 'motivo': 'nota de rodapé ou nome inválido'}); continue
+        if fab == 'dmb' and nome.lower().startswith('linha '):
+            descartados.append({'nome': nome, 'url': m.get('url'), 'motivo': 'página de categoria'}); continue
         fam = m.get('familia')
         if fam == 'pulverizador':
             fam = familia_pulv(m)
@@ -45,6 +50,12 @@ for arq, fab in MARCAS:
         for e in item['especificacoes']:
             if not e.get('campo') and e.get('secao'):
                 e['campo'] = e.pop('secao')
+        if not item['categoriaFabricante'] and fab in ('lavrale', 'dmb', 'imasa'):
+            partes = [p for p in (item['url'] or '').split('/')[3:] if p]
+            item['categoriaFabricante'] = partes[-2] if len(partes) >= 2 else None
+        docs = [x for x in m.get('documentos') or [] if x.get('titulo') or x['url'].lower().endswith('.pdf')]
+        if docs:
+            item['documentos'] = docs
         for k in ('lastmodSitemap', 'atualizadoNoFabricante', 'prospectos', 'observacao'):
             if m.get(k):
                 item[k] = m[k]
