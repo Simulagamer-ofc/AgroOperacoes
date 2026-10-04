@@ -3467,11 +3467,11 @@
    ],
    "associadaCSMIA": true,
    "site": {
-    "url": null,
-    "status": "nao_localizado",
+    "url": "https://www.marchesan.com.br/",
+    "status": "acessivel_nao_confirmado",
     "tituloPagina": null,
     "dataVerificacao": "2026-10-04",
-    "observacao": "ATENÇÃO: www.tatu.com.br pertence a outra empresa (Tatu PreMoldados, concreto). Site correto ainda não confirmado."
+    "observacao": "Domínio oficial indicado por pesquisa (Wikipedia, LinkedIn da empresa); não acessado porque o domínio não está liberado no ambiente. ATENÇÃO: www.tatu.com.br pertence a outra empresa (Tatu PreMoldados)."
    },
    "segmentos": [],
    "observacao": null

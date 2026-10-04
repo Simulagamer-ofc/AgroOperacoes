@@ -1,0 +1,3742 @@
+{
+ "catalogo": "Nexus Agro — modelos de máquinas e implementos",
+ "marca": "Stara",
+ "fabricanteId": "stara",
+ "fonte": "https://www.stara.com.br/sitemap",
+ "dataConsulta": "2026-10-04",
+ "regras": [
+  "Especificações copiadas como texto literal do site oficial do fabricante, sem conversão nem interpretação.",
+  "Valores servem para identificação e consulta. Para preencher automaticamente um parâmetro de regulagem, o valor precisa ser confirmado no manual/folheto do modelo e ano.",
+  "O site pode não refletir variações por ano-modelo, mercado ou opcionais."
+ ],
+ "totalModelos": 66,
+ "comEspecificacoes": 50,
+ "modelos": [
+  {
+   "id": "stara-syncro-agricultura-de-precisao",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Syncro | Agricultura de Precisão",
+   "linha": "Syncro | Agricultura de Precisão",
+   "familia": "agricultura_precisao",
+   "categoriaFabricante": "agricultura-de-precisao",
+   "url": "https://www.stara.com.br/produtos-servicos/agricultura-de-precisao/produto/syncro",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "stara-topper-5500-agricultura-de-precisao",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Topper 5500 | Agricultura de Precisão",
+   "linha": "Topper 5500 | Agricultura de Precisão",
+   "familia": "agricultura_precisao",
+   "categoriaFabricante": "agricultura-de-precisao",
+   "url": "https://www.stara.com.br/produtos-servicos/agricultura-de-precisao/produto/topper-5500",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/123-b_r__topper_5500_web.pdf"
+   ]
+  },
+  {
+   "id": "stara-topper-6500",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Topper 6500",
+   "linha": "Topper 6500",
+   "familia": "agricultura_precisao",
+   "categoriaFabricante": "agricultura-de-precisao",
+   "url": "https://www.stara.com.br/produtos-servicos/agricultura-de-precisao/produto/topper-6500",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/211-b_r__topper_6500.pdf"
+   ]
+  },
+  {
+   "id": "stara-topper-driver-3-agricultura-de-precisao",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Topper Driver 3 | Agricultura de Precisão",
+   "linha": "Topper Driver 3 | Agricultura de Precisão",
+   "familia": "agricultura_precisao",
+   "categoriaFabricante": "agricultura-de-precisao",
+   "url": "https://www.stara.com.br/produtos-servicos/agricultura-de-precisao/produto/topper-driver-3",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "stara-zero-amassamento-agricultura-de-precisao",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Zero Amassamento | Agricultura de Precisão",
+   "linha": "Zero Amassamento | Agricultura de Precisão",
+   "familia": "agricultura_precisao",
+   "categoriaFabricante": "agricultura-de-precisao",
+   "url": "https://www.stara.com.br/produtos-servicos/agricultura-de-precisao/produto/zero-amassamento",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "stara-reboke-11000",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Reboke 11000",
+   "linha": "Carreta Agrícola Reboke 11000 e 15000",
+   "familia": "carreta_graneleira",
+   "categoriaFabricante": "carretas-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/implementos-agricolas/carretas-agricolas/carreta-agricola-reboke-11000-e-15000",
+   "especificacoes": [
+    {
+     "campo": "Capacidade de carga",
+     "valor": "11 m³"
+    },
+    {
+     "campo": "Tubo de descarga",
+     "valor": "340 mm"
+    },
+    {
+     "campo": "Comprimento do reservatório",
+     "valor": "3,67m"
+    },
+    {
+     "campo": "Largura do reservatório",
+     "valor": "3,20 m"
+    },
+    {
+     "campo": "Altura de descarga com rodado standart",
+     "valor": "4.120 mm *pneu 18.4-30"
+    },
+    {
+     "campo": "Rodado Standard",
+     "valor": "18.4-30"
+    },
+    {
+     "campo": "Rodado opcional",
+     "valor": "18.4-26, 18.4-34, 18.4-34 (aros)"
+    },
+    {
+     "campo": "Acionamento de descarga",
+     "valor": "TDP do trator"
+    },
+    {
+     "campo": "Bocal direcional",
+     "valor": "Não"
+    },
+    {
+     "campo": "Pneus",
+     "valor": "-"
+    },
+    {
+     "campo": "Kit combate incêndio",
+     "valor": "Não"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/175-b_r__reboke_15000.pdf"
+   ]
+  },
+  {
+   "id": "stara-reboke-15000",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Reboke 15000",
+   "linha": "Carreta Agrícola Reboke 11000 e 15000",
+   "familia": "carreta_graneleira",
+   "categoriaFabricante": "carretas-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/implementos-agricolas/carretas-agricolas/carreta-agricola-reboke-11000-e-15000",
+   "especificacoes": [
+    {
+     "campo": "Capacidade de carga",
+     "valor": "15 m³"
+    },
+    {
+     "campo": "Tubo de descarga",
+     "valor": "340 mm"
+    },
+    {
+     "campo": "Comprimento do reservatório",
+     "valor": "3,67 m"
+    },
+    {
+     "campo": "Largura do reservatório",
+     "valor": "3,20 m"
+    },
+    {
+     "campo": "Altura de descarga com rodado standart",
+     "valor": "4.160 mm *pneu 23.1-26"
+    },
+    {
+     "campo": "Rodado Standard",
+     "valor": "23.1-26"
+    },
+    {
+     "campo": "Rodado opcional",
+     "valor": "23.1-30 (aros)"
+    },
+    {
+     "campo": "Acionamento de descarga",
+     "valor": "TDP do trator"
+    },
+    {
+     "campo": "Bocal direcional",
+     "valor": "Não"
+    },
+    {
+     "campo": "Pneus",
+     "valor": "-"
+    },
+    {
+     "campo": "Kit combate incêndio",
+     "valor": "Não"
+    },
+    {
+     "campo": "Opcionais",
+     "valor": "Lona e sinaleira"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/175-b_r__reboke_15000.pdf"
+   ]
+  },
+  {
+   "id": "stara-carreta-agricola-reboke-inox",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Carreta Agrícola Reboke Inox",
+   "linha": "Carreta Agrícola Reboke Inox",
+   "familia": "carreta_graneleira",
+   "categoriaFabricante": "carretas-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/implementos-agricolas/carretas-agricolas/carreta-agricola-reboke-inox",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/95-b_r__reboke__inox.pdf"
+   ]
+  },
+  {
+   "id": "stara-carreta-agricola-reboke-ninja",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Carreta Agrícola Reboke Ninja",
+   "linha": "Carreta Agrícola Reboke Ninja",
+   "familia": "carreta_graneleira",
+   "categoriaFabricante": "carretas-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/implementos-agricolas/carretas-agricolas/carreta-agricola-reboke-ninja",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/91-b_r__reboke__ninja_web.pdf"
+   ]
+  },
+  {
+   "id": "stara-escarificador-fox",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Escarificador Fox",
+   "linha": "Escarificador Fox",
+   "familia": "escarificador",
+   "categoriaFabricante": "escarificadores",
+   "url": "https://www.stara.com.br/produtos-servicos/implementos-agricolas/escarificadores/escarificador-fox",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/103-b_r__fox.pdf"
+   ]
+  },
+  {
+   "id": "stara-plaina-hidraulica-niveladora-starplan",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Plaina Hidráulica Niveladora Starplan",
+   "linha": "Plaina Hidráulica Niveladora Starplan",
+   "familia": "plaina_niveladora",
+   "categoriaFabricante": "niveladores-de-solo-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/implementos-agricolas/niveladores-de-solo-agricolas/plaina-hidraulica-niveladora-starplan",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/115-b_r__starplan.pdf"
+   ]
+  },
+  {
+   "id": "stara-plaina-agricola-dianteira-pad",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Plaina Agrícola Dianteira PAD",
+   "linha": "Plaina Agrícola Dianteira PAD",
+   "familia": "plaina",
+   "categoriaFabricante": "plainas-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/implementos-agricolas/plainas-agricolas/plaina-agricola-dianteira-pad",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/107-b_r__p_a_d.pdf"
+   ]
+  },
+  {
+   "id": "stara-plataforma-de-milho-bravissima",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Plataforma de milho Bravíssima",
+   "linha": "Plataforma de milho Bravíssima",
+   "familia": "plataforma_milho",
+   "categoriaFabricante": "plataformas-de-milho",
+   "url": "https://www.stara.com.br/produtos-servicos/implementos-agricolas/plataformas-de-milho/plataforma-de-milho-bravissima",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/186-b_r__bravi╠üssima.pdf"
+   ]
+  },
+  {
+   "id": "stara-subsolador-asa-laser-canavieiro",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Subsolador Asa Laser Canavieiro",
+   "linha": "Subsolador Asa Laser Canavieiro",
+   "familia": "subsolador",
+   "categoriaFabricante": "subsoladores-implementos-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/implementos-agricolas/subsoladores-implementos-agricolas/subsolador-asa-laser-canavieiro",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/111-b_r__asa_web.pdf"
+   ]
+  },
+  {
+   "id": "stara-bruttus-12000",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Bruttus 12000",
+   "linha": "Distribuidor Agrícola Bruttus 25000, 18000 e 12000",
+   "familia": "distribuidor",
+   "categoriaFabricante": "distribuidores",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/distribuidores/distribuidor-agricola-bruttus-25000-18000-e-12000",
+   "especificacoes": [
+    {
+     "campo": "Sistema de transmissão",
+     "valor": "Hidráulico"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "3,18 m"
+    },
+    {
+     "campo": "Altura de aplicação",
+     "valor": "1,25 m"
+    },
+    {
+     "campo": "Faixa de aplicação",
+     "valor": "6,70 m"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 5500 SL"
+    },
+    {
+     "campo": "Taxa Variável",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de carga",
+     "valor": "12.000 kg ou 7,5 m³"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/87-linha_bruttus.pdf"
+   ]
+  },
+  {
+   "id": "stara-bruttus-25000",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Bruttus 25000",
+   "linha": "Distribuidor Agrícola Bruttus 25000, 18000 e 12000",
+   "familia": "distribuidor",
+   "categoriaFabricante": "distribuidores",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/distribuidores/distribuidor-agricola-bruttus-25000-18000-e-12000",
+   "especificacoes": [
+    {
+     "campo": "Capacidade de carga",
+     "valor": "25.000 kg ou 15,60 m³"
+    },
+    {
+     "campo": "Sistema de transmissão",
+     "valor": "Hidráulico"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "3,18 m"
+    },
+    {
+     "campo": "Altura de aplicação",
+     "valor": "1,37 m"
+    },
+    {
+     "campo": "Faixa de aplicação",
+     "valor": "11,10 m"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 5500 VT"
+    },
+    {
+     "campo": "Taxa Variável",
+     "valor": "sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria",
+     "valor": "sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/87-linha_bruttus.pdf"
+   ]
+  },
+  {
+   "id": "stara-bruttus-18000",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Bruttus 18000",
+   "linha": "Distribuidor Agrícola Bruttus 25000, 18000 e 12000",
+   "familia": "distribuidor",
+   "categoriaFabricante": "distribuidores",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/distribuidores/distribuidor-agricola-bruttus-25000-18000-e-12000",
+   "especificacoes": [
+    {
+     "campo": "Capacidade de carga",
+     "valor": "18.000 kg ou 11,25 m³"
+    },
+    {
+     "campo": "Sistema de transmissão",
+     "valor": "Hidráulico"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "3,18 m"
+    },
+    {
+     "campo": "Altura de aplicação",
+     "valor": "1,45 m"
+    },
+    {
+     "campo": "Faixa de aplicação",
+     "valor": "9 m"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 5500 SL"
+    },
+    {
+     "campo": "Taxa Variável",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/87-linha_bruttus.pdf"
+   ]
+  },
+  {
+   "id": "stara-hercules-10000-inox",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Hércules 10000 Inox",
+   "linha": "Distribuidor Agrícola Hércules 24000, 15000 e 10000 Inox",
+   "familia": "distribuidor",
+   "categoriaFabricante": "distribuidores",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/distribuidores/distribuidor-agricola-hercules-24000-15000-e-10000-inox",
+   "especificacoes": [
+    {
+     "campo": "Comprimento",
+     "valor": "6,30 m"
+    },
+    {
+     "campo": "Capacidade de carga e volume",
+     "valor": "10.000 kg ou 5 m³"
+    },
+    {
+     "campo": "Vazão",
+     "valor": "14 kg/ha a 8.750 kg/ha (dependendo do produto e velocidade)"
+    },
+    {
+     "campo": "Potência requerida",
+     "valor": "Trator com potência mínima de 100 cv"
+    },
+    {
+     "campo": "Comporta dupla",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Taxa Variável",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/71-b_r__he╠ürcules__arrasto.pdf"
+   ]
+  },
+  {
+   "id": "stara-hercules-15000-inox",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Hércules 15000 Inox",
+   "linha": "Distribuidor Agrícola Hércules 24000, 15000 e 10000 Inox",
+   "familia": "distribuidor",
+   "categoriaFabricante": "distribuidores",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/distribuidores/distribuidor-agricola-hercules-24000-15000-e-10000-inox",
+   "especificacoes": [
+    {
+     "campo": "Comprimento",
+     "valor": "6,85 m"
+    },
+    {
+     "campo": "Capacidade de carga e volume",
+     "valor": "15.000 kg ou 7,5 m³"
+    },
+    {
+     "campo": "Vazão",
+     "valor": "14 kg/ha a 6.000 kg/ha (dependendo do produto e velocidade)"
+    },
+    {
+     "campo": "Potência requerida",
+     "valor": "Trator com potência mínima de 150 cv"
+    },
+    {
+     "campo": "Comporta dupla",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Taxa Variável",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Câmera traseira",
+     "valor": "Sim (opcional)"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/71-b_r__he╠ürcules__arrasto.pdf"
+   ]
+  },
+  {
+   "id": "stara-hercules-24000-inox",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Hércules 24000 Inox",
+   "linha": "Distribuidor Agrícola Hércules 24000, 15000 e 10000 Inox",
+   "familia": "distribuidor",
+   "categoriaFabricante": "distribuidores",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/distribuidores/distribuidor-agricola-hercules-24000-15000-e-10000-inox",
+   "especificacoes": [
+    {
+     "campo": "Comprimento",
+     "valor": "8,45 m"
+    },
+    {
+     "campo": "Capacidade de carga e volume",
+     "valor": "24.000 kg ou 12 m³"
+    },
+    {
+     "campo": "Vazão",
+     "valor": "14 kg/ha a 8.750 kg/ha (dependendo do produto e velocidade)"
+    },
+    {
+     "campo": "Potência requerida",
+     "valor": "Trator com potência mínima de 180 cv"
+    },
+    {
+     "campo": "Taxa Variável",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Câmera traseira",
+     "valor": "Não"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/71-b_r__he╠ürcules__arrasto.pdf"
+   ]
+  },
+  {
+   "id": "stara-hercules-24000-c",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Hércules 24000 C",
+   "linha": "Distribuidor Agrícola Hércules 24000 Caminhão",
+   "familia": "distribuidor",
+   "categoriaFabricante": "distribuidores",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/distribuidores/distribuidor-agricola-hercules-24000-c",
+   "especificacoes": [
+    {
+     "campo": "Comprimento",
+     "valor": "9 m até 10 m"
+    },
+    {
+     "campo": "Capacidade de carga e volume",
+     "valor": "24.000 kg ou 12 m³"
+    },
+    {
+     "campo": "Vazão",
+     "valor": "14 kg/ha a 8.750 kg/ha com faixa de 14 metros"
+    },
+    {
+     "campo": "Potência requerida",
+     "valor": "-"
+    },
+    {
+     "campo": "Comporta dupla",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Taxa Variável",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Câmera traseira",
+     "valor": "Não"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/59-b_r__hércules__caminhão__w_e_b.pdf"
+   ]
+  },
+  {
+   "id": "stara-hercules-4-0",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Hércules 4.0",
+   "linha": "Distribuidor Agrícola Hércules 4.0",
+   "familia": "distribuidor",
+   "categoriaFabricante": "distribuidores",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/distribuidores/distribuidor-agricola-hercules-40",
+   "especificacoes": [
+    {
+     "campo": "Vão livre do solo",
+     "valor": "1,40 m"
+    },
+    {
+     "campo": "Abertura do rodado",
+     "valor": "De 2,70 a 3,30 m"
+    },
+    {
+     "campo": "Motor",
+     "valor": "Eletrônico Cummins de 200 cv"
+    },
+    {
+     "campo": "Disco",
+     "valor": "27-36"
+    },
+    {
+     "campo": "Largura de distribuição",
+     "valor": "Até 36 m"
+    },
+    {
+     "campo": "Giro Inteligente nas 4 Rodas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Vazão",
+     "valor": "De 15 kg/ha a 1.250 kg/ha (dependendo do produto e velocidade)"
+    },
+    {
+     "campo": "Capacidade de carga",
+     "valor": "4.000 kg ou 4 m³"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/79-b_r__hércules_4.0.pdf"
+   ]
+  },
+  {
+   "id": "stara-hercules-6-0",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Hércules 6.0",
+   "linha": "Distribuidor Agrícola Hércules 6.0",
+   "familia": "distribuidor",
+   "categoriaFabricante": "distribuidores",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/distribuidores/distribuidor-agricola-hercules-60",
+   "especificacoes": [
+    {
+     "campo": "Capacidade de carga",
+     "valor": "6.000 kg ou 6 m³"
+    },
+    {
+     "campo": "Vão livre do solo",
+     "valor": "1,37 m"
+    },
+    {
+     "campo": "Abertura do rodado",
+     "valor": "De 2,90 a 3,50 m"
+    },
+    {
+     "campo": "Motor",
+     "valor": "Eletrônico MWM de 220 cv Turbo"
+    },
+    {
+     "campo": "Disco",
+     "valor": "27-36"
+    },
+    {
+     "campo": "Largura de distribuição",
+     "valor": "Até 36 m"
+    },
+    {
+     "campo": "Giro Inteligente nas 4 Rodas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Vazão",
+     "valor": "De 15 kg/ha a 1.500 kg/ha (dependendo do produto e velocidade)"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/75-b_r__he╠ürcules_6.0.pdf"
+   ]
+  },
+  {
+   "id": "stara-distribuidor-agricola-twister-1500",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Distribuidor Agrícola Twister 1500",
+   "linha": "Distribuidor Agrícola Twister 1500",
+   "familia": "distribuidor",
+   "categoriaFabricante": "distribuidores",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/distribuidores/distribuidor-agricola-twister-1500",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/67-b_r__twister_web.pdf"
+   ]
+  },
+  {
+   "id": "stara-hercules-9-0",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Hércules 9.0",
+   "linha": "Distribuidor Agrícola Hércules 9.0",
+   "familia": "distribuidor",
+   "categoriaFabricante": "distribuidores",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/distribuidores/hercules-90",
+   "especificacoes": [
+    {
+     "campo": "Capacidade de carga",
+     "valor": "9.000 kg ou 9 m³"
+    },
+    {
+     "campo": "Vão livre do solo",
+     "valor": "1,53 m"
+    },
+    {
+     "campo": "Abertura do rodado",
+     "valor": "2,90 a 3,60 m"
+    },
+    {
+     "campo": "Motor",
+     "valor": "Volvo 6 cilindros - 300 CV"
+    },
+    {
+     "campo": "Disco",
+     "valor": "27 - 36"
+    },
+    {
+     "campo": "Largura de distribuição",
+     "valor": "27 a 36 m"
+    },
+    {
+     "campo": "Giro Inteligente nas 4 Rodas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Vazão",
+     "valor": "De 15 kg/ha a 1.500 kg/ha (dependendo do produto e velocidade)"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/215-b_r__he╠ürcules_9.0__w_e_b.pdf"
+   ]
+  },
+  {
+   "id": "stara-absoluta-27-24",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Absoluta 27 - 24",
+   "linha": "Plantadeira Absoluta",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-absoluta",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "27 x 45 cm, 24 x 50 cm, 19 x 60 cm, 16 x 76 cm, 14 x 90 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "4.266 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "Não"
+    },
+    {
+     "campo": "Capacidade do reservatório de pulverização no sulco",
+     "valor": "2.400 l"
+    },
+    {
+     "campo": "Capacidade de sementes miúdas",
+     "valor": "1.100 l"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "3,20 m"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Calibrada de fábrica",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/37-b_r__absoluta.pdf"
+   ]
+  },
+  {
+   "id": "stara-absoluta-33-30",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Absoluta 33 - 30",
+   "linha": "Plantadeira Absoluta",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-absoluta",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "33 x 45 cm, 30 x 50 cm, 25x 60 cm, 20 x 76 cm, 18 x 90 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "4.266 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "Não"
+    },
+    {
+     "campo": "Capacidade do reservatório de pulverização no sulco",
+     "valor": "2.400 l"
+    },
+    {
+     "campo": "Capacidade de sementes miúdas",
+     "valor": "1.100 l"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "3,20 m"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6550"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Calibrada de fábrica",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/37-b_r__absoluta.pdf"
+   ]
+  },
+  {
+   "id": "stara-absoluta-35-32",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Absoluta 35 - 32",
+   "linha": "Plantadeira Absoluta",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-absoluta",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "35 x 45 cm, 32 x 50 cm, 27 x 60 cm, 20 x 76 cm, 18 x 90 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "4.266 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "Não"
+    },
+    {
+     "campo": "Capacidade do reservatório de pulverização no sulco",
+     "valor": "2.400 l"
+    },
+    {
+     "campo": "Capacidade de sementes miúdas",
+     "valor": "1.100 l"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "3,20 m"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Calibrada de fábrica",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/37-b_r__absoluta.pdf"
+   ]
+  },
+  {
+   "id": "stara-absoluta-39-36",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Absoluta 39 - 36",
+   "linha": "Plantadeira Absoluta",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-absoluta",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "39 x 45 cm, 36 x 50 cm, 29 x 60 cm, 24 x 76 cm, 20 x 90 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "5.700 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "Não"
+    },
+    {
+     "campo": "Capacidade do reservatório de pulverização no sulco",
+     "valor": "3.200 l"
+    },
+    {
+     "campo": "Capacidade de sementes miúdas",
+     "valor": "1.100 l"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "3,20 m"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Calibrada de fábrica",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/37-b_r__absoluta.pdf"
+   ]
+  },
+  {
+   "id": "stara-absoluta-45-40",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Absoluta 45 - 40",
+   "linha": "Plantadeira Absoluta",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-absoluta",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "45 x 45 cm, 40 x 50 cm, 33 x 60 cm, 26 x 76 cm, 22 x 90 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "5.700 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "Não"
+    },
+    {
+     "campo": "Capacidade do reservatório de pulverização no sulco",
+     "valor": "3.200 l"
+    },
+    {
+     "campo": "Capacidade de sementes miúdas",
+     "valor": "1.100 l"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "3,20 m"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Calibrada de fábrica",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/37-b_r__absoluta.pdf"
+   ]
+  },
+  {
+   "id": "stara-absoluta-49-44",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Absoluta 49 - 44",
+   "linha": "Plantadeira Absoluta",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-absoluta",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "49 x 45 cm, 44 x 50 cm, 37 x 60 cm, 30 x 76 cm, 24 x 90 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "5.700 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "Não"
+    },
+    {
+     "campo": "Capacidade do reservatório de pulverização no sulco",
+     "valor": "3.200 l"
+    },
+    {
+     "campo": "Capacidade de sementes miúdas",
+     "valor": "1.100 l"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "3,20 m"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Calibrada de fábrica",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/37-b_r__absoluta.pdf"
+   ]
+  },
+  {
+   "id": "stara-plantadeira-agricola-cinderela-stara-maquina-de-plantio",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Plantadeira Agrícola Cinderela Stara: Máquina de plantio",
+   "linha": "Plantadeira Agrícola Cinderela Stara: Máquina de plantio",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-cinderela",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/33-b_r__cinderela.pdf"
+   ]
+  },
+  {
+   "id": "stara-estrela-18-21",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Estrela 18 - 21",
+   "linha": "Plantadeira Estrela",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-estrela",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "15 x 60 cm, 18 x 50 cm, 21 x 45 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "3.000 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "3.035 l"
+    },
+    {
+     "campo": "Capacidade do reservatório de pulverização no sulco",
+     "valor": "1.200 l"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "-"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Calibrada de fábrica",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/55-b_r__estrela.pdf"
+   ]
+  },
+  {
+   "id": "stara-estrela-20-23",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Estrela 20 - 23",
+   "linha": "Plantadeira Estrela",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-estrela",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "17 x 60 cm, 20 x 50 cm, 23 x 45 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "3.000 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "3.035 l"
+    },
+    {
+     "campo": "Capacidade do reservatório de pulverização no sulco",
+     "valor": "1.200 l"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "-"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Calibrada de fábrica",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/55-b_r__estrela.pdf"
+   ]
+  },
+  {
+   "id": "stara-estrela-22-25",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Estrela 22 - 25",
+   "linha": "Plantadeira Estrela",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-estrela",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "19 x 60 cm, 22 x 50 cm, 25 x 45 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "3.000 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "3.035 l"
+    },
+    {
+     "campo": "Capacidade do reservatório de pulverização no sulco",
+     "valor": "1.200 l"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "-"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Calibrada de fábrica",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/55-b_r__estrela.pdf"
+   ]
+  },
+  {
+   "id": "stara-estrela-24-27",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Estrela 24 - 27",
+   "linha": "Plantadeira Estrela",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-estrela",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "21 x 60 cm, 24 x 50 cm, 27 x 45 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "4.000 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "4.016 l"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "-"
+    },
+    {
+     "campo": "Capacidade do reservatório de pulverização no sulco",
+     "valor": "1.500 l"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Calibrada de fábrica",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/55-b_r__estrela.pdf"
+   ]
+  },
+  {
+   "id": "stara-estrela-30-33",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Estrela 30 - 33",
+   "linha": "Plantadeira Estrela",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-estrela",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "25 x 60 cm, 30 x 50 cm, 33 x 45 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "4.000 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "4.016 l"
+    },
+    {
+     "campo": "Capacidade do reservatório de pulverização no sulco",
+     "valor": "1.500 l"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "-"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Calibrada de fábrica",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/55-b_r__estrela.pdf"
+   ]
+  },
+  {
+   "id": "stara-plantadeira-eva",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Plantadeira Eva",
+   "linha": "Plantadeira Eva",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-eva",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/171-b_r__eva__w_e_b.pdf"
+   ]
+  },
+  {
+   "id": "stara-princesa-14x50",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Princesa 14x50",
+   "linha": "Plantadeira agrícola Princesa: precisão no plantio",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-princesa",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "14 x 50 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "2.200 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "3.000 l"
+    },
+    {
+     "campo": "Capacidade do reservatório de pulverização no sulco",
+     "valor": "1.250 l"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "3,20 m"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Calibrada de fábrica",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/29-b_r__princesa__w_e_b.pdf"
+   ]
+  },
+  {
+   "id": "stara-princesa-16x45",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Princesa 16x45",
+   "linha": "Plantadeira agrícola Princesa: precisão no plantio",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-princesa",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "16 x 45 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "2.200 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "3.000 l"
+    },
+    {
+     "campo": "Capacidade do reservatório de pulverização no sulco",
+     "valor": "1.250 l"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "3,20 m"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Calibrada de fábrica",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/29-b_r__princesa__w_e_b.pdf"
+   ]
+  },
+  {
+   "id": "stara-princesa-16x50",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Princesa 16x50",
+   "linha": "Plantadeira agrícola Princesa: precisão no plantio",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-princesa",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "16 x 50 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "2.200 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "3.000 l"
+    },
+    {
+     "campo": "Capacidade do reservatório de pulverização no sulco",
+     "valor": "1.250 l"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "3,20 m"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Calibrada de fábrica",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/29-b_r__princesa__w_e_b.pdf"
+   ]
+  },
+  {
+   "id": "stara-princesa-18x45",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Princesa 18x45",
+   "linha": "Plantadeira agrícola Princesa: precisão no plantio",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-princesa",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "18 x 45 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "2.200 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "3.000 l"
+    },
+    {
+     "campo": "Capacidade do reservatório de pulverização no sulco",
+     "valor": "1.250 l"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "3,20 m"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Calibrada de fábrica",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/29-b_r__princesa__w_e_b.pdf"
+   ]
+  },
+  {
+   "id": "stara-princesa-18x50",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Princesa 18x50",
+   "linha": "Plantadeira agrícola Princesa: precisão no plantio",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-princesa",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "18 x 50 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "2.200 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "3.000 l"
+    },
+    {
+     "campo": "Capacidade do reservatório de pulverização no sulco",
+     "valor": "1.250 l"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "3,20 m"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Calibrada de fábrica",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/29-b_r__princesa__w_e_b.pdf"
+   ]
+  },
+  {
+   "id": "stara-princesa-20x45",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Princesa 20x45",
+   "linha": "Plantadeira agrícola Princesa: precisão no plantio",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/plantadeira-princesa",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "20 x 45 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "2.200 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "3.000 l"
+    },
+    {
+     "campo": "Capacidade do reservatório de pulverização no sulco",
+     "valor": "1.250 l"
+    },
+    {
+     "campo": "Largura de transporte",
+     "valor": "3,20 m"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Calibrada de fábrica",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/29-b_r__princesa__w_e_b.pdf"
+   ]
+  },
+  {
+   "id": "stara-ceres-1870",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Ceres 1870",
+   "linha": "Semeadora Agrícola: Ceres e Ceres Master",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/semeadora-agricola-ceres-e-ceres-master",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "12 x 17 cm, 5 x 45 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Não"
+    },
+    {
+     "campo": "Potência requerida",
+     "valor": "60 cv"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "380 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "450 l"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Não"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Não"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Não"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Não"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/21-b_r__ceres_master.pdf"
+   ]
+  },
+  {
+   "id": "stara-ceres-2210",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Ceres 2210",
+   "linha": "Semeadora Agrícola: Ceres e Ceres Master",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/semeadora-agricola-ceres-e-ceres-master",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "14 x 17 cm, 6 x 45 cm, 5 x 50 cm"
+    },
+    {
+     "campo": "Pulverização no sulco",
+     "valor": "Não"
+    },
+    {
+     "campo": "Potência requerida",
+     "valor": "72 cv"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "440 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "540 l"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Não"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Não"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Não"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Não"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/21-b_r__ceres_master.pdf"
+   ]
+  },
+  {
+   "id": "stara-ceres-2550",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Ceres 2550",
+   "linha": "Semeadora Agrícola: Ceres e Ceres Master",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/semeadora-agricola-ceres-e-ceres-master",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "16 x 17 cm, 6 x 45 cm"
+    },
+    {
+     "campo": "Potência requerida",
+     "valor": "80 cv"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "500 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "620 l"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Não"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Não"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Não"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Não"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/21-b_r__ceres_master.pdf"
+   ]
+  },
+  {
+   "id": "stara-ceres-2890",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Ceres 2890",
+   "linha": "Semeadora Agrícola: Ceres e Ceres Master",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/semeadora-agricola-ceres-e-ceres-master",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "18 x 17 cm, 8 x 40 cm, 7 x 45 cm"
+    },
+    {
+     "campo": "Potência requerida",
+     "valor": "90 cv"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "560 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "690 l"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Não"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Não"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Não"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Não"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/21-b_r__ceres_master.pdf"
+   ]
+  },
+  {
+   "id": "stara-ceres-master-3230",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Ceres Master 3230",
+   "linha": "Semeadora Agrícola: Ceres e Ceres Master",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/semeadora-agricola-ceres-e-ceres-master",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "20 x 17 cm, 8 x 45 cm"
+    },
+    {
+     "campo": "Potência requerida",
+     "valor": "96 cv"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "860 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "1.170 l"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Não"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Não"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Não"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Não"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/21-b_r__ceres_master.pdf"
+   ]
+  },
+  {
+   "id": "stara-ceres-master-3570",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Ceres Master 3570",
+   "linha": "Semeadora Agrícola: Ceres e Ceres Master",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/semeadora-agricola-ceres-e-ceres-master",
+   "especificacoes": [
+    {
+     "campo": "Espaçamento de linha",
+     "valor": "22 x 17 cm, 9 x 45 cm"
+    },
+    {
+     "campo": "Potência requerida",
+     "valor": "108 cv"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "950 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "1.290 l"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Não"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Não"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Não"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Não"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/21-b_r__ceres_master.pdf"
+   ]
+  },
+  {
+   "id": "stara-guapita-33-smartphone",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Guapita 33 Smartphone",
+   "linha": "Semeadora Agrícola Guapita",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/semeadora-agricola-guapita",
+   "especificacoes": [
+    {
+     "campo": "Potência requerida",
+     "valor": "-"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "1.465 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "1.915 l"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Smartphone"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Não"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Não"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/51-b_r__guapita_web.pdf"
+   ]
+  },
+  {
+   "id": "stara-guapita-33",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Guapita 33",
+   "linha": "Semeadora Agrícola Guapita",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/semeadora-agricola-guapita",
+   "especificacoes": [
+    {
+     "campo": "Potência requerida",
+     "valor": "-"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "1.465 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "1.915 l"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 5500 VT"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/51-b_r__guapita_web.pdf"
+   ]
+  },
+  {
+   "id": "stara-guapa-24-28",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Guapa - 24 -28",
+   "linha": "Semeadora Agrícola: Linha Guapa",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/semeadora-agricola-linha-guapa",
+   "especificacoes": [
+    {
+     "campo": "Potência requerida",
+     "valor": "5 cv/linha"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "24 linhas 1.035 l - 28 linhas 1.210 l"
+    },
+    {
+     "campo": "Cacidade de sementes (máquina somente sementes)",
+     "valor": "2.500 l (28 linhas) / 2.100 l (24 linhas)"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "*28 linhas 1.675 l- 24 linhas 1.405 l"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Não"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Não"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Não"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Não"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/41-b_r__guapa.pdf"
+   ]
+  },
+  {
+   "id": "stara-guapa-supra-e-guapa-supra-winter-60",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Guapa Supra e Guapa Supra Winter - 60",
+   "linha": "Semeadora Agrícola: Linha Guapa",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras-e-semeadoras",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/plantadeiras-e-semeadoras/semeadora-agricola-linha-guapa",
+   "especificacoes": [
+    {
+     "campo": "Potência requerida",
+     "valor": "5 cv/linha"
+    },
+    {
+     "campo": "Capacidade de semente",
+     "valor": "2.050 l - 3.060 l - 2.380 l | 5.150 l"
+    },
+    {
+     "campo": "Capacidade de fertilizante",
+     "valor": "3100 l - 1990 l - 2740 l"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 5500 VT"
+    },
+    {
+     "campo": "Desligamento Linha a Linha",
+     "valor": "Não"
+    },
+    {
+     "campo": "Zero Amassamento",
+     "valor": "Não"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/41-b_r__guapa.pdf"
+   ]
+  },
+  {
+   "id": "stara-pulverizador-agricola-autopropelido-imperador-eco-spray",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Pulverizador Agrícola Autopropelido Imperador Eco Spray",
+   "linha": "Pulverizador Agrícola Autopropelido Imperador Eco Spray",
+   "familia": "pulverizador_autopropelido",
+   "categoriaFabricante": "pulverizadores-maquinas-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/pulverizadores-maquinas-agricolas/imperador-eco-spray",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/207-b_r__eco_spray__elitizado.pdf"
+   ]
+  },
+  {
+   "id": "stara-imperador-3-0",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Imperador 3.0",
+   "linha": "Pulverizador Agrícola Autopropelido Imperador 3.0",
+   "familia": "pulverizador_autopropelido",
+   "categoriaFabricante": "pulverizadores-maquinas-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/pulverizadores-maquinas-agricolas/pulverizador-agricola-autopropelido-distribuidor-imperador-30",
+   "especificacoes": [
+    {
+     "campo": "Barra",
+     "valor": "27 e 30 m"
+    },
+    {
+     "campo": "Altura de aplicação",
+     "valor": "0,87 a 2,30 m (sem Sistema Sobe e Desce), 0,80 a 2,63 m (com Sistema Sobe e Desce)"
+    },
+    {
+     "campo": "Reservatório de calda",
+     "valor": "2.400 l"
+    },
+    {
+     "campo": "Motor",
+     "valor": "Eletrônico Cummins de 223 cv turbo"
+    },
+    {
+     "campo": "Giro Inteligente nas 4 Rodas",
+     "valor": "Apenas no modelo Top"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 5500 VT"
+    },
+    {
+     "campo": "Sistema Recirculante Contínuo",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Dupla Linha",
+     "valor": "Não"
+    },
+    {
+     "campo": "Bico a Bico",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sobe e Desce",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Distribuição",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Ponte Verde",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/13-b_r__imperador_3.0.pdf"
+   ]
+  },
+  {
+   "id": "stara-imperador-3-0-ca",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Imperador 3.0 CA",
+   "linha": "Pulverizador Agrícola Autopropelido Imperador 3.0",
+   "familia": "pulverizador_autopropelido",
+   "categoriaFabricante": "pulverizadores-maquinas-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/pulverizadores-maquinas-agricolas/pulverizador-agricola-autopropelido-distribuidor-imperador-30",
+   "especificacoes": [
+    {
+     "campo": "Barra",
+     "valor": "27 m"
+    },
+    {
+     "campo": "Altura de aplicação",
+     "valor": "0,72 a 2,15 m (Pneu 380/80 R38), 0,62 a 2,05 m (Pneu 540/65 R28)"
+    },
+    {
+     "campo": "Reservatório de calda",
+     "valor": "2.400 l"
+    },
+    {
+     "campo": "Motor",
+     "valor": "Eletrônico Cummins de 223 cv Turbo"
+    },
+    {
+     "campo": "Giro Inteligente nas 4 Rodas",
+     "valor": "Não"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 5500 VT"
+    },
+    {
+     "campo": "Sistema Recirculante Contínuo",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Dupla Linha",
+     "valor": "Não"
+    },
+    {
+     "campo": "Bico a Bico",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sobe e Desce",
+     "valor": "Não"
+    },
+    {
+     "campo": "Distribuição",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Ponte Verde",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/13-b_r__imperador_3.0.pdf"
+   ]
+  },
+  {
+   "id": "stara-imperador-2000",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Imperador 2000",
+   "linha": "Pulverizadores Agrícolas Autopropelidos Imperador 2000 e Imperador 2000 PV",
+   "familia": "pulverizador_autopropelido",
+   "categoriaFabricante": "pulverizadores-maquinas-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/pulverizadores-maquinas-agricolas/pulverizador-agricola-autopropelido-imperador-2000-e-2000-pv",
+   "especificacoes": [
+    {
+     "campo": "Barra",
+     "valor": "27 m"
+    },
+    {
+     "campo": "Altura de aplicação",
+     "valor": "2 m"
+    },
+    {
+     "campo": "Reservatório de calda",
+     "valor": "2.000 l"
+    },
+    {
+     "campo": "Motor",
+     "valor": "Eletrônico Cummins de 200 cv turbo intercooler"
+    },
+    {
+     "campo": "Giro Inteligente nas 4 Rodas",
+     "valor": "Não"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 5500 SL"
+    },
+    {
+     "campo": "Sistema Recirculante Contínuo",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Dupla Linha",
+     "valor": "Não"
+    },
+    {
+     "campo": "Bico a Bico",
+     "valor": "Não"
+    },
+    {
+     "campo": "Sobe e Desce",
+     "valor": "Não"
+    },
+    {
+     "campo": "Distribuição",
+     "valor": "Não"
+    },
+    {
+     "campo": "Ponte Verde",
+     "valor": "Não"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Não"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/184-b_r__imperador_2000_p_v_e2000.pdf"
+   ]
+  },
+  {
+   "id": "stara-imperador-2000-intermediario",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Imperador 2000 Intermediário",
+   "linha": "Pulverizadores Agrícolas Autopropelidos Imperador 2000 e Imperador 2000 PV",
+   "familia": "pulverizador_autopropelido",
+   "categoriaFabricante": "pulverizadores-maquinas-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/pulverizadores-maquinas-agricolas/pulverizador-agricola-autopropelido-imperador-2000-e-2000-pv",
+   "especificacoes": [
+    {
+     "campo": "Barra",
+     "valor": "27 e 30 m"
+    },
+    {
+     "campo": "Altura de aplicação",
+     "valor": "2,20 m"
+    },
+    {
+     "campo": "Reservatório de calda",
+     "valor": "2.000 l"
+    },
+    {
+     "campo": "Motor",
+     "valor": "Eletrônico Cummins de 200 cv turbo intercooler"
+    },
+    {
+     "campo": "Giro Inteligente nas 4 Rodas",
+     "valor": "Não"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 5500 VT"
+    },
+    {
+     "campo": "Sistema Recirculante Contínuo",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Dupla Linha",
+     "valor": "Não"
+    },
+    {
+     "campo": "Bico a Bico",
+     "valor": "Não"
+    },
+    {
+     "campo": "Sobe e Desce",
+     "valor": "Não"
+    },
+    {
+     "campo": "Distribuição",
+     "valor": "Não"
+    },
+    {
+     "campo": "Ponte Verde",
+     "valor": "Não"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/184-b_r__imperador_2000_p_v_e2000.pdf"
+   ]
+  },
+  {
+   "id": "stara-imperador-2000-top",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Imperador 2000 Top",
+   "linha": "Pulverizadores Agrícolas Autopropelidos Imperador 2000 e Imperador 2000 PV",
+   "familia": "pulverizador_autopropelido",
+   "categoriaFabricante": "pulverizadores-maquinas-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/pulverizadores-maquinas-agricolas/pulverizador-agricola-autopropelido-imperador-2000-e-2000-pv",
+   "especificacoes": [
+    {
+     "campo": "Barra",
+     "valor": "30 m"
+    },
+    {
+     "campo": "Altura de aplicação",
+     "valor": "2,20 m"
+    },
+    {
+     "campo": "Reservatório de calda",
+     "valor": "2.000 l"
+    },
+    {
+     "campo": "Motor",
+     "valor": "Eletrônico Cummins de 200 cv turbo intercooler"
+    },
+    {
+     "campo": "Giro Inteligente nas 4 Rodas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 5500 VT"
+    },
+    {
+     "campo": "Sistema Recirculante Contínuo",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Dupla Linha",
+     "valor": "Não"
+    },
+    {
+     "campo": "Bico a Bico",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sobe e Desce",
+     "valor": "Não"
+    },
+    {
+     "campo": "Distribuição",
+     "valor": "Não"
+    },
+    {
+     "campo": "Ponte Verde",
+     "valor": "Não"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/184-b_r__imperador_2000_p_v_e2000.pdf"
+   ]
+  },
+  {
+   "id": "stara-imperador-2000-pv-intermediario",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Imperador 2000 PV Intermediário",
+   "linha": "Pulverizadores Agrícolas Autopropelidos Imperador 2000 e Imperador 2000 PV",
+   "familia": "pulverizador_autopropelido",
+   "categoriaFabricante": "pulverizadores-maquinas-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/pulverizadores-maquinas-agricolas/pulverizador-agricola-autopropelido-imperador-2000-e-2000-pv",
+   "especificacoes": [
+    {
+     "campo": "Barra",
+     "valor": "27 e 30 m"
+    },
+    {
+     "campo": "Altura de aplicação",
+     "valor": "2,20 m"
+    },
+    {
+     "campo": "Reservatório de calda",
+     "valor": "2.000 l"
+    },
+    {
+     "campo": "Motor",
+     "valor": "Eletrônico Cummins de 200 cv turbo intercooler"
+    },
+    {
+     "campo": "Giro Inteligente nas 4 Rodas",
+     "valor": "Não"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 5500 VT"
+    },
+    {
+     "campo": "Sistema Recirculante Contínuo",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Dupla Linha",
+     "valor": "Não"
+    },
+    {
+     "campo": "Bico a Bico",
+     "valor": "Não"
+    },
+    {
+     "campo": "Sobe e Desce",
+     "valor": "Não"
+    },
+    {
+     "campo": "Distribuição",
+     "valor": "Não"
+    },
+    {
+     "campo": "Ponte Verde",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/184-b_r__imperador_2000_p_v_e2000.pdf"
+   ]
+  },
+  {
+   "id": "stara-imperador-2000-pv-top",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Imperador 2000 PV Top",
+   "linha": "Pulverizadores Agrícolas Autopropelidos Imperador 2000 e Imperador 2000 PV",
+   "familia": "pulverizador_autopropelido",
+   "categoriaFabricante": "pulverizadores-maquinas-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/pulverizadores-maquinas-agricolas/pulverizador-agricola-autopropelido-imperador-2000-e-2000-pv",
+   "especificacoes": [
+    {
+     "campo": "Barra",
+     "valor": "30 m"
+    },
+    {
+     "campo": "Altura de aplicação",
+     "valor": "2,20 m"
+    },
+    {
+     "campo": "Reservatório de calda",
+     "valor": "2.000 l"
+    },
+    {
+     "campo": "Motor",
+     "valor": "Eletrônico Cummins de 200 cv turbo intercooler"
+    },
+    {
+     "campo": "Giro Inteligente nas 4 Rodas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 5500 VT"
+    },
+    {
+     "campo": "Sistema Recirculante Contínuo",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Dupla Linha",
+     "valor": "Não"
+    },
+    {
+     "campo": "Bico a Bico",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sobe e Desce",
+     "valor": "Não"
+    },
+    {
+     "campo": "Distribuição",
+     "valor": "Não"
+    },
+    {
+     "campo": "Ponte Verde",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/184-b_r__imperador_2000_p_v_e2000.pdf"
+   ]
+  },
+  {
+   "id": "stara-imperador-2500-intermediario",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Imperador 2500 Intermediário",
+   "linha": "Pulverizador Agrícola Autopropelido Imperador 2500",
+   "familia": "pulverizador_autopropelido",
+   "categoriaFabricante": "pulverizadores-maquinas-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/pulverizadores-maquinas-agricolas/pulverizador-agricola-autopropelido-imperador-2500",
+   "especificacoes": [
+    {
+     "campo": "Barra",
+     "valor": "30 m"
+    },
+    {
+     "campo": "Altura de aplicação",
+     "valor": "0,80 a 2,20 m"
+    },
+    {
+     "campo": "Reservatório de calda",
+     "valor": "2.500 l"
+    },
+    {
+     "campo": "Motor",
+     "valor": "Eletrônico Cummins de 213 cv turbo intercooler"
+    },
+    {
+     "campo": "Giro Inteligente nas 4 Rodas",
+     "valor": "Não"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 5500 VT"
+    },
+    {
+     "campo": "Sistema Recirculante Contínuo",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Dupla Linha",
+     "valor": "Não"
+    },
+    {
+     "campo": "Bico a Bico",
+     "valor": "Não"
+    },
+    {
+     "campo": "Sobe e Desce",
+     "valor": "Não"
+    },
+    {
+     "campo": "Distribuição",
+     "valor": "Não"
+    },
+    {
+     "campo": "Ponte Verde",
+     "valor": "Não"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/179-b_r__imperador_2500.pdf"
+   ]
+  },
+  {
+   "id": "stara-imperador-2500-top",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Imperador 2500 Top",
+   "linha": "Pulverizador Agrícola Autopropelido Imperador 2500",
+   "familia": "pulverizador_autopropelido",
+   "categoriaFabricante": "pulverizadores-maquinas-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/pulverizadores-maquinas-agricolas/pulverizador-agricola-autopropelido-imperador-2500",
+   "especificacoes": [
+    {
+     "campo": "Barra",
+     "valor": "30 m"
+    },
+    {
+     "campo": "Altura de aplicação",
+     "valor": "0,80 a 2,20 m"
+    },
+    {
+     "campo": "Reservatório de calda",
+     "valor": "2.500 l"
+    },
+    {
+     "campo": "Motor",
+     "valor": "Eletrônico Cummins de 213 cv turbo intercooler"
+    },
+    {
+     "campo": "Giro Inteligente nas 4 Rodas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 5500 VT"
+    },
+    {
+     "campo": "Sistema Recirculante Contínuo",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Dupla Linha",
+     "valor": "Não"
+    },
+    {
+     "campo": "Bico a Bico",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sobe e Desce",
+     "valor": "Não"
+    },
+    {
+     "campo": "Distribuição",
+     "valor": "Não"
+    },
+    {
+     "campo": "Ponte Verde",
+     "valor": "Não"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/179-b_r__imperador_2500.pdf"
+   ]
+  },
+  {
+   "id": "stara-imperador-3000",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Imperador 3000",
+   "linha": "Pulverizador Agrícola Autopropelido Imperador 3000 e 4000",
+   "familia": "pulverizador_autopropelido",
+   "categoriaFabricante": "pulverizadores-maquinas-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/pulverizadores-maquinas-agricolas/pulverizador-agricola-autopropelido-imperador-3000-e-4000",
+   "especificacoes": [
+    {
+     "campo": "Barra",
+     "valor": "30 ou 36 m"
+    },
+    {
+     "campo": "Altura de aplicação",
+     "valor": "2,60 a 3 m (com Sistema Sobe e Desce)"
+    },
+    {
+     "campo": "Reservatório de calda",
+     "valor": "3.000 l"
+    },
+    {
+     "campo": "Motor",
+     "valor": "Eletrônico Cummins de 6.7 - 260 cv Turbo"
+    },
+    {
+     "campo": "Giro Inteligente nas 4 Rodas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Sistema Recirculante Contínuo",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Dupla Linha",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Bico a Bico",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sobe e Desce",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Distribuição",
+     "valor": "Não"
+    },
+    {
+     "campo": "Ponte Verde",
+     "valor": "Não"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/17-b_r__imperador_4000.pdf"
+   ]
+  },
+  {
+   "id": "stara-imperador-4000",
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "modelo": "Imperador 4000",
+   "linha": "Pulverizador Agrícola Autopropelido Imperador 3000 e 4000",
+   "familia": "pulverizador_autopropelido",
+   "categoriaFabricante": "pulverizadores-maquinas-agricolas",
+   "url": "https://www.stara.com.br/produtos-servicos/maquinas-agricolas/pulverizadores-maquinas-agricolas/pulverizador-agricola-autopropelido-imperador-3000-e-4000",
+   "especificacoes": [
+    {
+     "campo": "Barra",
+     "valor": "30 ou 36 m"
+    },
+    {
+     "campo": "Altura de aplicação",
+     "valor": "2,60 a 3 m (com Sistema Sobe e Desce)"
+    },
+    {
+     "campo": "Reservatório de calda",
+     "valor": "4.000 l"
+    },
+    {
+     "campo": "Motor",
+     "valor": "Eletrônico Cummins de 6.7 - 295 cv Turbo"
+    },
+    {
+     "campo": "Giro Inteligente nas 4 Rodas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Controlador",
+     "valor": "Topper 6500"
+    },
+    {
+     "campo": "Sistema Recirculante Contínuo",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Dupla Linha",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Bico a Bico",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sobe e Desce",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Distribuição",
+     "valor": "Não"
+    },
+    {
+     "campo": "Ponte Verde",
+     "valor": "Não"
+    },
+    {
+     "campo": "Conectividade",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Sinal Pago",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Monitoramento de Máquinas",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Syncro",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Telemetria Stara",
+     "valor": "Sim"
+    },
+    {
+     "campo": "Conecta",
+     "valor": "Sim"
+    }
+   ],
+   "origemEspecificacoes": "comparador de modelos da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "prospectos": [
+    "https://cdn.stara.com.br/institucional/uploads/products/prospecto/17-b_r__imperador_4000.pdf"
+   ]
+  }
+ ],
+ "descartados": []
+}

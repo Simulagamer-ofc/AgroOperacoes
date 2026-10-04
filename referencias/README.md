@@ -7,6 +7,8 @@ Módulo independente da interface. Pode ser incorporado ao Nexus Agro 2.23 ou ao
 | `regras-afericao.json` | Regras com escopo, limites, condições, fontes e status de validação; tabela ISO 10625; fórmulas |
 | `avaliador.js` | Avaliação (`avaliar`) e fluxos compostos; funciona no navegador (`window.NexusAvaliador`) e no Node |
 | `catalogo-fabricantes.json` | Fabricantes de máquinas e implementos atuantes no Brasil (identificação; sem parâmetros técnicos) |
+| `modelos/` | Modelos por marca, com especificações copiadas do site do fabricante (`indice.json` lista as marcas) |
+| `ferramentas/coleta/` | Scripts de coleta e consolidação dos modelos |
 | `tests/avaliador.test.js` | Testes: `node --test referencias/tests/*.test.js` |
 
 ## Como o avaliador decide
@@ -59,3 +61,22 @@ Base: lista pública de associadas da **CSMIA/ABIMAQ** (consulta em 04/10/2026),
 - **Site do fabricante:** só é registrado quando o título da página confirma a empresa. Alguns endereços óbvios pertencem a outras empresas: `www.tatu.com.br` é uma fábrica de pré-moldados e `www.ikeda.com.br` é um domínio à venda.
 - **Segmentos e modelos:** começam vazios e são preenchidos fabricante por fabricante, a partir do site ou catálogo oficial.
 - **Uso na regulagem:** este arquivo identifica quem fabrica. Nenhum parâmetro de regulagem vem dele.
+
+## Catálogo de modelos (coleta de 04/10/2026)
+
+| Marca | Modelos | Com especificações | Fonte |
+|---|---|---|---|
+| Stara | 66 | 50 | comparador de modelos do site |
+| John Deere | 170 | 105 | tabelas de especificação (modelos fora de linha descartados) |
+| Massey Ferguson | 160 | 156 | tabelas de modelos |
+| Valtra | 109 | 108 | tabelas de modelos |
+| Case IH | 95 | 95 | dados estruturados da página |
+| Jacto | 187 | 158 | catálogo público do site (mercado Brasil, ativos) |
+| **Total** | **787** | **672** | |
+
+- **Valores:** copiados como texto literal. A releitura de 60 modelos mostrou 99,4% dos valores idênticos à página; o restante são diferenças de formatação.
+- **Uso na regulagem:** as especificações servem para identificar e consultar. Para preencher sozinho um parâmetro de regulagem, o sistema exige confirmação no manual ou folheto do modelo e do ano.
+- **Pendentes:**
+  - New Holland: o robots.txt proíbe a coleta automática da seção Brasil.
+  - Tatu Marchesan: domínio `www.marchesan.com.br` não liberado no ambiente.
+  - Fendt: linha brasileira não verificada.

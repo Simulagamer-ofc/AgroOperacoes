@@ -173,3 +173,23 @@ test('regra suspensa é ignorada; validada sem responsável é apontada na audit
   const c = JSON.parse(JSON.stringify(BANCO)); c.regras.find(r => r.id === 'ADUB-CV-N-01').statusValidacao = 'validada';
   assert.ok(A.auditarBanco(c).some(p => p.includes('validadoPor')));
 });
+
+test('catálogo de modelos: estrutura, ids únicos e origem declarada', () => {
+  const fs = require('node:fs'), path = require('node:path');
+  const dir = path.join(__dirname, '..', 'modelos');
+  const indice = JSON.parse(fs.readFileSync(path.join(dir, 'indice.json'), 'utf8'));
+  let total = 0;
+  for (const m of indice.marcas) {
+    const d = JSON.parse(fs.readFileSync(path.join(__dirname, '..', m.arquivo), 'utf8'));
+    assert.equal(d.modelos.length, m.totalModelos);
+    const ids = new Set();
+    for (const x of d.modelos) {
+      assert.ok(x.id && x.marca && x.modelo && x.url && x.dataConsulta, `campos obrigatórios: ${x.id}`);
+      assert.ok(!ids.has(x.id), `id duplicado ${x.id}`); ids.add(x.id);
+      if (x.especificacoes.length) assert.ok(x.origemEspecificacoes, `origem ausente: ${x.id}`);
+      for (const e of x.especificacoes) assert.ok(e.campo && typeof e.valor === 'string' && !e.valor.includes('\n'));
+    }
+    total += d.modelos.length;
+  }
+  assert.ok(total > 700);
+});

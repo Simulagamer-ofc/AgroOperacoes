@@ -1,0 +1,61 @@
+{
+ "dataConsulta": "2026-10-04",
+ "marcas": [
+  {
+   "marca": "Stara",
+   "fabricanteId": "stara",
+   "arquivo": "modelos/stara.json",
+   "totalModelos": 66,
+   "comEspecificacoes": 50
+  },
+  {
+   "marca": "John Deere",
+   "fabricanteId": "john-deere",
+   "arquivo": "modelos/john-deere.json",
+   "totalModelos": 170,
+   "comEspecificacoes": 105
+  },
+  {
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "arquivo": "modelos/massey-ferguson.json",
+   "totalModelos": 160,
+   "comEspecificacoes": 156
+  },
+  {
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "arquivo": "modelos/valtra.json",
+   "totalModelos": 109,
+   "comEspecificacoes": 108
+  },
+  {
+   "marca": "Case IH",
+   "fabricanteId": "cnh",
+   "arquivo": "modelos/case-ih.json",
+   "totalModelos": 95,
+   "comEspecificacoes": 95
+  },
+  {
+   "marca": "Jacto",
+   "fabricanteId": "jacto",
+   "arquivo": "modelos/jacto.json",
+   "totalModelos": 187,
+   "comEspecificacoes": 158
+  }
+ ],
+ "pendentes": [
+  {
+   "marca": "New Holland",
+   "motivo": "O robots.txt de www.newholland.com proíbe a coleta automática de /pt-br/southamerica; o site de agricultura (agriculture.newholland.com) não está liberado no ambiente."
+  },
+  {
+   "marca": "Tatu Marchesan",
+   "motivo": "Site oficial www.marchesan.com.br não liberado no ambiente."
+  },
+  {
+   "marca": "Fendt",
+   "motivo": "Site respondeu apenas com página da América do Norte; linha brasileira não verificada."
+  }
+ ]
+}
