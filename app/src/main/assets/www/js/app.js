@@ -4,6 +4,8 @@ import { ENTITIES, DATA_STORES, OP_STATUS, MACHINE_STATUS, MAINT_KINDS, MAINT_ST
 
 const APP_VERSION = '0.2.0-beta1';
 const insideApp = location.hostname === 'appassets.androidplatform.net';
+// Página publicada dentro de outro site (ex.: claude.ai): sem download, impressão nem service worker.
+const embedded = window.AGRO_EMBED === true;
 const $ = (sel, root = document) => root.querySelector(sel);
 const esc = L.escapeHtml;
 const today = () => L.localDate();
@@ -147,7 +149,14 @@ function openForm(store, record = null, defaults = {}) {
 }
 
 // ---------- Exportação de arquivos
+function showCopyDialog(name, text) {
+  openModal(`<h3>${esc(name)}</h3><p class="muted">Esta página não pode baixar arquivos. Copie o conteúdo abaixo e cole num arquivo de texto com o nome <strong>${esc(name)}</strong>.</p>
+    <textarea id="copyText" class="copy-text" rows="10" readonly>${esc(text)}</textarea>
+    <div class="actions"><button type="button" class="secondary" data-act="close-modal">Fechar</button><button type="button" class="primary" data-act="copy-text">Copiar</button></div>`);
+}
+
 function saveFile(name, mime, text) {
+  if (embedded) { showCopyDialog(name, text); return; }
   if (window.AgroAndroid && typeof window.AgroAndroid.saveFile === 'function') {
     window.AgroAndroid.saveFile(name, mime, text);
     return;
@@ -214,8 +223,9 @@ function viewDashboard() {
   const ops = state.operations.filter(o => o.date === t).sort(byOpOrder);
   const empty = DATA_STORES.every(s => !state[s].length);
   const onboarding = empty ? `<section class="card card-section"><h3>Comece por aqui</h3><p>Cadastre talhões, máquinas e itens de estoque, ou carregue dados de exemplo para conhecer o aplicativo. Tudo fica salvo neste dispositivo.</p><div class="button-row"><a class="secondary" href="#/cadastros">Ir para Cadastros</a><button class="primary" data-act="sample">Carregar dados de exemplo</button></div></section>` : '';
+  const demo = settings.demo && !empty ? `<section class="card card-section demo-note"><h3>Você está vendo dados de exemplo</h3><p>Explore à vontade: tudo o que você mudar fica salvo só neste navegador. Quando quiser usar com os dados da sua fazenda, apague os exemplos e comece do zero.</p><div class="button-row"><button class="primary" data-act="wipe">Apagar exemplos e começar</button></div></section>` : '';
   return `${pageHeader(settings.farmName || 'Operações da fazenda', 'Acompanhe o trabalho do campo e os registros salvos neste dispositivo.', newButton('operations'))}
-    ${onboarding}
+    ${demo}${onboarding}
     <section class="kpis">
       ${kpi('blue', '◷', 'Programadas hoje', k.scheduled, k.scheduledHint, 'operacoes')}
       ${kpi('green', '▶', 'Em andamento', k.running, k.runningHint, 'operacoes?all=1&status=andamento')}
@@ -402,7 +412,7 @@ function viewReports(params) {
   const typeMax = Math.max(0, ...r.operations.byType.map(x => x.count));
   const hourMax = Math.max(0, ...r.hours.map(x => x.hours));
   const alerts = L.computeAlerts(state, t);
-  return `${pageHeader('Relatórios', `${L.fmtDate(from)} a ${L.fmtDate(to)}`, insideApp ? '' : '<button class="secondary" data-act="print">Imprimir</button>')}
+  return `${pageHeader('Relatórios', `${L.fmtDate(from)} a ${L.fmtDate(to)}`, insideApp || embedded ? '' : '<button class="secondary" data-act="print">Imprimir</button>')}
     <div class="card toolbar"><label>De <input type="date" value="${from}" data-act="rep-from"></label><label>Até <input type="date" value="${to}" data-act="rep-to"></label>
       <button class="secondary" data-act="rep-range" data-range="month">Este mês</button><button class="secondary" data-act="rep-range" data-range="30">Últimos 30 dias</button></div>
     <section class="summary">
@@ -439,7 +449,7 @@ function viewSettings() {
     <section class="card card-section"><h3>Cadastros básicos</h3><div class="list-rows">${basics}</div></section>
     <section class="card card-section"><h3>Cópia de segurança</h3>
       <p>Os dados ficam só neste dispositivo. Exporte um backup com frequência e guarde em outro lugar (Drive, e-mail, computador). Se o aplicativo for desinstalado ou os dados forem limpos, só o backup recupera as informações.</p>
-      <div class="button-row"><button class="primary" data-act="backup-export">Exportar backup</button><label class="secondary" style="cursor:pointer">Importar backup<input type="file" accept=".json,application/json" data-act="backup-import" hidden></label></div>
+      <div class="button-row"><button class="primary" data-act="backup-export">Exportar backup</button><label class="secondary" style="cursor:pointer">Importar arquivo de backup<input type="file" accept=".json,application/json" data-act="backup-import" hidden></label><button class="secondary" data-act="backup-paste">Colar backup</button></div>
       <p class="muted" id="storageInfo" style="margin:12px 0 0;font-size:.85rem"></p></section>
     <section class="card card-section"><h3>Dados de exemplo</h3><p>Carregue um conjunto de dados fictícios para conhecer o aplicativo, ou apague tudo para recomeçar.</p>
       <div class="button-row"><button class="secondary" data-act="sample">Carregar dados de exemplo</button><button class="danger" data-act="wipe">Apagar todos os dados</button></div></section>
@@ -478,10 +488,14 @@ function currentRoute() {
   return { name: name in ROUTES ? name : '', params: new URLSearchParams(query) };
 }
 
+// Troca o endereço sem criar histórico; se o navegador não deixar, navega normalmente (o hashchange redesenha).
+function replaceHash(hash) {
+  try { history.replaceState(null, '', hash); return true; } catch { if (location.hash !== hash) { location.hash = hash; return false; } return true; }
+}
+
 function setRouteParams(name, params) {
   const query = new URLSearchParams(Object.entries(params).filter(([, v]) => v !== '' && v !== undefined && v !== null)).toString();
-  history.replaceState(null, '', `#/${name}${query ? '?' + query : ''}`);
-  render();
+  if (replaceHash(`#/${name}${query ? '?' + query : ''}`)) render();
 }
 
 // ---------- Desenho da tela
@@ -567,18 +581,33 @@ const clickActions = {
   sample: async () => {
     const hasData = DATA_STORES.some(s => state[s].length);
     if (hasData && !await confirmDialog('Os dados atuais serão substituídos pelos dados de exemplo. Exporte um backup antes se quiser guardá-los.', 'Substituir')) return;
-    await replaceAllData(L.sampleData(today()), { farmName: settings.farmName || 'Fazenda Exemplo' });
+    await replaceAllData(L.sampleData(today()), { farmName: settings.farmName || 'Fazenda Exemplo', demo: true });
     toast('Dados de exemplo carregados');
     location.hash = '#/';
     render();
   },
   wipe: async () => {
     if (!await confirmDialog('Apagar todos os dados deste dispositivo? Essa ação não pode ser desfeita. Exporte um backup antes se quiser guardá-los.', 'Apagar tudo')) return;
-    await replaceAllData({}, { farmName: '', userName: '' });
+    await replaceAllData({}, { farmName: '', userName: '', demo: false });
     toast('Todos os dados foram apagados');
     render();
   },
   print: () => window.print(),
+  'copy-text': async () => {
+    const area = $('#copyText');
+    if (!area) return;
+    try { await navigator.clipboard.writeText(area.value); toast('Conteúdo copiado'); } catch { area.focus(); area.select(); toast('Selecionado: use Ctrl+C (ou Copiar) para copiar'); }
+  },
+  'backup-paste': () => {
+    openModal(`<h3>Colar backup</h3><p class="muted">Cole aqui o conteúdo de um backup exportado pelo Agro Operações.</p><textarea id="pasteText" class="copy-text" rows="10" placeholder='{"app":"agro-operacoes", ...}'></textarea>
+      <div class="actions"><button type="button" class="secondary" data-act="close-modal">Cancelar</button><button type="button" class="primary" data-act="paste-import">Importar</button></div>`);
+  },
+  'paste-import': async () => {
+    const text = $('#pasteText')?.value || '';
+    if (!text.trim()) { toast('Cole o conteúdo do backup primeiro.'); return; }
+    closeModal();
+    await importBackupText(text);
+  },
   theme: () => {
     const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
@@ -616,18 +645,21 @@ const changeActions = {
   'backup-import': async el => {
     const file = el.files?.[0];
     el.value = '';
-    if (!file) return;
+    if (file) await importBackupText(await file.text());
+  },
+};
+
+async function importBackupText(text) {
     let parsed;
-    try { parsed = JSON.parse(await file.text()); } catch { toast('O arquivo não é um backup válido.'); return; }
+    try { parsed = JSON.parse(text); } catch { toast('O conteúdo não é um backup válido.'); return; }
     const result = L.validateBackup(parsed);
     if (!result.ok) { toast(result.error); return; }
     const when = result.exportedAt ? ` de ${new Date(result.exportedAt).toLocaleString('pt-BR')}` : '';
     if (!await confirmDialog(`Substituir todos os dados atuais pelo backup${when} (${L.plural(result.count, 'registro', 'registros')})?`, 'Importar', false)) return;
-    await replaceAllData(result.data, result.settings || undefined);
+    await replaceAllData(result.data, { ...(result.settings || {}), demo: false });
     toast('Backup importado');
     render();
-  },
-};
+}
 
 document.addEventListener('click', event => {
   const el = event.target.closest('[data-act]');
@@ -671,7 +703,7 @@ function runSearch(query, source) {
       location.hash = `#/busca?q=${encodeURIComponent(query)}`;
       return;
     }
-    history.replaceState(null, '', `#/busca${query ? '?q=' + encodeURIComponent(query) : ''}`);
+    replaceHash(`#/busca${query ? '?q=' + encodeURIComponent(query) : ''}`);
     $('#searchResults').innerHTML = searchResultsHtml(query);
     if (source !== 'page' && $('#pageSearch')) $('#pageSearch').value = query;
     if (source !== 'top') $('#topSearch').value = query;
@@ -703,8 +735,8 @@ let installPrompt = null;
 addEventListener('beforeinstallprompt', event => { event.preventDefault(); installPrompt = event; $('#installBtn').classList.add('show'); });
 addEventListener('appinstalled', () => toast('Aplicativo instalado com sucesso'));
 // Dentro do APK os arquivos já estão no aparelho: sem instalação PWA nem service worker.
-if (insideApp || matchMedia('(display-mode: standalone)').matches) $('#installBtn').style.display = 'none';
-if (!insideApp && 'serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(() => {}));
+if (insideApp || embedded || matchMedia('(display-mode: standalone)').matches) $('#installBtn').style.display = 'none';
+if (!insideApp && !embedded && 'serviceWorker' in navigator) addEventListener('load', () => navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(() => {}));
 $('#date').textContent = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' });
 
 // ---------- Início
@@ -724,6 +756,9 @@ async function boot() {
     for (const s of DATA_STORES) state[s] = all[s] || [];
     settings = { ...settings, ...((all.settings || []).find(s => s.id === 'app') || {}) };
     await migrateLegacy();
+    if (window.AGRO_DEMO_FIRST_RUN === true && !settings.demoSeen && DATA_STORES.every(s => !state[s].length)) {
+      await replaceAllData(L.sampleData(today()), { farmName: 'Fazenda Exemplo', demo: true, demoSeen: true });
+    }
     navigator.storage?.persist?.().catch(() => {});
     render();
   } catch (err) {
