@@ -341,7 +341,95 @@
       for (const [c] of ESCOPO) if (Array.isArray(r[c]) && r[c].includes('*')) problemas.push(`${r.id}: "*" dentro de lista em "${c}" (use "*" sem lista)`);
       if (finito(r.limiteMin) && finito(r.limiteMax) && r.limiteMin > r.limiteMax) problemas.push(`${r.id}: limiteMin maior que limiteMax`);
     }
+    for (const t of banco.tabelasClassificacao || []) {
+      if (!t.id) { problemas.push('Tabela de classificação sem id'); continue; }
+      if (ids.has(t.id)) problemas.push(`${t.id}: id duplicado`); ids.add(t.id);
+      if (t.statusValidacao === 'validada' && !(t.fontes || []).some(f => f.conferido === true && f.trechoLiteral)) problemas.push(`${t.id}: validada sem fonte conferida (trechoLiteral)`);
+      if (!finito(t.casasDecimais)) problemas.push(`${t.id}: casasDecimais ausente`);
+      for (const tp of t.tipos || []) for (const d of t.defeitos || []) if (!finito(tp.limites?.[d.id])) problemas.push(`${t.id}: ${tp.tipo} sem limite para "${d.id}"`);
+      for (let i = 1; i < (t.tipos || []).length; i++) for (const d of t.defeitos) if (t.tipos[i].limites[d.id] < t.tipos[i - 1].limites[d.id]) problemas.push(`${t.id}: limite de "${d.id}" diminui de ${t.tipos[i - 1].tipo} para ${t.tipos[i].tipo}`);
+    }
     return problemas;
+  }
+
+
+  // ---------------- Classificação de grãos (enquadramento em tipo) ----------------
+  // Arredonda como a norma manda expressar o resultado (IN 11: 1 casa; IN 60: 2 casas).
+  const arredNorma = (v, casas) => Math.round((v + Number.EPSILON) * 10 ** casas) / 10 ** casas;
+  const pct = (v, casas) => `${v.toFixed(casas).replace('.', ',')}%`;
+
+  /**
+   * Enquadra a amostra em tipo pela tabela oficial (pior tipo entre os defeitos — IN 11, Art. 27).
+   * dados: {produto, destino, etapa, grupo ('I'|'II' para soja), valores:{defeitoId: %}}
+   * Sem tabela validada e aplicável → SEM_REFERENCIA; faltando defeito → DADOS_INSUFICIENTES.
+   */
+  function classificarGraos(dados, banco, opcoes = {}) {
+    const res = {status: null, enquadramento: null, tabelaId: '', tabelaVersao: '', titulo: '', grupo: dados.grupo || null,
+      defeitos: [], motivos: [], consequencias: [], pendencias: [], fontes: [], casasDecimais: null,
+      bancoVersao: banco.versaoBanco || '', dataAnalise: opcoes.dataAnalise || new Date().toISOString()};
+    const fim = (status, pend) => { res.status = status; if (pend) res.pendencias.push(pend); return res; };
+    const tabs = (banco.tabelasClassificacao || []).filter(t => t.produto === dados.produto && t.statusValidacao !== 'suspensa');
+    if (!tabs.length) return fim(STATUS.SEM_REFERENCIA, `Nenhuma tabela oficial de classificação cadastrada para "${dados.produto || 'produto não informado'}".`);
+    const noEscopo = tabs.filter(t => (t.destino === '*' || lista(t.destino).includes(dados.destino)) && (t.etapa === '*' || lista(t.etapa).includes(dados.etapa)));
+    if (!noEscopo.length) return fim(STATUS.SEM_REFERENCIA, `A classificação oficial cadastrada vale para ${lista(tabs[0].destino).join(', ')} na etapa ${lista(tabs[0].etapa).join(', ')}.`);
+    let tab = noEscopo.length === 1 && !noEscopo[0].grupo ? noEscopo[0] : null;
+    if (!tab) {
+      if (vazio(dados.grupo)) return fim(STATUS.DADOS_INSUFICIENTES, `Informe o grupo: ${noEscopo.map(t => t.grupo?.rotulo).filter(Boolean).join(' ou ')} (responsabilidade do interessado).`);
+      tab = noEscopo.find(t => t.grupo?.valor === dados.grupo);
+      if (!tab) return fim(STATUS.SEM_REFERENCIA, `Grupo "${dados.grupo}" sem tabela cadastrada.`);
+    }
+    Object.assign(res, {tabelaId: tab.id, tabelaVersao: tab.versao, titulo: tab.titulo, casasDecimais: tab.casasDecimais,
+      fontes: (tab.fontes || []).map(f => ({...f})), grupoRotulo: tab.grupo?.rotulo || null});
+    if (tab.statusValidacao !== 'validada') return fim(STATUS.SEM_REFERENCIA, `Tabela ${tab.id} ainda não conferida no documento oficial.`);
+
+    const v = {}, faltando = [];
+    for (const d of tab.defeitos) {
+      const bruto = (dados.valores || {})[d.id];
+      if (!finito(bruto)) { faltando.push(d.rotulo); continue; }
+      if (bruto < 0 || bruto > 100) return fim(STATUS.DADOS_INSUFICIENTES, `${d.rotulo}: percentual inválido (${bruto}).`);
+      v[d.id] = arredNorma(bruto, tab.casasDecimais);
+    }
+    // Partes não podem superar o total que as contém
+    const parte = (a, b) => finito(v[a]) && finito(v[b]) && v[a] > v[b];
+    const rot = id => tab.defeitos.find(d => d.id === id)?.rotulo || id;
+    const incoerentes = [['queimados', 'ardidos_queimados'], ['ardidos', 'avariados_total'], ['ardidos_queimados', 'avariados_total'], ['mofados', 'avariados_total']]
+      .filter(([a, b]) => parte(a, b)).map(([a, b]) => `${rot(a)} (${pct(v[a], tab.casasDecimais)}) maior que ${rot(b)} (${pct(v[b], tab.casasDecimais)}), que o inclui.`);
+    if (finito(v.ardidos_queimados) && finito(v.mofados) && finito(v.avariados_total) && arredNorma(v.ardidos_queimados + v.mofados, tab.casasDecimais) > v.avariados_total)
+      incoerentes.push(`Ardidos e queimados + mofados (${pct(v.ardidos_queimados + v.mofados, tab.casasDecimais)}) maior que o total de avariados (${pct(v.avariados_total, tab.casasDecimais)}).`);
+    if (incoerentes.length) { res.pendencias.push(...incoerentes); return fim(STATUS.DADOS_INSUFICIENTES, 'Corrigir os valores: um defeito parcial não pode ser maior que o total que o contém.'); }
+
+    // Por defeito: melhor tipo cujo limite máximo comporta o valor (limites inclusivos: "limites máximos de tolerância")
+    let pior = -1;
+    for (const d of tab.defeitos) {
+      if (!finito(v[d.id])) continue;
+      const idx = tab.tipos.findIndex(t => v[d.id] <= t.limites[d.id]);
+      const nivel = idx === -1 ? tab.tipos.length : idx;
+      pior = Math.max(pior, nivel);
+      res.defeitos.push({id: d.id, rotulo: d.rotulo, valor: v[d.id], valorInformado: dados.valores[d.id],
+        tipo: idx === -1 ? tab.foraDeTipo : tab.tipos[idx].tipo, limiteUltimoTipo: tab.tipos[tab.tipos.length - 1].limites[d.id]});
+    }
+    // Desclassificação pelos percentuais (vale mesmo com outros defeitos ainda não informados)
+    for (const dc of tab.desclassificacao || []) {
+      if (!dc.soma.every(id => finito(v[id]))) continue;
+      const total = arredNorma(dc.soma.reduce((s, id) => s + v[id], 0), tab.casasDecimais);
+      if (total > dc.limiteMaxExclusivo) res.motivos.push(`${dc.rotulo}: ${pct(total, tab.casasDecimais)} — ${dc.artigo}.`);
+    }
+    if (res.motivos.length) {
+      res.enquadramento = 'Desclassificado';
+      res.consequencias.push('Comercialização proibida; a entidade classificadora comunica a Superintendência Federal de Agricultura (SFA) da UF.');
+      return fim(STATUS.FORA_DO_PADRAO);
+    }
+    if (faltando.length) {
+      res.enquadramento = null;
+      if (pior >= 0) res.pendencias.push(`Pelos defeitos informados, o melhor enquadramento possível é ${pior < tab.tipos.length ? tab.tipos[pior].tipo : tab.foraDeTipo}.`);
+      return fim(STATUS.DADOS_INSUFICIENTES, `Para enquadrar em tipo, informe também: ${faltando.join(', ')}.`);
+    }
+    if (pior < tab.tipos.length) { res.enquadramento = tab.tipos[pior].tipo; return fim(STATUS.OK); }
+    res.enquadramento = tab.foraDeTipo;
+    const acima = res.defeitos.filter(d => d.tipo === tab.foraDeTipo);
+    res.motivos.push(...acima.map(d => `${d.rotulo}: ${pct(d.valor, tab.casasDecimais)} (máximo ${pct(d.limiteUltimoTipo, tab.casasDecimais)} para ${tab.tipos[tab.tipos.length - 1].tipo}).`));
+    for (const c of Object.values(tab.consequencias || {})) if (acima.some(d => c.defeitos.includes(d.id))) res.consequencias.push(c.texto);
+    return fim(STATUS.FORA_DO_PADRAO);
   }
 
   /**
@@ -349,7 +437,8 @@
    * dados: {equipamentoFamilia, produto, destino, etapa, condicoes:{...},
    *         leituras:[{ponto, posicao, variavel:'temperatura'|'umidade_graos'|'umidade_relativa_ar'
    *                    |'graos_avariados'|'graos_quebrados_amassados'|'impurezas_materias_estranhas', valor}],
-   *         umidadeInicial, umidadeFinal, umidadeMeta, massaInicial}
+   *         umidadeInicial, umidadeFinal, umidadeMeta, massaInicial,
+   *         classificacao:{grupo, valores:{defeitoId: %}} (moega, opcional)}
    */
   function avaliarSecagem(dados, banco, opcoes = {}) {
     const UN = {temperatura: '°C', umidade_graos: '%', umidade_relativa_ar: '%',
@@ -367,10 +456,17 @@
       calc.quebraPct = arred((mi - calc.massaFinalEstimada) / mi * 100, 2);
     }
     const pend = [];
-    if (!leituras.length) pend.push('Nenhuma leitura informada.');
+    // Classificação na moega: só quando algum defeito foi informado
+    const cl = dados.classificacao && Object.values(dados.classificacao.valores || {}).some(finito)
+      ? classificarGraos({produto: dados.produto, destino: dados.destino, etapa: dados.etapa, grupo: dados.classificacao.grupo, valores: dados.classificacao.valores}, banco, opcoes) : null;
+    if (!leituras.length && !cl) pend.push('Nenhuma leitura informada.');
     avaliacoes.forEach(a => a.avaliacao.pendencias.forEach(x => pend.push(`[${a.variavel} — ${a.ponto || 'ponto não informado'}] ${x}`)));
-    return {status: leituras.length ? resumir(avaliacoes.map(a => a.avaliacao.status)) : STATUS.DADOS_INSUFICIENTES, leituras: avaliacoes, calculos: calc, pendencias: [...new Set(pend)]};
+    if (cl) cl.pendencias.forEach(x => pend.push(`Classificação: ${x}`));
+    const statuses = [...avaliacoes.map(a => a.avaliacao.status), ...(cl ? [cl.status] : [])];
+    const r = {status: statuses.length ? resumir(statuses) : STATUS.DADOS_INSUFICIENTES, leituras: avaliacoes, calculos: calc, pendencias: [...new Set(pend)]};
+    if (cl) r.classificacao = cl;
+    return r;
   }
 
-  return {STATUS, calculos, avaliar, congelar, resumir, avaliarSecagem, avaliarBicos, avaliarSensor, avaliarDistribuicaoLongitudinal, avaliarPerdas, avaliarDistribuicaoTransversal, avaliarTaxaAplicacao, avaliarDose, auditarBanco};
+  return {STATUS, calculos, avaliar, congelar, resumir, avaliarSecagem, classificarGraos, avaliarBicos, avaliarSensor, avaliarDistribuicaoLongitudinal, avaliarPerdas, avaliarDistribuicaoTransversal, avaliarTaxaAplicacao, avaliarDose, auditarBanco};
 }));

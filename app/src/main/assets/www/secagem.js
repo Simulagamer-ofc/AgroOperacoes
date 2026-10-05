@@ -12,8 +12,13 @@ const EMBALAGENS = [['sacaria', 'Sacaria'], ['big_bag', 'Big-bag']];
 const PRODUTOS_SEC = [['soja', 'Soja'], ['milho', 'Milho'], ['trigo', 'Trigo'], ['feijao', 'Feijão'], ['arroz', 'Arroz'], ['sorgo', 'Sorgo'], ['outro', 'Outro']];
 const VARIAVEL = {temperatura: 'Temperatura', umidade_graos: 'Umidade dos grãos', umidade_relativa_ar: 'Umidade relativa do ar',
   graos_avariados: 'Grãos avariados', graos_quebrados_amassados: 'Partidos, quebrados e amassados', impurezas_materias_estranhas: 'Matérias estranhas e impurezas'};
-// Classificação na moega: defeitos medidos na amostra da carga (% em peso)
+// Versão 0.5.0 gravava estes defeitos como leituras simples (registros antigos continuam exibidos)
 const CLASSIF = [['impureza', 'impurezas_materias_estranhas'], ['avariados', 'graos_avariados'], ['quebrados', 'graos_quebrados_amassados']];
+// Tabelas oficiais de classificação (IN 11/2007 soja, IN 60/2011 milho), carregadas do banco antes da etapa 3
+let TABS_CLASS = null;
+const tabelasDoProduto = s => (TABS_CLASS || []).filter(t => t.produto === s.produto && t.statusValidacao !== 'suspensa'
+  && (t.destino === '*' || [].concat(t.destino).includes(s.destino)) && (t.etapa === '*' || [].concat(t.etapa).includes(s.etapa)));
+const camposClass = s => Object.keys(s).filter(k => k.startsWith('cl_'));
 const rotulo = (lista, v) => (lista.find(x => x[0] === v) || [, v || '—'])[1];
 
 let sc = null;
@@ -55,7 +60,7 @@ function passoSecagem() {
       ${s.local === 'secador' ? sCampo('tipoSecador', 'Tipo de secador', sSel('tipoSecador', TIPO_SECADOR, s.tipoSecador, 'Não informado'), 'Algumas referências valem só para um tipo (ex.: secador estático).', true) : ''}
       ${sCampo('lotId', 'Lote', sSel('lotId', db.lots.map(l => [l.id, `${l.code} — ${[l.species, l.cultivar].filter(Boolean).join(' ')}`]), s.lotId, 'Sem lote'), 'Ao escolher um lote de sementes, cultura e destino são sugeridos.', true)}
       ${sCampo('produto', 'Produto / grão', sSel('produto', PRODUTOS_SEC, s.produto, 'Selecione'))}
-      ${sCampo('destino', 'Destino do produto', sSel('destino', DESTINOS, s.destino, 'Selecione'), s.local === 'moega' ? 'Para classificar a carga de soja pela IN 11/2007 (avariados e quebrados), escolha “Grão — comercialização (classificação)”.' : 'Define a referência: semente e grão têm limites diferentes.')}
+      ${sCampo('destino', 'Destino do produto', sSel('destino', DESTINOS, s.destino, 'Selecione'), s.local === 'moega' ? 'Soja e milho com destino de grão são enquadrados em tipo pelas normas do MAPA (IN 11/2007 e IN 60/2011).' : 'Define a referência: semente e grão têm limites diferentes.')}
     </div>${sNav(false)}</section>`;
   }
   if (s.passo === 2) {
@@ -75,9 +80,7 @@ function passoSecagem() {
     return topo + `<section class="card panel"><div class="form">
       ${s.ponto ? sNum('temperatura', `Temperatura — ${rotulo(PONTOS, s.ponto)} (°C)`, '', true) : ''}
       ${comUR ? sNum('urAr', `Umidade relativa do ar — ${rotulo(PONTOS, s.ponto)} (%)`, 'Opcional.', true) : ''}
-      ${moega ? sNum('umidadeFinal', 'Umidade do produto recebido (%)', 'Determinada na amostra da carga.') + `<p class="nota field full" style="margin:0">Classificação da amostra (% em peso). Avariados = soma dos defeitos que a IN 11 classifica como avariados (ex.: ardidos, mofados), conforme o laudo do classificador; grãos picados por percevejo entram divididos por 4.</p>` +
-          sNum('avariados', 'Grãos avariados — total (%)', 'Soja: tolerância de 8% (IN 11/2007).') + sNum('quebrados', 'Partidos, quebrados e amassados (%)', 'Soja: tolerância de 30% (IN 11/2007).') +
-          sNum('impureza', 'Matérias estranhas e impurezas (%)', 'Registrado; ainda sem referência validada no banco.')
+      ${moega ? sNum('umidadeFinal', 'Umidade do produto recebido (%)', 'Determinada na amostra da carga.', true) + camposClassificacao(s)
         : sNum('umidadeFinal', s.etapa === 'secagem' ? 'Umidade atual da amostra (%)' : 'Umidade da amostra (%)', 'Usada na comparação com a referência de armazenamento.') +
           (s.etapa !== 'armazenamento' ? sNum('umidadeInicial', 'Umidade inicial / na entrada (%)', 'Opcional — calcula a redução.') + sNum('umidadeMeta', 'Meta de umidade (%)', 'Opcional — sua meta operacional.') + sNum('massaInicial', 'Massa inicial (t)', 'Opcional — estima a quebra de peso pela secagem.') : '')}
       ${sCampo('data', 'Data', sInp('data', s.data, 'type="date"'))}${sCampo('hora', 'Hora', sInp('hora', s.hora, 'type="time"'))}
@@ -127,9 +130,9 @@ function validarSecagem() {
   if (s.passo === 1) { if (!s.local) return 'Selecione o local da leitura'; if (!s.produto) return 'Selecione o produto'; if (!s.destino) return 'Selecione o destino — a referência depende dele'; }
   if (s.passo === 2 && !s.etapa) return 'Selecione a etapa';
   if (s.passo === 3) {
-    const algum = ['temperatura', 'urAr', 'umidadeFinal', ...CLASSIF.map(c => c[0])].some(k => umNum(s[k]) !== undefined);
+    const algum = ['temperatura', 'urAr', 'umidadeFinal', ...camposClass(s)].some(k => umNum(s[k]) !== undefined);
     if (!algum) return 'Informe pelo menos uma medição';
-    for (const k of ['temperatura', 'urAr', 'umidadeFinal', 'umidadeInicial', 'umidadeMeta', 'massaInicial', 'impureza', 'avariados', 'quebrados'])
+    for (const k of ['temperatura', 'urAr', 'umidadeFinal', 'umidadeInicial', 'umidadeMeta', 'massaInicial', 'impureza', ...camposClass(s)])
       if (s[k] !== undefined && s[k] !== '' && umNum(s[k]) === undefined) return `Valor inválido: ${s[k]}`;
   }
   return '';
@@ -141,9 +144,9 @@ async function calcularSecagem() {
   if (s.ponto && umNum(s.temperatura) !== undefined) leituras.push({ponto: s.ponto, posicao: s.posicao || undefined, variavel: 'temperatura', valor: umNum(s.temperatura)});
   if (umNum(s.urAr) !== undefined) leituras.push({ponto: s.ponto, posicao: s.posicao || undefined, variavel: 'umidade_relativa_ar', valor: umNum(s.urAr)});
   if (umNum(s.umidadeFinal) !== undefined) leituras.push({ponto: 'amostra', variavel: 'umidade_graos', valor: umNum(s.umidadeFinal)});
-  if (s.etapa === 'recebimento') CLASSIF.forEach(([k, variavel]) => { if (umNum(s[k]) !== undefined) leituras.push({ponto: 'amostra', variavel, valor: umNum(s[k])}); });
   const r = AV().avaliarSecagem({equipamentoFamilia: s.local, produto: s.produto, destino: s.destino, etapa: s.etapa,
     condicoes: {tipoSecador: s.tipoSecador || undefined, regiaoArmazenamento: s.regiaoArmazenamento || undefined, embalagem: s.embalagem || undefined},
+    classificacao: s.etapa === 'recebimento' ? {grupo: s.grupoSoja || undefined, valores: Object.fromEntries(camposClass(s).map(k => [k.slice(3), umNum(s[k])]).filter(([, v]) => v !== undefined))} : undefined,
     leituras, umidadeInicial: umNum(s.umidadeInicial), umidadeFinal: umNum(s.umidadeFinal), umidadeMeta: umNum(s.umidadeMeta), massaInicial: umNum(s.massaInicial)}, banco);
   // A meta é do operador; avisa se ela estiver acima da referência aplicável
   const ru = r.leituras.find(l => l.variavel === 'umidade_graos')?.avaliacao;
@@ -156,7 +159,9 @@ async function calcularSecagem() {
 function resultadoSecagem(r, s) {
   const info = STATUS_INFO[r.status] || {rotulo: r.status, cor: 'gray'};
   const fora = r.leituras.find(l => l.avaliacao.status === 'FORA_DO_PADRAO');
+  const cl = r.classificacao;
   const acao = fora ? (fora.avaliacao.acaoRecomendada || 'Corrigir a operação e registrar nova leitura.')
+    : cl?.status === 'FORA_DO_PADRAO' ? cl.consequencias.join(' ')
     : r.status === 'SEM_REFERENCIA' ? 'Obter uma referência aplicável antes de concluir a avaliação.'
     : r.status === 'DADOS_INSUFICIENTES' ? 'Completar os dados indicados nas pendências e avaliar novamente.'
     : r.status === 'OK' ? 'Nenhuma correção necessária para as leituras avaliadas.' : '';
@@ -169,15 +174,37 @@ function resultadoSecagem(r, s) {
     // registros antigos guardavam a impureza só como anotação
     s?.impureza && !r.leituras.some(l => l.variavel === 'impurezas_materias_estranhas') && ['Impureza registrada', `${s.impureza}%`],
     ...r.leituras.filter(l => CLASSIF.some(c => c[1] === l.variavel) && l.avaliacao.status === 'FORA_DO_PADRAO' && l.avaliacao.diferenca > 0)
-      .map(l => [`Excesso sobre a tolerância — ${VARIAVEL[l.variavel].toLowerCase()}`, `${num(l.avaliacao.diferenca, 2)} p.p. (sujeito a desconto direto)`])
+      .map(l => [`Acima do limite — ${VARIAVEL[l.variavel].toLowerCase()}`, `${num(l.avaliacao.diferenca, 2)} p.p.`])
   ].filter(Boolean);
-  return `<div class="resultado ${info.cor}"><small>RESULTADO</small><strong>${esc(info.rotulo)}</strong><small>AÇÃO RECOMENDADA</small><span>${esc(acao)}</span></div>
-    <h3 style="margin-top:16px">Leituras</h3><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Leitura</th><th>Ponto</th><th class="num">Valor</th><th>Referência</th><th>Resultado</th></tr></thead><tbody>
+  return `<div class="resultado ${info.cor}"><small>RESULTADO</small><strong>${esc(info.rotulo)}</strong>${cl?.enquadramento ? `<small>CLASSIFICAÇÃO</small><strong>${esc(cl.enquadramento)}</strong>` : ''}<small>AÇÃO RECOMENDADA</small><span>${esc(acao)}</span></div>
+    ${cl ? blocoClassificacao(cl) : ''}
+    ${r.leituras.length ? `<h3 style="margin-top:16px">Leituras</h3><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Leitura</th><th>Ponto</th><th class="num">Valor</th><th>Referência</th><th>Resultado</th></tr></thead><tbody>
     ${r.leituras.map(l => `<tr><td>${esc(VARIAVEL[l.variavel])}</td><td>${esc(l.ponto === 'amostra' ? 'Amostra do produto' : rotulo(PONTOS, l.ponto))}${l.posicao ? ' — ' + esc(l.posicao) : ''}</td><td class="num">${num(l.valor, 1)} ${l.variavel === 'temperatura' ? '°C' : '%'}</td><td>${lim(l.avaliacao)}${l.avaliacao.regraId ? `<br><small style="color:var(--muted)">${esc(l.avaliacao.regraId)} v${esc(l.avaliacao.regraVersao)}</small>` : ''}</td><td>${statusChip(l.avaliacao.status)}</td></tr>`).join('')}
-    </tbody></table></div>
+    </tbody></table></div>` : ''}
     ${calc.length ? `<h3 style="margin-top:16px">Valores calculados</h3><table class="tbl"><tbody>${calc.map(([a, b]) => `<tr><td>${esc(a)}</td><td class="num">${esc(b)}</td></tr>`).join('')}</tbody></table>` : ''}
     ${r.leituras.filter(l => l.avaliacao.regraId).map(l => { const f = (l.avaliacao.fontes || []).find(x => x.conferido !== false) || {}; return `<p class="nota"><strong>${esc(l.avaliacao.regraId)}</strong> — ${esc([f.organizacao, f.titulo].filter(Boolean).join(' — '))}${f.pagina ? ', ' + esc(f.pagina) : ''}${f.trechoLiteral ? `: <em>“${esc(f.trechoLiteral.slice(0, 300))}${f.trechoLiteral.length > 300 ? '…' : ''}”</em>` : ''}</p>`; }).join('')}
     ${resumoPendencias(r, s)}`;
+}
+
+// Campos de defeitos gerados a partir da tabela oficial do produto (mesmos rótulos da norma)
+function camposClassificacao(s) {
+  const tabs = tabelasDoProduto(s);
+  if (!tabs.length) return sNum('impureza', 'Impureza / matérias estranhas (%)', 'Registro (sem tabela oficial de classificação no banco para este produto/destino).');
+  const grupos = tabs.filter(t => t.grupo).map(t => [t.grupo.valor, t.grupo.rotulo]);
+  const t = tabs.find(x => !x.grupo || x.grupo.valor === s.grupoSoja) || tabs[0];
+  return `<p class="nota field full" style="margin:0"><strong>Classificação da amostra</strong> — % em peso, como no laudo do classificador. Deixe em branco o que não foi determinado.</p>` +
+    (grupos.length ? sCampo('grupoSoja', 'Grupo (uso proposto)', sSel('grupoSoja', grupos, s.grupoSoja, 'Selecione'), 'Informação do interessado (IN 11/2007, Art. 4º, § 1º). Define a tabela de tolerâncias.', true) : '') +
+    t.defeitos.map(d => sNum('cl_' + d.id, `${d.rotulo} (%)`, d.ajuda)).join('');
+}
+
+function blocoClassificacao(cl) {
+  const f = (cl.fontes || [])[0] || {};
+  return `<h3 style="margin-top:16px">Classificação${cl.grupoRotulo ? ' — ' + esc(cl.grupoRotulo) : ''}</h3>
+    ${cl.defeitos.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Defeito</th><th class="num">Valor (norma)</th><th>Enquadra em</th></tr></thead><tbody>
+    ${cl.defeitos.map(d => `<tr><td>${esc(d.rotulo)}</td><td class="num">${num(d.valor, cl.casasDecimais)}%${d.valorInformado !== d.valor ? `<br><small style="color:var(--muted)">informado ${num(d.valorInformado, 3)}</small>` : ''}</td><td>${esc(d.tipo)}</td></tr>`).join('')}
+    </tbody></table></div>` : ''}
+    ${cl.motivos.length ? `<ul class="pend">${cl.motivos.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
+    ${cl.tabelaId ? `<p class="nota"><strong>${esc(cl.tabelaId)} v${esc(cl.tabelaVersao)}</strong> — ${esc([f.organizacao, f.titulo].filter(Boolean).join(' — '))}${f.pagina ? ', ' + esc(f.pagina) : ''}. Enquadramento pelo pior tipo entre os defeitos; valores arredondados com ${cl.casasDecimais} casa(s) decimal(is), como a norma determina. A norma não estabelece desconto: descontos dependem do contrato ou da tabela do comprador.</p>` : ''}`;
 }
 
 // Explica em linguagem simples por que cada leitura não foi concluída; a lista técnica fica recolhida.
@@ -203,6 +230,7 @@ Object.assign(ACTIONS, {
   'sc-avancar': async () => {
     coletarSecagem();
     const e = validarSecagem(); if (e) { showToast(e); return; }
+    if (!TABS_CLASS) { try { TABS_CLASS = (await dados('regras')).tabelasClassificacao || []; } catch { TABS_CLASS = []; } }
     if (sc.passo === 3) { try { sc.resultado = await calcularSecagem(); } catch (x) { showToast('Não foi possível calcular: ' + x.message); return; } }
     sc.passo++; render(); scrollTo(0, 0);
   },
@@ -216,7 +244,7 @@ Object.assign(ACTIONS, {
       resultado: AV().congelar(s.resultado), criadoEm: new Date().toISOString()};
     if (mq && s.tipoSecador && !mq.tipoSecador) mq.tipoSecador = s.tipoSecador;
     db.secagem.push(reg);
-    if (l) db.lotEvents.push({id: uid(), lotId: l.id, date: s.data, title: `${LOCAIS[s.local]}: ${rotulo(ETAPAS, s.etapa)}`, text: reg.resultado.leituras.map(x => `${VARIAVEL[x.variavel]} ${num(x.valor, 1)}${x.variavel === 'temperatura' ? ' °C' : '%'}`).join(' • ') + ` — ${STATUS_INFO[reg.resultado.status]?.rotulo}`});
+    if (l) db.lotEvents.push({id: uid(), lotId: l.id, date: s.data, title: `${LOCAIS[s.local]}: ${rotulo(ETAPAS, s.etapa)}`, text: reg.resultado.leituras.map(x => `${VARIAVEL[x.variavel]} ${num(x.valor, 1)}${x.variavel === 'temperatura' ? ' °C' : '%'}`).join(' • ') + (reg.resultado.classificacao?.enquadramento ? `${reg.resultado.leituras.length ? ' • ' : ''}Classificação: ${reg.resultado.classificacao.enquadramento}` : '') + ` — ${STATUS_INFO[reg.resultado.status]?.rotulo}`});
     save(); sc = null; showToast('Leitura registrada'); go('secagem/' + reg.id);
   },
   'sc-excluir': id => confirmDialog('Excluir este registro?', () => { remove('secagem', id); go('secagem'); })
@@ -243,8 +271,10 @@ function relatorioSecagem(id) {
       ${linha('Etapa', rotulo(ETAPAS, a.etapa))}${linha('Ponto de temperatura', e.ponto ? rotulo(PONTOS, e.ponto) : 'Sem leitura de temperatura')}${linha('Sensor / posição', e.posicao)}
       ${linha('Região de armazenamento', e.regiaoArmazenamento ? rotulo(REGIOES, e.regiaoArmazenamento) : '')}${linha('Embalagem', e.embalagem ? rotulo(EMBALAGENS, e.embalagem) : '')}
       ${linha('Umidade inicial (%)', e.umidadeInicial)}${linha('Umidade medida (%)', e.umidadeFinal)}${linha('Meta de umidade (%)', e.umidadeMeta)}${linha('Massa inicial (t)', e.massaInicial)}${linha('Impureza (%)', e.impureza)}${linha('Grãos avariados (%)', e.avariados)}${linha('Partidos, quebrados e amassados (%)', e.quebrados)}
+      ${r.classificacao ? linha('Grupo', r.classificacao.grupoRotulo) + r.classificacao.defeitos.map(d => linha(`${d.rotulo} (%)`, num(d.valorInformado, 3))).join('') : ''}
     </tbody></table>
-    <h3>4. Referência e condições de aplicação</h3><table class="tbl"><tbody>${regras.length ? regras.map(l => linha(`${VARIAVEL[l.variavel]} (${l.ponto === 'amostra' ? 'amostra' : rotulo(PONTOS, l.ponto)})`, `${l.avaliacao.regraId} v${l.avaliacao.regraVersao} — ${l.avaliacao.regraTitulo}. Condições: ${(l.avaliacao.condicoesAplicadas || []).join('; ') || 'escopo da regra (produto, destino, etapa, ponto)'}. Análise em ${new Date(l.avaliacao.dataAnalise).toLocaleString('pt-BR')} (banco ${l.avaliacao.bancoVersao}).`)).join('') : linha('Referência', 'Nenhuma referência validada aplicável às condições desta leitura.')}</tbody></table>
+    <h3>4. Referência e condições de aplicação</h3><table class="tbl"><tbody>${regras.length ? regras.map(l => linha(`${VARIAVEL[l.variavel]} (${l.ponto === 'amostra' ? 'amostra' : rotulo(PONTOS, l.ponto)})`, `${l.avaliacao.regraId} v${l.avaliacao.regraVersao} — ${l.avaliacao.regraTitulo}. Condições: ${(l.avaliacao.condicoesAplicadas || []).join('; ') || 'escopo da regra (produto, destino, etapa, ponto)'}. Análise em ${new Date(l.avaliacao.dataAnalise).toLocaleString('pt-BR')} (banco ${l.avaliacao.bancoVersao}).`)).join('') : (r.classificacao ? '' : linha('Referência', 'Nenhuma referência validada aplicável às condições desta leitura.'))}
+      ${r.classificacao?.tabelaId ? linha('Classificação', `${r.classificacao.tabelaId} v${r.classificacao.tabelaVersao} — ${r.classificacao.titulo}. Análise em ${new Date(r.classificacao.dataAnalise).toLocaleString('pt-BR')} (banco ${r.classificacao.bancoVersao}).`) : ''}</tbody></table>
     <h3>5. Instrumentos e observações</h3><table class="tbl"><tbody>${linha('Instrumento', e.instrumento || 'Não informado')}${linha('Rastreabilidade metrológica do instrumento', 'Não informada')}${linha('Observações', e.observacoes)}</tbody></table>
     <h3>6. Pendências e alcance do documento</h3>
     ${(r.pendencias || []).length ? `<ul class="pend">${r.pendencias.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '<p>Sem pendências registradas.</p>'}

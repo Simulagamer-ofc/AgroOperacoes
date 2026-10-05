@@ -18,7 +18,8 @@ test('banco publicado passa na auditoria; só regras com trecho conferido estão
   const validadas = BANCO.regras.filter(r => r.statusValidacao === 'validada');
   assert.ok(validadas.length >= 18);
   for (const r of validadas) assert.ok(r.fontes.some(f => f.conferido === true && f.trechoLiteral), r.id);
-  assert.ok(['PULV-BICO-MED-01', 'PULV-SENSOR-01', 'COM-SOJA-UMID-01', 'COM-MILHO-UMID-01'].every(id => BANCO.regras.find(r => r.id === id).statusValidacao !== 'validada'));
+  assert.ok(['PULV-BICO-MED-01', 'PULV-SENSOR-01'].every(id => BANCO.regras.find(r => r.id === id).statusValidacao !== 'validada'));
+  assert.ok(BANCO.tabelasClassificacao.every(t => t.fontes.some(f => f.conferido === true && f.trechoLiteral && f.organizacao === 'MAPA')));
   const iso = BANCO.tabelasReferencia.find(t => t.id === 'ISO10625-CORES');
   assert.equal(iso.linhas.find(l => l.cor === 'amarela').vazao, 0.8);
   assert.equal(iso.linhas.length, 19);
@@ -259,9 +260,10 @@ test('umidade: limite exclusivo "abaixo de 14%" e destino/etapa obrigatórios', 
   const u = (o) => sec({equipamentoFamilia: 'secador', produto: 'soja', etapa: 'pos_secagem', ...o, leituras: [L('amostra', 'umidade_graos', o.v)]});
   assert.equal(u({destino: 'agroindustria', v: 14}).status, STATUS.FORA_DO_PADRAO);
   assert.equal(u({destino: 'agroindustria', v: 13.9}).status, STATUS.OK);
-  assert.equal(u({destino: 'comercializacao', v: 13}).status, STATUS.SEM_REFERENCIA); // MAPA pendente
+  assert.equal(u({destino: 'comercializacao', v: 13}).status, STATUS.SEM_REFERENCIA); // norma do MAPA só no recebimento
   assert.equal(u({destino: undefined, v: 13}).status, STATUS.DADOS_INSUFICIENTES);
-  assert.equal(sec({equipamentoFamilia: 'moega', produto: 'soja', destino: 'agroindustria', etapa: 'recebimento', leituras: [L('amostra', 'umidade_graos', 18)]}).status, STATUS.SEM_REFERENCIA);
+  const moega = sec({equipamentoFamilia: 'moega', produto: 'soja', destino: 'agroindustria', etapa: 'recebimento', leituras: [L('amostra', 'umidade_graos', 18)]});
+  assert.equal(moega.status, STATUS.FORA_DO_PADRAO); assert.equal(moega.leituras[0].avaliacao.regraId, 'COM-SOJA-UMID-01'); // IN 11, Art. 4º, § 4º
 });
 
 test('semente armazenada: umidade por região e embalagem', () => {
@@ -290,20 +292,60 @@ test('várias leituras: pior resultado prevalece; cálculos de umidade e quebra'
   quase(r.calculos.massaFinalEstimada, 931.818, 0.01); quase(r.calculos.quebraPct, 6.82, 0.01);
 });
 
-test('moega: classificação da soja pela IN 11 — avariados 8% e quebrados 30%; excesso = desconto', () => {
-  const m = (destino, leituras, produto = 'soja') => sec({equipamentoFamilia: 'moega', produto, destino, etapa: 'recebimento', leituras});
-  const ok = m('comercializacao', [L('amostra', 'graos_avariados', 8), L('amostra', 'graos_quebrados_amassados', 30)]);
-  assert.equal(ok.status, STATUS.OK); // limite incluso: "tolerância máxima de 8%"
-  const fora = m('comercializacao', [L('amostra', 'graos_avariados', 9.5)]);
-  assert.equal(fora.status, STATUS.FORA_DO_PADRAO);
-  assert.equal(fora.leituras[0].avaliacao.regraId, 'CLA-SOJA-AVAR-01'); assert.equal(fora.leituras[0].avaliacao.diferenca, 1.5);
-  assert.equal(m('comercializacao', [L('amostra', 'graos_quebrados_amassados', 31)]).status, STATUS.FORA_DO_PADRAO);
-  // impureza: valor de norma revogada → não conclui
-  const imp = m('comercializacao', [L('amostra', 'impurezas_materias_estranhas', 3)]);
-  assert.equal(imp.status, STATUS.SEM_REFERENCIA);
-  assert.ok(imp.leituras[0].avaliacao.referenciasCandidatas.some(c => c.regraId === 'CLA-SOJA-IMPUR-01'));
-  // fora do escopo da IN 11 no banco: semente, milho, outra etapa
-  assert.equal(m('semente', [L('amostra', 'graos_avariados', 20)]).status, STATUS.SEM_REFERENCIA);
-  assert.equal(m('comercializacao', [L('amostra', 'graos_avariados', 20)], 'milho').status, STATUS.SEM_REFERENCIA);
-  assert.equal(sec({equipamentoFamilia: 'armazem', produto: 'soja', destino: 'comercializacao', etapa: 'armazenamento', leituras: [L('amostra', 'graos_avariados', 20)]}).status, STATUS.SEM_REFERENCIA);
+test('soja IN 11/2007: tabelas oficiais conferidas e enquadramento pelo pior tipo', () => {
+  const t = id => BANCO.tabelasClassificacao.find(x => x.id === id);
+  assert.deepEqual(t('CLA-SOJA-IN11-GII').tipos[0].limites, {ardidos_queimados: 4, queimados: 1, mofados: 6, avariados_total: 8, esverdeados: 8, quebrados: 30, impurezas: 1});
+  assert.deepEqual(t('CLA-SOJA-IN11-GI').tipos.map(x => x.limites.quebrados), [8, 15]);
+  const c = (grupo, valores) => A.classificarGraos({produto: 'soja', destino: 'comercializacao', etapa: 'recebimento', grupo, valores}, BANCO);
+  const base = {avariados_total: 3, ardidos_queimados: 0.8, queimados: 0.2, mofados: 0.4, esverdeados: 1.5, quebrados: 7, impurezas: 0.9};
+  assert.equal(c('I', base).enquadramento, 'Tipo 1');
+  assert.equal(c('I', {...base, quebrados: 9}).enquadramento, 'Tipo 2'); // pior defeito decide (Art. 27)
+  const fora = c('I', {...base, esverdeados: 4.1});
+  assert.equal(fora.status, STATUS.FORA_DO_PADRAO); assert.equal(fora.enquadramento, 'Fora de Tipo');
+  assert.ok(fora.consequencias.some(x => x.includes('§ 3º'))); // esverdeados = defeito leve
+  assert.equal(c('II', {...base, quebrados: 30}).enquadramento, 'Padrão Básico'); // limite inclusivo
+  assert.equal(c('II', {...base, avariados_total: 7.96}).enquadramento, 'Padrão Básico'); // 1 casa decimal (Art. 25, VII)
+  assert.equal(c('II', {...base, avariados_total: 8.05}).enquadramento, 'Fora do Padrão Básico');
+  // defeitos graves = ardidos e queimados + mofados; > 40% desclassifica (Grupo II), > 12% (Grupo I)
+  const g = {...base, avariados_total: 45, ardidos_queimados: 30, queimados: 1, mofados: 11};
+  assert.equal(c('II', g).enquadramento, 'Desclassificado');
+  assert.equal(c('II', {...g, mofados: 10}).enquadramento, 'Fora do Padrão Básico');
+  assert.equal(c('I', {...base, avariados_total: 13, ardidos_queimados: 10, queimados: 1, mofados: 2.1}).enquadramento, 'Desclassificado');
+  // grupo é obrigatório; defeito faltando e valores incoerentes impedem concluir
+  assert.equal(c(undefined, base).status, STATUS.DADOS_INSUFICIENTES);
+  const falta = c('II', {quebrados: 12});
+  assert.equal(falta.status, STATUS.DADOS_INSUFICIENTES); assert.equal(falta.enquadramento, null);
+  assert.equal(c('II', {...base, queimados: 2}).status, STATUS.DADOS_INSUFICIENTES); // queimados > ardidos e queimados
+  // fora do escopo: semente, outra etapa
+  assert.equal(A.classificarGraos({produto: 'soja', destino: 'semente', etapa: 'recebimento', grupo: 'II', valores: base}, BANCO).status, STATUS.SEM_REFERENCIA);
+  assert.equal(A.classificarGraos({produto: 'soja', destino: 'comercializacao', etapa: 'armazenamento', grupo: 'II', valores: base}, BANCO).status, STATUS.SEM_REFERENCIA);
+});
+
+test('milho IN 60/2011: tipos 1–3, Fora de Tipo e desclassificação', () => {
+  const c = valores => A.classificarGraos({produto: 'milho', destino: 'racao_animal', etapa: 'recebimento', valores}, BANCO);
+  const base = {avariados_total: 5, ardidos: 0.8, quebrados: 2.5, impurezas: 0.9, carunchados: 1.5};
+  assert.equal(c(base).enquadramento, 'Tipo 1');
+  assert.equal(c({...base, impurezas: 1.5}).enquadramento, 'Tipo 2');
+  assert.equal(c({...base, avariados_total: 15}).enquadramento, 'Tipo 3');
+  const q = c({...base, quebrados: 5.01});
+  assert.equal(q.enquadramento, 'Fora de Tipo'); assert.ok(q.consequencias[0].includes('não pode ser comercializado como se apresenta'));
+  assert.ok(c({...base, carunchados: 6}).consequencias[0].includes('pode ser comercializado como se apresenta'));
+  assert.equal(c({...base, ardidos: 5.01, avariados_total: 10}).enquadramento, 'Desclassificado');
+  assert.equal(c({...base, carunchados: 8}).enquadramento, 'Fora de Tipo'); // 8,00 ainda é Fora de Tipo
+  assert.equal(c({avariados_total: 21}).enquadramento, 'Desclassificado'); // desclassifica mesmo com dados parciais
+  assert.equal(c({...base, ardidos: 6, avariados_total: 5}).status, STATUS.DADOS_INSUFICIENTES); // ardidos > total
+});
+
+test('moega: classificação integrada à leitura; umidade de comercialização conferida (14%)', () => {
+  const m = (d) => sec({equipamentoFamilia: 'moega', etapa: 'recebimento', ...d});
+  const r = m({produto: 'soja', destino: 'armazenamento_graos', leituras: [L('amostra', 'umidade_graos', 15)],
+    classificacao: {grupo: 'II', valores: {avariados_total: 3, ardidos_queimados: 1, queimados: 0.1, mofados: 0.5, esverdeados: 2, quebrados: 10, impurezas: 0.5}}});
+  assert.equal(r.classificacao.enquadramento, 'Padrão Básico');
+  assert.equal(r.leituras[0].avaliacao.regraId, 'COM-SOJA-UMID-01'); assert.equal(r.leituras[0].avaliacao.status, STATUS.FORA_DO_PADRAO);
+  assert.equal(r.status, STATUS.FORA_DO_PADRAO);
+  const so = m({produto: 'milho', destino: 'comercializacao', leituras: [], classificacao: {valores: {avariados_total: 5, ardidos: 0.8, quebrados: 2.5, impurezas: 0.9, carunchados: 1.5}}});
+  assert.equal(so.status, STATUS.OK); assert.ok(!so.pendencias.includes('Nenhuma leitura informada.'));
+  assert.equal(m({produto: 'milho', destino: 'comercializacao', leituras: [L('amostra', 'umidade_graos', 14)]}).status, STATUS.OK); // "até 14,0%"
+  // regras antigas de 0.5.0 suspensas, mas mantidas no banco
+  assert.ok(['CLA-SOJA-AVAR-01', 'CLA-SOJA-QUEB-01', 'CLA-SOJA-IMPUR-01'].every(id => BANCO.regras.find(x => x.id === id).statusValidacao === 'suspensa'));
 });

@@ -46,7 +46,7 @@ Fórmulas conferidas: classes de espaçamento (F-ESPAC-CLASSES) e perdas interna
 
 Sem referência no banco (o sistema não avalia): perdas de milho, trigo, feijão e outras culturas; pressão do manômetro; tamanho de gota; condições climáticas de aplicação.
 
-## Secador, moega e armazenagem (banco 1.3.0)
+## Secador, moega e armazenagem (banco 1.4.0)
 
 Conferência documental em 05/10/2026. O ponto de medição faz parte do escopo: uma regra da massa de grãos nunca é aplicada ao ar de entrada.
 
@@ -61,14 +61,22 @@ Conferência documental em 05/10/2026. O ponto de medição faz parte do escopo:
 | ARM-SOJA-SEM-UMID-* (6 regras) | soja / semente, por região e embalagem | armazenamento / amostra | 13,5 · 12,0 · 11,5% (sacaria); 1 p.p. a menos em big-bag | Doc. 380 (2016), p. 49 | **validada** (big-bag: confiança média, valor derivado) |
 | ARM-SOJA-SEM-TEMP-01 / URAR-01 | soja / semente | armazenamento | abaixo de 25 °C / UR abaixo de 70% | Manual Embrapa (2005) | **validada** |
 | SEC-SOJA-SEM-MASSA-2005 | soja / semente | secagem / massa | 38 °C | Manual Embrapa (2005) | suspensa — substituída pelo Doc. 380 (2016) |
-| COM-SOJA-UMID-01 / COM-MILHO-UMID-01 | comercialização | recebimento… / amostra | 14% | MAPA IN 11/2007 e IN 60/2011 | pendente — site do MAPA não acessível |
-| CLA-SOJA-AVAR-01 | soja / comercialização | recebimento (moega) / amostra | avariados até 8% — acima, desconto direto | Embrapa Soja, Doc. 403 (2018), p. 180, aplicando a IN 11/2007 | **validada** |
-| CLA-SOJA-QUEB-01 | soja / comercialização | recebimento (moega) / amostra | partidos, quebrados e amassados até 30% — acima, desconto direto | Embrapa Soja, Doc. 403 (2018), p. 180 | **validada** |
-| CLA-SOJA-IMPUR-01 | soja / comercialização | recebimento (moega) / amostra | matérias estranhas e impurezas 1% | Manual Embrapa (2005), citando a Portaria 262/1983 (revogada) | pendente — conferir no anexo da IN 11 |
+| COM-SOJA-UMID-01 / COM-MILHO-UMID-01 | soja / milho — destinos de grão | recebimento (moega) / amostra | até 14% (recomendado; não entra no tipo) | IN 11/2007, Art. 4º, § 4º · IN 60/2011, Art. 11 | **validada** |
+| CLA-SOJA-AVAR-01 · QUEB-01 · IMPUR-01 | soja | recebimento | 8% · 30% · 1% | Embrapa | suspensas — substituídas pelas tabelas abaixo |
 
-Classificação na moega: o app mostra o excesso sobre a tolerância em pontos percentuais, mas **não calcula o valor do desconto** (a regra de desconto da IN 11 ainda não foi conferida no texto oficial). Os demais limites da IN 11 (ardidos, queimados, mofados, esverdeados, tipos do Grupo I) e toda a tabela do milho (IN 60/2011) dependem do acesso a `sistemasweb.agricultura.gov.br` / `www.gov.br`.
+### Classificação oficial (`tabelasClassificacao`)
 
-Sem referência no banco: temperatura do ar de entrada para soja, temperatura na moega, impureza, classificação do milho (IN 60/2011), trigo, feijão, arroz e outras culturas.
+Conferida em 05/10/2026 no texto consolidado do SISLEGIS/MAPA; cópia do texto em `fontes/mapa/`. Vale no recebimento para destinos de grão (não para semente).
+
+| ID | Norma | Tipos (limites máximos, %) | Fora de tipo / desclassificação |
+|---|---|---|---|
+| CLA-SOJA-IN11-GI | IN 11/2007, Tabela 1 (Grupo I — consumo in natura) | Tipo 1: ardidos+queimados 1,0; queimados 0,3; mofados 0,5; avariados 4,0; esverdeados 2,0; partidos/quebrados/amassados 8,0; matérias estranhas e impurezas 1,0 · Tipo 2: 2,0; 1,0; 1,5; 6,0; 4,0; 15,0; 1,0 | acima do Tipo 2 = Fora de Tipo (Art. 6º); defeitos graves > 12% = desclassificada (Art. 8º, II) |
+| CLA-SOJA-IN11-GII | IN 11/2007, Tabela 2 (Grupo II — outros usos) | Padrão Básico: 4,0; 1,0; 6,0; 8,0; 8,0; 30,0; 1,0 | Fora do Padrão Básico; defeitos graves > 40% = desclassificada (Art. 8º, III) |
+| CLA-MILHO-IN60 | IN 60/2011, Tabela 1 | ardidos · avariados · quebrados · impurezas · carunchados — Tipo 1: 1; 6; 3; 1; 2 · Tipo 2: 2; 10; 4; 1,5; 3 · Tipo 3: 3; 15; 5; 2; 4 | acima do Tipo 3 = Fora de Tipo; ardidos > 5, avariados > 20 ou carunchados > 8 = desclassificado (Art. 5º, § 3º, II, d) |
+
+Regras de cálculo seguidas: enquadramento pelo pior tipo (IN 11, Art. 27); resultado de cada defeito com 1 casa decimal na soja (Art. 25, VII) e 2 no milho; picados por percevejo entram divididos por 4 nos danificados da soja (Art. 25, III — o operador informa o total já calculado). As normas **não definem desconto**; desconto é acordo comercial e não é calculado. Desclassificação por mau estado, odor, sementes tóxicas etc. depende de inspeção do classificador e não é calculada.
+
+Sem referência no banco: temperatura do ar de entrada para soja, temperatura na moega, classificação de trigo, feijão, arroz e outras culturas.
 
 Limites "abaixo de" são exclusivos (`limiteMaxExclusivo`): 14,0% já está fora de "abaixo de 14%".
 
