@@ -400,6 +400,7 @@ VIEWS.inicio = (anchor) => {
       <button data-act="mt-new"><span class="qicon orange">⚙</span><span><strong>Abrir manutenção</strong><small>Preventiva ou corretiva</small></span></button>
       <button data-act="mov-new"><span class="qicon purple">⇄</span><span><strong>Movimentar estoque</strong><small>Entrada, saída ou ajuste</small></span></button>
     </section>
+    ${!isEmpty && typeof painelGraficos === 'function' ? painelGraficos() : ''}
     ${isEmpty ? `<section class="card" style="margin-top:24px">${empty('Nenhum dado cadastrado ainda', 'Comece cadastrando talhões, máquinas e insumos — ou carregue dados de exemplo para conhecer o aplicativo.', {act: 'seed', label: 'Carregar dados de exemplo'})}</section>` : ''}
     <section class="grid">
       <article class="card panel"><div class="section-title" style="margin:0 0 4px"><h3>Operações do dia</h3><button data-act="nav" data-id="operacoes">Ver todas</button></div>
@@ -427,13 +428,22 @@ VIEWS.maquinas = () => {
   const mts = db.maintenances.slice().sort((a, b) => (a.status === 'Concluída') - (b.status === 'Concluída') || b.date.localeCompare(a.date));
   return head('Máquinas e manutenção', 'Horímetro, revisões programadas e ordens de manutenção.', btn('Registrar horímetro', 'hour-new', '', 'secondary') + btn('Abrir manutenção', 'mt-new', '', 'secondary') + btn('+ Nova máquina', 'mc-new')) +
     (ms.length ? `<section class="cards">${ms.map(m => {
-      const st = machineStatus(m), left = hoursToService(m);
+      const st = machineStatus(m), left = hoursToService(m), temRev = Number(m.nextService) > 0;
       const color = st === 'Em manutenção' ? 'orange' : st === 'Inativa' ? 'gray' : 'green';
-      const warn = Number(m.nextService) > 0 ? (left <= 0 ? chip('Revisão vencida', 'red') : left <= SERVICE_WARN_HOURS ? chip(`Revisão em ${num(left)} h`, 'orange') : '') : '';
-      return `<article class="card item-card"><header><div><h4>${esc(m.name)}</h4><div class="meta">${esc([m.type, m.model].filter(Boolean).join(' • '))}</div></div>${chip(st, color)}</header>
-        <div class="big">${num(m.hours)} h</div>
-        <div class="meta"><span>Próxima revisão: ${Number(m.nextService) > 0 ? num(m.nextService) + ' h' : '—'} ${warn}</span><span>Último registro: ${fmtDate(db.hourLogs.filter(h => h.machineId === m.id).sort(byDateDesc)[0]?.date)}</span>${m.catalogo ? `<span>Catálogo: ${esc(m.catalogo.marca)} ${esc(m.catalogo.nome)}${m.catalogo.codigoFiname ? ' • FINAME ' + esc(m.catalogo.codigoFiname) : ''}</span>` : ''}${(() => { const u = db.afericoes.filter(a => a.maquina?.id === m.id).sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora))[0]; return u ? `<span>Última aferição: ${fmtDate(u.data)} — ${esc({OK: 'dentro da referência', ATENCAO: 'atenção', FORA_DO_PADRAO: 'fora da referência', SEM_REFERENCIA: 'não avaliada', DADOS_INSUFICIENTES: 'dados insuficientes'}[u.resultado.status] || '')}</span>` : ''; })()}</div>
-        <div class="row-actions" style="justify-content:flex-start">${mini('◷ Horímetro', 'hour-new', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}${mini('◎ Aferição', 'af-nova', m.id)}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${mini(m.catalogo ? 'Catálogo ✓' : 'Vincular catálogo', 'mc-cat', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}</div></article>`;
+      // Barra até a próxima revisão: horas desde a última revisão ÷ intervalo
+      const intervalo = Number(m.interval) || 250, pct = temRev ? Math.max(0, Math.min(100, 100 - left / intervalo * 100)) : 0;
+      const corRev = !temRev ? '' : left <= 0 ? 'rev-vencida' : left <= SERVICE_WARN_HOURS ? 'rev-alerta' : 'rev-ok';
+      const textoRev = !temRev ? 'Sem revisão programada' : left <= 0 ? `! Revisão vencida há ${num(-left)} h` : `Revisão em ${num(left)} h (${num(m.nextService)} h)`;
+      const af = db.afericoes.filter(a => a.maquina?.id === m.id).sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora))[0];
+      const extras = [m.catalogo ? `Catálogo: ${esc(m.catalogo.marca)} ${esc(m.catalogo.nome)}` : '', af ? `Última aferição: ${fmtDate(af.data)} — ${esc({OK: 'dentro da referência', ATENCAO: 'atenção', FORA_DO_PADRAO: 'fora da referência', SEM_REFERENCIA: 'não avaliada', DADOS_INSUFICIENTES: 'dados insuficientes'}[af.resultado.status] || '')}` : ''].filter(Boolean);
+      return `<article class="card item-card maq-card"><header><div><h4>${esc(m.name)}</h4><div class="meta">${esc([m.type, m.model].filter(Boolean).join(' • '))}</div></div>${chip(st, color)}</header>
+        <div class="maq-horas"><span class="big">${num(m.hours)} h</span><small>último registro ${fmtDate(db.hourLogs.filter(h => h.machineId === m.id).sort(byDateDesc)[0]?.date)}</small></div>
+        <div class="maq-rev ${corRev}"><small>${textoRev}</small>${temRev ? `<div class="progress"><span style="width:${pct}%"></span></div>` : ''}</div>
+        ${extras.length ? `<div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>` : ''}
+        <div class="maq-acoes">${mini('◷ Horímetro', 'hour-new', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}
+          <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">
+            ${mini('◎ Aferição e calibragem', 'af-nova', m.id)}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
+          </div></details></div></article>`;
     }).join('')}</section>` : `<section class="card">${empty('Nenhuma máquina cadastrada', 'Cadastre tratores, colheitadeiras e implementos para controlar horímetro e revisões.', {act: 'mc-new', label: '+ Nova máquina'})}</section>`) +
     `<div class="section-title"><h3>Ordens de manutenção</h3></div><section class="card list">${mts.length ? mts.map(mt => {
       const color = mt.status === 'Concluída' ? 'gray' : mt.status === 'Em execução' ? 'blue' : 'orange';
@@ -625,6 +635,13 @@ function loadSamples() {
   db.fields.push({id: f1, name: 'Talhão 07', area: 84.5, crop: 'Soja', cultivar: 'BMX Zeus', season: '2026/27', plantingDate: today()}, {id: f2, name: 'Talhão 08', area: 62, crop: 'Soja', cultivar: 'NS 7709', season: '2026/27'}, {id: f3, name: 'Talhão 12', area: 110, crop: 'Milho', cultivar: 'P3898', season: '2026/27'});
   db.machines.push({id: m1, name: 'Trator 7230J', type: 'Trator', model: 'John Deere 7230J', hours: 1492, interval: 250, nextService: 1500}, {id: m2, name: 'Colheitadeira 01', type: 'Colheitadeira', model: 'S540', hours: 3120, interval: 250, nextService: 3250}, {id: m3, name: 'Pulverizador 4730', type: 'Pulverizador', model: 'JD 4730', hours: 860, interval: 200, nextService: 1000});
   db.hourLogs.push({id: uid(), machineId: m1, date: daysAgo(1), hours: 1492, previous: 1480});
+  // Histórico das últimas semanas (exemplo) para os indicadores da Visão Geral
+  [[m1, 1480, [9, 7, 11, 8, 10, 6]], [m2, 3120, [12, 14, 9, 13, 0, 0]], [m3, 860, [6, 0, 8, 5, 7, 9]]].forEach(([id, h, semanas]) => {
+    let atual = h;
+    semanas.forEach((d, i) => { if (!d) return; db.hourLogs.push({id: uid(), machineId: id, date: daysAgo(3 + i * 7), hours: atual, previous: atual - d}); atual -= d; });
+  });
+  [[f3, 'Colheita', m2, 55, 6], [f3, 'Colheita', m2, 55, 8], [f1, 'Preparo de solo', m1, 42, 13], [f2, 'Adubação', m1, 31, 15], [f2, 'Preparo de solo', m1, 31, 20], [f1, 'Aplicação', m3, 84.5, 22], [f3, 'Aplicação', m3, 110, 27]]
+    .forEach(([fieldId, type, machineId, area, d]) => db.operations.push({id: uid(), date: daysAgo(d), time: '07:00', type, fieldId, machineId, status: 'Concluída', area}));
   db.maintenances.push({id: uid(), machineId: m2, kind: 'Preventiva', date: today(), description: 'Troca de filtros e inspeção', status: 'Aberta'});
   db.operations.push(
     {id: uid(), date: today(), time: '07:10', type: 'Plantio', fieldId: f1, machineId: m1, status: 'Em andamento', area: 40, operator: 'Equipe A', notes: 'Plantadeira 30 linhas'},
@@ -693,6 +710,8 @@ function render(anchor = pendingAnchor) {
   $$('[data-route]').forEach(b => b.classList.toggle('active', b.dataset.route === key));
   VIEWS[name].after?.(anchor);
 }
+// Menus "⋯ Mais": fecham ao tocar fora ou ao escolher uma opção
+document.addEventListener('click', e => $$('.menu-mais[open]').forEach(d => { if (!d.contains(e.target) || e.target.closest('.menu-lista button')) d.open = false; }));
 let lastRoute = '';
 addEventListener('hashchange', () => { const r = location.hash; if (r !== lastRoute) { lastRoute = r; render(); scrollTo(0, 0); } });
 lastRoute = location.hash;
