@@ -10,7 +10,10 @@ const PONTOS = [['massa_graos', 'Massa de grãos / sementes'], ['ar_entrada', 'A
 const REGIOES = [['sul', 'RS, SC e centro-sul do PR'], ['transicao', 'Norte e oeste do PR, sul do MS e SP'], ['cerrados', 'Demais regiões dos Cerrados']];
 const EMBALAGENS = [['sacaria', 'Sacaria'], ['big_bag', 'Big-bag']];
 const PRODUTOS_SEC = [['soja', 'Soja'], ['milho', 'Milho'], ['trigo', 'Trigo'], ['feijao', 'Feijão'], ['arroz', 'Arroz'], ['sorgo', 'Sorgo'], ['outro', 'Outro']];
-const VARIAVEL = {temperatura: 'Temperatura', umidade_graos: 'Umidade dos grãos', umidade_relativa_ar: 'Umidade relativa do ar'};
+const VARIAVEL = {temperatura: 'Temperatura', umidade_graos: 'Umidade dos grãos', umidade_relativa_ar: 'Umidade relativa do ar',
+  graos_avariados: 'Grãos avariados', graos_quebrados_amassados: 'Partidos, quebrados e amassados', impurezas_materias_estranhas: 'Matérias estranhas e impurezas'};
+// Classificação na moega: defeitos medidos na amostra da carga (% em peso)
+const CLASSIF = [['impureza', 'impurezas_materias_estranhas'], ['avariados', 'graos_avariados'], ['quebrados', 'graos_quebrados_amassados']];
 const rotulo = (lista, v) => (lista.find(x => x[0] === v) || [, v || '—'])[1];
 
 let sc = null;
@@ -52,7 +55,7 @@ function passoSecagem() {
       ${s.local === 'secador' ? sCampo('tipoSecador', 'Tipo de secador', sSel('tipoSecador', TIPO_SECADOR, s.tipoSecador, 'Não informado'), 'Algumas referências valem só para um tipo (ex.: secador estático).', true) : ''}
       ${sCampo('lotId', 'Lote', sSel('lotId', db.lots.map(l => [l.id, `${l.code} — ${[l.species, l.cultivar].filter(Boolean).join(' ')}`]), s.lotId, 'Sem lote'), 'Ao escolher um lote de sementes, cultura e destino são sugeridos.', true)}
       ${sCampo('produto', 'Produto / grão', sSel('produto', PRODUTOS_SEC, s.produto, 'Selecione'))}
-      ${sCampo('destino', 'Destino do produto', sSel('destino', DESTINOS, s.destino, 'Selecione'), 'Define a referência: semente e grão têm limites diferentes.')}
+      ${sCampo('destino', 'Destino do produto', sSel('destino', DESTINOS, s.destino, 'Selecione'), s.local === 'moega' ? 'Para classificar a carga de soja pela IN 11/2007 (avariados e quebrados), escolha “Grão — comercialização (classificação)”.' : 'Define a referência: semente e grão têm limites diferentes.')}
     </div>${sNav(false)}</section>`;
   }
   if (s.passo === 2) {
@@ -72,7 +75,9 @@ function passoSecagem() {
     return topo + `<section class="card panel"><div class="form">
       ${s.ponto ? sNum('temperatura', `Temperatura — ${rotulo(PONTOS, s.ponto)} (°C)`, '', true) : ''}
       ${comUR ? sNum('urAr', `Umidade relativa do ar — ${rotulo(PONTOS, s.ponto)} (%)`, 'Opcional.', true) : ''}
-      ${moega ? sNum('umidadeFinal', 'Umidade do produto recebido (%)', 'Determinada na amostra da carga.') + sNum('impureza', 'Impureza / matérias estranhas (%)', 'Registro (sem referência validada no banco).')
+      ${moega ? sNum('umidadeFinal', 'Umidade do produto recebido (%)', 'Determinada na amostra da carga.') + `<p class="nota field full" style="margin:0">Classificação da amostra (% em peso). Avariados = soma dos defeitos que a IN 11 classifica como avariados (ex.: ardidos, mofados), conforme o laudo do classificador; grãos picados por percevejo entram divididos por 4.</p>` +
+          sNum('avariados', 'Grãos avariados — total (%)', 'Soja: tolerância de 8% (IN 11/2007).') + sNum('quebrados', 'Partidos, quebrados e amassados (%)', 'Soja: tolerância de 30% (IN 11/2007).') +
+          sNum('impureza', 'Matérias estranhas e impurezas (%)', 'Registrado; ainda sem referência validada no banco.')
         : sNum('umidadeFinal', s.etapa === 'secagem' ? 'Umidade atual da amostra (%)' : 'Umidade da amostra (%)', 'Usada na comparação com a referência de armazenamento.') +
           (s.etapa !== 'armazenamento' ? sNum('umidadeInicial', 'Umidade inicial / na entrada (%)', 'Opcional — calcula a redução.') + sNum('umidadeMeta', 'Meta de umidade (%)', 'Opcional — sua meta operacional.') + sNum('massaInicial', 'Massa inicial (t)', 'Opcional — estima a quebra de peso pela secagem.') : '')}
       ${sCampo('data', 'Data', sInp('data', s.data, 'type="date"'))}${sCampo('hora', 'Hora', sInp('hora', s.hora, 'type="time"'))}
@@ -122,9 +127,9 @@ function validarSecagem() {
   if (s.passo === 1) { if (!s.local) return 'Selecione o local da leitura'; if (!s.produto) return 'Selecione o produto'; if (!s.destino) return 'Selecione o destino — a referência depende dele'; }
   if (s.passo === 2 && !s.etapa) return 'Selecione a etapa';
   if (s.passo === 3) {
-    const algum = ['temperatura', 'urAr', 'umidadeFinal'].some(k => umNum(s[k]) !== undefined);
+    const algum = ['temperatura', 'urAr', 'umidadeFinal', ...CLASSIF.map(c => c[0])].some(k => umNum(s[k]) !== undefined);
     if (!algum) return 'Informe pelo menos uma medição';
-    for (const k of ['temperatura', 'urAr', 'umidadeFinal', 'umidadeInicial', 'umidadeMeta', 'massaInicial', 'impureza'])
+    for (const k of ['temperatura', 'urAr', 'umidadeFinal', 'umidadeInicial', 'umidadeMeta', 'massaInicial', 'impureza', 'avariados', 'quebrados'])
       if (s[k] !== undefined && s[k] !== '' && umNum(s[k]) === undefined) return `Valor inválido: ${s[k]}`;
   }
   return '';
@@ -136,6 +141,7 @@ async function calcularSecagem() {
   if (s.ponto && umNum(s.temperatura) !== undefined) leituras.push({ponto: s.ponto, posicao: s.posicao || undefined, variavel: 'temperatura', valor: umNum(s.temperatura)});
   if (umNum(s.urAr) !== undefined) leituras.push({ponto: s.ponto, posicao: s.posicao || undefined, variavel: 'umidade_relativa_ar', valor: umNum(s.urAr)});
   if (umNum(s.umidadeFinal) !== undefined) leituras.push({ponto: 'amostra', variavel: 'umidade_graos', valor: umNum(s.umidadeFinal)});
+  if (s.etapa === 'recebimento') CLASSIF.forEach(([k, variavel]) => { if (umNum(s[k]) !== undefined) leituras.push({ponto: 'amostra', variavel, valor: umNum(s[k])}); });
   const r = AV().avaliarSecagem({equipamentoFamilia: s.local, produto: s.produto, destino: s.destino, etapa: s.etapa,
     condicoes: {tipoSecador: s.tipoSecador || undefined, regiaoArmazenamento: s.regiaoArmazenamento || undefined, embalagem: s.embalagem || undefined},
     leituras, umidadeInicial: umNum(s.umidadeInicial), umidadeFinal: umNum(s.umidadeFinal), umidadeMeta: umNum(s.umidadeMeta), massaInicial: umNum(s.massaInicial)}, banco);
@@ -160,7 +166,10 @@ function resultadoSecagem(r, s) {
     c.reducaoUmidadePP != null && ['Redução de umidade', `${num(c.reducaoUmidadePP, 1)} p.p.`],
     c.diferencaMetaPP != null && ['Diferença para a meta', `${c.diferencaMetaPP > 0 ? '+' : ''}${num(c.diferencaMetaPP, 1)} p.p.`],
     c.massaFinalEstimada != null && ['Massa final estimada', `${num(c.massaFinalEstimada, 2)} t (quebra de ${num(c.quebraMassa, 2)} t = ${num(c.quebraPct, 2)}%)`],
-    s?.impureza && ['Impureza registrada', `${s.impureza}%`]
+    // registros antigos guardavam a impureza só como anotação
+    s?.impureza && !r.leituras.some(l => l.variavel === 'impurezas_materias_estranhas') && ['Impureza registrada', `${s.impureza}%`],
+    ...r.leituras.filter(l => CLASSIF.some(c => c[1] === l.variavel) && l.avaliacao.status === 'FORA_DO_PADRAO' && l.avaliacao.diferenca > 0)
+      .map(l => [`Excesso sobre a tolerância — ${VARIAVEL[l.variavel].toLowerCase()}`, `${num(l.avaliacao.diferenca, 2)} p.p. (sujeito a desconto direto)`])
   ].filter(Boolean);
   return `<div class="resultado ${info.cor}"><small>RESULTADO</small><strong>${esc(info.rotulo)}</strong><small>AÇÃO RECOMENDADA</small><span>${esc(acao)}</span></div>
     <h3 style="margin-top:16px">Leituras</h3><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Leitura</th><th>Ponto</th><th class="num">Valor</th><th>Referência</th><th>Resultado</th></tr></thead><tbody>
@@ -233,7 +242,7 @@ function relatorioSecagem(id) {
     <h3>3. Condições da leitura</h3><table class="tbl"><tbody>
       ${linha('Etapa', rotulo(ETAPAS, a.etapa))}${linha('Ponto de temperatura', e.ponto ? rotulo(PONTOS, e.ponto) : 'Sem leitura de temperatura')}${linha('Sensor / posição', e.posicao)}
       ${linha('Região de armazenamento', e.regiaoArmazenamento ? rotulo(REGIOES, e.regiaoArmazenamento) : '')}${linha('Embalagem', e.embalagem ? rotulo(EMBALAGENS, e.embalagem) : '')}
-      ${linha('Umidade inicial (%)', e.umidadeInicial)}${linha('Umidade medida (%)', e.umidadeFinal)}${linha('Meta de umidade (%)', e.umidadeMeta)}${linha('Massa inicial (t)', e.massaInicial)}${linha('Impureza (%)', e.impureza)}
+      ${linha('Umidade inicial (%)', e.umidadeInicial)}${linha('Umidade medida (%)', e.umidadeFinal)}${linha('Meta de umidade (%)', e.umidadeMeta)}${linha('Massa inicial (t)', e.massaInicial)}${linha('Impureza (%)', e.impureza)}${linha('Grãos avariados (%)', e.avariados)}${linha('Partidos, quebrados e amassados (%)', e.quebrados)}
     </tbody></table>
     <h3>4. Referência e condições de aplicação</h3><table class="tbl"><tbody>${regras.length ? regras.map(l => linha(`${VARIAVEL[l.variavel]} (${l.ponto === 'amostra' ? 'amostra' : rotulo(PONTOS, l.ponto)})`, `${l.avaliacao.regraId} v${l.avaliacao.regraVersao} — ${l.avaliacao.regraTitulo}. Condições: ${(l.avaliacao.condicoesAplicadas || []).join('; ') || 'escopo da regra (produto, destino, etapa, ponto)'}. Análise em ${new Date(l.avaliacao.dataAnalise).toLocaleString('pt-BR')} (banco ${l.avaliacao.bancoVersao}).`)).join('') : linha('Referência', 'Nenhuma referência validada aplicável às condições desta leitura.')}</tbody></table>
     <h3>5. Instrumentos e observações</h3><table class="tbl"><tbody>${linha('Instrumento', e.instrumento || 'Não informado')}${linha('Rastreabilidade metrológica do instrumento', 'Não informada')}${linha('Observações', e.observacoes)}</tbody></table>

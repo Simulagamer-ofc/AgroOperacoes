@@ -347,11 +347,13 @@
   /**
    * Secador, moega e armazém: avalia cada leitura separadamente, sempre com o ponto de medição informado.
    * dados: {equipamentoFamilia, produto, destino, etapa, condicoes:{...},
-   *         leituras:[{ponto, posicao, variavel:'temperatura'|'umidade_graos'|'umidade_relativa_ar', valor}],
+   *         leituras:[{ponto, posicao, variavel:'temperatura'|'umidade_graos'|'umidade_relativa_ar'
+   *                    |'graos_avariados'|'graos_quebrados_amassados'|'impurezas_materias_estranhas', valor}],
    *         umidadeInicial, umidadeFinal, umidadeMeta, massaInicial}
    */
   function avaliarSecagem(dados, banco, opcoes = {}) {
-    const UN = {temperatura: '°C', umidade_graos: '%', umidade_relativa_ar: '%'};
+    const UN = {temperatura: '°C', umidade_graos: '%', umidade_relativa_ar: '%',
+      graos_avariados: '%', graos_quebrados_amassados: '%', impurezas_materias_estranhas: '%'}; // classificação na moega (amostra)
     const leituras = (dados.leituras || []).filter(l => finito(l.valor));
     const avaliacoes = leituras.map(l => ({...l, avaliacao: avaliar({equipamentoFamilia: dados.equipamentoFamilia, produto: dados.produto, destino: dados.destino,
       etapa: dados.etapa, ponto: l.ponto, posicao: l.posicao, variavel: l.variavel, unidade: UN[l.variavel], valor: l.valor, condicoes: dados.condicoes || {}}, banco, opcoes)}));

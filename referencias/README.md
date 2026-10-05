@@ -46,7 +46,7 @@ Fórmulas conferidas: classes de espaçamento (F-ESPAC-CLASSES) e perdas interna
 
 Sem referência no banco (o sistema não avalia): perdas de milho, trigo, feijão e outras culturas; pressão do manômetro; tamanho de gota; condições climáticas de aplicação.
 
-## Secador, moega e armazenagem (banco 1.2.0)
+## Secador, moega e armazenagem (banco 1.3.0)
 
 Conferência documental em 05/10/2026. O ponto de medição faz parte do escopo: uma regra da massa de grãos nunca é aplicada ao ar de entrada.
 
@@ -62,8 +62,13 @@ Conferência documental em 05/10/2026. O ponto de medição faz parte do escopo:
 | ARM-SOJA-SEM-TEMP-01 / URAR-01 | soja / semente | armazenamento | abaixo de 25 °C / UR abaixo de 70% | Manual Embrapa (2005) | **validada** |
 | SEC-SOJA-SEM-MASSA-2005 | soja / semente | secagem / massa | 38 °C | Manual Embrapa (2005) | suspensa — substituída pelo Doc. 380 (2016) |
 | COM-SOJA-UMID-01 / COM-MILHO-UMID-01 | comercialização | recebimento… / amostra | 14% | MAPA IN 11/2007 e IN 60/2011 | pendente — site do MAPA não acessível |
+| CLA-SOJA-AVAR-01 | soja / comercialização | recebimento (moega) / amostra | avariados até 8% — acima, desconto direto | Embrapa Soja, Doc. 403 (2018), p. 180, aplicando a IN 11/2007 | **validada** |
+| CLA-SOJA-QUEB-01 | soja / comercialização | recebimento (moega) / amostra | partidos, quebrados e amassados até 30% — acima, desconto direto | Embrapa Soja, Doc. 403 (2018), p. 180 | **validada** |
+| CLA-SOJA-IMPUR-01 | soja / comercialização | recebimento (moega) / amostra | matérias estranhas e impurezas 1% | Manual Embrapa (2005), citando a Portaria 262/1983 (revogada) | pendente — conferir no anexo da IN 11 |
 
-Sem referência no banco: temperatura do ar de entrada para soja, temperatura na moega, impureza e demais itens de classificação (dependem das INs do MAPA), trigo, feijão, arroz e outras culturas.
+Classificação na moega: o app mostra o excesso sobre a tolerância em pontos percentuais, mas **não calcula o valor do desconto** (a regra de desconto da IN 11 ainda não foi conferida no texto oficial). Os demais limites da IN 11 (ardidos, queimados, mofados, esverdeados, tipos do Grupo I) e toda a tabela do milho (IN 60/2011) dependem do acesso a `sistemasweb.agricultura.gov.br` / `www.gov.br`.
+
+Sem referência no banco: temperatura do ar de entrada para soja, temperatura na moega, impureza, classificação do milho (IN 60/2011), trigo, feijão, arroz e outras culturas.
 
 Limites "abaixo de" são exclusivos (`limiteMaxExclusivo`): 14,0% já está fora de "abaixo de 14%".
 

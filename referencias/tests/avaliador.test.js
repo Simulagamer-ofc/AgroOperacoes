@@ -289,3 +289,21 @@ test('várias leituras: pior resultado prevalece; cálculos de umidade e quebra'
   assert.equal(r.calculos.reducaoUmidadePP, 6); assert.equal(r.calculos.diferencaMetaPP, -0.5);
   quase(r.calculos.massaFinalEstimada, 931.818, 0.01); quase(r.calculos.quebraPct, 6.82, 0.01);
 });
+
+test('moega: classificação da soja pela IN 11 — avariados 8% e quebrados 30%; excesso = desconto', () => {
+  const m = (destino, leituras, produto = 'soja') => sec({equipamentoFamilia: 'moega', produto, destino, etapa: 'recebimento', leituras});
+  const ok = m('comercializacao', [L('amostra', 'graos_avariados', 8), L('amostra', 'graos_quebrados_amassados', 30)]);
+  assert.equal(ok.status, STATUS.OK); // limite incluso: "tolerância máxima de 8%"
+  const fora = m('comercializacao', [L('amostra', 'graos_avariados', 9.5)]);
+  assert.equal(fora.status, STATUS.FORA_DO_PADRAO);
+  assert.equal(fora.leituras[0].avaliacao.regraId, 'CLA-SOJA-AVAR-01'); assert.equal(fora.leituras[0].avaliacao.diferenca, 1.5);
+  assert.equal(m('comercializacao', [L('amostra', 'graos_quebrados_amassados', 31)]).status, STATUS.FORA_DO_PADRAO);
+  // impureza: valor de norma revogada → não conclui
+  const imp = m('comercializacao', [L('amostra', 'impurezas_materias_estranhas', 3)]);
+  assert.equal(imp.status, STATUS.SEM_REFERENCIA);
+  assert.ok(imp.leituras[0].avaliacao.referenciasCandidatas.some(c => c.regraId === 'CLA-SOJA-IMPUR-01'));
+  // fora do escopo da IN 11 no banco: semente, milho, outra etapa
+  assert.equal(m('semente', [L('amostra', 'graos_avariados', 20)]).status, STATUS.SEM_REFERENCIA);
+  assert.equal(m('comercializacao', [L('amostra', 'graos_avariados', 20)], 'milho').status, STATUS.SEM_REFERENCIA);
+  assert.equal(sec({equipamentoFamilia: 'armazem', produto: 'soja', destino: 'comercializacao', etapa: 'armazenamento', leituras: [L('amostra', 'graos_avariados', 20)]}).status, STATUS.SEM_REFERENCIA);
+});

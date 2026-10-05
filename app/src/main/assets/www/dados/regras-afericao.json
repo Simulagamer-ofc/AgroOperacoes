@@ -1,6 +1,6 @@
 {
   "banco": "Nexus Agro — referências de aferição e calibragem de máquinas e implementos",
-  "versaoBanco": "1.2.0",
+  "versaoBanco": "1.3.0",
   "dataBanco": "2026-10-05",
   "observacaoGeral": "Somente regras com statusValidacao = 'validada' são usadas para concluir uma avaliação. Regras 'validada' tiveram o trecho conferido no documento original (ver fontes[].trechoLiteral). Regras 'pendente_conferencia' tiveram a fonte localizada, mas o texto ainda não foi conferido no documento original; o avaliador as mostra como referência candidata e devolve SEM_REFERENCIA. Escopo '*' significa que a regra declara expressamente não depender daquele campo.",
   "statusPossiveis": {
@@ -1451,6 +1451,163 @@
       ],
       "observacaoTecnica": "Pendente de conferência no texto oficial.",
       "confianca": "media",
+      "statusValidacao": "pendente_conferencia",
+      "validadoPor": null,
+      "dataValidacao": null
+    },
+    {
+      "id": "CLA-SOJA-AVAR-01",
+      "versao": "1.0.0",
+      "titulo": "Grãos avariados — tolerância máxima na classificação da soja (IN 11/2007)",
+      "equipamentoFamilia": "*",
+      "avaliacao": "classificacao_recebimento",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "comercializacao"
+      ],
+      "etapa": [
+        "recebimento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "graos_avariados",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 8,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Acima da tolerância de 8% de avariados: pela IN 11/2007 incide desconto direto sobre o excesso. Registrar o percentual no romaneio da carga.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Documentos 403 — Qualidade de sementes e grãos comerciais de soja no Brasil, safra 2016/17 (cap. 'Regulamento Técnico da Soja da Instrução Normativa Nº 11, de 15 de maio de 2007, do MAPA, para amostras de grãos', I. Lorini)",
+          "ano": 2018,
+          "url": "https://www.alice.cnptia.embrapa.br/alice/bitstream/doc/1099613/1/p179196.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 180 (Documentos 403)",
+          "trechoLiteral": "Os grãos avariados compreendem a soma dos ardidos, mofa[dos ...] tolerância máxima de 8%. Acima disto incidem descontos diretos, conforme estabelece a IN11 do MAPA"
+        },
+        {
+          "organizacao": "MAPA",
+          "titulo": "Instrução Normativa nº 11, de 15/05/2007 — Regulamento Técnico da Soja (complementada pela IN nº 37, de 27/07/2007)",
+          "url": "https://sistemasweb.agricultura.gov.br/sislegis/action/detalhaAto.do?method=visualizarAtoPortalMapa&chave=1194426968",
+          "tipo": "norma",
+          "conferido": false,
+          "observacao": "Domínio do MAPA bloqueado no ambiente de coleta; limite conferido na publicação da Embrapa que aplica a IN 11. Conferir o anexo da norma quando o domínio for liberado."
+        }
+      ],
+      "observacaoTecnica": "Valor de avariados é a SOMA dos defeitos classificados como avariados pela IN 11 (o documento cita ardidos, mofados e outros; a lista completa está ilegível no PDF e deve ser conferida no anexo da IN 11); grãos picados por percevejo entram divididos por quatro (\"conforme estabelece a IN11\", mesmo documento). O trecho entre colchetes está ilegível no PDF; o limite e a frase sobre descontos estão legíveis.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original da Embrapa; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "CLA-SOJA-QUEB-01",
+      "versao": "1.0.0",
+      "titulo": "Grãos partidos, quebrados e amassados — tolerância máxima na classificação da soja (IN 11/2007)",
+      "equipamentoFamilia": "*",
+      "avaliacao": "classificacao_recebimento",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "comercializacao"
+      ],
+      "etapa": [
+        "recebimento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "graos_quebrados_amassados",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 30,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Acima da tolerância de 30% de quebrados/amassados: pela IN 11/2007 incide desconto direto sobre o excesso. Verificar regulagem da colhedora e transporte.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Documentos 403 — Qualidade de sementes e grãos comerciais de soja no Brasil, safra 2016/17 (cap. 'Regulamento Técnico da Soja da Instrução Normativa Nº 11, de 15 de maio de 2007, do MAPA, para amostras de grãos', I. Lorini)",
+          "ano": 2018,
+          "url": "https://www.alice.cnptia.embrapa.br/alice/bitstream/doc/1099613/1/p179196.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 180 (Documentos 403)",
+          "trechoLiteral": "Os grãos quebrados e amassados têm a tolerância máxima de 30%. Acima disto incidem descontos diretos, conforme estabelece a IN11 do MAPA"
+        },
+        {
+          "organizacao": "MAPA",
+          "titulo": "Instrução Normativa nº 11, de 15/05/2007 — Regulamento Técnico da Soja (complementada pela IN nº 37, de 27/07/2007)",
+          "url": "https://sistemasweb.agricultura.gov.br/sislegis/action/detalhaAto.do?method=visualizarAtoPortalMapa&chave=1194426968",
+          "tipo": "norma",
+          "conferido": false,
+          "observacao": "Domínio do MAPA bloqueado no ambiente de coleta; limite conferido na publicação da Embrapa que aplica a IN 11. Conferir o anexo da norma quando o domínio for liberado."
+        }
+      ],
+      "observacaoTecnica": "Percentual em peso da amostra.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original da Embrapa; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "CLA-SOJA-IMPUR-01",
+      "versao": "1.0.0",
+      "titulo": "Matérias estranhas e impurezas — soja (valor da norma anterior, não usado para concluir)",
+      "equipamentoFamilia": "*",
+      "avaliacao": "classificacao_recebimento",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "comercializacao"
+      ],
+      "etapa": [
+        "recebimento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "impurezas_materias_estranhas",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 1,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "",
+      "fontes": [
+        {
+          "organizacao": "Embrapa / SENAI / SEBRAE",
+          "titulo": "Manual de segurança e qualidade para a cultura da soja",
+          "ano": 2005,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/116424/1/MANUALSEGURANCAQUALIDADEParaaculturadesoja.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 41",
+          "trechoLiteral": "Segundo estabelece a Portaria nº 262, de 23/10/83 (COMPANHIA..., 2004), os limites máximos de tolerância de defeitos permitidos para o grão de soja Padrão Básico (PB) são: [...] Impurezas e matérias estranhas 1,00",
+          "observacao": "Norma citada (Portaria 262/1983) foi substituída pela IN 11/2007."
+        },
+        {
+          "organizacao": "MAPA",
+          "titulo": "Instrução Normativa nº 11, de 15/05/2007 — Regulamento Técnico da Soja (complementada pela IN nº 37, de 27/07/2007)",
+          "url": "https://sistemasweb.agricultura.gov.br/sislegis/action/detalhaAto.do?method=visualizarAtoPortalMapa&chave=1194426968",
+          "tipo": "norma",
+          "conferido": false,
+          "observacao": "Domínio do MAPA bloqueado no ambiente de coleta; limite conferido na publicação da Embrapa que aplica a IN 11. Conferir o anexo da norma quando o domínio for liberado."
+        }
+      ],
+      "observacaoTecnica": "O valor de 1,00% foi conferido literalmente no Manual de Segurança e Qualidade da Soja (Embrapa/SENAI/SEBRAE, 2005, p. 41), mas lá ele é atribuído à Portaria nº 262/1983, revogada pela IN 11/2007. Falta conferir o valor no anexo da IN 11.",
+      "confianca": "baixa",
       "statusValidacao": "pendente_conferencia",
       "validadoPor": null,
       "dataValidacao": null
