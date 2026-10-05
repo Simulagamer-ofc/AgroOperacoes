@@ -1,10 +1,10 @@
-# Agro Operações
+# Nexus Agro
 
 Aplicativo Android offline para operações agrícolas, máquinas, manutenção, talhões, produção de sementes, rastreabilidade e estoque.
 
 ## Versão atual
 
-`0.8.0-beta1` — aferição e calibragem simplificada (3 passos, um campo por medição, resultado que aponta o item a corrigir), indicadores com gráficos na Visão Geral, catálogo organizado por marca e tipo, cartões de máquina enxutos, classificação oficial de soja (IN 11/2007) e milho (IN 60/2011) na moega, secador e moega, aferição e calibragem com referências técnicas validadas e catálogo de máquinas offline.
+`0.9.0-beta1` — nova aparência Nexus Agro (tema escuro, faixa “Centro de operações”, rosca da situação das operações, últimos sete dias, estoque de insumos e controle de gastos; tema claro opcional), configuração da máquina a partir do catálogo, aferição e calibragem simplificada (3 passos, um campo por medição, resultado que aponta o item a corrigir), indicadores com gráficos na Visão Geral, catálogo organizado por marca e tipo, cartões de máquina enxutos, classificação oficial de soja (IN 11/2007) e milho (IN 60/2011) na moega, secador e moega, aferição e calibragem com referências técnicas validadas e catálogo de máquinas offline.
 
 ### Funcionalidades
 

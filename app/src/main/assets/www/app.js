@@ -93,7 +93,7 @@ const root = document.documentElement, sidebar = $('#sidebar'), overlay = $('#ov
 let toastTimer;
 function showToast(message) { toastEl.textContent = message; toastEl.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2800); }
 const savedTheme = safeStorage.get('agro-theme'); if (savedTheme) root.dataset.theme = savedTheme;
-$('#themeBtn').onclick = () => { const next = root.dataset.theme === 'dark' ? 'light' : 'dark'; root.dataset.theme = next; safeStorage.set('agro-theme', next); };
+$('#themeBtn').onclick = () => { const next = (root.dataset.theme || 'dark') === 'dark' ? 'light' : 'dark'; root.dataset.theme = next; safeStorage.set('agro-theme', next); };
 const closeMenu = () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); };
 const openMenu = () => { sidebar.classList.add('open'); overlay.classList.add('show'); };
 $('#menuBtn').onclick = openMenu; $('#moreBtn').onclick = openMenu; overlay.onclick = closeMenu;
@@ -375,41 +375,41 @@ function operationRow(o, actions = true) {
 
 // ---------- Telas ----------
 const VIEWS = {};
-const TITLES = {inicio: 'Visão Geral', operacoes: 'Operações do Dia', maquinas: 'Máquinas e Manutenção', talhoes: 'Talhões', sementes: 'Produção de Sementes', lotes: 'Lotes e Rastreabilidade', estoque: 'Estoque e Insumos', relatorios: 'Relatórios', cadastros: 'Cadastros e Backup', busca: 'Pesquisa'};
+const TITLES = {inicio: 'Visão geral', operacoes: 'Operações do dia', maquinas: 'Máquinas e manutenção', talhoes: 'Talhões', sementes: 'Produção de sementes', lotes: 'Lotes e rastreabilidade', estoque: 'Estoque e insumos', relatorios: 'Relatórios', cadastros: 'Cadastros e backup', busca: 'Pesquisa'};
 
 VIEWS.inicio = (anchor) => {
   const t = today();
   const todays = db.operations.filter(o => o.date === t);
   const running = db.operations.filter(o => o.status === 'Em andamento');
-  const inMaint = db.machines.filter(m => machineStatus(m) === 'Em manutenção');
   const al = alerts();
   const isEmpty = COLLECTIONS.every(c => !db[c].length);
   const upcoming = db.operations.filter(o => o.status === 'Em andamento' || (o.date >= t && o.status === 'Programada') || o.date === t).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time)).slice(0, 8);
+  // Alertas de manutenção e estoque (os demais alertas continuam na lista “Atenção”)
+  const mtAbertas = db.maintenances.filter(m => m.status !== 'Concluída').length;
+  const revisoes = db.machines.filter(m => !isInactive(m) && Number(m.nextService) > 0 && hoursToService(m) <= SERVICE_WARN_HOURS).length;
+  const estBaixo = db.stock.filter(stockLow).length;
+  const partes = [mtAbertas && `${mtAbertas} ${mtAbertas === 1 ? 'manutenção' : 'manutenções'}`, revisoes && `${revisoes} ${revisoes === 1 ? 'revisão' : 'revisões'}`, estBaixo && `${estBaixo} estoque baixo`].filter(Boolean);
+  const tipos = [...new Set(todays.map(o => o.type))];
   return `
-    <section class="welcome"><div><h2>${esc(db.settings.farm ? 'Operações — ' + db.settings.farm : 'Operações da fazenda')}</h2><p>Acompanhe o trabalho do campo e os registros salvos neste dispositivo.</p></div><button class="primary" data-act="op-new">+ Nova operação</button></section>
-    <section class="kpis">
-      <article class="card kpi"><div class="badge blue">◷</div><div class="label">Operações hoje</div><div class="value">${todays.length}</div><div class="hint">${todays.filter(o => o.status === 'Programada').length} aguardando início</div></article>
-      <article class="card kpi"><div class="badge green">▶</div><div class="label">Em andamento</div><div class="value">${running.length}</div><div class="hint">${esc([...new Set(running.map(o => o.type))].join(', ') || 'Nenhuma no momento')}</div></article>
-      <article class="card kpi"><div class="badge orange">⚙</div><div class="label">Máquinas em manutenção</div><div class="value">${inMaint.length}</div><div class="hint">de ${db.machines.filter(m => !isInactive(m)).length} máquinas ativas</div></article>
-      <article class="card kpi"><div class="badge red">!</div><div class="label">Pendências importantes</div><div class="value">${al.length}</div><div class="hint">Estoque, lotes e manutenção</div></article>
+    <section class="hero"><img class="hero-arte" src="img/centro-operacoes.jpg" alt="" aria-hidden="true">
+      <div class="hero-txt"><h2>Centro de operações</h2><p>${esc(db.settings.farm ? `Planeje, registre e conclua o trabalho no campo — ${db.settings.farm}.` : 'Planeje, registre e conclua o trabalho no campo.')}</p></div>
+      <button class="primary hero-cta" data-act="op-new">+ Nova operação</button></section>
+    <section class="kpis nexus">
+      <article class="card kpi"><div class="label">Operações hoje</div><div class="value">${todays.length}</div><div class="hint">${esc(tipos.join(', ') || 'Nenhuma operação hoje')}</div></article>
+      <article class="card kpi"><div class="label">Em andamento</div><div class="value">${running.length}</div><div class="hint">${running.length === 1 ? 'Operação aberta' : 'Operações abertas'}</div></article>
+      <article class="card kpi"><div class="label">Alertas de manutenção e estoque</div><div class="value">${mtAbertas + revisoes + estBaixo}</div><div class="hint">${esc(partes.join(' · ') || 'Tudo em dia')}</div></article>
     </section>
-    <div class="section-title"><h3>Ações rápidas</h3></div>
-    <section class="quick">
-      <button data-act="op-new"><span class="qicon green">＋</span><span><strong>Nova operação</strong><small>Registrar atividade no campo</small></span></button>
-      <button data-act="hour-new"><span class="qicon blue">◷</span><span><strong>Registrar horímetro</strong><small>Máquina e horas trabalhadas</small></span></button>
-      <button data-act="mt-new"><span class="qicon orange">⚙</span><span><strong>Abrir manutenção</strong><small>Preventiva ou corretiva</small></span></button>
-      <button data-act="mov-new"><span class="qicon purple">⇄</span><span><strong>Movimentar estoque</strong><small>Entrada, saída ou ajuste</small></span></button>
-    </section>
-    ${!isEmpty && typeof painelGraficos === 'function' ? painelGraficos() : ''}
-    ${isEmpty ? `<section class="card" style="margin-top:24px">${empty('Nenhum dado cadastrado ainda', 'Comece cadastrando talhões, máquinas e insumos — ou carregue dados de exemplo para conhecer o aplicativo.', {act: 'seed', label: 'Carregar dados de exemplo'})}</section>` : ''}
-    <section class="grid">
-      <article class="card panel"><div class="section-title" style="margin:0 0 4px"><h3>Operações do dia</h3><button data-act="nav" data-id="operacoes">Ver todas</button></div>
+    <div class="nx-acoes"><button data-act="hour-new">◷ Registrar horímetro</button><button data-act="mt-new">⚙ Abrir manutenção</button><button data-act="mov-new">⇄ Movimentar estoque</button><button data-act="af-nova">◎ Nova aferição</button></div>
+    ${isEmpty ? `<section class="card" style="margin-top:18px">${empty('Nenhum dado cadastrado ainda', 'Comece cadastrando talhões, máquinas e insumos — ou carregue dados de exemplo para conhecer o aplicativo.', {act: 'seed', label: 'Carregar dados de exemplo'})}</section>` : (typeof painelNexus === 'function' ? painelNexus() : '')}
+    <section class="grid nexus">
+      <article class="card panel"><div class="section-title" style="margin:0 0 4px"><h3>Operações de hoje</h3><button data-act="nav" data-id="operacoes">Ver todas</button></div>
         ${upcoming.length ? upcoming.map(o => operationRow(o, false)).join('') : empty('Sem operações para hoje', 'Toque em “Nova operação” para registrar.')}
       </article>
-      <article class="card panel" id="alertas"><h3>Alertas e pendências</h3>
+      <article class="card panel" id="alertas"><h3>Atenção</h3>
         ${al.length ? al.map(a => `<div class="alert clickable" data-act="nav" data-id="${esc(a.route)}"><span class="alert-icon ${a.color}">${a.icon}</span><div style="flex:1"><strong>${esc(a.title)}</strong><small>${esc(a.text)}</small>${a.progress != null ? `<div class="progress"><span style="width:${a.progress}%"></span></div>` : ''}</div></div>`).join('') : empty('Tudo em dia', 'Nenhuma pendência encontrada.')}
       </article>
-    </section>`;
+    </section>
+    ${!isEmpty && typeof painelGraficos === 'function' ? painelGraficos() : ''}`;
 };
 VIEWS.inicio.after = anchor => { if (anchor) document.getElementById(anchor)?.scrollIntoView({behavior: 'smooth'}); };
 
@@ -643,7 +643,9 @@ function loadSamples() {
   });
   [[f3, 'Colheita', m2, 55, 6], [f3, 'Colheita', m2, 55, 8], [f1, 'Preparo de solo', m1, 42, 13], [f2, 'Adubação', m1, 31, 15], [f2, 'Preparo de solo', m1, 31, 20], [f1, 'Aplicação', m3, 84.5, 22], [f3, 'Aplicação', m3, 110, 27]]
     .forEach(([fieldId, type, machineId, area, d]) => db.operations.push({id: uid(), date: daysAgo(d), time: '07:00', type, fieldId, machineId, status: 'Concluída', area}));
-  db.maintenances.push({id: uid(), machineId: m2, kind: 'Preventiva', date: today(), description: 'Troca de filtros e inspeção', status: 'Aberta'});
+  db.maintenances.push({id: uid(), machineId: m2, kind: 'Preventiva', date: today(), description: 'Troca de filtros e inspeção', status: 'Aberta'},
+    {id: uid(), machineId: m1, kind: 'Preventiva', date: daysAgo(20), doneDate: daysAgo(19), description: 'Revisão de 1.250 h — óleo e filtros', status: 'Concluída', cost: 3200},
+    {id: uid(), machineId: m3, kind: 'Corretiva', date: daysAgo(9), doneDate: daysAgo(8), description: 'Troca de mangueiras da barra', status: 'Concluída', cost: 1650});
   db.operations.push(
     {id: uid(), date: today(), time: '07:10', type: 'Plantio', fieldId: f1, machineId: m1, status: 'Em andamento', area: 40, operator: 'Equipe A', notes: 'Plantadeira 30 linhas'},
     {id: uid(), date: today(), time: '09:00', type: 'Tratamento de sementes', place: 'Unidade de beneficiamento', status: 'Programada', notes: 'Lote SM-026'},
@@ -707,10 +709,13 @@ function render(anchor = pendingAnchor) {
   const key = name === 'talhao' ? 'talhoes' : name;
   view.innerHTML = VIEWS[name](arg || anchor);
   $('#viewTitle').textContent = TITLES[key] || (name === 'talhao' ? 'Talhões' : 'Agro Operações');
-  document.title = `${TITLES[key] || 'Agro Operações'} — Operações Agrícolas`;
+  document.title = `${TITLES[key] || 'Nexus Agro'} — Nexus Agro`;
   $$('[data-route]').forEach(b => b.classList.toggle('active', b.dataset.route === key));
   VIEWS[name].after?.(anchor);
+  const h2 = view.querySelector('.view-head h2'), igual = t => semAcentoApp(t).replace(/[^a-z]/g, '');
+  if (h2 && igual(h2.textContent) === igual($('#viewTitle').textContent)) h2.classList.add('repetido');
 }
+const semAcentoApp = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 // Menus "⋯ Mais": fecham ao tocar fora ou ao escolher uma opção
 document.addEventListener('click', e => $$('.menu-mais[open]').forEach(d => { if (!d.contains(e.target) || e.target.closest('.menu-lista button')) d.open = false; }));
 let lastRoute = '';

@@ -87,11 +87,50 @@ function graficoEstoque() {
   return cartao('Estoque × mínimo', sub, corpo + tabela(['Item', 'Saldo', 'Mínimo'], itens.map(({s}) => [s.name, `${num(s.qty)} ${s.unit}`, `${num(s.min)} ${s.unit}`])));
 }
 
+// ---------- Painel principal (modelo Nexus): situação, últimos 7 dias, estoque e gastos ----------
+const DIAS_SEM = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+function roscaSituacao() {
+  const ops = db.operations, total = ops.length;
+  const cont = OP_STATUS.map(s => [s, ops.filter(o => o.status === s).length]);
+  if (!total) return cartaoNx('Situação das operações', semDados('Nenhuma operação registrada.'));
+  // Anel: cada situação é um arco; 2px de folga entre arcos
+  const r = 58, C = 2 * Math.PI * r, folga = cont.filter(([, n]) => n).length > 1 ? 2 : 0;
+  let acum = 0;
+  const arcos = cont.filter(([, n]) => n).map(([st, n]) => {
+    const comp = n / total * C, arco = `<circle class="nx-seg" r="${r}" cx="75" cy="75" fill="none" stroke="var(--s${COR_SITUACAO[st]})" stroke-width="22" stroke-dasharray="${Math.max(0, comp - folga)} ${C}" stroke-dashoffset="${-acum}" transform="rotate(-90 75 75)" ${tip(st, `${n} de ${total} (${num(n / total * 100, 0)}%)`)}></circle>`;
+    acum += comp; return arco;
+  }).join('');
+  return cartaoNx('Situação das operações', `<div class="nx-donut"><svg viewBox="0 0 150 150" role="img" aria-label="Situação das operações: ${cont.map(([s, n]) => `${s} ${n}`).join(', ')}">${arcos}
+      <text x="75" y="80" text-anchor="middle" class="centro-n">${total}</text><text x="75" y="100" text-anchor="middle" class="centro-t">operações</text></svg>
+    <ul class="nx-leg">${cont.map(([st, n]) => `<li><i class="s${COR_SITUACAO[st]}"></i><span>${esc(st === 'Programada' ? 'Planejada' : st)}</span><b>${n}</b></li>`).join('')}</ul></div>` +
+    tabela(['Situação', 'Operações'], cont.map(([st, n]) => [st, n])));
+}
+function semanaOperacoes() {
+  const fim = today(), dias = Array.from({length: 7}, (_, i) => addDias(fim, i - 6));
+  const cont = dias.map(d => [d, db.operations.filter(o => o.date === d && o.status !== 'Cancelada').length]);
+  const max = Math.max(1, ...cont.map(c => c[1]));
+  const dia = d => DIAS_SEM[new Date(d + 'T12:00:00').getDay()];
+  return cartaoNx('Últimos sete dias', `<div class="nx-semana" role="img" aria-label="Operações por dia nos últimos sete dias">${cont.map(([d, n]) =>
+    `<div class="nx-dia" ${tip(`${dia(d)} ${fmtDia(d)}`, `${n} ${n === 1 ? 'operação' : 'operações'}`)}><div class="nx-trilho">${n ? `<span class="nx-barra" style="height:${n / max * 100}%"></span><b style="bottom:${n / max * 100}%">${n}</b>` : ''}</div><small>${dia(d)}</small></div>`).join('')}</div>` +
+    tabela(['Dia', 'Operações'], cont.map(([d, n]) => [`${dia(d)} ${fmtDia(d)}`, n])));
+}
+function estoqueInsumos() {
+  const comMin = db.stock.filter(s => Number(s.min) > 0), baixo = comMin.filter(stockLow);
+  return cartaoNx('Estoque de insumos', `<div class="nx-tiles"><div class="nx-tile ok"><strong>${comMin.length - baixo.length}</strong><span>Sem alerta</span></div><div class="nx-tile baixo"><strong>${baixo.length}</strong><span>${baixo.length ? '! ' : ''}Estoque baixo</span></div></div>
+    <p class="nx-nota">${baixo.length ? `Abaixo do mínimo: ${esc(baixo.map(s => s.name).join(', '))}.` : 'Saldo comparado ao mínimo cadastrado.'}${db.stock.length > comMin.length ? ` ${db.stock.length - comMin.length} sem mínimo definido.` : ''}</p>`);
+}
+const cartaoNx = (titulo, corpo) => `<article class="card nx-card"><h3>${esc(titulo)}</h3>${corpo}</article>`;
+function painelNexus() {
+  const custo = db.maintenances.reduce((s, m) => s + (Number(m.cost) || 0), 0);
+  return `<section class="viz-root nx-grid3">${roscaSituacao()}${semanaOperacoes()}${estoqueInsumos()}</section>
+    <section class="card nx-gastos"><div><h3>Controle de gastos</h3><p>Custos de manutenção lançados neste aparelho: <strong>R$ ${num(custo, 2)}</strong></p></div><button data-act="nav" data-id="relatorios">Ver relatórios</button></section>`;
+}
+
 function painelGraficos() {
   const fim = today(), ini = addDias(fim, -(periodoGraf - 1));
-  return `<div class="section-title viz-cab"><h3>Indicadores</h3><div class="filters viz-filtro" role="group" aria-label="Período dos indicadores">${PERIODOS.map(([d, r]) =>
+  return `<div class="section-title viz-cab"><h3>Indicadores do período</h3><div class="filters viz-filtro" role="group" aria-label="Período dos indicadores">${PERIODOS.map(([d, r]) =>
     `<button class="${d === periodoGraf ? 'active' : ''}" data-act="graf-periodo" data-id="${d}" aria-pressed="${d === periodoGraf}">${r}</button>`).join('')}</div></div>
-    <section class="viz-root viz-grid">${graficoArea(ini, fim)}${graficoHoras(ini, fim)}${graficoSituacao(ini, fim)}${graficoEstoque()}</section>`;
+    <section class="viz-root viz-grid">${graficoArea(ini, fim)}${graficoHoras(ini, fim)}${graficoEstoque()}</section>`;
 }
 
 ACTIONS['graf-periodo'] = id => { periodoGraf = Number(id); safeStorage.set('agro-periodo-graf', String(periodoGraf)); render(); };
