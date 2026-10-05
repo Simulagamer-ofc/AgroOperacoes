@@ -435,14 +435,15 @@ VIEWS.maquinas = () => {
       const corRev = !temRev ? '' : left <= 0 ? 'rev-vencida' : left <= SERVICE_WARN_HOURS ? 'rev-alerta' : 'rev-ok';
       const textoRev = !temRev ? 'Sem revisão programada' : left <= 0 ? `! Revisão vencida há ${num(-left)} h` : `Revisão em ${num(left)} h (${num(m.nextService)} h)`;
       const af = db.afericoes.filter(a => a.maquina?.id === m.id).sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora))[0];
-      const extras = [m.catalogo ? `Catálogo: ${esc(m.catalogo.marca)} ${esc(m.catalogo.nome)}` : '', af ? `Última aferição: ${fmtDate(af.data)} — ${esc({OK: 'dentro da referência', ATENCAO: 'atenção', FORA_DO_PADRAO: 'fora da referência', SEM_REFERENCIA: 'não avaliada', DADOS_INSUFICIENTES: 'dados insuficientes'}[af.resultado.status] || '')}` : ''].filter(Boolean);
+      const cfgN = m.config ? Object.keys(m.config).length : 0;
+      const extras = [cfgN ? `Configuração para aferição: ${cfgN} ${cfgN === 1 ? 'parâmetro' : 'parâmetros'}` : '', m.catalogo ? `Catálogo: ${esc(m.catalogo.marca)} ${esc(m.catalogo.nome)}` : '', af ? `Última aferição: ${fmtDate(af.data)} — ${esc({OK: 'dentro da referência', ATENCAO: 'atenção', FORA_DO_PADRAO: 'fora da referência', SEM_REFERENCIA: 'não avaliada', DADOS_INSUFICIENTES: 'dados insuficientes'}[af.resultado.status] || '')}` : ''].filter(Boolean);
       return `<article class="card item-card maq-card"><header><div><h4>${esc(m.name)}</h4><div class="meta">${esc([m.type, m.model].filter(Boolean).join(' • '))}</div></div>${chip(st, color)}</header>
         <div class="maq-horas"><span class="big">${num(m.hours)} h</span><small>último registro ${fmtDate(db.hourLogs.filter(h => h.machineId === m.id).sort(byDateDesc)[0]?.date)}</small></div>
         <div class="maq-rev ${corRev}"><small>${textoRev}</small>${temRev ? `<div class="progress"><span style="width:${pct}%"></span></div>` : ''}</div>
         ${extras.length ? `<div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>` : ''}
         <div class="maq-acoes">${mini('◷ Horímetro', 'hour-new', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}
           <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">
-            ${mini('◎ Aferição e calibragem', 'af-nova', m.id)}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
+            ${mini('◎ Aferição e calibragem', 'af-nova', m.id)}${mini('⚙ Configuração para aferição', 'mc-config', m.id)}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
           </div></details></div></article>`;
     }).join('')}</section>` : `<section class="card">${empty('Nenhuma máquina cadastrada', 'Cadastre tratores, colheitadeiras e implementos para controlar horímetro e revisões.', {act: 'mc-new', label: '+ Nova máquina'})}</section>`) +
     `<div class="section-title"><h3>Ordens de manutenção</h3></div><section class="card list">${mts.length ? mts.map(mt => {

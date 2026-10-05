@@ -90,3 +90,10 @@ details.af-ref{margin-top:14px}details.af-ref table{margin-top:8px}
 @media(max-width:760px){.af-tipos{grid-template-columns:1fr}.af-tipo{padding:11px}.af-lm{grid-template-columns:1fr 1fr}.af-sn{grid-template-columns:1fr}}
 @media print{details.af-ref{display:block}details.af-ref>summary{list-style:none}}
 .resultado .af-acao strong{font-size:inherit;margin:0}.af-tipos.um{grid-template-columns:1fr;margin-bottom:0}.af-trocar{margin:6px 0 0 2px;padding:4px 0}
+/* ---------- Configuração da máquina para aferição ---------- */
+.cfg-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}.cfg-param{display:grid;gap:6px;align-content:start}.cfg-param label{font-size:.85rem;color:var(--muted)}
+.cfg-param input,.cfg-faixa input{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px;background:var(--bg);color:var(--text)}.cfg-faixa{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}.cfg-faixa span{color:var(--muted);font-size:.85rem}
+.cfg-origem{font-size:.75rem;font-weight:650}.cfg-origem.fabricante{color:var(--green)}.cfg-origem.usuario{color:var(--blue)}
+.cfg-ops{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.cfg-ops span{font-size:.75rem;color:var(--muted);margin-right:2px}.cfg-op{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:999px;padding:5px 11px;font-size:.82rem}.cfg-op.on{background:var(--green);border-color:var(--green);color:#fff}
+.cfg-trecho{font-size:.72rem;color:var(--muted);font-style:italic;line-height:1.35}
+.af-avisos{border:1px solid var(--orange);background:rgba(245,158,11,.08);border-radius:12px;padding:12px 14px;margin-bottom:12px;font-size:.88rem}.af-avisos ul{margin:6px 0;padding-left:18px}.af-avisos small{color:var(--muted)}

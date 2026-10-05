@@ -242,7 +242,8 @@ const pergunta = (k, label, hint = '') => `<div class="field full af-sn"><span c
 // Lista de medições: um campo por item; Enter vai para o próximo e cria um novo no fim
 function listaMedidas(k, label, unidade, hint = '') {
   const cfg = LISTAS[k], vals = String(wz[k] || '').trim().split(/[\s;]+/).filter(Boolean);
-  const n = Math.max(vals.length + (vals.length ? 1 : 0), cfg.inicial);
+  const inicial = (k === 'vazoes' && typeof qtdBicosConfig === 'function' && qtdBicosConfig(wz)) || cfg.inicial;
+  const n = Math.max(vals.length + (vals.length ? 1 : 0), inicial);
   return `<div class="field full af-lista" data-lista="${k}"><label>${esc(label)}${unidade ? ` <span class="af-un">(${esc(unidade)})</span>` : ''}</label>
     <div class="af-lm">${Array.from({length: n}, (_, i) => linhaMedida(k, i, vals[i])).join('')}</div>
     <div class="af-lm-pe"><button type="button" class="secondary" data-act="af-lm-add" data-id="${k}">+ ${esc(cfg.item === 'Esp.' ? 'Espaçamento' : cfg.item)}</button><span class="af-lm-resumo" id="res_${k}"></span></div>
@@ -292,11 +293,11 @@ function passoWizard() {
         listaMedidas('vazoes', 'Vazão medida em cada bico', w.unidadeVazao || 'L/min')],
       perdas: () => [
         pergunta('incluiGraosEmVagens', 'Foram recolhidos os grãos soltos e os de dentro das vagens?'),
-        campo('areaM2', 'Área de cada ponto (m²)', num_('areaM2', w.areaM2), 'Armação Embrapa: 4,0 m × 0,5 m = 2,0 m².', true),
+        campo('areaM2', 'Área de cada ponto (m²)', num_('areaM2', w.areaM2), 'Armação Embrapa: 4,0 m × 0,5 m = 2,0 m².' + (() => { const L = configDaMaquina(w.machineId).larguraPlataformaM; return L ? ` Com a plataforma de ${num(L, 2)} m (configuração da máquina), uma armação na largura toda precisa de ${num(2 / L, 2)} m de profundidade para dar 2 m².` : ''; })(), true),
         listaMedidas('massasG', 'Grãos coletados atrás da colhedora', 'g por ponto') +
         `<details class="field full af-colar"><summary>Separar perdas da plataforma (opcional)</summary>${listaMedidas('massasPlataformaG', 'Grãos na frente da colhedora', 'g por ponto', 'Permite separar perdas da plataforma e internas.')}</details>`],
       longitudinal: () => ['',
-        campo('sementesPorMetro', 'Sementes por metro planejadas', num_('sementesPorMetro', w.sementesPorMetro), 'Define o espaçamento ideal (Xref = 100 ÷ sementes/m).', true),
+        campo('sementesPorMetro', 'Sementes por metro planejadas', num_('sementesPorMetro', w.sementesPorMetro), 'Define o espaçamento ideal (Xref = 100 ÷ sementes/m).', true) + `<p class="nota field full" id="infoPopulacao"></p>`,
         listaMedidas('espacamentos', 'Espaçamentos medidos entre sementes', 'cm')],
       transversal: () => [
         pergunta('fertilizanteNitrogenado', 'O produto contém nitrogênio?') +
@@ -316,7 +317,9 @@ function passoWizard() {
       dose: () => ['',
         campo('dosePlanejada', 'Dose planejada (kg/ha)', num_('dosePlanejada', w.dosePlanejada), '', true),
         campo('distanciaM', 'Distância percorrida na coleta (m)', num_('distanciaM', w.distanciaM)) +
-        campo('larguraM', 'Largura coletada (m)', num_('larguraM', w.larguraM), 'Nº de linhas coletadas × espaçamento.') +
+        (w.familia !== 'distribuidor_lanco' ? campo('linhasColetadas', 'Linhas coletadas', num_('linhasColetadas', w.linhasColetadas), 'Quantas linhas você recolheu.') +
+          campo('espLinhasM', 'Espaçamento entre linhas (m)', num_('espLinhasM', w.espLinhasM)) : '') +
+        campo('larguraM', 'Largura coletada (m)', num_('larguraM', w.larguraM), w.familia !== 'distribuidor_lanco' ? 'Calculada: linhas coletadas × espaçamento (pode corrigir).' : 'Largura da faixa coletada.', true) +
         campo('massaKg', 'Massa coletada (kg)', num_('massaKg', w.massaKg), '', true)]
     }[w.tipo]();
     return topo + `<section class="card panel">
@@ -346,6 +349,11 @@ VIEWS.afericao.after = () => {
     cor.innerHTML = '<option value="">—</option>' + t.linhas.map(l => `<option value="${l.tamanho}" ${l.tamanho === wz.corIso ? 'selected' : ''}>${esc(l.cor)} — classe ${num(l.vazao, 2)} L/min a 3 bar</option>`).join('');
   });
   $$('.af-lista').forEach(el => atualizarResumoLista(el.dataset.lista));
+  for (const k of Object.keys(wz?._origem || {})) { const el = $('#wz_' + k); if (el && !el.parentElement.querySelector('.cfg-origem')) el.insertAdjacentHTML('afterend', '<small class="cfg-origem fabricante">⚙ da configuração da máquina</small>'); }
+  const lin = $('#wz_linhasColetadas'), esp = $('#wz_espLinhasM'), larg = $('#wz_larguraM');
+  if (lin && esp && larg) { const calc = () => { const n = umNum(lin.value), e = umNum(esp.value); if (n > 0 && e > 0) larg.value = String(Math.round(n * e * 1000) / 1000).replace('.', ','); }; lin.oninput = calc; esp.oninput = calc; }
+  const spm = $('#wz_sementesPorMetro'), info = $('#infoPopulacao');
+  if (spm && info) { const e = configDaMaquina(wz.machineId).espacamentoLinhasM; const upd = () => { const v = umNum(spm.value); info.textContent = e && v > 0 ? `Com ${num(e * 100, 0)} cm entre linhas (configuração da máquina): ${num(AV().calculos.populacao(v, e), 0)} sementes/ha.` : ''; }; spm.oninput = upd; upd(); }
   if (wz?.tipo === 'bicos' && !limitesBico) dados('regras').then(b => { const r = b.regras.find(x => x.id === 'PULV-BICO-CAT-01' && x.statusValidacao === 'validada'); limitesBico = r ? [r.limiteMin, r.limiteMax] : false; atualizarResumoLista('vazoes'); });
 };
 // Prévia enquanto digita: quantidade, média e (bicos) desvio de cada ponta em relação à tabela. O resultado oficial vem do avaliador.
@@ -390,6 +398,11 @@ function coletarWizard() {
     const k = el.dataset.lista, colado = el.querySelector(`[data-lm-colar="${k}"]`)?.value.trim();
     wz[k] = colado || $$(`input[data-lm="${k}"]`, el).map(i => i.value.trim()).filter(Boolean).join(' ');
   });
+  const cfg = configDaMaquina(wz.machineId);
+  for (const [k, ck] of Object.entries(wz._origem || {})) {
+    const v = cfg[ck], atual = typeof v === 'number' ? umNum(wz[k]) : wz[k];
+    if (atual !== v) delete wz._origem[k];
+  }
 }
 
 function validarPasso() {
@@ -469,7 +482,9 @@ function blocoResultado(r, w) {
   const pend = [...new Set(r.pendencias || [])].filter(x => !(r.bicos && x.includes('PULV-BICO-MED-01')));
   const faixa = p.limiteMin != null && p.limiteMax != null ? (p.limiteMin === -p.limiteMax ? `±${num(p.limiteMax, 1)}%` : `${num(p.limiteMin, 1)}% a +${num(p.limiteMax, 1)}%`) : '';
   const okBicos = r.bicos && r.status === 'OK' && faixa ? `<span>Todos os ${r.bicos.length} bicos dentro de ${faixa} da tabela do fabricante.</span>` : '';
-  return `<div class="resultado ${info.cor}"><small>RESULTADO</small><strong>${esc(info.rotulo)}</strong>${okBicos}<small>AÇÃO RECOMENDADA</small><span>${esc(acao)}</span>${listaAcao}</div>
+  const avisos = w?.criadoEm ? [] : (w?.avisos || []); // no relatório salvo os avisos ficam na seção 6
+  const blocoAvisos = avisos.length ? `<div class="af-avisos"><strong>⚠ Avisos da configuração da máquina</strong><ul>${avisos.map(x => `<li>${esc(x)}</li>`).join('')}</ul><small>Não mudam o resultado; confira a operação.</small></div>` : '';
+  return blocoAvisos + `<div class="resultado ${info.cor}"><small>RESULTADO</small><strong>${esc(info.rotulo)}</strong>${okBicos}<small>AÇÃO RECOMENDADA</small><span>${esc(acao)}</span>${listaAcao}</div>
     ${calc.length ? `<h3 style="margin-top:16px">Valores calculados</h3><table class="tbl"><tbody>${calc.map(([a, b]) => `<tr><td>${esc(a)}</td><td class="num">${esc(String(b))}</td></tr>`).join('')}</tbody></table>` : ''}
     ${tabBicos}
     ${p.regraId ? `<details class="tecnico af-ref" ${relatorioSalvo ? 'open' : ''}><summary>Referência técnica usada: ${esc(p.regraId)} v${esc(p.regraVersao)} (fonte e trecho)</summary><table class="tbl"><tbody><tr><td>Regra</td><td>${esc(p.regraId)} — versão ${esc(p.regraVersao)}</td></tr><tr><td>Limites</td><td>${p.limiteMin != null ? 'mín. ' + num(p.limiteMin, 2) : ''} ${p.limiteMax != null ? 'máx. ' + num(p.limiteMax, 2) : ''} ${esc(p.unidade || '')}</td></tr><tr><td>Fonte</td><td>${esc(fonteTxt)}${fonte?.pagina ? ' — ' + esc(fonte.pagina) : ''}</td></tr>${fonte?.trechoLiteral ? `<tr><td>Trecho</td><td><em>“${esc(fonte.trechoLiteral.slice(0, 400))}${fonte.trechoLiteral.length > 400 ? '…' : ''}”</em></td></tr>` : ''}<tr><td>Condições atendidas</td><td>${esc((p.condicoesAplicadas || []).join(' • ') || '—')}</td></tr></tbody></table></details>` : ''}
@@ -490,8 +505,9 @@ Object.assign(ACTIONS, {
   'af-avancar': async () => {
     coletarWizard();
     const erro = validarPasso(); if (erro) { showToast(erro); return; }
+    if (wz.passo === 1) aplicarConfigMaquina(wz);
     if (wz.passo === 2) {
-      try { wz.resultado = await calcular(); } catch (e) { showToast('Não foi possível calcular: ' + e.message); return; }
+      try { wz.resultado = await calcular(); wz.avisos = avisosConfig(wz); } catch (e) { showToast('Não foi possível calcular: ' + e.message); return; }
     }
     wz.passo++; render(); scrollTo(0, 0);
   },
@@ -509,6 +525,7 @@ Object.assign(ACTIONS, {
   'af-imprimir': () => { if (window.AndroidBridge?.printPage) window.AndroidBridge.printPage(); else window.print(); }
 });
 
+const ROTULO_CFG = {espacamentoBicosM: 'Espaçamento entre bicos (m)', modeloPonta: 'Modelo da ponta', espLinhasM: 'Espaçamento entre linhas (m)'};
 function relatorio(id) {
   const a = find('afericoes', id);
   if (!a) return empty('Registro não encontrado', '');
@@ -536,11 +553,13 @@ function relatorio(id) {
       ${linha('Cultura / produto', (PRODUTOS.find(x => x[0] === a.produto) || [])[1])}${linha('Talhão / local', fieldName(a.fieldId))}
       ${linha('Data / hora', `${fmtDate(a.data)} ${a.hora}`)}${linha('Responsável', a.responsavel)}${linha('Propriedade', db.settings.farm)}
     </tbody></table>
-    <h3>3. Condições da leitura</h3><table class="tbl"><tbody>${condicoes.map(([k, v]) => linha(k, v)).join('')}</tbody></table>
+    <h3>3. Condições da leitura</h3><table class="tbl"><tbody>${condicoes.map(([k, v]) => linha(k, v)).join('')}${linha('Linhas coletadas', e.linhasColetadas)}${linha('Espaçamento entre linhas (m)', e.espLinhasM)}
+      ${Object.keys(e._origem || {}).length ? linha('Valores vindos da configuração da máquina', Object.keys(e._origem).map(k => `${ROTULO_CFG[k] || k}: ${e[k]}`).join(' • ')) : ''}</tbody></table>
     <h3>4. Referência e condições de aplicação</h3><table class="tbl"><tbody>${p.regraId ? linha('Regra / versão', `${p.regraId} v${p.regraVersao}`) + linha('Título', p.regraTitulo) + linha('Fonte', p.fonte) + linha('Banco de referências', a.bancoVersao ? 'versão ' + a.bancoVersao : '') + linha('Data da análise', p.dataAnalise ? new Date(p.dataAnalise).toLocaleString('pt-BR') : '') : linha('Referência', 'Nenhuma referência validada aplicável a esta condição.')}</tbody></table>
     <h3>5. Instrumentos e observações</h3><table class="tbl"><tbody>${linha('Instrumento', e.instrumento || 'Não informado')}${linha('Rastreabilidade metrológica do instrumento', 'Não informada')}${linha('Observações', e.observacoes)}</tbody></table>
     <h3>6. Pendências e alcance do documento</h3>
     ${(r.pendencias || []).length ? `<ul class="pend">${[...new Set(r.pendencias)].map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '<p>Sem pendências registradas.</p>'}
+    ${(e.avisos || []).length ? `<p><strong>Avisos da configuração da máquina</strong> (não alteram o resultado):</p><ul class="pend">${e.avisos.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
     <p class="nota">Este documento registra uma <strong>medição e comparação</strong> com referência técnica operacional. <strong>Não é certificado de calibração, laudo laboratorial nem certificação de conformidade.</strong> O resultado, a regra, a versão e os limites ficaram gravados no momento da análise e não mudam se as referências forem atualizadas.</p>
   </article>`;
 }
