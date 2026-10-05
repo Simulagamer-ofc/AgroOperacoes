@@ -46,6 +46,27 @@ Fórmulas conferidas: classes de espaçamento (F-ESPAC-CLASSES) e perdas interna
 
 Sem referência no banco (o sistema não avalia): perdas de milho, trigo, feijão e outras culturas; pressão do manômetro; tamanho de gota; condições climáticas de aplicação.
 
+## Secador, moega e armazenagem (banco 1.2.0)
+
+Conferência documental em 05/10/2026. O ponto de medição faz parte do escopo: uma regra da massa de grãos nunca é aplicada ao ar de entrada.
+
+| ID | Produto / destino | Etapa / ponto | Limite | Fonte | Status |
+|---|---|---|---|---|---|
+| SEC-SOJA-SEM-MASSA-01 | soja / semente | secagem / massa de sementes | até 40 °C | Embrapa Soja, Doc. 380 (2016), pp. 45-46 | **validada** |
+| SEC-SOJA-SEM-URAR-01 | soja / semente — secador estático | secagem / ar de secagem | UR ≥ 35% | Embrapa Soja, Doc. 380 (2016) | **validada** |
+| SEC-SOJA-AGRO-MASSA-01 | soja / agroindústria | secagem / massa de grãos | até 48 °C | Embrapa, Manual de Segurança e Qualidade da Soja (2005) | **validada** |
+| SEC-MILHO-SEM-AR-01 · MOAG · RACAO | milho / semente · moagem · ração | secagem / ar de secagem | 44 · 55 · 82 °C | Embrapa Milho e Sorgo, Cultivo do Milho (2015), p. 28 | **validada** (confiança média: a p. 20 do mesmo texto fala em temperatura "dos grãos") |
+| ARM-SOJA-AGRO-UMID-01 | soja / agroindústria | pós-secagem e armazenamento / amostra | abaixo de 14% | Manual Embrapa (2005) | **validada** |
+| ARM-MILHO-GRAO-UMID-01 | milho / grão | pós-secagem e armazenamento / amostra | até 13% | Cultivo do Milho (2015), p. 10 | **validada** |
+| ARM-SOJA-SEM-UMID-* (6 regras) | soja / semente, por região e embalagem | armazenamento / amostra | 13,5 · 12,0 · 11,5% (sacaria); 1 p.p. a menos em big-bag | Doc. 380 (2016), p. 49 | **validada** (big-bag: confiança média, valor derivado) |
+| ARM-SOJA-SEM-TEMP-01 / URAR-01 | soja / semente | armazenamento | abaixo de 25 °C / UR abaixo de 70% | Manual Embrapa (2005) | **validada** |
+| SEC-SOJA-SEM-MASSA-2005 | soja / semente | secagem / massa | 38 °C | Manual Embrapa (2005) | suspensa — substituída pelo Doc. 380 (2016) |
+| COM-SOJA-UMID-01 / COM-MILHO-UMID-01 | comercialização | recebimento… / amostra | 14% | MAPA IN 11/2007 e IN 60/2011 | pendente — site do MAPA não acessível |
+
+Sem referência no banco: temperatura do ar de entrada para soja, temperatura na moega, impureza e demais itens de classificação (dependem das INs do MAPA), trigo, feijão, arroz e outras culturas.
+
+Limites "abaixo de" são exclusivos (`limiteMaxExclusivo`): 14,0% já está fora de "abaixo de 14%".
+
 ## Como validar uma regra
 
 1. Abrir o documento da fonte (URL na regra) e localizar o trecho.

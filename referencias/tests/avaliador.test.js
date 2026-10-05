@@ -15,8 +15,10 @@ function bancoValidado(ids) {
 
 test('banco publicado passa na auditoria; só regras com trecho conferido estão validadas', () => {
   assert.deepEqual(A.auditarBanco(BANCO), []);
-  const validadas = BANCO.regras.filter(r => r.statusValidacao === 'validada').map(r => r.id).sort();
-  assert.deepEqual(validadas, ['COLH-PERDA-SOJA-01', 'PULV-BICO-CAT-01']);
+  const validadas = BANCO.regras.filter(r => r.statusValidacao === 'validada');
+  assert.ok(validadas.length >= 18);
+  for (const r of validadas) assert.ok(r.fontes.some(f => f.conferido === true && f.trechoLiteral), r.id);
+  assert.ok(['PULV-BICO-MED-01', 'PULV-SENSOR-01', 'COM-SOJA-UMID-01', 'COM-MILHO-UMID-01'].every(id => BANCO.regras.find(r => r.id === id).statusValidacao !== 'validada'));
   const iso = BANCO.tabelasReferencia.find(t => t.id === 'ISO10625-CORES');
   assert.equal(iso.linhas.find(l => l.cor === 'amarela').vazao, 0.8);
   assert.equal(iso.linhas.length, 19);
@@ -219,4 +221,71 @@ test('dados do aplicativo sincronizados com referencias/ (rode ferramentas/gerar
   assert.equal(cat.modelos.length, indice.marcas.reduce((s, m) => s + m.totalModelos, 0));
   const fin = JSON.parse(fs.readFileSync(path.join(www, 'dados', 'finame.json'), 'utf8'));
   assert.equal(fin.produtos.length, JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'bndes', 'produtos-agricolas-finame.json'), 'utf8')).totalProdutos);
+});
+
+
+// ---------------- Secador, moega e armazenagem ----------------
+const sec = (d) => A.avaliarSecagem(d, BANCO);
+const L = (ponto, variavel, valor) => ({ponto, variavel, valor});
+
+test('ESPECIFICAÇÃO: soja semente, ar de entrada 160 °C → não foi possível avaliar', () => {
+  const r = sec({equipamentoFamilia: 'secador', produto: 'soja', destino: 'semente', etapa: 'secagem', leituras: [{...L('ar_entrada', 'temperatura', 160), posicao: 'superior'}]});
+  assert.equal(r.status, STATUS.SEM_REFERENCIA);
+  assert.ok(r.pendencias.some(p => p.includes('ponto medido "ar_entrada"')));
+});
+
+test('limite da massa de grãos nunca é aplicado ao ar de entrada', () => {
+  const massa = sec({equipamentoFamilia: 'secador', produto: 'soja', destino: 'semente', etapa: 'secagem', leituras: [L('massa_graos', 'temperatura', 41)]});
+  assert.equal(massa.status, STATUS.FORA_DO_PADRAO); assert.equal(massa.leituras[0].avaliacao.regraId, 'SEC-SOJA-SEM-MASSA-01');
+  assert.equal(sec({equipamentoFamilia: 'secador', produto: 'soja', destino: 'semente', etapa: 'secagem', leituras: [L('massa_graos', 'temperatura', 40)]}).status, STATUS.OK);
+  assert.equal(sec({equipamentoFamilia: 'secador', produto: 'soja', destino: 'semente', etapa: 'secagem', leituras: [L('ar_entrada', 'temperatura', 41)]}).status, STATUS.SEM_REFERENCIA);
+  // agroindústria tem outro limite (48 °C)
+  assert.equal(sec({equipamentoFamilia: 'secador', produto: 'soja', destino: 'agroindustria', etapa: 'secagem', leituras: [L('massa_graos', 'temperatura', 45)]}).status, STATUS.OK);
+});
+
+test('regra substituída (38 °C, 2005) não gera conflito nem conclusão', () => {
+  const r = sec({equipamentoFamilia: 'secador', produto: 'soja', destino: 'semente', etapa: 'secagem', leituras: [L('massa_graos', 'temperatura', 39)]});
+  assert.equal(r.status, STATUS.OK); assert.equal(r.leituras[0].avaliacao.regraId, 'SEC-SOJA-SEM-MASSA-01');
+});
+
+test('milho: limite do ar de secagem depende do destino', () => {
+  const m = (destino, v) => sec({equipamentoFamilia: 'secador', produto: 'milho', destino, etapa: 'secagem', leituras: [L('ar_entrada', 'temperatura', v)]}).status;
+  assert.equal(m('semente', 50), STATUS.FORA_DO_PADRAO); assert.equal(m('semente', 44), STATUS.OK);
+  assert.equal(m('moagem_alimentacao_humana', 50), STATUS.OK); assert.equal(m('racao_animal', 80), STATUS.OK); assert.equal(m('racao_animal', 85), STATUS.FORA_DO_PADRAO);
+  assert.equal(sec({equipamentoFamilia: 'secador', produto: 'milho', destino: 'semente', etapa: 'secagem', leituras: [L('massa_graos', 'temperatura', 50)]}).status, STATUS.SEM_REFERENCIA);
+});
+
+test('umidade: limite exclusivo "abaixo de 14%" e destino/etapa obrigatórios', () => {
+  const u = (o) => sec({equipamentoFamilia: 'secador', produto: 'soja', etapa: 'pos_secagem', ...o, leituras: [L('amostra', 'umidade_graos', o.v)]});
+  assert.equal(u({destino: 'agroindustria', v: 14}).status, STATUS.FORA_DO_PADRAO);
+  assert.equal(u({destino: 'agroindustria', v: 13.9}).status, STATUS.OK);
+  assert.equal(u({destino: 'comercializacao', v: 13}).status, STATUS.SEM_REFERENCIA); // MAPA pendente
+  assert.equal(u({destino: undefined, v: 13}).status, STATUS.DADOS_INSUFICIENTES);
+  assert.equal(sec({equipamentoFamilia: 'moega', produto: 'soja', destino: 'agroindustria', etapa: 'recebimento', leituras: [L('amostra', 'umidade_graos', 18)]}).status, STATUS.SEM_REFERENCIA);
+});
+
+test('semente armazenada: umidade por região e embalagem', () => {
+  const s = (cond, v) => sec({equipamentoFamilia: 'armazem', produto: 'soja', destino: 'semente', etapa: 'armazenamento', condicoes: cond, leituras: [L('amostra', 'umidade_graos', v)]});
+  assert.equal(s({}, 11).status, STATUS.DADOS_INSUFICIENTES);
+  assert.equal(s({regiaoArmazenamento: 'cerrados', embalagem: 'sacaria'}, 11.5).status, STATUS.OK);
+  assert.equal(s({regiaoArmazenamento: 'cerrados', embalagem: 'sacaria'}, 11.8).status, STATUS.FORA_DO_PADRAO);
+  assert.equal(s({regiaoArmazenamento: 'cerrados', embalagem: 'big_bag'}, 10.6).status, STATUS.FORA_DO_PADRAO);
+  assert.equal(s({regiaoArmazenamento: 'sul', embalagem: 'sacaria'}, 13.4).status, STATUS.OK);
+  const t = sec({equipamentoFamilia: 'armazem', produto: 'soja', destino: 'semente', etapa: 'armazenamento', leituras: [L('massa_graos', 'temperatura', 25)]});
+  assert.equal(t.status, STATUS.FORA_DO_PADRAO); // "abaixo de 25 ºC"
+});
+
+test('secador estático: UR do ar ≥ 35% só com o tipo de secador informado', () => {
+  const s = (tipo, v) => sec({equipamentoFamilia: 'secador', produto: 'soja', destino: 'semente', etapa: 'secagem', condicoes: {tipoSecador: tipo}, leituras: [L('ar_entrada', 'umidade_relativa_ar', v)]}).status;
+  assert.equal(s('estatico', 30), STATUS.FORA_DO_PADRAO); assert.equal(s('estatico', 40), STATUS.OK);
+  assert.equal(s('continuo', 30), STATUS.SEM_REFERENCIA); assert.equal(s(undefined, 30), STATUS.DADOS_INSUFICIENTES);
+});
+
+test('várias leituras: pior resultado prevalece; cálculos de umidade e quebra', () => {
+  const r = sec({equipamentoFamilia: 'secador', produto: 'soja', destino: 'semente', etapa: 'secagem', umidadeInicial: 18, umidadeFinal: 12, umidadeMeta: 12.5, massaInicial: 1000,
+    leituras: [L('massa_graos', 'temperatura', 39), L('ar_entrada', 'temperatura', 70)]});
+  assert.equal(r.status, STATUS.SEM_REFERENCIA); // ar de entrada sem referência impede conclusão geral
+  assert.equal(r.leituras[0].avaliacao.status, STATUS.OK);
+  assert.equal(r.calculos.reducaoUmidadePP, 6); assert.equal(r.calculos.diferencaMetaPP, -0.5);
+  quase(r.calculos.massaFinalEstimada, 931.818, 0.01); quase(r.calculos.quebraPct, 6.82, 0.01);
 });

@@ -4,7 +4,7 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.3.0-beta1` — aferição e calibragem com referências técnicas validadas e catálogo de máquinas offline.
+`0.4.0-beta1` — secador e moega, aferição e calibragem com referências técnicas validadas e catálogo de máquinas offline.
 
 ### Funcionalidades
 
@@ -16,6 +16,7 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 - **Estoque**: itens com estoque mínimo, entradas, saídas (com bloqueio de saldo negativo), ajuste de inventário e consumo por talhão.
 - **Relatórios**: operações por tipo, horas por máquina, consumo de insumos e custo de manutenção (7/30/90 dias ou 12 meses); exportação CSV (compatível com Excel).
 - **Aferição e calibragem** (fluxo em 4 etapas: equipamento → condições → medições → resultado): vazão de bicos, taxa de aplicação, sensor de velocidade/fluxômetro, distribuição de sementes, dose (kg/ha), CV de distribuidor a lanço e perdas na colheita. O resultado só é concluído quando existe referência validada aplicável (ver `referencias/`); caso contrário mostra "Não foi possível avaliar" e o que falta. Cada registro guarda o resultado, a regra, a versão e os limites do momento, e gera relatório de medição e comparação (imprimir/PDF).
+- **Secador e moega** (4 etapas: equipamento e produto/lote → etapa e ponto de medição → medições → resultado): temperatura avaliada somente contra referência do mesmo ponto (ar de entrada, massa de grãos…), produto, destino e etapa; umidade inicial/final/meta, quebra de peso estimada, registro no histórico do lote e relatório. Sem referência aplicável: "Não foi possível avaliar".
 - **Catálogo de máquinas offline**: 1.243 modelos com fichas técnicas e manuais dos sites dos fabricantes e 11.107 produtos agrícolas da lista oficial BNDES/FINAME. Máquinas da frota podem ser vinculadas a um modelo do catálogo.
 - **Cadastros e backup**: dados da propriedade, exportação/restauração de backup JSON, dados de exemplo e limpeza.
 - **Pesquisa** global (sem acentos) e tema claro/escuro.

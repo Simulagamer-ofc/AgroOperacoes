@@ -33,3 +33,5 @@ table.tbl{width:100%;border-collapse:collapse;font-size:.88rem}.tbl th,.tbl td{t
 .relatorio h3{margin:22px 0 10px;font-size:1rem;border-bottom:1px solid var(--line);padding-bottom:6px}.rel-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:6px}
 .row a.secondary{text-decoration:none;font-size:.85rem}
 @media print{.sidebar,.topbar,.mobile-nav,.no-print,.toast,.overlay{display:none!important}.app{display:block}.content{padding:0;max-width:none}body{background:#fff;color:#000}.card{box-shadow:none;border:0}:root,[data-theme="dark"]{--panel:#fff;--bg:#fff;--text:#000;--muted:#444;--line:#ccc}}
+details.tecnico{margin-top:8px;font-size:.82rem;color:var(--muted)}details.tecnico summary{cursor:pointer;color:var(--blue)}
+@media print{details.tecnico{display:block}details.tecnico>*{display:block}}

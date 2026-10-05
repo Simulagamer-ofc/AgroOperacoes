@@ -1,7 +1,7 @@
 {
   "banco": "Nexus Agro — referências de aferição e calibragem de máquinas e implementos",
-  "versaoBanco": "1.1.0",
-  "dataBanco": "2026-10-04",
+  "versaoBanco": "1.2.0",
+  "dataBanco": "2026-10-05",
   "observacaoGeral": "Somente regras com statusValidacao = 'validada' são usadas para concluir uma avaliação. Regras 'validada' tiveram o trecho conferido no documento original (ver fontes[].trechoLiteral). Regras 'pendente_conferencia' tiveram a fonte localizada, mas o texto ainda não foi conferido no documento original; o avaliador as mostra como referência candidata e devolve SEM_REFERENCIA. Escopo '*' significa que a regra declara expressamente não depender daquele campo.",
   "statusPossiveis": {
     "validada": "Valor conferido no documento original por um responsável (validadoPor/dataValidacao preenchidos).",
@@ -502,6 +502,958 @@
           "alteracao": "Conferida no manual Embrapa Soja (2013): limite expresso em 60 kg/ha; mínimo de 5 pontos; armação de 2,0 m² de dimensões variáveis."
         }
       ]
+    },
+    {
+      "id": "SEC-SOJA-SEM-MASSA-01",
+      "versao": "1.0.0",
+      "titulo": "Temperatura da massa de semente de soja durante a secagem",
+      "equipamentoFamilia": [
+        "secador"
+      ],
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "secagem"
+      ],
+      "ponto": [
+        "massa_graos"
+      ],
+      "posicao": "*",
+      "variavel": "temperatura",
+      "unidade": "°C",
+      "limiteMin": null,
+      "limiteMax": 40,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Reduzir a temperatura do ar de secagem/ajustar o fluxo até a massa de semente ficar em até 40 ºC; registrar nova leitura.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Tecnologia da produção de semente de soja de alta qualidade — Documentos 380 (ISSN 2176-2937)",
+          "autores": "José de Barros França-Neto; Francisco Carlos Krzyzanowski; Ademir Assis Henning; Gilda Pizzolante de Pádua; Irineu Lorini; Fernando Augusto Henning",
+          "ano": 2016,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1057882/1/Documentos380OL1.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "pp. 45-46 (p. 47 do PDF)",
+          "trechoLiteral": "A semente de soja pode ser secada em sistemas estáticos, contínuos e intermitentes (Figura 32), tomando-se a precaução de que a temperatura da massa de semente não venha a ser superior a 40 ºC e que a umidade relativa do ar de secagem em secadores estáticos não seja inferior a 35%."
+        }
+      ],
+      "observacaoTecnica": "Vale para a temperatura da MASSA de semente, não para o ar de entrada. O mesmo documento cita, no parágrafo anterior, \"temperatura da massa de semente não superior a 42 ºC\" no contexto da intermitência; a recomendação operacional para os três sistemas é 40 ºC.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "SEC-SOJA-SEM-MASSA-2005",
+      "versao": "1.0.0",
+      "titulo": "Temperatura da massa de semente de soja (versão de 2005, substituída)",
+      "equipamentoFamilia": [
+        "secador"
+      ],
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "secagem"
+      ],
+      "ponto": [
+        "massa_graos"
+      ],
+      "posicao": "*",
+      "variavel": "temperatura",
+      "unidade": "°C",
+      "limiteMin": null,
+      "limiteMax": 38,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Transferência de Tecnologia / SENAI / SEBRAE (Programa Alimentos Seguros)",
+          "titulo": "Manual de segurança e qualidade para a cultura da soja (ISBN 85-7383-298-3)",
+          "ano": 2005,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/116424/1/MANUALSEGURANCAQUALIDADEParaaculturadesoja.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "item 2.12 Pós-colheita (p. 41 do PDF)",
+          "trechoLiteral": "A temperatura de secagem da massa de grãos não deve exceder 38ºC para semente, e 48ºC para grãos de soja destinados à agroindústria."
+        }
+      ],
+      "observacaoTecnica": "Substituída por SEC-SOJA-SEM-MASSA-01 (Embrapa Soja, Documentos 380, 2016, mais recente e específico para semente). Mantida para rastreabilidade.",
+      "confianca": "alta",
+      "statusValidacao": "suspensa",
+      "validadoPor": null,
+      "dataValidacao": null
+    },
+    {
+      "id": "SEC-SOJA-SEM-URAR-01",
+      "versao": "1.0.0",
+      "titulo": "Umidade relativa do ar de secagem em secador estático (semente de soja)",
+      "equipamentoFamilia": [
+        "secador"
+      ],
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "secagem"
+      ],
+      "ponto": [
+        "ar_entrada"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_relativa_ar",
+      "unidade": "%",
+      "limiteMin": 35,
+      "limiteMax": null,
+      "alvo": null,
+      "condicoes": [
+        {
+          "campo": "tipoSecador",
+          "operador": "igual",
+          "valor": "estatico",
+          "descricao": "O secador é do tipo estático."
+        }
+      ],
+      "acaoForaDoPadrao": "Reduzir o aquecimento do ar até a umidade relativa do ar de secagem ficar em pelo menos 35%.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Tecnologia da produção de semente de soja de alta qualidade — Documentos 380 (ISSN 2176-2937)",
+          "autores": "José de Barros França-Neto; Francisco Carlos Krzyzanowski; Ademir Assis Henning; Gilda Pizzolante de Pádua; Irineu Lorini; Fernando Augusto Henning",
+          "ano": 2016,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1057882/1/Documentos380OL1.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "pp. 45-46 (p. 47 do PDF)",
+          "trechoLiteral": "...e que a umidade relativa do ar de secagem em secadores estáticos não seja inferior a 35%."
+        }
+      ],
+      "observacaoTecnica": "Somente para secadores estáticos.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "SEC-SOJA-AGRO-MASSA-01",
+      "versao": "1.0.0",
+      "titulo": "Temperatura da massa de grãos de soja destinados à agroindústria durante a secagem",
+      "equipamentoFamilia": [
+        "secador"
+      ],
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "agroindustria"
+      ],
+      "etapa": [
+        "secagem"
+      ],
+      "ponto": [
+        "massa_graos"
+      ],
+      "posicao": "*",
+      "variavel": "temperatura",
+      "unidade": "°C",
+      "limiteMin": null,
+      "limiteMax": 48,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Reduzir a temperatura do ar de secagem até a massa de grãos ficar em até 48 ºC.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Transferência de Tecnologia / SENAI / SEBRAE (Programa Alimentos Seguros)",
+          "titulo": "Manual de segurança e qualidade para a cultura da soja (ISBN 85-7383-298-3)",
+          "ano": 2005,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/116424/1/MANUALSEGURANCAQUALIDADEParaaculturadesoja.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "item 2.12 Pós-colheita (p. 41 do PDF)",
+          "trechoLiteral": "A temperatura de secagem da massa de grãos não deve exceder 38ºC para semente, e 48ºC para grãos de soja destinados à agroindústria."
+        }
+      ],
+      "observacaoTecnica": "Vale para a massa de grãos (não para o ar). Destino: agroindústria.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "SEC-MILHO-SEM-AR-01",
+      "versao": "1.0.0",
+      "titulo": "Temperatura do ar de secagem — milho para semente",
+      "equipamentoFamilia": [
+        "secador"
+      ],
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "milho"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "secagem"
+      ],
+      "ponto": [
+        "ar_entrada"
+      ],
+      "posicao": "*",
+      "variavel": "temperatura",
+      "unidade": "°C",
+      "limiteMin": null,
+      "limiteMax": 44,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Reduzir a temperatura do ar de secagem para até 44 °C.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Milho e Sorgo",
+          "titulo": "Cultivo do Milho — Colheita e pós-colheita. Sistema de Produção 1 (ISSN 1679-012X), 9ª edição",
+          "ano": 2015,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/748767/1/Milho-Colheita-e-pos-colheita.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 28 do PDF (também p. 19)",
+          "trechoLiteral": "A temperatura do ar de secagem não pode exceder a 44 °C no caso de sementes, 55 °C para grãos que se destinam à indústria de moagem e 82 °C para os destinados à fabricação de ração, sob pena de comprometer a qualidade."
+        }
+      ],
+      "observacaoTecnica": "Limite do AR de secagem (texto explícito na p. 28). Na p. 20 o mesmo documento recomenda \"não ultrapassar a temperatura máxima dos grãos ... de acordo com a finalidade\"; por isso a confiança é média.",
+      "confianca": "media",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "SEC-MILHO-MOAG-AR-01",
+      "versao": "1.0.0",
+      "titulo": "Temperatura do ar de secagem — milho para indústria de moagem / alimentação humana",
+      "equipamentoFamilia": [
+        "secador"
+      ],
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "milho"
+      ],
+      "destino": [
+        "moagem_alimentacao_humana"
+      ],
+      "etapa": [
+        "secagem"
+      ],
+      "ponto": [
+        "ar_entrada"
+      ],
+      "posicao": "*",
+      "variavel": "temperatura",
+      "unidade": "°C",
+      "limiteMin": null,
+      "limiteMax": 55,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Reduzir a temperatura do ar de secagem para até 55 °C.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Milho e Sorgo",
+          "titulo": "Cultivo do Milho — Colheita e pós-colheita. Sistema de Produção 1 (ISSN 1679-012X), 9ª edição",
+          "ano": 2015,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/748767/1/Milho-Colheita-e-pos-colheita.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 28 do PDF (também p. 19)",
+          "trechoLiteral": "A temperatura do ar de secagem não pode exceder a 44 °C no caso de sementes, 55 °C para grãos que se destinam à indústria de moagem e 82 °C para os destinados à fabricação de ração, sob pena de comprometer a qualidade."
+        }
+      ],
+      "observacaoTecnica": "Limite do AR de secagem. Ver ressalva da regra SEC-MILHO-SEM-AR-01.",
+      "confianca": "media",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "SEC-MILHO-RACAO-AR-01",
+      "versao": "1.0.0",
+      "titulo": "Temperatura do ar de secagem — milho para fabricação de ração",
+      "equipamentoFamilia": [
+        "secador"
+      ],
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "milho"
+      ],
+      "destino": [
+        "racao_animal"
+      ],
+      "etapa": [
+        "secagem"
+      ],
+      "ponto": [
+        "ar_entrada"
+      ],
+      "posicao": "*",
+      "variavel": "temperatura",
+      "unidade": "°C",
+      "limiteMin": null,
+      "limiteMax": 82,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Reduzir a temperatura do ar de secagem para até 82 °C.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Milho e Sorgo",
+          "titulo": "Cultivo do Milho — Colheita e pós-colheita. Sistema de Produção 1 (ISSN 1679-012X), 9ª edição",
+          "ano": 2015,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/748767/1/Milho-Colheita-e-pos-colheita.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 28 do PDF (também p. 19)",
+          "trechoLiteral": "A temperatura do ar de secagem não pode exceder a 44 °C no caso de sementes, 55 °C para grãos que se destinam à indústria de moagem e 82 °C para os destinados à fabricação de ração, sob pena de comprometer a qualidade."
+        }
+      ],
+      "observacaoTecnica": "Limite do AR de secagem. Ver ressalva da regra SEC-MILHO-SEM-AR-01.",
+      "confianca": "media",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "ARM-SOJA-AGRO-UMID-01",
+      "versao": "1.0.0",
+      "titulo": "Umidade dos grãos de soja destinados à agroindústria para armazenamento",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "agroindustria"
+      ],
+      "etapa": [
+        "pos_secagem",
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 14,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Continuar a secagem até a umidade ficar abaixo de 14%.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Transferência de Tecnologia / SENAI / SEBRAE (Programa Alimentos Seguros)",
+          "titulo": "Manual de segurança e qualidade para a cultura da soja (ISBN 85-7383-298-3)",
+          "ano": 2005,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/116424/1/MANUALSEGURANCAQUALIDADEParaaculturadesoja.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "item 2.12 Pós-colheita (p. 41 do PDF)",
+          "trechoLiteral": "Ocasionalmente, os grãos podem ser colhidos com grau de umidade superior àquele adequado para armazenamento seguro, que é de 12,5 % para semente, e de 14% para grão. [...] Manter os grãos destinados à agroindústria armazenados abaixo de 14% de umidade."
+        }
+      ],
+      "observacaoTecnica": "Texto: \"abaixo de 14%\" — 14,0% já está fora.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05",
+      "limiteMaxExclusivo": true
+    },
+    {
+      "id": "ARM-MILHO-GRAO-UMID-01",
+      "versao": "1.0.0",
+      "titulo": "Umidade do milho a granel para armazenamento",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "milho"
+      ],
+      "destino": [
+        "moagem_alimentacao_humana",
+        "racao_animal",
+        "armazenamento_graos",
+        "comercializacao",
+        "agroindustria"
+      ],
+      "etapa": [
+        "pos_secagem",
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 13,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Continuar a secagem até a umidade ficar em no máximo 13%.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Milho e Sorgo",
+          "titulo": "Cultivo do Milho — Colheita e pós-colheita. Sistema de Produção 1 (ISSN 1679-012X), 9ª edição",
+          "ano": 2015,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/748767/1/Milho-Colheita-e-pos-colheita.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 10 do PDF",
+          "trechoLiteral": "No caso do milho a granel, para o armazenamento após a colheita na propriedade ou em armazéns, os grãos deverão ter no máximo 13% de umidade."
+        }
+      ],
+      "observacaoTecnica": "Para grão (não semente) armazenado a granel.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "ARM-SOJA-SEM-TEMP-01",
+      "versao": "1.0.0",
+      "titulo": "Temperatura da semente de soja armazenada",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "armazenamento"
+      ],
+      "ponto": [
+        "massa_graos"
+      ],
+      "posicao": "*",
+      "variavel": "temperatura",
+      "unidade": "°C",
+      "limiteMin": null,
+      "limiteMax": 25,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Resfriar/aerar o lote até a temperatura ficar abaixo de 25 ºC.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Transferência de Tecnologia / SENAI / SEBRAE (Programa Alimentos Seguros)",
+          "titulo": "Manual de segurança e qualidade para a cultura da soja (ISBN 85-7383-298-3)",
+          "ano": 2005,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/116424/1/MANUALSEGURANCAQUALIDADEParaaculturadesoja.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "item 2.12 Pós-colheita (p. 41 do PDF)",
+          "trechoLiteral": "Manter a temperatura do produto destinado à semente abaixo de 25ºC e a umidade relativa do ar abaixo de 70% durante o armazenamento."
+        }
+      ],
+      "observacaoTecnica": "Texto: \"abaixo de 25ºC\" — 25,0 ºC já está fora.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05",
+      "limiteMaxExclusivo": true
+    },
+    {
+      "id": "ARM-SOJA-SEM-URAR-01",
+      "versao": "1.0.0",
+      "titulo": "Umidade relativa do ar no armazenamento de semente de soja",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "armazenamento"
+      ],
+      "ponto": [
+        "ambiente_armazem"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_relativa_ar",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 70,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Reduzir a umidade relativa do ambiente de armazenamento abaixo de 70%.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Transferência de Tecnologia / SENAI / SEBRAE (Programa Alimentos Seguros)",
+          "titulo": "Manual de segurança e qualidade para a cultura da soja (ISBN 85-7383-298-3)",
+          "ano": 2005,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/116424/1/MANUALSEGURANCAQUALIDADEParaaculturadesoja.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "item 2.12 Pós-colheita (p. 41 do PDF)",
+          "trechoLiteral": "Manter a temperatura do produto destinado à semente abaixo de 25ºC e a umidade relativa do ar abaixo de 70% durante o armazenamento."
+        }
+      ],
+      "observacaoTecnica": "Texto: \"abaixo de 70%\".",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05",
+      "limiteMaxExclusivo": true
+    },
+    {
+      "id": "ARM-SOJA-SEM-UMID-SUL-SC",
+      "versao": "1.0.0",
+      "titulo": "Umidade da semente de soja armazenada — RS, SC e centro-sul do PR — sacaria",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 13.5,
+      "alvo": null,
+      "condicoes": [
+        {
+          "campo": "regiaoArmazenamento",
+          "operador": "igual",
+          "valor": "sul",
+          "descricao": "Armazenamento em: RS, SC e centro-sul do PR."
+        },
+        {
+          "campo": "embalagem",
+          "operador": "igual",
+          "valor": "sacaria",
+          "descricao": "Sementes armazenadas em sacaria."
+        }
+      ],
+      "acaoForaDoPadrao": "Secar o lote até a umidade indicada para a região e embalagem antes de armazenar.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Tecnologia da produção de semente de soja de alta qualidade — Documentos 380 (ISSN 2176-2937)",
+          "autores": "José de Barros França-Neto; Francisco Carlos Krzyzanowski; Ademir Assis Henning; Gilda Pizzolante de Pádua; Irineu Lorini; Fernando Augusto Henning",
+          "ano": 2016,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1057882/1/Documentos380OL1.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 49 do PDF",
+          "trechoLiteral": "Especificamente para as condições de armazenamento do Brasil, pode-se sugerir que o conteúdo de água da semente seja mantido nos seguintes níveis: 13,0% a 13,5%, para o Rio Grande do Sul, Santa Catarina e centro sul do Paraná; 11,5% a 12,0% para o norte e oeste do Paraná, o sul do Mato Grosso do Sul e São Paulo; e 11,0% a 11,5% para as demais regiões dos Cerrados."
+        }
+      ],
+      "observacaoTecnica": "Faixa sugerida: 13,0% a 13,5%. Valores abaixo da faixa não são classificados como fora por esta regra.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "ARM-SOJA-SEM-UMID-SUL-BB",
+      "versao": "1.0.0",
+      "titulo": "Umidade da semente de soja armazenada — RS, SC e centro-sul do PR — big-bag",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 12.5,
+      "alvo": null,
+      "condicoes": [
+        {
+          "campo": "regiaoArmazenamento",
+          "operador": "igual",
+          "valor": "sul",
+          "descricao": "Armazenamento em: RS, SC e centro-sul do PR."
+        },
+        {
+          "campo": "embalagem",
+          "operador": "igual",
+          "valor": "big_bag",
+          "descricao": "Sementes armazenadas em big-bag."
+        }
+      ],
+      "acaoForaDoPadrao": "Secar o lote até a umidade indicada para a região e embalagem antes de armazenar.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Tecnologia da produção de semente de soja de alta qualidade — Documentos 380 (ISSN 2176-2937)",
+          "autores": "José de Barros França-Neto; Francisco Carlos Krzyzanowski; Ademir Assis Henning; Gilda Pizzolante de Pádua; Irineu Lorini; Fernando Augusto Henning",
+          "ano": 2016,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1057882/1/Documentos380OL1.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 49 do PDF",
+          "trechoLiteral": "Especificamente para as condições de armazenamento do Brasil, pode-se sugerir que o conteúdo de água da semente seja mantido nos seguintes níveis: 13,0% a 13,5%, para o Rio Grande do Sul, Santa Catarina e centro sul do Paraná; 11,5% a 12,0% para o norte e oeste do Paraná, o sul do Mato Grosso do Sul e São Paulo; e 11,0% a 11,5% para as demais regiões dos Cerrados. Quando as sementes forem armazenadas em sacolões (\"big-bags\"; Figura 35) é importante que o grau de umidade das sementes esteja em média 1,0% a menos em relação ao utilizado quando as sementes são armazenadas em sacarias."
+        }
+      ],
+      "observacaoTecnica": "Faixa sugerida: 13,0% a 13,5% em sacaria; em big-bag o documento indica, em média, 1,0 ponto a menos (limite derivado: 12,5%).",
+      "confianca": "media",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "ARM-SOJA-SEM-UMID-TRANSICAO-SC",
+      "versao": "1.0.0",
+      "titulo": "Umidade da semente de soja armazenada — norte e oeste do PR, sul do MS e SP — sacaria",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 12.0,
+      "alvo": null,
+      "condicoes": [
+        {
+          "campo": "regiaoArmazenamento",
+          "operador": "igual",
+          "valor": "transicao",
+          "descricao": "Armazenamento em: norte e oeste do PR, sul do MS e SP."
+        },
+        {
+          "campo": "embalagem",
+          "operador": "igual",
+          "valor": "sacaria",
+          "descricao": "Sementes armazenadas em sacaria."
+        }
+      ],
+      "acaoForaDoPadrao": "Secar o lote até a umidade indicada para a região e embalagem antes de armazenar.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Tecnologia da produção de semente de soja de alta qualidade — Documentos 380 (ISSN 2176-2937)",
+          "autores": "José de Barros França-Neto; Francisco Carlos Krzyzanowski; Ademir Assis Henning; Gilda Pizzolante de Pádua; Irineu Lorini; Fernando Augusto Henning",
+          "ano": 2016,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1057882/1/Documentos380OL1.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 49 do PDF",
+          "trechoLiteral": "Especificamente para as condições de armazenamento do Brasil, pode-se sugerir que o conteúdo de água da semente seja mantido nos seguintes níveis: 13,0% a 13,5%, para o Rio Grande do Sul, Santa Catarina e centro sul do Paraná; 11,5% a 12,0% para o norte e oeste do Paraná, o sul do Mato Grosso do Sul e São Paulo; e 11,0% a 11,5% para as demais regiões dos Cerrados."
+        }
+      ],
+      "observacaoTecnica": "Faixa sugerida: 11,5% a 12,0%. Valores abaixo da faixa não são classificados como fora por esta regra.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "ARM-SOJA-SEM-UMID-TRANSICAO-BB",
+      "versao": "1.0.0",
+      "titulo": "Umidade da semente de soja armazenada — norte e oeste do PR, sul do MS e SP — big-bag",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 11.0,
+      "alvo": null,
+      "condicoes": [
+        {
+          "campo": "regiaoArmazenamento",
+          "operador": "igual",
+          "valor": "transicao",
+          "descricao": "Armazenamento em: norte e oeste do PR, sul do MS e SP."
+        },
+        {
+          "campo": "embalagem",
+          "operador": "igual",
+          "valor": "big_bag",
+          "descricao": "Sementes armazenadas em big-bag."
+        }
+      ],
+      "acaoForaDoPadrao": "Secar o lote até a umidade indicada para a região e embalagem antes de armazenar.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Tecnologia da produção de semente de soja de alta qualidade — Documentos 380 (ISSN 2176-2937)",
+          "autores": "José de Barros França-Neto; Francisco Carlos Krzyzanowski; Ademir Assis Henning; Gilda Pizzolante de Pádua; Irineu Lorini; Fernando Augusto Henning",
+          "ano": 2016,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1057882/1/Documentos380OL1.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 49 do PDF",
+          "trechoLiteral": "Especificamente para as condições de armazenamento do Brasil, pode-se sugerir que o conteúdo de água da semente seja mantido nos seguintes níveis: 13,0% a 13,5%, para o Rio Grande do Sul, Santa Catarina e centro sul do Paraná; 11,5% a 12,0% para o norte e oeste do Paraná, o sul do Mato Grosso do Sul e São Paulo; e 11,0% a 11,5% para as demais regiões dos Cerrados. Quando as sementes forem armazenadas em sacolões (\"big-bags\"; Figura 35) é importante que o grau de umidade das sementes esteja em média 1,0% a menos em relação ao utilizado quando as sementes são armazenadas em sacarias."
+        }
+      ],
+      "observacaoTecnica": "Faixa sugerida: 11,5% a 12,0% em sacaria; em big-bag o documento indica, em média, 1,0 ponto a menos (limite derivado: 11,0%).",
+      "confianca": "media",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "ARM-SOJA-SEM-UMID-CERRADOS-SC",
+      "versao": "1.0.0",
+      "titulo": "Umidade da semente de soja armazenada — demais regiões dos Cerrados — sacaria",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 11.5,
+      "alvo": null,
+      "condicoes": [
+        {
+          "campo": "regiaoArmazenamento",
+          "operador": "igual",
+          "valor": "cerrados",
+          "descricao": "Armazenamento em: demais regiões dos Cerrados."
+        },
+        {
+          "campo": "embalagem",
+          "operador": "igual",
+          "valor": "sacaria",
+          "descricao": "Sementes armazenadas em sacaria."
+        }
+      ],
+      "acaoForaDoPadrao": "Secar o lote até a umidade indicada para a região e embalagem antes de armazenar.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Tecnologia da produção de semente de soja de alta qualidade — Documentos 380 (ISSN 2176-2937)",
+          "autores": "José de Barros França-Neto; Francisco Carlos Krzyzanowski; Ademir Assis Henning; Gilda Pizzolante de Pádua; Irineu Lorini; Fernando Augusto Henning",
+          "ano": 2016,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1057882/1/Documentos380OL1.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 49 do PDF",
+          "trechoLiteral": "Especificamente para as condições de armazenamento do Brasil, pode-se sugerir que o conteúdo de água da semente seja mantido nos seguintes níveis: 13,0% a 13,5%, para o Rio Grande do Sul, Santa Catarina e centro sul do Paraná; 11,5% a 12,0% para o norte e oeste do Paraná, o sul do Mato Grosso do Sul e São Paulo; e 11,0% a 11,5% para as demais regiões dos Cerrados."
+        }
+      ],
+      "observacaoTecnica": "Faixa sugerida: 11,0% a 11,5%. Valores abaixo da faixa não são classificados como fora por esta regra.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "ARM-SOJA-SEM-UMID-CERRADOS-BB",
+      "versao": "1.0.0",
+      "titulo": "Umidade da semente de soja armazenada — demais regiões dos Cerrados — big-bag",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 10.5,
+      "alvo": null,
+      "condicoes": [
+        {
+          "campo": "regiaoArmazenamento",
+          "operador": "igual",
+          "valor": "cerrados",
+          "descricao": "Armazenamento em: demais regiões dos Cerrados."
+        },
+        {
+          "campo": "embalagem",
+          "operador": "igual",
+          "valor": "big_bag",
+          "descricao": "Sementes armazenadas em big-bag."
+        }
+      ],
+      "acaoForaDoPadrao": "Secar o lote até a umidade indicada para a região e embalagem antes de armazenar.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Tecnologia da produção de semente de soja de alta qualidade — Documentos 380 (ISSN 2176-2937)",
+          "autores": "José de Barros França-Neto; Francisco Carlos Krzyzanowski; Ademir Assis Henning; Gilda Pizzolante de Pádua; Irineu Lorini; Fernando Augusto Henning",
+          "ano": 2016,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1057882/1/Documentos380OL1.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 49 do PDF",
+          "trechoLiteral": "Especificamente para as condições de armazenamento do Brasil, pode-se sugerir que o conteúdo de água da semente seja mantido nos seguintes níveis: 13,0% a 13,5%, para o Rio Grande do Sul, Santa Catarina e centro sul do Paraná; 11,5% a 12,0% para o norte e oeste do Paraná, o sul do Mato Grosso do Sul e São Paulo; e 11,0% a 11,5% para as demais regiões dos Cerrados. Quando as sementes forem armazenadas em sacolões (\"big-bags\"; Figura 35) é importante que o grau de umidade das sementes esteja em média 1,0% a menos em relação ao utilizado quando as sementes são armazenadas em sacarias."
+        }
+      ],
+      "observacaoTecnica": "Faixa sugerida: 11,0% a 11,5% em sacaria; em big-bag o documento indica, em média, 1,0 ponto a menos (limite derivado: 10,5%).",
+      "confianca": "media",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "COM-SOJA-UMID-01",
+      "versao": "1.0.0",
+      "titulo": "Umidade recomendada para comercialização da soja (classificação)",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "comercializacao"
+      ],
+      "etapa": [
+        "recebimento",
+        "pos_secagem",
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 14,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "",
+      "fontes": [
+        {
+          "organizacao": "MAPA",
+          "titulo": "Instrução Normativa nº 11, de 15/05/2007 — Regulamento Técnico da Soja",
+          "url": "https://sistemasweb.agricultura.gov.br/sislegis/action/detalhaAto.do?method=visualizarAtoPortalMapa&chave=1194426968",
+          "tipo": "norma",
+          "conferido": false,
+          "observacao": "Domínio não acessível no ambiente; trecho visto apenas em resultado de pesquisa: 'A umidade deverá ser obrigatoriamente determinada, mas não será considerada para efeito de enquadramento em tipos, sendo recomendado o percentual máximo de 14%'."
+        }
+      ],
+      "observacaoTecnica": "Pendente de conferência no texto oficial.",
+      "confianca": "media",
+      "statusValidacao": "pendente_conferencia",
+      "validadoPor": null,
+      "dataValidacao": null
+    },
+    {
+      "id": "COM-MILHO-UMID-01",
+      "versao": "1.0.0",
+      "titulo": "Umidade recomendada para comercialização do milho (classificação)",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "milho"
+      ],
+      "destino": [
+        "comercializacao"
+      ],
+      "etapa": [
+        "recebimento",
+        "pos_secagem",
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 14,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "",
+      "fontes": [
+        {
+          "organizacao": "MAPA",
+          "titulo": "Instrução Normativa nº 60, de 22/12/2011 — Regulamento Técnico do Milho",
+          "url": "https://sistemasweb.agricultura.gov.br/sislegis/action/detalhaAto.do?method=visualizarAtoPortalMapa&chave=1739574738",
+          "tipo": "norma",
+          "conferido": false,
+          "observacao": "Domínio não acessível no ambiente; trecho visto apenas em resultado de pesquisa: 'O percentual de umidade tecnicamente recomendado para fins de comercialização do milho será de até 14,0%'."
+        }
+      ],
+      "observacaoTecnica": "Pendente de conferência no texto oficial.",
+      "confianca": "media",
+      "statusValidacao": "pendente_conferencia",
+      "validadoPor": null,
+      "dataValidacao": null
     }
   ],
   "tabelasReferencia": [
@@ -739,6 +1691,12 @@
       "origem": "Embrapa Soja, manual do copo medidor (2013), p. 11.",
       "tipo": "calculo",
       "conferido": true
+    },
+    {
+      "id": "F-QUEBRA-UMIDADE",
+      "descricao": "Massa final estimada = massa inicial × (100 − umidade inicial) ÷ (100 − umidade final), umidades em base úmida (%)",
+      "origem": "Balanço de matéria seca (a matéria seca se conserva na secagem).",
+      "tipo": "calculo"
     }
   ]
 }

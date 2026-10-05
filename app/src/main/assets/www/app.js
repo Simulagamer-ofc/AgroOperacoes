@@ -22,7 +22,7 @@ const safeStorage = {
 
 // ---------- Banco de dados local ----------
 const DB_KEY = 'agro-db-v1';
-const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes'];
+const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem'];
 const emptyDb = () => ({version: 1, settings: {farm: '', owner: ''}, ...Object.fromEntries(COLLECTIONS.map(c => [c, []]))});
 
 function loadDb() {
@@ -59,7 +59,7 @@ const remove = (col, id) => { db[col] = db[col].filter(x => x.id !== id); save()
 const OP_TYPES = ['Plantio', 'Aplicação', 'Adubação', 'Colheita', 'Preparo de solo', 'Transporte', 'Beneficiamento de sementes', 'Tratamento de sementes', 'Manutenção', 'Outra'];
 const OP_STATUS = ['Programada', 'Em andamento', 'Concluída', 'Cancelada'];
 const STATUS_COLOR = {'Programada': 'blue', 'Em andamento': 'green', 'Concluída': 'gray', 'Cancelada': 'red'};
-const MACHINE_TYPES = ['Trator', 'Colheitadeira', 'Pulverizador', 'Plantadeira', 'Caminhão', 'Implemento', 'Beneficiamento', 'Outro'];
+const MACHINE_TYPES = ['Trator', 'Colheitadeira', 'Pulverizador', 'Plantadeira', 'Caminhão', 'Implemento', 'Secador', 'Moega', 'Silo/Armazém', 'Beneficiamento', 'Outro'];
 const LOT_STATUS = ['Em campo', 'Colhido', 'Em beneficiamento', 'Aguardando análise', 'Aprovado', 'Reprovado', 'Expedido'];
 const LOT_COLOR = {'Em campo': 'green', 'Colhido': 'blue', 'Em beneficiamento': 'purple', 'Aguardando análise': 'orange', 'Aprovado': 'green', 'Reprovado': 'red', 'Expedido': 'gray'};
 const UNITS = ['L', 'kg', 't', 'sc', 'un', 'm³', 'big bag'];

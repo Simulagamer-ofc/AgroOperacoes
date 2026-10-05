@@ -56,6 +56,12 @@
     /** F-DOSE-KGHA */
     doseKgHa(massaKg, distanciaM, larguraM) { exigirNumero(massaKg, 'massa'); if (massaKg < 0) throw new Error('massa negativa'); exigirPositivo(distanciaM, 'distância'); exigirPositivo(larguraM, 'largura'); return massaKg * 10000 / (distanciaM * larguraM); },
     /** F-PERDA: retorna kg/ha e sacas de 60 kg/ha */
+    /** F-QUEBRA-UMIDADE: massa final após secar de ui% para uf% (base úmida) */
+    massaAposSecagem(massaInicial, ui, uf) {
+      exigirPositivo(massaInicial, 'massa inicial'); exigirNumero(ui, 'umidade inicial'); exigirNumero(uf, 'umidade final');
+      if (ui < 0 || ui >= 100 || uf < 0 || uf >= 100) throw new Error('umidade deve estar entre 0 e 100%');
+      return massaInicial * (100 - ui) / (100 - uf);
+    },
     perda(massaG, areaM2) { exigirNumero(massaG, 'massa'); if (massaG < 0) throw new Error('massa negativa'); exigirPositivo(areaM2, 'área'); const kg = massaG * 10 / areaM2; return {kgHa: kg, sc60Ha: kg / 60}; },
     /** Classificação de espaçamentos: duplos < 0,5·Xref ≤ aceitáveis ≤ 1,5·Xref < falhos */
     classificarEspacamentos(espacamentosCm, xrefCm) {
@@ -137,19 +143,21 @@
     }
 
     // 2–9: escopo, unidade e condições de cada candidata
-    const aplicaveis = [], faltandoValidadas = [], faltandoOutras = [], divergenteGeral = [];
+    const aplicaveis = [], faltandoValidadas = [], faltandoOutras = [], divergenteGeral = [], compativeis = [];
     for (const r of candidatas) {
       const esc = verificarEscopo(r, leitura);
       if (esc.divergente.length) { divergenteGeral.push(...esc.divergente); continue; }
       const cond = verificarCondicoes(r, leitura.condicoes);
       if (cond.divergente.length) { divergenteGeral.push(...cond.divergente); continue; }
+      compativeis.push(r);
       const faltando = [...esc.faltando, ...cond.faltando];
       if (faltando.length) { (r.statusValidacao === 'validada' && temLimite(r) ? faltandoValidadas : faltandoOutras).push(...faltando); continue; }
       aplicaveis.push({regra: r, aplicadas: cond.aplicadas});
     }
 
     const validadas = aplicaveis.filter(a => a.regra.statusValidacao === 'validada' && temLimite(a.regra));
-    res.referenciasCandidatas = candidatas.filter(r => !(r.statusValidacao === 'validada' && temLimite(r))).map(regra => ({
+    // Só as regras compatíveis com a condição informada (escopo e condições), mas sem validação ou sem limite
+    res.referenciasCandidatas = compativeis.filter(r => !(r.statusValidacao === 'validada' && temLimite(r))).map(regra => ({
       regraId: regra.id, regraVersao: regra.versao, titulo: regra.titulo, statusValidacao: regra.statusValidacao,
       limiteMin: regra.limiteMin ?? null, limiteMax: regra.limiteMax ?? null, fonte: fonteTexto(regra),
       motivo: temLimite(regra) ? 'Referência ainda não conferida no documento original — não usada para concluir.' : 'Regra sem limite definido por fonte técnica.'
@@ -181,8 +189,12 @@
       regraId: regra.id, regraVersao: regra.versao, regraTitulo: regra.titulo,
       fonte: fonteTexto(regra), fontes: (regra.fontes || []).map(f => ({...f})), condicoesAplicadas: aplicadas
     });
-    if (min !== null && v < min) { res.status = STATUS.FORA_DO_PADRAO; res.diferenca = arred(v - min); }
-    else if (max !== null && v > max) { res.status = STATUS.FORA_DO_PADRAO; res.diferenca = arred(v - max); }
+    // limites exclusivos: "abaixo de 14%" → 14,0 já está fora
+    const abaixo = min !== null && (regra.limiteMinExclusivo ? v <= min : v < min);
+    const acima = max !== null && (regra.limiteMaxExclusivo ? v >= max : v > max);
+    res.limiteMinExclusivo = !!regra.limiteMinExclusivo; res.limiteMaxExclusivo = !!regra.limiteMaxExclusivo;
+    if (abaixo) { res.status = STATUS.FORA_DO_PADRAO; res.diferenca = arred(v - min); }
+    else if (acima) { res.status = STATUS.FORA_DO_PADRAO; res.diferenca = arred(v - max); }
     else {
       const fa = regra.faixaAtencao;
       const atencao = fa && ((finito(fa.min) && v < fa.min) || (finito(fa.max) && v > fa.max));
@@ -326,10 +338,37 @@
         if (!(r.fontes || []).some(f => f.conferido === true && f.trechoLiteral)) problemas.push(`${r.id}: validada sem fonte conferida (trechoLiteral)`);
         if (!temLimite(r)) problemas.push(`${r.id}: validada sem limite`);
       }
+      for (const [c] of ESCOPO) if (Array.isArray(r[c]) && r[c].includes('*')) problemas.push(`${r.id}: "*" dentro de lista em "${c}" (use "*" sem lista)`);
       if (finito(r.limiteMin) && finito(r.limiteMax) && r.limiteMin > r.limiteMax) problemas.push(`${r.id}: limiteMin maior que limiteMax`);
     }
     return problemas;
   }
 
-  return {STATUS, calculos, avaliar, congelar, resumir, avaliarBicos, avaliarSensor, avaliarDistribuicaoLongitudinal, avaliarPerdas, avaliarDistribuicaoTransversal, avaliarTaxaAplicacao, avaliarDose, auditarBanco};
+  /**
+   * Secador, moega e armazém: avalia cada leitura separadamente, sempre com o ponto de medição informado.
+   * dados: {equipamentoFamilia, produto, destino, etapa, condicoes:{...},
+   *         leituras:[{ponto, posicao, variavel:'temperatura'|'umidade_graos'|'umidade_relativa_ar', valor}],
+   *         umidadeInicial, umidadeFinal, umidadeMeta, massaInicial}
+   */
+  function avaliarSecagem(dados, banco, opcoes = {}) {
+    const UN = {temperatura: '°C', umidade_graos: '%', umidade_relativa_ar: '%'};
+    const leituras = (dados.leituras || []).filter(l => finito(l.valor));
+    const avaliacoes = leituras.map(l => ({...l, avaliacao: avaliar({equipamentoFamilia: dados.equipamentoFamilia, produto: dados.produto, destino: dados.destino,
+      etapa: dados.etapa, ponto: l.ponto, posicao: l.posicao, variavel: l.variavel, unidade: UN[l.variavel], valor: l.valor, condicoes: dados.condicoes || {}}, banco, opcoes)}));
+    const calc = {};
+    const {umidadeInicial: ui, umidadeFinal: uf, umidadeMeta: um, massaInicial: mi} = dados;
+    if (finito(ui) && finito(uf)) calc.reducaoUmidadePP = arred(ui - uf, 2);
+    if (finito(uf) && finito(um)) calc.diferencaMetaPP = arred(uf - um, 2);
+    if (finito(mi) && mi > 0 && finito(ui) && finito(uf) && ui < 100 && uf < 100) {
+      calc.massaFinalEstimada = arred(calculos.massaAposSecagem(mi, ui, uf), 3);
+      calc.quebraMassa = arred(mi - calc.massaFinalEstimada, 3);
+      calc.quebraPct = arred((mi - calc.massaFinalEstimada) / mi * 100, 2);
+    }
+    const pend = [];
+    if (!leituras.length) pend.push('Nenhuma leitura informada.');
+    avaliacoes.forEach(a => a.avaliacao.pendencias.forEach(x => pend.push(`[${a.variavel} — ${a.ponto || 'ponto não informado'}] ${x}`)));
+    return {status: leituras.length ? resumir(avaliacoes.map(a => a.avaliacao.status)) : STATUS.DADOS_INSUFICIENTES, leituras: avaliacoes, calculos: calc, pendencias: [...new Set(pend)]};
+  }
+
+  return {STATUS, calculos, avaliar, congelar, resumir, avaliarSecagem, avaliarBicos, avaliarSensor, avaliarDistribuicaoLongitudinal, avaliarPerdas, avaliarDistribuicaoTransversal, avaliarTaxaAplicacao, avaliarDose, auditarBanco};
 }));
