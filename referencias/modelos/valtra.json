@@ -1,0 +1,3712 @@
+{
+ "catalogo": "Nexus Agro — modelos de máquinas e implementos",
+ "marca": "Valtra",
+ "fabricanteId": "agco",
+ "fonte": "sitemap do site oficial",
+ "dataConsulta": "2026-10-04",
+ "regras": [
+  "Especificações copiadas como texto literal do site oficial do fabricante, sem conversão nem interpretação.",
+  "Valores servem para identificação e consulta. Para preencher automaticamente um parâmetro de regulagem, o valor precisa ser confirmado no manual/folheto do modelo e ano.",
+  "O site pode não refletir variações por ano-modelo, mercado ou opcionais."
+ ],
+ "totalModelos": 109,
+ "comEspecificacoes": 108,
+ "modelos": [
+  {
+   "id": "valtra-bc6800",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BC6800",
+   "linha": "Colheitadeira Axial Série 800: Sistema de Arrefecimento",
+   "familia": "colhedora_graos",
+   "categoriaFabricante": "colheitadeiras-axiais",
+   "url": "https://www.valtra.com.br/produtos/colheitadeiras-axiais/serie-800.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA MÁXIMA (CV)",
+     "valor": "390"
+    },
+    {
+     "campo": "TAMANHO DA PLATAFORMA (pés)",
+     "valor": "CARACOL 25 e 30 • DRAPER 25, 30 e 35"
+    },
+    {
+     "campo": "TAMANHO DO TANQUE (L)",
+     "valor": "10.570"
+    },
+    {
+     "campo": "VAZÃO DE DESCARGA (L/S)",
+     "valor": "88"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bc7800",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BC7800",
+   "linha": "Colheitadeira Axial Série 800: Sistema de Arrefecimento",
+   "familia": "colhedora_graos",
+   "categoriaFabricante": "colheitadeiras-axiais",
+   "url": "https://www.valtra.com.br/produtos/colheitadeiras-axiais/serie-800.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA MÁXIMA (CV)",
+     "valor": "450"
+    },
+    {
+     "campo": "TAMANHO DA PLATAFORMA (pés)",
+     "valor": "DRAPER DE 35 e 40"
+    },
+    {
+     "campo": "TAMANHO DO TANQUE (L)",
+     "valor": "12.334"
+    },
+    {
+     "campo": "VAZÃO DE DESCARGA (L/S)",
+     "valor": "150"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-r560-dry",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "R560 DRY",
+   "linha": "Distribuidor R560 DRY",
+   "familia": "distribuidor",
+   "categoriaFabricante": "distribuidor",
+   "url": "https://www.valtra.com.br/produtos/distribuidor/r560-dry.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "200"
+    },
+    {
+     "campo": "CAPACIDADE DO RESERVATÓRIO (m3)",
+     "valor": "6"
+    },
+    {
+     "campo": "LARGURA DE DISTRIBUIÇÃO",
+     "valor": "40*"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bdf-1300",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BDF 1300",
+   "linha": "Fertilizer BDF 1300 para Distribuição de Fertilizantes",
+   "familia": null,
+   "categoriaFabricante": "implementos",
+   "url": "https://www.valtra.com.br/produtos/implementos/fertilizer-bdf-1300.html",
+   "especificacoes": [
+    {
+     "campo": "CAPACIDADE (l)",
+     "valor": "1300"
+    },
+    {
+     "campo": "LARGURA DE TRABALHO (m)",
+     "valor": "18 a 36"
+    },
+    {
+     "campo": "ROTAÇÃO TDP (rpm)",
+     "valor": "540"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE TRATOR (kgf)",
+     "valor": "2500"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bp-302-hidraulica",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 302 (Hidráulica)",
+   "linha": "Plantadeira Compact para Agricultura Familiar",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/compact.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "3"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "220"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "95"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "45"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bp-503-hidraulica",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 503 (Hidráulica)",
+   "linha": "Plantadeira Compact para Agricultura Familiar",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/compact.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "5"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "350"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "160"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "60"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bp-603-arrasto",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 603 (Arrasto)",
+   "linha": "Plantadeira Compact para Agricultura Familiar",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/compact.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "6"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "420"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "190"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "60"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bp-2617",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 2617",
+   "linha": "Semeadora Fine para Plantio de Arroz",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/fine.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "26"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "17"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L) — Min.",
+     "valor": "960"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L) — Máx.",
+     "valor": "1100"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L) — Min.",
+     "valor": "990"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L) — Máx.",
+     "valor": "1145"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "120"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bp-1106",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 1106",
+   "linha": "Plantadeira Frontier para melhor experiência no Plantio",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/frontier.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "11"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "2130"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "1500"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "140"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bp-1307",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 1307",
+   "linha": "Plantadeira Frontier para melhor experiência no Plantio",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/frontier.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "13"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "2520"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "1500"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "165"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bp-1508",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 1508",
+   "linha": "Plantadeira Frontier para melhor experiência no Plantio",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/frontier.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "15"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "2910"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "1500"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "190"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bp-1709",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 1709",
+   "linha": "Plantadeira Frontier para melhor experiência no Plantio",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/frontier.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "17"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "3225"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "1500"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "215"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bp-2212",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 2212",
+   "linha": "Plantadeira Frontier para melhor experiência no Plantio",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/frontier.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "22"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "4260"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "3000"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "275"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bp-2614",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 2614",
+   "linha": "Plantadeira Frontier para melhor experiência no Plantio",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/frontier.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "26"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "5040"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "3000"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "325"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bp-3016",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 3016",
+   "linha": "Plantadeira Frontier para melhor experiência no Plantio",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/frontier.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "30"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "5820"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "3000"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "375"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bp-704",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 704",
+   "linha": "Plantadeira HiTech com Baixo Custo e Alta Qualidade",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/hitech-compact.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "7"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "645"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "455"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "75"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bp-905",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 905",
+   "linha": "Plantadeira HiTech com Baixo Custo e Alta Qualidade",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/hitech-compact.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "9"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "825"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "585"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "100"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bp-805",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 805",
+   "linha": "Plantadeira HiTech: Modelos de 8 a 17 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/hitech.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "8"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "935"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "520"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "90"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bp-905-2",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 905 (Plantadeira HiTech: Modelos de 8 a 17 linhas)",
+   "linha": "Plantadeira HiTech: Modelos de 8 a 17 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/hitech.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "9"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "1175"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "585"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "100"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-bp-1005",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 1005",
+   "linha": "Plantadeira HiTech: Modelos de 8 a 17 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/hitech.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "10"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "1420"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "650"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "120"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bp-1106-2",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 1106 (Plantadeira HiTech: Modelos de 8 a 17 linhas)",
+   "linha": "Plantadeira HiTech: Modelos de 8 a 17 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/hitech.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "11"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "1420"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "710"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "130"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-bp-1206",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 1206",
+   "linha": "Plantadeira HiTech: Modelos de 8 a 17 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/hitech.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "12"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "1642"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "780"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "135"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bp-1307-2",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 1307 (Plantadeira HiTech: Modelos de 8 a 17 linhas)",
+   "linha": "Plantadeira HiTech: Modelos de 8 a 17 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/hitech.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "13"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "1642"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "840"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "135"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-bp-1508-2",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 1508 (Plantadeira HiTech: Modelos de 8 a 17 linhas)",
+   "linha": "Plantadeira HiTech: Modelos de 8 a 17 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/hitech.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "15"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "1865"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "970"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "180"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-bp-1709-2",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BP 1709 (Plantadeira HiTech: Modelos de 8 a 17 linhas)",
+   "linha": "Plantadeira HiTech: Modelos de 8 a 17 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/hitech.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "17"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "2355"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "1100"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "200"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-momentum-sementes",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes",
+   "linha": "Plantadeira Momentum 30 e 40",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/momentum.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "30"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "-"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "5130"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "315"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-momentum-sementes-2",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes (40)",
+   "linha": "Plantadeira Momentum 30 e 40",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/momentum.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "40"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "-"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "5130"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "420"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-momentum-sementes-fertilizantes",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes & Fertilizantes",
+   "linha": "Plantadeira Momentum 30 e 40",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/momentum.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "30"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L)",
+     "valor": "3600"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L)",
+     "valor": "5130"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "375"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-1305-l",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "1305 L",
+   "linha": "Semeadora Multiple L com Menor Custo Operacional",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/multiple-l.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "13 e 5 (inverno e verão)"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "17 e 45 (inverno e verão)"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L) — Inverno",
+     "valor": "488"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L) — Verão",
+     "valor": "488"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L) — Inverno",
+     "valor": "372"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L) — Verão",
+     "valor": "397"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "50 e 60 (inverno e verão)"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-1707-l",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "1707 L",
+   "linha": "Semeadora Multiple L com Menor Custo Operacional",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/multiple-l.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "17 e 7 (inverno e verão)"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "17 e 45 (inverno e verão)"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L) — Inverno",
+     "valor": "659"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L) — Verão",
+     "valor": "659"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L) — Inverno",
+     "valor": "505"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L) — Verão",
+     "valor": "540"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "70 e 85 (inverno e verão)"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-2108-l",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "2108 L",
+   "linha": "Semeadora Multiple L com Menor Custo Operacional",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/multiple-l.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "21 e 8 (inverno e verão)"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "17 e 45 (inverno e verão)"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L) — Inverno",
+     "valor": "1148"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L) — Verão",
+     "valor": "1148"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L) — Inverno",
+     "valor": "890"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L) — Verão",
+     "valor": "922"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "85 e 105 (inverno e verão)"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-2509-m",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "2509 M",
+   "linha": "Semeadora Multiple M com mais 10% de Autonomia",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/multiple-m.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "25 e 9 (inverno e verão)"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "17 e 45 (inverno e verão)"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L) — Inverno",
+     "valor": "1630"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L) — Verão",
+     "valor": "1458"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L) — Inverno",
+     "valor": "1312"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L) — Verão",
+     "valor": "1409"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "50 e 60 (inverno e verão)"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-2911-m",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "2911 M",
+   "linha": "Semeadora Multiple M com mais 10% de Autonomia",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/multiple-m.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "29 e 11 (inverno e verão)"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "17 e 45 (inverno e verão)"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L) — Inverno",
+     "valor": "1885"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE ADUBO (L) — Verão",
+     "valor": "1616"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L) — Inverno",
+     "valor": "1517"
+    },
+    {
+     "campo": "CAPACIDADE RESERVATÓRIO DE SEMENTES (L) — Verão",
+     "valor": "1629"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "70 e 85 (inverno e verão)"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-momentum-sementes-3",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes (Plantadeira Momentum 18 a 24)",
+   "linha": "Plantadeira Momentum 18 a 24",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/nova-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "18"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45, 50 e 60 cm"
+    },
+    {
+     "campo": "CAPACIDADES DOS RESERVATÓRIOS (L)",
+     "valor": "Semente: 3500"
+    },
+    {
+     "campo": "REQUISITOS MÍNIMOS DO TRATOR",
+     "valor": "Power Beyond/ Load Sense / Retorno Sistema de levante Hidráulico Vazão de 120 l/min"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-momentum-sementes-4",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes (Plantadeira Momentum 18 a 24)",
+   "linha": "Plantadeira Momentum 18 a 24",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/nova-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "20"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45, 50 e 60 cm"
+    },
+    {
+     "campo": "CAPACIDADES DOS RESERVATÓRIOS (L)",
+     "valor": "Semente: 3500"
+    },
+    {
+     "campo": "REQUISITOS MÍNIMOS DO TRATOR",
+     "valor": "Power Beyond/ Load Sense / Retorno Sistema de levante Hidráulico Vazão de 120 l/min"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-momentum-sementes-5",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes (Plantadeira Momentum 18 a 24)",
+   "linha": "Plantadeira Momentum 18 a 24",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/nova-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "22"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45, 50 e 60 cm"
+    },
+    {
+     "campo": "CAPACIDADES DOS RESERVATÓRIOS (L)",
+     "valor": "Semente: 3500"
+    },
+    {
+     "campo": "REQUISITOS MÍNIMOS DO TRATOR",
+     "valor": "Power Beyond/ Load Sense / Retorno Sistema de levante Hidráulico Vazão de 120 l/min"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-momentum-sementes-6",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes (Plantadeira Momentum 18 a 24)",
+   "linha": "Plantadeira Momentum 18 a 24",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/nova-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "24"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45, 50 e 60 cm"
+    },
+    {
+     "campo": "CAPACIDADES DOS RESERVATÓRIOS (L)",
+     "valor": "Semente: 3500"
+    },
+    {
+     "campo": "REQUISITOS MÍNIMOS DO TRATOR",
+     "valor": "Power Beyond/ Load Sense / Retorno Sistema de levante Hidráulico Vazão de 120 l/min"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-momentum-sementes-fertilizantes-2",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes & Fertilizantes (Plantadeira Momentum 18 a 24)",
+   "linha": "Plantadeira Momentum 18 a 24",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/nova-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "18"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45, 50 e 60 cm"
+    },
+    {
+     "campo": "CAPACIDADES DOS RESERVATÓRIOS (L)",
+     "valor": "Semente: 3500 Fertilizante: 3500"
+    },
+    {
+     "campo": "REQUISITOS MÍNIMOS DO TRATOR",
+     "valor": "Power Beyond/ Load Sense / Retorno Sistema de levante Hidráulico Vazão de 170 l/min"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-momentum-sementes-fertilizantes-3",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes & Fertilizantes (Plantadeira Momentum 18 a 24)",
+   "linha": "Plantadeira Momentum 18 a 24",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/nova-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "20"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45, 50 e 60 cm"
+    },
+    {
+     "campo": "CAPACIDADES DOS RESERVATÓRIOS (L)",
+     "valor": "Semente: 3500 Fertilizante: 3500"
+    },
+    {
+     "campo": "REQUISITOS MÍNIMOS DO TRATOR",
+     "valor": "Power Beyond/ Load Sense / Retorno Sistema de levante Hidráulico Vazão de 170 l/min"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-momentum-sementes-fertilizantes-4",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes & Fertilizantes (Plantadeira Momentum 18 a 24)",
+   "linha": "Plantadeira Momentum 18 a 24",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/nova-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "22"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45, 50 e 60 cm"
+    },
+    {
+     "campo": "CAPACIDADES DOS RESERVATÓRIOS (L)",
+     "valor": "Semente: 3500 Fertilizante: 3500"
+    },
+    {
+     "campo": "REQUISITOS MÍNIMOS DO TRATOR",
+     "valor": "Power Beyond/ Load Sense / Retorno Sistema de levante Hidráulico Vazão de 170 l/min"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-momentum-sementes-fertilizantes-5",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes & Fertilizantes (Plantadeira Momentum 18 a 24)",
+   "linha": "Plantadeira Momentum 18 a 24",
+   "familia": "semeadora",
+   "categoriaFabricante": "plantadeiras",
+   "url": "https://www.valtra.com.br/produtos/plantadeiras/nova-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "24"
+    },
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45, 50 e 60 cm"
+    },
+    {
+     "campo": "CAPACIDADES DOS RESERVATÓRIOS (L)",
+     "valor": "Semente: 3500 Fertilizante: 3500"
+    },
+    {
+     "campo": "REQUISITOS MÍNIMOS DO TRATOR",
+     "valor": "Power Beyond/ Load Sense / Retorno Sistema de levante Hidráulico Vazão de 170 l/min"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-hiflex-serie-600f",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "HiFlex Série 600F",
+   "linha": "Plataforma de Colheita Caracol 600F 5% mais durável",
+   "familia": "plataforma_colheita",
+   "categoriaFabricante": "plataformas",
+   "url": "https://www.valtra.com.br/produtos/plataformas/caracol-600f.html",
+   "especificacoes": [
+    {
+     "campo": "TAMANHO (pés)",
+     "valor": "25"
+    },
+    {
+     "campo": "INDICAÇÃO DE MÁQUINA",
+     "valor": "BC6800"
+    },
+    {
+     "campo": "PRINCIPAIS CULTURAS",
+     "valor": "Soja / Trigo / Cevada / Feijão"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-hiflex-serie-600f-2",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "HiFlex Série 600F (30)",
+   "linha": "Plataforma de Colheita Caracol 600F 5% mais durável",
+   "familia": "plataforma_colheita",
+   "categoriaFabricante": "plataformas",
+   "url": "https://www.valtra.com.br/produtos/plataformas/caracol-600f.html",
+   "especificacoes": [
+    {
+     "campo": "TAMANHO (pés)",
+     "valor": "30"
+    },
+    {
+     "campo": "INDICAÇÃO DE MÁQUINA",
+     "valor": "BC6800"
+    },
+    {
+     "campo": "PRINCIPAIS CULTURAS",
+     "valor": "Soja / Trigo / Cevada / Feijão"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-700fd",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "700FD",
+   "linha": "Plataforma Draper 700FD",
+   "familia": "plataforma_colheita",
+   "categoriaFabricante": "plataformas",
+   "url": "https://www.valtra.com.br/produtos/plataformas/draper-700fd.html",
+   "especificacoes": [
+    {
+     "campo": "TAMANHO",
+     "valor": "25FT"
+    },
+    {
+     "campo": "INDICAÇÃO DE MÁQUINA",
+     "valor": "BC6800"
+    },
+    {
+     "campo": "PRINCIPAL CULTURA",
+     "valor": "Grãos"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-700fd-2",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "700FD (30FT)",
+   "linha": "Plataforma Draper 700FD",
+   "familia": "plataforma_colheita",
+   "categoriaFabricante": "plataformas",
+   "url": "https://www.valtra.com.br/produtos/plataformas/draper-700fd.html",
+   "especificacoes": [
+    {
+     "campo": "TAMANHO",
+     "valor": "30FT"
+    },
+    {
+     "campo": "INDICAÇÃO DE MÁQUINA",
+     "valor": "BC6800"
+    },
+    {
+     "campo": "PRINCIPAL CULTURA",
+     "valor": "Grãos"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-700fd-3",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "700FD (35FT)",
+   "linha": "Plataforma Draper 700FD",
+   "familia": "plataforma_colheita",
+   "categoriaFabricante": "plataformas",
+   "url": "https://www.valtra.com.br/produtos/plataformas/draper-700fd.html",
+   "especificacoes": [
+    {
+     "campo": "TAMANHO",
+     "valor": "35FT"
+    },
+    {
+     "campo": "INDICAÇÃO DE MÁQUINA",
+     "valor": "BC6800/BC7800"
+    },
+    {
+     "campo": "PRINCIPAL CULTURA",
+     "valor": "Grãos"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-700fd-4",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "700FD (40FT)",
+   "linha": "Plataforma Draper 700FD",
+   "familia": "plataforma_colheita",
+   "categoriaFabricante": "plataformas",
+   "url": "https://www.valtra.com.br/produtos/plataformas/draper-700fd.html",
+   "especificacoes": [
+    {
+     "campo": "TAMANHO",
+     "valor": "40FT"
+    },
+    {
+     "campo": "INDICAÇÃO DE MÁQUINA",
+     "valor": "BC7800"
+    },
+    {
+     "campo": "PRINCIPAL CULTURA",
+     "valor": "Grãos"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "valtra-plataforma-de-milho-tecnologia-na-colheita-de-milho",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "Plataforma de Milho: Tecnologia na colheita de Milho",
+   "linha": "Plataforma de Milho: Tecnologia na colheita de Milho",
+   "familia": "plataforma_colheita",
+   "categoriaFabricante": "plataformas",
+   "url": "https://www.valtra.com.br/produtos/plataformas/plataformas-de-milho.html",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "observacao": "Página do produto sem tabela de modelos; incluído apenas para identificação."
+  },
+  {
+   "id": "valtra-bs2225h-hitech",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BS2225H HITECH",
+   "linha": "Pulverizador BS2225H HiTech",
+   "familia": "pulverizador",
+   "categoriaFabricante": "pulverizadores",
+   "url": "https://www.valtra.com.br/produtos/pulverizadores/pulverizador-bs2225h-hitech.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "174"
+    },
+    {
+     "campo": "CAPACIDADE DO TANQUE (L)",
+     "valor": "2.500"
+    },
+    {
+     "campo": "TAMANHO DA BARRA (M)",
+     "valor": "24 e 30*"
+    },
+    {
+     "campo": "SEÇÕES DA BARRA",
+     "valor": "9 com acionamento eletro-hidráulico"
+    },
+    {
+     "campo": "CAPACIDADE DE RAMPA",
+     "valor": "34%"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bs2225h",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BS2225H",
+   "linha": "Pulverizador BS2225H: 60% de Economia de Combustível",
+   "familia": "pulverizador",
+   "categoriaFabricante": "pulverizadores",
+   "url": "https://www.valtra.com.br/produtos/pulverizadores/pulverizador-bs2225h.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "174 cv"
+    },
+    {
+     "campo": "CAPACIDADE DO TANQUE (L)",
+     "valor": "2.500"
+    },
+    {
+     "campo": "TAMANHO DA BARRA (M)",
+     "valor": "25 e 28"
+    },
+    {
+     "campo": "SEÇÕES DA BARRA",
+     "valor": "7"
+    },
+    {
+     "campo": "CAPACIDADE DE RAMPA",
+     "valor": "32%"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-r530",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "R530",
+   "linha": "Pulverizadores Série R",
+   "familia": "pulverizador",
+   "categoriaFabricante": "pulverizadores",
+   "url": "https://www.valtra.com.br/produtos/pulverizadores/pulverizadores-serie-r.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "200"
+    },
+    {
+     "campo": "CAPACIDADE DO TANQUE (L)",
+     "valor": "3.000"
+    },
+    {
+     "campo": "TAMANHO DA BARRA (M)",
+     "valor": "24, 30, 32, 36 e 42"
+    },
+    {
+     "campo": "SEÇÕES DA BARRA",
+     "valor": "9 pneumáticas, 36 elétricas ou controle bico a bico com sistema PWM*"
+    },
+    {
+     "campo": "CAPACIDADE DE RAMPA",
+     "valor": "36%"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-r535",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "R535",
+   "linha": "Pulverizadores Série R",
+   "familia": "pulverizador",
+   "categoriaFabricante": "pulverizadores",
+   "url": "https://www.valtra.com.br/produtos/pulverizadores/pulverizadores-serie-r.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "200"
+    },
+    {
+     "campo": "CAPACIDADE DO TANQUE (L)",
+     "valor": "3.500"
+    },
+    {
+     "campo": "TAMANHO DA BARRA (M)",
+     "valor": "24, 30, 32, 36 e 42"
+    },
+    {
+     "campo": "SEÇÕES DA BARRA",
+     "valor": "9 pneumáticas, 36 elétricas ou controle bico a bico com sistema PWM*"
+    },
+    {
+     "campo": "CAPACIDADE DE RAMPA",
+     "valor": "36%"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bh154",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BH154",
+   "linha": "Linha BH G4 de Tratores Unindo Inovação e Tradição",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/bh-g4.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "159"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "12F+4R Heavy Duty"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "64, 90 ou 162"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "8000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bh174",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BH174",
+   "linha": "Linha BH G4 de Tratores Unindo Inovação e Tradição",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/bh-g4.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "179"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "12F+4R Heavy Duty"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "67, 92 ou 170"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "8000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bh184",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BH184",
+   "linha": "Linha BH G4 de Tratores Unindo Inovação e Tradição",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/bh-g4.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "180"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "12F+4R Heavy Duty"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "64, 90 ou 162"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "8000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bh194",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BH194",
+   "linha": "Linha BH G4 de Tratores Unindo Inovação e Tradição",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/bh-g4.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "195"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "12F+4R Heavy Duty"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "67, 92 ou 170"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "8000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bh214",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BH214",
+   "linha": "Linha BH G4 de Tratores Unindo Inovação e Tradição",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/bh-g4.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "210"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "12F+4R Heavy Duty"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "67, 92 ou 170"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "8000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bh224",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BH224",
+   "linha": "Linha BH G4 de Tratores Unindo Inovação e Tradição",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/bh-g4.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "220"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "12F+4R Heavy Duty"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "67, 92 ou 170"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "8000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bh154-hitech",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BH154 HiTech",
+   "linha": "Trator Agrícola BH Tech Totalmente Focado em Resultados",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/bh-hitech.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "159"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "90/162"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "18F+18R (Power Shuttle)"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "8.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bh174-hitech",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BH174 HiTech",
+   "linha": "Trator Agrícola BH Tech Totalmente Focado em Resultados",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/bh-hitech.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "179"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "92/170"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "18F+18R (Power Shuttle)"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "8.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bh184-hitech",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BH184 HiTech",
+   "linha": "Trator Agrícola BH Tech Totalmente Focado em Resultados",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/bh-hitech.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "180"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "90/162"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "18F+18R (Power Shuttle)"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "8.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bh194-hitech",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BH194 HiTech",
+   "linha": "Trator Agrícola BH Tech Totalmente Focado em Resultados",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/bh-hitech.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "195"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "92/170"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "18F+18R (Power Shuttle)"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "8.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bh214-hitech",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BH214 HiTech",
+   "linha": "Trator Agrícola BH Tech Totalmente Focado em Resultados",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/bh-hitech.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "210"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "92/170"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "18F+18R (Power Shuttle)"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "8.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bh224-hitech",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BH224 HiTech",
+   "linha": "Trator Agrícola BH Tech Totalmente Focado em Resultados",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/bh-hitech.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "220"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "92/170"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "18F+18R (Power Shuttle)"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "8.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bm-115",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BM 115",
+   "linha": "Linha BM",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/linha-bm.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "117"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "16F+8R"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "52 ou 98"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "4.760"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-bm-135",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "BM 135",
+   "linha": "Linha BM",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/linha-bm.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "135"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "16F+8R"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "52 ou 98"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "4.760"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a800r",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A800R",
+   "linha": "Trator Série A2R 10% mais economia de combustível",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a2r.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "80"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "3"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+4R 12F+8R Redutor 16F+8R Multiplicador 12F+12R Reversão Mecânica"
+    },
+    {
+     "campo": "VAZÃO (L/MIN.)",
+     "valor": "40 (std) ou 55 (opc)"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "3.800"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a850r",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A850R",
+   "linha": "Trator Série A2R 10% mais economia de combustível",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a2r.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "89"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "3"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+4R 12F+8R Redutor 16F+8R Multiplicador 12F+12R Reversão Mecânica"
+    },
+    {
+     "campo": "VAZÃO (L/MIN.)",
+     "valor": "40 (std) ou 55 (opc)"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "3.800"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a950r",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A950R",
+   "linha": "Trator Série A2R 10% mais economia de combustível",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a2r.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "99"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "3"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+4R 12F+8R Redutor 16F+8R Multiplicador 12F+12R Reversão Mecânica"
+    },
+    {
+     "campo": "VAZÃO (L/MIN.)",
+     "valor": "55"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "3.800"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a990r",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A990R",
+   "linha": "Trator Série A2R 10% mais economia de combustível",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a2r.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "105"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "3"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+4R 12F+8R Redutor 16F+8R Multiplicador 12F+12R Reversão Mecânica"
+    },
+    {
+     "campo": "VAZÃO (L/MIN.)",
+     "valor": "55"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "3.800"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a52s",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A52s",
+   "linha": "Trator Agrícola Série A2S com Melhor Custo Benefício",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a2s.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "57"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "3"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+2R 12F+3R Creeper"
+    },
+    {
+     "campo": "VAZÃO (L/MIN.)",
+     "valor": "17 ou 59"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "2.500"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a62s",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A62s",
+   "linha": "Trator Agrícola Série A2S com Melhor Custo Benefício",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a2s.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "67"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "3"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+2R 12F+3R Creeper"
+    },
+    {
+     "campo": "VAZÃO (L/MIN.)",
+     "valor": "17 ou 59"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "2.500"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a63f",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A63F",
+   "linha": "Trator Cafeeiro Série A3F economize até 12% de combustível",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a3f.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "69"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+4R 12F+8R Redutor 16F+8R Multiplicador 12F+12R Reversão Mecânica"
+    },
+    {
+     "campo": "CILINDROS",
+     "valor": "3"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "40/55"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KGF)",
+     "valor": "3.135"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a73f",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A73F",
+   "linha": "Trator Cafeeiro Série A3F economize até 12% de combustível",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a3f.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "79"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+4R 12F+8R Redutor 16F+8R Multiplicador 12F+12R Reversão Mecânica"
+    },
+    {
+     "campo": "CILINDROS",
+     "valor": "3"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "40/55"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KGF)",
+     "valor": "3.135"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a83f",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A83F",
+   "linha": "Trator Cafeeiro Série A3F economize até 12% de combustível",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a3f.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "89"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+4R 12F+8R Redutor 16F+8R Multiplicador 12F+12R Reversão Mecânica"
+    },
+    {
+     "campo": "CILINDROS",
+     "valor": "3"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "40/55"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KGF)",
+     "valor": "3.135"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a93f",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A93F",
+   "linha": "Trator Cafeeiro Série A3F economize até 12% de combustível",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a3f.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "99"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+4R 12F+8R Redutor 16F+8R Multiplicador 12F+12R Reversão Mecânica"
+    },
+    {
+     "campo": "CILINDROS",
+     "valor": "3"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "40/55"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KGF)",
+     "valor": "3.135"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a124-hitech",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A124 HiTech",
+   "linha": "Trator Agrícola Série A4 HiTech com Alta Tecnologia",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a4-hitech.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "125"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "16F + 16R"
+    },
+    {
+     "campo": "VAZÃO (L/MIN.)",
+     "valor": "98/105"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "4.950"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a134-hitech",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A134 HiTech",
+   "linha": "Trator Agrícola Série A4 HiTech com Alta Tecnologia",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a4-hitech.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "135"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "16F + 16R"
+    },
+    {
+     "campo": "VAZÃO (L/MIN.)",
+     "valor": "98/105"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "4.950"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a144-hitech",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A144 HiTech",
+   "linha": "Trator Agrícola Série A4 HiTech com Alta Tecnologia",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a4-hitech.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "145"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "16F + 16R"
+    },
+    {
+     "campo": "VAZÃO (L/MIN.)",
+     "valor": "98/105"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "4.950"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a94",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A94",
+   "linha": "Trator Série A4 com piloto automático",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a4.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "99"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "3"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "12F + 12R ou 24F + 24R"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "57/98"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (Kg)",
+     "valor": "4.300"
+    },
+    {
+     "campo": "POSTO DE OPERAÇÃO",
+     "valor": "Cabinado e Plataformado"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a104",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A104",
+   "linha": "Trator Série A4 com piloto automático",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a4.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "105"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "3"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "12F + 12R ou 24F + 24R"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "57/98"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (Kg)",
+     "valor": "4.300"
+    },
+    {
+     "campo": "POSTO DE OPERAÇÃO",
+     "valor": "Cabinado e Plataformado"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a114",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A114",
+   "linha": "Trator Série A4 com piloto automático",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a4.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "115"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "12F + 12R ou 24F + 24R"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "57/98"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (Kg)",
+     "valor": "4.950"
+    },
+    {
+     "campo": "POSTO DE OPERAÇÃO",
+     "valor": "Cabinado e Plataformado"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a124",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A124",
+   "linha": "Trator Série A4 com piloto automático",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a4.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "125"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "12F + 12R ou 24F + 24R"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "57/98"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (Kg)",
+     "valor": "4.950"
+    },
+    {
+     "campo": "POSTO DE OPERAÇÃO",
+     "valor": "Cabinado e Plataformado"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a134",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A134",
+   "linha": "Trator Série A4 com piloto automático",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a4.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "135"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "12F + 12R ou 24F + 24R"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "57/98"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (Kg)",
+     "valor": "4.950"
+    },
+    {
+     "campo": "POSTO DE OPERAÇÃO",
+     "valor": "Cabinado e Plataformado"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a144",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A144",
+   "linha": "Trator Série A4 com piloto automático",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a4.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "145"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "12F + 12R ou 24F + 24R"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "98"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (Kg)",
+     "valor": "4.950"
+    },
+    {
+     "campo": "POSTO DE OPERAÇÃO",
+     "valor": "Cabinado"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a74s",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A74s",
+   "linha": "Trator Agrícola de Alto Rendimento Série A4S",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a4s.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "79"
+    },
+    {
+     "campo": "CILINDROS",
+     "valor": "3"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "12F + 12R"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "65"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KGF)",
+     "valor": "3.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a84s",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A84s",
+   "linha": "Trator Agrícola de Alto Rendimento Série A4S",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a4s.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "89"
+    },
+    {
+     "campo": "CILINDROS",
+     "valor": "3"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "12F + 12R"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "65"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KGF)",
+     "valor": "3.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a94s",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A94s",
+   "linha": "Trator Agrícola de Alto Rendimento Série A4S",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a4s.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "99"
+    },
+    {
+     "campo": "CILINDROS",
+     "valor": "3"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "12F + 12R"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "65"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KGF)",
+     "valor": "3.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a125-hitech",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A125 HiTech",
+   "linha": "Série A5 HiTech",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a5-hitech.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "125"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "HiTech 4 - PowerShift de 4 steps com Power Shuttle"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "98 ou 105"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "4.950"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a135-hitech",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A135 HiTech",
+   "linha": "Série A5 HiTech",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a5-hitech.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "135"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "HiTech 4 - PowerShift de 4 steps com Power Shuttle"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "98 ou 105"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "4.950"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a145-hitech",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A145 HiTech",
+   "linha": "Série A5 HiTech",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a5-hitech.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "145"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "HiTech 4 - PowerShift de 4 steps com Power Shuttle"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "98 ou 105"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "4.950"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a105",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A105",
+   "linha": "Série A5",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a5.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "105"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Mecânica sincronizada com HiShift (troca de marcha sem uso do pedal da embreagem em transporte)"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "98"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "4.500"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a115",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A115",
+   "linha": "Série A5",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a5.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "115"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Mecânica sincronizada com HiShift (troca de marcha sem uso do pedal da embreagem em transporte)"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "98"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "4.500"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a125",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A125",
+   "linha": "Série A5",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a5.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "125"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Mecânica sincronizada com HiShift (troca de marcha sem uso do pedal da embreagem em transporte)"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "98"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "5.400"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a135",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A135",
+   "linha": "Série A5",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a5.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "135"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Mecânica sincronizada com HiShift (troca de marcha sem uso do pedal da embreagem em transporte)"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "98"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "5.400"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-a145",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "A145",
+   "linha": "Série A5",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-a5.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "145"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Mecânica sincronizada com HiShift (troca de marcha sem uso do pedal da embreagem em transporte)"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "98"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "5.400"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-m165",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "M165",
+   "linha": "Série M5",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-m5.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "165"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "PowerShift - 3 steps com trocas automáticas dentro dos grupos e Grupos sincronizados"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "91, 150 ou 205"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "8.500"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-m185",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "M185",
+   "linha": "Série M5",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-m5.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "185"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "4"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "PowerShift - 3 steps com trocas automáticas dentro dos grupos e Grupos sincronizados"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "91, 150 ou 205"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "8.500"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-m205",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "M205",
+   "linha": "Série M5",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-m5.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "205"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "PowerShift - 3 steps com trocas automáticas dentro dos grupos e Grupos sincronizados"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "91, 150 ou 205"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "8.500"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-q265",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "Q265",
+   "linha": "Série Q5",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-q5.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "265"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "CVT"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "235"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "10.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-q285",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "Q285",
+   "linha": "Série Q5",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-q5.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "285"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "CVT"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "235"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "10.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-q305",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "Q305",
+   "linha": "Série Q5",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-q5.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "305"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "CVT"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "235"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "10.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-s346",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "S346",
+   "linha": "Série S6",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-s6.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "345"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "CVT"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "400"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "12.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-s376",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "S376",
+   "linha": "Série S6",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-s6.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "375"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "CVT"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "400"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "12.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-s416",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "S416",
+   "linha": "Série S6",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-s6.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "425"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "CVT"
+    },
+    {
+     "campo": "VAZÃO (l/min.)",
+     "valor": "400"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "12.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-t195-cvt",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "T195 CVT",
+   "linha": "Trator Agrícola Série T CVT com Motor Eletrônico| Valtra",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-tcvt.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "195"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "CVT"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "190"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "9.600"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-t210-cvt",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "T210 CVT",
+   "linha": "Trator Agrícola Série T CVT com Motor Eletrônico| Valtra",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-tcvt.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "210"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "CVT"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "190"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "9.600"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-t230-cvt",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "T230 CVT",
+   "linha": "Trator Agrícola Série T CVT com Motor Eletrônico| Valtra",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-tcvt.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "230"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "CVT"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "190"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "9.600"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "valtra-t250-cvt",
+   "marca": "Valtra",
+   "fabricanteId": "agco",
+   "modelo": "T250 CVT",
+   "linha": "Trator Agrícola Série T CVT com Motor Eletrônico| Valtra",
+   "familia": "trator",
+   "categoriaFabricante": "tratores",
+   "url": "https://www.valtra.com.br/produtos/tratores/serie-tcvt.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (cv)",
+     "valor": "250"
+    },
+    {
+     "campo": "N° DE CILINDROS",
+     "valor": "6"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "CVT"
+    },
+    {
+     "campo": "VAZÃO (l/min)",
+     "valor": "190"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "9.950"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  }
+ ],
+ "descartados": [],
+ "tabelasRejeitadas": [
+  {
+   "url": "https://www.valtra.com.br/produtos/plataformas/plataformas-de-milho.html",
+   "cabecalho": [
+    "TAMANHO",
+    "FINANCIAMENTO",
+    "PRINCIPAL CULTURA",
+    "INDICAÇÃO DE MÁQUINA"
+   ]
+  },
+  {
+   "url": "https://www.valtra.com.br/produtos/plataformas/plataformas-de-milho.html",
+   "cabecalho": [
+    "Tamanhos Considerando 45cm de espaçamento",
+    "FINANCIAMENTO",
+    "INDICAÇÃO DE MÁQUINA"
+   ]
+  }
+ ]
+}

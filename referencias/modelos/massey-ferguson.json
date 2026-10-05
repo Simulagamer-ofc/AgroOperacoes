@@ -1,0 +1,5104 @@
+{
+ "catalogo": "Nexus Agro — modelos de máquinas e implementos",
+ "marca": "Massey Ferguson",
+ "fabricanteId": "agco",
+ "fonte": "sitemap do site oficial",
+ "dataConsulta": "2026-10-04",
+ "regras": [
+  "Especificações copiadas como texto literal do site oficial do fabricante, sem conversão nem interpretação.",
+  "Valores servem para identificação e consulta. Para preencher automaticamente um parâmetro de regulagem, o valor precisa ser confirmado no manual/folheto do modelo e ano.",
+  "O site pode não refletir variações por ano-modelo, mercado ou opcionais."
+ ],
+ "totalModelos": 160,
+ "comEspecificacoes": 156,
+ "modelos": [
+  {
+   "id": "massey-ferguson-mf-1840",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 1840",
+   "linha": "MF 1840",
+   "familia": "enfardadora",
+   "categoriaFabricante": "balers",
+   "url": "https://www.masseyferguson.com/pt_br/product/balers/mf-1840.html",
+   "especificacoes": [
+    {
+     "campo": "Tamanho do fardo (mm)",
+     "valor": "356 x 457"
+    },
+    {
+     "campo": "Velocidade do pistão (cursos/min)",
+     "valor": "100"
+    },
+    {
+     "campo": "Largura de trabalho do coletor (mm)",
+     "valor": "1.900"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-2200",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 2200",
+   "linha": "MF 2200",
+   "familia": "enfardadora",
+   "categoriaFabricante": "balers",
+   "url": "https://www.masseyferguson.com/pt_br/product/balers/mf-2200.html",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "observacao": "Página do produto sem tabela de modelos; incluído apenas para identificação."
+  },
+  {
+   "id": "massey-ferguson-lb2233",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "LB2233",
+   "linha": "MF 2234",
+   "familia": "enfardadora",
+   "categoriaFabricante": "balers",
+   "url": "https://www.masseyferguson.com/pt_br/product/balers/mf-2234.html",
+   "especificacoes": [
+    {
+     "campo": "ALTURA DO FARDO",
+     "valor": "31.5 (875)"
+    },
+    {
+     "campo": "LARGURA DO FARDO",
+     "valor": "34.4 (880)"
+    },
+    {
+     "campo": "VELOCIDADE DO PISTÃO (BATIDAS POR MINUTO)",
+     "valor": "47"
+    },
+    {
+     "campo": "LARGURA DE TRABALHO DO RECOLHEDOR",
+     "valor": "89 (2.260)"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA SUGERIDA (VERSÃO SEM PICADOR)",
+     "valor": "150"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA SUGERIDA (VERSÃO COM PICADOR)",
+     "valor": "180"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-lb2234",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "LB2234",
+   "linha": "MF 2234",
+   "familia": "enfardadora",
+   "categoriaFabricante": "balers",
+   "url": "https://www.masseyferguson.com/pt_br/product/balers/mf-2234.html",
+   "especificacoes": [
+    {
+     "campo": "ALTURA DO FARDO",
+     "valor": "34.4 (875)"
+    },
+    {
+     "campo": "LARGURA DO FARDO",
+     "valor": "47.2 (1.200)"
+    },
+    {
+     "campo": "VELOCIDADE DO PISTÃO (BATIDAS POR MINUTO)",
+     "valor": "47"
+    },
+    {
+     "campo": "LARGURA DE TRABALHO DO RECOLHEDOR",
+     "valor": "89 (2.260)"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA SUGERIDA (VERSÃO SEM PICADOR)",
+     "valor": "170"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA SUGERIDA (VERSÃO COM PICADOR)",
+     "valor": "200"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-lb2234xd",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "LB2234XD",
+   "linha": "MF 2234",
+   "familia": "enfardadora",
+   "categoriaFabricante": "balers",
+   "url": "https://www.masseyferguson.com/pt_br/product/balers/mf-2234.html",
+   "especificacoes": [
+    {
+     "campo": "ALTURA DO FARDO",
+     "valor": "34.4 (875)"
+    },
+    {
+     "campo": "LARGURA DO FARDO",
+     "valor": "47.2 (1.200)"
+    },
+    {
+     "campo": "VELOCIDADE DO PISTÃO (BATIDAS POR MINUTO)",
+     "valor": "47"
+    },
+    {
+     "campo": "LARGURA DE TRABALHO DO RECOLHEDOR",
+     "valor": "89 (2.260)"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA SUGERIDA (VERSÃO SEM PICADOR)",
+     "valor": "180"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA SUGERIDA (VERSÃO COM PICADOR)",
+     "valor": "210"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-lb2244",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "LB2244",
+   "linha": "MF 2234",
+   "familia": "enfardadora",
+   "categoriaFabricante": "balers",
+   "url": "https://www.masseyferguson.com/pt_br/product/balers/mf-2234.html",
+   "especificacoes": [
+    {
+     "campo": "ALTURA DO FARDO",
+     "valor": "50.2 (1.275)"
+    },
+    {
+     "campo": "LARGURA DO FARDO",
+     "valor": "47.2 (1.200)"
+    },
+    {
+     "campo": "VELOCIDADE DO PISTÃO (BATIDAS POR MINUTO)",
+     "valor": "33"
+    },
+    {
+     "campo": "LARGURA DE TRABALHO DO RECOLHEDOR",
+     "valor": "89 (2.260)"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA SUGERIDA (VERSÃO SEM PICADOR)",
+     "valor": "180"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA SUGERIDA (VERSÃO COM PICADOR)",
+     "valor": "-"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-rb-f-protec",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF RB F PROTEC",
+   "linha": "MF RB F PROTEC",
+   "familia": "enfardadora",
+   "categoriaFabricante": "balers",
+   "url": "https://www.masseyferguson.com/pt_br/product/balers/mf-rb-f-protec.html",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "observacao": "Página do produto sem tabela de modelos; incluído apenas para identificação."
+  },
+  {
+   "id": "massey-ferguson-enfardadora-de-fardos-cilindricos-mf-rb-3130f-essencial",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "Enfardadora de fardos cilíndricos MF RB 3130F Essencial",
+   "linha": "MF RB F",
+   "familia": "enfardadora",
+   "categoriaFabricante": "balers",
+   "url": "https://www.masseyferguson.com/pt_br/product/balers/mf-rb-f.html",
+   "especificacoes": [
+    {
+     "campo": "Diâmetro da câmara (m)",
+     "valor": "1,25"
+    },
+    {
+     "campo": "Largura da câmara (m)",
+     "valor": "1,23"
+    },
+    {
+     "campo": "Largura do coletor (m)",
+     "valor": "2,25"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "3.000 a 3.500"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-enfardadora-de-fardos-cilindricos-mf-rb-3130f-exclusive",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "Enfardadora de fardos cilíndricos MF RB 3130F Exclusive",
+   "linha": "MF RB F",
+   "familia": "enfardadora",
+   "categoriaFabricante": "balers",
+   "url": "https://www.masseyferguson.com/pt_br/product/balers/mf-rb-f.html",
+   "especificacoes": [
+    {
+     "campo": "Diâmetro da câmara (m)",
+     "valor": "1,25"
+    },
+    {
+     "campo": "Largura da câmara (m)",
+     "valor": "1,23"
+    },
+    {
+     "campo": "Largura do coletor (m)",
+     "valor": "2,25"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "3.000 a 3.500"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-rb-4160-v-protect",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF RB 4160 V Protect",
+   "linha": "MF RB 4160V Protec",
+   "familia": "enfardadora",
+   "categoriaFabricante": "balers",
+   "url": "https://www.masseyferguson.com/pt_br/product/balers/mf-rb-v-protec.html",
+   "especificacoes": [
+    {
+     "campo": "Diâmetro da câmara (m)",
+     "valor": "0.9 - 1.6"
+    },
+    {
+     "campo": "Largura da câmara (m)",
+     "valor": "1.23"
+    },
+    {
+     "campo": "Largura do coletor (m)",
+     "valor": "2.25"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "6.550"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "urlsAdicionais": [
+    "https://www.masseyferguson.com/pt_br/product/balers/mf-rb-v.html"
+   ]
+  },
+  {
+   "id": "massey-ferguson-mf-rb-4160-v-classic",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF RB 4160 V Classic",
+   "linha": "MF RB V",
+   "familia": "enfardadora",
+   "categoriaFabricante": "balers",
+   "url": "https://www.masseyferguson.com/pt_br/product/balers/mf-rb-v.html",
+   "especificacoes": [
+    {
+     "campo": "Diâmetro da câmara (m)",
+     "valor": "0,7 - 1,6"
+    },
+    {
+     "campo": "Largura da câmara (m)",
+     "valor": "1,23"
+    },
+    {
+     "campo": "Largura do coletor (m)",
+     "valor": "2 / 2,25"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "3.690"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-rb-4160v-xtra",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF RB 4160V Xtra",
+   "linha": "MF RB V",
+   "familia": "enfardadora",
+   "categoriaFabricante": "balers",
+   "url": "https://www.masseyferguson.com/pt_br/product/balers/mf-rb-v.html",
+   "especificacoes": [
+    {
+     "campo": "Diâmetro da câmara (m)",
+     "valor": "0,7 - 1,6"
+    },
+    {
+     "campo": "Largura da câmara (m)",
+     "valor": "1,23"
+    },
+    {
+     "campo": "Largura do coletor (m)",
+     "valor": "2,25 / 2,4"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "3.950"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-tw-130",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF TW 130",
+   "linha": "MF TW",
+   "familia": "enfardadora",
+   "categoriaFabricante": "balers",
+   "url": "https://www.masseyferguson.com/pt_br/product/balers/mf-tw.html",
+   "especificacoes": [
+    {
+     "campo": "Controle",
+     "valor": "Semiautomático"
+    },
+    {
+     "campo": "Diâmetro do fardo (m)",
+     "valor": "0,9 - 1,3"
+    },
+    {
+     "campo": "Peso aproximado (kg)",
+     "valor": "1.080"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-9595",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 9595",
+   "linha": "Axiais",
+   "familia": "colhedora_graos",
+   "categoriaFabricante": "combine-harvesters",
+   "url": "https://www.masseyferguson.com/pt_br/product/combine-harvesters/axial.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "360"
+    },
+    {
+     "campo": "CAPACIDADE DO TANQUE DE GRÃOS (L)",
+     "valor": "8800"
+    },
+    {
+     "campo": "VAZÃO DE DESCARGA",
+     "valor": "88"
+    },
+    {
+     "campo": "PLATAFORMA DE CORTE (PÉS)",
+     "valor": "Draper (25 pés) e Caracol (25 e 30 pés)"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO POWER™ 8.4 AW3"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-9695",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 9695",
+   "linha": "Axiais",
+   "familia": "colhedora_graos",
+   "categoriaFabricante": "combine-harvesters",
+   "url": "https://www.masseyferguson.com/pt_br/product/combine-harvesters/axial.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "390"
+    },
+    {
+     "campo": "CAPACIDADE DO TANQUE DE GRÃOS (L)",
+     "valor": "8800"
+    },
+    {
+     "campo": "VAZÃO DE DESCARGA",
+     "valor": "88"
+    },
+    {
+     "campo": "PLATAFORMA DE CORTE (PÉS)",
+     "valor": "Draper (25 pés) e Caracol (25 e 30 pés)"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO POWER™ 8.4 AW3"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-9795",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 9795",
+   "linha": "Axiais",
+   "familia": "colhedora_graos",
+   "categoriaFabricante": "combine-harvesters",
+   "url": "https://www.masseyferguson.com/pt_br/product/combine-harvesters/axial.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "450"
+    },
+    {
+     "campo": "CAPACIDADE DO TANQUE DE GRÃOS (L)",
+     "valor": "12334"
+    },
+    {
+     "campo": "VAZÃO DE DESCARGA",
+     "valor": "150"
+    },
+    {
+     "campo": "PLATAFORMA DE CORTE (PÉS)",
+     "valor": "Draper 35 e 40 pés"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO POWER™ 9.8 AT3"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-9895",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 9895",
+   "linha": "Axiais",
+   "familia": "colhedora_graos",
+   "categoriaFabricante": "combine-harvesters",
+   "url": "https://www.masseyferguson.com/pt_br/product/combine-harvesters/axial.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "500"
+    },
+    {
+     "campo": "CAPACIDADE DO TANQUE DE GRÃOS (L)",
+     "valor": "12334"
+    },
+    {
+     "campo": "VAZÃO DE DESCARGA",
+     "valor": "150"
+    },
+    {
+     "campo": "PLATAFORMA DE CORTE (PÉS)",
+     "valor": "Draper 40 e 45 pés"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO POWER™ 9.8 AT3"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-4690hd",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 4690HD",
+   "linha": "Híbridas",
+   "familia": "colhedora_graos",
+   "categoriaFabricante": "combine-harvesters",
+   "url": "https://www.masseyferguson.com/pt_br/product/combine-harvesters/hybrid.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "218"
+    },
+    {
+     "campo": "CAPACIDADE DO TANQUE DE GRÃOS (L)",
+     "valor": "5500"
+    },
+    {
+     "campo": "VAZÃO DE DESCARGA (L/S)",
+     "valor": "86"
+    },
+    {
+     "campo": "PLATAFORMA DE CORTE (PÉS)",
+     "valor": "Caracol - Flexível (18 e 20 pés) e Milho (até 9L45)"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 6,6L, 6 Cilindros, AGCO Power 6 Cilindros"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-5690hd",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 5690HD",
+   "linha": "Híbridas",
+   "familia": "colhedora_graos",
+   "categoriaFabricante": "combine-harvesters",
+   "url": "https://www.masseyferguson.com/pt_br/product/combine-harvesters/hybrid.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "224"
+    },
+    {
+     "campo": "CAPACIDADE DO TANQUE DE GRÃOS (L)",
+     "valor": "5500"
+    },
+    {
+     "campo": "VAZÃO DE DESCARGA (L/S)",
+     "valor": "86"
+    },
+    {
+     "campo": "PLATAFORMA DE CORTE (PÉS)",
+     "valor": "Caracol - Flexível (18, 20 e 23 pés), Rígida (20 pés) e Milho (até 10L45)"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 7.4L, 6 Cilindros"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-6690hd",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 6690HD",
+   "linha": "Híbridas",
+   "familia": "colhedora_graos",
+   "categoriaFabricante": "combine-harvesters",
+   "url": "https://www.masseyferguson.com/pt_br/product/combine-harvesters/hybrid.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "262"
+    },
+    {
+     "campo": "CAPACIDADE DO TANQUE DE GRÃOS (L)",
+     "valor": "7000"
+    },
+    {
+     "campo": "VAZÃO DE DESCARGA (L/S)",
+     "valor": "86"
+    },
+    {
+     "campo": "PLATAFORMA DE CORTE (PÉS)",
+     "valor": "Caracol - Flexível (20, 23 e 25 pés), Rígida (20 - 23 pés), Draper - Flexível (25 pés) e Milho (até 13L45)"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 7.4L, 6 Cilindros"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-164-f",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 164 (F)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Transmissão por engrenagens dentadas, Montagem traseira com grupo de acionamento interno"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "1,66"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "4"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-205-f",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 205 (F)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Transmissão por engrenagens dentadas, Montagem traseira com grupo de acionamento interno"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "2,06"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "5"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-246-f",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 246 (F)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Transmissão por engrenagens dentadas, Montagem traseira com grupo de acionamento interno"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "2,42"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "6"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-287-f",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 287 (F)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Transmissão por engrenagens dentadas, Montagem traseira com grupo de acionamento interno"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "2,82"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "7"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-246-isl-f",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 246 ISL (F)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Transmissão por engrenagens dentadas, Montagem traseira sem grupo de acionamento interno"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "2,42"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "6"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-287-isl-f",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 287 ISL (F)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Transmissão por engrenagens dentadas, Montagem traseira sem grupo de acionamento interno"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "2,82"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "7"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-255-p-p",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 255-P (P)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Montagem traseira, Conexão lateral, Transmissão angular compacta"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "2,55"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "5"
+    },
+    {
+     "campo": "Outras variações de equipamento",
+     "valor": "KC, RC"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-306-p-p",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 306-P (P)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Montagem traseira, Conexão lateral, Transmissão angular compacta"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "3"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "6"
+    },
+    {
+     "campo": "Outras variações de equipamento",
+     "valor": "KC"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-357-p-p",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 357-P (P)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Montagem traseira, Conexão lateral, Transmissão angular compacta"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "3,5"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "7"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-408-tl-p",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 408 TL (P)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Montagem traseira, Conexão central, Transmissão angular compacta"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "4"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "8"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-459-tl-p",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 459 TL (P)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Montagem traseira, Conexão central, Transmissão angular compacta"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "4,5"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "9"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-306-tr-p",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 306 TR (P)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Transmissão angular compacta, De arrasto, Com chassi de transporte"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "3"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "6"
+    },
+    {
+     "campo": "Outras variações de equipamento",
+     "valor": "KC, RC"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-357-hs-tr-p",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 357 HS TR (P)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Transmissão angular compacta, De arrasto, Com chassi de transporte"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "3,5"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "7"
+    },
+    {
+     "campo": "Outras variações de equipamento",
+     "valor": "KC, RC"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-254-fp-p",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 254 FP (P)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Alpine de montagem dianteira com transmissão angular compacta"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "2,5"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "4"
+    },
+    {
+     "campo": "Outras variações de equipamento",
+     "valor": "FP-S"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-306-fp-p",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 306 FP (P)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Transmissão angular compacta, Montagem dianteira com cabeçalho pivotante"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "3"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "6"
+    },
+    {
+     "campo": "Outras variações de equipamento",
+     "valor": "KC, RC"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-306-fp-k-p",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 306 FP-K (P)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Transmissão angular compacta, Montagem dianteira com cabeçalho pivotante"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "3"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "6"
+    },
+    {
+     "campo": "Outras variações de equipamento",
+     "valor": "KC"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-306-fp-sl-p",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 306 FP-SL (P)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Transmissão angular compacta, Montagem dianteira com cabeçalho pivotante"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "3"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "6"
+    },
+    {
+     "campo": "Outras variações de equipamento",
+     "valor": "KC"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-367-fq-p",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 367 FQ (P)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Montagem dianteira, Segadeira dianteira, Com sistema de adaptação tridimensional ao terreno"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "3,62"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "7"
+    },
+    {
+     "campo": "Outras variações de equipamento",
+     "valor": "KC, RC"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-8312-tl-p",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 8312 TL (P)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Combinação de segadeiras"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "8,3"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "12"
+    },
+    {
+     "campo": "Outras variações de equipamento",
+     "valor": "KC, RC"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-9314-tl-p",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 9314 TL (P)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Combinação de segadeiras"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "9,3"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "14"
+    },
+    {
+     "campo": "Outras variações de equipamento",
+     "valor": "KC"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-dm-9314-el-tl-kcb-p",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF DM 9314 EL TL-KCB (P)",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Combinação de segadeiras condicionadoras com sistema de controle ISOBUS e sistema de transferência de correia"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "9,3"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "14"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-f-serie-agricultor-p-serie-profissional",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "(F) - Série Agricultor | (P) - Série Profissional",
+   "linha": "SÉRIES MF DM E M",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-mowers.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "(F) - Série Agricultor | (P) - Série Profissional"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "(F) - Série Agricultor | (P) - Série Profissional"
+    },
+    {
+     "campo": "Quantidades de discos segadores",
+     "valor": "(F) - Série Agricultor | (P) - Série Profissional"
+    },
+    {
+     "campo": "Outras variações de equipamento",
+     "valor": "(F) - Série Agricultor | (P) - Série Profissional"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-5130",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 5130",
+   "linha": "SÉRIE MF RK",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-rakes.html",
+   "especificacoes": [
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "Até 9,22"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-rk-341-dn",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF RK 341 DN",
+   "linha": "SÉRIE MF RK",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-rakes.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Engate de três pontos, Enleirador monorrotor, Cabeçalho flutuante"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "3,4"
+    },
+    {
+     "campo": "Número de rotores",
+     "valor": "1"
+    },
+    {
+     "campo": "Braços dentados por rotor",
+     "valor": "8-3"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-rk-361-dn",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF RK 361 DN",
+   "linha": "SÉRIE MF RK",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-rakes.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Engate de três pontos, Enleirador monorrotor, Cabeçalho flutuante"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "3,6"
+    },
+    {
+     "campo": "Número de rotores",
+     "valor": "1"
+    },
+    {
+     "campo": "Braços dentados por rotor",
+     "valor": "10-4"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-rk-451-dn",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF RK 451 DN",
+   "linha": "SÉRIE MF RK",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-rakes.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Engate de três pontos, Enleirador monorrotor, Cabeçalho flutuante"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "4,5"
+    },
+    {
+     "campo": "Número de rotores",
+     "valor": "1"
+    },
+    {
+     "campo": "Braços dentados por rotor",
+     "valor": "12-4"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-rk-662-sd-trc",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF RK 662 SD-TRC",
+   "linha": "SÉRIE MF RK",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-rakes.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Enleirador de dois rotores, Formação lateral de leiras"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "6,65"
+    },
+    {
+     "campo": "Número de rotores",
+     "valor": "2"
+    },
+    {
+     "campo": "Braços dentados por rotor",
+     "valor": "10"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-rk-842-sd-trc",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF RK 842 SD-TRC",
+   "linha": "SÉRIE MF RK",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-rakes.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Enleirador de dois rotores, Formação lateral de leiras"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "8,4"
+    },
+    {
+     "campo": "Número de rotores",
+     "valor": "2"
+    },
+    {
+     "campo": "Braços dentados por rotor",
+     "valor": "13-4"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-rk-662-trc",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF RK 662 TRC",
+   "linha": "SÉRIE MF RK",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-rakes.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Enleirador de dois rotores, Formação central de leiras"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "6,6"
+    },
+    {
+     "campo": "Número de rotores",
+     "valor": "2"
+    },
+    {
+     "campo": "Braços dentados por rotor",
+     "valor": "10-4"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-rk-762-trc",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF RK 762 TRC",
+   "linha": "SÉRIE MF RK",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-rakes.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Enleirador de dois rotores, Formação central de leiras"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "7,6"
+    },
+    {
+     "campo": "Número de rotores",
+     "valor": "2"
+    },
+    {
+     "campo": "Braços dentados por rotor",
+     "valor": "12-4"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-rk-1002-trc",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF RK 1002 TRC",
+   "linha": "SÉRIE MF RK",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-rakes.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Enleirador de dois rotores, Formação central de leiras"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "10"
+    },
+    {
+     "campo": "Número de rotores",
+     "valor": "2"
+    },
+    {
+     "campo": "Braços dentados por rotor",
+     "valor": "15-5"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-td-524-dn",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF TD 524 DN",
+   "linha": "SÉRIE MF TD",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-tedders.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Engate de três pontos"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "5,2"
+    },
+    {
+     "campo": "Número de rotores",
+     "valor": "4"
+    },
+    {
+     "campo": "Braços dentados por rotor",
+     "valor": "6"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-td-776-dn",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF TD 776 DN",
+   "linha": "SÉRIE MF TD",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-tedders.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Engate de três pontos"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "7,7"
+    },
+    {
+     "campo": "Número de rotores",
+     "valor": "6"
+    },
+    {
+     "campo": "Braços dentados por rotor",
+     "valor": "6"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-td-868-trc",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF TD 868 TRC",
+   "linha": "SÉRIE MF TD",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-tedders.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Chassi de transporte"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "8,6"
+    },
+    {
+     "campo": "Número de rotores",
+     "valor": "8"
+    },
+    {
+     "campo": "Braços dentados por rotor",
+     "valor": "6"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-td-1310-trc",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF TD 1310 TRC",
+   "linha": "SÉRIE MF TD",
+   "familia": "forragem",
+   "categoriaFabricante": "hay-and-forage",
+   "url": "https://www.masseyferguson.com/pt_br/product/hay-and-forage/mf-tedders.html",
+   "especificacoes": [
+    {
+     "campo": "Nome da máquina",
+     "valor": "Chassi de transporte"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "12,7"
+    },
+    {
+     "campo": "Número de rotores",
+     "valor": "10"
+    },
+    {
+     "campo": "Braços dentados por rotor",
+     "valor": "6"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-fl-x",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF FL X",
+   "linha": "MF FL X",
+   "familia": "carregadora_frontal",
+   "categoriaFabricante": "materials-handling",
+   "url": "https://www.masseyferguson.com/pt_br/product/materials-handling/mf-fl-x.html",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "observacao": "Página do produto sem tabela de modelos; incluído apenas para identificação."
+  },
+  {
+   "id": "massey-ferguson-mf-th",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF TH",
+   "linha": "MF TH",
+   "familia": "carregadora_frontal",
+   "categoriaFabricante": "materials-handling",
+   "url": "https://www.masseyferguson.com/pt_br/product/materials-handling/mf-th.html",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "observacao": "Página do produto sem tabela de modelos; incluído apenas para identificação."
+  },
+  {
+   "id": "massey-ferguson-mf-8250-dynaflex",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 8250 Dynaflex",
+   "linha": "Plataformas Convencionais",
+   "familia": "plataforma_colheita",
+   "categoriaFabricante": "platforms",
+   "url": "https://www.masseyferguson.com/pt_br/product/platforms/conventional-headers.html",
+   "especificacoes": [
+    {
+     "campo": "LARGURA DE CORTE (PÉS)",
+     "valor": "16' (4,8) / 18' (5,5) / 20' (6,1) / 23' (7,0) / 25' (7,6) / 30' (9,1)"
+    },
+    {
+     "campo": "LARGURA TOTAL (M)",
+     "valor": "5,2 / 5,8 / 6,4 / 7,3 / 8,0 / 9,5"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-plataforma-rigida",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "Plataforma Rigida",
+   "linha": "Plataformas Convencionais",
+   "familia": "plataforma_colheita",
+   "categoriaFabricante": "platforms",
+   "url": "https://www.masseyferguson.com/pt_br/product/platforms/conventional-headers.html",
+   "especificacoes": [
+    {
+     "campo": "LARGURA DE CORTE (PÉS)",
+     "valor": "16' / 18' / 20'"
+    },
+    {
+     "campo": "LARGURA TOTAL (M)",
+     "valor": "4,80 / 5,50 / 6,10"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-3000-l-e-m",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 3000 L e M",
+   "linha": "Plataforma de Milho",
+   "familia": "plataforma_colheita",
+   "categoriaFabricante": "platforms",
+   "url": "https://www.masseyferguson.com/pt_br/product/platforms/corn-headers.html",
+   "especificacoes": [
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45 a 90"
+    },
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "4 a 18"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-3000-cyclone",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 3000 Cyclone",
+   "linha": "Plataforma de Milho",
+   "familia": "plataforma_colheita",
+   "categoriaFabricante": "platforms",
+   "url": "https://www.masseyferguson.com/pt_br/product/platforms/corn-headers.html",
+   "especificacoes": [
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45 a 90"
+    },
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "4 a 12"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-red-solution",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "Red Solution",
+   "linha": "Plataforma de Milho",
+   "familia": "plataforma_colheita",
+   "categoriaFabricante": "platforms",
+   "url": "https://www.masseyferguson.com/pt_br/product/platforms/corn-headers.html",
+   "especificacoes": [
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45 a 90"
+    },
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "18 a 24"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-9300-draper-dynaflex",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 9300 Draper Dynaflex",
+   "linha": "Plataforma Draper",
+   "familia": "plataforma_colheita",
+   "categoriaFabricante": "platforms",
+   "url": "https://www.masseyferguson.com/pt_br/product/platforms/draper-headers.html",
+   "especificacoes": [
+    {
+     "campo": "LARGURA DE CORTE (PÉS)",
+     "valor": "25’ (7,6m) / 30’ (9,1m) / 35’ (10,6) / 40’ (12,2) / 45’ (13,7m)"
+    },
+    {
+     "campo": "LARGURA TOTAL (M)",
+     "valor": "8,2 / 9,6 / 11,1 / 12,7 / 14,3"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-104",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 104",
+   "linha": "MF 100",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-100.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "4"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "120"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "280"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "45"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-106",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 106",
+   "linha": "MF 100",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-100.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "5"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "160"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "350"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "60"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-206",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 206",
+   "linha": "MF 200",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-200.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "6"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "180"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "420"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "60"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-322",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 322",
+   "linha": "MF 300",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-300.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "22"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "17"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "875"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "930"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "100"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-326",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 326",
+   "linha": "MF 300",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-300.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "26"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "17"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "1035"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "1100"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "120"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-407",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 407",
+   "linha": "MF 400",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-400.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "7"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "425"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "645"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "85"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-409",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 409",
+   "linha": "MF 400",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-400.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "9"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "545"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "830"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "115"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-508",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 508",
+   "linha": "MF 500",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-500.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "8"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "690"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "935"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "85"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-509",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 509",
+   "linha": "MF 500",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-500.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "9"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "870"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "1175"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "95"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-510",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 510",
+   "linha": "MF 500",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-500.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "10"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "1045"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "1420"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "105"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-511",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 511",
+   "linha": "MF 500",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-500.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "11"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "1065"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "1420"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "115"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-512",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 512",
+   "linha": "MF 500",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-500.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "12"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "1195"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "1645"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "125"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-513",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 513",
+   "linha": "MF 500",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-500.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "13"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "1215"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "1645"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "135"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-515",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 515",
+   "linha": "MF 500",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-500.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "15"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "1365"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "1865"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "155"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-517",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 517",
+   "linha": "MF 500",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-500.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "17"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "1720"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "2355"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "180"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-600-versao-l",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 600 Versão L",
+   "linha": "MF 600",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-600.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "3 a 21"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "17 a 90"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "287 a 930"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "1468 a 1885"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "50 a 105"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-600-versao-m",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 600 Versão M",
+   "linha": "MF 600",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-600.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "5 a 29"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "17 a 90"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "1312 a 1650"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "1874 a 4850"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "95 a 145"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-711",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 711",
+   "linha": "MF 700",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-700.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "11"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "1450"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "1450"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "130"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-713",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 713",
+   "linha": "MF 700",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-700.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "13"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "1450"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "2520"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "155"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-715",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 715",
+   "linha": "MF 700",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-700.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "15"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "1450"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "2910"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "180"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-717",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 717",
+   "linha": "MF 700",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-700.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "17"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "1450"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "3228"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "205"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-722",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 722",
+   "linha": "MF 700",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-700.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "22"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "2900"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "4260"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "265"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-726",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 726",
+   "linha": "MF 700",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-700.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "26"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "2900"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "5040"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "315"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-730",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 730",
+   "linha": "MF 700",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/mf-700.html",
+   "especificacoes": [
+    {
+     "campo": "Número de linhas",
+     "valor": "30"
+    },
+    {
+     "campo": "Espaçamento entre linhas (cm)",
+     "valor": "45"
+    },
+    {
+     "campo": "Capacidade de sementes (L)",
+     "valor": "2900"
+    },
+    {
+     "campo": "Capacidade de fertilizante (L)",
+     "valor": "5820"
+    },
+    {
+     "campo": "Potência mínima (cv)",
+     "valor": "360"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mom30",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MOM30",
+   "linha": "Momentum 30 e 40 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/momentum.html",
+   "especificacoes": [
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45 – 50"
+    },
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "30"
+    },
+    {
+     "campo": "PESO APROXIMADO (KG)",
+     "valor": "17.700"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "250"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mom40",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MOM40",
+   "linha": "Momentum 30 e 40 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/momentum.html",
+   "especificacoes": [
+    {
+     "campo": "ESPAÇAMENTO ENTRE LINHAS (CM)",
+     "valor": "45 – 50"
+    },
+    {
+     "campo": "NÚMERO DE LINHAS",
+     "valor": "40"
+    },
+    {
+     "campo": "PESO APROXIMADO (KG)",
+     "valor": "22.240"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "320"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-modelos",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MODELOS",
+   "linha": "Momentum 18, 20, 22 e 24 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/new-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "ESPAÇAMENTO ENTRELINHAS (CM)",
+     "valor": "ESPAÇAMENTO ENTRELINHAS (CM)"
+    },
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "NÚMERO DE LINHAS*"
+    },
+    {
+     "campo": "PESO APROXIMADO (KG)",
+     "valor": "Versão sementes vazia"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "Sem sulcador"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "Com sulcador"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "Com disco duplo ou turbo incorporado"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-momentum-sementes",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes",
+   "linha": "Momentum 18, 20, 22 e 24 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/new-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "ESPAÇAMENTO ENTRELINHAS (CM)",
+     "valor": "60"
+    },
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "17"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-momentum-sementes-2",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes (45 e 50)",
+   "linha": "Momentum 18, 20, 22 e 24 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/new-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "ESPAÇAMENTO ENTRELINHAS (CM)",
+     "valor": "45 e 50"
+    },
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "18"
+    },
+    {
+     "campo": "PESO APROXIMADO (KG)",
+     "valor": "11.630"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "165"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "250"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "massey-ferguson-momentum-sementes-3",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes (45 e 50)",
+   "linha": "Momentum 18, 20, 22 e 24 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/new-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "ESPAÇAMENTO ENTRELINHAS (CM)",
+     "valor": "45 e 50"
+    },
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "20"
+    },
+    {
+     "campo": "PESO APROXIMADO (KG)",
+     "valor": "12.490"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "165 - 180"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "250-280"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "massey-ferguson-momentum-sementes-4",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes (45 e 50)",
+   "linha": "Momentum 18, 20, 22 e 24 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/new-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "ESPAÇAMENTO ENTRELINHAS (CM)",
+     "valor": "45 e 50"
+    },
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "22"
+    },
+    {
+     "campo": "PESO APROXIMADO (KG)",
+     "valor": "12.840"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "180-200"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "280-310"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "massey-ferguson-momentum-sementes-5",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes (45)",
+   "linha": "Momentum 18, 20, 22 e 24 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/new-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "ESPAÇAMENTO ENTRELINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "24"
+    },
+    {
+     "campo": "PESO APROXIMADO (KG)",
+     "valor": "13.180"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "155-215"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "240-335"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "massey-ferguson-momentum-sementes-fertilizantes",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes & Fertilizantes",
+   "linha": "Momentum 18, 20, 22 e 24 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/new-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "ESPAÇAMENTO ENTRELINHAS (CM)",
+     "valor": "60"
+    },
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "17"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-momentum-sementes-fertilizantes-2",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes & Fertilizantes (45 e 50)",
+   "linha": "Momentum 18, 20, 22 e 24 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/new-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "ESPAÇAMENTO ENTRELINHAS (CM)",
+     "valor": "45 e 50"
+    },
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "18"
+    },
+    {
+     "campo": "PESO APROXIMADO (KG)",
+     "valor": "12.830"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "250"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "180"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "massey-ferguson-momentum-sementes-fertilizantes-3",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes & Fertilizantes (45 e 50)",
+   "linha": "Momentum 18, 20, 22 e 24 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/new-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "ESPAÇAMENTO ENTRELINHAS (CM)",
+     "valor": "45 e 50"
+    },
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "20"
+    },
+    {
+     "campo": "PESO APROXIMADO (KG)",
+     "valor": "13.460"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "250-280"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "180-200"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "massey-ferguson-momentum-sementes-fertilizantes-4",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes & Fertilizantes (45 e 50)",
+   "linha": "Momentum 18, 20, 22 e 24 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/new-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "ESPAÇAMENTO ENTRELINHAS (CM)",
+     "valor": "45 e 50"
+    },
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "22"
+    },
+    {
+     "campo": "PESO APROXIMADO (KG)",
+     "valor": "13.820"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "280-310"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "200-220"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "massey-ferguson-momentum-sementes-fertilizantes-5",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "Momentum Sementes & Fertilizantes (45)",
+   "linha": "Momentum 18, 20, 22 e 24 linhas",
+   "familia": "semeadora",
+   "categoriaFabricante": "seeders-planters",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/new-momentum.html",
+   "especificacoes": [
+    {
+     "campo": "ESPAÇAMENTO ENTRELINHAS (CM)",
+     "valor": "45"
+    },
+    {
+     "campo": "NÚMERO DE LINHAS*",
+     "valor": "24"
+    },
+    {
+     "campo": "PESO APROXIMADO (KG)",
+     "valor": "14.180"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "240-335"
+    },
+    {
+     "campo": "POTÊNCIA MÍNIMA REQUERIDA (CV)",
+     "valor": "170-240"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "massey-ferguson-serie-mf530r",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "Série MF530R",
+   "linha": "MF500R",
+   "familia": "pulverizador",
+   "categoriaFabricante": "sprayers",
+   "url": "https://www.masseyferguson.com/pt_br/product/sprayers/mf-500-r.html",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "200"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 6 Cilindros"
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "Hidrostática Eletrônica Independente"
+    },
+    {
+     "campo": "Tamanho Tanque (L)",
+     "valor": "3.000"
+    },
+    {
+     "campo": "Vão Livre (m)",
+     "valor": "1,65 (rodado 380/90R46)"
+    },
+    {
+     "campo": "Tamanhos Barras (m)",
+     "valor": "24, 30, 32 e 36"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-serie-mf535r",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "Série MF535R",
+   "linha": "MF500R",
+   "familia": "pulverizador",
+   "categoriaFabricante": "sprayers",
+   "url": "https://www.masseyferguson.com/pt_br/product/sprayers/mf-500-r.html",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "200"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 6 Cilindros"
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "Hidrostática Eletrônica Independente"
+    },
+    {
+     "campo": "Tamanho Tanque (L)",
+     "valor": "3.500"
+    },
+    {
+     "campo": "Vão Livre (m)",
+     "valor": "1,65 (rodado 380/90R46)"
+    },
+    {
+     "campo": "Tamanhos Barras (m)",
+     "valor": "24, 30, 32 e 36"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-serie-mf-560r-dry",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "Série MF 560R Dry",
+   "linha": "MF 560R",
+   "familia": "pulverizador",
+   "categoriaFabricante": "sprayers",
+   "url": "https://www.masseyferguson.com/pt_br/product/sprayers/mf-560r.html",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "200"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 6 Cilindros"
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "Hidrostática Eletrônica Independente"
+    },
+    {
+     "campo": "Tamanho Tanque (M³)",
+     "valor": "6"
+    },
+    {
+     "campo": "Vão Livre (m)",
+     "valor": "1,5 (380/80R38)"
+    },
+    {
+     "campo": "Largura de trabalho (m)",
+     "valor": "Até 40 m (dependendo do produto aplicado)"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-8225hd",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 8225HD",
+   "linha": "MF 8225HD",
+   "familia": "pulverizador",
+   "categoriaFabricante": "sprayers",
+   "url": "https://www.masseyferguson.com/pt_br/product/sprayers/mf-8225hd.html",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "174"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 4,9 L, 4 Cilindros"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Bosch Rexroth Hidrostática 4x4"
+    },
+    {
+     "campo": "Peso (kg)",
+     "valor": "8.700"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-2750-4wd-4x2",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 2750 (4WD / 4x2)",
+   "linha": "MF 2700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/MF-2700.html",
+   "especificacoes": [
+    {
+     "campo": "Potência máx. do motor (cv)",
+     "valor": "50"
+    },
+    {
+     "campo": "Torque máx.",
+     "valor": "184 Nm"
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "8 x 8 Com reversão mecânica"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-2760-4wd-4x2",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 2760 (4WD / 4x2)",
+   "linha": "MF 2700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/MF-2700.html",
+   "especificacoes": [
+    {
+     "campo": "Potência máx. do motor (cv)",
+     "valor": "60"
+    },
+    {
+     "campo": "Torque máx.",
+     "valor": "221 Nm"
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "12F + 3R"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-3775-plataformado",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 3775 Plataformado",
+   "linha": "MF 3700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/MF-3700.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)*",
+     "valor": "75"
+    },
+    {
+     "campo": "Motor",
+     "valor": "SDF 1000.4W, MAR-1"
+    },
+    {
+     "campo": "Cilindrada",
+     "valor": "4 Cilindros"
+    },
+    {
+     "campo": "CAPACIDADE DE ELEVAÇÃO",
+     "valor": "3.500 KG"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-3790-cabinado",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 3790 Cabinado",
+   "linha": "MF 3700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/MF-3700.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)*",
+     "valor": "85"
+    },
+    {
+     "campo": "Motor",
+     "valor": "SDF 1000.4W, MAR-1"
+    },
+    {
+     "campo": "Cilindrada",
+     "valor": "4 Cilindros"
+    },
+    {
+     "campo": "CAPACIDADE DE ELEVAÇÃO",
+     "valor": "3.500 KG"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-6m",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 6M",
+   "linha": "MF 6M",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/MF-6M.html",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "165"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 4 cil."
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "Dyna-3 18F+18R Power Shift Sincronizada"
+    },
+    {
+     "campo": "Vazão (L/Min)",
+     "valor": "87, 150 ou 205"
+    },
+    {
+     "campo": "Capacidade de Levante (KG)",
+     "valor": "8.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-6m-2",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 6M (185)",
+   "linha": "MF 6M",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/MF-6M.html",
+   "especificacoes": [
+    {
+     "campo": "Potência (CV)",
+     "valor": "185"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 4 cil."
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "Dyna-3 18F+18R Power Shift Sincronizada"
+    },
+    {
+     "campo": "Vazão (L/Min)",
+     "valor": "87, 150 ou 205"
+    },
+    {
+     "campo": "Capacidade de Levante (KG)",
+     "valor": "8.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04",
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "massey-ferguson-mf-3305-xtra",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 3305 Xtra",
+   "linha": "MF 3300 Xtra",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-3300xtra.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "59"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 33DTC"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8 x 2 Deslizante, 12 x 4 Constant Mesh, 8 x 2 Deslizante (Creeper) , 12 x 4 Constant Mesh (Creeper)"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "42 / 59"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "2.100"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-3306-xtra",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 3306 Xtra",
+   "linha": "MF 3300 Xtra",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-3300xtra.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "69"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 33DTC"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8 x 2 Deslizante, 12 x 4 Constant Mesh, 8 x 2 Deslizante (Creeper) , 12 x 4 Constant Mesh (Creeper)"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "42 / 59"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "2.100"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-3307-xtra",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 3307 Xtra",
+   "linha": "MF 3300 Xtra",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-3300xtra.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "78"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 33DTC"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8 x 2 Deslizante, 12 x 4 Constant Mesh, 8 x 2 Deslizante (Creeper) , 12 x 4 Constant Mesh (Creeper)"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "42 / 59"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "2.100"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-3406",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 3406",
+   "linha": "MF 3400",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-3400.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "69"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 3 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+4R , 12F+8R Creeper, 16F+8R , 12F+12R Reversão Mecânica"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "41 ou 54"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "3.135"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-3407",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 3407",
+   "linha": "MF 3400",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-3400.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "79"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 3 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+4R , 12F+8R Creeper, 16F+8R , 12F+12R Reversão Mecânica"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "41 ou 54"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "3.135"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-3408",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 3408",
+   "linha": "MF 3400",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-3400.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "89"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 3 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+4R , 12F+8R Creeper, 16F+8R , 12F+12R Reversão Mecânica"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "41 ou 54"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "3.135"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-3409",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 3409",
+   "linha": "MF 3400",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-3400.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "99"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 3 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+4R , 12F+8R Creeper, 16F+8R , 12F+12R Reversão Mecânica"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "41 ou 54"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "3.135"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-4305",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 4305",
+   "linha": "MF 4300",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-4300.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "57"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 3 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8Fx2R deslizante"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "17 ou 59"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "2.500"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-4306",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 4306",
+   "linha": "MF 4300",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-4300.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "67"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 3 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8Fx2R deslizante"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "17 ou 59"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "2.500"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-4307",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 4307",
+   "linha": "MF 4300",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-4300.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "80"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 3 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8Fx2R deslizante, 12F+4R sincronizada"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "17 ou 59"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "2.500"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-4408",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 4408",
+   "linha": "MF 4400",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-4400.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "80"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 3 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+4R , 12F+8R Creeper, 16F+8R , 12F+12R Reversão Mecânica"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "40"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "2.600"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-4408-s",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 4408 S",
+   "linha": "MF 4400",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-4400.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "89"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 3 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+4R , 12F+8R Creeper, 16F+8R , 12F+12R Reversão Mecânica"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "40"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "2.600"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-4409",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 4409",
+   "linha": "MF 4400",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-4400.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "99"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 3 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+4R , 12F+8R Creeper, 16F+8R , 12F+12R Reversão Mecânica"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "55"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "3.800"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-4410",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 4410",
+   "linha": "MF 4400",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-4400.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "105"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 3 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "8F+4R , 12F+8R Creeper, 16F+8R , 12F+12R Reversão Mecânica"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "55"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "3.800"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-4707",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 4707",
+   "linha": "MF 4700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-4700.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "79"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 3 cil."
+    },
+    {
+     "campo": "Transmissão*",
+     "valor": "Sincronizada 12x12, Sincronizada 24x24"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "65"
+    },
+    {
+     "campo": "Capacidade de levante (kg)",
+     "valor": "3000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-4708",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 4708",
+   "linha": "MF 4700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-4700.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "89"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 3 cil."
+    },
+    {
+     "campo": "Transmissão*",
+     "valor": "Sincronizada 12x12, Sincronizada 24x24"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "65"
+    },
+    {
+     "campo": "Capacidade de levante (kg)",
+     "valor": "3000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-4709",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 4709",
+   "linha": "MF 4700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-4700.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "99"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 3 cil."
+    },
+    {
+     "campo": "Transmissão*",
+     "valor": "Sincronizada 12x12, Sincronizada 24x24"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "65"
+    },
+    {
+     "campo": "Capacidade de levante (kg)",
+     "valor": "3000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-5709",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 5709",
+   "linha": "MF 5700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-5700.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "99"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 3 cil."
+    },
+    {
+     "campo": "Transmissão*",
+     "valor": "Sincronizada 12x12, Sincronizada 24x24"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "57 ou 98"
+    },
+    {
+     "campo": "Capacidade de levante (kg)",
+     "valor": "4300"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-5710",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 5710",
+   "linha": "MF 5700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-5700.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "105"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 3 cil."
+    },
+    {
+     "campo": "Transmissão*",
+     "valor": "Sincronizada 12x12, Sincronizada 24x24"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "57 ou 98"
+    },
+    {
+     "campo": "Capacidade de levante (kg)",
+     "valor": "4300"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-5m-105",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 5M.105",
+   "linha": "MF 5M",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-5m1.html",
+   "especificacoes": [
+    {
+     "campo": "Potência máxima (cv)*",
+     "valor": "105"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power de 4,4 litros e 4 cilindros"
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "Sincronizada 12x12, Sincronizada 24x24"
+    },
+    {
+     "campo": "Torque máximo (Nm)**",
+     "valor": "440"
+    },
+    {
+     "campo": "Capacidade de elevação (kg)",
+     "valor": "4,300"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-5m-115",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 5M.115",
+   "linha": "MF 5M",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-5m1.html",
+   "especificacoes": [
+    {
+     "campo": "Potência máxima (cv)*",
+     "valor": "115"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power de 4,4 litros e 4 cilindros"
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "Sincronizada 12x12, Sincronizada 24x24"
+    },
+    {
+     "campo": "Torque máximo (Nm)**",
+     "valor": "460"
+    },
+    {
+     "campo": "Capacidade de elevação (kg)",
+     "valor": "4,300"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-5m-125",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 5M.125",
+   "linha": "MF 5M",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-5m1.html",
+   "especificacoes": [
+    {
+     "campo": "Potência máxima (cv)*",
+     "valor": "125"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power de 4,4 litros e 4 cilindros"
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "Sincronizada 12x12, Sincronizada 24x24"
+    },
+    {
+     "campo": "Torque máximo (Nm)**",
+     "valor": "520"
+    },
+    {
+     "campo": "Capacidade de elevação (kg)",
+     "valor": "5,200"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-5m-135",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 5M.135",
+   "linha": "MF 5M",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-5m1.html",
+   "especificacoes": [
+    {
+     "campo": "Potência máxima (cv)*",
+     "valor": "135"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power de 4,4 litros e 4 cilindros"
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "Sincronizada 12x12, Sincronizada 24x24"
+    },
+    {
+     "campo": "Torque máximo (Nm)**",
+     "valor": "545"
+    },
+    {
+     "campo": "Capacidade de elevação (kg)",
+     "valor": "5,200"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-5m-145",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 5M.145",
+   "linha": "MF 5M",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-5m1.html",
+   "especificacoes": [
+    {
+     "campo": "Potência máxima (cv)*",
+     "valor": "145"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power de 4,4 litros e 4 cilindros"
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "Sincronizada 12x12, Sincronizada 24x24"
+    },
+    {
+     "campo": "Torque máximo (Nm)**",
+     "valor": "560"
+    },
+    {
+     "campo": "Capacidade de elevação (kg)",
+     "valor": "5,200"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-6712-r-dyna-4",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 6712 R Dyna-4",
+   "linha": "MF 6700 R",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-6700-r.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "125"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 4 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Dyna-4 16F+16R Power Shift"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "98 ou 105"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "4.950"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-6713-r-dyna-4",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 6713 R Dyna-4",
+   "linha": "MF 6700 R",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-6700-r.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "135"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 4 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Dyna-4 16F+16R Power Shift"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "98 ou 105"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "4.950"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-6714-r-dyna-4",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 6714 R Dyna-4",
+   "linha": "MF 6700 R",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-6700-r.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "145"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 4 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Dyna-4 16F+16R Power Shift"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "98 ou 105"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "4.950"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-6711",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 6711",
+   "linha": "MF 6700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-6700.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "115"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 4 cil."
+    },
+    {
+     "campo": "Transmissão*",
+     "valor": "Sincronizada 12x12, Sincronizada 24x24"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "57 ou 98"
+    },
+    {
+     "campo": "Capacidade de levante (kg)",
+     "valor": "4950"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-6712",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 6712",
+   "linha": "MF 6700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-6700.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "125"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 4 cil."
+    },
+    {
+     "campo": "Transmissão*",
+     "valor": "Sincronizada 12x12, Sincronizada 24x24"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "57 ou 98"
+    },
+    {
+     "campo": "Capacidade de levante (kg)",
+     "valor": "4950"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-6713",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 6713",
+   "linha": "MF 6700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-6700.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "135"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 4 cil."
+    },
+    {
+     "campo": "Transmissão*",
+     "valor": "Sincronizada 12x12, Sincronizada 24x24"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "57 ou 98"
+    },
+    {
+     "campo": "Capacidade de levante (kg)",
+     "valor": "4950"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-6714",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 6714",
+   "linha": "MF 6700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-6700.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "145"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 4 cil."
+    },
+    {
+     "campo": "Transmissão*",
+     "valor": "Sincronizada 12x12, Sincronizada 24x24"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "98"
+    },
+    {
+     "campo": "Capacidade de levante (kg)",
+     "valor": "4950"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-7316-dyna-3",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 7316 Dyna-3",
+   "linha": "MF 7300",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-7300.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "160"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 4 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Dyna-3 18F+18R Power Shift"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "90 ou 162"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "8.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-7318-dyna-3",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 7318 Dyna-3",
+   "linha": "MF 7300",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-7300.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "180"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 4 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Dyna-3 18F+18R Power Shift"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "90 ou 162"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "8.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-7718-dyna-6",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 7718 Dyna-6",
+   "linha": "MF 7700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-7700.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "180"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 6,6L, 6 Cilindros"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Dyna-6 automática 24x24"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "150"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "Traseiro: 9300 / Dianteiro: 4000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-7719-dyna-6",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 7719 Dyna-6",
+   "linha": "MF 7700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-7700.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "195"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 6,6L, 6 Cilindros"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Dyna-6 automática 24x24"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "150"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "Traseiro: 9300 / Dianteiro: 4000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-7720-dyna-6",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 7720 Dyna-6",
+   "linha": "MF 7700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-7700.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "210"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 6,6L, 6 Cilindros"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Dyna-6 automática 24x24"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "150"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "Traseiro: 9300 / Dianteiro: 4000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-7722-dyna-6",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 7722 Dyna-6",
+   "linha": "MF 7700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-7700.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "230"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 7.4L, 6 Cilindros"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Dyna-6 automática 24x24"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "150"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "Traseiro: 9950 / Dianteiro: 4000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-7725-dyna-6",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 7725 Dyna-6",
+   "linha": "MF 7700",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-7700.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "250"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 7.4L, 6 Cilindros"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Dyna-6 automática 24x24"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "150"
+    },
+    {
+     "campo": "CAPACIDADE DE LEVANTE (KG)",
+     "valor": "Traseiro: 9950 / Dianteiro: 4000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-8732-s-dyna-vt",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 8732 S Dyna-VT",
+   "linha": "MF 8700 S",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-8700-s.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "320"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 6 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Transmissão Dyna-VT - Com gerenciamento automático de velocidade (DTM)"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "205"
+    },
+    {
+     "campo": "Capacidade de levante (kg)",
+     "valor": "12000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-8737-s-dyna-vt",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 8737 S Dyna-VT",
+   "linha": "MF 8700 S",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-8700-s.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)",
+     "valor": "370"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power 6 cil."
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Transmissão Dyna-VT - Com gerenciamento automático de velocidade (DTM)"
+    },
+    {
+     "campo": "VAZÃO (L/MIN)",
+     "valor": "205"
+    },
+    {
+     "campo": "Capacidade de levante (kg)",
+     "valor": "12000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-8s-265-xtra",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 8S.265 Xtra",
+   "linha": "MF 8S Xtra",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-8S-Xtra.html",
+   "especificacoes": [
+    {
+     "campo": "Potência máxima (cv)*",
+     "valor": "265"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 7.4L, 6-Cilindros"
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "Transmissão Dyna-VT - Com gerenciamento automático de velocidade (DTM)"
+    },
+    {
+     "campo": "Torque máximo (Nm)**",
+     "valor": "1200"
+    },
+    {
+     "campo": "Capacidade de elevação (kg)",
+     "valor": "10,000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-8s-285-xtra",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 8S.285 Xtra",
+   "linha": "MF 8S Xtra",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-8S-Xtra.html",
+   "especificacoes": [
+    {
+     "campo": "Potência máxima (cv)*",
+     "valor": "285"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 7.4L, 6-Cilindros"
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "Transmissão Dyna-VT - Com gerenciamento automático de velocidade (DTM)"
+    },
+    {
+     "campo": "Torque máximo (Nm)**",
+     "valor": "1260"
+    },
+    {
+     "campo": "Capacidade de elevação (kg)",
+     "valor": "10,000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-8s-305-xtra",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 8S.305 Xtra",
+   "linha": "MF 8S Xtra",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-8S-Xtra.html",
+   "especificacoes": [
+    {
+     "campo": "Potência máxima (cv)*",
+     "valor": "305"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 7.4L, 6-Cilindros"
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "Transmissão Dyna-VT - Com gerenciamento automático de velocidade (DTM)"
+    },
+    {
+     "campo": "Torque máximo (Nm)**",
+     "valor": "1280"
+    },
+    {
+     "campo": "Capacidade de elevação (kg)",
+     "valor": "10,000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-8s-245",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 8S.245",
+   "linha": "MF 8S",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-8s.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)*",
+     "valor": "245"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power"
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "Transmissão Dyna-7 - Com gerenciamento automático de velocidade (DTM), Dyna E-Power"
+    },
+    {
+     "campo": "Torque máx. (Nm)**",
+     "valor": "1,100"
+    },
+    {
+     "campo": "Capacidade de levante (kg)",
+     "valor": "10,000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-8s-265",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 8S.265",
+   "linha": "MF 8S",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-8s.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)*",
+     "valor": "265"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power"
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "Transmissão Dyna-7 - Com gerenciamento automático de velocidade (DTM), Dyna E-Power"
+    },
+    {
+     "campo": "Torque máx. (Nm)**",
+     "valor": "1,200"
+    },
+    {
+     "campo": "Capacidade de levante (kg)",
+     "valor": "10,000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-8s-285",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 8S.285",
+   "linha": "MF 8S",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-8s.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)*",
+     "valor": "285"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power"
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "Transmissão Dyna-VT - Com gerenciamento automático de velocidade (DTM)"
+    },
+    {
+     "campo": "Torque máx. (Nm)**",
+     "valor": "1.260"
+    },
+    {
+     "campo": "Capacidade de levante (kg)",
+     "valor": "10.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-8s-305",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 8S.305",
+   "linha": "MF 8S",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-8s.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)*",
+     "valor": "305"
+    },
+    {
+     "campo": "Motor",
+     "valor": "AGCO Power"
+    },
+    {
+     "campo": "Transmissão",
+     "valor": "Transmissão Dyna-VT - Com gerenciamento automático de velocidade (DTM)"
+    },
+    {
+     "campo": "Torque máx. (Nm)**",
+     "valor": "1.280"
+    },
+    {
+     "campo": "Capacidade de levante (kg)",
+     "valor": "10.000"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-9s-340",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 9S.340",
+   "linha": "MF 9S",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-9s.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)*",
+     "valor": "345"
+    },
+    {
+     "campo": "TORQUE MÁXIMO",
+     "valor": "1.450"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 6 cilindros 8,4 litros"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Dyna-VT"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-9s-370",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 9S.370",
+   "linha": "MF 9S",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-9s.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)*",
+     "valor": "375"
+    },
+    {
+     "campo": "TORQUE MÁXIMO",
+     "valor": "1.600"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 6 cilindros 8,4 litros"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Dyna-VT"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  },
+  {
+   "id": "massey-ferguson-mf-9s-425",
+   "marca": "Massey Ferguson",
+   "fabricanteId": "agco",
+   "modelo": "MF 9S.425",
+   "linha": "MF 9S",
+   "familia": "trator",
+   "categoriaFabricante": "tractors",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-9s.html",
+   "especificacoes": [
+    {
+     "campo": "POTÊNCIA (CV)*",
+     "valor": "425"
+    },
+    {
+     "campo": "TORQUE MÁXIMO",
+     "valor": "1.750"
+    },
+    {
+     "campo": "MOTOR",
+     "valor": "AGCO Power 6 cilindros 8,4 litros"
+    },
+    {
+     "campo": "TRANSMISSÃO",
+     "valor": "Dyna-VT"
+    }
+   ],
+   "origemEspecificacoes": "tabela de modelos da página do produto (texto literal; células mescladas expandidas)",
+   "dataConsulta": "2026-10-04"
+  }
+ ],
+ "descartados": [
+  {
+   "nome": "*Valores médios encontrados nos testes de campo quando comparados a modelos equivalentes.",
+   "url": "https://www.masseyferguson.com/pt_br/product/balers/mf-2234.html",
+   "motivo": "nota de rodapé ou nome inválido"
+  },
+  {
+   "nome": "* Medição no pino de articulação | ** A 1,5 m de altura - no pino e articulação",
+   "url": "https://www.masseyferguson.com/pt_br/product/materials-handling/mf-fl.html",
+   "motivo": "nota de rodapé ou nome inválido"
+  },
+  {
+   "nome": "*O número de linhas considera 45 cm. Para montagem com 50 cm, essa quantidade diminui em duas linhas.",
+   "url": "https://www.masseyferguson.com/pt_br/product/seeders-planters/momentum.html",
+   "motivo": "nota de rodapé ou nome inválido"
+  },
+  {
+   "nome": "* 2.200 RPM",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/MF-3700.html",
+   "motivo": "nota de rodapé ou nome inválido"
+  },
+  {
+   "nome": "*Valores médios encontrados nos testes de campo quando comparados a modelos equivalentes.",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-3300xtra.html",
+   "motivo": "nota de rodapé ou nome inválido"
+  },
+  {
+   "nome": "Disponível na versão Cabinado e Plataformado | Reversão Mecânica ou Eletro-Hidráulica | *24x24 com Creeper",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-5700.html",
+   "motivo": "nota de rodapé ou nome inválido"
+  },
+  {
+   "nome": "* 1.850 RPM | ** 1.000 – 1.500 RPM",
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-8s.html",
+   "motivo": "nota de rodapé ou nome inválido"
+  }
+ ],
+ "tabelasRejeitadas": [
+  {
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-8S-Xtra.html",
+   "cabecalho": [
+    "",
+    "Eficiente",
+    "Exclusivo"
+   ]
+  },
+  {
+   "url": "https://www.masseyferguson.com/pt_br/product/tractors/mf-8S-Xtra.html",
+   "cabecalho": [
+    "Pecuária/ laticínios/ mista 85hp-145hp setor",
+    "Fazenda mista 140hp-180hp setor",
+    "Fazenda arável 150hp-210hp",
+    "Arável/ empreiteiro 200hp-305hp setor"
+   ]
+  }
+ ]
+}

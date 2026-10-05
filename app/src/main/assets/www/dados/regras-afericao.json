@@ -1,0 +1,2344 @@
+{
+  "banco": "Nexus Agro — referências de aferição e calibragem de máquinas e implementos",
+  "versaoBanco": "1.4.0",
+  "dataBanco": "2026-10-05",
+  "observacaoGeral": "Somente regras com statusValidacao = 'validada' são usadas para concluir uma avaliação. Regras 'validada' tiveram o trecho conferido no documento original (ver fontes[].trechoLiteral). Regras 'pendente_conferencia' tiveram a fonte localizada, mas o texto ainda não foi conferido no documento original; o avaliador as mostra como referência candidata e devolve SEM_REFERENCIA. Escopo '*' significa que a regra declara expressamente não depender daquele campo.",
+  "statusPossiveis": {
+    "validada": "Valor conferido no documento original por um responsável (validadoPor/dataValidacao preenchidos).",
+    "pendente_conferencia": "Fonte localizada; valor ainda não conferido no documento original. Não usar para concluir.",
+    "suspensa": "Regra retirada de uso (ex.: fonte revisada). Mantida para rastreabilidade de registros antigos."
+  },
+  "regras": [
+    {
+      "id": "PULV-BICO-CAT-01",
+      "versao": "1.1.0",
+      "titulo": "Vazão individual do bico em relação ao catálogo do fabricante",
+      "equipamentoFamilia": [
+        "pulverizador_barra"
+      ],
+      "avaliacao": "vazao_bicos",
+      "produto": "*",
+      "destino": "*",
+      "etapa": "afericao",
+      "ponto": "bico",
+      "posicao": "*",
+      "variavel": "desvio_vazao_catalogo",
+      "unidade": "%",
+      "limiteMin": -10,
+      "limiteMax": 10,
+      "alvo": 0,
+      "condicoes": [
+        {
+          "campo": "pressaoColetaIgualCatalogo",
+          "operador": "igual",
+          "valor": true,
+          "descricao": "A coleta foi feita na mesma pressão da vazão de catálogo usada como base (ou a vazão de catálogo foi convertida para a pressão de coleta)."
+        },
+        {
+          "campo": "vazaoCatalogoInformada",
+          "operador": "igual",
+          "valor": true,
+          "descricao": "A vazão de catálogo do modelo exato da ponta foi informada (não apenas a cor)."
+        }
+      ],
+      "acaoForaDoPadrao": "Substituir a ponta (desgaste ou entupimento) e repetir a coleta.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Agroindústria Tropical",
+          "titulo": "Tecnologia de Aplicação de Defensivos Agrícolas — Documentos 102 (ISSN 1677-1915)",
+          "autores": "Francisco Roberto de Azevedo; Francisco das Chagas Oliveira Freire",
+          "ano": 2006,
+          "url": "https://www.infoteca.cnptia.embrapa.br/bitstream/doc/426350/1/Dc102.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 30 do PDF — seção 'Desgaste e substituição dos componentes dos bicos'",
+          "trechoLiteral": "A avaliação e a determinação na troca ou substituição das pontas de pulverização deverão ser regidas pela avaliação periódica da vazão de cada ponta ou bico e sua comparação com a apresentada pelas tabelas dos fabricantes. Variações dentro da faixa de 10%, em relação ao valor da tabela, são aceitáveis. Acima desses valores, justifica-se a substituição"
+        },
+        {
+          "organizacao": "ISO",
+          "titulo": "ISO 16122-2 — Inspection of sprayers in use — Part 2: Horizontal boom sprayers",
+          "url": "https://standards.iteh.ai/catalog/standards/iso/e8a2566e-9fe1-4c86-b3d9-da09225be691/iso-fdis-16122-2",
+          "tipo": "norma",
+          "conferido": false,
+          "observacao": "Requisito fora da amostra pública da norma; não conferido."
+        }
+      ],
+      "observacaoTecnica": "Desvio = (vazão medida − vazão da tabela do fabricante) / vazão da tabela × 100. A Embrapa admite variação dentro de 10% e justifica a substituição acima disso. A cor da ponta (ISO 10625) só identifica a classe; usar a tabela do modelo exato na pressão de coleta.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 04/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-04",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-04",
+          "alteracao": "Criação (pendente de conferência)."
+        },
+        {
+          "versao": "1.1.0",
+          "data": "2026-10-04",
+          "alteracao": "Trecho conferido no Doc. 102 (p. 30); autoria corrigida para Embrapa Agroindústria Tropical; ISO 16122-2 mantida como fonte complementar não conferida."
+        }
+      ]
+    },
+    {
+      "id": "PULV-BICO-MED-01",
+      "versao": "1.1.0",
+      "titulo": "Vazão individual do bico em relação à média da barra",
+      "equipamentoFamilia": [
+        "pulverizador_barra"
+      ],
+      "avaliacao": "vazao_bicos",
+      "produto": "*",
+      "destino": "*",
+      "etapa": "afericao",
+      "ponto": "bico",
+      "posicao": "*",
+      "variavel": "desvio_vazao_media",
+      "unidade": "%",
+      "limiteMin": -10,
+      "limiteMax": 10,
+      "alvo": 0,
+      "condicoes": [
+        {
+          "campo": "mesmoTempoColeta",
+          "operador": "igual",
+          "valor": true,
+          "descricao": "Todos os bicos foram coletados no mesmo intervalo de tempo e na mesma pressão."
+        },
+        {
+          "campo": "pontasMesmoModelo",
+          "operador": "igual",
+          "valor": true,
+          "descricao": "Todas as pontas da seção avaliada são do mesmo modelo."
+        }
+      ],
+      "acaoForaDoPadrao": "Ponta com problema (desgastada ou entupida): limpar ou substituir e repetir a coleta.",
+      "fontes": [
+        {
+          "organizacao": "—",
+          "titulo": "Fonte primária não localizada",
+          "url": "",
+          "tipo": "nao_localizada",
+          "conferido": false,
+          "observacao": "O critério de ±10% em relação à média NÃO consta do Embrapa Doc. 102 (verificado em 04/10/2026). Foi visto apenas em portal de conteúdo (Agrolink), que não é aceito como referência primária."
+        }
+      ],
+      "observacaoTecnica": "Comparação com a média é informativa até haver fonte primária. A avaliação principal do bico é contra a tabela do fabricante (PULV-BICO-CAT-01).",
+      "confianca": "alta",
+      "statusValidacao": "pendente_conferencia",
+      "validadoPor": null,
+      "dataValidacao": null,
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-04",
+          "alteracao": "Criação atribuída ao Doc. 102."
+        },
+        {
+          "versao": "1.1.0",
+          "data": "2026-10-04",
+          "alteracao": "Atribuição ao Doc. 102 removida: o critério não consta do documento."
+        }
+      ]
+    },
+    {
+      "id": "PULV-SENSOR-01",
+      "versao": "1.1.0",
+      "titulo": "Erro do sensor de velocidade ou do fluxômetro do controlador",
+      "equipamentoFamilia": [
+        "pulverizador_barra"
+      ],
+      "avaliacao": "sensor_controlador",
+      "produto": "*",
+      "destino": "*",
+      "etapa": "afericao",
+      "ponto": [
+        "sensor_velocidade",
+        "fluxometro"
+      ],
+      "posicao": "*",
+      "variavel": "erro_relativo_instrumento",
+      "unidade": "%",
+      "limiteMin": -5,
+      "limiteMax": 5,
+      "alvo": 0,
+      "condicoes": [
+        {
+          "campo": "comparadoComInstrumentoReferencia",
+          "operador": "igual",
+          "valor": true,
+          "descricao": "A leitura foi comparada com um instrumento de referência (ex.: trena + cronômetro para velocidade, coleta volumétrica/gravimétrica para vazão)."
+        }
+      ],
+      "acaoForaDoPadrao": "Recalibrar a constante do sensor no controlador (pulsos por metro / pulsos por litro) e repetir o teste.",
+      "fontes": [
+        {
+          "organizacao": "ISO",
+          "titulo": "ISO 16122-2 — Inspection of sprayers in use — Part 2: Horizontal boom sprayers",
+          "url": "https://standards.iteh.ai/catalog/standards/iso/e8a2566e-9fe1-4c86-b3d9-da09225be691/iso-fdis-16122-2",
+          "tipo": "norma",
+          "trechoLocalizado": "Dispositivos de medição (fluxômetros e sensores de velocidade) usados para controlar a taxa por hectare devem medir com erro máximo de ±5% do valor do instrumento de referência.",
+          "conferido": false,
+          "observacao": "A edição ISO/FDIS 16122-2:2024 declara 'modified the maximum error flow-meters for controlling the volume/hectare rate' (prefácio, conferido). O valor de ±5% refere-se à edição anterior; o valor vigente não está na amostra pública."
+        }
+      ],
+      "observacaoTecnica": "Erro = (leitura do controlador − referência) / referência × 100. Limite possivelmente alterado na revisão de 2024 da norma — não validar sem o texto vigente.",
+      "confianca": "media",
+      "statusValidacao": "pendente_conferencia",
+      "validadoPor": null,
+      "dataValidacao": null,
+      "historico": [
+        {
+          "versao": "1.1.0",
+          "data": "2026-10-04",
+          "alteracao": "Registrada a revisão de 2024 da ISO 16122-2 que modificou o erro máximo de fluxômetros."
+        }
+      ]
+    },
+    {
+      "id": "PULV-TAXA-01",
+      "versao": "1.0.0",
+      "titulo": "Taxa de aplicação medida em relação à taxa planejada",
+      "equipamentoFamilia": [
+        "pulverizador_barra"
+      ],
+      "avaliacao": "taxa_aplicacao",
+      "produto": "*",
+      "destino": "*",
+      "etapa": "calibracao",
+      "ponto": "barra",
+      "posicao": "*",
+      "variavel": "desvio_taxa_planejada",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": null,
+      "alvo": 0,
+      "condicoes": [],
+      "acaoForaDoPadrao": "",
+      "fontes": [],
+      "observacaoTecnica": "Tolerância ainda não definida por fonte técnica aplicável. Deve vir da bula do produto, da recomendação agronômica ou de norma específica. Enquanto isso, o sistema calcula o desvio mas devolve SEM_REFERENCIA.",
+      "confianca": "nenhuma",
+      "statusValidacao": "pendente_conferencia",
+      "validadoPor": null,
+      "dataValidacao": null
+    },
+    {
+      "id": "SEM-ESPAC-01",
+      "versao": "1.1.0",
+      "titulo": "Distribuição longitudinal — percentual de espaçamentos aceitáveis (0,5 a 1,5 × Xref)",
+      "equipamentoFamilia": [
+        "semeadora_precisao"
+      ],
+      "avaliacao": "distribuicao_longitudinal",
+      "produto": "*",
+      "destino": "*",
+      "etapa": "afericao",
+      "ponto": "linha_semeadura",
+      "posicao": "*",
+      "variavel": "percentual_espacamentos_aceitaveis",
+      "unidade": "%",
+      "limiteMin": 90,
+      "limiteMax": 100,
+      "alvo": 100,
+      "faixasClassificacao": [
+        {
+          "rotulo": "Ótimo",
+          "min": 90,
+          "max": 100
+        }
+      ],
+      "condicoes": [
+        {
+          "campo": "xrefDefinido",
+          "operador": "igual",
+          "valor": true,
+          "descricao": "O espaçamento de referência (Xref) foi definido pela regulagem planejada (100 / sementes por metro, em cm)."
+        },
+        {
+          "campo": "minimoEspacamentosMedidos",
+          "operador": "maior_igual",
+          "valor": 50,
+          "descricao": "Pelo menos 50 espaçamentos medidos na linha avaliada (amostra mínima adotada pelo sistema)."
+        }
+      ],
+      "acaoForaDoPadrao": "Verificar disco/dosador, velocidade de trabalho, vácuo (se pneumática), tratamento/fluidez das sementes e repetir a avaliação.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Plantabilidade na cultura da soja — Atualização no cultivo da soja, Módulo 3 (apresentação)",
+          "autores": "Osmar Conte",
+          "url": "https://www.embrapa.br/documents/1355202/1529289/2-Osmar_Plantabilidade.pdf/d77e9697-97d9-df21-b377-b1f4e0b78f4a?version=1.0&download=true",
+          "tipo": "material_tecnico_apresentacao",
+          "conferido": true,
+          "trechoLiteral": "Norma técnica da ABNT (1994), apud Kurachi et al. (1989) — Espaçamentos duplos: ED < 0,5 ESD; Espaçamentos falhos: EF > 1,5 ESD; 3,6 cm < EA < 10,7 cm (para 14 sem/m = 7,14 cm)."
+        },
+        {
+          "organizacao": "ABNT (1994) apud Kurachi et al. (1989)",
+          "titulo": "Norma técnica de semeadoras de precisão — classificação de espaçamentos",
+          "url": "",
+          "tipo": "norma",
+          "conferido": false,
+          "observacao": "Citada pela Embrapa Soja; documento original não consultado."
+        }
+      ],
+      "observacaoTecnica": "Limites de classe (0,5 e 1,5 × Xref) conferidos na Embrapa Soja. O critério de desempenho (≥ 90% aceitáveis) e a amostra mínima de 50 espaçamentos NÃO foram localizados em fonte primária — por isso a regra continua pendente. Os percentuais de duplos, aceitáveis e falhos são sempre calculados.",
+      "confianca": "media",
+      "statusValidacao": "pendente_conferencia",
+      "validadoPor": null,
+      "dataValidacao": null,
+      "historico": [
+        {
+          "versao": "1.1.0",
+          "data": "2026-10-04",
+          "alteracao": "Classes conferidas na Embrapa Soja; ano da norma ABNT corrigido para 1994; limite de 90% sem fonte."
+        }
+      ]
+    },
+    {
+      "id": "ADUB-CV-N-01",
+      "versao": "1.0.0",
+      "titulo": "Coeficiente de variação transversal — distribuidor a lanço, fertilizante nitrogenado",
+      "equipamentoFamilia": [
+        "distribuidor_lanco"
+      ],
+      "avaliacao": "distribuicao_transversal",
+      "produto": "*",
+      "destino": "*",
+      "etapa": "afericao",
+      "ponto": "faixa_aplicacao",
+      "posicao": "*",
+      "variavel": "cv_transversal",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 15,
+      "alvo": null,
+      "condicoes": [
+        {
+          "campo": "fertilizanteNitrogenado",
+          "operador": "igual",
+          "valor": true,
+          "descricao": "O produto contém nitrogênio."
+        },
+        {
+          "campo": "cvComSobreposicao",
+          "operador": "igual",
+          "valor": true,
+          "descricao": "O CV foi calculado com a sobreposição das passadas na largura de trabalho efetiva (método de bandejas transversais)."
+        }
+      ],
+      "acaoForaDoPadrao": "Ajustar largura de trabalho, palhetas/ponto de queda e rotação dos discos conforme o manual do fabricante e repetir o teste de bandejas.",
+      "fontes": [
+        {
+          "organizacao": "ISO",
+          "titulo": "ISO 5690-1 — Equipment for distributing fertilizers — Test methods — Part 1: Full width fertilizer distributors",
+          "url": "",
+          "tipo": "norma",
+          "trechoLocalizado": "Método de bandejas transversais e cálculo do CV com sobreposição."
+        },
+        {
+          "organizacao": "Fertiliser Quality Council (NZ) — Spreadmark",
+          "titulo": "Spreadmark Code of Practice",
+          "url": "https://flrc.massey.ac.nz/workshops/24/Manuscripts/Holmes_Allister.pdf",
+          "tipo": "programa_qualidade",
+          "trechoLocalizado": "CV transversal de 15% para fertilizantes nitrogenados e 25% para os demais e calcário."
+        }
+      ],
+      "observacaoTecnica": "O limite de 15% vem de programa de qualidade (Spreadmark, Nova Zelândia) e é citado como critério internacional; a ISO 5690-1 define o método, não necessariamente o limite. Confirmar aplicabilidade antes de validar.",
+      "confianca": "media",
+      "statusValidacao": "pendente_conferencia",
+      "validadoPor": null,
+      "dataValidacao": null
+    },
+    {
+      "id": "ADUB-CV-OUT-01",
+      "versao": "1.0.0",
+      "titulo": "Coeficiente de variação transversal — distribuidor a lanço, fertilizante não nitrogenado ou calcário",
+      "equipamentoFamilia": [
+        "distribuidor_lanco"
+      ],
+      "avaliacao": "distribuicao_transversal",
+      "produto": "*",
+      "destino": "*",
+      "etapa": "afericao",
+      "ponto": "faixa_aplicacao",
+      "posicao": "*",
+      "variavel": "cv_transversal",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 25,
+      "alvo": null,
+      "condicoes": [
+        {
+          "campo": "fertilizanteNitrogenado",
+          "operador": "igual",
+          "valor": false,
+          "descricao": "O produto não contém nitrogênio (ou é calcário)."
+        },
+        {
+          "campo": "cvComSobreposicao",
+          "operador": "igual",
+          "valor": true,
+          "descricao": "O CV foi calculado com a sobreposição das passadas na largura de trabalho efetiva (método de bandejas transversais)."
+        }
+      ],
+      "acaoForaDoPadrao": "Ajustar largura de trabalho, palhetas/ponto de queda e rotação dos discos conforme o manual do fabricante e repetir o teste de bandejas.",
+      "fontes": [
+        {
+          "organizacao": "Fertiliser Quality Council (NZ) — Spreadmark",
+          "titulo": "Spreadmark Code of Practice",
+          "url": "https://flrc.massey.ac.nz/workshops/24/Manuscripts/Holmes_Allister.pdf",
+          "tipo": "programa_qualidade",
+          "trechoLocalizado": "CV transversal de 15% para fertilizantes nitrogenados e 25% para os demais e calcário."
+        }
+      ],
+      "observacaoTecnica": "Mesma ressalva da regra ADUB-CV-N-01.",
+      "confianca": "media",
+      "statusValidacao": "pendente_conferencia",
+      "validadoPor": null,
+      "dataValidacao": null
+    },
+    {
+      "id": "DOSE-PLAN-01",
+      "versao": "1.0.0",
+      "titulo": "Dose aplicada (adubo/semente) em relação à dose planejada",
+      "equipamentoFamilia": [
+        "semeadora_precisao",
+        "semeadora_fluxo_continuo",
+        "adubadora_linha",
+        "distribuidor_lanco"
+      ],
+      "avaliacao": "dose_aplicada",
+      "produto": "*",
+      "destino": "*",
+      "etapa": "calibracao",
+      "ponto": "*",
+      "posicao": "*",
+      "variavel": "desvio_dose_planejada",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": null,
+      "alvo": 0,
+      "condicoes": [],
+      "acaoForaDoPadrao": "",
+      "fontes": [],
+      "observacaoTecnica": "Nenhuma tolerância com fonte técnica aplicável foi localizada. O sistema calcula dose e desvio, mas devolve SEM_REFERENCIA até que uma fonte (manual do fabricante, recomendação agronômica ou norma) seja cadastrada.",
+      "confianca": "nenhuma",
+      "statusValidacao": "pendente_conferencia",
+      "validadoPor": null,
+      "dataValidacao": null
+    },
+    {
+      "id": "COLH-PERDA-SOJA-01",
+      "versao": "1.1.0",
+      "titulo": "Perda total na colheita de soja (média dos pontos, método da armação de 2,0 m²)",
+      "equipamentoFamilia": [
+        "colhedora"
+      ],
+      "avaliacao": "perdas_colheita",
+      "produto": [
+        "soja"
+      ],
+      "destino": "*",
+      "etapa": "colheita",
+      "ponto": "atras_colhedora",
+      "posicao": "*",
+      "variavel": "perda_total",
+      "unidade": "kg/ha",
+      "limiteMin": null,
+      "limiteMax": 60,
+      "alvo": null,
+      "condicoes": [
+        {
+          "campo": "areaAmostralM2",
+          "operador": "entre",
+          "valor": [
+            1.95,
+            2.05
+          ],
+          "descricao": "Área amostral de 2,0 m² por ponto (ex.: 4,0 m × 0,5 m, ou comprimento = 2 ÷ largura da plataforma)."
+        },
+        {
+          "campo": "numeroPontos",
+          "operador": "maior_igual",
+          "valor": 5,
+          "descricao": "Coleta em pelo menos cinco pontos (repetições) da lavoura."
+        },
+        {
+          "campo": "incluiGraosEmVagens",
+          "operador": "igual",
+          "valor": true,
+          "descricao": "Foram recolhidos todos os grãos e todas as vagens da área da armação (vagens debulhadas)."
+        }
+      ],
+      "acaoForaDoPadrao": "Identificar a origem da perda (plataforma × trilha/separação/limpeza) e regular a colhedora conforme o manual; repetir a avaliação.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Determinação de perdas na colheita de soja: copo medidor da Embrapa",
+          "autores": "José Miguel Silveira; Osmar Conte",
+          "ano": 2013,
+          "url": "https://www.infoteca.cnptia.embrapa.br/bitstream/doc/979883/1/ManualCopoMedidorbaixacompleto.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "pp. 7–11 (Introdução; Determinação das perdas…)",
+          "trechoLiteral": "…de modo a ajustá-las dentro do nível de tolerância de 60 kg por hectare. […] a coleta dos grãos em uma área delimitada de 2,0 m2 […] Uma medida fixa e padrão de armação de 4,0 m de largura (Y) por 0,5 m de comprimento (X) pode ser adotada; […] divide-se o número dois pela largura da plataforma (X = 2/Y). […] cada amostragem ou aferição, durante o processo de colheita deve ser feita em, pelo menos, cinco pontos (repetições) da lavoura […] coletam-se todos os grãos e todas as vagens de seu interior […] PMI = PTT - PPC."
+        }
+      ],
+      "observacaoTecnica": "Válido somente para soja. Limite em massa: 60 kg/ha (= 1 saca de 60 kg/ha). O sistema calcula por massa (g × 10 ÷ m²), equivalente à leitura do copo medidor, que é volumétrico. Perdas internas: PMI = PTT − PPC.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 04/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-04",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-04",
+          "alteracao": "Criação (limite 1 sc/ha, armação 4,0 × 0,5 m)."
+        },
+        {
+          "versao": "1.1.0",
+          "data": "2026-10-04",
+          "alteracao": "Conferida no manual Embrapa Soja (2013): limite expresso em 60 kg/ha; mínimo de 5 pontos; armação de 2,0 m² de dimensões variáveis."
+        }
+      ]
+    },
+    {
+      "id": "SEC-SOJA-SEM-MASSA-01",
+      "versao": "1.0.0",
+      "titulo": "Temperatura da massa de semente de soja durante a secagem",
+      "equipamentoFamilia": [
+        "secador"
+      ],
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "secagem"
+      ],
+      "ponto": [
+        "massa_graos"
+      ],
+      "posicao": "*",
+      "variavel": "temperatura",
+      "unidade": "°C",
+      "limiteMin": null,
+      "limiteMax": 40,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Reduzir a temperatura do ar de secagem/ajustar o fluxo até a massa de semente ficar em até 40 ºC; registrar nova leitura.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Tecnologia da produção de semente de soja de alta qualidade — Documentos 380 (ISSN 2176-2937)",
+          "autores": "José de Barros França-Neto; Francisco Carlos Krzyzanowski; Ademir Assis Henning; Gilda Pizzolante de Pádua; Irineu Lorini; Fernando Augusto Henning",
+          "ano": 2016,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1057882/1/Documentos380OL1.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "pp. 45-46 (p. 47 do PDF)",
+          "trechoLiteral": "A semente de soja pode ser secada em sistemas estáticos, contínuos e intermitentes (Figura 32), tomando-se a precaução de que a temperatura da massa de semente não venha a ser superior a 40 ºC e que a umidade relativa do ar de secagem em secadores estáticos não seja inferior a 35%."
+        }
+      ],
+      "observacaoTecnica": "Vale para a temperatura da MASSA de semente, não para o ar de entrada. O mesmo documento cita, no parágrafo anterior, \"temperatura da massa de semente não superior a 42 ºC\" no contexto da intermitência; a recomendação operacional para os três sistemas é 40 ºC.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "SEC-SOJA-SEM-MASSA-2005",
+      "versao": "1.0.0",
+      "titulo": "Temperatura da massa de semente de soja (versão de 2005, substituída)",
+      "equipamentoFamilia": [
+        "secador"
+      ],
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "secagem"
+      ],
+      "ponto": [
+        "massa_graos"
+      ],
+      "posicao": "*",
+      "variavel": "temperatura",
+      "unidade": "°C",
+      "limiteMin": null,
+      "limiteMax": 38,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Transferência de Tecnologia / SENAI / SEBRAE (Programa Alimentos Seguros)",
+          "titulo": "Manual de segurança e qualidade para a cultura da soja (ISBN 85-7383-298-3)",
+          "ano": 2005,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/116424/1/MANUALSEGURANCAQUALIDADEParaaculturadesoja.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "item 2.12 Pós-colheita (p. 41 do PDF)",
+          "trechoLiteral": "A temperatura de secagem da massa de grãos não deve exceder 38ºC para semente, e 48ºC para grãos de soja destinados à agroindústria."
+        }
+      ],
+      "observacaoTecnica": "Substituída por SEC-SOJA-SEM-MASSA-01 (Embrapa Soja, Documentos 380, 2016, mais recente e específico para semente). Mantida para rastreabilidade.",
+      "confianca": "alta",
+      "statusValidacao": "suspensa",
+      "validadoPor": null,
+      "dataValidacao": null
+    },
+    {
+      "id": "SEC-SOJA-SEM-URAR-01",
+      "versao": "1.0.0",
+      "titulo": "Umidade relativa do ar de secagem em secador estático (semente de soja)",
+      "equipamentoFamilia": [
+        "secador"
+      ],
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "secagem"
+      ],
+      "ponto": [
+        "ar_entrada"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_relativa_ar",
+      "unidade": "%",
+      "limiteMin": 35,
+      "limiteMax": null,
+      "alvo": null,
+      "condicoes": [
+        {
+          "campo": "tipoSecador",
+          "operador": "igual",
+          "valor": "estatico",
+          "descricao": "O secador é do tipo estático."
+        }
+      ],
+      "acaoForaDoPadrao": "Reduzir o aquecimento do ar até a umidade relativa do ar de secagem ficar em pelo menos 35%.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Tecnologia da produção de semente de soja de alta qualidade — Documentos 380 (ISSN 2176-2937)",
+          "autores": "José de Barros França-Neto; Francisco Carlos Krzyzanowski; Ademir Assis Henning; Gilda Pizzolante de Pádua; Irineu Lorini; Fernando Augusto Henning",
+          "ano": 2016,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1057882/1/Documentos380OL1.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "pp. 45-46 (p. 47 do PDF)",
+          "trechoLiteral": "...e que a umidade relativa do ar de secagem em secadores estáticos não seja inferior a 35%."
+        }
+      ],
+      "observacaoTecnica": "Somente para secadores estáticos.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "SEC-SOJA-AGRO-MASSA-01",
+      "versao": "1.0.0",
+      "titulo": "Temperatura da massa de grãos de soja destinados à agroindústria durante a secagem",
+      "equipamentoFamilia": [
+        "secador"
+      ],
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "agroindustria"
+      ],
+      "etapa": [
+        "secagem"
+      ],
+      "ponto": [
+        "massa_graos"
+      ],
+      "posicao": "*",
+      "variavel": "temperatura",
+      "unidade": "°C",
+      "limiteMin": null,
+      "limiteMax": 48,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Reduzir a temperatura do ar de secagem até a massa de grãos ficar em até 48 ºC.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Transferência de Tecnologia / SENAI / SEBRAE (Programa Alimentos Seguros)",
+          "titulo": "Manual de segurança e qualidade para a cultura da soja (ISBN 85-7383-298-3)",
+          "ano": 2005,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/116424/1/MANUALSEGURANCAQUALIDADEParaaculturadesoja.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "item 2.12 Pós-colheita (p. 41 do PDF)",
+          "trechoLiteral": "A temperatura de secagem da massa de grãos não deve exceder 38ºC para semente, e 48ºC para grãos de soja destinados à agroindústria."
+        }
+      ],
+      "observacaoTecnica": "Vale para a massa de grãos (não para o ar). Destino: agroindústria.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "SEC-MILHO-SEM-AR-01",
+      "versao": "1.0.0",
+      "titulo": "Temperatura do ar de secagem — milho para semente",
+      "equipamentoFamilia": [
+        "secador"
+      ],
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "milho"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "secagem"
+      ],
+      "ponto": [
+        "ar_entrada"
+      ],
+      "posicao": "*",
+      "variavel": "temperatura",
+      "unidade": "°C",
+      "limiteMin": null,
+      "limiteMax": 44,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Reduzir a temperatura do ar de secagem para até 44 °C.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Milho e Sorgo",
+          "titulo": "Cultivo do Milho — Colheita e pós-colheita. Sistema de Produção 1 (ISSN 1679-012X), 9ª edição",
+          "ano": 2015,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/748767/1/Milho-Colheita-e-pos-colheita.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 28 do PDF (também p. 19)",
+          "trechoLiteral": "A temperatura do ar de secagem não pode exceder a 44 °C no caso de sementes, 55 °C para grãos que se destinam à indústria de moagem e 82 °C para os destinados à fabricação de ração, sob pena de comprometer a qualidade."
+        }
+      ],
+      "observacaoTecnica": "Limite do AR de secagem (texto explícito na p. 28). Na p. 20 o mesmo documento recomenda \"não ultrapassar a temperatura máxima dos grãos ... de acordo com a finalidade\"; por isso a confiança é média.",
+      "confianca": "media",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "SEC-MILHO-MOAG-AR-01",
+      "versao": "1.0.0",
+      "titulo": "Temperatura do ar de secagem — milho para indústria de moagem / alimentação humana",
+      "equipamentoFamilia": [
+        "secador"
+      ],
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "milho"
+      ],
+      "destino": [
+        "moagem_alimentacao_humana"
+      ],
+      "etapa": [
+        "secagem"
+      ],
+      "ponto": [
+        "ar_entrada"
+      ],
+      "posicao": "*",
+      "variavel": "temperatura",
+      "unidade": "°C",
+      "limiteMin": null,
+      "limiteMax": 55,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Reduzir a temperatura do ar de secagem para até 55 °C.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Milho e Sorgo",
+          "titulo": "Cultivo do Milho — Colheita e pós-colheita. Sistema de Produção 1 (ISSN 1679-012X), 9ª edição",
+          "ano": 2015,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/748767/1/Milho-Colheita-e-pos-colheita.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 28 do PDF (também p. 19)",
+          "trechoLiteral": "A temperatura do ar de secagem não pode exceder a 44 °C no caso de sementes, 55 °C para grãos que se destinam à indústria de moagem e 82 °C para os destinados à fabricação de ração, sob pena de comprometer a qualidade."
+        }
+      ],
+      "observacaoTecnica": "Limite do AR de secagem. Ver ressalva da regra SEC-MILHO-SEM-AR-01.",
+      "confianca": "media",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "SEC-MILHO-RACAO-AR-01",
+      "versao": "1.0.0",
+      "titulo": "Temperatura do ar de secagem — milho para fabricação de ração",
+      "equipamentoFamilia": [
+        "secador"
+      ],
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "milho"
+      ],
+      "destino": [
+        "racao_animal"
+      ],
+      "etapa": [
+        "secagem"
+      ],
+      "ponto": [
+        "ar_entrada"
+      ],
+      "posicao": "*",
+      "variavel": "temperatura",
+      "unidade": "°C",
+      "limiteMin": null,
+      "limiteMax": 82,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Reduzir a temperatura do ar de secagem para até 82 °C.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Milho e Sorgo",
+          "titulo": "Cultivo do Milho — Colheita e pós-colheita. Sistema de Produção 1 (ISSN 1679-012X), 9ª edição",
+          "ano": 2015,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/748767/1/Milho-Colheita-e-pos-colheita.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 28 do PDF (também p. 19)",
+          "trechoLiteral": "A temperatura do ar de secagem não pode exceder a 44 °C no caso de sementes, 55 °C para grãos que se destinam à indústria de moagem e 82 °C para os destinados à fabricação de ração, sob pena de comprometer a qualidade."
+        }
+      ],
+      "observacaoTecnica": "Limite do AR de secagem. Ver ressalva da regra SEC-MILHO-SEM-AR-01.",
+      "confianca": "media",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "ARM-SOJA-AGRO-UMID-01",
+      "versao": "1.0.0",
+      "titulo": "Umidade dos grãos de soja destinados à agroindústria para armazenamento",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "agroindustria"
+      ],
+      "etapa": [
+        "pos_secagem",
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 14,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Continuar a secagem até a umidade ficar abaixo de 14%.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Transferência de Tecnologia / SENAI / SEBRAE (Programa Alimentos Seguros)",
+          "titulo": "Manual de segurança e qualidade para a cultura da soja (ISBN 85-7383-298-3)",
+          "ano": 2005,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/116424/1/MANUALSEGURANCAQUALIDADEParaaculturadesoja.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "item 2.12 Pós-colheita (p. 41 do PDF)",
+          "trechoLiteral": "Ocasionalmente, os grãos podem ser colhidos com grau de umidade superior àquele adequado para armazenamento seguro, que é de 12,5 % para semente, e de 14% para grão. [...] Manter os grãos destinados à agroindústria armazenados abaixo de 14% de umidade."
+        }
+      ],
+      "observacaoTecnica": "Texto: \"abaixo de 14%\" — 14,0% já está fora.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05",
+      "limiteMaxExclusivo": true
+    },
+    {
+      "id": "ARM-MILHO-GRAO-UMID-01",
+      "versao": "1.0.0",
+      "titulo": "Umidade do milho a granel para armazenamento",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "milho"
+      ],
+      "destino": [
+        "moagem_alimentacao_humana",
+        "racao_animal",
+        "armazenamento_graos",
+        "comercializacao",
+        "agroindustria"
+      ],
+      "etapa": [
+        "pos_secagem",
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 13,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Continuar a secagem até a umidade ficar em no máximo 13%.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Milho e Sorgo",
+          "titulo": "Cultivo do Milho — Colheita e pós-colheita. Sistema de Produção 1 (ISSN 1679-012X), 9ª edição",
+          "ano": 2015,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/748767/1/Milho-Colheita-e-pos-colheita.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 10 do PDF",
+          "trechoLiteral": "No caso do milho a granel, para o armazenamento após a colheita na propriedade ou em armazéns, os grãos deverão ter no máximo 13% de umidade."
+        }
+      ],
+      "observacaoTecnica": "Para grão (não semente) armazenado a granel.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "ARM-SOJA-SEM-TEMP-01",
+      "versao": "1.0.0",
+      "titulo": "Temperatura da semente de soja armazenada",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "armazenamento"
+      ],
+      "ponto": [
+        "massa_graos"
+      ],
+      "posicao": "*",
+      "variavel": "temperatura",
+      "unidade": "°C",
+      "limiteMin": null,
+      "limiteMax": 25,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Resfriar/aerar o lote até a temperatura ficar abaixo de 25 ºC.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Transferência de Tecnologia / SENAI / SEBRAE (Programa Alimentos Seguros)",
+          "titulo": "Manual de segurança e qualidade para a cultura da soja (ISBN 85-7383-298-3)",
+          "ano": 2005,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/116424/1/MANUALSEGURANCAQUALIDADEParaaculturadesoja.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "item 2.12 Pós-colheita (p. 41 do PDF)",
+          "trechoLiteral": "Manter a temperatura do produto destinado à semente abaixo de 25ºC e a umidade relativa do ar abaixo de 70% durante o armazenamento."
+        }
+      ],
+      "observacaoTecnica": "Texto: \"abaixo de 25ºC\" — 25,0 ºC já está fora.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05",
+      "limiteMaxExclusivo": true
+    },
+    {
+      "id": "ARM-SOJA-SEM-URAR-01",
+      "versao": "1.0.0",
+      "titulo": "Umidade relativa do ar no armazenamento de semente de soja",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "armazenamento"
+      ],
+      "ponto": [
+        "ambiente_armazem"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_relativa_ar",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 70,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Reduzir a umidade relativa do ambiente de armazenamento abaixo de 70%.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Transferência de Tecnologia / SENAI / SEBRAE (Programa Alimentos Seguros)",
+          "titulo": "Manual de segurança e qualidade para a cultura da soja (ISBN 85-7383-298-3)",
+          "ano": 2005,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/116424/1/MANUALSEGURANCAQUALIDADEParaaculturadesoja.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "item 2.12 Pós-colheita (p. 41 do PDF)",
+          "trechoLiteral": "Manter a temperatura do produto destinado à semente abaixo de 25ºC e a umidade relativa do ar abaixo de 70% durante o armazenamento."
+        }
+      ],
+      "observacaoTecnica": "Texto: \"abaixo de 70%\".",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05",
+      "limiteMaxExclusivo": true
+    },
+    {
+      "id": "ARM-SOJA-SEM-UMID-SUL-SC",
+      "versao": "1.0.0",
+      "titulo": "Umidade da semente de soja armazenada — RS, SC e centro-sul do PR — sacaria",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 13.5,
+      "alvo": null,
+      "condicoes": [
+        {
+          "campo": "regiaoArmazenamento",
+          "operador": "igual",
+          "valor": "sul",
+          "descricao": "Armazenamento em: RS, SC e centro-sul do PR."
+        },
+        {
+          "campo": "embalagem",
+          "operador": "igual",
+          "valor": "sacaria",
+          "descricao": "Sementes armazenadas em sacaria."
+        }
+      ],
+      "acaoForaDoPadrao": "Secar o lote até a umidade indicada para a região e embalagem antes de armazenar.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Tecnologia da produção de semente de soja de alta qualidade — Documentos 380 (ISSN 2176-2937)",
+          "autores": "José de Barros França-Neto; Francisco Carlos Krzyzanowski; Ademir Assis Henning; Gilda Pizzolante de Pádua; Irineu Lorini; Fernando Augusto Henning",
+          "ano": 2016,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1057882/1/Documentos380OL1.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 49 do PDF",
+          "trechoLiteral": "Especificamente para as condições de armazenamento do Brasil, pode-se sugerir que o conteúdo de água da semente seja mantido nos seguintes níveis: 13,0% a 13,5%, para o Rio Grande do Sul, Santa Catarina e centro sul do Paraná; 11,5% a 12,0% para o norte e oeste do Paraná, o sul do Mato Grosso do Sul e São Paulo; e 11,0% a 11,5% para as demais regiões dos Cerrados."
+        }
+      ],
+      "observacaoTecnica": "Faixa sugerida: 13,0% a 13,5%. Valores abaixo da faixa não são classificados como fora por esta regra.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "ARM-SOJA-SEM-UMID-SUL-BB",
+      "versao": "1.0.0",
+      "titulo": "Umidade da semente de soja armazenada — RS, SC e centro-sul do PR — big-bag",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 12.5,
+      "alvo": null,
+      "condicoes": [
+        {
+          "campo": "regiaoArmazenamento",
+          "operador": "igual",
+          "valor": "sul",
+          "descricao": "Armazenamento em: RS, SC e centro-sul do PR."
+        },
+        {
+          "campo": "embalagem",
+          "operador": "igual",
+          "valor": "big_bag",
+          "descricao": "Sementes armazenadas em big-bag."
+        }
+      ],
+      "acaoForaDoPadrao": "Secar o lote até a umidade indicada para a região e embalagem antes de armazenar.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Tecnologia da produção de semente de soja de alta qualidade — Documentos 380 (ISSN 2176-2937)",
+          "autores": "José de Barros França-Neto; Francisco Carlos Krzyzanowski; Ademir Assis Henning; Gilda Pizzolante de Pádua; Irineu Lorini; Fernando Augusto Henning",
+          "ano": 2016,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1057882/1/Documentos380OL1.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 49 do PDF",
+          "trechoLiteral": "Especificamente para as condições de armazenamento do Brasil, pode-se sugerir que o conteúdo de água da semente seja mantido nos seguintes níveis: 13,0% a 13,5%, para o Rio Grande do Sul, Santa Catarina e centro sul do Paraná; 11,5% a 12,0% para o norte e oeste do Paraná, o sul do Mato Grosso do Sul e São Paulo; e 11,0% a 11,5% para as demais regiões dos Cerrados. Quando as sementes forem armazenadas em sacolões (\"big-bags\"; Figura 35) é importante que o grau de umidade das sementes esteja em média 1,0% a menos em relação ao utilizado quando as sementes são armazenadas em sacarias."
+        }
+      ],
+      "observacaoTecnica": "Faixa sugerida: 13,0% a 13,5% em sacaria; em big-bag o documento indica, em média, 1,0 ponto a menos (limite derivado: 12,5%).",
+      "confianca": "media",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "ARM-SOJA-SEM-UMID-TRANSICAO-SC",
+      "versao": "1.0.0",
+      "titulo": "Umidade da semente de soja armazenada — norte e oeste do PR, sul do MS e SP — sacaria",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 12.0,
+      "alvo": null,
+      "condicoes": [
+        {
+          "campo": "regiaoArmazenamento",
+          "operador": "igual",
+          "valor": "transicao",
+          "descricao": "Armazenamento em: norte e oeste do PR, sul do MS e SP."
+        },
+        {
+          "campo": "embalagem",
+          "operador": "igual",
+          "valor": "sacaria",
+          "descricao": "Sementes armazenadas em sacaria."
+        }
+      ],
+      "acaoForaDoPadrao": "Secar o lote até a umidade indicada para a região e embalagem antes de armazenar.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Tecnologia da produção de semente de soja de alta qualidade — Documentos 380 (ISSN 2176-2937)",
+          "autores": "José de Barros França-Neto; Francisco Carlos Krzyzanowski; Ademir Assis Henning; Gilda Pizzolante de Pádua; Irineu Lorini; Fernando Augusto Henning",
+          "ano": 2016,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1057882/1/Documentos380OL1.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 49 do PDF",
+          "trechoLiteral": "Especificamente para as condições de armazenamento do Brasil, pode-se sugerir que o conteúdo de água da semente seja mantido nos seguintes níveis: 13,0% a 13,5%, para o Rio Grande do Sul, Santa Catarina e centro sul do Paraná; 11,5% a 12,0% para o norte e oeste do Paraná, o sul do Mato Grosso do Sul e São Paulo; e 11,0% a 11,5% para as demais regiões dos Cerrados."
+        }
+      ],
+      "observacaoTecnica": "Faixa sugerida: 11,5% a 12,0%. Valores abaixo da faixa não são classificados como fora por esta regra.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "ARM-SOJA-SEM-UMID-TRANSICAO-BB",
+      "versao": "1.0.0",
+      "titulo": "Umidade da semente de soja armazenada — norte e oeste do PR, sul do MS e SP — big-bag",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 11.0,
+      "alvo": null,
+      "condicoes": [
+        {
+          "campo": "regiaoArmazenamento",
+          "operador": "igual",
+          "valor": "transicao",
+          "descricao": "Armazenamento em: norte e oeste do PR, sul do MS e SP."
+        },
+        {
+          "campo": "embalagem",
+          "operador": "igual",
+          "valor": "big_bag",
+          "descricao": "Sementes armazenadas em big-bag."
+        }
+      ],
+      "acaoForaDoPadrao": "Secar o lote até a umidade indicada para a região e embalagem antes de armazenar.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Tecnologia da produção de semente de soja de alta qualidade — Documentos 380 (ISSN 2176-2937)",
+          "autores": "José de Barros França-Neto; Francisco Carlos Krzyzanowski; Ademir Assis Henning; Gilda Pizzolante de Pádua; Irineu Lorini; Fernando Augusto Henning",
+          "ano": 2016,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1057882/1/Documentos380OL1.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 49 do PDF",
+          "trechoLiteral": "Especificamente para as condições de armazenamento do Brasil, pode-se sugerir que o conteúdo de água da semente seja mantido nos seguintes níveis: 13,0% a 13,5%, para o Rio Grande do Sul, Santa Catarina e centro sul do Paraná; 11,5% a 12,0% para o norte e oeste do Paraná, o sul do Mato Grosso do Sul e São Paulo; e 11,0% a 11,5% para as demais regiões dos Cerrados. Quando as sementes forem armazenadas em sacolões (\"big-bags\"; Figura 35) é importante que o grau de umidade das sementes esteja em média 1,0% a menos em relação ao utilizado quando as sementes são armazenadas em sacarias."
+        }
+      ],
+      "observacaoTecnica": "Faixa sugerida: 11,5% a 12,0% em sacaria; em big-bag o documento indica, em média, 1,0 ponto a menos (limite derivado: 11,0%).",
+      "confianca": "media",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "ARM-SOJA-SEM-UMID-CERRADOS-SC",
+      "versao": "1.0.0",
+      "titulo": "Umidade da semente de soja armazenada — demais regiões dos Cerrados — sacaria",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 11.5,
+      "alvo": null,
+      "condicoes": [
+        {
+          "campo": "regiaoArmazenamento",
+          "operador": "igual",
+          "valor": "cerrados",
+          "descricao": "Armazenamento em: demais regiões dos Cerrados."
+        },
+        {
+          "campo": "embalagem",
+          "operador": "igual",
+          "valor": "sacaria",
+          "descricao": "Sementes armazenadas em sacaria."
+        }
+      ],
+      "acaoForaDoPadrao": "Secar o lote até a umidade indicada para a região e embalagem antes de armazenar.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Tecnologia da produção de semente de soja de alta qualidade — Documentos 380 (ISSN 2176-2937)",
+          "autores": "José de Barros França-Neto; Francisco Carlos Krzyzanowski; Ademir Assis Henning; Gilda Pizzolante de Pádua; Irineu Lorini; Fernando Augusto Henning",
+          "ano": 2016,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1057882/1/Documentos380OL1.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 49 do PDF",
+          "trechoLiteral": "Especificamente para as condições de armazenamento do Brasil, pode-se sugerir que o conteúdo de água da semente seja mantido nos seguintes níveis: 13,0% a 13,5%, para o Rio Grande do Sul, Santa Catarina e centro sul do Paraná; 11,5% a 12,0% para o norte e oeste do Paraná, o sul do Mato Grosso do Sul e São Paulo; e 11,0% a 11,5% para as demais regiões dos Cerrados."
+        }
+      ],
+      "observacaoTecnica": "Faixa sugerida: 11,0% a 11,5%. Valores abaixo da faixa não são classificados como fora por esta regra.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "ARM-SOJA-SEM-UMID-CERRADOS-BB",
+      "versao": "1.0.0",
+      "titulo": "Umidade da semente de soja armazenada — demais regiões dos Cerrados — big-bag",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 10.5,
+      "alvo": null,
+      "condicoes": [
+        {
+          "campo": "regiaoArmazenamento",
+          "operador": "igual",
+          "valor": "cerrados",
+          "descricao": "Armazenamento em: demais regiões dos Cerrados."
+        },
+        {
+          "campo": "embalagem",
+          "operador": "igual",
+          "valor": "big_bag",
+          "descricao": "Sementes armazenadas em big-bag."
+        }
+      ],
+      "acaoForaDoPadrao": "Secar o lote até a umidade indicada para a região e embalagem antes de armazenar.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Tecnologia da produção de semente de soja de alta qualidade — Documentos 380 (ISSN 2176-2937)",
+          "autores": "José de Barros França-Neto; Francisco Carlos Krzyzanowski; Ademir Assis Henning; Gilda Pizzolante de Pádua; Irineu Lorini; Fernando Augusto Henning",
+          "ano": 2016,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1057882/1/Documentos380OL1.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 49 do PDF",
+          "trechoLiteral": "Especificamente para as condições de armazenamento do Brasil, pode-se sugerir que o conteúdo de água da semente seja mantido nos seguintes níveis: 13,0% a 13,5%, para o Rio Grande do Sul, Santa Catarina e centro sul do Paraná; 11,5% a 12,0% para o norte e oeste do Paraná, o sul do Mato Grosso do Sul e São Paulo; e 11,0% a 11,5% para as demais regiões dos Cerrados. Quando as sementes forem armazenadas em sacolões (\"big-bags\"; Figura 35) é importante que o grau de umidade das sementes esteja em média 1,0% a menos em relação ao utilizado quando as sementes são armazenadas em sacarias."
+        }
+      ],
+      "observacaoTecnica": "Faixa sugerida: 11,0% a 11,5% em sacaria; em big-bag o documento indica, em média, 1,0 ponto a menos (limite derivado: 10,5%).",
+      "confianca": "media",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05"
+    },
+    {
+      "id": "COM-SOJA-UMID-01",
+      "versao": "1.1.0",
+      "titulo": "Umidade recomendada para comercialização da soja (classificação)",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "comercializacao",
+        "armazenamento_graos",
+        "agroindustria",
+        "moagem_alimentacao_humana",
+        "racao_animal"
+      ],
+      "etapa": [
+        "recebimento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 14,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Umidade acima do máximo recomendado de 14% (IN 11/2007, Art. 4º, § 4º). Não altera o tipo; registrar no laudo e secar antes de armazenar.",
+      "fontes": [
+        {
+          "organizacao": "MAPA",
+          "titulo": "Instrução Normativa nº 11, de 15/05/2007 — Regulamento Técnico da Soja (texto consolidado com a IN nº 37/2007)",
+          "ano": 2007,
+          "url": "https://sistemasweb.agricultura.gov.br/sislegis/action/detalhaAto.do?method=visualizarAtoPortalMapa&chave=1194426968",
+          "tipo": "norma",
+          "conferido": true,
+          "pagina": "Anexo, Art. 4º, § 4º",
+          "trechoLiteral": "A umidade deverá ser obrigatoriamente determinada, mas não será considerada para efeito de enquadramento em tipos, sendo recomendado o percentual máximo de 14% (catorze por cento).",
+          "copiaLocal": "referencias/fontes/mapa/IN-11-2007-soja.txt"
+        }
+      ],
+      "observacaoTecnica": "Recomendação da norma para comercialização; não entra no enquadramento em tipo. Aplicada só no recebimento (moega) para não se sobrepor às referências de armazenagem.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 no texto consolidado do SISLEGIS/MAPA; recomenda-se revisão por responsável técnico (classificador credenciado).",
+      "dataValidacao": "2026-10-05",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-05",
+          "alteracao": "Criação (pendente: domínio do MAPA inacessível)."
+        },
+        {
+          "versao": "1.1.0",
+          "data": "2026-10-05",
+          "alteracao": "Trecho conferido no texto oficial; escopo restrito ao recebimento e estendido a todos os destinos de grão."
+        }
+      ]
+    },
+    {
+      "id": "COM-MILHO-UMID-01",
+      "versao": "1.1.0",
+      "titulo": "Umidade recomendada para comercialização do milho (classificação)",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "milho"
+      ],
+      "destino": [
+        "comercializacao",
+        "armazenamento_graos",
+        "agroindustria",
+        "moagem_alimentacao_humana",
+        "racao_animal"
+      ],
+      "etapa": [
+        "recebimento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 14,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Umidade acima dos 14,0% recomendados (IN 60/2011, Art. 11). Pode ser comercializado, com a umidade registrada no documento de classificação; secar antes de armazenar.",
+      "fontes": [
+        {
+          "organizacao": "MAPA",
+          "titulo": "Instrução Normativa nº 60, de 22/12/2011 — Regulamento Técnico do Milho (texto consolidado com a IN nº 18/2012)",
+          "ano": 2011,
+          "url": "https://sistemasweb.agricultura.gov.br/sislegis/action/detalhaAto.do?method=visualizarAtoPortalMapa&chave=1739574738",
+          "tipo": "norma",
+          "conferido": true,
+          "pagina": "Art. 11 e § 1º",
+          "trechoLiteral": "Art. 11. O percentual de umidade tecnicamente recomendado para fins de comercialização do milho será de até 14,0% (catorze por cento). § 1º O milho que apresentar umidade superior à recomendada neste Regulamento Técnico poderá ser comercializado, devendo a informação relativa ao percentual de umidade constar no Documento de Classificação do produto.",
+          "copiaLocal": "referencias/fontes/mapa/IN-60-2011-milho.txt"
+        }
+      ],
+      "observacaoTecnica": "Recomendação da norma para comercialização; não entra no enquadramento em tipo. Aplicada só no recebimento (moega) para não se sobrepor às referências de armazenagem.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 no texto consolidado do SISLEGIS/MAPA; recomenda-se revisão por responsável técnico (classificador credenciado).",
+      "dataValidacao": "2026-10-05",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-05",
+          "alteracao": "Criação (pendente: domínio do MAPA inacessível)."
+        },
+        {
+          "versao": "1.1.0",
+          "data": "2026-10-05",
+          "alteracao": "Trecho conferido no texto oficial; escopo restrito ao recebimento e estendido a todos os destinos de grão."
+        }
+      ]
+    },
+    {
+      "id": "CLA-SOJA-AVAR-01",
+      "versao": "1.0.0",
+      "titulo": "Grãos avariados — tolerância máxima na classificação da soja (IN 11/2007)",
+      "equipamentoFamilia": "*",
+      "avaliacao": "classificacao_recebimento",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "comercializacao"
+      ],
+      "etapa": [
+        "recebimento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "graos_avariados",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 8,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Acima da tolerância de 8% de avariados: pela IN 11/2007 incide desconto direto sobre o excesso. Registrar o percentual no romaneio da carga.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Documentos 403 — Qualidade de sementes e grãos comerciais de soja no Brasil, safra 2016/17 (cap. 'Regulamento Técnico da Soja da Instrução Normativa Nº 11, de 15 de maio de 2007, do MAPA, para amostras de grãos', I. Lorini)",
+          "ano": 2018,
+          "url": "https://www.alice.cnptia.embrapa.br/alice/bitstream/doc/1099613/1/p179196.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 180 (Documentos 403)",
+          "trechoLiteral": "Os grãos avariados compreendem a soma dos ardidos, mofa[dos ...] tolerância máxima de 8%. Acima disto incidem descontos diretos, conforme estabelece a IN11 do MAPA"
+        },
+        {
+          "organizacao": "MAPA",
+          "titulo": "Instrução Normativa nº 11, de 15/05/2007 — Regulamento Técnico da Soja (complementada pela IN nº 37, de 27/07/2007)",
+          "url": "https://sistemasweb.agricultura.gov.br/sislegis/action/detalhaAto.do?method=visualizarAtoPortalMapa&chave=1194426968",
+          "tipo": "norma",
+          "conferido": false,
+          "observacao": "Domínio do MAPA bloqueado no ambiente de coleta; limite conferido na publicação da Embrapa que aplica a IN 11. Conferir o anexo da norma quando o domínio for liberado."
+        }
+      ],
+      "observacaoTecnica": "Valor de avariados é a SOMA dos defeitos classificados como avariados pela IN 11 (o documento cita ardidos, mofados e outros; a lista completa está ilegível no PDF e deve ser conferida no anexo da IN 11); grãos picados por percevejo entram divididos por quatro (\"conforme estabelece a IN11\", mesmo documento). O trecho entre colchetes está ilegível no PDF; o limite e a frase sobre descontos estão legíveis. SUSPENSA em 05/10/2026: substituída pelas tabelas CLA-SOJA-IN11-GI/GII (enquadramento completo em tipo pelo texto oficial). A IN 11 não estabelece desconto; o texto anterior sobre desconto vinha da publicação da Embrapa e descreve prática comercial.",
+      "confianca": "alta",
+      "statusValidacao": "suspensa",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original da Embrapa; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-05",
+          "alteracao": "Suspensa — substituída pelas tabelas de classificação da IN 11/2007."
+        }
+      ]
+    },
+    {
+      "id": "CLA-SOJA-QUEB-01",
+      "versao": "1.0.0",
+      "titulo": "Grãos partidos, quebrados e amassados — tolerância máxima na classificação da soja (IN 11/2007)",
+      "equipamentoFamilia": "*",
+      "avaliacao": "classificacao_recebimento",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "comercializacao"
+      ],
+      "etapa": [
+        "recebimento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "graos_quebrados_amassados",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 30,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Acima da tolerância de 30% de quebrados/amassados: pela IN 11/2007 incide desconto direto sobre o excesso. Verificar regulagem da colhedora e transporte.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Documentos 403 — Qualidade de sementes e grãos comerciais de soja no Brasil, safra 2016/17 (cap. 'Regulamento Técnico da Soja da Instrução Normativa Nº 11, de 15 de maio de 2007, do MAPA, para amostras de grãos', I. Lorini)",
+          "ano": 2018,
+          "url": "https://www.alice.cnptia.embrapa.br/alice/bitstream/doc/1099613/1/p179196.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 180 (Documentos 403)",
+          "trechoLiteral": "Os grãos quebrados e amassados têm a tolerância máxima de 30%. Acima disto incidem descontos diretos, conforme estabelece a IN11 do MAPA"
+        },
+        {
+          "organizacao": "MAPA",
+          "titulo": "Instrução Normativa nº 11, de 15/05/2007 — Regulamento Técnico da Soja (complementada pela IN nº 37, de 27/07/2007)",
+          "url": "https://sistemasweb.agricultura.gov.br/sislegis/action/detalhaAto.do?method=visualizarAtoPortalMapa&chave=1194426968",
+          "tipo": "norma",
+          "conferido": false,
+          "observacao": "Domínio do MAPA bloqueado no ambiente de coleta; limite conferido na publicação da Embrapa que aplica a IN 11. Conferir o anexo da norma quando o domínio for liberado."
+        }
+      ],
+      "observacaoTecnica": "Percentual em peso da amostra. SUSPENSA em 05/10/2026: substituída pelas tabelas CLA-SOJA-IN11-GI/GII (enquadramento completo em tipo pelo texto oficial). A IN 11 não estabelece desconto; o texto anterior sobre desconto vinha da publicação da Embrapa e descreve prática comercial.",
+      "confianca": "alta",
+      "statusValidacao": "suspensa",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original da Embrapa; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-05",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-05",
+          "alteracao": "Suspensa — substituída pelas tabelas de classificação da IN 11/2007."
+        }
+      ]
+    },
+    {
+      "id": "CLA-SOJA-IMPUR-01",
+      "versao": "1.0.0",
+      "titulo": "Matérias estranhas e impurezas — soja (valor da norma anterior, não usado para concluir)",
+      "equipamentoFamilia": "*",
+      "avaliacao": "classificacao_recebimento",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "comercializacao"
+      ],
+      "etapa": [
+        "recebimento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "impurezas_materias_estranhas",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 1,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "",
+      "fontes": [
+        {
+          "organizacao": "Embrapa / SENAI / SEBRAE",
+          "titulo": "Manual de segurança e qualidade para a cultura da soja",
+          "ano": 2005,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/116424/1/MANUALSEGURANCAQUALIDADEParaaculturadesoja.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 41",
+          "trechoLiteral": "Segundo estabelece a Portaria nº 262, de 23/10/83 (COMPANHIA..., 2004), os limites máximos de tolerância de defeitos permitidos para o grão de soja Padrão Básico (PB) são: [...] Impurezas e matérias estranhas 1,00",
+          "observacao": "Norma citada (Portaria 262/1983) foi substituída pela IN 11/2007."
+        },
+        {
+          "organizacao": "MAPA",
+          "titulo": "Instrução Normativa nº 11, de 15/05/2007 — Regulamento Técnico da Soja (complementada pela IN nº 37, de 27/07/2007)",
+          "url": "https://sistemasweb.agricultura.gov.br/sislegis/action/detalhaAto.do?method=visualizarAtoPortalMapa&chave=1194426968",
+          "tipo": "norma",
+          "conferido": false,
+          "observacao": "Domínio do MAPA bloqueado no ambiente de coleta; limite conferido na publicação da Embrapa que aplica a IN 11. Conferir o anexo da norma quando o domínio for liberado."
+        }
+      ],
+      "observacaoTecnica": "O valor de 1,00% foi conferido literalmente no Manual de Segurança e Qualidade da Soja (Embrapa/SENAI/SEBRAE, 2005, p. 41), mas lá ele é atribuído à Portaria nº 262/1983, revogada pela IN 11/2007. Falta conferir o valor no anexo da IN 11. SUSPENSA em 05/10/2026: substituída pelas tabelas CLA-SOJA-IN11-GI/GII (enquadramento completo em tipo pelo texto oficial). A IN 11 não estabelece desconto; o texto anterior sobre desconto vinha da publicação da Embrapa e descreve prática comercial.",
+      "confianca": "baixa",
+      "statusValidacao": "suspensa",
+      "validadoPor": null,
+      "dataValidacao": null,
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-05",
+          "alteracao": "Suspensa — substituída pelas tabelas de classificação da IN 11/2007."
+        }
+      ]
+    }
+  ],
+  "tabelasReferencia": [
+    {
+      "id": "ISO10625-CORES",
+      "versao": "1.1.0",
+      "titulo": "ISO 10625:2018 — Tabela 1: cores de pontas de baixa vazão (até 7,9 L/min) a 300 kPa",
+      "uso": "Somente identificação da classe de vazão. Não substitui o catálogo do modelo exato da ponta.",
+      "unidade": "L/min",
+      "pressaoBase_kPa": 300,
+      "linhas": [
+        {
+          "vazao": 0.2,
+          "tamanho": "0050",
+          "cor": "lilás-azulado",
+          "nomeISO": "Blue lilac",
+          "ral": "4005-P"
+        },
+        {
+          "vazao": 0.25,
+          "tamanho": "0067",
+          "cor": "verde-oliva",
+          "nomeISO": "Olive green",
+          "ral": "6003-P"
+        },
+        {
+          "vazao": 0.3,
+          "tamanho": "0075",
+          "cor": "rosa-claro",
+          "nomeISO": "Light pink",
+          "ral": "3015-P"
+        },
+        {
+          "vazao": 0.4,
+          "tamanho": "01",
+          "cor": "laranja",
+          "nomeISO": "Pure orange",
+          "ral": "2004-P"
+        },
+        {
+          "vazao": 0.6,
+          "tamanho": "015",
+          "cor": "verde",
+          "nomeISO": "Traffic green",
+          "ral": "6024-P"
+        },
+        {
+          "vazao": 0.8,
+          "tamanho": "02",
+          "cor": "amarela",
+          "nomeISO": "Zinc yellow",
+          "ral": "1018-P"
+        },
+        {
+          "vazao": 1.0,
+          "tamanho": "025",
+          "cor": "violeta (lilás)",
+          "nomeISO": "Signal violet",
+          "ral": "4008-P"
+        },
+        {
+          "vazao": 1.2,
+          "tamanho": "03",
+          "cor": "azul",
+          "nomeISO": "Gentian blue",
+          "ral": "5010-P"
+        },
+        {
+          "vazao": 1.4,
+          "tamanho": "035",
+          "cor": "vermelho-púrpura",
+          "nomeISO": "Purple red",
+          "ral": "3004-P"
+        },
+        {
+          "vazao": 1.6,
+          "tamanho": "04",
+          "cor": "vermelha",
+          "nomeISO": "Flame red",
+          "ral": "3000-P"
+        },
+        {
+          "vazao": 2.0,
+          "tamanho": "05",
+          "cor": "marrom",
+          "nomeISO": "Nut brown",
+          "ral": "8011-P"
+        },
+        {
+          "vazao": 2.4,
+          "tamanho": "06",
+          "cor": "cinza",
+          "nomeISO": "Signal grey",
+          "ral": "7004-P"
+        },
+        {
+          "vazao": 3.2,
+          "tamanho": "08",
+          "cor": "branca",
+          "nomeISO": "Traffic white",
+          "ral": "9016-P"
+        },
+        {
+          "vazao": 4.0,
+          "tamanho": "10",
+          "cor": "azul-claro",
+          "nomeISO": "Light blue",
+          "ral": "5012-P"
+        },
+        {
+          "vazao": 4.8,
+          "tamanho": "12",
+          "cor": "vermelho-framboesa",
+          "nomeISO": "Raspberry red",
+          "ral": "3027-P"
+        },
+        {
+          "vazao": 5.6,
+          "tamanho": "14",
+          "cor": "amarelo-oliva",
+          "nomeISO": "Olive yellow",
+          "ral": "1020-P"
+        },
+        {
+          "vazao": 6.0,
+          "tamanho": "15",
+          "cor": "verde-amarelado",
+          "nomeISO": "Yellow green",
+          "ral": "6018-P"
+        },
+        {
+          "vazao": 6.4,
+          "tamanho": "16",
+          "cor": "marrom-alaranjado",
+          "nomeISO": "Orange brown",
+          "ral": "8023-P"
+        },
+        {
+          "vazao": 7.2,
+          "tamanho": "18",
+          "cor": "azul-turquesa",
+          "nomeISO": "Turquoise blue",
+          "ral": "5024-P"
+        }
+      ],
+      "fontes": [
+        {
+          "organizacao": "ISO",
+          "titulo": "ISO 10625:2018 — Equipment for crop protection — Sprayer nozzles — Colour coding for identification",
+          "url": "https://www.iso.org/standard/70624.html",
+          "tipo": "norma",
+          "conferido": true,
+          "pagina": "Seção 5, Tabela 1 (amostra pública)",
+          "trechoLiteral": "The colour of the nozzle shall be that specified in Table 1 and Table 2, on the basis of the nozzle's flow rate at a working pressure of 300 kPa. […] Flow rate at 300 kPa (l/min with relative tolerance of ±5 %)"
+        }
+      ],
+      "observacaoTecnica": "Tamanho e RAL são informativos na norma. A Tabela 2 (alta vazão, acima de 8 L/min) não foi incluída.",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 04/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-04",
+      "toleranciaRelativaClasse": "±5 %"
+    }
+  ],
+  "formulas": [
+    {
+      "id": "F-TAXA-LHA",
+      "descricao": "Taxa de aplicação (L/ha) = 600 × q (L/min por bico) ÷ [v (km/h) × e (m entre bicos)]",
+      "origem": "Conversão de unidades: 1 km/h × 1 m = 1000/60 m²/min; 10 000 m²/ha ÷ (1000/60) = 600.",
+      "tipo": "calculo"
+    },
+    {
+      "id": "F-VAZAO-BICO",
+      "descricao": "Vazão necessária por bico (L/min) = Q (L/ha) × v (km/h) × e (m) ÷ 600",
+      "origem": "Inversão de F-TAXA-LHA.",
+      "tipo": "calculo"
+    },
+    {
+      "id": "F-VAZAO-PRESSAO",
+      "descricao": "q2 = q1 × √(p2 ÷ p1)",
+      "origem": "Lei do orifício (vazão proporcional à raiz quadrada da pressão). Válida para pontas de jato plano/cone sem pré-orifício; para pontas com indução de ar ou pré-orifício, usar a tabela do fabricante.",
+      "tipo": "estimativa"
+    },
+    {
+      "id": "F-VELOCIDADE",
+      "descricao": "Velocidade (km/h) = 3,6 × distância (m) ÷ tempo (s)",
+      "origem": "Conversão de unidades.",
+      "tipo": "calculo"
+    },
+    {
+      "id": "F-POPULACAO",
+      "descricao": "População (plantas ou sementes/ha) = n por metro × 10 000 ÷ espaçamento entre linhas (m)",
+      "origem": "Conversão de unidades.",
+      "tipo": "calculo"
+    },
+    {
+      "id": "F-XREF",
+      "descricao": "Xref (cm) = 100 ÷ sementes por metro planejadas",
+      "origem": "Definição do espaçamento de referência.",
+      "tipo": "calculo"
+    },
+    {
+      "id": "F-DOSE-KGHA",
+      "descricao": "Dose (kg/ha) = massa coletada (kg) × 10 000 ÷ [distância percorrida (m) × largura coletada (m)]",
+      "origem": "Conversão de unidades.",
+      "tipo": "calculo"
+    },
+    {
+      "id": "F-PERDA",
+      "descricao": "Perda (kg/ha) = massa coletada (g) × 10 ÷ área amostrada (m²); sacas/ha = kg/ha ÷ 60",
+      "origem": "Conversão de unidades (1 g/m² = 10 kg/ha).",
+      "tipo": "calculo"
+    },
+    {
+      "id": "F-CV",
+      "descricao": "CV (%) = desvio-padrão amostral ÷ média × 100",
+      "origem": "Estatística descritiva.",
+      "tipo": "calculo"
+    },
+    {
+      "id": "F-DESVIO",
+      "descricao": "Desvio (%) = (medido − referência) ÷ referência × 100",
+      "origem": "Definição.",
+      "tipo": "calculo"
+    },
+    {
+      "id": "F-ESPAC-CLASSES",
+      "descricao": "Duplos: x < 0,5·Xref; aceitáveis: 0,5·Xref ≤ x ≤ 1,5·Xref; falhos: x > 1,5·Xref",
+      "origem": "ABNT (1994) apud Kurachi et al. (1989), conforme Embrapa Soja (Conte, Plantabilidade).",
+      "tipo": "classificacao",
+      "conferido": true
+    },
+    {
+      "id": "F-PERDA-PMI",
+      "descricao": "Perdas nos mecanismos internos: PMI = PTT − PPC (perda total − perda na plataforma de corte)",
+      "origem": "Embrapa Soja, manual do copo medidor (2013), p. 11.",
+      "tipo": "calculo",
+      "conferido": true
+    },
+    {
+      "id": "F-QUEBRA-UMIDADE",
+      "descricao": "Massa final estimada = massa inicial × (100 − umidade inicial) ÷ (100 − umidade final), umidades em base úmida (%)",
+      "origem": "Balanço de matéria seca (a matéria seca se conserva na secagem).",
+      "tipo": "calculo"
+    }
+  ],
+  "tabelasClassificacao": [
+    {
+      "versao": "1.0.0",
+      "equipamentoFamilia": "*",
+      "destino": [
+        "comercializacao",
+        "armazenamento_graos",
+        "agroindustria",
+        "moagem_alimentacao_humana",
+        "racao_animal"
+      ],
+      "etapa": [
+        "recebimento"
+      ],
+      "statusValidacao": "validada",
+      "confianca": "alta",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 no texto consolidado do SISLEGIS/MAPA; recomenda-se revisão por responsável técnico (classificador credenciado).",
+      "dataValidacao": "2026-10-05",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-05",
+          "alteracao": "Criação a partir do texto oficial consolidado (SISLEGIS)."
+        }
+      ],
+      "id": "CLA-SOJA-IN11-GI",
+      "titulo": "Soja — Grupo I (consumo in natura): limites máximos de tolerância (IN 11/2007, Tabela 1)",
+      "produto": "soja",
+      "grupo": {
+        "campo": "grupoSoja",
+        "valor": "I",
+        "rotulo": "Grupo I — soja destinada ao consumo in natura"
+      },
+      "casasDecimais": 1,
+      "defeitos": [
+        {
+          "id": "avariados_total",
+          "rotulo": "Avariados — total",
+          "ajuda": "Soma de queimados, ardidos, mofados, fermentados, germinados, danificados, imaturos e chochos. Picados por percevejo: percentual dividido por 4 e somado aos danificados (Art. 25, III)."
+        },
+        {
+          "id": "ardidos_queimados",
+          "rotulo": "Total de ardidos e queimados",
+          "ajuda": "Parte dos avariados."
+        },
+        {
+          "id": "queimados",
+          "rotulo": "Máximo de queimados",
+          "ajuda": "Parte dos ardidos e queimados."
+        },
+        {
+          "id": "mofados",
+          "rotulo": "Mofados",
+          "ajuda": "Parte dos avariados."
+        },
+        {
+          "id": "esverdeados",
+          "rotulo": "Esverdeados",
+          "ajuda": ""
+        },
+        {
+          "id": "quebrados",
+          "rotulo": "Partidos, quebrados e amassados",
+          "ajuda": "Retidos na peneira de crivos circulares de 3,0 mm."
+        },
+        {
+          "id": "impurezas",
+          "rotulo": "Matérias estranhas e impurezas",
+          "ajuda": "Vazam pela peneira de 3,0 mm, ou ficam retidas sem ser soja (inclui vagens não debulhadas)."
+        }
+      ],
+      "tipos": [
+        {
+          "tipo": "Tipo 1",
+          "limites": {
+            "ardidos_queimados": 1.0,
+            "queimados": 0.3,
+            "mofados": 0.5,
+            "avariados_total": 4.0,
+            "esverdeados": 2.0,
+            "quebrados": 8.0,
+            "impurezas": 1.0
+          }
+        },
+        {
+          "tipo": "Tipo 2",
+          "limites": {
+            "ardidos_queimados": 2.0,
+            "queimados": 1.0,
+            "mofados": 1.5,
+            "avariados_total": 6.0,
+            "esverdeados": 4.0,
+            "quebrados": 15.0,
+            "impurezas": 1.0
+          }
+        }
+      ],
+      "foraDeTipo": "Fora de Tipo",
+      "consequencias": {
+        "graves": {
+          "defeitos": [
+            "ardidos_queimados",
+            "queimados",
+            "mofados"
+          ],
+          "texto": "Art. 6º, § 1º: Fora de Tipo por defeitos graves (queimados, ardidos e mofados) não pode ser comercializada quando destinada diretamente à alimentação humana; pode ser rebeneficiada para enquadramento em tipo quando o somatório desses defeitos for de até 12%."
+        },
+        "impurezas": {
+          "defeitos": [
+            "impurezas"
+          ],
+          "texto": "Art. 6º, § 2º: Fora de Tipo por matérias estranhas e impurezas não pode ser comercializada quando destinada diretamente à alimentação humana; pode ser rebeneficiada para enquadramento em tipo."
+        },
+        "leves": {
+          "defeitos": [
+            "avariados_total",
+            "esverdeados",
+            "quebrados"
+          ],
+          "texto": "Art. 6º, § 3º: Fora de Tipo por defeitos leves pode ser comercializada como se apresenta, desde que identificada como tal, ou rebeneficiada, desdobrada ou recomposta para enquadramento em tipo."
+        }
+      },
+      "desclassificacao": [
+        {
+          "rotulo": "Defeitos graves (queimados, ardidos e mofados) acima de 12%",
+          "soma": [
+            "ardidos_queimados",
+            "mofados"
+          ],
+          "limiteMaxExclusivo": 12,
+          "artigo": "Art. 8º, II (soja destinada diretamente à alimentação humana)"
+        }
+      ],
+      "observacaoTecnica": "O total de ardidos e queimados já inclui os queimados; defeitos graves = ardidos e queimados + mofados. Art. 27: enquadrar pelo pior tipo encontrado. Resultado de cada defeito com 1 casa decimal (Art. 25, VII). O Grupo I foi associado ao limite do Art. 8º, II (alimentação humana direta). A umidade não entra no enquadramento (Art. 4º, § 4º).",
+      "fontes": [
+        {
+          "organizacao": "MAPA",
+          "titulo": "Instrução Normativa nº 11, de 15/05/2007 — Regulamento Técnico da Soja (texto consolidado com a IN nº 37/2007)",
+          "ano": 2007,
+          "url": "https://sistemasweb.agricultura.gov.br/sislegis/action/detalhaAto.do?method=visualizarAtoPortalMapa&chave=1194426968",
+          "tipo": "norma",
+          "conferido": true,
+          "pagina": "Anexo, Art. 4º, § 3º, I — Tabela 1; Arts. 6º, 8º, 25 e 27",
+          "trechoLiteral": "Tabela 1 - Limites máximos de tolerância, expressos em porcentagem, para a soja do Grupo I: Tipo | Avariados [Total de Ardidos e Queimados | Máximo de Queimados | Mofados | Total (1)] | Esverdeados | Partidos Quebrados e Amassados | Matérias Estranhas e Impurezas — 1 | 1,0 | 0,3 | 0,5 | 4,0 | 2,0 | 8,0 | 1,0 — 2 | 2,0 | 1,0 | 1,5 | 6,0 | 4,0 | 15,0 | 1,0. (1) A soma de queimados, ardidos, mofados, fermentados, germinados, danificados, imaturos e chochos. Art. 8º [...] II - percentual de defeitos graves superior a 12% (doze por cento) para a soja destinada diretamente à alimentação humana",
+          "copiaLocal": "referencias/fontes/mapa/IN-11-2007-soja.txt"
+        }
+      ]
+    },
+    {
+      "versao": "1.0.0",
+      "equipamentoFamilia": "*",
+      "destino": [
+        "comercializacao",
+        "armazenamento_graos",
+        "agroindustria",
+        "moagem_alimentacao_humana",
+        "racao_animal"
+      ],
+      "etapa": [
+        "recebimento"
+      ],
+      "statusValidacao": "validada",
+      "confianca": "alta",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 no texto consolidado do SISLEGIS/MAPA; recomenda-se revisão por responsável técnico (classificador credenciado).",
+      "dataValidacao": "2026-10-05",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-05",
+          "alteracao": "Criação a partir do texto oficial consolidado (SISLEGIS)."
+        }
+      ],
+      "id": "CLA-SOJA-IN11-GII",
+      "titulo": "Soja — Grupo II (outros usos): limites máximos de tolerância (IN 11/2007, Tabela 2)",
+      "produto": "soja",
+      "grupo": {
+        "campo": "grupoSoja",
+        "valor": "II",
+        "rotulo": "Grupo II — soja destinada a outros usos"
+      },
+      "casasDecimais": 1,
+      "defeitos": [
+        {
+          "id": "avariados_total",
+          "rotulo": "Avariados — total",
+          "ajuda": "Soma de queimados, ardidos, mofados, fermentados, germinados, danificados, imaturos e chochos. Picados por percevejo: percentual dividido por 4 e somado aos danificados (Art. 25, III)."
+        },
+        {
+          "id": "ardidos_queimados",
+          "rotulo": "Total de ardidos e queimados",
+          "ajuda": "Parte dos avariados."
+        },
+        {
+          "id": "queimados",
+          "rotulo": "Máximo de queimados",
+          "ajuda": "Parte dos ardidos e queimados."
+        },
+        {
+          "id": "mofados",
+          "rotulo": "Mofados",
+          "ajuda": "Parte dos avariados."
+        },
+        {
+          "id": "esverdeados",
+          "rotulo": "Esverdeados",
+          "ajuda": ""
+        },
+        {
+          "id": "quebrados",
+          "rotulo": "Partidos, quebrados e amassados",
+          "ajuda": "Retidos na peneira de crivos circulares de 3,0 mm."
+        },
+        {
+          "id": "impurezas",
+          "rotulo": "Matérias estranhas e impurezas",
+          "ajuda": "Vazam pela peneira de 3,0 mm, ou ficam retidas sem ser soja (inclui vagens não debulhadas)."
+        }
+      ],
+      "tipos": [
+        {
+          "tipo": "Padrão Básico",
+          "limites": {
+            "ardidos_queimados": 4.0,
+            "queimados": 1.0,
+            "mofados": 6.0,
+            "avariados_total": 8.0,
+            "esverdeados": 8.0,
+            "quebrados": 30.0,
+            "impurezas": 1.0
+          }
+        }
+      ],
+      "foraDeTipo": "Fora do Padrão Básico",
+      "consequencias": {
+        "graves": {
+          "defeitos": [
+            "ardidos_queimados",
+            "queimados",
+            "mofados"
+          ],
+          "texto": "Art. 6º, § 1º: Fora de Tipo por defeitos graves (queimados, ardidos e mofados) não pode ser comercializada quando destinada diretamente à alimentação humana; pode ser rebeneficiada para enquadramento em tipo quando o somatório desses defeitos for de até 12%."
+        },
+        "impurezas": {
+          "defeitos": [
+            "impurezas"
+          ],
+          "texto": "Art. 6º, § 2º: Fora de Tipo por matérias estranhas e impurezas não pode ser comercializada quando destinada diretamente à alimentação humana; pode ser rebeneficiada para enquadramento em tipo."
+        },
+        "leves": {
+          "defeitos": [
+            "avariados_total",
+            "esverdeados",
+            "quebrados"
+          ],
+          "texto": "Art. 6º, § 3º: Fora de Tipo por defeitos leves pode ser comercializada como se apresenta, desde que identificada como tal, ou rebeneficiada, desdobrada ou recomposta para enquadramento em tipo."
+        }
+      },
+      "desclassificacao": [
+        {
+          "rotulo": "Defeitos graves (queimados, ardidos e mofados) acima de 40%",
+          "soma": [
+            "ardidos_queimados",
+            "mofados"
+          ],
+          "limiteMaxExclusivo": 40,
+          "artigo": "Art. 8º, III (soja destinada a outros usos)"
+        }
+      ],
+      "observacaoTecnica": "O total de ardidos e queimados já inclui os queimados; defeitos graves = ardidos e queimados + mofados. Art. 6º: não atender o Padrão Básico = Fora de Tipo (grafado \"Fora do Padrão Básico\", Art. 33, § 5º). A IN não estabelece desconto: descontos são acordos comerciais. A umidade não entra no enquadramento (Art. 4º, § 4º).",
+      "fontes": [
+        {
+          "organizacao": "MAPA",
+          "titulo": "Instrução Normativa nº 11, de 15/05/2007 — Regulamento Técnico da Soja (texto consolidado com a IN nº 37/2007)",
+          "ano": 2007,
+          "url": "https://sistemasweb.agricultura.gov.br/sislegis/action/detalhaAto.do?method=visualizarAtoPortalMapa&chave=1194426968",
+          "tipo": "norma",
+          "conferido": true,
+          "pagina": "Anexo, Art. 4º, § 3º, II — Tabela 2; Arts. 6º, 8º, 25, 27 e 33",
+          "trechoLiteral": "Tabela 2 - Limites máximos de tolerância, expressos em porcentagem, para a soja do Grupo II: Tipo | Avariados [Total de Ardidos e Queimados | Máximo de Queimados | Mofados | Total (1)] | Esverdeados | Partidos Quebrados e Amassados | Matérias Estranhas e Impurezas — Padrão Básico | 4,0 | 1,0 | 6,0 | 8,0 | 8,0 | 30,0 | 1,0. (1) A soma de queimados, ardidos, mofados, fermentados, germinados, danificados, imaturos e chochos. Art. 8º [...] III - percentual de defeitos graves superior a 40% (quarenta por cento) para a soja destinada a outros usos",
+          "copiaLocal": "referencias/fontes/mapa/IN-11-2007-soja.txt"
+        }
+      ]
+    },
+    {
+      "versao": "1.0.0",
+      "equipamentoFamilia": "*",
+      "destino": [
+        "comercializacao",
+        "armazenamento_graos",
+        "agroindustria",
+        "moagem_alimentacao_humana",
+        "racao_animal"
+      ],
+      "etapa": [
+        "recebimento"
+      ],
+      "statusValidacao": "validada",
+      "confianca": "alta",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 no texto consolidado do SISLEGIS/MAPA; recomenda-se revisão por responsável técnico (classificador credenciado).",
+      "dataValidacao": "2026-10-05",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-05",
+          "alteracao": "Criação a partir do texto oficial consolidado (SISLEGIS)."
+        }
+      ],
+      "id": "CLA-MILHO-IN60",
+      "titulo": "Milho — limites máximos de tolerância (IN 60/2011, Tabela 1)",
+      "produto": "milho",
+      "casasDecimais": 2,
+      "defeitos": [
+        {
+          "id": "avariados_total",
+          "rotulo": "Grãos avariados — total",
+          "ajuda": "Ardidos, chochos ou imaturos, fermentados, germinados, gessados e mofados."
+        },
+        {
+          "id": "ardidos",
+          "rotulo": "Grãos ardidos",
+          "ajuda": "Parte dos avariados (inclui grãos totalmente queimados)."
+        },
+        {
+          "id": "quebrados",
+          "rotulo": "Grãos quebrados",
+          "ajuda": "Vazam pela peneira de 5,00 mm e ficam retidos na de 3,00 mm."
+        },
+        {
+          "id": "impurezas",
+          "rotulo": "Matérias estranhas e impurezas",
+          "ajuda": ""
+        },
+        {
+          "id": "carunchados",
+          "rotulo": "Carunchados",
+          "ajuda": "Atacados por pragas de grãos armazenados."
+        }
+      ],
+      "tipos": [
+        {
+          "tipo": "Tipo 1",
+          "limites": {
+            "ardidos": 1.0,
+            "avariados_total": 6.0,
+            "quebrados": 3.0,
+            "impurezas": 1.0,
+            "carunchados": 2.0
+          }
+        },
+        {
+          "tipo": "Tipo 2",
+          "limites": {
+            "ardidos": 2.0,
+            "avariados_total": 10.0,
+            "quebrados": 4.0,
+            "impurezas": 1.5,
+            "carunchados": 3.0
+          }
+        },
+        {
+          "tipo": "Tipo 3",
+          "limites": {
+            "ardidos": 3.0,
+            "avariados_total": 15.0,
+            "quebrados": 5.0,
+            "impurezas": 2.0,
+            "carunchados": 4.0
+          }
+        }
+      ],
+      "foraDeTipo": "Fora de Tipo",
+      "consequencias": {
+        "comercializavel": {
+          "defeitos": [
+            "ardidos",
+            "avariados_total",
+            "carunchados"
+          ],
+          "texto": "Art. 5º, § 3º, I, a: Fora de Tipo por grãos ardidos, total de avariados ou carunchados pode ser comercializado como se apresenta, desde que identificado como Fora de Tipo, ou rebeneficiado, desdobrado ou recomposto para enquadramento em tipo."
+        },
+        "rebeneficiar": {
+          "defeitos": [
+            "quebrados",
+            "impurezas"
+          ],
+          "texto": "Art. 5º, § 3º, I, b: Fora de Tipo por grãos quebrados ou matérias estranhas e impurezas não pode ser comercializado como se apresenta; deve ser rebeneficiado, desdobrado ou recomposto para enquadramento em tipo."
+        }
+      },
+      "desclassificacao": [
+        {
+          "rotulo": "Ardidos acima de 5,00%",
+          "soma": [
+            "ardidos"
+          ],
+          "limiteMaxExclusivo": 5.0,
+          "artigo": "Art. 5º, § 3º, II, d"
+        },
+        {
+          "rotulo": "Total de avariados acima de 20,00%",
+          "soma": [
+            "avariados_total"
+          ],
+          "limiteMaxExclusivo": 20.0,
+          "artigo": "Art. 5º, § 3º, II, d"
+        },
+        {
+          "rotulo": "Carunchados acima de 8,00%",
+          "soma": [
+            "carunchados"
+          ],
+          "limiteMaxExclusivo": 8.0,
+          "artigo": "Art. 5º, § 3º, II, d"
+        }
+      ],
+      "observacaoTecnica": "Não se aplica ao milho pipoca (Art. 1º, parágrafo único). Resultado de cada defeito com 2 casas decimais. Desclassificação também por mau estado de conservação, sementes tratadas ou tóxicas e odor estranho (Art. 5º, § 3º, II, a–c) — verificação visual do classificador, não calculada. Grupo e classe não interferem no tipo. Vigência: 1º/09/2013 (IN 18/2012).",
+      "fontes": [
+        {
+          "organizacao": "MAPA",
+          "titulo": "Instrução Normativa nº 60, de 22/12/2011 — Regulamento Técnico do Milho (texto consolidado com a IN nº 18/2012)",
+          "ano": 2011,
+          "url": "https://sistemasweb.agricultura.gov.br/sislegis/action/detalhaAto.do?method=visualizarAtoPortalMapa&chave=1739574738",
+          "tipo": "norma",
+          "conferido": true,
+          "pagina": "Art. 5º, § 3º — Tabela 1, incisos I e II",
+          "trechoLiteral": "TABELA 1 - Limites máximos de tolerância expressos em percentual (%): Enquadramento | Grãos avariados [Ardidos | Total] | Grãos quebrados | Matérias Estranhas e Impurezas | Carunchados — Tipo 1 | 1,00 | 6,00 | 3,00 | 1,00 | 2,00 — Tipo 2 | 2,00 | 10,00 | 4,00 | 1,50 | 3,00 — Tipo 3 | 3,00 | 15,00 | 5,00 | 2,00 | 4,00 — Fora de Tipo | 5,00 | 20,00 | Maior que 5,00 | Maior que 2,00 | 8,00. I - será considerado como Fora de Tipo o milho que não atender os parâmetros estabelecidos para o Tipo 3 [...] II - será desclassificado [...] d) limites de tolerâncias acima do estabelecido para os defeitos ardidos, total de avariados ou carunchados previstos na Tabela 1 desta Instrução Normativa para Fora de Tipo.",
+          "copiaLocal": "referencias/fontes/mapa/IN-60-2011-milho.txt"
+        }
+      ]
+    }
+  ]
+}

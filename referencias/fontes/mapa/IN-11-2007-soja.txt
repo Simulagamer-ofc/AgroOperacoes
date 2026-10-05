@@ -1,0 +1,445 @@
+
+Sistema Integrado de Legislação
+ Ministério da Agricultura, Pecuária e Abastecimento
+ | 
+ BINAGRI - SISLEGIS
+ | 
+ Instrução Normativa 11/2007
+ 16/05/2007
+ | 
+ MINISTÉRIO DA AGRICULTURA, PECUÁRIA E ABASTECIMENTO
+GABINETE DO MINISTRO 
+INSTRUÇÃO NORMATIVA Nº 11, DE 15 DE MAIO DE 2007 
+O MINISTRO DE ESTADO DA AGRICULTURA, PECUÁRIA E ABASTECIMENTO, no uso da atribuição
+que lhe confere o art. 2º, do Decreto nº 5.741, de 30 de março de 2006, tendo em vista
+o disposto na Lei nº 9.972, de 25 de maio de 2000, no Decreto nº 3.664, de 17 de
+novembro de 2000, e o que consta do Processo nº 21000.014080/2005-73, resolve:
+.Art. 1º Estabelecer o Regulamento Técnico da Soja, definindo o seu padrão oficial de
+classificação, com os requisitos de identidade e qualidade intrínseca e extrínseca, a
+amostragem e a marcação ou rotulagem, na forma do Anexo.
+.Art. 2º Na soja destinada à exportação, os aspectos relativos à sua identidade e
+qualidade, não contemplados nos contratos referentes a essa operação, observarão como
+referência o previsto nesta Instrução Normativa.
+.Art. 3º As dúvidas porventura surgidas na aplicação da presente Instrução
+Normativa serão resolvidas pelo Ministério da Agricultura, Pecuária e Abastecimento.
+.Art. 4º Esta Instrução Normativa entra em vigor no prazo de 60 (sessenta) dias a
+partir da data de sua publicação.
+.Art. 5º Fica revogada a Portaria MA nº 262, de 23 de novembro de 1983.
+REINHOLD STEPHANES 
+ANEXO 
+REGULAMENTO TÉCNICO DA SOJA 
+CAPÍTULO I 
+DISPOSIÇÕES GERAIS 
+Art. 1º O presente Regulamento Técnico tem por objetivo definir o padrão oficial de
+classificação da soja, considerando os seus requisitos de identidade e qualidade
+intrínseca e extrínseca, de amostragem e de marcação ou rotulagem.
+Art. 2º Para efeito deste Regulamento, considera-se:
+I - soja: grãos provenientes da espécie Glycine max (L) Merrill;
+II - identidade: conjunto de parâmetros ou características técnicas que permitem
+identificar ou caracterizar um produto ou processo quanto aos aspectos botânicos, de
+aparência, metodologia de preparo, natureza ou forma de processamento, beneficiamento ou
+industrialização, modo de apresentação, conforme o caso;
+III - qualidade: conjunto de parâmetros ou características extrínsecas ou
+intrínsecas de um produto ou um processo, que permitem determinar as suas
+especificações quali-quantitativas, mediante aspectos relativos à tolerância de defeitos, medida 
+ou teor de fatores essenciais de composição, características organolépticas, fatores higiênico-
+sanitários ou tecnológicos;
+IV - avariados: grãos ou pedaços de grãos que se apresentam queimados, ardidos,
+mofados, fermentados, germinados, danificados, imaturos e chochos:
+a) queimados: grãos ou pedaços de grãos carbonizados;
+b) ardidos: grãos ou pedaços de grãos que se apresentam visivelmente fermentados em
+sua totalidade e com coloração marrom escura acentuada, afetando o cotilédone; (Redação dada pelo(a) Instrução Normativa 37/2007/MAPA)
+_______________________________________________ Redação(ões) Anterior(es)
+c) mofados: grãos ou pedaços de grãos que se apresentam com fungos (mofo ou bolor)
+visíveis a olho nu;
+d) fermentados: grãos ou pedaços de grãos que, em razão do processo de
+fermentação, tenham sofrido alteração visível na cor do cotilédone que não aquela
+definida para os ardidos;
+e) germinados: grãos ou pedaços de grãos que apresentam visivelmente a emissão da
+radícula;
+f) danificados: grãos ou pedaços de grãos que se apresentam com manchas na polpa
+alterados e deformados, perfurados ou atacados por doenças ou insetos, em qualquer de
+suas fases evolutivas;
+g) imaturos: grãos de formato oblongo, que se apresentam intensamente verdes, por não
+terem atingido seu desenvolvimento fisiológico completo e que podem se apresentar
+enrugados; e (Redação dada pelo(a) Instrução Normativa 37/2007/MAPA)
+_______________________________________________ Redação(ões) Anterior(es)
+h) chochos: grãos com formato irregular que se apresentam enrugados, atrofiados e
+desprovidos de massa interna. (Acrescentado(a) pelo(a) Instrução Normativa 37/2007/MAPA)
+V - amassados: grãos que se apresentam esmagados, com os cotilédones e tegumento
+rompidos por danos mecânicos, estando excluídos deste defeito os grãos que se
+apresentam trincados em seu tegumento;
+VI - partidos e quebrados: pedaços de grãos, inclusive cotilédones, que ficam
+retidos na peneira de crivos circulares de 3,0 mm (três milímetros) de diâmetro;
+VII - esverdeados: grãos ou pedaços de grãos com desenvolvimento fisiológico
+completo que apresentam coloração totalmente esverdeada no cotilédone;
+VIII - mancha púrpura: grãos que apresentam manchas arroxeadas no tegumento;
+IX - mancha café ou derramamento de hilo: grãos que apresentam manchas escuras a
+partir do hilo;
+X - matérias estranhas e impurezas: todo material que vazar através de peneiras que
+tenham as seguintes características: espessura de chapa de 0,8 mm (zero vírgula oito
+milímetros); quantidade de furos de 400/100 cm2 (quatrocentos por cem centímetros
+quadrados);
+diâmetro dos furos de 3,0 mm (três milímetros) ou que nelas ficarem retidos, mas que
+não seja soja, inclusive as vagens não debulhadas; a casca do grão de soja (película)
+retida na peneira não é considerada impureza;
+XI - umidade: percentual de água encontrado na amostra do produto isenta de matérias
+estranhas e impurezas, determinado por um método oficial ou por aparelho que dê
+resultado equivalente;
+XII - defeitos graves: aqueles cuja incidência sobre o grão comprometem seriamente a
+aparência, conservação e qualidade do produto, restringindo ou inviabilizando seu uso;
+são os grãos ardidos, mofados e queimados;
+XIII - defeitos leves: aqueles cuja incidência sobre o grão não restringem ou
+inviabilizem a utilização do produto, por não comprometer seriamente sua aparência,
+conservação e qualidade; são os grãos fermentados, danificados, germinados, imaturos,
+chochos, esverdeados, amassados, partidos e quebrados;
+XIV - lote: quantidade de produto com especificações de identidade, qualidade e
+apresentação perfeitamente definidas;
+XV - substâncias nocivas à saúde: substâncias ou agentes estranhos de origem
+biológica, química ou física que sejam nocivos à saúde, tais como as micotoxinas, os
+resíduos de produtos fitossanitários ou outros contaminantes, previstos em legislação
+específica vigente, não sendo assim considerado o produto cujo valor se verifica dentro
+dos limites máximos previstos;
+XVI - matérias macroscópicas: aquelas estranhas ao produto que podem ser detectadas
+por observação direta (olho nu), sem auxílio de instrumentos ópticos e que estão
+relacionadas ao risco à saúde humana segundo legislação específica vigente;
+XVII - matérias microscópicas: aquelas estranhas ao produto que podem ser detectadas
+com auxílio de instrumentos ópticos e que estão relacionadas ao risco à saúde humana
+segundo legislação específica vigente;
+XVIII - partículas com toxicidade desconhecida: partículas estranhas, grãos ou
+partes desses, diferentes de sua condição natural, com suspeitas de toxicidade.
+CAPÍTULO II 
+REQUISITOS DE IDENTIDADE E QUALIDADE INTRÍNSECA E EXTRÍNSECA 
+Art. 3º O requisito de identidade da soja é identificado pela própria espécie do
+produto, na forma disposta no inciso I, art. 2º, do Capítulo I, deste Regulamento
+Técnico.
+Art. 4º Os requisitos de qualidade da soja serão definidos em Grupos, em função do
+uso proposto; em Classes, em função da coloração do grão e em Tipos, em função da
+qualidade de acordo com os percentuais de tolerância estabelecidos nas Tabelas 1 e 2,
+deste Capítulo.
+§ 1º De acordo com o uso proposto, a soja será classificada em dois Grupos, sendo o
+interessado responsável por essa informação:
+I - Grupo I: soja destinada ao consumo in natura;
+II - Grupo II: soja destinada a outros usos.
+§ 2º De acordo com a coloração do grão, a soja será classificada em 2 (duas)
+Classes, assim definidas:
+I - Amarela: é a constituída de soja que apresenta o tegumento de cor amarela, verde
+ou pérola, cujo interior se mostra amarelo, amarelado, claro ou esbranquiçado em corte
+transversal, admitindo-se até 10% (dez por cento) de grãos de outras cores;
+II - Misturada: é aquela que não se enquadra na Classe Amarela.
+§ 3º A soja do Grupo I e do Grupo II será classificada em 2 Tipos, definidos em
+função da sua qualidade, de acordo com os percentuais de tolerância, estabelecidos nas
+Tabelas 1 e 2, a seguir:
+I - Tabela 1 - Limites máximos de tolerância, expressos em porcentagem, para a soja
+do Grupo I:
+ Tipo | 
+ Avariados | 
+ Esverdeados | 
+ Partidos Quebrados e Amassados | 
+ Matérias Estranhas e Impurezas | 
+ Total de Ardidos e Queimados | 
+ Máximo de Queimados | 
+ Mofados | 
+ Total (1) | 
+ 1 | 
+ 1,0 | 
+ 0,3 | 
+ 0,5 | 
+ 4,0 | 
+ 2,0 | 
+ 8,0 | 
+ 1,0 | 
+ 2 | 
+ 2,0 | 
+ 1,0 | 
+ 1,5 | 
+ 6,0 | 
+ 4,0 | 
+ 15,0 | 
+ 1,0 | 
+(1) A soma de queimados, ardidos, mofados, fermentados, germinados, danificados,
+imaturos e chochos.
+II - Tabela 2 - Limites máximos de tolerância, expressos em porcentagem, para a soja
+do Grupo II:
+ Tipo | 
+ Avariados | 
+ Esverdeados | 
+ Partidos Quebrados e Amassados | 
+ Matérias Estranhas e Impurezas | 
+ Total de Ardidos e Queimados | 
+ Máximo de Queimados | 
+ Mofados | 
+ Total (1) | 
+ Padrão | 
+ 4,0 | 
+ 1,0 | 
+ 6,0 | 
+ 8,0 | 
+ 8,0 | 
+ 30,0 | 
+ 1,0 | 
+ Básico | 
+ | 
+ | 
+ | 
+ | 
+ | 
+ | 
+ | 
+(1) A soma de queimados, ardidos, mofados, fermentados, germinados, danificados,
+imaturos e chochos.
+§ 4º A umidade deverá ser obrigatoriamente determinada, mas não será considerada
+para efeito de enquadramento em tipos, sendo recomendado o percentual máximo de 14%
+(catorze por cento).
+Art. 5º A soja deverá se apresentar fisiologicamente desenvolvida, sã, limpa, seca e
+isenta de odores estranhos ou impróprios ao produto.
+Parágrafo único. Os limites e procedimentos a serem adotados quando da verificação
+da presença de partículas com toxicidade desconhecida deverão ser os dispostos na
+Instrução Normativa nº 15, de 9 de junho de 2004.
+Art. 6º Será classificado como Fora de Tipo a soja que não atender, em um ou mais
+aspectos, às especificações de qualidade previstas nas Tabelas 1 e 2, do Capítulo II,
+deste Regulamento Técnico, para o Tipo 2, na soja do Grupo I e para o Padrão Básico, na
+soja do Grupo II.
+§ 1º A soja classificada como Fora de Tipo por defeitos graves (queimados, ardidos e
+mofados) não poderá ser comercializada quando destinada diretamente à alimentação
+humana, podendo ser rebeneficiada para efeito de enquadramento em tipo quando o somatório
+do percentual destes defeitos for de até 12% (doze por cento).
+§ 2º A soja classificada como Fora de Tipo por matérias estranhas e impurezas não
+poderá ser comercializada quando destinada diretamente à alimentação humana, podendo
+ser rebeneficiada para efeito de enquadramento em Tipo.
+§ 3º A soja classificada como Fora de Tipo por defeitos leves poderá ser:
+I - comercializada como se apresenta, desde que identificada como tal;
+II - rebeneficiada, desdobrada ou recomposta para efeito de enquadramento em tipo.
+Art. 7º O lote de soja que apresentar, por quilograma de amostra, duas ou mais bagas
+de mamona ou outras sementes de espécies tóxicas em seu estado natural deverá
+obrigatoriamente ser rebeneficiado antes de se proceder à sua classificação.
+Art. 8º Será desclassificada e proibida a sua internalização e comercialização, a
+soja que apresentar uma ou mais das características indicadas abaixo:
+I - mau estado de conservação;
+II - percentual de defeitos graves superior a 12% (doze por cento) para a soja
+destinada diretamente à alimentação humana;
+III - percentual de defeitos graves superior a 40% (quarenta por cento) para a soja
+destinada a outros usos;
+IV - odor estranho (ácido ou azedo) de qualquer natureza, impróprio ao produto, que
+inviabilize a sua utilização;
+V - presença de insetos vivos, mortos ou partes desses no produto já classificado e
+destinado diretamente à alimentação humana;
+VI - presença de sementes tóxicas, na soja destinada diretamente à alimentação
+humana.
+Art. 9º Sempre que julgar necessário, o Ministério da Agricultura, Pecuária e
+Abastecimento poderá exigir análise de substâncias nocivas à saúde, matérias
+macroscópicas, microscópicas e microbiológicas relacionadas ao risco à saúde humana,
+de acordo com a legislação específica vigente, independentemente do resultado da
+classificação do produto, desde que o mesmo já não tenha sido considerado
+desclassificado.
+Parágrafo único. A soja será desclassificada quando da análise de que trata o caput
+se constatar a presença das referidas substâncias em limites superiores ao máximo
+estabelecido na legislação vigente.
+Art. 10. Quando a pessoa jurídica responsável pela classificação constatar a
+desclassificação do produto, esta deverá comunicar o fato ao Setor Técnico Competente
+da Superintendência Federal de Agricultura- SFA da Unidade da Federação onde o produto
+se encontra estocado, para as providências cabíveis.
+Art. 11. Caberá ao Ministério da Agricultura, Pecuária e Abastecimento a decisão
+quanto ao destino do produto desclassificado, podendo, para isso, articular-se nas
+situações em que couber, com outros órgãos oficiais.
+CAPÍTULO III 
+REQUISITOS DE AMOSTRAGEM 
+Art. 12. Previamente à amostragem, deverão ser observadas as condições gerais do
+lote do produto e havendo qualquer anormalidade, tais como presença de insetos vivos ou a
+existência de quaisquer das características desclassificantes (odor estranho, mau estado
+de conservação, aspecto generalizado de mofo, entre outras), deverão ser adotados os
+procedimentos específicos previstos nos arts.7º, 8º, 9º, 10 e 11, do Capítulo II,
+deste Regulamento Técnico.
+Parágrafo único. Havendo qualquer anormalidade, deve-se exigir, previamente à
+classificação, o expurgo ou qualquer outra forma de controle ou beneficiamento do
+produto, conforme o caso, na forma estabelecida na legislação específica.
+Art. 13. Responderá legalmente pela representatividade da amostra, em relação ao
+lote ou volume do qual se originou, a pessoa física ou jurídica que proceder à coleta
+da mesma.
+Art. 14. A coleta das amostras em transporte rodoviário, ferroviário e hidroviário
+deve ser realizada em pontos uniformemente distribuídos no veículo, de maneira
+aleatória, conforme critérios estabelecidos na Tabela 3 - Número de pontos de coleta de
+amostras de acordo com o tamanho do lote, em profundidades que atinjam o terço superior,
+o meio e o terço inferior da carga a ser amostrada, a seguir:
+Tabela 3 - Número de pontos de coleta de amostra de acordo com o tamanho do lote
+ Quantidade do produto que constitui o lote (toneladas)
+ | 
+ Número mínimo de pontos a serem amostrados | 
+ até 15 toneladas | 
+ 5 | 
+ mais de 15 até 30 toneladas | 
+ 8 | 
+ mais de 30 toneladas | 
+ 11 | 
+Parágrafo único. O total de produto amostrado deverá ser homogeneizado, quarteado e
+reduzido em 3kg (três quilogramas) para compor, no mínimo, 3 (três) amostras,
+constituídas de 1kg (um quilograma) cada, que serão representativas do lote.
+Art. 15. A coleta das amostras em equipamentos de movimentação ou grãos em movimento
+quando das operações de carga, descarga ou transilagem deve ser feita com equipamento
+apropriado, realizando-se coletas de 500g (quinhentos gramas) nas correias transportadoras
+e extraindo-se, no mínimo, 10kg (dez quilogramas) de produto para cada fração de 500t
+(quinhentas toneladas) da quantidade de produto a ser amostrada, em intervalos regulares
+de tempos iguais, calculados em função da vazão de cada terminal.
+§ 1º Os 10kg (dez quilogramas) extraídos de cada fração de 500t (quinhentas
+toneladas) deverão ser homogeneizados, quarteados e reservados para comporem a amostra
+que será analisada a cada 5000t (cinco mil toneladas) do lote.
+§ 2º A cada 5000t (cinco mil toneladas), juntar as 10 (dez) amostras parciais que
+foram reservadas para compor a amostra a ser analisada conforme previsto no § 1º deste
+artigo, homogeneizar e quartear no mínimo por 3 (três) vezes até obter 3kg (três
+quilogramas) de produto para compor, no mínimo, as 3 (três) vias de amostras,
+constituídas de 1kg (um quilograma) cada.
+Art. 16. A coleta de amostras em silos e armazéns graneleiros será feita no sistema
+de recepção ou expedição da unidade armazenadora, procedendo-se segundo as
+instruções para amostragem em equipamento de movimentação previstas no art. 15 deste
+Regulamento Técnico.
+Art. 17. A coleta de amostra em produto ensacado será feita ao acaso, em no mínimo
+10% (dez por cento) dos sacos, devendo abranger todas as faces da pilha formadas pelos
+sacos.
+Parágrafo único. A quantidade mínima de coleta será de 30g (trinta gramas) por
+saco, até completar no mínimo 5kg (cinco quilogramas) do produto, que deverá ser
+homogeneizado, quarteado e reduzido em 3kg (três quilogramas) para compor, no mínimo, 3
+(três) amostras, constituídas de 1kg (um quilograma) cada, que serão representativas do
+lote.
+Art. 18. Na coleta de amostra em produto empacotado, deverá ser retirado um número de
+pacotes que totalize no mínimo 10kg (dez quilogramas), independentemente do tamanho do
+lote, uma vez que o produto empacotado apresenta-se homogêneo.
+Parágrafo único. O produto extraído deverá ser homogeneizado, quarteado e reduzido
+a 3kg (três quilogramas) para compor, no mínimo, as 3 (três) amostras, de 1kg (um
+quilograma) cada, que serão representativas do lote.
+Art. 19. A quantidade remanescente do processo de amostragem, homogeneização e
+quarteamento será recolocada no lote ou devolvida ao detentor do produto.
+Art. 20. As amostras extraídas conforme os procedimentos descritos neste Capítulo
+deverão ser devidamente acondicionadas, lacradas, identificadas e autenticadas.
+Parágrafo único. As vias das amostras coletadas terão a seguinte destinação: 1
+(uma) via deverá ser entregue ao interessado e as demais vias serão destinadas à
+Empresa ou Entidade que efetuará a classificação, sendo que uma dessas deverá ficar
+como contraprova.
+Art. 21. Quando a amostra for coletada e enviada pelo interessado, deverão ser
+observados os mesmos critérios e procedimentos de amostragem previstos neste Regulamento
+Técnico.
+Art. 22. Estando o produto em condições de ser classificado, deve-se homogeneizar a
+amostra destinada à classificação, reduzi-la pelo processo de quarteamento até a
+obtenção da amostra de trabalho, ou seja, no mínimo 125g (cento e vinte e cinco
+gramas), pesada em balança previamente aferida, anotando-se o peso obtido para efeito de
+cálculo dos percentuais de tolerâncias previstos nas Tabelas 1 e 2, do Capítulo II,
+deste Regulamento Técnico.
+Art. 23. Do restante da amostra destinada à classificação de 1kg (um quilograma),
+deve-se obter ainda pelo processo de quarteamento uma subamostra destinada à
+determinação da umidade, da qual se retirará as matérias estranhas e impurezas.
+§ 1º O peso da subamostra deverá estar de acordo com as recomendações do
+fabricante do equipamento utilizado para verificação da umidade.
+§ 2º Uma vez verificada a umidade, deve-se anotar o valor encontrado no Laudo e no
+Certificado de Classificação.
+Art. 24. De posse da amostra de trabalho, deve-se utilizar a peneira de crivos
+circulares de 3,0 mm (três milímetros) de diâmetro, executando movimentos contínuos e
+uniformes durante 30s (trinta segundos), observando-se os critérios abaixo:
+I - as vagens não debulhadas serão consideradas como impureza;
+II - a película do grão da soja que ficar retida na peneira não será considerada
+impureza;
+III - as impurezas e matérias estranhas que ficarem retidas na peneira serão catadas
+manualmente, adicionadas e pesadas às que vazarem na peneira e determinado o seu
+percentual, anotando-se o valor encontrado no laudo.
+Art. 25. Para a determinação dos defeitos, deve-se aferir o peso da amostra isenta de
+matérias estranhas e impurezas, anotando o peso obtido no laudo de classificação, o
+qual será utilizado posteriormente para o cálculo do percentual de defeitos.
+Parágrafo único. Posteriormente, deve-se proceder à separação dos grãos avariados
+(queimados, ardidos, mofados, fermentados, germinados, danificados, imaturos e chochos),
+esverdeados, quebrados, partidos e amassados, observando-se os seguintes critérios:
+I - sempre que houver dúvidas quanto à identificação de algum defeito no grão de
+soja, o mesmo deverá ser cortado, no sentido transversal aos cotilédones, na região
+afetada;
+II - caso o grão apresente mais de um defeito, prevalecerá o defeito mais grave para
+efeito de classificação e enquadramento em tipo, considerando-se a seguinte escala de
+gravidade em ordem decrescente: queimado, ardido, mofado, fermentado, esverdeado, germinado, 
+danificado, imaturo,
+chocho, amassado, partido e quebrado;
+III - no caso dos grãos danificados, separar os grãos atacados por insetos sugadores
+(picados), pesar e encontrar o percentual, dividindo este por 4 (quatro), cujo resultado
+deverá ser somado aos percentuais dos outros grãos danificados, caso ocorram na amostra;
+somar o percentual de grãos danificados encontrados aos demais percentuais de grãos
+avariados, sendo esse somatório utilizado para posterior enquadramento do produto nas
+Tabelas 1 e 2, do Capítulo II, deste Regulamento Técnico, conforme o caso;
+IV - pesar os grãos amassados, partidos e quebrados já separados e encontrar o
+percentual para enquadramento nas Tabelas 1 e 2, do Capítulo II, deste Regulamento
+Técnico, conforme o caso; não considerar como defeito o grão amassado sem o rompimento
+do tegumento;
+V - pesar os grãos esverdeados e encontrar o percentual para utilização nas Tabelas
+1 e 2, do Capítulo II, deste Regulamento Técnico, conforme o caso;
+VI - os grãos com mancha púrpura e os grãos com mancha café não serão
+considerados como defeitos;
+VII - pesar todos os defeitos isoladamente e anotar no laudo de classificação o peso
+e o percentual encontrado de cada um, fazendo a conversão dos valores pela fórmula a
+seguir, sendo seu resultado expresso com 1 (uma) casa decimal:
+% = peso do defeito (g) x 100 peso da amostra (g) Art. 26. Proceder ao enquadramento do
+produto em Tipo, considerando os percentuais encontrados, conforme a distribuição dos
+defeitos e respectivas tolerâncias, contidos nas Tabelas 1 e 2, do Capítulo II, deste
+Regulamento Técnico, conforme o caso.
+Art. 27. Deve-se enquadrar o produto em função do pior tipo encontrado.
+Art. 28. Para determinação da Classe, deve-se aferir o peso da amostra isenta de
+defeitos, anotando o peso obtido no laudo de classificação, valor esse que será
+utilizado posteriormente para o cálculo do percentual de grãos de outras cores.
+§ 1º Se a amostra contiver grãos de outras cores diferentes da permitida para a
+classe amarela, proceder à separação dos mesmos, pesar e anotar os valores encontrados
+no respectivo campo do laudo, fazendo a conversão dos valores pela fórmula:
+% = peso de grãos de outras cores (g) x 100 peso da amostra (g) § 2º Verificar se o
+percentual encontrado se situa dentro do valor máximo admitido para a Classe Amarela;
+caso esse valor seja superior ao admitido para a classe Amarela, a soja será considerada
+da Classe Misturada.
+Art. 29. Concluída a classificação e caso a soja seja considerada como Fora de Tipo,
+Desclassificada ou da Classe Misturada, fazer constar no Laudo e no Certificado de
+Classificação os motivos que causaram essas situações, conforme o caso.
+Art. 30. Revisar, datar, carimbar e assinar o Laudo e o Certificado de Classificação,
+devendo constar, em ambos, obrigatoriamente, o carimbo, o nome do classificador e o seu
+número de registro no Ministério da Agricultura, Pecuária e Abastecimento.
+Art. 31. Com o objetivo de uniformizar os critérios de classificação, será
+elaborado um referencial fotográfico, identificando e caracterizando cada defeito.
+CAPÍTULO IV 
+REQUISITOS DE MARCAÇÃO E ROTULAGEM 
+Art. 32. A soja pode ser comercializada a granel, ensacada ou empacotada.
+§ 1º As embalagens utilizadas no acondicionamento da soja podem ser de materiais
+naturais, sintéticos ou qualquer outro material apropriado.
+§ 2º As especificações quanto à confecção e à capacidade das embalagens devem
+estar de acordo com a legislação específica vigente.
+Art. 33. As especificações de qualidade do produto contidas na marcação ou
+rotulagem deverão estar em consonância com o respectivo Certificado de Classificação.
+§ 1º No caso do produto embalado para a venda direta à alimentação humana, a
+marcação ou rotulagem deverá conter as seguintes informações:
+I - relativas à classificação do produto:
+a) grupo;
+b) classe, que será obrigatória somente quando a soja for considerada da Classe
+Misturada;
+c) tipo;
+II - relativas ao produto e ao seu responsável:
+a) denominação de venda do produto (a palavra "soja" acrescida da marca
+comercial do produto);
+b) identificação do lote, que será de responsabilidade do interessado;
+c) nome empresarial, CNPJ, endereço da empresa embaladora ou do responsável pelo
+produto.
+§ 2º No caso do produto a granel destinado à venda direta à alimentação humana,
+esse deverá ser identificado e as informações colocadas em lugar de destaque, contendo
+no mínimo as seguintes informações:
+I - denominação de venda do produto;
+II - grupo;
+III - classe, que será obrigatória somente quando a soja for considerada da Classe
+Misturada;
+IV - tipo.
+§ 3º No caso do produto importado, além das exigências contidas nas alíneas
+"a", "b" e "c" do inciso I e "b" do inciso II,
+todos do § 1º, deste artigo, deste Regulamento Técnico, deverá apresentar, ainda, as
+seguintes informações:
+I - país de origem;
+II - nome e endereço do importador.
+§ 4º A marcação ou rotulagem deve ser de fácil visualização e de difícil
+remoção, assegurando informações corretas, claras, precisas, ostensivas e em língua
+portuguesa, cumprindo com as exigências previstas na legislação específica vigente.
+§ 5º A informação qualitativa referente ao Grupo deverá ser grafada com a palavra
+"Grupo" seguida do algarismo romano e das expressões "soja destinada ao
+consumo in natura" ou "Soja destinada a outros usos", conforme o caso; a
+Classe deverá ser grafada por extenso, quando for necessária sua identificação; o Tipo
+deverá ser grafado com a palavra "Tipo", seguido do algarismo arábico
+correspondente ou com a expressão "Padrão Básico", onde couber; e, quando a
+soja não se enquadrar em Tipo ou for Desclassificada, a informação deverá ser grafada
+coma a expressão "Fora de Tipo", ou "Fora do Padrão Básico", ou
+ainda, "Desclassificada", conforme o caso.
+D.O.U., 16/05/2007 - Seção 1
+ | 

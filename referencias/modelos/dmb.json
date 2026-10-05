@@ -1,0 +1,1332 @@
+{
+ "catalogo": "Nexus Agro — modelos de máquinas e implementos",
+ "marca": "DMB",
+ "fabricanteId": "dmb",
+ "fonte": "sitemap de www.dmb.com.br",
+ "dataConsulta": "2026-10-04",
+ "regras": [
+  "Especificações copiadas como texto literal do site oficial do fabricante, sem conversão nem interpretação.",
+  "Valores servem para identificação e consulta. Para preencher automaticamente um parâmetro de regulagem, o valor precisa ser confirmado no manual/folheto do modelo e ano.",
+  "O site pode não refletir variações por ano-modelo, mercado ou opcionais."
+ ],
+ "totalModelos": 36,
+ "comEspecificacoes": 33,
+ "modelos": [
+  {
+   "id": "dmb-carreta-distribuidora-de-mudas",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Carreta distribuidora de mudas",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "agricultura-familiar",
+   "url": "https://www.dmb.com.br/linha-canavieira/agricultura-familiar/carreta-distribuidora-de-mudas",
+   "especificacoes": [
+    {
+     "campo": "Obs",
+     "valor": "produto vendido sem rodas e pneus"
+    },
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "75 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.01.01.01.00.001"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-carreta-de-mudas-1-01-01-01-00-001.pdf"
+    }
+   ],
+   "urlsAdicionais": [
+    "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/carreta-distribuidora-de-mudas"
+   ]
+  },
+  {
+   "id": "dmb-cobridor-de-2-linhas",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Cobridor de 2 Linhas",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "agricultura-familiar",
+   "url": "https://www.dmb.com.br/linha-canavieira/agricultura-familiar/cobridor-de-2-linhas",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "50 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.02.03.01.00.003"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-cobr-2-linhas-29-05-17.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-cobridor-sem-rolo.pdf"
+    }
+   ],
+   "urlsAdicionais": [
+    "https://www.dmb.com.br/linha-canavieira/cobridores/cobridor-de-2-linhas"
+   ]
+  },
+  {
+   "id": "dmb-cobridor-de-2-linhas-com-rolos-lisos",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Cobridor de 2 Linhas com Rolos Lisos",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "agricultura-familiar",
+   "url": "https://www.dmb.com.br/linha-canavieira/agricultura-familiar/cobridor-de-2-linhas-com-rolos-lisos",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "50 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.02.03.01.00.001"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-cobr-2-linhas-rolos-lisos-29-05-17.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-cobridor-com-rolo-liso.pdf"
+    }
+   ],
+   "urlsAdicionais": [
+    "https://www.dmb.com.br/linha-canavieira/cobridores/cobridor-de-2-linhas-com-rolos-lisos"
+   ]
+  },
+  {
+   "id": "dmb-cultivador-sao-francisco-jr",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Cultivador São Francisco Jr",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "agricultura-familiar",
+   "url": "https://www.dmb.com.br/linha-canavieira/agricultura-familiar/cultivador-sao-francisco-jr",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "75 hp (traçado)."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.10.02.01.04.087"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sf-jr-completo-01-07-16.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações (acionamento mecânico)",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-cult-sf-jr-cq-mec-22-04-20.pdf"
+    }
+   ],
+   "urlsAdicionais": [
+    "https://www.dmb.com.br/linha-canavieira/cultivadores/cultivador-sao-francisco-jr"
+   ]
+  },
+  {
+   "id": "dmb-cultivador-tipo-grade",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Cultivador Tipo Grade",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "agricultura-familiar",
+   "url": "https://www.dmb.com.br/linha-canavieira/agricultura-familiar/cultivador-tipo-grade",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "75 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.03.02.01.00.002"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-cult-tipo-grade-28-05-18.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-cult-tipo-grade-13-11-19.pdf"
+    }
+   ],
+   "urlsAdicionais": [
+    "https://www.dmb.com.br/linha-canavieira/cultivadores/cultivador-tipo-grade"
+   ]
+  },
+  {
+   "id": "dmb-enleirador-de-palha",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Enleirador de palha",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "agricultura-familiar",
+   "url": "https://www.dmb.com.br/linha-canavieira/agricultura-familiar/enleirador-de-palha-giropalha",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "65 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.05.01.01.00.001"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://cdi.assisteweb.com.br/catalogo-token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOjQsImVtcCI6MTEsImFsdyI6MTc2LCJpYXQiOjE2NjY4NzQ3MjAsInN1YiI6IjAifQ.KAfBpMVVc4tVK7j5ji2YsT-xgOMbfbMAvUIQIFTtf2E"
+    }
+   ],
+   "urlsAdicionais": [
+    "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/enleirador-de-palha-giropalha"
+   ]
+  },
+  {
+   "id": "dmb-sulcador-de-1-linha",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Sulcador de 1 Linha",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "agricultura-familiar",
+   "url": "https://www.dmb.com.br/linha-canavieira/agricultura-familiar/sulcador-de-1-linha",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "60 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.09.08.01.00.001"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sulcador-de-1-linha-20-07-18.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-sulcador-de-1-linha-14-10-19.pdf"
+    }
+   ],
+   "urlsAdicionais": [
+    "https://www.dmb.com.br/linha-canavieira/sulcadores/sulcador-de-1-linha"
+   ]
+  },
+  {
+   "id": "dmb-sulcador-de-2-linhas",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Sulcador de 2 Linhas",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "agricultura-familiar",
+   "url": "https://www.dmb.com.br/linha-canavieira/agricultura-familiar/sulcador-de-2-linhas",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "70 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.09.02.01.00.001"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sulcador-especial-2-linhas-1-09-02-01-00-001.pdf"
+    }
+   ],
+   "urlsAdicionais": [
+    "https://www.dmb.com.br/linha-canavieira/sulcadores/sulcador-de-2-linhas"
+   ]
+  },
+  {
+   "id": "dmb-sulcador-de-2-linhas-com-adubadeira",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Sulcador de 2 Linhas com Adubadeira",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "agricultura-familiar",
+   "url": "https://www.dmb.com.br/linha-canavieira/agricultura-familiar/sulcador-de-2-linhas-com-adubadeira",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "80 hp."
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sulcador-especial-2-linhas-adub-de-latao-17-10-19.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-sulc-2-linhas-ad-latao-17-10-19.pdf"
+    }
+   ],
+   "urlsAdicionais": [
+    "https://www.dmb.com.br/linha-canavieira/sulcadores/sulcador-de-2-linhas-com-adubadeira"
+   ]
+  },
+  {
+   "id": "dmb-sulcador-de-3-linhas-bico-de-pato",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Sulcador de 3 linhas Bico de Pato",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "agricultura-familiar",
+   "url": "https://www.dmb.com.br/linha-canavieira/agricultura-familiar/sulcador-de-3-linhas-bico-de-pato",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "75 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.09.05.01.00.002"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sulcador-bico-de-pato-1-09-05-01-00-002.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-sulcador-de-3-linhas-bico-de-pato-14-10-19.pdf"
+    }
+   ],
+   "urlsAdicionais": [
+    "https://www.dmb.com.br/linha-canavieira/sulcadores/sulcador-de-3-linhas-bico-de-pato"
+   ]
+  },
+  {
+   "id": "dmb-sulcador-especial-de-1-linha-com-adubadeira",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Sulcador Especial de 1 Linha com Adubadeira",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "agricultura-familiar",
+   "url": "https://www.dmb.com.br/linha-canavieira/agricultura-familiar/sulcador-especial-de-1-linha-com-adubadeira",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "60 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.09.03.02.01.004"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sulcador-especial-1-linha-1-09-03-02-01-004.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-sulc-esp-1-linha-com-ad-04-11-19.pdf"
+    }
+   ],
+   "urlsAdicionais": [
+    "https://www.dmb.com.br/linha-canavieira/sulcadores/sulcador-especial-de-1-linha-com-adubadeira"
+   ]
+  },
+  {
+   "id": "dmb-sulcador-modelo-sao-francisco-jr",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Sulcador Modelo São Francisco Jr",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "agricultura-familiar",
+   "url": "https://www.dmb.com.br/linha-canavieira/agricultura-familiar/sulcador-modelo-sao-francisco-jr",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "75 hp (traçado)."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.10.02.01.04.120"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual de Instruções e Operações",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-sulc-modelo-sao-francisco-jr-22-04-20.pdf"
+    }
+   ],
+   "urlsAdicionais": [
+    "https://www.dmb.com.br/linha-canavieira/sulcadores/sulcador-modelo-sao-francisco-jr"
+   ]
+  },
+  {
+   "id": "dmb-cobridor-de-3-linhas-auto-direcionavel-com-3-rodas-alinhadoras",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Cobridor de 3 Linhas Auto-Direcionável com 3 rodas alinhadoras",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "cobridores",
+   "url": "https://www.dmb.com.br/linha-canavieira/cobridores/cobridor-de-3-linhas-auto-direcionavel-com-3-rodas-alinhadoras",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "90 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.02.03.04.01.016"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-cobr-3-linhas-auto-direc-be-30-05-17.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-cobridor-de-3-linhas-auto-direcionavel-com-rodas-alinhadoras-e-aplicador-de-inseticida",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Cobridor de 3 linhas auto-direcionável com rodas alinhadoras e aplicador de inseticida",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "cobridores",
+   "url": "https://www.dmb.com.br/linha-canavieira/cobridores/cobridor-de-3-linhas-auto-direcionavel-com-rodas-alinhadoras-e-aplicador-de-inseticida",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "90 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.02.03.04.01.012"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/files/catalogo%20cobr%203%20linhas%20auto%20dir%20bp%2002-12-20.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-cultivador-novo-sao-francisco-cana-crua-e-queimada-de-esteiras",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Cultivador Novo São Francisco cana crua e queimada de Esteiras",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "cultivadores",
+   "url": "https://www.dmb.com.br/linha-canavieira/cultivadores/cultivador-novo-sao-francisco-cana-crua-e-queimada-de-esteiras",
+   "especificacoes": [
+    {
+     "campo": "Cacacterísticas",
+     "valor": "2 discos planos de corte de 23” auto direcionáveis."
+    },
+    {
+     "campo": "Potência Mínima Sugerida",
+     "valor": "140hp"
+    },
+    {
+     "campo": "Código",
+     "valor": "1.10.02.01.04.118"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-novo-sao-frco-adub-esteira-mh.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações (acionamento por motor hidráulico)",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-novo-sf-mh-esteiras-28-07-17.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-cultivador-novo-sao-francisco-com-haste-simples",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Cultivador Novo São Francisco com haste simples",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "cultivadores",
+   "url": "https://www.dmb.com.br/linha-canavieira/cultivadores/cultivador-novo-sao-francisco-com-haste-simples",
+   "especificacoes": [
+    {
+     "campo": "Cacacterísticas",
+     "valor": "2 discos planos de corte de 23” auto direcionáveis."
+    },
+    {
+     "campo": "Potência Mínima Sugerida",
+     "valor": "100hp"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças (acionamento mecänico)",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-novo-sao-frco-haste-simples-mec.pdf"
+    },
+    {
+     "titulo": "Catálogo de Peças (acionamento motor hidráulico)",
+     "url": "https://cdi.assisteweb.com.br/catalogo-token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOjQsImVtcCI6MTEsImFsdyI6MTc0LCJpYXQiOjE2NjY4NzQxMDEsInN1YiI6IjAifQ.-hWqVd8Ur8XXQloQxXi66oFhAcZVgJJ_Fu-chcWFfDo"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações (acionamento mecânico)",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-novo-sf-haste-simples-mec-22-04-20.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações (acionamento por motor hidráulico)",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-novo-sf-haste-simples-mh-07-07017.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-cultivador-novo-sao-francisco-haste-simples-com-desenleirador",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Cultivador Novo São Francisco haste simples com Desenleirador",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "cultivadores",
+   "url": "https://www.dmb.com.br/linha-canavieira/cultivadores/cultivador-novo-sao-francisco-haste-simples-com-desenleirador",
+   "especificacoes": [
+    {
+     "campo": "Cacacterísticas",
+     "valor": "2 discos planos de corte de 23” auto direcionáveis."
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças (Acionamento por motor hidráulico)",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-novo-sao-frco-com-desenleirador-mh-25.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-novo-sf-haste-simples-com-desenl-17-10-19.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-cultivador-novo-sao-francisco-para-cana-crua-e-queimada",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Cultivador Novo São Francisco para Cana Crua e Queimada",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "cultivadores",
+   "url": "https://www.dmb.com.br/linha-canavieira/cultivadores/cultivador-novo-sao-francisco-para-cana-crua-e-queimada",
+   "especificacoes": [
+    {
+     "campo": "Cacacterísticas",
+     "valor": "- 2 discos planos de corte de 23” auto direcionáveis."
+    },
+    {
+     "campo": "Potência Mínima Sugerida",
+     "valor": "140hp"
+    },
+    {
+     "campo": "Código",
+     "valor": "1.10.02.01.04.075"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual de Instruções e Operações (acionamento mecânico)",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-novo-sf-mec-22-04-20.pdf"
+    },
+    {
+     "titulo": "Catálogo de Peças (acionamento motor hidráulico)",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-novo-sao-frco-mh.pdf"
+    },
+    {
+     "titulo": "Catálogo de Peças (acionamento mecânico)",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-novo-sao-frco-mec.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações (acionamento por motor hidráulico)",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-novo-sf-mh-30-06-17.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-cultivador-quebra-lombo",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Cultivador Quebra-Lombo",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "cultivadores",
+   "url": "https://www.dmb.com.br/linha-canavieira/cultivadores/cultivador-quebra-lombo",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "110 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.10.02.02.00.026"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sf-quebra-lombo-30-09-19.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-cult-quebra-lombo-30-09-19.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-cultivador-quebra-lombo-com-adubadeiras",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Cultivador Quebra Lombo com Adubadeiras",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "cultivadores",
+   "url": "https://www.dmb.com.br/linha-canavieira/cultivadores/cultivador-quebra-lombo-com-adubadeiras",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "120 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.10.02.01.04.132"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças (acionamento motor hidráulico)",
+     "url": "https://cdi.assisteweb.com.br/catalogo-token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOjQsImVtcCI6MTEsImFsdyI6MTgzLCJpYXQiOjE2NjY4NzU0NDksInN1YiI6IjAifQ.nemtv1OUacBA1Jd6lgI52fPMnte5eKu65sT5IfqrtFw"
+    },
+    {
+     "titulo": "Catálogo de Peças (acionamento mecânico)",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sf-quebra-lombo-com-adubadeiras-mec-30-09-19.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações (acionamento por motor hidráulico)",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-cult-quebra-lombo-com-adubadeiras-mh-03-10-17.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações (acionamento mecânico)",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-cult-quebra-lombo-com-adubadeiras-mec-22-04-20.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-cultivador-quebra-lombo-com-aplicador-de-herbicidas",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Cultivador Quebra-Lombo com Aplicador de Herbicidas",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "cultivadores",
+   "url": "https://www.dmb.com.br/linha-canavieira/cultivadores/cultivador-quebra-lombo-com-aplicador-de-herbicidas",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "120 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.10.02.03.02.003"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças (Bomba de Pistão acionada por cardan)",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sf-quebra-lombo-com-aplicador-de-herbicidas-30-09-19.pdf"
+    },
+    {
+     "titulo": "Catálogo de Peças (Bomba modelo JP)",
+     "url": "https://cdi.assisteweb.com.br/catalogo-token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOjQsImVtcCI6MTEsImFsdyI6MTg1LCJpYXQiOjE2NjY4NzU5ODQsInN1YiI6IjAifQ.03tXnlOaZxS_ozIu3ZavJxdFJ7eZcTdqyU_0BonJCKA"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações (Bomba de pistão acoplada na TDP)",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-cult-quebra-lombo-com-aplicador-de-herbicidas-bomba-jp-06-06-19.pdf"
+    },
+    {
+     "titulo": "Catálogo de Peças - lote a partir de 90155/21",
+     "url": "https://www.dmb.com.br/admin/public/img/files/1_10_02_03_02_003.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-cultivador-sao-francisco-cana-queimada",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Cultivador São Francisco Cana Queimada",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "cultivadores",
+   "url": "https://www.dmb.com.br/linha-canavieira/cultivadores/cultivador-sao-francisco-cana-queimada",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "100 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.10.02.01.04.003"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças (acionamento mecânico)",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sao-frco-cq-mec-30-09-19.pdf"
+    },
+    {
+     "titulo": "Catálogo de Peças (acionamento motor hidráulico)",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sao-frco-cq-mh-30-09-19.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações (acionamento por motor hidráulico)",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-cult-sf-cana-queimada-mh-08-06-16.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações (acionamento mecânico)",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-cult-sf-cana-queimada-mec-22-04-20.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-cultivador-sao-francisco-cana-queimada-para-3-linhas",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Cultivador São Francisco cana queimada para 3 linhas",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "cultivadores",
+   "url": "https://www.dmb.com.br/linha-canavieira/cultivadores/cultivador-sao-francisco-cana-queimada-para-3-linhas",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "140 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.10.02.01.04.028"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sao-frco-cq-3-linhas-30-09-19.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-cultivador-sao-francisco-jr-para-cana-crua-e-queimada",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Cultivador São Francisco Jr para Cana Crua e Queimada",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "cultivadores",
+   "url": "https://www.dmb.com.br/linha-canavieira/cultivadores/cultivador-sao-francisco-jr-para-cana-crua-e-queimada",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "75 hp (4x4)"
+    },
+    {
+     "campo": "Código",
+     "valor": "1.10.02.01.04.147"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catalogo de Peças (acionamento mecânico)",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sf-jr-completo-01-07-16.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações (acionamento mecânico)",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-cult-sf-jr-cc-mec-22-04-20.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações (acionamento por motor hidráulico)",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-cult-sf-jr-cc-mh-28-07-17.pdf"
+    },
+    {
+     "titulo": "Catálogo de Peças (acionamento por motor hidráulico)",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sf-jr-cana-crua-e-queimada-mh-17-07-18.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-aplicador-de-inseticidas-em-soqueiras-com-kit-desenleirador",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Aplicador de Inseticidas em Soqueiras com Kit Desenleirador",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "outros-equipamentos",
+   "url": "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/aplicador-de-inseticidas-em-soqueiras-com-kit-desenleirador",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "120 hp"
+    },
+    {
+     "campo": "Código",
+     "valor": "1.19.01.01.01.014"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://cdi.assisteweb.com.br/catalogo-token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOjQsImVtcCI6MTEsImFsdyI6MTY5LCJpYXQiOjE2NjY4NzM0NTgsInN1YiI6IjAifQ.c3a65y_rDbta9L57ZpNkXoFuI3U42uXNlVM3LEDT_ss"
+    }
+   ]
+  },
+  {
+   "id": "dmb-aplicador-de-nematicidas",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Aplicador de Nematicidas",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "outros-equipamentos",
+   "url": "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/aplicador-de-nematicidas",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-aplicador-de-nematicidas.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-plantadora-de-torta",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Plantadora de Torta",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "outros-equipamentos",
+   "url": "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/carreta-sulcadora-e-distribuidora-de-torta-de-filtro-plantadora-de-torta",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://cdi.assisteweb.com.br/catalogo-token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOjQsImVtcCI6MTEsImFsdyI6MTA2NywiaWF0IjoxNzYyMjY5MjExLCJzdWIiOiIwIn0.5uVeGVsQlWwpxO7S1xHDp-gXMu_RXNJsLwT9uq4wAGU"
+    },
+    {
+     "titulo": "Kit Bandeja Dianteira Tipo Esteira Articulada",
+     "url": "https://cdi.assisteweb.com.br/catalogo-token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOjQsImVtcCI6MTEsImFsdyI6MTA2OCwiaWF0IjoxNzYyMjY5MzIwLCJzdWIiOiIwIn0.EXXaRMYDrtvYUwKrllFtH6UVdQ3VYv_De5shR8PGX5s"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações",
+     "url": "https://www.dmb.com.br/admin/public/img/files/manual-de-Instrucoes-e-operacoes.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-desenleirador-de-palha-para-cana-crua",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Desenleirador de palha para cana crua",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "outros-equipamentos",
+   "url": "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/desenleirador-de-palha-para-cana-crua",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "75 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.20.00.00.00.006"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://cdi.assisteweb.com.br/catalogo-token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOjQsImVtcCI6MTEsImFsdyI6MTg2LCJpYXQiOjE2NjY4NzY0NzEsInN1YiI6IjAifQ.PuINGsQaFvrqKlPNlYOeE10XuesMu84uMgkUCYGi1uo"
+    }
+   ]
+  },
+  {
+   "id": "dmb-enleirador-de-palha-de-6-rodas",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Enleirador de Palha de 6 rodas",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "outros-equipamentos",
+   "url": "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/enleirador-de-palha-de-6-rodas",
+   "especificacoes": [],
+   "origemEspecificacoes": null,
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://cdi.assisteweb.com.br/catalogo-token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOjQsImVtcCI6MTEsImFsdyI6MTc3LCJpYXQiOjE2NjY4NzQ3NDksInN1YiI6IjAifQ.3VtkuWFZ_nHOlvBQEuGgkLdnf3niyfZKjlDFBtwJP-g"
+    }
+   ]
+  },
+  {
+   "id": "dmb-distribuidora-de-cana-picada-dcp-5000",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Distribuidora de Cana Picada DCP 5000",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "plantadoras-distribuidoras",
+   "url": "https://www.dmb.com.br/linha-canavieira/plantadoras-distribuidoras/distribuidora-de-cana-picada-dcp-5000",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "140 hp"
+    },
+    {
+     "campo": "Código",
+     "valor": "1.01.05.01.01.001"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-dcp-5000.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-dcp-5000.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-plantadora-de-cana-picada",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Plantadora de Cana Picada",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "plantadoras-distribuidoras",
+   "url": "https://www.dmb.com.br/linha-canavieira/plantadoras-distribuidoras/plantadora-de-cana-picada-pcp-6000",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "200 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.17.01.02.01.057"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-pcp-6000-02-10-19.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-pcp-6000-23-06-16.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-plantadora-de-cana-picada-2",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Plantadora de Cana Picada (200 hp)",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "plantadoras-distribuidoras",
+   "url": "https://www.dmb.com.br/linha-canavieira/plantadoras-distribuidoras/plantadora-de-cana-picada-pcp-6000-automatizada",
+   "especificacoes": [
+    {
+     "campo": "Potência sugerida para trabalho",
+     "valor": "200 hp"
+    },
+    {
+     "campo": "Código",
+     "valor": "1.17.01.02.01.066"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Manual de Instrução e Operações",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-pcp-6000-automatizada-23-06-16.pdf"
+    },
+    {
+     "titulo": "Catálogo de Peças - Caixa para Óxidos",
+     "url": "https://cdi.assisteweb.com.br/catalogo-token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOjQsImVtcCI6MTEsImFsdyI6MTcwLCJpYXQiOjE2NjY4NzM2NDUsInN1YiI6IjAifQ.Js4xUzhRSGF1KV0TobC6YuAt5jW8jvWxnFi8MIuFo0Y"
+    },
+    {
+     "titulo": "Catálogo de Peças - Adubadeira de Esteiras",
+     "url": "https://cdi.assisteweb.com.br/catalogo-token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOjQsImVtcCI6MTEsImFsdyI6MTA2MSwiaWF0IjoxNzYyMjY5MTU1LCJzdWIiOiIwIn0.RBLRTXFEnlnRr7HraejTFDizFVFo7u10K5CEmOV9ds0"
+    },
+    {
+     "titulo": "Catálogo de Peças - Adubadeira de Rosca sem Fim",
+     "url": "https://cdi.assisteweb.com.br/catalogo-token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOjQsImVtcCI6MTEsImFsdyI6MTA2MiwiaWF0IjoxNzYyMjY5MTA0LCJzdWIiOiIwIn0.9FqyFgC-eBKsvqgUhBJUbojypl42ec_ekoF5VB0MyVQ"
+    },
+    {
+     "titulo": "Acessorios - Sulcador com Dispositivo Destorroador",
+     "url": "https://cdi.assisteweb.com.br/catalogo-token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXAiOjQsImVtcCI6MTEsImFsdyI6NTg3LCJpYXQiOjE2OTkyODI4MTQsInN1YiI6IjAifQ.pMfRZ0W8CG3S1f8Ho0ZReev2WIFV3_ixnS0lJUHMHSs"
+    }
+   ],
+   "observacao": "Nome repetido no site do fabricante com especificações diferentes; diferenciado entre parênteses."
+  },
+  {
+   "id": "dmb-sulcador-de-2-linhas-com-adubadeiras-e-marcador-de-sulco",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Sulcador de 2 Linhas com Adubadeiras e Marcador de Sulco",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "sulcadores",
+   "url": "https://www.dmb.com.br/linha-canavieira/sulcadores/sulcador-de-2-linhas-com-adubadeiras-e-marcador-de-sulco",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "120 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.09.04.02.01.006"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sf-sulcador-2-linhas-mec-marc-sulco-20-08-19.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-sulc-2-linhas-mec-marc-sulco-22-04-20.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-sulcador-de-2-linhas-com-adubadeiras-marcador-de-sulco-e-banqueta",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Sulcador de 2 linhas com adubadeiras, marcador de sulco e banqueta",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "sulcadores",
+   "url": "https://www.dmb.com.br/linha-canavieira/sulcadores/sulcador-de-2-linhas-com-adubadeiras-marcador-de-sulco-e-banqueta",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "140 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.09.04.02.01.006"
+    },
+    {
+     "campo": "Banqueta Direita",
+     "valor": "2.15.01.01.01.001"
+    },
+    {
+     "campo": "Banqueta Esquerda",
+     "valor": "2.15.01.01.01.002"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sulcador-beija-flor-2-linhas-1.pdf"
+    },
+    {
+     "titulo": "Manual de Instrução e Operações Família São Francisco",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-cult-sulc-sao-frco.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-sulcador-de-3-linhas",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Sulcador de 3 linhas",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "sulcadores",
+   "url": "https://www.dmb.com.br/linha-canavieira/sulcadores/sulcador-de-3-linhas",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "90 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.09.03.01.00.003"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sulcador-asa-reta-3-linhas-1-09-03-01-00-003.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-sulcador-de-3-linhas-14-10-19.pdf"
+    }
+   ]
+  },
+  {
+   "id": "dmb-sulcador-de-3-linhas-com-adubadeiras-e-marcador-de-sulco",
+   "marca": "DMB",
+   "fabricanteId": "dmb",
+   "modelo": "Sulcador de 3 linhas com adubadeiras e marcador de sulco",
+   "linha": null,
+   "familia": null,
+   "categoriaFabricante": "sulcadores",
+   "url": "https://www.dmb.com.br/linha-canavieira/sulcadores/sulcador-de-3-linhas-com-adubadeiras-e-marcador-de-sulco",
+   "especificacoes": [
+    {
+     "campo": "Potência mínima sugerida",
+     "valor": "150 hp."
+    },
+    {
+     "campo": "Código",
+     "valor": "1.09.03.02.02.055"
+    }
+   ],
+   "origemEspecificacoes": "pares campo/valor da página do produto (texto literal)",
+   "dataConsulta": "2026-10-04",
+   "documentos": [
+    {
+     "titulo": "Catálogo de Peças",
+     "url": "https://www.dmb.com.br/admin/public/img/catalogo-sulcador-3-linhas-com-adubadeiras.pdf"
+    },
+    {
+     "titulo": "Manual de Instruções e Operações",
+     "url": "https://www.dmb.com.br/admin/public/img/manual-sulc-3-linhas-adub-e-marc-sulco-30-09-19.pdf"
+    }
+   ]
+  }
+ ],
+ "descartados": [
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/agricultura-familiar/cobridor-de-2-linhas-com-aplicador-de-inseticida-bomba-de-pistao",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/cobridores/cobridor-de-2-linhas-com-aplicador-de-inseticida-bomba-de-pistao",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/cobridores/cobridor-de-2-linhas-com-aplicador-de-inseticida-bomba-eletrica",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/adubadeira-de-superficie",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/adubador-com-distribuicao-em-profundidade-e-superficial",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/adubador-de-discos-1250-h",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/adubador-de-discos-1250-h-para-espacamento-combinado",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/adubador-de-discos-2300-a",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/adubador-de-discos-articulado-de-3-linhas-para-espacamento-combinado",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/aplicador-de-inseticidas-em-soqueiras",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/carreta-distribuidora-de-torta-de-filtro",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/distribuidor-de-calcario-e-adubo-em-superficie",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/eliminador-mecanico-de-soqueira",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/outros-equipamentos/subsolador-hidraulico",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/plantadoras-distribuidoras/plantadora-de-mudas-de-cana",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/plantadoras-distribuidoras/plantadora-pci-4000-geracao-iii",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/sulcadores/sulcador-modelo-sao-francisco",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "| DMB",
+   "url": "https://www.dmb.com.br/linha-canavieira/sulcadores/sulcador-pantografico-de-3-linhas-com-adubadeiras",
+   "motivo": "página sem conteúdo (produto retirado do site, URL ainda no sitemap)"
+  },
+  {
+   "nome": "Linha Canavieira",
+   "url": "https://www.dmb.com.br/linha-florestal/adubador/cultivador-adubador-florestal-caf-600-h",
+   "motivo": "página de categoria"
+  },
+  {
+   "nome": "Linha Canavieira",
+   "url": "https://www.dmb.com.br/linha-florestal/sulcador/subsolador-sulcador-florestal-ssf-800-a",
+   "motivo": "página de categoria"
+  },
+  {
+   "nome": "Linha Canavieira",
+   "url": "https://www.dmb.com.br/linha-florestal/sulcador/subsolador-sulcador-florestal-ssf-a-sem-adubadeira-e-grade",
+   "motivo": "página de categoria"
+  },
+  {
+   "nome": "Linha Canavieira",
+   "url": "https://www.dmb.com.br/linha-florestal/sulcador/subsolador-sulcador-florestal-ssf-h",
+   "motivo": "página de categoria"
+  },
+  {
+   "nome": "Linha Canavieira",
+   "url": "https://www.dmb.com.br/linha-florestal/sulcador/subsolador-sulcador-florestal-ssf-h-sem-adubadeira",
+   "motivo": "página de categoria"
+  },
+  {
+   "nome": "Linha Canavieira",
+   "url": "https://www.dmb.com.br/linha-florestal/sulcador/sulcador-florestal-ssf-600-h",
+   "motivo": "página de categoria"
+  }
+ ]
+}

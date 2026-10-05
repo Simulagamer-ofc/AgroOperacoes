@@ -1,0 +1,44 @@
+name: Publicar versão web (navegador / Windows)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'app/src/main/assets/www/**'
+      - 'referencias/**'
+      - '.github/workflows/pages.yml'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      # Mesmo motor de avaliação do APK: só publica se os testes e a auditoria do banco passarem
+      - name: Testes do avaliador
+        run: node --test referencias/tests/*.test.js
+      - name: Conferir que o app usa o banco atual
+        run: |
+          cmp referencias/avaliador.js app/src/main/assets/www/avaliador.js
+          cmp referencias/regras-afericao.json app/src/main/assets/www/dados/regras-afericao.json
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: app/src/main/assets/www
+      - id: deployment
+        uses: actions/deploy-pages@v4
