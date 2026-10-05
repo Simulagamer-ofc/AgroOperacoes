@@ -34,3 +34,16 @@ Os dados ficam em `localStorage` (chave `agro-db-v1`). Registros da versão `0.1
 ### Build
 
 O APK de depuração é gerado pelo GitHub Actions (`.github/workflows/android.yml`) a cada push na `main` e em pull requests.
+
+## Plataformas
+
+O mesmo código (`app/src/main/assets/www`) roda em todas as plataformas; recursos nativos ficam atrás de `window.AndroidBridge` e têm alternativa no navegador (download do backup, impressão/PDF pelo navegador).
+
+| Plataforma | Como obter | Situação |
+|---|---|---|
+| Android (APK) | GitHub Actions → *Build Agro Operações APK* → artefato | disponível |
+| Navegador | GitHub Pages: `https://simulagamer-ofc.github.io/AgroOperacoes/` (workflow `pages.yml`, publica a cada push na `main` que altere o app ou o banco) | requer ativar o Pages uma vez: *Settings → Pages → Source: GitHub Actions* |
+| Windows (instalado) | Abrir o endereço acima no Edge ou Chrome → botão **Instalar aplicativo** (ou ícone de instalar na barra de endereço). Cria atalho no menu Iniciar, abre em janela própria e funciona sem internet | disponível assim que o Pages estiver ativo |
+| Windows (instalador .exe) | Empacotar a mesma pasta `www` com Electron ou Tauri | futuro |
+
+Os dados ficam no aparelho/navegador onde foram lançados (armazenamento local). Para levar dados de um para outro, use **Cadastros e Backup → Exportar / Restaurar backup (JSON)**. Não há sincronização automática.
