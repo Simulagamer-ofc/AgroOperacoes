@@ -385,3 +385,22 @@ test('revisão: entradas inválidas devolvem pendência em vez de travar', () =>
   const quebrado = JSON.parse(JSON.stringify(BANCO)); delete quebrado.tabelasClassificacao[0].defeitos; quebrado.tabelasClassificacao[1].tipos[0].limites = undefined;
   assert.doesNotThrow(() => A.auditarBanco(quebrado));
 });
+
+test('revisão: limite comparado com o valor medido sem arredondar; conflitos e regra específica avisados', () => {
+  const regra = (id, extra = {}) => ({id, versao: '1.0.0', titulo: id, equipamentoFamilia: '*', avaliacao: 'x', produto: '*', destino: '*', etapa: '*', ponto: '*', posicao: '*',
+    variavel: 'v', unidade: '%', limiteMin: -10, limiteMax: 10, condicoes: [], fontes: [{conferido: true, trechoLiteral: 't'}], statusValidacao: 'validada', ...extra});
+  const banco = r => ({versaoBanco: 't', regras: r});
+  const av = (b, valor, cond = {}) => A.avaliar({variavel: 'v', unidade: '%', valor, condicoes: cond}, b);
+  const b1 = banco([regra('R1')]);
+  assert.equal(av(b1, 10.004).status, STATUS.FORA_DO_PADRAO);   // antes: 10,00 → OK
+  assert.equal(av(b1, -10.005).status, STATUS.FORA_DO_PADRAO);  // antes: −10,00 → OK
+  assert.equal(av(b1, 10).status, STATUS.OK);
+  assert.equal(av(b1, 10.004).valorMedido, 10.004);
+  // mesma faixa, um exclusivo e outro não → conflito
+  const b2 = banco([regra('R1'), regra('R2', {limiteMaxExclusivo: true})]);
+  assert.equal(av(b2, 10).status, STATUS.SEM_REFERENCIA);
+  // regra específica validada com condição não respondida → aviso
+  const b3 = banco([regra('GERAL', {limiteMin: null, limiteMax: 25}), regra('ESPEC', {limiteMin: null, limiteMax: 15, condicoes: [{campo: 'nitrogenado', operador: 'igual', valor: true, descricao: 'Produto nitrogenado.'}]})]);
+  const r3 = av(b3, 20);
+  assert.equal(r3.status, STATUS.OK); assert.ok(r3.pendencias.some(p => p.includes('outra referência validada')));
+});
