@@ -232,3 +232,5 @@ body{background:var(--bg)}
 .nav-grupo{display:block;margin:12px 12px 4px;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#7fa3b5;font-weight:700}
 :root[data-theme="light"] .nav-grupo{color:var(--muted)}
 @media(max-width:760px){.sidebar{top:0;bottom:0;height:auto}}
+
+.pd-rateio{display:flex;gap:8px;align-items:center;font-size:.86rem;color:var(--muted);cursor:pointer}.pd-rateio input{width:auto}

@@ -24,7 +24,7 @@ const safeStorage = {
 
 // ---------- Banco de dados local ----------
 const DB_KEY = 'agro-db-v1';
-const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs', 'fuel', 'contas'];
+const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs', 'fuel', 'contas', 'colheitas', 'vendas'];
 const emptyDb = () => ({version: 1, settings: {farm: '', owner: ''}, ...Object.fromEntries(COLLECTIONS.map(c => [c, []]))});
 
 function loadDb() {
@@ -389,7 +389,7 @@ function movementForm(itemId, kind) {
       const tinhaCusto = custoMedio(s) != null || Number(s.qty || 0) <= 0;
       const mov = aplicarMovimento(s, k, Number(v.qty), valor);
       const {gasto, value, supplier, doc, ...resto} = v;
-      const reg = {id: uid(), ...resto, kind: k, ...mov, ...(k === 'Entrada' ? {supplier, doc} : {})};
+      const reg = {id: uid(), ...resto, kind: k, ...mov, ...(k === 'Entrada' ? {supplier, doc} : {}), ...(k === 'Saída' && v.fieldId ? {season: find('fields', v.fieldId)?.season || ''} : {})};
       db.movements.push(reg);
       if (valor && gasto === 'Sim') db.expenses.push({id: uid(), date: v.date, category: CAT_GASTO_DO_ITEM[s.category] || 'Insumos', description: `Compra: ${s.name} — ${num(v.qty)} ${s.unit}`, value: valor, supplier, doc, movementId: reg.id, notes: v.notes});
       save();
@@ -494,9 +494,9 @@ VIEWS.maquinas = () => {
         <div class="maq-horas"><span class="big">${num(m.hours)} h</span><small>último registro ${fmtDate(db.hourLogs.filter(h => h.machineId === m.id).sort(byDateDesc)[0]?.date)}</small></div>
         <div class="maq-rev ${corRev}"><small>${textoRev}</small>${temRev ? `<div class="progress"><span style="width:${pct}%"></span></div>` : ''}</div>
         ${extras.length ? `<div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>` : ''}
-        <div class="maq-acoes">${isInactive(m) ? '' : mini('◷ Horímetro', 'hour-new', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}${isInactive(m) ? '' : mini('⛽ Abastecer', 'cb-new', m.id)}
+        <div class="maq-acoes">${isInactive(m) ? '' : mini('◷ Horímetro', 'hour-new', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}
           <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">
-            ${mini('◎ Aferição e calibragem', 'af-nova', m.id)}${mini('⚙ Configuração para aferição', 'mc-config', m.id)}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
+            ${isInactive(m) ? '' : mini('⛽ Abastecimento', 'cb-new', m.id)}${mini('◎ Aferição e calibragem', 'af-nova', m.id)}${mini('⚙ Configuração para aferição', 'mc-config', m.id)}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
           </div></details></div></article>`;
     }).join('')}</section>` : `<section class="card">${empty('Nenhuma máquina cadastrada', 'Cadastre tratores, colheitadeiras e implementos para controlar horímetro e revisões.', {act: 'mc-new', label: '+ Nova máquina'})}</section>`) +
     `<div class="section-title"><h3>Ordens de manutenção</h3></div><section class="card list">${mts.length ? mts.map(mt => {
@@ -524,7 +524,7 @@ VIEWS.talhao = id => {
   const ops = db.operations.filter(o => o.fieldId === id).sort(byDateDesc);
   const movs = db.movements.filter(m => m.fieldId === id && m.kind === 'Saída').sort(byDateDesc);
   const gastos = db.expenses.filter(g => g.fieldId === id && Number(g.value) > 0).sort(byDateDesc), totG = gastos.reduce((s, g) => s + Number(g.value), 0);
-  return head(f.name, `${num(f.area)} ha • ${[f.crop, f.cultivar, f.season].filter(Boolean).join(' • ')}`, btn('← Talhões', 'nav', 'talhoes', 'secondary') + btn('+ Operação', 'op-field', id)) +
+  return head(f.name, `${num(f.area)} ha • ${[f.crop, f.cultivar, f.season].filter(Boolean).join(' • ')}`, btn('← Talhões', 'nav', 'talhoes', 'secondary') + btn('+ Colheita', 'pd-colheita', id, 'secondary') + btn('+ Operação', 'op-field', id)) +
     `<div class="section-title"><h3>Operações (${ops.length})</h3></div><section class="card list">${ops.length ? ops.map(o => operationRow(o)).join('') : empty('Nenhuma operação neste talhão', '')}</section>` +
     `<div class="section-title"><h3>Insumos aplicados</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Data</th><th>Item</th><th class="num">Quantidade</th><th class="num">Por ha</th><th class="num">Custo</th></tr></thead><tbody>${movs.map(m => { const s = find('stock', m.itemId); return `<tr><td>${fmtDate(m.date)}</td><td>${esc(s?.name || 'Item removido')}</td><td class="num">${num(m.qty)} ${esc(s?.unit || '')}</td><td class="num">${Number(f.area) ? num(m.qty / f.area) : '—'}</td><td class="num">${Number(m.value) > 0 ? `R$ ${num(m.value, 2)}${Number(f.area) ? `<br><small>R$ ${num(m.value / f.area, 2)}/ha</small>` : ''}` : '—'}</td></tr>`; }).join('') || '<tr><td colspan="5">Nenhuma saída de estoque vinculada a este talhão.</td></tr>'}</tbody></table></div></section>` +
     `<div class="section-title"><h3>Gastos (R$ ${num(totG, 2)}${Number(f.area) > 0 && totG ? ` • R$ ${num(totG / f.area, 2)}/ha` : ''})</h3><button data-act="gs-talhao" data-id="${esc(id)}">+ Lançar gasto</button></div><section class="card panel">${gastos.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th class="num">Valor</th></tr></thead><tbody>${gastos.map(g => `<tr><td>${fmtDate(g.date)}</td><td>${esc(g.description)}</td><td>${esc(g.category)}</td><td class="num">R$ ${num(g.value, 2)}</td></tr>`).join('')}</tbody></table></div>` : 'Nenhum gasto vinculado a este talhão.'}</section>`;
@@ -606,7 +606,7 @@ VIEWS.relatorios = () => {
 };
 
 VIEWS.cadastros = () => {
-  const counts = [['Operações', 'operations'], ['Máquinas', 'machines'], ['Registros de horímetro', 'hourLogs'], ['Manutenções', 'maintenances'], ['Talhões', 'fields'], ['Lotes', 'lots'], ['Itens de estoque', 'stock'], ['Movimentações', 'movements'], ['Gastos', 'expenses'], ['Ordens de beneficiamento', 'ubs'], ['Abastecimentos', 'fuel'], ['Contas a pagar e receber', 'contas']];
+  const counts = [['Operações', 'operations'], ['Máquinas', 'machines'], ['Registros de horímetro', 'hourLogs'], ['Manutenções', 'maintenances'], ['Talhões', 'fields'], ['Lotes', 'lots'], ['Itens de estoque', 'stock'], ['Movimentações', 'movements'], ['Gastos', 'expenses'], ['Ordens de beneficiamento', 'ubs'], ['Abastecimentos', 'fuel'], ['Contas a pagar e receber', 'contas'], ['Colheitas', 'colheitas'], ['Vendas', 'vendas']];
   return head('Cadastros e backup', 'Dados da propriedade e cópia de segurança dos registros deste dispositivo.') +
     `<section class="settings">
       <article class="card panel"><h3>Propriedade</h3><p>Nome exibido no aplicativo e nos arquivos exportados.</p>
@@ -714,7 +714,10 @@ function loadSamples() {
     {id: uid(), date: daysAgo(2), category: 'Peças', description: 'Pontas de pulverização', value: 980, machineId: m3, season: '2026/27'});
   db.contas.push({id: uid(), tipo: 'pagar', grupo: 'g1', descricao: 'Fertilizante 04-14-08', categoria: 'Insumos', parceiro: 'Revenda', valor: 18900, vencimento: daysAgo(-5), parcela: '1/2', status: 'aberta', lancarGasto: 'Sim'},
     {id: uid(), tipo: 'pagar', grupo: 'g1', descricao: 'Fertilizante 04-14-08', categoria: 'Insumos', parceiro: 'Revenda', valor: 18900, vencimento: daysAgo(-35), parcela: '2/2', status: 'aberta', lancarGasto: 'Sim'},
-    {id: uid(), tipo: 'receber', descricao: 'Venda de soja — 1.200 sc', categoria: 'Venda de grãos', parceiro: 'Cooperativa', valor: 156000, vencimento: daysAgo(-20), status: 'aberta', season: '2025/26'});
+    {id: 'cv1', tipo: 'receber', descricao: 'Venda de soja — 1.200 sc', categoria: 'Venda de grãos', parceiro: 'Cooperativa', valor: 156000, vencimento: daysAgo(-20), status: 'aberta', season: '2025/26', vendaId: 'vd1'});
+  db.vendas.push({id: 'vd1', cultura: 'Soja', season: '2025/26', date: daysAgo(10), sacas: 1200, preco: 130, valor: 156000, comprador: 'Cooperativa', recebimento: 'A prazo', vencimento: daysAgo(-20), contaId: 'cv1'});
+  db.colheitas.push({id: uid(), fieldId: f1, cultura: 'Soja', season: '2025/26', date: daysAgo(160), kg: 324480, umidade: 13}, {id: uid(), fieldId: f2, cultura: 'Soja', season: '2025/26', date: daysAgo(158), kg: 230640, umidade: 13.5});
+  db.expenses.push({id: uid(), date: daysAgo(300), category: 'Insumos', description: 'Custeio da safra 2025/26 (resumo)', value: 380250, fieldId: f1, season: '2025/26'}, {id: uid(), date: daysAgo(300), category: 'Insumos', description: 'Custeio da safra 2025/26 (resumo)', value: 279000, fieldId: f2, season: '2025/26'});
   db.movements.push({id: uid(), itemId: s3, kind: 'Saída', qty: 12, date: today(), fieldId: f1, before: 48, after: 36, unitCost: 3150, value: 37800, notes: 'Adubação de plantio'});
   db.lots.push({id: l1, code: 'SM-024', species: 'Soja', cultivar: 'BMX Zeus', category: 'C1', fieldId: f1, season: '2025/26', weight: 42000, status: 'Aguardando análise', germination: '', vigor: ''}, {id: l2, code: 'SM-026', species: 'Soja', cultivar: 'NS 7709', category: 'S1', fieldId: f2, season: '2025/26', weight: 38500, status: 'Em beneficiamento', germination: 92, vigor: 86});
   db.ubs.push({id: uid(), lotId: l2, lote: {code: 'SM-026', species: 'Soja', cultivar: 'NS 7709', category: 'S1', season: '2025/26'}, inicio: daysAgo(2), status: 'Em andamento',
