@@ -22,7 +22,7 @@ const safeStorage = {
 
 // ---------- Banco de dados local ----------
 const DB_KEY = 'agro-db-v1';
-const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses'];
+const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs'];
 const emptyDb = () => ({version: 1, settings: {farm: '', owner: ''}, ...Object.fromEntries(COLLECTIONS.map(c => [c, []]))});
 
 function loadDb() {
@@ -559,7 +559,8 @@ function lotDetail(id) {
     ...(f ? db.operations.filter(o => o.fieldId === f.id && (o.status === 'Concluída' || o.status === 'Em andamento')).map(o => ({date: o.date, title: `${o.type} — ${f.name}`, text: [o.status, machineName(o.machineId), o.notes].filter(Boolean).join(' • '), color: 'green', icon: '◷'})) : []),
     ...(f ? db.movements.filter(m => m.fieldId === f.id && m.kind === 'Saída').map(m => { const s = find('stock', m.itemId); return {date: m.date, title: `Insumo aplicado: ${s?.name || 'item'}`, text: `${num(m.qty)} ${s?.unit || ''} no ${f.name}`, color: 'blue', icon: '□'}; }) : [])
   ].sort(byDateDesc);
-  return head(`Lote ${l.code}`, [l.species, l.cultivar, l.category, l.season].filter(Boolean).join(' • '), btn('← Lotes', 'nav', 'lotes', 'secondary') + btn('Editar', 'lot-edit', id, 'secondary') + btn('+ Evento', 'lot-event', id)) +
+  const ordem = db.ubs.filter(o => o.lotId === id).sort((a, b) => (b.inicio || '').localeCompare(a.inicio || ''))[0];
+  return head(`Lote ${l.code}`, [l.species, l.cultivar, l.category, l.season].filter(Boolean).join(' • '), btn('← Lotes', 'nav', 'lotes', 'secondary') + (ordem ? btn('Beneficiamento', 'nav', 'ubs/' + ordem.id, 'secondary') : '') + btn('Editar', 'lot-edit', id, 'secondary') + btn('+ Evento', 'lot-event', id)) +
     `<section class="kpis">
       <article class="card kpi"><div class="label">Situação</div><div class="value" style="font-size:1.1rem">${chip(l.status, LOT_COLOR[l.status])}</div></article>
       <article class="card kpi"><div class="label">Talhão de origem</div><div class="value" style="font-size:1.2rem">${esc(f?.name || '—')}</div><div class="hint">${f ? num(f.area) + ' ha' : ''}</div></article>
@@ -603,7 +604,7 @@ VIEWS.relatorios = () => {
 };
 
 VIEWS.cadastros = () => {
-  const counts = [['Operações', 'operations'], ['Máquinas', 'machines'], ['Registros de horímetro', 'hourLogs'], ['Manutenções', 'maintenances'], ['Talhões', 'fields'], ['Lotes', 'lots'], ['Itens de estoque', 'stock'], ['Movimentações', 'movements'], ['Gastos', 'expenses']];
+  const counts = [['Operações', 'operations'], ['Máquinas', 'machines'], ['Registros de horímetro', 'hourLogs'], ['Manutenções', 'maintenances'], ['Talhões', 'fields'], ['Lotes', 'lots'], ['Itens de estoque', 'stock'], ['Movimentações', 'movements'], ['Gastos', 'expenses'], ['Ordens de beneficiamento', 'ubs']];
   return head('Cadastros e backup', 'Dados da propriedade e cópia de segurança dos registros deste dispositivo.') +
     `<section class="settings">
       <article class="card panel"><h3>Propriedade</h3><p>Nome exibido no aplicativo e nos arquivos exportados.</p>
@@ -710,6 +711,9 @@ function loadSamples() {
     {id: uid(), date: daysAgo(2), category: 'Peças', description: 'Pontas de pulverização', value: 980, machineId: m3, season: '2026/27'});
   db.movements.push({id: uid(), itemId: s3, kind: 'Saída', qty: 12, date: today(), fieldId: f1, before: 48, after: 36, unitCost: 3150, value: 37800, notes: 'Adubação de plantio'});
   db.lots.push({id: l1, code: 'SM-024', species: 'Soja', cultivar: 'BMX Zeus', category: 'C1', fieldId: f1, season: '2025/26', weight: 42000, status: 'Aguardando análise', germination: '', vigor: ''}, {id: l2, code: 'SM-026', species: 'Soja', cultivar: 'NS 7709', category: 'S1', fieldId: f2, season: '2025/26', weight: 38500, status: 'Em beneficiamento', germination: 92, vigor: 86});
+  db.ubs.push({id: uid(), lotId: l2, lote: {code: 'SM-026', species: 'Soja', cultivar: 'NS 7709', category: 'S1', season: '2025/26'}, inicio: daysAgo(2), status: 'Em andamento',
+    etapas: ['recebimento', 'pre_limpeza', 'secagem', 'ar_peneiras', 'espiral', 'mesa', 'tratamento', 'ensaque'], pulos: [],
+    registros: {recebimento: {data: daysAgo(2), pesoKg: 38500, umidade: 13}, pre_limpeza: {data: daysAgo(2), descarteKg: 580, regulagem: ''}}});
   db.lotEvents.push({id: uid(), lotId: l1, date: daysAgo(12), title: 'Colheita', text: 'Umidade 13%'}, {id: uid(), lotId: l1, date: daysAgo(5), title: 'Amostra enviada ao laboratório', text: ''}, {id: uid(), lotId: l2, date: daysAgo(10), title: 'Análise registrada', text: 'Germinação 92% • vigor 86%'});
   save(); showToast('Dados de exemplo carregados'); render();
 }

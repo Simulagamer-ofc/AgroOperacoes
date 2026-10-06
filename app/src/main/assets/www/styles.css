@@ -193,3 +193,27 @@ body{background:var(--bg)}
 
 /* Celular: colunas dos gráficos podem encolher (sem rolagem horizontal) */
 .viz-grid>*,.viz-card{min-width:0}@media(max-width:760px){.viz-grid{grid-template-columns:minmax(0,1fr)}}.viz-med-topo>span{min-width:0}.viz-med-topo .viz-valor{text-align:right;white-space:normal}
+
+/* Beneficiamento (UBS) */
+.ubs-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}
+.ubs-ordem{padding:16px;display:grid;gap:12px;cursor:pointer}
+.ubs-topo{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.ubs-topo strong{font-size:1.05rem}.ubs-topo small{display:block;color:var(--muted);margin-top:2px}
+.ubs-passos{display:flex;gap:4px}.ubs-passos i{flex:1;height:8px;border-radius:4px;background:var(--bg)}.ubs-passos i.feito{background:#24a672}.ubs-passos i.atual{background:#c08508}.ubs-passos i.pulado{background:transparent;border:1px dashed var(--line)}
+.ubs-num{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-size:.84rem}.ubs-num span{color:var(--muted);display:block}.ubs-num b{font-size:1.02rem}
+.ubs-prox{color:var(--muted);font-size:.8rem}
+.ubs-acoes{margin:0 0 14px;flex-wrap:wrap}
+.ubs-det{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px;align-items:start}
+.ubs-etapas{list-style:none;margin:0;padding:0}
+.ubs-etapas li{display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line)}.ubs-etapas li:last-child{border:0}
+.ubs-etapas .bola{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;font-weight:800;background:var(--bg);color:var(--muted)}
+.ubs-etapas .feito .bola{background:#24a672;color:#06281a}.ubs-etapas .atual .bola{background:#c08508;color:#2a1c00}.ubs-etapas .pulado{opacity:.6}
+.ubs-etapas strong{display:block}.ubs-etapas small{color:var(--muted);display:block;margin-top:2px}
+.ubs-etapas .kg{text-align:right;font-size:.88rem;white-space:nowrap}.ubs-etapas .kg b{display:block}
+.ubs-fluxo{display:grid;gap:9px}.ubs-fluxo .ln{display:grid;grid-template-columns:150px minmax(0,1fr) 96px;gap:10px;align-items:center;font-size:.84rem;outline:none}
+.ubs-fluxo .tr{height:14px;background:var(--trilho);border-radius:4px;position:relative}.ubs-fluxo .tr span{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0;background:var(--s1)}
+.ubs-fluxo .ln.final .tr span{background:var(--s3)}.ubs-fluxo .ln b{text-align:right}
+.ubs-rend{display:flex;align-items:baseline;gap:10px;margin:2px 0 14px;flex-wrap:wrap}.ubs-rend b{font-size:2.4rem;color:var(--destaque)}.ubs-rend span{color:var(--muted)}
+:root[data-theme="light"] .ubs-rend b{color:var(--green)}
+.ubs-maior{padding:10px 12px;border-radius:10px;background:var(--bg);font-size:.86rem;margin-top:12px}
+.ubs-cfg{display:grid;gap:8px}.es-ck{display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:10px}.es-ck input{width:auto!important}
+@media(max-width:760px){.ubs-det{grid-template-columns:minmax(0,1fr)}.ubs-fluxo .ln{grid-template-columns:100px minmax(0,1fr) auto}.ubs-fluxo .ln b{white-space:nowrap}.ubs-lista{grid-template-columns:minmax(0,1fr)}}
