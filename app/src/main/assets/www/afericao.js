@@ -565,8 +565,8 @@ function relatorio(id) {
 }
 
 // ---------- Integração com o restante do app ----------
-TITLES.afericao = 'Aferição e Calibragem';
-TITLES.catalogo = 'Catálogo de Máquinas';
+TITLES.afericao = 'Aferição e calibragem';
+TITLES.catalogo = 'Catálogo de máquinas';
 const alertasBase = alerts;
 alerts = function () {
   const lista = alertasBase();

@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             runOnUiThread {
                 val printManager = getSystemService(Context.PRINT_SERVICE) as PrintManager
                 printManager.print(
-                    "Relatório Agro Operações",
+                    "Relatório Nexus Agro",
                     webView.createPrintDocumentAdapter("relatorio-afericao"),
                     PrintAttributes.Builder().build()
                 )

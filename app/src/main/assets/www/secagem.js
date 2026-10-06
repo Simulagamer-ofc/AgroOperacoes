@@ -283,7 +283,7 @@ function relatorioSecagem(id) {
 }
 
 // ---------- Integração ----------
-TITLES.secagem = 'Secador e Moega';
+TITLES.secagem = 'Secador e moega';
 const alertasComAfericao = alerts;
 alerts = function () {
   const lista = alertasComAfericao();
