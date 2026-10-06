@@ -227,10 +227,13 @@ const cartaoTipo = (k, ativo, acao = 'af-tipo') => {
 VIEWS.afericao = arg => {
   if (arg === 'nova') { if (!wz) wz = criarWizard(); return passoWizard(); }
   if (arg) return relatorio(arg);
-  const lista = db.afericoes.slice().sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora));
+  const lista = db.afericoes.filter(a => !afMaqFiltro || a.maquina?.id === afMaqFiltro).sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora));
+  const comIntervalo = db.machines.filter(m => !isInactive(m) && Number(m.reaferirDias) > 0);
+  const maqsComAf = [...new Set(db.afericoes.map(a => a.maquina?.id).filter(Boolean))].map(id => find('machines', id)).filter(Boolean);
   return head('Aferição e calibragem', 'Escolha o que vai aferir. O resultado só é concluído com referência técnica validada. Funciona sem internet.') +
     `<section class="af-tipos">${Object.keys(TIPOS).map(k => cartaoTipo(k, false, 'af-nova-tipo')).join('')}</section>` +
-    `<div class="section-title"><h3>Registros (${lista.length})</h3></div><section class="card list">${lista.length ? lista.map(a => {
+    (comIntervalo.length ? `<div class="section-title"><h3>Calendário de aferição</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Máquina</th><th>Última aferição</th><th>Próxima</th><th></th></tr></thead><tbody>${comIntervalo.map(m => { const r = situacaoReaferir(m); return `<tr><td><strong>${esc(m.name)}</strong><br><small style="color:var(--muted)">a cada ${num(m.reaferirDias)} dias</small></td><td>${r.ultima ? fmtDate(r.ultima.data) + ' ' + statusChip(r.ultima.resultado.status) : 'nunca aferida'}</td><td>${r.vencida ? chip(r.dias === null ? 'Aferir agora' : `Atrasada ${-r.dias} d`, 'red') : r.dias <= 7 ? chip(`Em ${r.dias} d`, 'orange') : fmtDate(r.proxima)}</td><td>${mini('◎ Aferir', 'af-nova', m.id)}</td></tr>`; }).join('')}</tbody></table></div></section>` : '') +
+    `<div class="section-title"><h3>Registros (${lista.length})</h3></div>${maqsComAf.length > 1 || afMaqFiltro ? `<div class="filters"><button class="${!afMaqFiltro ? 'active' : ''}" data-act="af-maq" data-id="">Todas as máquinas</button>${maqsComAf.map(m => `<button class="${afMaqFiltro === m.id ? 'active' : ''}" data-act="af-maq" data-id="${esc(m.id)}">${esc(m.name)}</button>`).join('')}</div>` : ''}<section class="card list">${lista.length ? lista.map(a => {
       const p = principal(a.resultado);
       return `<div class="row clickable" data-act="nav" data-id="afericao/${esc(a.id)}" style="cursor:pointer"><span class="status ${STATUS_INFO[a.resultado.status]?.cor === 'gray' ? 'blue' : STATUS_INFO[a.resultado.status]?.cor}"></span><div><strong>${esc(TIPOS[a.tipo]?.titulo || a.tipo)} — ${esc(a.maquina?.name || 'equipamento não cadastrado')}</strong><small>${esc([fmtDate(a.data) + ' ' + a.hora, a.responsavel, p?.regraId ? 'regra ' + p.regraId + ' v' + p.regraVersao : ''].filter(Boolean).join(' • '))}</small></div>${statusChip(a.resultado.status)}</div>`;
     }).join('') : empty('Nenhuma aferição registrada', 'Toque no que você vai aferir, acima, para começar.')}</section>`;
@@ -582,10 +585,23 @@ function relatorio(id) {
 // ---------- Integração com o restante do app ----------
 TITLES.afericao = 'Aferição e calibragem';
 TITLES.catalogo = 'Catálogo de máquinas';
+// Reaferição: intervalo em dias definido pelo usuário na máquina (procedimento próprio, não é referência técnica)
+let afMaqFiltro = '';
+function situacaoReaferir(m) {
+  const ultima = db.afericoes.filter(a => a.maquina?.id === m.id).sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora))[0];
+  const dias = Number(m.reaferirDias);
+  if (!(dias > 0)) return {ultima};
+  if (!ultima) return {ultima, vencida: true, dias: null, proxima: null};
+  const proxima = addDias(ultima.data, dias), faltam = Math.round((new Date(proxima + 'T12:00:00') - new Date(today() + 'T12:00:00')) / 864e5);
+  return {ultima, proxima, dias: faltam, vencida: faltam < 0};
+}
+const textoReaferir = m => { const r = situacaoReaferir(m); if (r.proxima === undefined) return ''; return r.vencida ? (r.dias === null ? `! Reaferição: nunca aferida (a cada ${num(m.reaferirDias)} dias)` : `! Reaferição atrasada há ${-r.dias} dias`) : `Próxima aferição: ${fmtDate(r.proxima)}${r.dias <= 7 ? ` (em ${r.dias} d)` : ''}`; };
+ACTIONS['af-maq'] = id => { afMaqFiltro = id || ''; go('afericao'); };
 const alertasBase = alerts;
 alerts = function () {
   const lista = alertasBase();
   const limite = daysAgo(30);
+  db.machines.filter(m => !isInactive(m) && Number(m.reaferirDias) > 0).forEach(m => { const r = situacaoReaferir(m); if (r.vencida || r.dias <= 7) lista.push({color: r.vencida ? 'red' : 'orange', icon: '◎', title: `${r.vencida ? 'Aferição atrasada' : 'Aferição próxima'}: ${m.name}`, text: textoReaferir(m).replace(/^! /, ''), route: 'afericao'}); });
   db.afericoes.filter(a => a.data >= limite && a.resultado?.status === 'FORA_DO_PADRAO').forEach(a => lista.push({color: 'red', icon: '◎', title: `Aferição fora da referência: ${a.maquina?.name || TIPOS[a.tipo]?.titulo}`, text: `${TIPOS[a.tipo]?.titulo} em ${fmtDate(a.data)}.`, route: 'afericao/' + a.id}));
   return lista;
 };

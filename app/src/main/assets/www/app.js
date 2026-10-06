@@ -198,7 +198,8 @@ function machineForm(m = {}) {
       {k: 'hours', label: 'Horímetro atual (h)', type: 'number', min: 0, required: true},
       {k: 'interval', label: 'Intervalo de revisão (h)', type: 'number', min: 0},
       {k: 'nextService', label: 'Próxima revisão em (h)', type: 'number', min: 0, hint: 'Vazio = horímetro atual + intervalo'},
-      {k: 'state', label: 'Situação', type: 'select', options: ['Ativa', 'Inativa'], required: true}
+      {k: 'state', label: 'Situação', type: 'select', options: ['Ativa', 'Inativa'], required: true},
+      {k: 'reaferirDias', label: 'Reaferir a cada (dias)', type: 'number', min: 0, hint: 'Opcional — conforme o seu procedimento de qualidade. Gera lembrete.'}
     ],
     onSubmit: v => {
       if (v.nextService === '' && v.interval) v.nextService = Number(v.hours) + Number(v.interval);
@@ -489,14 +490,14 @@ VIEWS.maquinas = () => {
       const textoRev = !temRev ? 'Sem revisão programada' : left <= 0 ? `! Revisão vencida há ${num(-left)} h` : `Revisão em ${num(left)} h (${num(m.nextService)} h)`;
       const af = db.afericoes.filter(a => a.maquina?.id === m.id).sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora))[0];
       const cfgN = m.config ? Object.keys(m.config).length : 0;
-      const extras = [cfgN ? `Configuração para aferição: ${cfgN} ${cfgN === 1 ? 'parâmetro' : 'parâmetros'}` : '', m.catalogo ? `Catálogo: ${esc(m.catalogo.marca)} ${esc(m.catalogo.nome)}` : '', af ? `Última aferição: ${fmtDate(af.data)} — ${esc({OK: 'dentro da referência', ATENCAO: 'atenção', FORA_DO_PADRAO: 'fora da referência', SEM_REFERENCIA: 'não avaliada', DADOS_INSUFICIENTES: 'dados insuficientes'}[af.resultado.status] || '')}` : ''].filter(Boolean);
+      const extras = [cfgN ? `Configuração para aferição: ${cfgN} ${cfgN === 1 ? 'parâmetro' : 'parâmetros'}` : '', m.catalogo ? `Catálogo: ${esc(m.catalogo.marca)} ${esc(m.catalogo.nome)}` : '', af ? `Última aferição: ${fmtDate(af.data)} — ${esc({OK: 'dentro da referência', ATENCAO: 'atenção', FORA_DO_PADRAO: 'fora da referência', SEM_REFERENCIA: 'não avaliada', DADOS_INSUFICIENTES: 'dados insuficientes'}[af.resultado.status] || '')}` : '', typeof textoReaferir === 'function' ? textoReaferir(m) : ''].filter(Boolean);
       return `<article class="card item-card maq-card"><header><div><h4>${esc(m.name)}</h4><div class="meta">${esc([m.type, m.model].filter(Boolean).join(' • '))}</div></div>${chip(st, color)}</header>
         <div class="maq-horas"><span class="big">${num(m.hours)} h</span><small>último registro ${fmtDate(db.hourLogs.filter(h => h.machineId === m.id).sort(byDateDesc)[0]?.date)}</small></div>
         <div class="maq-rev ${corRev}"><small>${textoRev}</small>${temRev ? `<div class="progress"><span style="width:${pct}%"></span></div>` : ''}</div>
         ${extras.length ? `<div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>` : ''}
         <div class="maq-acoes">${isInactive(m) ? '' : mini('◷ Horímetro', 'hour-new', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}
           <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">
-            ${isInactive(m) ? '' : mini('⛽ Abastecimento', 'cb-new', m.id)}${mini('◎ Aferição e calibragem', 'af-nova', m.id)}${mini('⚙ Configuração para aferição', 'mc-config', m.id)}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
+            ${isInactive(m) ? '' : mini('⛽ Abastecimento', 'cb-new', m.id)}${mini('◎ Aferição e calibragem', 'af-nova', m.id)}${mini('Histórico de aferições', 'af-maq', m.id)}${mini('⚙ Configuração para aferição', 'mc-config', m.id)}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
           </div></details></div></article>`;
     }).join('')}</section>` : `<section class="card">${empty('Nenhuma máquina cadastrada', 'Cadastre tratores, colheitadeiras e implementos para controlar horímetro e revisões.', {act: 'mc-new', label: '+ Nova máquina'})}</section>`) +
     `<div class="section-title"><h3>Ordens de manutenção</h3></div><section class="card list">${mts.length ? mts.map(mt => {
@@ -562,7 +563,7 @@ function lotDetail(id) {
     ...(f ? db.movements.filter(m => m.fieldId === f.id && m.kind === 'Saída').map(m => { const s = find('stock', m.itemId); return {date: m.date, title: `Insumo aplicado: ${s?.name || 'item'}`, text: `${num(m.qty)} ${s?.unit || ''} no ${f.name}`, color: 'blue', icon: '□'}; }) : [])
   ].sort(byDateDesc);
   const ordem = db.ubs.filter(o => o.lotId === id).sort((a, b) => (b.inicio || '').localeCompare(a.inicio || ''))[0];
-  return head(`Lote ${l.code}`, [l.species, l.cultivar, l.category, l.season].filter(Boolean).join(' • '), btn('← Lotes', 'nav', 'lotes', 'secondary') + (ordem ? btn('Beneficiamento', 'nav', 'ubs/' + ordem.id, 'secondary') : '') + btn('Editar', 'lot-edit', id, 'secondary') + btn('+ Evento', 'lot-event', id)) +
+  return head(`Lote ${l.code}`, [l.species, l.cultivar, l.category, l.season].filter(Boolean).join(' • '), btn('← Lotes', 'nav', 'lotes', 'secondary') + btn('Etiqueta / QR', 'nav', 'etiqueta/' + id, 'secondary') + (ordem ? btn('Beneficiamento', 'nav', 'ubs/' + ordem.id, 'secondary') : '') + btn('Editar', 'lot-edit', id, 'secondary') + btn('+ Evento', 'lot-event', id)) +
     `<section class="kpis">
       <article class="card kpi"><div class="label">Situação</div><div class="value" style="font-size:1.1rem">${chip(l.status, LOT_COLOR[l.status])}</div></article>
       <article class="card kpi"><div class="label">Talhão de origem</div><div class="value" style="font-size:1.2rem">${esc(f?.name || '—')}</div><div class="hint">${f ? num(f.area) + ' ha' : ''}</div></article>
