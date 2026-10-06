@@ -45,10 +45,12 @@ const PRODUTOS = [['soja', 'Soja'], ['milho', 'Milho'], ['trigo', 'Trigo'], ['fe
 function numeros(txt) {
   const tokens = String(txt || '').trim().split(/[\s;]+/).filter(Boolean);
   const vals = [], erros = [];
-  for (const t of tokens) { const v = Number(t.replace(',', '.')); if (Number.isFinite(v)) vals.push(v); else erros.push(t); }
+  // "1.250" é ambíguo (1,25 ou 1250): recusado para o usuário digitar sem ponto de milhar
+  for (const t of tokens) { const v = MILHAR.test(t) ? NaN : Number(t.replace(',', '.')); if (Number.isFinite(v)) vals.push(v); else erros.push(t); }
   return {vals, erros};
 }
-const umNum = v => { if (v === '' || v == null) return undefined; const n = Number(String(v).replace(',', '.')); return Number.isFinite(n) ? n : undefined; };
+const MILHAR = /^-?\d{1,3}(\.\d{3})+(,\d*)?$/;
+const umNum = v => { const t = String(v ?? '').trim(); if (t === '' || MILHAR.test(t)) return undefined; const n = Number(t.replace(',', '.')); return Number.isFinite(n) ? n : undefined; };
 const triEstado = v => v === 'sim' ? true : v === 'nao' ? false : undefined;
 const statusChip = s => chip(STATUS_INFO[s]?.rotulo || s, STATUS_INFO[s]?.cor || 'gray');
 
@@ -120,7 +122,9 @@ async function atualizarCatalogo() {
   } catch (e) { lista.innerHTML = empty('Catálogo indisponível', 'Não foi possível carregar os dados offline.'); }
 }
 async function detalheCatalogo(id) {
+  const rota = location.hash;
   const m = await modeloPorId(id);
+  if (location.hash !== rota) return; // o usuário já saiu desta tela
   if (!m) { view.innerHTML = empty('Modelo não encontrado', ''); return; }
   const secoes = {};
   (m.especificacoes || []).forEach(([s, c, v]) => (secoes[s || 'Especificações'] ||= []).push([c, v]));
@@ -145,7 +149,9 @@ async function vincularMaquina(machineId) {
   modal.classList.add('open');
   let fonte = 'fabricante';
   const atual = async () => {
-    const r = await buscarCatalogo($('#vq').value, '', fonte, 30);
+    const f = fonte, q = $('#vq').value;
+    const r = await buscarCatalogo(q, '', f, 30);
+    if (f !== fonte || !$('#vq') || q !== $('#vq').value) return; // resultado de uma busca antiga
     $('#vres').innerHTML = r.length ? r.map(x => `<div class="row clickable" data-pick="${esc(x.id)}" style="cursor:pointer"><span class="status ${x.fonte === 'finame' ? 'purple' : 'blue'}"></span><div><strong>${esc(x.marca)} — ${esc(x.nome)}</strong><small>${esc([x.modelo, x.codigoFiname].filter(Boolean).join(' • '))}</small></div></div>`).join('') : '<div class="empty">Nada encontrado.</div>';
   };
   $('#vq').oninput = atual;
@@ -347,14 +353,14 @@ VIEWS.afericao.after = () => {
   if (cor) dados('regras').then(b => {
     const t = b.tabelasReferencia.find(x => x.id === 'ISO10625-CORES');
     cor.innerHTML = '<option value="">—</option>' + t.linhas.map(l => `<option value="${l.tamanho}" ${l.tamanho === wz.corIso ? 'selected' : ''}>${esc(l.cor)} — classe ${num(l.vazao, 2)} L/min a 3 bar</option>`).join('');
-  });
+  }).catch(() => { /* sem banco offline: lista de cores fica vazia */ });
   $$('.af-lista').forEach(el => atualizarResumoLista(el.dataset.lista));
   for (const k of Object.keys(wz?._origem || {})) { const el = $('#wz_' + k); if (el && !el.parentElement.querySelector('.cfg-origem')) el.insertAdjacentHTML('afterend', '<small class="cfg-origem fabricante">⚙ da configuração da máquina</small>'); }
   const lin = $('#wz_linhasColetadas'), esp = $('#wz_espLinhasM'), larg = $('#wz_larguraM');
   if (lin && esp && larg) { const calc = () => { const n = umNum(lin.value), e = umNum(esp.value); if (n > 0 && e > 0) larg.value = String(Math.round(n * e * 1000) / 1000).replace('.', ','); }; lin.oninput = calc; esp.oninput = calc; }
   const spm = $('#wz_sementesPorMetro'), info = $('#infoPopulacao');
   if (spm && info) { const e = configDaMaquina(wz.machineId).espacamentoLinhasM; const upd = () => { const v = umNum(spm.value); info.textContent = e && v > 0 ? `Com ${num(e * 100, 0)} cm entre linhas (configuração da máquina): ${num(AV().calculos.populacao(v, e), 0)} sementes/ha.` : ''; }; spm.oninput = upd; upd(); }
-  if (wz?.tipo === 'bicos' && !limitesBico) dados('regras').then(b => { const r = b.regras.find(x => x.id === 'PULV-BICO-CAT-01' && x.statusValidacao === 'validada'); limitesBico = r ? [r.limiteMin, r.limiteMax] : false; atualizarResumoLista('vazoes'); });
+  if (wz?.tipo === 'bicos' && !limitesBico) dados('regras').then(b => { const r = b.regras.find(x => x.id === 'PULV-BICO-CAT-01' && x.statusValidacao === 'validada'); limitesBico = r ? [r.limiteMin, r.limiteMax] : false; atualizarResumoLista('vazoes'); }).catch(() => { /* sem banco offline: a prévia fica sem limites */ });
 };
 // Prévia enquanto digita: quantidade, média e (bicos) desvio de cada ponta em relação à tabela. O resultado oficial vem do avaliador.
 function atualizarResumoLista(k) {
@@ -416,6 +422,9 @@ function validarPasso() {
     const lista = {bicos: 'vazoes', perdas: 'massasG', longitudinal: 'espacamentos', transversal: 'valoresSobrepostos'}[w.tipo];
     if (lista) { const n = numeros(w[lista]); if (n.erros.length) return `Valores não numéricos: ${n.erros.slice(0, 3).join(', ')}`; if (!n.vals.length) return 'Informe as medições'; }
     if (w.tipo === 'perdas') { const n = numeros(w.massasPlataformaG); if (n.erros.length) return `Valores não numéricos: ${n.erros.slice(0, 3).join(', ')}`; }
+    // Campos numéricos únicos: valor digitado que não é número não pode virar “não informado” em silêncio
+    const invalido = $$('input[data-wz][inputmode="decimal"]').find(el => el.value.trim() !== '' && umNum(el.value) === undefined);
+    if (invalido) return `Valor inválido: “${invalido.value.trim()}” — use só números, com vírgula para decimais e sem ponto de milhar`;
   }
   return '';
 }
@@ -503,19 +512,25 @@ Object.assign(ACTIONS, {
   'af-cancelar': () => { wz = null; go('afericao'); },
   'af-voltar': () => { coletarWizard(); wz.passo = Math.max(1, wz.passo - 1); render(); },
   'af-avancar': async () => {
+    if (!wz || wz._ocupado) return; // evita avançar duas vezes com toque duplo
     coletarWizard();
     const erro = validarPasso(); if (erro) { showToast(erro); return; }
     if (wz.passo === 1) aplicarConfigMaquina(wz);
-    if (wz.passo === 2) {
-      try { wz.resultado = await calcular(); wz.avisos = avisosConfig(wz); } catch (e) { showToast('Não foi possível calcular: ' + e.message); return; }
+    const passo = wz.passo;
+    if (passo === 2) {
+      wz._ocupado = true;
+      try { wz.resultado = await calcular(); wz.avisos = avisosConfig(wz); } catch (e) { showToast('Não foi possível calcular: ' + e.message); return; } finally { if (wz) delete wz._ocupado; }
     }
-    wz.passo++; render(); scrollTo(0, 0);
+    if (!wz || wz.passo !== passo) return;
+    wz.passo = passo + 1; render(); scrollTo(0, 0);
   },
   'af-salvar': () => {
+    if (!wz?.resultado) return;
     const w = wz, mq = w.machineId ? find('machines', w.machineId) : null;
     const reg = {id: uid(), data: w.data, hora: w.hora, responsavel: w.responsavel, tipo: w.tipo, familia: w.familia, produto: w.produto, fieldId: w.fieldId,
       maquina: mq ? {id: mq.id, name: mq.name, model: mq.model, hours: mq.hours, catalogo: mq.catalogo || null} : null,
-      entradas: Object.fromEntries(Object.entries(w).filter(([k]) => !['passo', 'resultado'].includes(k))),
+      entradas: Object.fromEntries(Object.entries(w).filter(([k]) => !['passo', 'resultado', '_ocupado'].includes(k))),
+      propriedade: db.settings.farm || '', talhao: fieldName(w.fieldId),
       resultado: AV().congelar(w.resultado), bancoVersao: w.resultado.avaliacao?.bancoVersao || principal(w.resultado)?.bancoVersao || null,
       criadoEm: new Date().toISOString()};
     db.afericoes.push(reg); save(); wz = null;
@@ -543,15 +558,15 @@ function relatorio(id) {
   }[a.tipo] || [];
   return `<div class="no-print">${head('Relatório de aferição', `${TIPOS[a.tipo]?.titulo || a.tipo} • ${fmtDate(a.data)} ${a.hora}`, btn('← Aferições', 'nav', 'afericao', 'secondary') + btn('Imprimir / PDF', 'af-imprimir', '', 'secondary') + `<button class="danger" data-act="af-excluir" data-id="${esc(a.id)}">Excluir</button>`)}</div>
   <article class="card panel relatorio">
-    <header class="rel-head"><div><strong>${esc(db.settings.farm || 'Nexus Agro')}</strong><br><small>Medição e comparação com referência técnica</small></div><small>Registro ${esc(a.id)}</small></header>
+    <header class="rel-head"><div><strong>${esc((a.propriedade ?? db.settings.farm) || 'Nexus Agro')}</strong><br><small>Medição e comparação com referência técnica</small></div><small>Registro ${esc(a.id)}</small></header>
     <h3>1. Resultado e ação recomendada</h3>${blocoResultado(r, a)}
     <h3>2. Identificação e rastreabilidade</h3><table class="tbl"><tbody>
       ${linha('Equipamento', a.maquina ? `${a.maquina.name}${a.maquina.model ? ' — ' + a.maquina.model : ''}` : 'Não cadastrado')}
       ${linha('Catálogo', a.maquina?.catalogo ? `${a.maquina.catalogo.marca} ${a.maquina.catalogo.nome}${a.maquina.catalogo.codigoFiname ? ' • FINAME ' + a.maquina.catalogo.codigoFiname : ''}` : '')}
       ${linha('Horímetro no registro', a.maquina?.hours ? num(a.maquina.hours) + ' h' : '')}
       ${linha('Tipo de equipamento', FAMILIA_EQUIP[a.familia])}${linha('Avaliação', TIPOS[a.tipo]?.titulo)}
-      ${linha('Cultura / produto', (PRODUTOS.find(x => x[0] === a.produto) || [])[1])}${linha('Talhão / local', fieldName(a.fieldId))}
-      ${linha('Data / hora', `${fmtDate(a.data)} ${a.hora}`)}${linha('Responsável', a.responsavel)}${linha('Propriedade', db.settings.farm)}
+      ${linha('Cultura / produto', (PRODUTOS.find(x => x[0] === a.produto) || [])[1])}${linha('Talhão / local', a.talhao ?? fieldName(a.fieldId))}
+      ${linha('Data / hora', `${fmtDate(a.data)} ${a.hora}`)}${linha('Responsável', a.responsavel)}${linha('Propriedade', a.propriedade ?? db.settings.farm)}
     </tbody></table>
     <h3>3. Condições da leitura</h3><table class="tbl"><tbody>${condicoes.map(([k, v]) => linha(k, v)).join('')}${linha('Linhas coletadas', e.linhasColetadas)}${linha('Espaçamento entre linhas (m)', e.espLinhasM)}
       ${Object.keys(e._origem || {}).length ? linha('Valores vindos da configuração da máquina', Object.keys(e._origem).map(k => `${ROTULO_CFG[k] || k}: ${e[k]}`).join(' • ')) : ''}</tbody></table>

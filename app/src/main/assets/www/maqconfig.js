@@ -100,9 +100,15 @@ const origemTexto = o => o?.origem === 'fabricante' ? `ficha do fabricante (${o.
 // Preenche, ao entrar na medição, só campos vazios — e marca a origem para mostrar na tela e no relatório
 function aplicarConfigMaquina(w) {
   const m = w.machineId ? find('machines', w.machineId) : null;
-  w._origem ||= {};
+  w._origem ||= {}; w._preenchidos ||= {};
+  // Trocou de máquina: limpa o que veio da configuração da anterior (se o usuário não alterou), para não medir com o espaçamento errado
+  if (w._cfgMaq !== undefined && w._cfgMaq !== w.machineId) {
+    for (const [k, v] of Object.entries(w._preenchidos)) if (w[k] === v) { w[k] = ''; delete w._origem[k]; }
+    w._preenchidos = {};
+  }
+  w._cfgMaq = w.machineId;
   if (!m?.config) return;
-  const pre = (k, ck, conv = v => v) => { const v = cfgValor(m, ck); if (v != null && v !== '' && (w[k] == null || w[k] === '')) { w[k] = typeof v === 'number' ? String(conv(v)).replace('.', ',') : conv(v); w._origem[k] = ck; } };
+  const pre = (k, ck, conv = v => v) => { const v = cfgValor(m, ck); if (v != null && v !== '' && (w[k] == null || w[k] === '')) { w[k] = typeof v === 'number' ? String(conv(v)).replace('.', ',') : conv(v); w._origem[k] = ck; w._preenchidos[k] = w[k]; } };
   if (w.tipo === 'taxa') pre('espacamentoBicosM', 'espacamentoBicosM');
   if (w.tipo === 'bicos') pre('modeloPonta', 'modeloPonta');
   if (w.tipo === 'dose' && w.familia !== 'distribuidor_lanco') pre('espLinhasM', 'espacamentoLinhasM');
@@ -122,6 +128,8 @@ function avisosConfig(w) {
   if (fora(pr, fp)) out.push(`Pressão ${num(pr, 1)} bar fora da faixa do comando (${num(fp.min, 1)} a ${num(fp.max, 1)} bar — ${origemTexto(m.config.faixaPressaoBar)}).`);
   const eb = cfgValor(m, 'espacamentoBicosM'), ebw = umNum(w.espacamentoBicosM);
   if (w.tipo === 'taxa' && eb && ebw && Math.abs(ebw - eb) > 0.001) out.push(`Espaçamento entre bicos usado (${num(ebw, 3)} m) diferente da configuração da máquina (${num(eb, 3)} m).`);
+  const el = cfgValor(m, 'espacamentoLinhasM'), elw = umNum(w.espLinhasM);
+  if (w.tipo === 'dose' && el && elw && Math.abs(elw - el) > 0.001) out.push(`Espaçamento entre linhas usado (${num(elw, 3)} m) diferente da configuração da máquina (${num(el, 3)} m).`);
   const nb = qtdBicosConfig(w), nv = numeros(w.vazoes).vals.length;
   if (w.tipo === 'bicos' && nb && nv && nv !== nb) out.push(`Foram medidos ${nv} bicos; a configuração da máquina tem ${nb}.`);
   return out;
@@ -135,6 +143,7 @@ VIEWS.maquinas = arg => {
   return VIEW_MAQUINAS_BASE(arg);
 };
 async function telaConfig(id) {
+  const rota = location.hash;
   const m = find('machines', id);
   if (!m) { view.innerHTML = empty('Máquina não encontrada', ''); return; }
   let sug = {}, modeloCat = null;
@@ -153,6 +162,7 @@ async function telaConfig(id) {
       ${ops.length ? `<div class="cfg-ops"><span>Opções da ficha:</span>${ops.map(o => opc(k, o)).join('')}</div><small class="cfg-trecho">“${esc([...new Set(ops.map(o => `${o.campo}: ${o.trecho}`))].join(' • ').slice(0, 220))}”</small>` : ''}</div>`;
   };
   const blocoLinhas = sug.linhas?.length ? `<div class="cfg-param"><label>Configuração de linhas de fábrica</label><div class="cfg-ops"><span>Escolha a da sua máquina:</span>${sug.linhas.map(o => `<button type="button" class="cfg-op ${cfgEdit.nLinhas?.valor === o.valor.nLinhas && cfgEdit.espacamentoLinhasM?.valor === o.valor.espacamentoLinhasM ? 'on' : ''}" data-act="cfg-linhas" data-id="${esc(JSON.stringify(o))}">${esc(o.rotulo)}</button>`).join('')}</div><small class="cfg-trecho">“${esc([...new Set(sug.linhas.map(o => `${o.campo}: ${o.trecho}`))].join(' • ').slice(0, 220))}”</small></div>` : '';
+  if (location.hash !== rota) return; // o usuário já saiu desta tela
   view.innerHTML = head(`Configuração para aferição — ${m.name}`, [m.type, m.catalogo ? `${m.catalogo.marca} ${m.catalogo.nome}` : m.model].filter(Boolean).join(' • '), btn('← Máquinas', 'nav', 'maquinas', 'secondary')) +
     `<section class="card panel"><p class="nota" style="margin-top:0">Estes dados são usados nas aferições desta máquina. ${modeloCat ? 'As opções vêm da ficha do fabricante (texto original abaixo de cada uma): <strong>toque na que corresponde à sua máquina</strong> — o app não escolhe sozinho.' : m.catalogo ? 'Esta máquina está vinculada à lista do BNDES, que não traz especificações: informe os valores.' : 'Vincule a máquina ao catálogo (menu ⋯) para ver as opções do fabricante, ou informe os valores.'}</p>
       ${grupos.map(g => `<h3 class="af-sec">${esc(PARAMS_MAQ[g].titulo)}</h3>${g === 'plantio' ? blocoLinhas : ''}<div class="cfg-lista">${PARAMS_MAQ[g].itens.map(linhaParam).join('')}</div>`).join('')}
