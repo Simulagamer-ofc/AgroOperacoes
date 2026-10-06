@@ -10,7 +10,7 @@ const pad = n => String(n).padStart(2, '0');
 const isoDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 const today = () => isoDate(new Date());
 const nowTime = () => { const d = new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
-const fmtDate = s => s ? s.split('-').reverse().join('/') : '—';
+const fmtDate = s => s ? String(s).split('-').reverse().join('/').replace(/[&<>"']/g, '') : '—';
 const num = (v, dec = 0) => Number(v || 0).toLocaleString('pt-BR', {minimumFractionDigits: dec, maximumFractionDigits: Math.max(dec, 2)});
 const daysAgo = n => { const d = new Date(); d.setDate(d.getDate() - n); return isoDate(d); };
 const byDateDesc = (a, b) => (b.date + (b.time || '')).localeCompare(a.date + (a.time || ''));
@@ -45,7 +45,6 @@ let db = loadDb();
 function save() {
   if (!safeStorage.set(DB_KEY, JSON.stringify(db))) showToast('Não foi possível salvar no dispositivo (armazenamento cheio?)');
 }
-save();
 
 const find = (col, id) => db[col].find(x => x.id === id);
 const upsert = (col, item) => {
@@ -92,6 +91,7 @@ function alerts() {
 const root = document.documentElement, sidebar = $('#sidebar'), overlay = $('#overlay'), modal = $('#modal'), dialog = $('#dialog'), toastEl = $('#toast'), view = $('#view');
 let toastTimer;
 function showToast(message) { toastEl.textContent = message; toastEl.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2800); }
+save(); // grava migrações do banco (agora o aviso de armazenamento cheio já pode ser exibido)
 const savedTheme = safeStorage.get('agro-theme'); if (savedTheme) root.dataset.theme = savedTheme;
 $('#themeBtn').onclick = () => { const next = (root.dataset.theme || 'dark') === 'dark' ? 'light' : 'dark'; root.dataset.theme = next; safeStorage.set('agro-theme', next); };
 const closeMenu = () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); };
@@ -124,6 +124,8 @@ function openForm({title, sub, fields, values = {}, submit = 'Salvar no disposit
     const common = `name="${f.k}" id="f_${f.k}" ${f.required ? 'required' : ''}`;
     if (f.type === 'select') {
       const opts = (typeof f.options === 'function' ? f.options() : f.options).map(o => typeof o === 'string' ? {value: o, label: o} : o);
+      // Valor gravado que não está mais entre as opções (máquina inativa/removida, talhão excluído): mantém em vez de trocar em silêncio
+      if (v !== '' && !opts.some(o => String(o.value) === String(v))) opts.unshift({value: v, label: f.labelAusente?.(v) || '(registro removido ou inativo)'});
       return `<select ${common}>${f.required ? '' : '<option value="">—</option>'}${opts.map(o => `<option value="${esc(o.value)}" ${String(o.value) === String(v) ? 'selected' : ''}>${esc(o.label)}</option>`).join('')}</select>`;
     }
     if (f.type === 'textarea') return `<textarea ${common} rows="3" placeholder="${esc(f.placeholder || '')}">${esc(v)}</textarea>`;
@@ -155,6 +157,8 @@ function confirmDialog(message, onYes, yesLabel = 'Excluir') {
 // ---------- Formulários de cada entidade ----------
 const fieldOptions = () => db.fields.map(f => ({value: f.id, label: f.name}));
 const machineOptions = () => db.machines.filter(m => !isInactive(m)).map(m => ({value: m.id, label: `${m.name} (${num(m.hours)} h)`}));
+// Rótulo para máquina inativa que já está gravada no registro
+const maquinaAusente = id => { const m = find('machines', id); return m ? `${m.name} (inativa)` : '(máquina removida)'; };
 const stockOptions = () => db.stock.map(s => ({value: s.id, label: `${s.name} — ${num(s.qty)} ${s.unit}`}));
 
 function operationForm(op = {}) {
@@ -167,7 +171,7 @@ function operationForm(op = {}) {
       {k: 'place', label: 'Outro local', placeholder: 'Ex.: Unidade de beneficiamento'},
       {k: 'date', label: 'Data', type: 'date', required: true},
       {k: 'time', label: 'Horário', type: 'time'},
-      {k: 'machineId', label: 'Máquina', type: 'select', options: machineOptions},
+      {k: 'machineId', label: 'Máquina', type: 'select', options: machineOptions, labelAusente: maquinaAusente},
       {k: 'status', label: 'Situação', type: 'select', options: OP_STATUS, required: true},
       {k: 'area', label: 'Área trabalhada (ha)', type: 'number', min: 0},
       {k: 'operator', label: 'Operador / equipe'},
@@ -204,6 +208,8 @@ function machineForm(m = {}) {
 
 function hourForm(machineId) {
   if (!db.machines.length) { showToast('Cadastre uma máquina primeiro'); return machineForm(); }
+  if (machineId && (!find('machines', machineId) || isInactive(find('machines', machineId)))) { showToast('Máquina inativa: reative-a em Editar para registrar o horímetro'); return; }
+  if (!db.machines.some(m => !isInactive(m))) { showToast('Nenhuma máquina ativa'); return; }
   openForm({
     title: 'Registrar horímetro',
     values: {machineId, date: today()},
@@ -355,28 +361,28 @@ function aplicarMovimento(s, kind, qty, value) {
 }
 function movementForm(itemId, kind) {
   if (!db.stock.length) { showToast('Cadastre um item de estoque primeiro'); return stockForm(); }
-  const s0 = find('stock', itemId), entrada = kind === 'Entrada', saida = kind === 'Saída';
+  const s0 = find('stock', itemId), entrada = kind === 'Entrada', saida = kind === 'Saída', ajuste = kind === 'Ajuste de inventário';
   openForm({
-    title: entrada ? `Entrada — ${s0?.name || 'estoque'}` : saida ? `Saída — ${s0?.name || 'estoque'}` : 'Movimentar estoque',
-    sub: entrada ? 'Compra ou recebimento. Com o valor da nota, o custo médio do item é recalculado.' : saida ? 'Consumo ou aplicação. O custo sai pelo custo médio do item, quando conhecido.' : '',
+    title: entrada ? `Entrada — ${s0?.name || 'estoque'}` : saida ? `Saída — ${s0?.name || 'estoque'}` : ajuste ? `Ajuste de inventário — ${s0?.name || 'estoque'}` : 'Movimentar estoque',
+    sub: entrada ? 'Compra ou recebimento. Com o valor da nota, o custo médio do item é recalculado.' : saida ? 'Consumo ou aplicação. O custo sai pelo custo médio do item, quando conhecido.' : ajuste ? `Informe o saldo contado. Saldo atual no app: ${num(s0?.qty)} ${s0?.unit || ''}. O custo médio não muda.` : '',
     values: {itemId, kind: kind || 'Saída', date: today(), gasto: 'Sim'},
     fields: [
       {k: 'itemId', label: 'Item', type: 'select', options: stockOptions, required: true, full: true},
       ...(kind ? [] : [{k: 'kind', label: 'Movimento', type: 'select', options: ['Entrada', 'Saída', 'Ajuste de inventário'], required: true}]),
-      {k: 'qty', label: entrada ? 'Quantidade recebida' : saida ? 'Quantidade usada' : 'Quantidade', type: 'number', min: 0, required: true, hint: kind ? '' : 'No ajuste, informe o saldo contado'},
+      {k: 'qty', label: entrada ? 'Quantidade recebida' : saida ? 'Quantidade usada' : ajuste ? 'Saldo contado' : 'Quantidade', type: 'number', min: 0, required: true, hint: kind ? '' : 'No ajuste, informe o saldo contado'},
       {k: 'date', label: 'Data', type: 'date', required: true},
-      ...(saida ? [] : [
+      ...(saida || ajuste ? [] : [
         {k: 'value', label: 'Valor total da nota (R$)', type: 'number', min: 0, hint: kind ? 'Opcional, mas sem ele o custo médio deixa de ser calculado.' : 'Só para entradas.'},
         {k: 'supplier', label: 'Fornecedor'}, {k: 'doc', label: 'Nota fiscal / documento'},
         {k: 'gasto', label: 'Lançar o valor em Controle de gastos', type: 'select', options: ['Sim', 'Não'], required: true, hint: 'Só para entradas com valor.'}]),
-      ...(entrada ? [] : [{k: 'fieldId', label: 'Talhão (consumo)', type: 'select', options: fieldOptions}]),
+      ...(entrada || ajuste ? [] : [{k: 'fieldId', label: 'Talhão (consumo)', type: 'select', options: fieldOptions}]),
       {k: 'notes', label: 'Observações', type: 'textarea'}
     ],
     onSubmit: v => {
       const s = find('stock', v.itemId), k = kind || v.kind;
       if (!s) return 'Selecione o item';
       if (k === 'Saída' && v.qty > Number(s.qty || 0)) return `Saldo insuficiente (${num(s.qty)} ${s.unit})`;
-      if (k === 'Entrada' && !(v.qty > 0)) return 'Informe a quantidade recebida';
+      if (k !== 'Ajuste de inventário' && !(v.qty > 0)) return 'Informe uma quantidade maior que zero';
       const valor = k === 'Entrada' && Number(v.value) > 0 ? Number(v.value) : 0;
       const tinhaCusto = custoMedio(s) != null || Number(s.qty || 0) <= 0;
       const mov = aplicarMovimento(s, k, Number(v.qty), valor);
@@ -390,7 +396,7 @@ function movementForm(itemId, kind) {
     }
   });
   // Mostra o custo unitário e o novo custo médio enquanto digita
-  if (!saida) {
+  if (!saida && !ajuste) {
     const qEl = $('#f_qty', dialog), vEl = $('#f_value', dialog), itEl = $('#f_itemId', dialog), hint = vEl?.parentElement.querySelector('.hint');
     const base = hint?.textContent || '';
     const atual = () => {
@@ -486,7 +492,7 @@ VIEWS.maquinas = () => {
         <div class="maq-horas"><span class="big">${num(m.hours)} h</span><small>último registro ${fmtDate(db.hourLogs.filter(h => h.machineId === m.id).sort(byDateDesc)[0]?.date)}</small></div>
         <div class="maq-rev ${corRev}"><small>${textoRev}</small>${temRev ? `<div class="progress"><span style="width:${pct}%"></span></div>` : ''}</div>
         ${extras.length ? `<div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>` : ''}
-        <div class="maq-acoes">${mini('◷ Horímetro', 'hour-new', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}
+        <div class="maq-acoes">${isInactive(m) ? '' : mini('◷ Horímetro', 'hour-new', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}
           <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">
             ${mini('◎ Aferição e calibragem', 'af-nova', m.id)}${mini('⚙ Configuração para aferição', 'mc-config', m.id)}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
           </div></details></div></article>`;
@@ -572,11 +578,12 @@ VIEWS.relatorios = () => {
   const ops = db.operations.filter(o => o.date >= from && o.date <= today() && o.status !== 'Cancelada');
   const byType = OP_TYPES.map(t => [t, ops.filter(o => o.type === t)]).filter(([, l]) => l.length);
   const maxType = Math.max(1, ...byType.map(([, l]) => l.length));
-  const hoursBy = db.machines.map(m => [m, db.hourLogs.filter(h => h.machineId === m.id && h.date >= from).reduce((s, h) => s + (Number(h.hours) - Number(h.previous || 0)), 0)]).filter(([, h]) => h > 0).sort((a, b) => b[1] - a[1]);
+  const hoursBy = db.machines.map(m => [m, db.hourLogs.filter(h => h.machineId === m.id && h.date >= from && h.date <= today()).reduce((s, h) => s + (Number(h.hours) - Number(h.previous || 0)), 0)]).filter(([, h]) => h > 0).sort((a, b) => b[1] - a[1]);
   const maxH = Math.max(1, ...hoursBy.map(([, h]) => h));
   const consumption = db.stock.map(s => [s, db.movements.filter(m => m.itemId === s.id && m.kind === 'Saída' && m.date >= from).reduce((t, m) => t + Number(m.qty), 0)]).filter(([, q]) => q > 0).sort((a, b) => b[1] - a[1]);
-  const maintCost = db.maintenances.filter(m => m.date >= from).reduce((s, m) => s + Number(m.cost || 0), 0);
-  const outrosGastos = db.expenses.filter(g => g.date >= from && g.date <= today()).reduce((s, g) => s + Number(g.value || 0), 0);
+  // Mesmo critério de datas do Controle de gastos (manutenção pela data de conclusão, ou de abertura)
+  const custos = lancamentosCusto(from, today()), custosManut = custos.filter(x => x.origem === 'manutencao');
+  const maintCost = somaValor(custosManut), outrosGastos = somaValor(custos.filter(x => x.origem === 'gasto'));
   const area = ops.filter(o => o.status === 'Concluída').reduce((s, o) => s + Number(o.area || 0), 0);
   return head('Relatórios', `Resumo dos últimos ${reportDays} dias (desde ${fmtDate(from)})`, btn('Exportar operações (CSV)', 'csv', 'operations', 'secondary') + btn('Exportar estoque (CSV)', 'csv', 'stock', 'secondary')) +
     `<div class="filters">${[7, 30, 90, 365].map(d => `<button class="${d === reportDays ? 'active' : ''}" data-act="rep-days" data-id="${d}">${d === 365 ? '12 meses' : d + ' dias'}</button>`).join('')}</div>
@@ -584,7 +591,7 @@ VIEWS.relatorios = () => {
       <article class="card kpi"><div class="label">Operações no período</div><div class="value">${ops.length}</div><div class="hint">${ops.filter(o => o.status === 'Concluída').length} concluídas</div></article>
       <article class="card kpi"><div class="label">Área trabalhada</div><div class="value">${num(area)}</div><div class="hint">ha em operações concluídas</div></article>
       <article class="card kpi"><div class="label">Horas de máquina</div><div class="value">${num(hoursBy.reduce((s, [, h]) => s + h, 0))}</div><div class="hint">pelos registros de horímetro</div></article>
-      <article class="card kpi"><div class="label">Custo de manutenção</div><div class="value">R$ ${num(maintCost, 2)}</div><div class="hint">${db.maintenances.filter(m => m.date >= from).length} ordens</div></article>
+      <article class="card kpi"><div class="label">Custo de manutenção</div><div class="value">R$ ${num(maintCost, 2)}</div><div class="hint">${custosManut.length} ${custosManut.length === 1 ? 'ordem com custo' : 'ordens com custo'}</div></article>
       <article class="card kpi clickable" data-act="nav" data-id="gastos" style="cursor:pointer"><div class="label">Outros gastos</div><div class="value">R$ ${num(outrosGastos, 2)}</div><div class="hint">combustível, peças, mão de obra e demais • ver detalhes</div></article>
     </section>
     <section class="grid">
@@ -661,6 +668,7 @@ function restoreBackup(text) {
   const n = COLLECTIONS.reduce((s, c) => s + (data[c]?.length || 0), 0);
   confirmDialog(`Restaurar backup de ${parsed.exportedAt ? new Date(parsed.exportedAt).toLocaleString('pt-BR') : 'data desconhecida'} com ${n} registros? Os dados atuais deste dispositivo serão substituídos.`, () => {
     db = {...emptyDb(), ...data}; for (const c of COLLECTIONS) if (!Array.isArray(db[c])) db[c] = [];
+    db.settings = {...emptyDb().settings, ...(data.settings && typeof data.settings === 'object' ? data.settings : {})};
     save(); applySettings(); showToast('Backup restaurado');
   }, 'Restaurar');
 }
@@ -716,7 +724,13 @@ const ACTIONS = {
   'op-done': id => { const o = find('operations', id); o.status = 'Concluída'; o.finishedAt = new Date().toISOString(); save(); showToast('Operação concluída'); render(); },
   'op-filter': id => { opFilter = id; render(); },
   'mc-new': () => machineForm(), 'mc-edit': id => machineForm(find('machines', id)),
-  'mc-del': id => confirmDialog('Excluir esta máquina? Os registros de horímetro dela também serão removidos.', () => { remove('machines', id); db.hourLogs = db.hourLogs.filter(h => h.machineId !== id); save(); }),
+  'mc-del': id => {
+    const abertas = openMaintenances(id).length;
+    confirmDialog(`Excluir esta máquina? Os registros de horímetro${abertas ? ` e ${abertas} ${abertas === 1 ? 'ordem de manutenção em aberto' : 'ordens de manutenção em aberto'}` : ''} dela também serão removidos. Manutenções concluídas e seus custos ficam no histórico. Se a máquina só saiu de uso, prefira marcá-la como Inativa em Editar.`, () => {
+      remove('machines', id); db.hourLogs = db.hourLogs.filter(h => h.machineId !== id);
+      db.maintenances = db.maintenances.filter(m => m.machineId !== id || m.status === 'Concluída'); save();
+    });
+  },
   'hour-new': id => hourForm(id),
   'mt-new': id => maintenanceForm(id ? {machineId: id} : {}), 'mt-edit': id => maintenanceForm(find('maintenances', id)),
   'mt-done': id => { finishMaintenance(find('maintenances', id)); render(); },
@@ -725,13 +739,15 @@ const ACTIONS = {
   'fd-del': id => confirmDialog('Excluir este talhão? Operações e lotes vinculados ficarão sem talhão.', () => remove('fields', id)),
   'lot-new': () => lotForm(), 'lot-edit': id => lotForm(find('lots', id)), 'lot-event': id => lotEventForm(id),
   'st-new': () => stockForm(), 'st-edit': id => stockForm(find('stock', id)),
-  'st-del': id => confirmDialog('Excluir este item e suas movimentações?', () => { remove('stock', id); db.movements = db.movements.filter(m => m.itemId !== id); save(); }),
+  // As movimentações ficam: são o histórico de insumos aplicados nos talhões e lotes (aparecem como “Item removido”)
+  'st-del': id => confirmDialog('Excluir este item do estoque? O histórico de movimentações e de insumos aplicados nos talhões é mantido.', () => remove('stock', id)),
   'mov-new': id => movementForm(id),
+  'st-ajuste': id => movementForm(id, 'Ajuste de inventário'),
   'rep-days': id => { reportDays = Number(id); render(); },
   'csv': id => exportCsv(id),
   'backup': exportBackup,
   'restore': () => $('#restoreInput').click(),
-  'seed': () => confirmDialog('Adicionar dados de exemplo aos registros deste dispositivo?', loadSamples, 'Carregar'),
+  'seed': () => db.lots.some(l => ['SM-024', 'SM-026'].includes(l.code)) ? showToast('Os dados de exemplo já foram carregados neste aparelho') : confirmDialog('Adicionar dados de exemplo aos registros deste dispositivo?', loadSamples, 'Carregar'),
   'wipe': () => confirmDialog('Apagar TODOS os dados deste dispositivo? Faça um backup antes. Esta ação não pode ser desfeita.', () => { const settings = db.settings; db = emptyDb(); db.settings = settings; save(); showToast('Dados apagados'); }, 'Apagar tudo')
 };
 document.addEventListener('click', e => {

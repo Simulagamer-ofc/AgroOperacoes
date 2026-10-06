@@ -23,7 +23,7 @@ function cartaoItem(s) {
   return `<article class="card es-item" id="item-${esc(s.id)}">
     <div class="es-topo"><div><strong>${esc(s.name)}</strong><small>${esc([s.category, s.location].filter(Boolean).join(' • ') || 'Sem categoria')}</small></div>
       <div class="es-topo-dir">${chip(n.rotulo, n.cor)}<details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">
-        <button data-act="mov-new" data-id="${esc(s.id)}">⇄ Ajuste de inventário</button><button data-act="st-edit" data-id="${esc(s.id)}">Editar item</button><button class="del" data-act="st-del" data-id="${esc(s.id)}">Excluir</button></div></details></div></div>
+        <button data-act="st-ajuste" data-id="${esc(s.id)}">⇄ Ajuste de inventário</button><button data-act="st-edit" data-id="${esc(s.id)}">Editar item</button><button class="del" data-act="st-del" data-id="${esc(s.id)}">Excluir</button></div></details></div></div>
     <div class="es-saldo"><b>${num(s.qty)}</b><span>${esc(s.unit)}</span></div>
     <div><div class="es-nivel" role="img" aria-label="${esc(`${num(s.qty)} ${s.unit}, ${n.txt}`)}"><i class="${n.cls}" style="width:${n.pct}%"></i>${n.marca != null ? `<em style="left:${n.marca}%" title="mínimo"></em>` : ''}</div>
       <div class="es-legenda"><span>${n.txt}</span><span>${n.marca != null ? `mínimo ${num(s.min)} ${esc(s.unit)}` : ''}</span></div></div>

@@ -92,7 +92,7 @@ Object.assign(ACTIONS, {
   'gs-talhao': id => gastoForm({fieldId: id}),
   'gs-edit': id => gastoForm(find('expenses', id)),
   'gs-del': id => confirmDialog('Excluir este gasto?', () => remove('expenses', id)),
-  'gs-periodo': id => { gastoPeriodo = id; render(); },
+  'gs-periodo': id => { gastoPeriodo = id; gastoCat = ''; render(); },
   'gs-cat': id => { gastoCat = id; render(); },
   'gs-csv': exportarGastosCsv
 });
