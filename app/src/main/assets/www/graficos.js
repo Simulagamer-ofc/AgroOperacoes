@@ -114,23 +114,40 @@ function semanaOperacoes() {
     `<div class="nx-dia" ${tip(`${dia(d)} ${fmtDia(d)}`, `${n} ${n === 1 ? 'operação' : 'operações'}`)}><div class="nx-trilho">${n ? `<span class="nx-barra" style="height:${n / max * 100}%"></span><b style="bottom:${n / max * 100}%">${n}</b>` : ''}</div><small>${dia(d)}</small></div>`).join('')}</div>` +
     tabela(['Dia', 'Operações'], cont.map(([d, n]) => [`${dia(d)} ${fmtDia(d)}`, n]));
 }
-// Custos por mês (últimos 6 meses). Hoje o app registra custo nas manutenções (data de conclusão, ou de abertura).
+// Custos dos últimos 6 meses em pizza, por máquina (3 maiores + “Outras”).
+// Hoje o app registra custo nas manutenções (data de conclusão, ou de abertura).
 const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
 function custosMes() {
-  const hoje = new Date(today() + 'T12:00:00');
-  const meses = Array.from({length: 6}, (_, i) => { const d = new Date(hoje.getFullYear(), hoje.getMonth() - 5 + i, 1); return [d.getFullYear(), d.getMonth()]; });
-  const chave = ([a, m]) => `${a}-${String(m + 1).padStart(2, '0')}`;
-  const soma = meses.map(m => [m, db.maintenances.filter(x => Number(x.cost) > 0 && (x.doneDate || x.date || '').startsWith(chave(m))).reduce((s, x) => s + Number(x.cost), 0)]);
-  const total = soma.reduce((s, [, v]) => s + v, 0);
-  const rot = ([a, m]) => `${MESES[m]}/${String(a).slice(2)}`;
-  const curto = v => v >= 1000 ? `${num(v / 1000, 1)} mil` : num(v, 0);
+  const hoje = new Date(today() + 'T12:00:00'), ini = new Date(hoje.getFullYear(), hoje.getMonth() - 5, 1);
+  const desde = `${ini.getFullYear()}-${String(ini.getMonth() + 1).padStart(2, '0')}-01`;
+  const lanc = db.maintenances.filter(x => Number(x.cost) > 0 && (x.doneDate || x.date || '') >= desde);
+  const total = lanc.reduce((s, x) => s + Number(x.cost), 0);
   if (!total) return cartaoNx('Custos', semDados('Nenhum custo lançado nos últimos 6 meses. Informe o custo ao registrar ou concluir uma manutenção.'));
-  const max = Math.max(...soma.map(([, v]) => v));
+  const porMaq = {};
+  lanc.forEach(x => { porMaq[x.machineId] = (porMaq[x.machineId] || 0) + Number(x.cost); });
+  let fatias = Object.entries(porMaq).map(([id, v]) => [machineName(id) || 'Máquina removida', v]).sort((a, b) => b[1] - a[1]);
+  if (fatias.length > 4) fatias = [...fatias.slice(0, 3), ['Outras', fatias.slice(3).reduce((s, f) => s + f[1], 0)]];
+  // Cor segue a máquina (ordem alfabética entre as mostradas), nunca a posição no ranking; “Outras” em cinza
+  const nomes = fatias.map(f => f[0]).filter(n => n !== 'Outras').sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  const cor = n => n === 'Outras' ? 'var(--c0)' : `var(--c${nomes.indexOf(n) + 1})`;
+  const pct = v => v / total * 100;
+  // Fatias como caminhos SVG; contorno na cor do cartão = folga de 2px entre fatias
+  const R = 70, cx = 75, cy = 75; let ang = -Math.PI / 2;
+  const ponto = a => `${(cx + R * Math.cos(a)).toFixed(2)} ${(cy + R * Math.sin(a)).toFixed(2)}`;
+  const fatiaSvg = ([n, v]) => {
+    const a = v / total * 2 * Math.PI, d = fatias.length === 1 ? `M ${cx} ${cy - R} A ${R} ${R} 0 1 1 ${cx - 0.01} ${cy - R} Z`
+      : `M ${cx} ${cy} L ${ponto(ang)} A ${R} ${R} 0 ${a > Math.PI ? 1 : 0} 1 ${ponto(ang + a)} Z`;
+    ang += a;
+    return `<path class="nx-seg" d="${d}" fill="${cor(n)}" stroke="var(--panel)" stroke-width="2" stroke-linejoin="round" ${tip(n, `R$ ${num(v, 2)} (${Math.round(pct(v))}%)`)}></path>`;
+  };
+  const meses = Array.from({length: 6}, (_, k) => new Date(ini.getFullYear(), ini.getMonth() + k, 1));
+  const porMes = meses.map(d => [`${MESES[d.getMonth()]}/${String(d.getFullYear()).slice(2)}`, lanc.filter(x => (x.doneDate || x.date).startsWith(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`)).reduce((s, x) => s + Number(x.cost), 0)]);
   return cartaoNx('Custos', `<p class="nx-total"><strong>R$ ${num(total, 2)}</strong> nos últimos 6 meses</p>
-    <div class="nx-semana" role="img" aria-label="Custos por mês nos últimos seis meses: total ${num(total, 2)} reais">${soma.map(([m, v]) =>
-      `<div class="nx-dia" ${tip(rot(m), `R$ ${num(v, 2)}`)}><div class="nx-trilho">${v ? `<span class="nx-barra custo" style="height:${v / max * 100}%"></span><b style="bottom:${v / max * 100}%">${curto(v)}</b>` : ''}</div><small>${MESES[m[1]]}</small></div>`).join('')}</div>
-    <p class="nx-nota">Custos de manutenção lançados neste aparelho.</p>` +
-    tabela(['Mês', 'Custo (R$)'], soma.map(([m, v]) => [rot(m), num(v, 2)])));
+    <div class="nx-donut"><svg viewBox="0 0 150 150" role="img" aria-label="Custos por máquina: ${fatias.map(([n, v]) => `${n} ${Math.round(pct(v))}%`).join(', ')}">${fatias.map(fatiaSvg).join('')}</svg>
+    <ul class="nx-leg custos">${fatias.map(([n, v]) => `<li><i style="background:${cor(n)}"></i><span>${esc(n)}<small>R$ ${num(v, 2)}</small></span><b>${Math.round(pct(v))}%</b></li>`).join('')}</ul></div>
+    <p class="nx-nota">Custos de manutenção lançados neste aparelho, por máquina.</p>` +
+    tabela(['Máquina', 'Custo (R$)', '%'], fatias.map(([n, v]) => [n, num(v, 2), Math.round(pct(v)) + '%'])) +
+    tabela(['Mês', 'Custo (R$)'], porMes.map(([m, v]) => [m, num(v, 2)])).replace('Ver tabela', 'Ver por mês'));
 }
 function estoqueInsumos() {
   const comMin = db.stock.filter(s => Number(s.min) > 0), baixo = comMin.filter(stockLow);
