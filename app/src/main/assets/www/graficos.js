@@ -92,7 +92,7 @@ const DIAS_SEM = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
 function roscaSituacao() {
   const ops = db.operations, total = ops.length;
   const cont = OP_STATUS.map(s => [s, ops.filter(o => o.status === s).length]);
-  if (!total) return cartaoNx('Situação das operações', semDados('Nenhuma operação registrada.'));
+  if (!total) return cartaoNx('Situação das operações', semDados('Nenhuma operação registrada.') + semanaOperacoes());
   // Anel: cada situação é um arco; 2px de folga entre arcos
   const r = 58, C = 2 * Math.PI * r, folga = cont.filter(([, n]) => n).length > 1 ? 2 : 0;
   let acum = 0;
@@ -103,16 +103,34 @@ function roscaSituacao() {
   return cartaoNx('Situação das operações', `<div class="nx-donut"><svg viewBox="0 0 150 150" role="img" aria-label="Situação das operações: ${cont.map(([s, n]) => `${s} ${n}`).join(', ')}">${arcos}
       <text x="75" y="80" text-anchor="middle" class="centro-n">${total}</text><text x="75" y="100" text-anchor="middle" class="centro-t">operações</text></svg>
     <ul class="nx-leg">${cont.map(([st, n]) => `<li><i class="s${COR_SITUACAO[st]}"></i><span>${esc(st === 'Programada' ? 'Planejada' : st)}</span><b>${n}</b></li>`).join('')}</ul></div>` +
-    tabela(['Situação', 'Operações'], cont.map(([st, n]) => [st, n])));
+    tabela(['Situação', 'Operações'], cont.map(([st, n]) => [st, n])) + semanaOperacoes());
 }
 function semanaOperacoes() {
   const fim = today(), dias = Array.from({length: 7}, (_, i) => addDias(fim, i - 6));
   const cont = dias.map(d => [d, db.operations.filter(o => o.date === d && o.status !== 'Cancelada').length]);
   const max = Math.max(1, ...cont.map(c => c[1]));
   const dia = d => DIAS_SEM[new Date(d + 'T12:00:00').getDay()];
-  return cartaoNx('Últimos sete dias', `<div class="nx-semana" role="img" aria-label="Operações por dia nos últimos sete dias">${cont.map(([d, n]) =>
+  return `<h4 class="nx-sub">Últimos sete dias</h4><div class="nx-semana compacta" role="img" aria-label="Operações por dia nos últimos sete dias">${cont.map(([d, n]) =>
     `<div class="nx-dia" ${tip(`${dia(d)} ${fmtDia(d)}`, `${n} ${n === 1 ? 'operação' : 'operações'}`)}><div class="nx-trilho">${n ? `<span class="nx-barra" style="height:${n / max * 100}%"></span><b style="bottom:${n / max * 100}%">${n}</b>` : ''}</div><small>${dia(d)}</small></div>`).join('')}</div>` +
-    tabela(['Dia', 'Operações'], cont.map(([d, n]) => [`${dia(d)} ${fmtDia(d)}`, n])));
+    tabela(['Dia', 'Operações'], cont.map(([d, n]) => [`${dia(d)} ${fmtDia(d)}`, n]));
+}
+// Custos por mês (últimos 6 meses). Hoje o app registra custo nas manutenções (data de conclusão, ou de abertura).
+const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+function custosMes() {
+  const hoje = new Date(today() + 'T12:00:00');
+  const meses = Array.from({length: 6}, (_, i) => { const d = new Date(hoje.getFullYear(), hoje.getMonth() - 5 + i, 1); return [d.getFullYear(), d.getMonth()]; });
+  const chave = ([a, m]) => `${a}-${String(m + 1).padStart(2, '0')}`;
+  const soma = meses.map(m => [m, db.maintenances.filter(x => Number(x.cost) > 0 && (x.doneDate || x.date || '').startsWith(chave(m))).reduce((s, x) => s + Number(x.cost), 0)]);
+  const total = soma.reduce((s, [, v]) => s + v, 0);
+  const rot = ([a, m]) => `${MESES[m]}/${String(a).slice(2)}`;
+  const curto = v => v >= 1000 ? `${num(v / 1000, 1)} mil` : num(v, 0);
+  if (!total) return cartaoNx('Custos', semDados('Nenhum custo lançado nos últimos 6 meses. Informe o custo ao registrar ou concluir uma manutenção.'));
+  const max = Math.max(...soma.map(([, v]) => v));
+  return cartaoNx('Custos', `<p class="nx-total"><strong>R$ ${num(total, 2)}</strong> nos últimos 6 meses</p>
+    <div class="nx-semana" role="img" aria-label="Custos por mês nos últimos seis meses: total ${num(total, 2)} reais">${soma.map(([m, v]) =>
+      `<div class="nx-dia" ${tip(rot(m), `R$ ${num(v, 2)}`)}><div class="nx-trilho">${v ? `<span class="nx-barra custo" style="height:${v / max * 100}%"></span><b style="bottom:${v / max * 100}%">${curto(v)}</b>` : ''}</div><small>${MESES[m[1]]}</small></div>`).join('')}</div>
+    <p class="nx-nota">Custos de manutenção lançados neste aparelho.</p>` +
+    tabela(['Mês', 'Custo (R$)'], soma.map(([m, v]) => [rot(m), num(v, 2)])));
 }
 function estoqueInsumos() {
   const comMin = db.stock.filter(s => Number(s.min) > 0), baixo = comMin.filter(stockLow);
@@ -122,7 +140,7 @@ function estoqueInsumos() {
 const cartaoNx = (titulo, corpo) => `<article class="card nx-card"><h3>${esc(titulo)}</h3>${corpo}</article>`;
 function painelNexus() {
   const custo = db.maintenances.reduce((s, m) => s + (Number(m.cost) || 0), 0);
-  return `<section class="viz-root nx-grid3">${roscaSituacao()}${semanaOperacoes()}${estoqueInsumos()}</section>
+  return `<section class="viz-root nx-grid3">${roscaSituacao()}${custosMes()}${estoqueInsumos()}</section>
     <section class="card nx-gastos"><div><h3>Controle de gastos</h3><p>Custos de manutenção lançados neste aparelho: <strong>R$ ${num(custo, 2)}</strong></p></div><button data-act="nav" data-id="relatorios">Ver relatórios</button></section>`;
 }
 

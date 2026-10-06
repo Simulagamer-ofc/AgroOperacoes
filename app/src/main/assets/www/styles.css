@@ -153,3 +153,7 @@ body{background:var(--bg)}
 .chip.green{color:#65e6a8}.chip.blue{color:#7cc0f5}.chip.orange{color:#f5b843}.chip.red{color:#ff8f8f}.chip.purple{color:#b9adff}
 :root[data-theme="light"] .chip.green{color:var(--green)}:root[data-theme="light"] .chip.blue{color:var(--blue)}:root[data-theme="light"] .chip.orange{color:#c27c06}:root[data-theme="light"] .chip.red{color:var(--red)}:root[data-theme="light"] .chip.purple{color:var(--purple)}
 .nx-donut{grid-template-columns:minmax(110px,150px) 1fr;gap:20px}.nx-donut svg{width:100%;height:auto}.nx-leg li{grid-template-columns:14px 1fr auto;font-size:.95rem}
+
+.nx-sub{font-size:1rem;font-weight:700;margin:20px 0 10px;padding-top:16px;border-top:1px solid var(--line)}.nx-semana.compacta{height:120px}
+.nx-total{margin:-6px 0 14px;color:#bbd2dc}.nx-total strong{font-size:1.6rem;color:var(--text);margin-right:4px}:root[data-theme="light"] .nx-total{color:var(--muted)}
+.nx-barra.custo{background:var(--s3)}.nx-trilho b{white-space:nowrap}
