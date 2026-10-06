@@ -349,3 +349,24 @@ test('moega: classificação integrada à leitura; umidade de comercialização 
   // regras antigas de 0.5.0 suspensas, mas mantidas no banco
   assert.ok(['CLA-SOJA-AVAR-01', 'CLA-SOJA-QUEB-01', 'CLA-SOJA-IMPUR-01'].every(id => BANCO.regras.find(x => x.id === id).statusValidacao === 'suspensa'));
 });
+
+test('descontos da carga na moega: balanço de massa, tabela do comprador e nenhum padrão assumido', () => {
+  // 30 000 kg, impureza 2% (padrão 1%), umidade 16% (padrão 14%)
+  const r = A.descontosCarga({pesoLiquido: 30000, impureza: 2, impurezaPadrao: 1, umidade: 16, umidadePadrao: 14});
+  assert.equal(r.status, STATUS.OK);
+  const limpo = 30000 * 98 / 99, seco = limpo * 84 / 86;
+  quase(r.linhas[0].descontoKg, 30000 - limpo);              // 303,03 kg
+  quase(r.linhas[1].descontoKg, limpo - seco);               // 690,55 kg
+  quase(r.linhas[1].percentual, (16 - 14) / (100 - 14) * 100); // F-DESC-UMIDADE: 2,3256%
+  quase(r.pesoFinalKg, seco); quase(r.sacas60, seco / 60);
+  // abaixo do padrão: sem desconto e sem acréscimo
+  const b = A.descontosCarga({pesoLiquido: 1000, umidade: 12, umidadePadrao: 14});
+  assert.equal(b.linhas[0].descontoKg, 0); assert.equal(b.pesoFinalKg, 1000);
+  // percentual da tabela do comprador tem prioridade
+  const t = A.descontosCarga({pesoLiquido: 1000, umidade: 16, umidadePadrao: 14, descUmidadePct: 3, outrosPct: 1, pesoRomaneio: 960});
+  assert.equal(t.linhas[0].metodo, 'tabela_comprador'); quase(t.linhas[0].descontoKg, 30); quase(t.linhas[1].descontoKg, 9.7); quase(t.pesoFinalKg, 960.3); quase(t.diferencaRomaneioKg, -0.3);
+  // sem padrão: não calcula e pede o dado (nunca assume 14%)
+  const s = A.descontosCarga({pesoLiquido: 1000, umidade: 16});
+  assert.equal(s.status, STATUS.DADOS_INSUFICIENTES); assert.equal(s.linhas.length, 0); assert.equal(s.pesoFinalKg, 1000);
+  assert.equal(A.descontosCarga({umidade: 16, umidadePadrao: 14}).status, STATUS.DADOS_INSUFICIENTES);
+});

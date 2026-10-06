@@ -114,22 +114,23 @@ function semanaOperacoes() {
     `<div class="nx-dia" ${tip(`${dia(d)} ${fmtDia(d)}`, `${n} ${n === 1 ? 'operação' : 'operações'}`)}><div class="nx-trilho">${n ? `<span class="nx-barra" style="height:${n / max * 100}%"></span><b style="bottom:${n / max * 100}%">${n}</b>` : ''}</div><small>${dia(d)}</small></div>`).join('')}</div>` +
     tabela(['Dia', 'Operações'], cont.map(([d, n]) => [`${dia(d)} ${fmtDia(d)}`, n]));
 }
-// Custos dos últimos 6 meses em pizza, por máquina (3 maiores + “Outras”).
-// Hoje o app registra custo nas manutenções (data de conclusão, ou de abertura).
+// Custos dos últimos 6 meses em pizza, por categoria (3 maiores + “Outras”).
+// Soma os gastos lançados e o custo das manutenções (data de conclusão, ou de abertura) — ver gastos.js.
 const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
 function custosMes() {
   const hoje = new Date(today() + 'T12:00:00'), ini = new Date(hoje.getFullYear(), hoje.getMonth() - 5, 1);
   const desde = `${ini.getFullYear()}-${String(ini.getMonth() + 1).padStart(2, '0')}-01`;
-  const lanc = db.maintenances.filter(x => Number(x.cost) > 0 && (x.doneDate || x.date || '') >= desde);
-  const total = lanc.reduce((s, x) => s + Number(x.cost), 0);
-  if (!total) return cartaoNx('Custos', semDados('Nenhum custo lançado nos últimos 6 meses. Informe o custo ao registrar ou concluir uma manutenção.'));
-  const porMaq = {};
-  lanc.forEach(x => { porMaq[x.machineId] = (porMaq[x.machineId] || 0) + Number(x.cost); });
-  let fatias = Object.entries(porMaq).map(([id, v]) => [machineName(id) || 'Máquina removida', v]).sort((a, b) => b[1] - a[1]);
-  if (fatias.length > 4) fatias = [...fatias.slice(0, 3), ['Outras', fatias.slice(3).reduce((s, f) => s + f[1], 0)]];
-  // Cor segue a máquina (ordem alfabética entre as mostradas), nunca a posição no ranking; “Outras” em cinza
-  const nomes = fatias.map(f => f[0]).filter(n => n !== 'Outras').sort((a, b) => a.localeCompare(b, 'pt-BR'));
-  const cor = n => n === 'Outras' ? 'var(--c0)' : `var(--c${nomes.indexOf(n) + 1})`;
+  const lanc = lancamentosCusto(desde, today());
+  const total = somaValor(lanc);
+  if (!total) return cartaoNx('Custos', semDados('Nenhum custo lançado nos últimos 6 meses. Use “Controle de gastos” ou informe o custo ao concluir uma manutenção.'));
+  let fatias = agrupar(lanc, x => x.category);
+  const porMaq = agrupar(lanc.filter(x => x.machineId), x => machineName(x.machineId) || 'Máquina removida');
+  // Só há 3 cores validadas: a partir da 4ª categoria, as menores viram “Demais” (cinza)
+  const DEMAIS = 'Demais';
+  if (fatias.length > 3) fatias = [...fatias.slice(0, 3), [DEMAIS, fatias.slice(3).reduce((s, f) => s + f[1], 0)]];
+  // Cor segue a categoria (ordem alfabética entre as mostradas), nunca a posição no ranking
+  const nomes = fatias.map(f => f[0]).filter(n => n !== DEMAIS).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  const cor = n => n === DEMAIS ? 'var(--c0)' : `var(--c${nomes.indexOf(n) + 1})`;
   const pct = v => v / total * 100;
   // Fatias como caminhos SVG; contorno na cor do cartão = folga de 2px entre fatias
   const R = 70, cx = 75, cy = 75; let ang = -Math.PI / 2;
@@ -141,12 +142,13 @@ function custosMes() {
     return `<path class="nx-seg" d="${d}" fill="${cor(n)}" stroke="var(--panel)" stroke-width="2" stroke-linejoin="round" ${tip(n, `R$ ${num(v, 2)} (${Math.round(pct(v))}%)`)}></path>`;
   };
   const meses = Array.from({length: 6}, (_, k) => new Date(ini.getFullYear(), ini.getMonth() + k, 1));
-  const porMes = meses.map(d => [`${MESES[d.getMonth()]}/${String(d.getFullYear()).slice(2)}`, lanc.filter(x => (x.doneDate || x.date).startsWith(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`)).reduce((s, x) => s + Number(x.cost), 0)]);
+  const porMes = meses.map(d => [`${MESES[d.getMonth()]}/${String(d.getFullYear()).slice(2)}`, somaValor(lanc.filter(x => x.date.startsWith(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`)))]);
   return cartaoNx('Custos', `<p class="nx-total"><strong>R$ ${num(total, 2)}</strong> nos últimos 6 meses</p>
-    <div class="nx-donut"><svg viewBox="0 0 150 150" role="img" aria-label="Custos por máquina: ${fatias.map(([n, v]) => `${n} ${Math.round(pct(v))}%`).join(', ')}">${fatias.map(fatiaSvg).join('')}</svg>
+    <div class="nx-donut"><svg viewBox="0 0 150 150" role="img" aria-label="Custos por categoria: ${fatias.map(([n, v]) => `${n} ${Math.round(pct(v))}%`).join(', ')}">${fatias.map(fatiaSvg).join('')}</svg>
     <ul class="nx-leg custos">${fatias.map(([n, v]) => `<li><i style="background:${cor(n)}"></i><span>${esc(n)}<small>R$ ${num(v, 2)}</small></span><b>${Math.round(pct(v))}%</b></li>`).join('')}</ul></div>
-    <p class="nx-nota">Custos de manutenção lançados neste aparelho, por máquina.</p>` +
-    tabela(['Máquina', 'Custo (R$)', '%'], fatias.map(([n, v]) => [n, num(v, 2), Math.round(pct(v)) + '%'])) +
+    <p class="nx-nota">Gastos e manutenções lançados neste aparelho, por categoria.</p>` +
+    tabela(['Categoria', 'Custo (R$)', '%'], fatias.map(([n, v]) => [n, num(v, 2), Math.round(pct(v)) + '%'])) +
+    (porMaq.length ? tabela(['Máquina', 'Custo (R$)'], porMaq.map(([n, v]) => [n, num(v, 2)])).replace('Ver tabela', 'Ver por máquina') : '') +
     tabela(['Mês', 'Custo (R$)'], porMes.map(([m, v]) => [m, num(v, 2)])).replace('Ver tabela', 'Ver por mês'));
 }
 function estoqueInsumos() {
@@ -156,9 +158,9 @@ function estoqueInsumos() {
 }
 const cartaoNx = (titulo, corpo) => `<article class="card nx-card"><h3>${esc(titulo)}</h3>${corpo}</article>`;
 function painelNexus() {
-  const custo = db.maintenances.reduce((s, m) => s + (Number(m.cost) || 0), 0);
+  const mes = somaValor(lancamentosCusto(today().slice(0, 8) + '01', today()));
   return `<section class="viz-root nx-grid3">${roscaSituacao()}${custosMes()}${estoqueInsumos()}</section>
-    <section class="card nx-gastos"><div><h3>Controle de gastos</h3><p>Custos de manutenção lançados neste aparelho: <strong>R$ ${num(custo, 2)}</strong></p></div><button data-act="nav" data-id="relatorios">Ver relatórios</button></section>`;
+    <section class="card nx-gastos"><div><h3>Controle de gastos</h3><p>Gastos deste mês (despesas e manutenções): <strong>R$ ${num(mes, 2)}</strong></p></div><div class="nx-gastos-btns"><button data-act="gs-new">+ Lançar gasto</button><button data-act="nav" data-id="gastos">Ver gastos</button></div></section>`;
 }
 
 function painelGraficos() {

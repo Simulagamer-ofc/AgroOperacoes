@@ -1,7 +1,7 @@
 {
   "banco": "Nexus Agro — referências de aferição e calibragem de máquinas e implementos",
-  "versaoBanco": "1.4.0",
-  "dataBanco": "2026-10-05",
+  "versaoBanco": "1.5.0",
+  "dataBanco": "2026-10-06",
   "observacaoGeral": "Somente regras com statusValidacao = 'validada' são usadas para concluir uma avaliação. Regras 'validada' tiveram o trecho conferido no documento original (ver fontes[].trechoLiteral). Regras 'pendente_conferencia' tiveram a fonte localizada, mas o texto ainda não foi conferido no documento original; o avaliador as mostra como referência candidata e devolve SEM_REFERENCIA. Escopo '*' significa que a regra declara expressamente não depender daquele campo.",
   "statusPossiveis": {
     "validada": "Valor conferido no documento original por um responsável (validadoPor/dataValidacao preenchidos).",
@@ -83,7 +83,7 @@
     },
     {
       "id": "PULV-BICO-MED-01",
-      "versao": "1.1.0",
+      "versao": "1.2.0",
       "titulo": "Vazão individual do bico em relação à média da barra",
       "equipamentoFamilia": [
         "pulverizador_barra"
@@ -116,15 +116,31 @@
       "acaoForaDoPadrao": "Ponta com problema (desgastada ou entupida): limpar ou substituir e repetir a coleta.",
       "fontes": [
         {
-          "organizacao": "—",
-          "titulo": "Fonte primária não localizada",
-          "url": "",
-          "tipo": "nao_localizada",
-          "conferido": false,
-          "observacao": "O critério de ±10% em relação à média NÃO consta do Embrapa Doc. 102 (verificado em 04/10/2026). Foi visto apenas em portal de conteúdo (Agrolink), que não é aceito como referência primária."
+          "organizacao": "Embrapa Meio Ambiente / Embrapa Informação Tecnológica",
+          "titulo": "Manual de tecnologia de aplicação de agrotóxicos",
+          "autores": "Aldemir Chaim",
+          "ano": 2009,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/663946/1/CNPMAMAN.DETEC.DEAPLIC.DEAGROT.092.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 54-55 (Regulagem de pulverizadores)",
+          "trechoLiteral": "No caso dos pulverizadores de barra, deve-se verificar a uniformidade da vazão de todos os bicos da barra. Para tanto, enquanto o equipamento estiver em funcionamento, recolhe-se o líquido pulverizado de cada bico por um período que varia de 30 a 60 segundos. Bicos que estiverem com variação de vazão entre 5% e 10%, em relação á média, deverão ser substituídos.",
+          "observacao": "Texto conferido em 06/10/2026. A frase é ambígua quanto ao limite: lida ao pé da letra, um desvio a partir de 5% da média já exige troca (limite ±5%), o que é mais rigoroso que os ±10% cadastrados. Não cita norma."
+        },
+        {
+          "organizacao": "Embrapa Milho e Sorgo (CNPMS) — Informe Agropecuário",
+          "titulo": "Técnicas de aplicação (Informe Agropecuário v. 11, n. 127)",
+          "autores": "J. B. Silva",
+          "ano": 1985,
+          "url": "https://www.alice.cnptia.embrapa.br/alice/bitstream/doc/476165/1/Tecnicasaplicacao.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 31",
+          "trechoLiteral": "Se a diferença de vazão entre os bicos não for superior a 10%, considere a vazão média. Se a diferença for muito grande, troque as pontas",
+          "observacao": "Compara os bicos entre si (não com a média) e é de 1985."
         }
       ],
-      "observacaoTecnica": "Comparação com a média é informativa até haver fonte primária. A avaliação principal do bico é contra a tabela do fabricante (PULV-BICO-CAT-01).",
+      "observacaoTecnica": "Duas publicações da Embrapa conferidas, mas com critérios diferentes (Chaim 2009: troca a partir de 5% a 10% da média; Silva 1985: até 10% de diferença entre bicos). Mantida pendente até decidir o limite (±5% ou ±10%) — decisão que muda resultados e precisa de aprovação. ISO 16122-2 não acessível no ambiente. A avaliação principal do bico continua contra a tabela do fabricante (PULV-BICO-CAT-01).",
       "confianca": "alta",
       "statusValidacao": "pendente_conferencia",
       "validadoPor": null,
@@ -139,6 +155,11 @@
           "versao": "1.1.0",
           "data": "2026-10-04",
           "alteracao": "Atribuição ao Doc. 102 removida: o critério não consta do documento."
+        },
+        {
+          "versao": "1.2.0",
+          "data": "2026-10-06",
+          "alteracao": "Fontes primárias da Embrapa localizadas e conferidas (Chaim 2009; Silva 1985); limite ainda não decidido por divergência entre elas."
         }
       ]
     },
@@ -193,6 +214,11 @@
           "versao": "1.1.0",
           "data": "2026-10-04",
           "alteracao": "Registrada a revisão de 2024 da ISO 16122-2 que modificou o erro máximo de fluxômetros."
+        },
+        {
+          "versao": "1.1.0",
+          "data": "2026-10-06",
+          "alteracao": "Nova busca em publicações da Embrapa (infoteca/alice): nenhum limite com texto conferível encontrado. ISO, ASABE, SciELO e Spreadmark inacessíveis no ambiente de coleta."
         }
       ]
     },
@@ -221,11 +247,18 @@
       "confianca": "nenhuma",
       "statusValidacao": "pendente_conferencia",
       "validadoPor": null,
-      "dataValidacao": null
+      "dataValidacao": null,
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-06",
+          "alteracao": "Nova busca em publicações da Embrapa (infoteca/alice): nenhum limite com texto conferível encontrado. ISO, ASABE, SciELO e Spreadmark inacessíveis no ambiente de coleta."
+        }
+      ]
     },
     {
       "id": "SEM-ESPAC-01",
-      "versao": "1.1.0",
+      "versao": "1.2.0",
       "titulo": "Distribuição longitudinal — percentual de espaçamentos aceitáveis (0,5 a 1,5 × Xref)",
       "equipamentoFamilia": [
         "semeadora_precisao"
@@ -280,6 +313,18 @@
           "tipo": "norma",
           "conferido": false,
           "observacao": "Citada pela Embrapa Soja; documento original não consultado."
+        },
+        {
+          "organizacao": "Embrapa Milho e Sorgo — Revista Brasileira de Milho e Sorgo",
+          "titulo": "Avaliação em campo de uma semeadora-adubadora para semeadura de milho de alta densidade (v. 14, n. 1, p. 38-48)",
+          "autores": "E. C. Mantovani, J. C. Cruz, A. C. de Oliveira",
+          "ano": 2015,
+          "url": "https://www.alice.cnptia.embrapa.br/alice/bitstream/doc/1025216/1/Avaliacaocampo.pdf",
+          "tipo": "artigo_cientifico",
+          "conferido": true,
+          "pagina": "p. 41",
+          "trechoLiteral": "A norma da ABNT (1996) considera espaçamentos aceitáveis todas as sementes que se encontram entre 0,5 a 1,5 vez o espaçamento médio estabelecido. Os valores fora desse limite são considerados como falha, quando estão acima de 1,5 vez o espaçamento médio, e como duplos os que estão abaixo de 0,5 vez o espaçamento médio.",
+          "observacao": "Confirma as classes (0,5 e 1,5 × Xref). Não traz o critério de desempenho (≥ 90%) nem a amostra mínima."
         }
       ],
       "observacaoTecnica": "Limites de classe (0,5 e 1,5 × Xref) conferidos na Embrapa Soja. O critério de desempenho (≥ 90% aceitáveis) e a amostra mínima de 50 espaçamentos NÃO foram localizados em fonte primária — por isso a regra continua pendente. Os percentuais de duplos, aceitáveis e falhos são sempre calculados.",
@@ -292,6 +337,11 @@
           "versao": "1.1.0",
           "data": "2026-10-04",
           "alteracao": "Classes conferidas na Embrapa Soja; ano da norma ABNT corrigido para 1994; limite de 90% sem fonte."
+        },
+        {
+          "versao": "1.2.0",
+          "data": "2026-10-06",
+          "alteracao": "Segunda fonte da Embrapa para as classes de espaçamento; critério de desempenho e amostra mínima continuam sem fonte primária acessível (Tourino & Klingensteiner 1983 e ISO 7256/1 citados em artigos bloqueados no ambiente)."
         }
       ]
     },
@@ -348,7 +398,14 @@
       "confianca": "media",
       "statusValidacao": "pendente_conferencia",
       "validadoPor": null,
-      "dataValidacao": null
+      "dataValidacao": null,
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-06",
+          "alteracao": "Nova busca em publicações da Embrapa (infoteca/alice): nenhum limite com texto conferível encontrado. ISO, ASABE, SciELO e Spreadmark inacessíveis no ambiente de coleta."
+        }
+      ]
     },
     {
       "id": "ADUB-CV-OUT-01",
@@ -396,7 +453,14 @@
       "confianca": "media",
       "statusValidacao": "pendente_conferencia",
       "validadoPor": null,
-      "dataValidacao": null
+      "dataValidacao": null,
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-06",
+          "alteracao": "Nova busca em publicações da Embrapa (infoteca/alice): nenhum limite com texto conferível encontrado. ISO, ASABE, SciELO e Spreadmark inacessíveis no ambiente de coleta."
+        }
+      ]
     },
     {
       "id": "DOSE-PLAN-01",
@@ -426,7 +490,14 @@
       "confianca": "nenhuma",
       "statusValidacao": "pendente_conferencia",
       "validadoPor": null,
-      "dataValidacao": null
+      "dataValidacao": null,
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-06",
+          "alteracao": "Nova busca em publicações da Embrapa (infoteca/alice): nenhum limite com texto conferível encontrado. ISO, ASABE, SciELO e Spreadmark inacessíveis no ambiente de coleta."
+        }
+      ]
     },
     {
       "id": "COLH-PERDA-SOJA-01",
@@ -1908,6 +1979,18 @@
       "id": "F-QUEBRA-UMIDADE",
       "descricao": "Massa final estimada = massa inicial × (100 − umidade inicial) ÷ (100 − umidade final), umidades em base úmida (%)",
       "origem": "Balanço de matéria seca (a matéria seca se conserva na secagem).",
+      "tipo": "calculo"
+    },
+    {
+      "id": "F-DESC-IMPUREZA",
+      "descricao": "Peso sem o excesso de impureza = peso × (100 − impureza medida) ÷ (100 − impureza padrão); desconto = peso − peso sem o excesso",
+      "origem": "Balanço de massa (o produto limpo se conserva; remove-se impureza até o padrão). O padrão vem do contrato ou da tabela do comprador — a IN 11/2007 e a IN 60/2011 não estabelecem desconto.",
+      "tipo": "calculo"
+    },
+    {
+      "id": "F-DESC-UMIDADE",
+      "descricao": "Desconto de umidade = peso × (umidade medida − umidade padrão) ÷ (100 − umidade padrão), quando a medida é maior que o padrão",
+      "origem": "Mesmo balanço de matéria seca de F-QUEBRA-UMIDADE. O padrão vem do contrato ou da tabela do comprador; tabelas comerciais podem incluir quebra técnica e diferir deste valor.",
       "tipo": "calculo"
     }
   ],

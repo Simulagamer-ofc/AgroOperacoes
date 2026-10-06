@@ -80,7 +80,7 @@ function passoSecagem() {
     return topo + `<section class="card panel"><div class="form">
       ${s.ponto ? sNum('temperatura', `Temperatura — ${rotulo(PONTOS, s.ponto)} (°C)`, '', true) : ''}
       ${comUR ? sNum('urAr', `Umidade relativa do ar — ${rotulo(PONTOS, s.ponto)} (%)`, 'Opcional.', true) : ''}
-      ${moega ? sNum('umidadeFinal', 'Umidade do produto recebido (%)', 'Determinada na amostra da carga.', true) + camposClassificacao(s)
+      ${moega ? sNum('umidadeFinal', 'Umidade do produto recebido (%)', 'Determinada na amostra da carga.', true) + camposClassificacao(s) + camposDescontos(s)
         : sNum('umidadeFinal', s.etapa === 'secagem' ? 'Umidade atual da amostra (%)' : 'Umidade da amostra (%)', 'Usada na comparação com a referência de armazenamento.') +
           (s.etapa !== 'armazenamento' ? sNum('umidadeInicial', 'Umidade inicial / na entrada (%)', 'Opcional — calcula a redução.') + sNum('umidadeMeta', 'Meta de umidade (%)', 'Opcional — sua meta operacional.') + sNum('massaInicial', 'Massa inicial (t)', 'Opcional — estima a quebra de peso pela secagem.') : '')}
       ${sCampo('data', 'Data', sInp('data', s.data, 'type="date"'))}${sCampo('hora', 'Hora', sInp('hora', s.hora, 'type="time"'))}
@@ -132,7 +132,7 @@ function validarSecagem() {
   if (s.passo === 3) {
     const algum = ['temperatura', 'urAr', 'umidadeFinal', ...camposClass(s)].some(k => umNum(s[k]) !== undefined);
     if (!algum) return 'Informe pelo menos uma medição';
-    for (const k of ['temperatura', 'urAr', 'umidadeFinal', 'umidadeInicial', 'umidadeMeta', 'massaInicial', 'impureza', ...camposClass(s)])
+    for (const k of ['temperatura', 'urAr', 'umidadeFinal', 'umidadeInicial', 'umidadeMeta', 'massaInicial', 'impureza', ...CAMPOS_DESC, ...camposClass(s)])
       if (s[k] !== undefined && s[k] !== '' && umNum(s[k]) === undefined) return `Valor inválido: ${s[k]}`;
   }
   return '';
@@ -148,6 +148,11 @@ async function calcularSecagem() {
     condicoes: {tipoSecador: s.tipoSecador || undefined, regiaoArmazenamento: s.regiaoArmazenamento || undefined, embalagem: s.embalagem || undefined},
     classificacao: s.etapa === 'recebimento' ? {grupo: s.grupoSoja || undefined, valores: Object.fromEntries(camposClass(s).map(k => [k.slice(3), umNum(s[k])]).filter(([, v]) => v !== undefined))} : undefined,
     leituras, umidadeInicial: umNum(s.umidadeInicial), umidadeFinal: umNum(s.umidadeFinal), umidadeMeta: umNum(s.umidadeMeta), massaInicial: umNum(s.massaInicial)}, banco);
+  // Descontos da carga (moega): só com o peso informado; padrões vêm do contrato/tabela do comprador
+  if (s.etapa === 'recebimento' && umNum(s.pesoCarga) !== undefined)
+    r.descontos = AV().descontosCarga({pesoLiquido: umNum(s.pesoCarga), umidade: umNum(s.umidadeFinal), umidadePadrao: umNum(s.umidadePadrao),
+      impureza: umNum(s.cl_impurezas ?? s.impureza), impurezaPadrao: umNum(s.impurezaPadrao), descUmidadePct: umNum(s.descUmidTabela),
+      descImpurezaPct: umNum(s.descImpTabela), outrosPct: umNum(s.outrosDesc), pesoRomaneio: umNum(s.pesoRomaneio)});
   // A meta é do operador; avisa se ela estiver acima da referência aplicável
   const ru = r.leituras.find(l => l.variavel === 'umidade_graos')?.avaliacao;
   const meta = umNum(s.umidadeMeta);
@@ -178,6 +183,7 @@ function resultadoSecagem(r, s) {
   ].filter(Boolean);
   return `<div class="resultado ${info.cor}"><small>RESULTADO</small><strong>${esc(info.rotulo)}</strong>${cl?.enquadramento ? `<small>CLASSIFICAÇÃO</small><strong>${esc(cl.enquadramento)}</strong>` : ''}<small>AÇÃO RECOMENDADA</small><span>${esc(acao)}</span></div>
     ${cl ? blocoClassificacao(cl) : ''}
+    ${r.descontos ? blocoDescontos(r.descontos) : ''}
     ${r.leituras.length ? `<h3 style="margin-top:16px">Leituras</h3><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Leitura</th><th>Ponto</th><th class="num">Valor</th><th>Referência</th><th>Resultado</th></tr></thead><tbody>
     ${r.leituras.map(l => `<tr><td>${esc(VARIAVEL[l.variavel])}</td><td>${esc(l.ponto === 'amostra' ? 'Amostra do produto' : rotulo(PONTOS, l.ponto))}${l.posicao ? ' — ' + esc(l.posicao) : ''}</td><td class="num">${num(l.valor, 1)} ${l.variavel === 'temperatura' ? '°C' : '%'}</td><td>${lim(l.avaliacao)}${l.avaliacao.regraId ? `<br><small style="color:var(--muted)">${esc(l.avaliacao.regraId)} v${esc(l.avaliacao.regraVersao)}</small>` : ''}</td><td>${statusChip(l.avaliacao.status)}</td></tr>`).join('')}
     </tbody></table></div>` : ''}
@@ -195,6 +201,31 @@ function camposClassificacao(s) {
   return `<p class="nota field full" style="margin:0"><strong>Classificação da amostra</strong> — % em peso, como no laudo do classificador. Deixe em branco o que não foi determinado.</p>` +
     (grupos.length ? sCampo('grupoSoja', 'Grupo (uso proposto)', sSel('grupoSoja', grupos, s.grupoSoja, 'Selecione'), 'Informação do interessado (IN 11/2007, Art. 4º, § 1º). Define a tabela de tolerâncias.', true) : '') +
     t.defeitos.map(d => sNum('cl_' + d.id, `${d.rotulo} (%)`, d.ajuda)).join('');
+}
+
+// Descontos da carga: conferência do romaneio. Nenhum padrão é preenchido pelo app.
+const CAMPOS_DESC = ['pesoCarga', 'umidadePadrao', 'impurezaPadrao', 'descUmidTabela', 'descImpTabela', 'outrosDesc', 'pesoRomaneio'];
+function camposDescontos(s) {
+  const ref = ['soja', 'milho'].includes(s.produto) ? 'A referência validada de umidade para recebimento é até 14% (IN 11/2007 · IN 60/2011), mas o padrão de desconto é o do contrato.' : 'Use o padrão do contrato ou da tabela do comprador.';
+  const aberto = CAMPOS_DESC.some(k => s[k]);
+  return `<details class="field full sc-desc" ${aberto ? 'open' : ''}><summary><strong>Descontos da carga</strong> — opcional, para conferir o romaneio</summary>
+    <p class="nota">Informe o peso e o <strong>padrão do contrato</strong> (ou o percentual da tabela do comprador). O app não preenche nenhum padrão: a IN 11/2007 e a IN 60/2011 não fixam descontos.</p>
+    <div class="form">${sNum('pesoCarga', 'Peso líquido da carga (kg)', 'Peso bruto − tara, da balança.', true)}
+    ${sNum('umidadePadrao', 'Umidade padrão do contrato (%)', ref)}${sNum('descUmidTabela', 'ou desconto de umidade da tabela (%)', 'Se informado, substitui o cálculo.')}
+    ${sNum('impurezaPadrao', 'Impureza padrão do contrato (%)', 'Tolerância sem desconto.')}${sNum('descImpTabela', 'ou desconto de impureza da tabela (%)', 'Se informado, substitui o cálculo.')}
+    ${sNum('outrosDesc', 'Outros descontos do comprador (%)', 'Opcional (ex.: avariados, quebra técnica).')}${sNum('pesoRomaneio', 'Peso final no romaneio (kg)', 'Opcional — mostra a diferença.')}</div></details>`;
+}
+function blocoDescontos(d) {
+  const met = l => l.metodo === 'tabela_comprador' ? `tabela do comprador: ${num(l.percentual, 2)}%` : `medido ${num(l.medido, 2)}% • padrão ${num(l.padrao, 2)}% → ${num(l.percentual, 2)}% (${l.formula})`;
+  return `<h3 style="margin-top:16px">Descontos da carga</h3>
+    ${d.linhas.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Desconto</th><th>Como foi calculado</th><th class="num">Sobre (kg)</th><th class="num">Desconto (kg)</th></tr></thead><tbody>
+    <tr><td>Peso líquido</td><td></td><td></td><td class="num">${num(d.pesoLiquido, 0)}</td></tr>
+    ${d.linhas.map(l => `<tr><td>${esc(l.rotulo)}</td><td>${esc(met(l))}</td><td class="num">${num(l.base, 1)}</td><td class="num">− ${num(l.descontoKg, 1)}</td></tr>`).join('')}
+    <tr><td><strong>Peso final</strong></td><td>desconto total ${num(d.descontoTotalPct, 2)}%</td><td></td><td class="num"><strong>${num(d.pesoFinalKg, 1)} kg</strong><br><small>${num(d.sacas60, 2)} sacas de 60 kg</small></td></tr>
+    ${d.diferencaRomaneioKg != null ? `<tr><td>Diferença para o romaneio</td><td>${Math.abs(d.diferencaRomaneioKg) < 0.5 ? 'confere' : d.diferencaRomaneioKg < 0 ? 'romaneio com menos peso que o calculado' : 'romaneio com mais peso que o calculado'}</td><td></td><td class="num">${d.diferencaRomaneioKg > 0 ? '+' : ''}${num(d.diferencaRomaneioKg, 1)} kg</td></tr>` : ''}
+    </tbody></table></div>` : ''}
+    ${d.pendencias.length ? `<ul class="pend">${d.pendencias.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
+    <p class="nota">Conferência por balanço de massa: o produto seco e limpo se conserva; desconta-se só o excesso acima do padrão. Tabelas comerciais podem incluir quebra técnica e dar valores diferentes — nesse caso, informe o percentual da tabela.</p>`;
 }
 
 function blocoClassificacao(cl) {
@@ -270,7 +301,7 @@ function relatorioSecagem(id) {
     <h3>3. Condições da leitura</h3><table class="tbl"><tbody>
       ${linha('Etapa', rotulo(ETAPAS, a.etapa))}${linha('Ponto de temperatura', e.ponto ? rotulo(PONTOS, e.ponto) : 'Sem leitura de temperatura')}${linha('Sensor / posição', e.posicao)}
       ${linha('Região de armazenamento', e.regiaoArmazenamento ? rotulo(REGIOES, e.regiaoArmazenamento) : '')}${linha('Embalagem', e.embalagem ? rotulo(EMBALAGENS, e.embalagem) : '')}
-      ${linha('Umidade inicial (%)', e.umidadeInicial)}${linha('Umidade medida (%)', e.umidadeFinal)}${linha('Meta de umidade (%)', e.umidadeMeta)}${linha('Massa inicial (t)', e.massaInicial)}${linha('Impureza (%)', e.impureza)}${linha('Grãos avariados (%)', e.avariados)}${linha('Partidos, quebrados e amassados (%)', e.quebrados)}
+      ${linha('Umidade inicial (%)', e.umidadeInicial)}${linha('Umidade medida (%)', e.umidadeFinal)}${linha('Meta de umidade (%)', e.umidadeMeta)}${linha('Massa inicial (t)', e.massaInicial)}${linha('Peso líquido da carga (kg)', e.pesoCarga)}${linha('Umidade padrão do contrato (%)', e.umidadePadrao)}${linha('Impureza padrão do contrato (%)', e.impurezaPadrao)}${linha('Desconto de umidade da tabela (%)', e.descUmidTabela)}${linha('Desconto de impureza da tabela (%)', e.descImpTabela)}${linha('Outros descontos (%)', e.outrosDesc)}${linha('Peso final no romaneio (kg)', e.pesoRomaneio)}${linha('Impureza (%)', e.impureza)}${linha('Grãos avariados (%)', e.avariados)}${linha('Partidos, quebrados e amassados (%)', e.quebrados)}
       ${r.classificacao ? linha('Grupo', r.classificacao.grupoRotulo) + r.classificacao.defeitos.map(d => linha(`${d.rotulo} (%)`, num(d.valorInformado, 3))).join('') : ''}
     </tbody></table>
     <h3>4. Referência e condições de aplicação</h3><table class="tbl"><tbody>${regras.length ? regras.map(l => linha(`${VARIAVEL[l.variavel]} (${l.ponto === 'amostra' ? 'amostra' : rotulo(PONTOS, l.ponto)})`, `${l.avaliacao.regraId} v${l.avaliacao.regraVersao} — ${l.avaliacao.regraTitulo}. Condições: ${(l.avaliacao.condicoesAplicadas || []).join('; ') || 'escopo da regra (produto, destino, etapa, ponto)'}. Análise em ${new Date(l.avaliacao.dataAnalise).toLocaleString('pt-BR')} (banco ${l.avaliacao.bancoVersao}).`)).join('') : (r.classificacao ? '' : linha('Referência', 'Nenhuma referência validada aplicável às condições desta leitura.'))}

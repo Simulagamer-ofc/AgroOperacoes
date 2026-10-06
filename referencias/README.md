@@ -36,8 +36,8 @@ Conferência documental feita em 04/10/2026 a partir dos documentos originais. O
 | PULV-BICO-CAT-01 | Vazão do bico × tabela do fabricante | ±10% | Embrapa Agroindústria Tropical, Documentos 102 (2006), p. 30 | **validada** |
 | COLH-PERDA-SOJA-01 | Perda total na colheita — **somente soja**, média de ≥ 5 pontos, armação de 2,0 m² | ≤ 60 kg/ha | Embrapa Soja, manual do copo medidor (2013) | **validada** |
 | ISO10625-CORES (tabela) | Cor da ponta × vazão nominal a 300 kPa (19 classes, tolerância ±5%) | — | ISO 10625:2018, Tabela 1 | **validada** |
-| SEM-ESPAC-01 | % de espaçamentos aceitáveis | ≥ 90% (sem fonte) | Classes 0,5/1,5 × Xref conferidas: Embrapa Soja; ABNT (1994) apud Kurachi (1989) | pendente: falta fonte para o limite de 90% |
-| PULV-BICO-MED-01 | Vazão do bico × média da barra | ±10% | **Não consta do Doc. 102**; visto só em portal comercial | pendente (só informativa) |
+| SEM-ESPAC-01 | % de espaçamentos aceitáveis | ≥ 90% (sem fonte) | Classes 0,5/1,5 × Xref conferidas: Embrapa Soja; Embrapa Milho e Sorgo (Mantovani et al., 2015, p. 41); ABNT apud Kurachi (1989) | pendente: falta fonte para o limite de 90% e a amostra mínima |
+| PULV-BICO-MED-01 | Vazão do bico × média da barra | ±10% | Embrapa: Chaim (2009, p. 55) — troca com desvio “entre 5% e 10%” da média; Silva (1985, p. 31) — até 10% entre bicos | pendente: fontes divergem (±5% ou ±10%), decisão do responsável |
 | PULV-SENSOR-01 | Sensor de velocidade / fluxômetro | ±5% | ISO 16122-2: a revisão de 2024 alterou o erro máximo dos fluxômetros | pendente: falta o texto vigente |
 | ADUB-CV-N-01 / ADUB-CV-OUT-01 | CV transversal do distribuidor | ≤ 15% / ≤ 25% | Spreadmark (NZ); acesso às fontes bloqueado | pendente |
 | PULV-TAXA-01 / DOSE-PLAN-01 | Taxa ou dose × planejada | **sem fonte** | — | pendente |
@@ -131,3 +131,14 @@ Fonte: arquivo público [`listasno.zip`](https://www.bndes.gov.br/arquivos/produ
 - **Fora da lista:** máquinas importadas não credenciadas, como a Kubota.
 - **Catálogo de fabricantes:** foi cruzado pela razão social e passou a ter 2.014 registros. 261 já existiam e ganharam CNPJ; 1.631 foram incluídos pelo BNDES. A marca só é vinculada automaticamente quando identifica uma única empresa.
 - **Limite do arquivo:** o nome do produto é cortado em 60 caracteres e o modelo em 45. Textos maiores aparecem truncados.
+
+## Descontos da carga na moega (banco 1.5.0)
+
+A IN 11/2007 e a IN 60/2011 não fixam descontos. O app só confere o romaneio com os padrões que o usuário informa (contrato ou tabela do comprador); nenhum padrão é preenchido.
+
+| Fórmula | Cálculo | Origem |
+|---|---|---|
+| F-DESC-IMPUREZA | peso × (100 − I) ÷ (100 − I padrão), aplicada só acima do padrão | balanço de massa |
+| F-DESC-UMIDADE | peso × (U − U padrão) ÷ (100 − U padrão), aplicada só acima do padrão, sobre o peso já sem o excesso de impureza | balanço de matéria seca (mesmo de F-QUEBRA-UMIDADE) |
+
+Quando o percentual da tabela do comprador é informado, ele substitui o cálculo.
