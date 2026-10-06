@@ -55,13 +55,13 @@
     xref(sementesPorMetro) { exigirPositivo(sementesPorMetro, 'sementes por metro'); return 100 / sementesPorMetro; },
     /** F-DOSE-KGHA */
     doseKgHa(massaKg, distanciaM, larguraM) { exigirNumero(massaKg, 'massa'); if (massaKg < 0) throw new Error('massa negativa'); exigirPositivo(distanciaM, 'distância'); exigirPositivo(larguraM, 'largura'); return massaKg * 10000 / (distanciaM * larguraM); },
-    /** F-PERDA: retorna kg/ha e sacas de 60 kg/ha */
     /** F-QUEBRA-UMIDADE: massa final após secar de ui% para uf% (base úmida) */
     massaAposSecagem(massaInicial, ui, uf) {
       exigirPositivo(massaInicial, 'massa inicial'); exigirNumero(ui, 'umidade inicial'); exigirNumero(uf, 'umidade final');
       if (ui < 0 || ui >= 100 || uf < 0 || uf >= 100) throw new Error('umidade deve estar entre 0 e 100%');
       return massaInicial * (100 - ui) / (100 - uf);
     },
+    /** F-PERDA: retorna kg/ha e sacas de 60 kg/ha */
     perda(massaG, areaM2) { exigirNumero(massaG, 'massa'); if (massaG < 0) throw new Error('massa negativa'); exigirPositivo(areaM2, 'área'); const kg = massaG * 10 / areaM2; return {kgHa: kg, sc60Ha: kg / 60}; },
     /** Classificação de espaçamentos: duplos < 0,5·Xref ≤ aceitáveis ≤ 1,5·Xref < falhos */
     classificarEspacamentos(espacamentosCm, xrefCm) {
@@ -110,12 +110,14 @@
   }
 
   const temLimite = r => finito(r.limiteMin) || finito(r.limiteMax);
-  const mesmaFaixa = (a, b) => a.limiteMin === b.limiteMin && a.limiteMax === b.limiteMax;
+  const mesmaFaixa = (a, b) => a.limiteMin === b.limiteMin && a.limiteMax === b.limiteMax
+    && !!a.limiteMinExclusivo === !!b.limiteMinExclusivo && !!a.limiteMaxExclusivo === !!b.limiteMaxExclusivo
+    && JSON.stringify(a.faixaAtencao ?? null) === JSON.stringify(b.faixaAtencao ?? null) && (a.alvo ?? null) === (b.alvo ?? null);
   const fonteTexto = r => (r.fontes || []).map(f => [f.organizacao, f.titulo].filter(Boolean).join(' — ')).join('; ');
 
   function resultadoBase(leitura, banco, dataAnalise) {
     return {
-      status: null, valorMedido: finito(leitura.valor) ? leitura.valor : null, unidade: leitura.unidade || '',
+      status: null, valorMedido: finito(leitura.valor) ? arred(leitura.valor, 6) : null, unidade: leitura.unidade || '',
       limiteMin: null, limiteMax: null, alvo: null, diferenca: null, acaoRecomendada: '',
       regraId: '', regraVersao: '', regraTitulo: '', fonte: '', fontes: [],
       condicoesAplicadas: [], pendencias: [], referenciasCandidatas: [],
@@ -201,6 +203,8 @@
       res.status = atencao ? STATUS.ATENCAO : STATUS.OK;
       res.diferenca = res.alvo !== null ? arred(v - res.alvo) : 0;
     }
+    // Outra regra validada poderia valer se a condição dela fosse informada: o resultado fica, mas o usuário é avisado
+    if (faltandoValidadas.length) res.pendencias.push(...[...new Set(faltandoValidadas)].map(x => `Há outra referência validada que depende de dado não informado — ${x}. Informe para confirmar o resultado.`));
     res.acaoRecomendada = res.status === STATUS.FORA_DO_PADRAO ? (regra.acaoForaDoPadrao || 'Corrigir a regulagem e repetir a medição.')
       : res.status === STATUS.ATENCAO ? (regra.acaoAtencao || 'Acompanhar: valor dentro do limite, porém próximo dele.')
       : 'Nenhuma correção necessária para esta variável.';
@@ -237,11 +241,11 @@
     const temCatalogo = finito(dados.vazaoCatalogo) && dados.vazaoCatalogo > 0;
     const bicos = vazoes.map((q, i) => {
       const dm = calculos.desvio(q, media);
-      const aMedia = avaliar({...base, variavel: 'desvio_vazao_media', valor: arred(dm, 2), condicoes: {mesmoTempoColeta: dados.mesmoTempoColeta, pontasMesmoModelo: dados.pontasMesmoModelo}}, banco, opcoes);
+      const aMedia = avaliar({...base, variavel: 'desvio_vazao_media', valor: dm, condicoes: {mesmoTempoColeta: dados.mesmoTempoColeta, pontasMesmoModelo: dados.pontasMesmoModelo}}, banco, opcoes);
       let aCat;
       if (temCatalogo) {
         const dc = calculos.desvio(q, dados.vazaoCatalogo);
-        aCat = avaliar({...base, variavel: 'desvio_vazao_catalogo', valor: arred(dc, 2), condicoes: {pressaoColetaIgualCatalogo: dados.pressaoColetaIgualCatalogo, vazaoCatalogoInformada: true}}, banco, opcoes);
+        aCat = avaliar({...base, variavel: 'desvio_vazao_catalogo', valor: dc, condicoes: {pressaoColetaIgualCatalogo: dados.pressaoColetaIgualCatalogo, vazaoCatalogoInformada: true}}, banco, opcoes);
       } else {
         aCat = {...resultadoBase({unidade: '%'}, banco, opcoes.dataAnalise || new Date().toISOString()), status: STATUS.DADOS_INSUFICIENTES, pendencias: ['Vazão de catálogo do modelo exato da ponta não informada.'], acaoRecomendada: 'Informar a vazão de catálogo da ponta na pressão de coleta.'};
       }
@@ -259,7 +263,7 @@
       return {...resultadoBase({unidade: '%'}, banco, opcoes.dataAnalise || new Date().toISOString()), status: STATUS.DADOS_INSUFICIENTES, pendencias: ['Informar a leitura do controlador e o valor do instrumento de referência.']};
     }
     const erro = calculos.desvio(dados.leituraControlador, dados.referencia);
-    return avaliar({equipamentoFamilia: dados.equipamentoFamilia || 'pulverizador_barra', produto: dados.produto, destino: dados.destino, etapa: 'afericao', ponto: dados.ponto, posicao: dados.posicao, variavel: 'erro_relativo_instrumento', unidade: '%', valor: arred(erro, 2), condicoes: {comparadoComInstrumentoReferencia: dados.comparadoComInstrumentoReferencia}}, banco, opcoes);
+    return avaliar({equipamentoFamilia: dados.equipamentoFamilia || 'pulverizador_barra', produto: dados.produto, destino: dados.destino, etapa: 'afericao', ponto: dados.ponto, posicao: dados.posicao, variavel: 'erro_relativo_instrumento', unidade: '%', valor: erro, condicoes: {comparadoComInstrumentoReferencia: dados.comparadoComInstrumentoReferencia}}, banco, opcoes);
   }
 
   /** Semeadora de precisão: distribuição longitudinal a partir dos espaçamentos medidos (cm). */
@@ -269,7 +273,7 @@
     }
     const xref = calculos.xref(dados.sementesPorMetro);
     const cls = calculos.classificarEspacamentos(dados.espacamentos, xref);
-    const avaliacao = avaliar({equipamentoFamilia: 'semeadora_precisao', produto: dados.produto, destino: dados.destino, etapa: 'afericao', ponto: 'linha_semeadura', posicao: dados.posicao, variavel: 'percentual_espacamentos_aceitaveis', unidade: '%', valor: arred(cls.pctAceitaveis, 2), condicoes: {xrefDefinido: true, minimoEspacamentosMedidos: cls.n}}, banco, opcoes);
+    const avaliacao = avaliar({equipamentoFamilia: 'semeadora_precisao', produto: dados.produto, destino: dados.destino, etapa: 'afericao', ponto: 'linha_semeadura', posicao: dados.posicao, variavel: 'percentual_espacamentos_aceitaveis', unidade: '%', valor: cls.pctAceitaveis, condicoes: {xrefDefinido: true, minimoEspacamentosMedidos: cls.n}}, banco, opcoes);
     return {status: avaliacao.status, xrefCm: arred(xref, 2), ...cls, avaliacao, pendencias: avaliacao.pendencias};
   }
 
@@ -290,17 +294,21 @@
     if (Array.isArray(mp) && mp.length && mp.every(m => finito(m) && m >= 0)) {
       ppc = calculos.media(mp.map(m => calculos.perda(m, dados.areaM2).kgHa)); pmi = ptt - ppc;
     }
-    const avaliacao = avaliar({equipamentoFamilia: 'colhedora', produto: dados.produto, destino: dados.destino, etapa: 'colheita', ponto: 'atras_colhedora', posicao: dados.posicao, variavel: 'perda_total', unidade: 'kg/ha', valor: arred(ptt, 2), condicoes: {areaAmostralM2: dados.areaM2, numeroPontos: ms.length, incluiGraosEmVagens: dados.incluiGraosEmVagens}}, banco, opcoes);
-    return {status: avaliacao.status, pttKgHa: arred(ptt, 2), pttSc60Ha: arred(ptt / 60, 3), pontosKgHa: pontos.map(v => arred(v, 2)), ppcKgHa: arred(ppc, 2), pmiKgHa: arred(pmi, 2), avaliacao, pendencias: avaliacao.pendencias};
+    const pendExtra = [];
+    // PMI = PTT − PPC só faz sentido se a perda da plataforma não superar a perda total
+    if (pmi != null && pmi < 0) { pmi = null; pendExtra.push('Perda na plataforma maior que a perda total: conferir as coletas (PMI não calculada).'); }
+    const avaliacao = avaliar({equipamentoFamilia: 'colhedora', produto: dados.produto, destino: dados.destino, etapa: 'colheita', ponto: 'atras_colhedora', posicao: dados.posicao, variavel: 'perda_total', unidade: 'kg/ha', valor: ptt, condicoes: {areaAmostralM2: dados.areaM2, numeroPontos: ms.length, incluiGraosEmVagens: dados.incluiGraosEmVagens}}, banco, opcoes);
+    return {status: avaliacao.status, pttKgHa: arred(ptt, 2), pttSc60Ha: arred(ptt / 60, 3), pontosKgHa: pontos.map(v => arred(v, 2)), ppcKgHa: arred(ppc, 2), pmiKgHa: arred(pmi, 2), avaliacao, pendencias: [...avaliacao.pendencias, ...pendExtra]};
   }
 
   /** Distribuidor a lanço: CV transversal a partir dos valores das bandejas JÁ sobrepostos na largura efetiva. */
   function avaliarDistribuicaoTransversal(dados, banco, opcoes = {}) {
-    if (!Array.isArray(dados.valoresSobrepostos) || dados.valoresSobrepostos.length < 3 || !dados.valoresSobrepostos.every(finito)) {
-      return {status: STATUS.DADOS_INSUFICIENTES, pendencias: ['Informar pelo menos 3 valores de bandejas (já com sobreposição das passadas).']};
+    const vs = dados.valoresSobrepostos;
+    if (!Array.isArray(vs) || vs.length < 3 || !vs.every(x => finito(x) && x >= 0) || !vs.some(x => x > 0)) {
+      return {status: STATUS.DADOS_INSUFICIENTES, pendencias: ['Informar pelo menos 3 valores de bandejas (já com sobreposição das passadas), sem valores negativos e com alguma massa coletada.']};
     }
     const cv = calculos.cv(dados.valoresSobrepostos);
-    const avaliacao = avaliar({equipamentoFamilia: 'distribuidor_lanco', produto: dados.produto, destino: dados.destino, etapa: 'afericao', ponto: 'faixa_aplicacao', posicao: dados.posicao, variavel: 'cv_transversal', unidade: '%', valor: arred(cv, 2), condicoes: {fertilizanteNitrogenado: dados.fertilizanteNitrogenado, cvComSobreposicao: dados.cvComSobreposicao}}, banco, opcoes);
+    const avaliacao = avaliar({equipamentoFamilia: 'distribuidor_lanco', produto: dados.produto, destino: dados.destino, etapa: 'afericao', ponto: 'faixa_aplicacao', posicao: dados.posicao, variavel: 'cv_transversal', unidade: '%', valor: cv, condicoes: {fertilizanteNitrogenado: dados.fertilizanteNitrogenado, cvComSobreposicao: dados.cvComSobreposicao}}, banco, opcoes);
     return {status: avaliacao.status, cv: arred(cv, 2), avaliacao, pendencias: avaliacao.pendencias};
   }
 
@@ -311,7 +319,7 @@
     const taxa = calculos.taxaAplicacao(q, v, e);
     if (!finito(taxaPlanejada) || taxaPlanejada <= 0) return {status: STATUS.DADOS_INSUFICIENTES, taxaLHa: arred(taxa, 2), pendencias: ['Informar a taxa planejada (L/ha) para comparar.']};
     const desvio = calculos.desvio(taxa, taxaPlanejada);
-    const avaliacao = avaliar({equipamentoFamilia: 'pulverizador_barra', produto: dados.produto, destino: dados.destino, etapa: 'calibracao', ponto: 'barra', posicao: dados.posicao, variavel: 'desvio_taxa_planejada', unidade: '%', valor: arred(desvio, 2), condicoes: {}}, banco, opcoes);
+    const avaliacao = avaliar({equipamentoFamilia: 'pulverizador_barra', produto: dados.produto, destino: dados.destino, etapa: 'calibracao', ponto: 'barra', posicao: dados.posicao, variavel: 'desvio_taxa_planejada', unidade: '%', valor: desvio, condicoes: {}}, banco, opcoes);
     return {status: avaliacao.status, taxaLHa: arred(taxa, 2), desvio: arred(desvio, 2), vazaoNecessariaBico: arred(calculos.vazaoNecessaria(taxaPlanejada, v, e), 3), avaliacao, pendencias: avaliacao.pendencias};
   }
 
@@ -322,7 +330,7 @@
     const dose = calculos.doseKgHa(massaKg, distanciaM, larguraM);
     if (!finito(dosePlanejada) || dosePlanejada <= 0) return {status: STATUS.DADOS_INSUFICIENTES, doseKgHa: arred(dose, 2), pendencias: ['Informar a dose planejada (kg/ha) para comparar.']};
     const desvio = calculos.desvio(dose, dosePlanejada);
-    const avaliacao = avaliar({equipamentoFamilia, produto: dados.produto, destino: dados.destino, etapa: 'calibracao', ponto: dados.ponto || 'coleta', posicao: dados.posicao, variavel: 'desvio_dose_planejada', unidade: '%', valor: arred(desvio, 2), condicoes: {}}, banco, opcoes);
+    const avaliacao = avaliar({equipamentoFamilia, produto: dados.produto, destino: dados.destino, etapa: 'calibracao', ponto: dados.ponto || 'coleta', posicao: dados.posicao, variavel: 'desvio_dose_planejada', unidade: '%', valor: desvio, condicoes: {}}, banco, opcoes);
     return {status: avaliacao.status, doseKgHa: arred(dose, 2), desvio: arred(desvio, 2), avaliacao, pendencias: avaliacao.pendencias};
   }
 
@@ -347,7 +355,7 @@
       if (t.statusValidacao === 'validada' && !(t.fontes || []).some(f => f.conferido === true && f.trechoLiteral)) problemas.push(`${t.id}: validada sem fonte conferida (trechoLiteral)`);
       if (!finito(t.casasDecimais)) problemas.push(`${t.id}: casasDecimais ausente`);
       for (const tp of t.tipos || []) for (const d of t.defeitos || []) if (!finito(tp.limites?.[d.id])) problemas.push(`${t.id}: ${tp.tipo} sem limite para "${d.id}"`);
-      for (let i = 1; i < (t.tipos || []).length; i++) for (const d of t.defeitos) if (t.tipos[i].limites[d.id] < t.tipos[i - 1].limites[d.id]) problemas.push(`${t.id}: limite de "${d.id}" diminui de ${t.tipos[i - 1].tipo} para ${t.tipos[i].tipo}`);
+      for (let i = 1; i < (t.tipos || []).length; i++) for (const d of t.defeitos || []) if (t.tipos[i].limites?.[d.id] < t.tipos[i - 1].limites?.[d.id]) problemas.push(`${t.id}: limite de "${d.id}" diminui de ${t.tipos[i - 1].tipo} para ${t.tipos[i].tipo}`);
     }
     return problemas;
   }
@@ -370,9 +378,11 @@
     const fim = (status, pend) => { res.status = status; if (pend) res.pendencias.push(pend); return res; };
     const tabs = (banco.tabelasClassificacao || []).filter(t => t.produto === dados.produto && t.statusValidacao !== 'suspensa');
     if (!tabs.length) return fim(STATUS.SEM_REFERENCIA, `Nenhuma tabela oficial de classificação cadastrada para "${dados.produto || 'produto não informado'}".`);
+    if (vazio(dados.destino) || vazio(dados.etapa)) return fim(STATUS.DADOS_INSUFICIENTES, `Informe ${vazio(dados.destino) ? 'o destino' : 'a etapa'} do produto: a tabela oficial depende dele.`);
     const noEscopo = tabs.filter(t => (t.destino === '*' || lista(t.destino).includes(dados.destino)) && (t.etapa === '*' || lista(t.etapa).includes(dados.etapa)));
     if (!noEscopo.length) return fim(STATUS.SEM_REFERENCIA, `A classificação oficial cadastrada vale para ${lista(tabs[0].destino).join(', ')} na etapa ${lista(tabs[0].etapa).join(', ')}.`);
     let tab = noEscopo.length === 1 && !noEscopo[0].grupo ? noEscopo[0] : null;
+    if (!tab && noEscopo.some(t => !t.grupo)) return fim(STATUS.SEM_REFERENCIA, `Mais de uma tabela de classificação aplicável (${noEscopo.map(t => t.id).join(', ')}): revisar o banco de referências.`);
     if (!tab) {
       if (vazio(dados.grupo)) return fim(STATUS.DADOS_INSUFICIENTES, `Informe o grupo: ${noEscopo.map(t => t.grupo?.rotulo).filter(Boolean).join(' ou ')} (responsabilidade do interessado).`);
       tab = noEscopo.find(t => t.grupo?.valor === dados.grupo);
@@ -450,12 +460,16 @@
     const {umidadeInicial: ui, umidadeFinal: uf, umidadeMeta: um, massaInicial: mi} = dados;
     if (finito(ui) && finito(uf)) calc.reducaoUmidadePP = arred(ui - uf, 2);
     if (finito(uf) && finito(um)) calc.diferencaMetaPP = arred(uf - um, 2);
-    if (finito(mi) && mi > 0 && finito(ui) && finito(uf) && ui < 100 && uf < 100) {
-      calc.massaFinalEstimada = arred(calculos.massaAposSecagem(mi, ui, uf), 3);
-      calc.quebraMassa = arred(mi - calc.massaFinalEstimada, 3);
-      calc.quebraPct = arred((mi - calc.massaFinalEstimada) / mi * 100, 2);
-    }
     const pend = [];
+    if (finito(mi) && mi > 0 && finito(ui) && finito(uf)) {
+      if (ui < 0 || ui >= 100 || uf < 0 || uf >= 100) pend.push('Umidades devem estar entre 0 e 100% para estimar a massa final.');
+      else if (uf > ui) pend.push('Umidade final maior que a inicial: quebra de massa pela secagem não calculada.');
+      else {
+        calc.massaFinalEstimada = arred(calculos.massaAposSecagem(mi, ui, uf), 3);
+        calc.quebraMassa = arred(mi - calc.massaFinalEstimada, 3);
+        calc.quebraPct = arred((mi - calc.massaFinalEstimada) / mi * 100, 2);
+      }
+    }
     // Classificação na moega: só quando algum defeito foi informado
     const cl = dados.classificacao && Object.values(dados.classificacao.valores || {}).some(finito)
       ? classificarGraos({produto: dados.produto, destino: dados.destino, etapa: dados.etapa, grupo: dados.classificacao.grupo, valores: dados.classificacao.valores}, banco, opcoes) : null;
@@ -482,25 +496,25 @@
     const d = dados || {}, pend = [], linhas = [];
     const P = d.pesoLiquido;
     if (!(finito(P) && P > 0)) return {status: STATUS.DADOS_INSUFICIENTES, linhas, pendencias: ['Informe o peso líquido da carga (kg).']};
-    const pct = v => finito(v) && v >= 0 && v < 100;
+    const pctValido = v => finito(v) && v >= 0 && v < 100;
     let peso = P;
     const aplicar = (id, rotulo, valor, padrao, tabela, formula) => {
       if (finito(tabela)) {
-        if (!pct(tabela)) { pend.push(`${rotulo}: percentual da tabela do comprador inválido.`); return; }
+        if (!pctValido(tabela)) { pend.push(`${rotulo}: percentual da tabela do comprador inválido.`); return; }
         const kg = peso * tabela / 100;
         linhas.push({id, rotulo, metodo: 'tabela_comprador', percentual: arred(tabela, 4), base: arred(peso, 3), descontoKg: arred(kg, 3)}); peso -= kg; return;
       }
       if (!finito(valor) && !finito(padrao)) return;
       if (!finito(valor)) { pend.push(`${rotulo}: informe o valor medido na amostra.`); return; }
       if (!finito(padrao)) { pend.push(`${rotulo}: informe o padrão do contrato ou o percentual da tabela do comprador.`); return; }
-      if (!pct(valor) || !pct(padrao)) { pend.push(`${rotulo}: percentuais devem estar entre 0 e 100.`); return; }
+      if (!pctValido(valor) || !pctValido(padrao)) { pend.push(`${rotulo}: percentuais devem estar entre 0 e 100.`); return; }
       const fim = valor > padrao ? peso * (100 - valor) / (100 - padrao) : peso, kg = peso - fim;
       linhas.push({id, rotulo, metodo: 'balanco_massa', formula, medido: valor, padrao, percentual: arred(kg / peso * 100, 4), base: arred(peso, 3), descontoKg: arred(kg, 3)}); peso = fim;
     };
     aplicar('impureza', 'Impureza e matérias estranhas', d.impureza, d.impurezaPadrao, d.descImpurezaPct, 'F-DESC-IMPUREZA');
     aplicar('umidade', 'Umidade', d.umidade, d.umidadePadrao, d.descUmidadePct, 'F-DESC-UMIDADE');
     if (finito(d.outrosPct)) {
-      if (pct(d.outrosPct)) { const kg = peso * d.outrosPct / 100; linhas.push({id: 'outros', rotulo: 'Outros descontos do comprador', metodo: 'tabela_comprador', percentual: arred(d.outrosPct, 4), base: arred(peso, 3), descontoKg: arred(kg, 3)}); peso -= kg; }
+      if (pctValido(d.outrosPct)) { const kg = peso * d.outrosPct / 100; linhas.push({id: 'outros', rotulo: 'Outros descontos do comprador', metodo: 'tabela_comprador', percentual: arred(d.outrosPct, 4), base: arred(peso, 3), descontoKg: arred(kg, 3)}); peso -= kg; }
       else pend.push('Outros descontos: percentual inválido.');
     }
     const total = P - peso;

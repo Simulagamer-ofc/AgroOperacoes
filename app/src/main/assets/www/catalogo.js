@@ -54,6 +54,7 @@ async function inicioCatalogo() {
   const corpo = $('#catCorpo'); if (!corpo) return;
   let d;
   try { d = await dados('marcas'); } catch { corpo.innerHTML = empty('Catálogo indisponível', 'Não foi possível carregar os dados offline.'); return; }
+  if (!corpo.isConnected) return; // o usuário já saiu do catálogo
   const totF = d.marcas.reduce((s, m) => s + m.f, 0), totB = d.marcas.reduce((s, m) => s + m.b, 0);
   $('#catTopo').innerHTML = head('Catálogo de máquinas e implementos', `${num(d.marcas.length)} marcas • ${num(totF)} modelos com ficha técnica • ${num(totB)} produtos da lista oficial BNDES/FINAME • funciona sem internet`);
   const porTipo = Object.fromEntries(d.tipos.map(([id]) => [id, d.marcas.reduce((s, m) => s + (m.t[id] || 0), 0)]));
@@ -71,6 +72,7 @@ async function inicioCatalogo() {
   } else {
     // Busca: marcas com o nome + modelos que batem, agrupados pela marca
     const res = await buscarModelos(termos, catTipo, 80);
+    if (!corpo.isConnected) return;
     html += marcas.length ? `<div class="section-title"><h3>Marcas (${num(marcas.length)})</h3></div><section class="marcas-grid">${marcas.slice(0, 8).map(m => cartaoMarca(d, m)).join('')}</section>` : '';
     const grupos = {};
     res.forEach(r => (grupos[r.b] ||= []).push(r));
@@ -99,10 +101,13 @@ async function buscarModelos(termos, tipo, limite) {
 }
 
 async function paginaMarca(id) {
+  const rota = location.hash;
   const d = await dados('marcas');
   const b = d.marcas.findIndex(m => m.id === id), m = d.marcas[b];
+  if (location.hash !== rota) return;
   if (!m) { view.innerHTML = empty('Marca não encontrada', ''); return; }
   const itens = await itensDaMarca(b);
+  if (location.hash !== rota) return; // o usuário já saiu desta tela
   const grupos = d.tipos.map(([t, r]) => [t, r, itens.filter(x => x.tipo === t).sort((a, z) => (a.fonte === 'finame') - (z.fonte === 'finame') || a.nome.localeCompare(z.nome, 'pt-BR'))]).filter(g => g[2].length);
   // Abre só o que é curto; listas longas ficam recolhidas (os botões de tipo levam direto a cada uma)
   const aberto = (l, i) => grupos.length === 1 || (i === 0 && l.length <= 24) || l.length <= 6;

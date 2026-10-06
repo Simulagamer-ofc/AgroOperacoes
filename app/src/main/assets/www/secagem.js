@@ -123,7 +123,12 @@ VIEWS.secagem.after = () => {
   };
 };
 
-function coletarSecagem() { $$('[data-sc]').forEach(el => { sc[el.dataset.sc] = el.value; }); }
+function coletarSecagem() {
+  $$('[data-sc]').forEach(el => { sc[el.dataset.sc] = el.value; });
+  // Na etapa de medições, valores de campos que não estão mais na tela (trocou ponto, etapa ou produto) não podem ser avaliados
+  if (sc.passo === 3) for (const k of ['temperatura', 'urAr', 'umidadeFinal', 'umidadeInicial', 'umidadeMeta', 'massaInicial', 'impureza', 'grupoSoja', ...CAMPOS_DESC, ...camposClass(sc)])
+    if (!document.querySelector(`[data-sc="${k}"]`)) delete sc[k];
+}
 
 function validarSecagem() {
   const s = sc;
@@ -259,19 +264,26 @@ Object.assign(ACTIONS, {
   'sc-cancelar': () => { sc = null; go('secagem'); },
   'sc-voltar': () => { coletarSecagem(); sc.passo = Math.max(1, sc.passo - 1); render(); },
   'sc-avancar': async () => {
+    if (!sc || sc._ocupado) return; // evita pular etapa com toque duplo
     coletarSecagem();
     const e = validarSecagem(); if (e) { showToast(e); return; }
-    if (!TABS_CLASS) { try { TABS_CLASS = (await dados('regras')).tabelasClassificacao || []; } catch { TABS_CLASS = []; } }
-    if (sc.passo === 3) { try { sc.resultado = await calcularSecagem(); } catch (x) { showToast('Não foi possível calcular: ' + x.message); return; } }
-    sc.passo++; render(); scrollTo(0, 0);
+    const passo = sc.passo; sc._ocupado = true;
+    try {
+      if (!TABS_CLASS) { try { TABS_CLASS = (await dados('regras')).tabelasClassificacao || []; } catch { TABS_CLASS = []; } }
+      if (passo === 3) { try { sc.resultado = await calcularSecagem(); } catch (x) { showToast('Não foi possível calcular: ' + x.message); return; } }
+    } finally { if (sc) delete sc._ocupado; }
+    if (!sc || sc.passo !== passo) return;
+    sc.passo = passo + 1; render(); scrollTo(0, 0);
   },
   'sc-salvar': () => {
+    if (!sc?.resultado) return;
     const s = sc, mq = s.machineId ? find('machines', s.machineId) : null, l = s.lotId ? find('lots', s.lotId) : null;
     if (s.regiaoArmazenamento) db.settings.regiaoArmazenamento = s.regiaoArmazenamento; // dado fixo da propriedade
     const reg = {id: uid(), data: s.data, hora: s.hora, responsavel: s.responsavel, local: s.local, produto: s.produto, destino: s.destino, etapa: s.etapa,
       equipamento: mq ? {id: mq.id, name: mq.name, type: mq.type, model: mq.model, tipoSecador: s.tipoSecador || null} : (s.tipoSecador ? {tipoSecador: s.tipoSecador} : null),
       lote: l ? {id: l.id, code: l.code, cultivar: l.cultivar, species: l.species} : null,
-      entradas: Object.fromEntries(Object.entries(s).filter(([k]) => !['passo', 'resultado'].includes(k))),
+      entradas: Object.fromEntries(Object.entries(s).filter(([k]) => !['passo', 'resultado', '_ocupado'].includes(k))),
+      propriedade: db.settings.farm || '',
       resultado: AV().congelar(s.resultado), criadoEm: new Date().toISOString()};
     if (mq && s.tipoSecador && !mq.tipoSecador) mq.tipoSecador = s.tipoSecador;
     db.secagem.push(reg);
@@ -289,11 +301,11 @@ function relatorioSecagem(id) {
   const regras = r.leituras.filter(l => l.avaliacao.regraId);
   return `<div class="no-print">${head('Relatório — secador e moega', `${LOCAIS[a.local]} • ${fmtDate(a.data)} ${a.hora}`, btn('← Registros', 'nav', 'secagem', 'secondary') + btn('Imprimir / PDF', 'af-imprimir', '', 'secondary') + `<button class="danger" data-act="sc-excluir" data-id="${esc(a.id)}">Excluir</button>`)}</div>
   <article class="card panel relatorio">
-    <header class="rel-head"><div><strong>${esc(db.settings.farm || 'Nexus Agro')}</strong><br><small>Medição e comparação com referência técnica — secagem e armazenagem</small></div><small>Registro ${esc(a.id)}</small></header>
+    <header class="rel-head"><div><strong>${esc((a.propriedade ?? db.settings.farm) || 'Nexus Agro')}</strong><br><small>Medição e comparação com referência técnica — secagem e armazenagem</small></div><small>Registro ${esc(a.id)}</small></header>
     <h3>1. Resultado e ação recomendada</h3>${resultadoSecagem(r, e)}
     <h3>2. Identificação e rastreabilidade</h3><table class="tbl"><tbody>
       ${linha('Local', LOCAIS[a.local])}${linha('Equipamento', a.equipamento?.name ? `${a.equipamento.name}${a.equipamento.model ? ' — ' + a.equipamento.model : ''}` : 'Não cadastrado')}
-      ${linha('Tipo de secador', rotulo(TIPO_SECADOR, a.equipamento?.tipoSecador))}${linha('Propriedade / unidade', db.settings.farm)}
+      ${linha('Tipo de secador', rotulo(TIPO_SECADOR, a.equipamento?.tipoSecador))}${linha('Propriedade / unidade', a.propriedade ?? db.settings.farm)}
       ${linha('Lote', a.lote ? `${a.lote.code} — ${[a.lote.species, a.lote.cultivar].filter(Boolean).join(' ')}` : '')}
       ${linha('Produto', rotulo(PRODUTOS_SEC, a.produto))}${linha('Destino', rotulo(DESTINOS, a.destino))}
       ${linha('Data / hora', `${fmtDate(a.data)} ${a.hora}`)}${linha('Responsável', a.responsavel)}
