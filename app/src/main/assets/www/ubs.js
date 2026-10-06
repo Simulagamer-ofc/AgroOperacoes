@@ -38,7 +38,6 @@ function calcOrdem(o) {
 const proximaEtapa = o => o.etapas.find(id => !(o.registros || {})[id] && !(o.pulos || []).includes(id));
 const loteDaOrdem = o => find('lots', o.lotId) || o.lote || {};
 const kgFmt = v => `${num(v, v % 1 ? 1 : 0)} kg`;
-const um1 = v => Number(v).toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1});
 const pctDe = (v, base) => base > 0 ? um1(v / base * 100) + '%' : '—';
 const maquinasDe = tipos => () => db.machines.filter(m => !tipos || tipos.includes(m.type)).map(m => ({value: m.id, label: m.name}));
 

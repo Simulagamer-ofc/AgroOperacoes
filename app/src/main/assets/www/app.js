@@ -12,6 +12,8 @@ const today = () => isoDate(new Date());
 const nowTime = () => { const d = new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
 const fmtDate = s => s ? String(s).split('-').reverse().join('/').replace(/[&<>"']/g, '') : '—';
 const num = (v, dec = 0) => Number(v || 0).toLocaleString('pt-BR', {minimumFractionDigits: dec, maximumFractionDigits: Math.max(dec, 2)});
+// Exatamente uma casa decimal (consumo, rendimento, percentuais)
+const um1 = v => Number(v).toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1});
 const daysAgo = n => { const d = new Date(); d.setDate(d.getDate() - n); return isoDate(d); };
 const byDateDesc = (a, b) => (b.date + (b.time || '')).localeCompare(a.date + (a.time || ''));
 const safeStorage = {
@@ -22,7 +24,7 @@ const safeStorage = {
 
 // ---------- Banco de dados local ----------
 const DB_KEY = 'agro-db-v1';
-const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs'];
+const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs', 'fuel'];
 const emptyDb = () => ({version: 1, settings: {farm: '', owner: ''}, ...Object.fromEntries(COLLECTIONS.map(c => [c, []]))});
 
 function loadDb() {
@@ -450,7 +452,7 @@ VIEWS.inicio = (anchor) => {
       <article class="card kpi"><div class="label">Em andamento</div><div class="value">${running.length}</div><div class="hint">${running.length === 1 ? 'Operação aberta' : 'Operações abertas'}</div></article>
       <article class="card kpi"><div class="label">Alertas de manutenção e estoque</div><div class="value">${mtAbertas + revisoes + estBaixo}</div><div class="hint">${esc(partes.join(' · ') || 'Tudo em dia')}</div></article>
     </section>
-    <div class="nx-acoes"><button data-act="hour-new">◷ Registrar horímetro</button><button data-act="mt-new">⚙ Abrir manutenção</button><button data-act="mov-new">⇄ Movimentar estoque</button><button data-act="af-nova">◎ Nova aferição</button></div>
+    <div class="nx-acoes"><button data-act="hour-new">◷ Registrar horímetro</button><button data-act="mt-new">⚙ Abrir manutenção</button><button data-act="mov-new">⇄ Movimentar estoque</button><button data-act="cb-new">⛽ Abastecimento</button><button data-act="af-nova">◎ Nova aferição</button></div>
     ${isEmpty ? `<section class="card" style="margin-top:18px">${empty('Nenhum dado cadastrado ainda', 'Comece cadastrando talhões, máquinas e insumos — ou carregue dados de exemplo para conhecer o aplicativo.', {act: 'seed', label: 'Carregar dados de exemplo'})}</section>` : (typeof painelNexus === 'function' ? painelNexus() : '')}
     <section class="grid nexus">
       <article class="card panel"><div class="section-title" style="margin:0 0 4px"><h3>Operações de hoje</h3><button data-act="nav" data-id="operacoes">Ver todas</button></div>
@@ -492,7 +494,7 @@ VIEWS.maquinas = () => {
         <div class="maq-horas"><span class="big">${num(m.hours)} h</span><small>último registro ${fmtDate(db.hourLogs.filter(h => h.machineId === m.id).sort(byDateDesc)[0]?.date)}</small></div>
         <div class="maq-rev ${corRev}"><small>${textoRev}</small>${temRev ? `<div class="progress"><span style="width:${pct}%"></span></div>` : ''}</div>
         ${extras.length ? `<div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>` : ''}
-        <div class="maq-acoes">${isInactive(m) ? '' : mini('◷ Horímetro', 'hour-new', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}
+        <div class="maq-acoes">${isInactive(m) ? '' : mini('◷ Horímetro', 'hour-new', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}${isInactive(m) ? '' : mini('⛽ Abastecer', 'cb-new', m.id)}
           <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">
             ${mini('◎ Aferição e calibragem', 'af-nova', m.id)}${mini('⚙ Configuração para aferição', 'mc-config', m.id)}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
           </div></details></div></article>`;
@@ -604,7 +606,7 @@ VIEWS.relatorios = () => {
 };
 
 VIEWS.cadastros = () => {
-  const counts = [['Operações', 'operations'], ['Máquinas', 'machines'], ['Registros de horímetro', 'hourLogs'], ['Manutenções', 'maintenances'], ['Talhões', 'fields'], ['Lotes', 'lots'], ['Itens de estoque', 'stock'], ['Movimentações', 'movements'], ['Gastos', 'expenses'], ['Ordens de beneficiamento', 'ubs']];
+  const counts = [['Operações', 'operations'], ['Máquinas', 'machines'], ['Registros de horímetro', 'hourLogs'], ['Manutenções', 'maintenances'], ['Talhões', 'fields'], ['Lotes', 'lots'], ['Itens de estoque', 'stock'], ['Movimentações', 'movements'], ['Gastos', 'expenses'], ['Ordens de beneficiamento', 'ubs'], ['Abastecimentos', 'fuel']];
   return head('Cadastros e backup', 'Dados da propriedade e cópia de segurança dos registros deste dispositivo.') +
     `<section class="settings">
       <article class="card panel"><h3>Propriedade</h3><p>Nome exibido no aplicativo e nos arquivos exportados.</p>
@@ -690,6 +692,7 @@ function loadSamples() {
   db.fields.push({id: f1, name: 'Talhão 07', area: 84.5, crop: 'Soja', cultivar: 'BMX Zeus', season: '2026/27', plantingDate: today()}, {id: f2, name: 'Talhão 08', area: 62, crop: 'Soja', cultivar: 'NS 7709', season: '2026/27'}, {id: f3, name: 'Talhão 12', area: 110, crop: 'Milho', cultivar: 'P3898', season: '2026/27'});
   db.machines.push({id: m1, name: 'Trator 7230J', type: 'Trator', model: 'John Deere 7230J', hours: 1492, interval: 250, nextService: 1500}, {id: m2, name: 'Colheitadeira 01', type: 'Colheitadeira', model: 'S540', hours: 3120, interval: 250, nextService: 3250}, {id: m3, name: 'Pulverizador 4730', type: 'Pulverizador', model: 'JD 4730', hours: 860, interval: 200, nextService: 1000});
   db.hourLogs.push({id: uid(), machineId: m1, date: daysAgo(1), hours: 1492, previous: 1480});
+  [[20, 1452, 0], [10, 1471, 190], [1, 1492, 215]].forEach(([d, h, l]) => db.fuel.push({id: uid(), machineId: m1, date: daysAgo(d), hours: h, liters: l || 180, cheio: 'Sim', origem: 'posto', value: ''}));
   // Histórico das últimas semanas (exemplo) para os indicadores da Visão Geral
   [[m1, 1480, [9, 7, 11, 8, 10, 6]], [m2, 3120, [12, 14, 9, 13, 0, 0]], [m3, 860, [6, 0, 8, 5, 7, 9]]].forEach(([id, h, semanas]) => {
     let atual = h;
