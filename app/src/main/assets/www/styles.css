@@ -217,3 +217,18 @@ body{background:var(--bg)}
 .ubs-maior{padding:10px 12px;border-radius:10px;background:var(--bg);font-size:.86rem;margin-top:12px}
 .ubs-cfg{display:grid;gap:8px}.es-ck{display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:10px}.es-ck input{width:auto!important}
 @media(max-width:760px){.ubs-det{grid-template-columns:minmax(0,1fr)}.ubs-fluxo .ln{grid-template-columns:100px minmax(0,1fr) auto}.ubs-fluxo .ln b{white-space:nowrap}.ubs-lista{grid-template-columns:minmax(0,1fr)}}
+
+/* Financeiro: fluxo de caixa */
+.fx-graf{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:10px;align-items:end;height:180px;margin:8px 0 6px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.fx-mes{display:grid;grid-template-rows:1fr auto;height:100%;gap:6px;text-align:center}.fx-mes small{color:var(--muted);font-size:.76rem}
+.fx-par{display:flex;gap:3px;align-items:end;justify-content:center;height:100%}
+.fx-barra{width:min(18px,40%);height:100%;display:flex;flex-direction:column-reverse;outline:none}.fx-barra span{display:block;width:100%}
+.fx-barra span:last-child{border-radius:4px 4px 0 0}.fx-barra .ent{background:var(--c1)}.fx-barra .sai{background:var(--c2)}.fx-barra .prev{opacity:.4}
+.fx-leg{list-style:none;display:flex;gap:16px;flex-wrap:wrap;padding:0;margin:6px 0 14px;font-size:.84rem;color:var(--muted)}.fx-leg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}.fx-leg .ent{background:var(--c1)}.fx-leg .sai{background:var(--c2)}.fx-leg .prev-amostra{background:var(--c1);opacity:.4}
+.fin-abas{margin-top:4px}
+
+/* Menu lateral: grupos e rolagem quando não cabe na altura da tela */
+.sidebar{overflow-y:auto;scrollbar-width:thin}.sidebar .nav{flex:0 0 auto}.sidebar-foot{margin-top:auto}
+.nav-grupo{display:block;margin:12px 12px 4px;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#7fa3b5;font-weight:700}
+:root[data-theme="light"] .nav-grupo{color:var(--muted)}
+@media(max-width:760px){.sidebar{top:0;bottom:0;height:auto}}

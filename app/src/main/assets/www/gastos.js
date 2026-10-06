@@ -20,7 +20,7 @@ function gastoForm(g = {}) {
   openForm({
     title: g.id ? 'Editar gasto' : 'Lançar gasto',
     sub: 'Informe o valor do documento (nota, recibo ou boleto). Vincule à máquina e ao talhão quando houver.',
-    values: {date: today(), ...g},
+    values: {date: today(), pagamento: 'À vista', parcelas: 2, ...g},
     fields: [
       {k: 'date', label: 'Data', type: 'date', required: true},
       {k: 'category', label: 'Categoria', type: 'select', options: CAT_GASTO, required: true},
@@ -31,14 +31,24 @@ function gastoForm(g = {}) {
       {k: 'fieldId', label: 'Talhão', type: 'select', options: fieldOptions},
       {k: 'season', label: 'Safra', placeholder: 'Ex.: 2026/27'},
       {k: 'doc', label: 'Documento', placeholder: 'Nº da nota ou recibo'},
+      // Só ao lançar: compra a prazo gera as parcelas em Financeiro → A pagar
+      ...(g.id ? [] : [{k: 'pagamento', label: 'Pagamento', type: 'select', options: ['À vista', 'A prazo'], required: true},
+        {k: 'parcelas', label: 'Parcelas (se a prazo)', type: 'number', min: 1}, {k: 'vencimento', label: '1º vencimento (se a prazo)', type: 'date'}]),
       {k: 'notes', label: 'Observações', type: 'textarea'}
     ],
     onSubmit: v => {
       if (!(Number(v.value) > 0)) return 'Informe um valor maior que zero';
       // Safra do talhão quando não informada
       if (!v.season && v.fieldId) v.season = find('fields', v.fieldId)?.season || '';
-      upsert('expenses', {...g, ...v, id: g.id || uid()});
-      showToast('Gasto salvo');
+      const {pagamento, parcelas, vencimento, ...dados} = v, id = g.id || uid();
+      if (!g.id && pagamento === 'A prazo') {
+        const n = Math.round(Number(parcelas) || 0);
+        if (!(n >= 1 && n <= 120)) return 'Informe o número de parcelas (1 a 120)';
+        if (!vencimento) return 'Informe o primeiro vencimento';
+        gerarParcelas({tipo: 'pagar', grupo: uid(), descricao: dados.description, categoria: dados.category, parceiro: dados.supplier, doc: dados.doc, machineId: dados.machineId, fieldId: dados.fieldId, season: dados.season, expenseId: id, lancarGasto: 'Não'}, dados.value, n, vencimento).forEach(p => db.contas.push(p));
+      }
+      upsert('expenses', {...g, ...dados, id});
+      showToast(!g.id && pagamento === 'A prazo' ? 'Gasto salvo • parcelas lançadas em Financeiro' : 'Gasto salvo');
     }
   });
 }
@@ -91,7 +101,10 @@ Object.assign(ACTIONS, {
   'gs-new': () => gastoForm(),
   'gs-talhao': id => gastoForm({fieldId: id}),
   'gs-edit': id => gastoForm(find('expenses', id)),
-  'gs-del': id => confirmDialog('Excluir este gasto?', () => remove('expenses', id)),
+  'gs-del': id => {
+    const abertas = db.contas.filter(c => c.expenseId === id && c.status !== 'paga').length;
+    confirmDialog(`Excluir este gasto?${abertas ? ` As ${abertas} parcela(s) em aberto em Financeiro também serão excluídas.` : ''}`, () => { db.contas = db.contas.filter(c => !(c.expenseId === id && c.status !== 'paga')); remove('expenses', id); });
+  },
   'gs-periodo': id => { gastoPeriodo = id; gastoCat = ''; render(); },
   'gs-cat': id => { gastoCat = id; render(); },
   'gs-csv': exportarGastosCsv

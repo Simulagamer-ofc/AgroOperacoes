@@ -24,7 +24,7 @@ const safeStorage = {
 
 // ---------- Banco de dados local ----------
 const DB_KEY = 'agro-db-v1';
-const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs', 'fuel'];
+const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs', 'fuel', 'contas'];
 const emptyDb = () => ({version: 1, settings: {farm: '', owner: ''}, ...Object.fromEntries(COLLECTIONS.map(c => [c, []]))});
 
 function loadDb() {
@@ -606,7 +606,7 @@ VIEWS.relatorios = () => {
 };
 
 VIEWS.cadastros = () => {
-  const counts = [['Operações', 'operations'], ['Máquinas', 'machines'], ['Registros de horímetro', 'hourLogs'], ['Manutenções', 'maintenances'], ['Talhões', 'fields'], ['Lotes', 'lots'], ['Itens de estoque', 'stock'], ['Movimentações', 'movements'], ['Gastos', 'expenses'], ['Ordens de beneficiamento', 'ubs'], ['Abastecimentos', 'fuel']];
+  const counts = [['Operações', 'operations'], ['Máquinas', 'machines'], ['Registros de horímetro', 'hourLogs'], ['Manutenções', 'maintenances'], ['Talhões', 'fields'], ['Lotes', 'lots'], ['Itens de estoque', 'stock'], ['Movimentações', 'movements'], ['Gastos', 'expenses'], ['Ordens de beneficiamento', 'ubs'], ['Abastecimentos', 'fuel'], ['Contas a pagar e receber', 'contas']];
   return head('Cadastros e backup', 'Dados da propriedade e cópia de segurança dos registros deste dispositivo.') +
     `<section class="settings">
       <article class="card panel"><h3>Propriedade</h3><p>Nome exibido no aplicativo e nos arquivos exportados.</p>
@@ -712,6 +712,9 @@ function loadSamples() {
   db.expenses.push({id: uid(), date: daysAgo(4), category: 'Combustível', description: 'Diesel S10 — 1.500 L', value: 9150, machineId: '', fieldId: '', season: '2026/27'},
     {id: uid(), date: daysAgo(15), category: 'Mão de obra', description: 'Diárias de plantio', value: 2400, fieldId: f1, season: '2026/27'},
     {id: uid(), date: daysAgo(2), category: 'Peças', description: 'Pontas de pulverização', value: 980, machineId: m3, season: '2026/27'});
+  db.contas.push({id: uid(), tipo: 'pagar', grupo: 'g1', descricao: 'Fertilizante 04-14-08', categoria: 'Insumos', parceiro: 'Revenda', valor: 18900, vencimento: daysAgo(-5), parcela: '1/2', status: 'aberta', lancarGasto: 'Sim'},
+    {id: uid(), tipo: 'pagar', grupo: 'g1', descricao: 'Fertilizante 04-14-08', categoria: 'Insumos', parceiro: 'Revenda', valor: 18900, vencimento: daysAgo(-35), parcela: '2/2', status: 'aberta', lancarGasto: 'Sim'},
+    {id: uid(), tipo: 'receber', descricao: 'Venda de soja — 1.200 sc', categoria: 'Venda de grãos', parceiro: 'Cooperativa', valor: 156000, vencimento: daysAgo(-20), status: 'aberta', season: '2025/26'});
   db.movements.push({id: uid(), itemId: s3, kind: 'Saída', qty: 12, date: today(), fieldId: f1, before: 48, after: 36, unitCost: 3150, value: 37800, notes: 'Adubação de plantio'});
   db.lots.push({id: l1, code: 'SM-024', species: 'Soja', cultivar: 'BMX Zeus', category: 'C1', fieldId: f1, season: '2025/26', weight: 42000, status: 'Aguardando análise', germination: '', vigor: ''}, {id: l2, code: 'SM-026', species: 'Soja', cultivar: 'NS 7709', category: 'S1', fieldId: f2, season: '2025/26', weight: 38500, status: 'Em beneficiamento', germination: 92, vigor: 86});
   db.ubs.push({id: uid(), lotId: l2, lote: {code: 'SM-026', species: 'Soja', cultivar: 'NS 7709', category: 'S1', season: '2025/26'}, inicio: daysAgo(2), status: 'Em andamento',
