@@ -163,3 +163,30 @@ body{background:var(--bg)}
 .nx-leg.custos span{display:grid;line-height:1.25;min-width:0}.nx-leg.custos span small{color:var(--muted);font-size:.78rem}.nx-leg.custos li{align-items:center}
 
 .sc-desc{border:1px solid var(--line);border-radius:12px;padding:12px 14px}.sc-desc summary{cursor:pointer}.sc-desc .form{margin-top:10px}
+
+/* Estoque e insumos (cartões por item) */
+.es-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}.es-kpis .kpi .value{font-size:1.6rem}
+.es-kpis .kpi.alerta .value{color:#ff8f8f}.es-kpis .kpi.aviso .value{color:#f5b843}
+:root[data-theme="light"] .es-kpis .kpi.alerta .value{color:var(--red)}:root[data-theme="light"] .es-kpis .kpi.aviso .value{color:#9a6a00}
+.es-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;margin-bottom:8px}
+.es-item{padding:16px;display:grid;gap:10px;align-content:start}
+.es-topo{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.es-topo strong{font-size:1.02rem}.es-topo small{display:block;color:var(--muted);margin-top:2px}
+.es-topo-dir{display:flex;gap:8px;align-items:center;flex:none}.es-topo-dir .menu-mais{margin-left:0}
+.es-saldo{display:flex;align-items:baseline;gap:8px}.es-saldo b{font-size:1.7rem}.es-saldo span{color:var(--muted)}
+.es-nivel{position:relative;height:10px;border-radius:9px;background:var(--bg)}
+.es-nivel i{position:absolute;left:0;top:0;bottom:0;border-radius:9px;background:#24a672}
+.es-nivel i.baixo{background:#e05a5a}.es-nivel i.perto{background:#c08508}.es-nivel i.sem{background:#5f7a88}
+:root[data-theme="light"] .es-nivel i{background:#1baf7a}:root[data-theme="light"] .es-nivel i.baixo{background:#d03b3b}:root[data-theme="light"] .es-nivel i.perto{background:#c98500}:root[data-theme="light"] .es-nivel i.sem{background:#9aa8b3}
+.es-nivel em{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--text);opacity:.75}
+.es-legenda{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-top:4px}
+.es-info{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:.86rem}.es-info span{color:var(--muted)}.es-info b{font-weight:600;text-align:right}
+.es-sem-custo{margin:0;font-size:.8rem;color:var(--muted);padding:8px 10px;border-radius:9px;background:var(--bg)}
+.es-acoes{display:flex;gap:8px}.es-acoes button{flex:1;white-space:nowrap;padding:9px;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--text)}
+.es-acoes button.ent{border-color:#24a672;color:#65e6a8}.es-acoes button.sai{border-color:#c08508;color:#f5b843}
+:root[data-theme="light"] .es-acoes button.ent{color:#137a52}:root[data-theme="light"] .es-acoes button.sai{color:#8a5f00}
+@media(max-width:760px){.es-kpis{grid-template-columns:1fr 1fr;gap:10px}.es-kpis .kpi .value{font-size:1.2rem}.es-grid{grid-template-columns:1fr}}
+/* Pizzas do painel: legenda abaixo do gráfico, sem sobrepor nome e percentual */
+.nx-donut.pizza{grid-template-columns:1fr;gap:14px}.nx-donut.pizza svg{max-width:150px;justify-self:center}
+.es-sinais{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:6px;font-size:.9rem;color:var(--muted)}.es-sinais b{display:inline-block;min-width:30px;color:var(--text)}.es-sinais .es-baixo b{color:#ff8f8f}.es-sinais .es-perto b{color:#f5b843}
+:root[data-theme="light"] .es-sinais .es-baixo b{color:var(--red)}:root[data-theme="light"] .es-sinais .es-perto b{color:#9a6a00}
+.viz-aviso{color:var(--s2);font-weight:700}

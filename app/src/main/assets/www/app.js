@@ -327,36 +327,81 @@ function stockForm(s = {}) {
       {k: 'unit', label: 'Unidade', type: 'select', options: UNITS, required: true},
       ...(s.id ? [] : [{k: 'qty', label: 'Saldo inicial', type: 'number', min: 0, required: true}]),
       {k: 'min', label: 'Estoque mínimo', type: 'number', min: 0, hint: 'Gera alerta quando o saldo ficar abaixo'},
-      {k: 'location', label: 'Local de armazenagem'}
+      {k: 'location', label: 'Local de armazenagem'},
+      {k: 'avgCost', label: 'Custo médio atual (R$ por unidade)', type: 'number', min: 0, full: true, hint: 'Opcional — informe só se souber o custo do saldo atual. Depois ele é recalculado pelas entradas com valor.'}
     ],
     onSubmit: v => { upsert('stock', {...s, ...v, id: s.id || uid()}); showToast('Item salvo'); }
   });
 }
 
-function movementForm(itemId) {
+// Custo médio ponderado (R$ por unidade). Desconhecido = null: o app nunca supõe preço.
+const custoMedio = s => Number(s?.avgCost) > 0 ? Number(s.avgCost) : null;
+const CAT_GASTO_DO_ITEM = {'Combustível': 'Combustível', 'Peças': 'Peças'};
+function aplicarMovimento(s, kind, qty, value) {
+  const before = Number(s.qty || 0), avg = custoMedio(s), mov = {before};
+  if (kind === 'Entrada') {
+    s.qty = before + qty;
+    if (value > 0 && qty > 0) {
+      mov.value = value; mov.unitCost = value / qty;
+      // Saldo anterior sem custo conhecido: não dá para calcular a média sem supor preço
+      s.avgCost = before <= 0 ? value / qty : avg != null ? (before * avg + value) / (before + qty) : '';
+    } else if (qty > 0) s.avgCost = ''; // entrada sem valor: o custo das novas unidades é desconhecido
+  } else if (kind === 'Saída') {
+    s.qty = before - qty;
+    if (avg != null) { mov.unitCost = avg; mov.value = qty * avg; }
+  } else s.qty = qty; // ajuste de inventário: saldo contado, custo unitário mantido
+  mov.after = s.qty;
+  return mov;
+}
+function movementForm(itemId, kind) {
   if (!db.stock.length) { showToast('Cadastre um item de estoque primeiro'); return stockForm(); }
+  const s0 = find('stock', itemId), entrada = kind === 'Entrada', saida = kind === 'Saída';
   openForm({
-    title: 'Movimentar estoque',
-    values: {itemId, kind: 'Saída', date: today()},
+    title: entrada ? `Entrada — ${s0?.name || 'estoque'}` : saida ? `Saída — ${s0?.name || 'estoque'}` : 'Movimentar estoque',
+    sub: entrada ? 'Compra ou recebimento. Com o valor da nota, o custo médio do item é recalculado.' : saida ? 'Consumo ou aplicação. O custo sai pelo custo médio do item, quando conhecido.' : '',
+    values: {itemId, kind: kind || 'Saída', date: today(), gasto: 'Sim'},
     fields: [
       {k: 'itemId', label: 'Item', type: 'select', options: stockOptions, required: true, full: true},
-      {k: 'kind', label: 'Movimento', type: 'select', options: ['Entrada', 'Saída', 'Ajuste de inventário'], required: true},
-      {k: 'qty', label: 'Quantidade', type: 'number', min: 0, required: true, hint: 'No ajuste, informe o saldo contado'},
+      ...(kind ? [] : [{k: 'kind', label: 'Movimento', type: 'select', options: ['Entrada', 'Saída', 'Ajuste de inventário'], required: true}]),
+      {k: 'qty', label: entrada ? 'Quantidade recebida' : saida ? 'Quantidade usada' : 'Quantidade', type: 'number', min: 0, required: true, hint: kind ? '' : 'No ajuste, informe o saldo contado'},
       {k: 'date', label: 'Data', type: 'date', required: true},
-      {k: 'fieldId', label: 'Talhão (consumo)', type: 'select', options: fieldOptions},
-      {k: 'notes', label: 'Documento / observações', type: 'textarea'}
+      ...(saida ? [] : [
+        {k: 'value', label: 'Valor total da nota (R$)', type: 'number', min: 0, hint: kind ? 'Opcional, mas sem ele o custo médio deixa de ser calculado.' : 'Só para entradas.'},
+        {k: 'supplier', label: 'Fornecedor'}, {k: 'doc', label: 'Nota fiscal / documento'},
+        {k: 'gasto', label: 'Lançar o valor em Controle de gastos', type: 'select', options: ['Sim', 'Não'], required: true, hint: 'Só para entradas com valor.'}]),
+      ...(entrada ? [] : [{k: 'fieldId', label: 'Talhão (consumo)', type: 'select', options: fieldOptions}]),
+      {k: 'notes', label: 'Observações', type: 'textarea'}
     ],
     onSubmit: v => {
-      const s = find('stock', v.itemId);
+      const s = find('stock', v.itemId), k = kind || v.kind;
       if (!s) return 'Selecione o item';
-      const before = Number(s.qty || 0);
-      if (v.kind === 'Saída' && v.qty > before) return `Saldo insuficiente (${num(before)} ${s.unit})`;
-      s.qty = v.kind === 'Entrada' ? before + v.qty : v.kind === 'Saída' ? before - v.qty : v.qty;
-      db.movements.push({id: uid(), ...v, before, after: s.qty});
+      if (k === 'Saída' && v.qty > Number(s.qty || 0)) return `Saldo insuficiente (${num(s.qty)} ${s.unit})`;
+      if (k === 'Entrada' && !(v.qty > 0)) return 'Informe a quantidade recebida';
+      const valor = k === 'Entrada' && Number(v.value) > 0 ? Number(v.value) : 0;
+      const tinhaCusto = custoMedio(s) != null || Number(s.qty || 0) <= 0;
+      const mov = aplicarMovimento(s, k, Number(v.qty), valor);
+      const {gasto, value, supplier, doc, ...resto} = v;
+      const reg = {id: uid(), ...resto, kind: k, ...mov, ...(k === 'Entrada' ? {supplier, doc} : {})};
+      db.movements.push(reg);
+      if (valor && gasto === 'Sim') db.expenses.push({id: uid(), date: v.date, category: CAT_GASTO_DO_ITEM[s.category] || 'Insumos', description: `Compra: ${s.name} — ${num(v.qty)} ${s.unit}`, value: valor, supplier, doc, movementId: reg.id, notes: v.notes});
       save();
-      showToast(`${s.name}: saldo ${num(s.qty)} ${s.unit}`);
+      const aviso = k === 'Entrada' && custoMedio(s) == null ? (valor && !tinhaCusto ? ' • informe o custo do saldo anterior em Editar para calcular o custo médio' : ' • entrada sem valor: custo médio não calculado') : '';
+      showToast(`${s.name}: saldo ${num(s.qty)} ${s.unit}${aviso}`);
     }
   });
+  // Mostra o custo unitário e o novo custo médio enquanto digita
+  if (!saida) {
+    const qEl = $('#f_qty', dialog), vEl = $('#f_value', dialog), itEl = $('#f_itemId', dialog), hint = vEl?.parentElement.querySelector('.hint');
+    const base = hint?.textContent || '';
+    const atual = () => {
+      const s = find('stock', itEl.value), q = Number(String(qEl.value).replace(',', '.')), val = Number(String(vEl.value).replace(',', '.'));
+      if (!hint) return;
+      if (!(s && q > 0 && val > 0)) { hint.textContent = base; return; }
+      const avg = custoMedio(s), before = Number(s.qty || 0), novo = before <= 0 ? val / q : avg != null ? (before * avg + val) / (before + q) : null;
+      hint.textContent = `R$ ${num(val / q, 2)}/${s.unit}` + (novo != null ? ` • custo médio ${avg != null && before > 0 ? `de R$ ${num(avg, 2)} ` : ''}passa a R$ ${num(novo, 2)}/${s.unit}` : ' • saldo anterior sem custo: informe-o em Editar para calcular o custo médio');
+    };
+    [qEl, vEl, itEl].forEach(el => el && el.addEventListener('input', atual));
+  }
 }
 
 // ---------- Componentes de lista ----------
@@ -473,7 +518,7 @@ VIEWS.talhao = id => {
   const gastos = db.expenses.filter(g => g.fieldId === id && Number(g.value) > 0).sort(byDateDesc), totG = gastos.reduce((s, g) => s + Number(g.value), 0);
   return head(f.name, `${num(f.area)} ha • ${[f.crop, f.cultivar, f.season].filter(Boolean).join(' • ')}`, btn('← Talhões', 'nav', 'talhoes', 'secondary') + btn('+ Operação', 'op-field', id)) +
     `<div class="section-title"><h3>Operações (${ops.length})</h3></div><section class="card list">${ops.length ? ops.map(o => operationRow(o)).join('') : empty('Nenhuma operação neste talhão', '')}</section>` +
-    `<div class="section-title"><h3>Insumos aplicados</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Data</th><th>Item</th><th class="num">Quantidade</th><th class="num">Por ha</th></tr></thead><tbody>${movs.map(m => { const s = find('stock', m.itemId); return `<tr><td>${fmtDate(m.date)}</td><td>${esc(s?.name || 'Item removido')}</td><td class="num">${num(m.qty)} ${esc(s?.unit || '')}</td><td class="num">${Number(f.area) ? num(m.qty / f.area) : '—'}</td></tr>`; }).join('') || '<tr><td colspan="4">Nenhuma saída de estoque vinculada a este talhão.</td></tr>'}</tbody></table></div></section>` +
+    `<div class="section-title"><h3>Insumos aplicados</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Data</th><th>Item</th><th class="num">Quantidade</th><th class="num">Por ha</th><th class="num">Custo</th></tr></thead><tbody>${movs.map(m => { const s = find('stock', m.itemId); return `<tr><td>${fmtDate(m.date)}</td><td>${esc(s?.name || 'Item removido')}</td><td class="num">${num(m.qty)} ${esc(s?.unit || '')}</td><td class="num">${Number(f.area) ? num(m.qty / f.area) : '—'}</td><td class="num">${Number(m.value) > 0 ? `R$ ${num(m.value, 2)}${Number(f.area) ? `<br><small>R$ ${num(m.value / f.area, 2)}/ha</small>` : ''}` : '—'}</td></tr>`; }).join('') || '<tr><td colspan="5">Nenhuma saída de estoque vinculada a este talhão.</td></tr>'}</tbody></table></div></section>` +
     `<div class="section-title"><h3>Gastos (R$ ${num(totG, 2)}${Number(f.area) > 0 && totG ? ` • R$ ${num(totG / f.area, 2)}/ha` : ''})</h3><button data-act="gs-talhao" data-id="${esc(id)}">+ Lançar gasto</button></div><section class="card panel">${gastos.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th class="num">Valor</th></tr></thead><tbody>${gastos.map(g => `<tr><td>${fmtDate(g.date)}</td><td>${esc(g.description)}</td><td>${esc(g.category)}</td><td class="num">R$ ${num(g.value, 2)}</td></tr>`).join('')}</tbody></table></div>` : 'Nenhum gasto vinculado a este talhão.'}</section>`;
 };
 
@@ -519,13 +564,7 @@ function lotDetail(id) {
     <section class="card panel"><div class="timeline">${events.length ? events.map(e => `<div class="tl-item"><span class="tl-dot ${e.color}">${e.icon}</span><div><strong>${esc(e.title)}</strong><small>${fmtDate(e.date)}${e.text ? ' • ' + esc(e.text) : ''}</small></div></div>`).join('') : 'Nenhum evento registrado.'}</div></section>`;
 }
 
-VIEWS.estoque = () => {
-  const items = db.stock.slice().sort((a, b) => stockLow(b) - stockLow(a) || a.name.localeCompare(b.name));
-  const movs = db.movements.slice().sort(byDateDesc).slice(0, 15);
-  return head('Estoque e insumos', `${items.length} itens • ${items.filter(stockLow).length} abaixo do mínimo`, btn('Movimentar', 'mov-new', '', 'secondary') + btn('+ Novo item', 'st-new')) +
-    (items.length ? `<section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Item</th><th>Categoria</th><th class="num">Saldo</th><th class="num">Mínimo</th><th></th></tr></thead><tbody>${items.map(s => `<tr><td><strong>${esc(s.name)}</strong>${stockLow(s) ? ' ' + chip('baixo', 'red') : ''}<br><small style="color:var(--muted)">${esc(s.location || '')}</small></td><td>${esc(s.category || '—')}</td><td class="num"><strong>${num(s.qty)}</strong> ${esc(s.unit)}</td><td class="num">${s.min !== '' && s.min != null ? num(s.min) + ' ' + esc(s.unit) : '—'}</td><td><div class="row-actions">${mini('⇄', 'mov-new', s.id)}${mini('Editar', 'st-edit', s.id)}${mini('Excluir', 'st-del', s.id, 'del')}</div></td></tr>`).join('')}</tbody></table></div></section>` : `<section class="card">${empty('Nenhum item cadastrado', 'Cadastre defensivos, fertilizantes, sementes, combustível e peças.', {act: 'st-new', label: '+ Novo item'})}</section>`) +
-    `<div class="section-title"><h3>Últimas movimentações</h3></div><section class="card list">${movs.length ? movs.map(m => { const s = find('stock', m.itemId); const color = m.kind === 'Entrada' ? 'green' : m.kind === 'Saída' ? 'orange' : 'blue'; return `<div class="row"><span class="status ${color}"></span><div><strong>${esc(m.kind)} — ${esc(s?.name || 'Item removido')}</strong><small>${esc([fmtDate(m.date), `${num(m.qty)} ${s?.unit || ''}`, `saldo ${num(m.before)} → ${num(m.after)}`, fieldName(m.fieldId), m.notes].filter(Boolean).join(' • '))}</small></div>${chip(m.kind, color)}</div>`; }).join('') : empty('Nenhuma movimentação', '')}</section>`;
-};
+// VIEWS.estoque fica em estoque.js
 
 let reportDays = 30;
 VIEWS.relatorios = () => {
@@ -628,7 +667,7 @@ function restoreBackup(text) {
 
 const CSV_DEFS = {
   operations: ['operacoes', [['Data', o => fmtDate(o.date)], ['Hora', o => o.time], ['Tipo', o => o.type], ['Local', opPlace], ['Máquina', o => machineName(o.machineId)], ['Área (ha)', o => o.area], ['Operador', o => o.operator], ['Situação', o => o.status], ['Observações', o => o.notes]], db => db.operations.slice().sort(byDateDesc)],
-  stock: ['estoque', [['Item', s => s.name], ['Categoria', s => s.category], ['Saldo', s => s.qty], ['Unidade', s => s.unit], ['Mínimo', s => s.min], ['Local', s => s.location]], db => db.stock]
+  stock: ['estoque', [['Item', s => s.name], ['Categoria', s => s.category], ['Saldo', s => s.qty], ['Unidade', s => s.unit], ['Mínimo', s => s.min], ['Local', s => s.location], ['Custo médio (R$/un)', s => custoMedio(s) ?? ''], ['Valor em estoque (R$)', s => custoMedio(s) != null ? Math.round(custoMedio(s) * Number(s.qty || 0) * 100) / 100 : '']], db => db.stock]
 };
 function exportCsv(kind) {
   const [name, cols, rows] = CSV_DEFS[kind];
@@ -657,11 +696,11 @@ function loadSamples() {
     {id: uid(), date: today(), time: '09:00', type: 'Tratamento de sementes', place: 'Unidade de beneficiamento', status: 'Programada', notes: 'Lote SM-026'},
     {id: uid(), date: today(), time: '06:30', type: 'Aplicação', fieldId: f3, machineId: m3, status: 'Concluída', area: 110, notes: 'Concluída 10:35'},
     {id: uid(), date: daysAgo(-1), time: '07:00', type: 'Plantio', fieldId: f2, machineId: m1, status: 'Programada'});
-  db.stock.push({id: s1, name: 'Tratamento TS-04', category: 'Tratamento de sementes', unit: 'L', qty: 18, min: 20, location: 'Galpão 2'}, {id: s2, name: 'Óleo diesel S10', category: 'Combustível', unit: 'L', qty: 4200, min: 1500, location: 'Tanque'}, {id: s3, name: 'Fertilizante 04-14-08', category: 'Fertilizante', unit: 't', qty: 36, min: 10, location: 'Armazém'});
+  db.stock.push({id: s1, name: 'Tratamento TS-04', category: 'Tratamento de sementes', unit: 'L', qty: 18, min: 20, location: 'Galpão 2', avgCost: 96.5}, {id: s2, name: 'Óleo diesel S10', category: 'Combustível', unit: 'L', qty: 4200, min: 1500, location: 'Tanque', avgCost: 6.1}, {id: s3, name: 'Fertilizante 04-14-08', category: 'Fertilizante', unit: 't', qty: 36, min: 10, location: 'Armazém', avgCost: 3150});
   db.expenses.push({id: uid(), date: daysAgo(4), category: 'Combustível', description: 'Diesel S10 — 1.500 L', value: 9150, machineId: '', fieldId: '', season: '2026/27'},
     {id: uid(), date: daysAgo(15), category: 'Mão de obra', description: 'Diárias de plantio', value: 2400, fieldId: f1, season: '2026/27'},
     {id: uid(), date: daysAgo(2), category: 'Peças', description: 'Pontas de pulverização', value: 980, machineId: m3, season: '2026/27'});
-  db.movements.push({id: uid(), itemId: s3, kind: 'Saída', qty: 12, date: today(), fieldId: f1, before: 48, after: 36, notes: 'Adubação de plantio'});
+  db.movements.push({id: uid(), itemId: s3, kind: 'Saída', qty: 12, date: today(), fieldId: f1, before: 48, after: 36, unitCost: 3150, value: 37800, notes: 'Adubação de plantio'});
   db.lots.push({id: l1, code: 'SM-024', species: 'Soja', cultivar: 'BMX Zeus', category: 'C1', fieldId: f1, season: '2025/26', weight: 42000, status: 'Aguardando análise', germination: '', vigor: ''}, {id: l2, code: 'SM-026', species: 'Soja', cultivar: 'NS 7709', category: 'S1', fieldId: f2, season: '2025/26', weight: 38500, status: 'Em beneficiamento', germination: 92, vigor: 86});
   db.lotEvents.push({id: uid(), lotId: l1, date: daysAgo(12), title: 'Colheita', text: 'Umidade 13%'}, {id: uid(), lotId: l1, date: daysAgo(5), title: 'Amostra enviada ao laboratório', text: ''}, {id: uid(), lotId: l2, date: daysAgo(10), title: 'Análise registrada', text: 'Germinação 92% • vigor 86%'});
   save(); showToast('Dados de exemplo carregados'); render();

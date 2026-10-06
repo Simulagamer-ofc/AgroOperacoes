@@ -79,10 +79,10 @@ function graficoEstoque() {
   const sub = 'Itens com estoque mínimo definido, do mais crítico ao mais folgado';
   if (!itens.length) return cartao('Estoque × mínimo', sub, semDados('Defina o estoque mínimo dos itens em Estoque e Insumos.'));
   const corpo = `<div class="viz-medidores">${itens.map(({s, r}) => {
-    const escala = Math.max(Number(s.qty), Number(s.min) * 2), baixo = stockLow(s);
+    const escala = Math.max(Number(s.qty), Number(s.min) * 2), baixo = stockLow(s), perto = estoquePerto(s);
     return `<div class="viz-medidor" ${tip(s.name, `${num(s.qty)} ${s.unit} • mínimo ${num(s.min)} ${s.unit}`)}>
-      <div class="viz-med-topo"><span>${esc(s.name)}</span><span class="viz-valor">${baixo ? '<b class="viz-alerta">! abaixo do mínimo</b> ' : ''}${num(s.qty)} / ${num(s.min)} ${esc(s.unit)}</span></div>
-      <div class="viz-trilho med"><span class="viz-barra h ${baixo ? 'crit' : 's1'}" style="width:${Math.min(100, Number(s.qty) / escala * 100)}%"></span><i class="viz-min" style="left:${Number(s.min) / escala * 100}%" title="mínimo"></i></div></div>`;
+      <div class="viz-med-topo"><span>${esc(s.name)}</span><span class="viz-valor">${baixo ? '<b class="viz-alerta">! abaixo do mínimo</b> ' : perto ? '<b class="viz-aviso">perto do mínimo</b> ' : ''}${num(s.qty)} / ${num(s.min)} ${esc(s.unit)}</span></div>
+      <div class="viz-trilho med"><span class="viz-barra h ${baixo ? 'crit' : perto ? 's2' : 's1'}" style="width:${Math.min(100, Number(s.qty) / escala * 100)}%"></span><i class="viz-min" style="left:${Number(s.min) / escala * 100}%" title="mínimo"></i></div></div>`;
   }).join('')}</div><p class="viz-unid">Traço vertical = estoque mínimo</p>`;
   return cartao('Estoque × mínimo', sub, corpo + tabela(['Item', 'Saldo', 'Mínimo'], itens.map(({s}) => [s.name, `${num(s.qty)} ${s.unit}`, `${num(s.min)} ${s.unit}`])));
 }
@@ -116,6 +116,26 @@ function semanaOperacoes() {
 }
 // Custos dos últimos 6 meses em pizza, por categoria (3 maiores + “Outras”).
 // Soma os gastos lançados e o custo das manutenções (data de conclusão, ou de abertura) — ver gastos.js.
+// Pizza com até 3 categorias + “Demais” (só há 3 cores categóricas validadas). Cor segue a categoria
+// (ordem alfabética entre as mostradas), nunca a posição no ranking; “Demais” em cinza.
+function pizza(entrada, total, fmt) {
+  const DEMAIS = 'Demais';
+  const fatias = entrada.length > 3 ? [...entrada.slice(0, 3), [DEMAIS, entrada.slice(3).reduce((s, f) => s + f[1], 0)]] : entrada;
+  const nomes = fatias.map(f => f[0]).filter(n => n !== DEMAIS).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  const cor = n => n === DEMAIS ? 'var(--c0)' : `var(--c${nomes.indexOf(n) + 1})`;
+  const pct = v => Math.round(v / total * 100);
+  // Fatias como caminhos SVG; contorno na cor do cartão = folga de 2px entre fatias
+  const R = 70, cx = 75, cy = 75; let ang = -Math.PI / 2;
+  const ponto = a => `${(cx + R * Math.cos(a)).toFixed(2)} ${(cy + R * Math.sin(a)).toFixed(2)}`;
+  const fatiaSvg = ([n, v]) => {
+    const a = v / total * 2 * Math.PI, d = fatias.length === 1 ? `M ${cx} ${cy - R} A ${R} ${R} 0 1 1 ${cx - 0.01} ${cy - R} Z`
+      : `M ${cx} ${cy} L ${ponto(ang)} A ${R} ${R} 0 ${a > Math.PI ? 1 : 0} 1 ${ponto(ang + a)} Z`;
+    ang += a;
+    return `<path class="nx-seg" d="${d}" fill="${cor(n)}" stroke="var(--panel)" stroke-width="2" stroke-linejoin="round" ${tip(n, `${fmt(v)} (${pct(v)}%)`)}></path>`;
+  };
+  return {fatias, html: rotulo => `<div class="nx-donut pizza"><svg viewBox="0 0 150 150" role="img" aria-label="${esc(rotulo)}: ${esc(fatias.map(([n, v]) => `${n} ${pct(v)}%`).join(', '))}">${fatias.map(fatiaSvg).join('')}</svg>
+    <ul class="nx-leg custos">${fatias.map(([n, v]) => `<li><i style="background:${cor(n)}"></i><span>${esc(n)}<small>${esc(fmt(v))}</small></span><b>${pct(v)}%</b></li>`).join('')}</ul></div>`};
+}
 const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
 function custosMes() {
   const hoje = new Date(today() + 'T12:00:00'), ini = new Date(hoje.getFullYear(), hoje.getMonth() - 5, 1);
@@ -125,36 +145,31 @@ function custosMes() {
   if (!total) return cartaoNx('Custos', semDados('Nenhum custo lançado nos últimos 6 meses. Use “Controle de gastos” ou informe o custo ao concluir uma manutenção.'));
   let fatias = agrupar(lanc, x => x.category);
   const porMaq = agrupar(lanc.filter(x => x.machineId), x => machineName(x.machineId) || 'Máquina removida');
-  // Só há 3 cores validadas: a partir da 4ª categoria, as menores viram “Demais” (cinza)
-  const DEMAIS = 'Demais';
-  if (fatias.length > 3) fatias = [...fatias.slice(0, 3), [DEMAIS, fatias.slice(3).reduce((s, f) => s + f[1], 0)]];
-  // Cor segue a categoria (ordem alfabética entre as mostradas), nunca a posição no ranking
-  const nomes = fatias.map(f => f[0]).filter(n => n !== DEMAIS).sort((a, b) => a.localeCompare(b, 'pt-BR'));
-  const cor = n => n === DEMAIS ? 'var(--c0)' : `var(--c${nomes.indexOf(n) + 1})`;
+  const pz = pizza(fatias, total, v => `R$ ${num(v, 2)}`);
   const pct = v => v / total * 100;
-  // Fatias como caminhos SVG; contorno na cor do cartão = folga de 2px entre fatias
-  const R = 70, cx = 75, cy = 75; let ang = -Math.PI / 2;
-  const ponto = a => `${(cx + R * Math.cos(a)).toFixed(2)} ${(cy + R * Math.sin(a)).toFixed(2)}`;
-  const fatiaSvg = ([n, v]) => {
-    const a = v / total * 2 * Math.PI, d = fatias.length === 1 ? `M ${cx} ${cy - R} A ${R} ${R} 0 1 1 ${cx - 0.01} ${cy - R} Z`
-      : `M ${cx} ${cy} L ${ponto(ang)} A ${R} ${R} 0 ${a > Math.PI ? 1 : 0} 1 ${ponto(ang + a)} Z`;
-    ang += a;
-    return `<path class="nx-seg" d="${d}" fill="${cor(n)}" stroke="var(--panel)" stroke-width="2" stroke-linejoin="round" ${tip(n, `R$ ${num(v, 2)} (${Math.round(pct(v))}%)`)}></path>`;
-  };
   const meses = Array.from({length: 6}, (_, k) => new Date(ini.getFullYear(), ini.getMonth() + k, 1));
   const porMes = meses.map(d => [`${MESES[d.getMonth()]}/${String(d.getFullYear()).slice(2)}`, somaValor(lanc.filter(x => x.date.startsWith(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`)))]);
   return cartaoNx('Custos', `<p class="nx-total"><strong>R$ ${num(total, 2)}</strong> nos últimos 6 meses</p>
-    <div class="nx-donut"><svg viewBox="0 0 150 150" role="img" aria-label="Custos por categoria: ${fatias.map(([n, v]) => `${n} ${Math.round(pct(v))}%`).join(', ')}">${fatias.map(fatiaSvg).join('')}</svg>
-    <ul class="nx-leg custos">${fatias.map(([n, v]) => `<li><i style="background:${cor(n)}"></i><span>${esc(n)}<small>R$ ${num(v, 2)}</small></span><b>${Math.round(pct(v))}%</b></li>`).join('')}</ul></div>
+    ${pz.html('Custos por categoria')}
     <p class="nx-nota">Gastos e manutenções lançados neste aparelho, por categoria.</p>` +
-    tabela(['Categoria', 'Custo (R$)', '%'], fatias.map(([n, v]) => [n, num(v, 2), Math.round(pct(v)) + '%'])) +
+    tabela(['Categoria', 'Custo (R$)', '%'], pz.fatias.map(([n, v]) => [n, num(v, 2), Math.round(pct(v)) + '%'])) +
     (porMaq.length ? tabela(['Máquina', 'Custo (R$)'], porMaq.map(([n, v]) => [n, num(v, 2)])).replace('Ver tabela', 'Ver por máquina') : '') +
     tabela(['Mês', 'Custo (R$)'], porMes.map(([m, v]) => [m, num(v, 2)])).replace('Ver tabela', 'Ver por mês'));
 }
+// Valor em estoque por categoria (custo médio × saldo). Sem nenhum custo registrado, mostra itens por categoria.
 function estoqueInsumos() {
-  const comMin = db.stock.filter(s => Number(s.min) > 0), baixo = comMin.filter(stockLow);
-  return cartaoNx('Estoque de insumos', `<div class="nx-tiles"><div class="nx-tile ok"><strong>${comMin.length - baixo.length}</strong><span>Sem alerta</span></div><div class="nx-tile baixo"><strong>${baixo.length}</strong><span>${baixo.length ? '! ' : ''}Estoque baixo</span></div></div>
-    <p class="nx-nota">${baixo.length ? `Abaixo do mínimo: ${esc(baixo.map(s => s.name).join(', '))}.` : 'Saldo comparado ao mínimo cadastrado.'}${db.stock.length > comMin.length ? ` ${db.stock.length - comMin.length} sem mínimo definido.` : ''}</p>`);
+  if (!db.stock.length) return cartaoNx('Estoque de insumos', semDados('Nenhum item de estoque cadastrado.'));
+  const comValor = db.stock.filter(s => valorItem(s) > 0), total = comValor.reduce((t, s) => t + valorItem(s), 0);
+  const porValor = total > 0, semCusto = db.stock.length - comValor.length;
+  const base = porValor ? agrupar(comValor.map(s => ({category: s.category || 'Outro', value: valorItem(s)})), x => x.category)
+    : agrupar(db.stock.map(s => ({category: s.category || 'Outro', value: 1})), x => x.category);
+  const tot = porValor ? total : db.stock.length;
+  const pz = pizza(base, tot, porValor ? (v => `R$ ${num(v, 2)}`) : (v => `${v} ${v === 1 ? 'item' : 'itens'}`));
+  const baixo = db.stock.filter(stockLow), perto = db.stock.filter(estoquePerto);
+  return cartaoNx('Estoque de insumos', `<p class="nx-total">${porValor ? `<strong>R$ ${num(total, 2)}</strong> em estoque` : `<strong>${db.stock.length}</strong> ${db.stock.length === 1 ? 'item' : 'itens'} por categoria`}</p>
+    ${pz.html(porValor ? 'Valor em estoque por categoria' : 'Itens por categoria')}
+    <ul class="es-sinais"><li class="es-baixo"><b>${baixo.length ? '! ' : ''}${baixo.length}</b>abaixo do mínimo${baixo.length ? ': ' + esc(baixo.map(s => s.name).join(', ')) : ''}</li><li class="es-perto"><b>${perto.length}</b>perto do mínimo</li>${semCusto ? `<li><b>${semCusto}</b>sem custo registrado${porValor ? ' (fora do valor)' : ''}</li>` : ''}</ul>` +
+    tabela(['Categoria', porValor ? 'Valor (R$)' : 'Itens', '%'], pz.fatias.map(([n, v]) => [n, porValor ? num(v, 2) : v, Math.round(v / tot * 100) + '%'])));
 }
 const cartaoNx = (titulo, corpo) => `<article class="card nx-card"><h3>${esc(titulo)}</h3>${corpo}</article>`;
 function painelNexus() {
