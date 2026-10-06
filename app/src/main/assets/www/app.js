@@ -22,7 +22,7 @@ const safeStorage = {
 
 // ---------- Banco de dados local ----------
 const DB_KEY = 'agro-db-v1';
-const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem'];
+const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses'];
 const emptyDb = () => ({version: 1, settings: {farm: '', owner: ''}, ...Object.fromEntries(COLLECTIONS.map(c => [c, []]))});
 
 function loadDb() {
@@ -470,9 +470,11 @@ VIEWS.talhao = id => {
   if (!f) return empty('Talhão não encontrado', '');
   const ops = db.operations.filter(o => o.fieldId === id).sort(byDateDesc);
   const movs = db.movements.filter(m => m.fieldId === id && m.kind === 'Saída').sort(byDateDesc);
+  const gastos = db.expenses.filter(g => g.fieldId === id && Number(g.value) > 0).sort(byDateDesc), totG = gastos.reduce((s, g) => s + Number(g.value), 0);
   return head(f.name, `${num(f.area)} ha • ${[f.crop, f.cultivar, f.season].filter(Boolean).join(' • ')}`, btn('← Talhões', 'nav', 'talhoes', 'secondary') + btn('+ Operação', 'op-field', id)) +
     `<div class="section-title"><h3>Operações (${ops.length})</h3></div><section class="card list">${ops.length ? ops.map(o => operationRow(o)).join('') : empty('Nenhuma operação neste talhão', '')}</section>` +
-    `<div class="section-title"><h3>Insumos aplicados</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Data</th><th>Item</th><th class="num">Quantidade</th><th class="num">Por ha</th></tr></thead><tbody>${movs.map(m => { const s = find('stock', m.itemId); return `<tr><td>${fmtDate(m.date)}</td><td>${esc(s?.name || 'Item removido')}</td><td class="num">${num(m.qty)} ${esc(s?.unit || '')}</td><td class="num">${Number(f.area) ? num(m.qty / f.area) : '—'}</td></tr>`; }).join('') || '<tr><td colspan="4">Nenhuma saída de estoque vinculada a este talhão.</td></tr>'}</tbody></table></div></section>`;
+    `<div class="section-title"><h3>Insumos aplicados</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Data</th><th>Item</th><th class="num">Quantidade</th><th class="num">Por ha</th></tr></thead><tbody>${movs.map(m => { const s = find('stock', m.itemId); return `<tr><td>${fmtDate(m.date)}</td><td>${esc(s?.name || 'Item removido')}</td><td class="num">${num(m.qty)} ${esc(s?.unit || '')}</td><td class="num">${Number(f.area) ? num(m.qty / f.area) : '—'}</td></tr>`; }).join('') || '<tr><td colspan="4">Nenhuma saída de estoque vinculada a este talhão.</td></tr>'}</tbody></table></div></section>` +
+    `<div class="section-title"><h3>Gastos (R$ ${num(totG, 2)}${Number(f.area) > 0 && totG ? ` • R$ ${num(totG / f.area, 2)}/ha` : ''})</h3><button data-act="gs-talhao" data-id="${esc(id)}">+ Lançar gasto</button></div><section class="card panel">${gastos.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th class="num">Valor</th></tr></thead><tbody>${gastos.map(g => `<tr><td>${fmtDate(g.date)}</td><td>${esc(g.description)}</td><td>${esc(g.category)}</td><td class="num">R$ ${num(g.value, 2)}</td></tr>`).join('')}</tbody></table></div>` : 'Nenhum gasto vinculado a este talhão.'}</section>`;
 };
 
 VIEWS.sementes = () => {
@@ -535,6 +537,7 @@ VIEWS.relatorios = () => {
   const maxH = Math.max(1, ...hoursBy.map(([, h]) => h));
   const consumption = db.stock.map(s => [s, db.movements.filter(m => m.itemId === s.id && m.kind === 'Saída' && m.date >= from).reduce((t, m) => t + Number(m.qty), 0)]).filter(([, q]) => q > 0).sort((a, b) => b[1] - a[1]);
   const maintCost = db.maintenances.filter(m => m.date >= from).reduce((s, m) => s + Number(m.cost || 0), 0);
+  const outrosGastos = db.expenses.filter(g => g.date >= from && g.date <= today()).reduce((s, g) => s + Number(g.value || 0), 0);
   const area = ops.filter(o => o.status === 'Concluída').reduce((s, o) => s + Number(o.area || 0), 0);
   return head('Relatórios', `Resumo dos últimos ${reportDays} dias (desde ${fmtDate(from)})`, btn('Exportar operações (CSV)', 'csv', 'operations', 'secondary') + btn('Exportar estoque (CSV)', 'csv', 'stock', 'secondary')) +
     `<div class="filters">${[7, 30, 90, 365].map(d => `<button class="${d === reportDays ? 'active' : ''}" data-act="rep-days" data-id="${d}">${d === 365 ? '12 meses' : d + ' dias'}</button>`).join('')}</div>
@@ -543,6 +546,7 @@ VIEWS.relatorios = () => {
       <article class="card kpi"><div class="label">Área trabalhada</div><div class="value">${num(area)}</div><div class="hint">ha em operações concluídas</div></article>
       <article class="card kpi"><div class="label">Horas de máquina</div><div class="value">${num(hoursBy.reduce((s, [, h]) => s + h, 0))}</div><div class="hint">pelos registros de horímetro</div></article>
       <article class="card kpi"><div class="label">Custo de manutenção</div><div class="value">R$ ${num(maintCost, 2)}</div><div class="hint">${db.maintenances.filter(m => m.date >= from).length} ordens</div></article>
+      <article class="card kpi clickable" data-act="nav" data-id="gastos" style="cursor:pointer"><div class="label">Outros gastos</div><div class="value">R$ ${num(outrosGastos, 2)}</div><div class="hint">combustível, peças, mão de obra e demais • ver detalhes</div></article>
     </section>
     <section class="grid">
       <article class="card panel"><h3>Operações por tipo</h3>${byType.length ? `<table class="tbl"><tbody>${byType.map(([t, l]) => `<tr><td>${esc(t)}</td><td style="width:45%"><div class="bar"><span style="width:${l.length / maxType * 100}%"></span></div></td><td class="num">${l.length}</td></tr>`).join('')}</tbody></table>` : 'Sem operações no período.'}</article>
@@ -553,7 +557,7 @@ VIEWS.relatorios = () => {
 };
 
 VIEWS.cadastros = () => {
-  const counts = [['Operações', 'operations'], ['Máquinas', 'machines'], ['Registros de horímetro', 'hourLogs'], ['Manutenções', 'maintenances'], ['Talhões', 'fields'], ['Lotes', 'lots'], ['Itens de estoque', 'stock'], ['Movimentações', 'movements']];
+  const counts = [['Operações', 'operations'], ['Máquinas', 'machines'], ['Registros de horímetro', 'hourLogs'], ['Manutenções', 'maintenances'], ['Talhões', 'fields'], ['Lotes', 'lots'], ['Itens de estoque', 'stock'], ['Movimentações', 'movements'], ['Gastos', 'expenses']];
   return head('Cadastros e backup', 'Dados da propriedade e cópia de segurança dos registros deste dispositivo.') +
     `<section class="settings">
       <article class="card panel"><h3>Propriedade</h3><p>Nome exibido no aplicativo e nos arquivos exportados.</p>
@@ -581,7 +585,8 @@ VIEWS.busca = q => {
   const fs = db.fields.filter(f => hit(f.name, f.crop, f.cultivar, f.season));
   const ls = db.lots.filter(l => hit(l.code, l.cultivar, l.species, l.status));
   const ss = db.stock.filter(s => hit(s.name, s.category, s.location));
-  const total = ops.length + ms.length + fs.length + ls.length + ss.length;
+  const gs = db.expenses.filter(g => hit(g.description, g.category, g.supplier, g.doc, machineName(g.machineId), fieldName(g.fieldId))).sort(byDateDesc);
+  const total = ops.length + ms.length + fs.length + ls.length + ss.length + gs.length;
   const group = (title, items) => items.length ? `<div class="section-title"><h3>${title} (${items.length})</h3></div><section class="card list">${items.join('')}</section>` : '';
   const simple = (title, sub, route) => `<div class="row clickable" data-act="nav" data-id="${esc(route)}" style="cursor:pointer"><span class="status blue"></span><div><strong>${esc(title)}</strong><small>${esc(sub)}</small></div><span class="chip">Abrir</span></div>`;
   return head(`Resultados para “${q}”`, `${total} registro(s) encontrado(s)`) + (total ? '' : `<section class="card">${empty('Nada encontrado', 'Tente outro termo.')}</section>`) +
@@ -589,7 +594,8 @@ VIEWS.busca = q => {
     group('Máquinas', ms.map(m => simple(m.name, `${m.type || ''} • ${num(m.hours)} h`, 'maquinas'))) +
     group('Talhões', fs.map(f => simple(f.name, `${num(f.area)} ha • ${f.crop || ''}`, 'talhao/' + f.id))) +
     group('Lotes', ls.map(l => simple(l.code, `${l.cultivar} • ${l.status}`, 'lotes/' + l.id))) +
-    group('Estoque', ss.map(s => simple(s.name, `${num(s.qty)} ${s.unit}`, 'estoque')));
+    group('Estoque', ss.map(s => simple(s.name, `${num(s.qty)} ${s.unit}`, 'estoque'))) +
+    group('Gastos', gs.map(g => simple(g.description, `${fmtDate(g.date)} • ${g.category} • R$ ${num(g.value, 2)}`, 'gastos')));
 };
 
 // ---------- Backup, CSV e exemplos ----------
@@ -652,6 +658,9 @@ function loadSamples() {
     {id: uid(), date: today(), time: '06:30', type: 'Aplicação', fieldId: f3, machineId: m3, status: 'Concluída', area: 110, notes: 'Concluída 10:35'},
     {id: uid(), date: daysAgo(-1), time: '07:00', type: 'Plantio', fieldId: f2, machineId: m1, status: 'Programada'});
   db.stock.push({id: s1, name: 'Tratamento TS-04', category: 'Tratamento de sementes', unit: 'L', qty: 18, min: 20, location: 'Galpão 2'}, {id: s2, name: 'Óleo diesel S10', category: 'Combustível', unit: 'L', qty: 4200, min: 1500, location: 'Tanque'}, {id: s3, name: 'Fertilizante 04-14-08', category: 'Fertilizante', unit: 't', qty: 36, min: 10, location: 'Armazém'});
+  db.expenses.push({id: uid(), date: daysAgo(4), category: 'Combustível', description: 'Diesel S10 — 1.500 L', value: 9150, machineId: '', fieldId: '', season: '2026/27'},
+    {id: uid(), date: daysAgo(15), category: 'Mão de obra', description: 'Diárias de plantio', value: 2400, fieldId: f1, season: '2026/27'},
+    {id: uid(), date: daysAgo(2), category: 'Peças', description: 'Pontas de pulverização', value: 980, machineId: m3, season: '2026/27'});
   db.movements.push({id: uid(), itemId: s3, kind: 'Saída', qty: 12, date: today(), fieldId: f1, before: 48, after: 36, notes: 'Adubação de plantio'});
   db.lots.push({id: l1, code: 'SM-024', species: 'Soja', cultivar: 'BMX Zeus', category: 'C1', fieldId: f1, season: '2025/26', weight: 42000, status: 'Aguardando análise', germination: '', vigor: ''}, {id: l2, code: 'SM-026', species: 'Soja', cultivar: 'NS 7709', category: 'S1', fieldId: f2, season: '2025/26', weight: 38500, status: 'Em beneficiamento', germination: 92, vigor: 86});
   db.lotEvents.push({id: uid(), lotId: l1, date: daysAgo(12), title: 'Colheita', text: 'Umidade 13%'}, {id: uid(), lotId: l1, date: daysAgo(5), title: 'Amostra enviada ao laboratório', text: ''}, {id: uid(), lotId: l2, date: daysAgo(10), title: 'Análise registrada', text: 'Germinação 92% • vigor 86%'});

@@ -468,5 +468,48 @@
     return r;
   }
 
-  return {STATUS, calculos, avaliar, congelar, resumir, avaliarSecagem, classificarGraos, avaliarBicos, avaliarSensor, avaliarDistribuicaoLongitudinal, avaliarPerdas, avaliarDistribuicaoTransversal, avaliarTaxaAplicacao, avaliarDose, auditarBanco};
+  /**
+   * Descontos de uma carga na moega (conferência do romaneio). Nenhum padrão é assumido:
+   * umidade e impureza padrão vêm do contrato ou da tabela do comprador. Quando o percentual da
+   * tabela do comprador é informado, ele é usado; senão aplica-se o balanço de massa:
+   *   impureza  → peso limpo   = peso × (100 − I) ÷ (100 − Ipadrão)   (F-DESC-IMPUREZA)
+   *   umidade   → peso seco    = peso × (100 − U) ÷ (100 − Upadrão)   (F-DESC-UMIDADE)
+   * Ordem: impureza sobre o peso líquido; umidade sobre o peso já sem o excesso de impureza;
+   * outros descontos (%) sobre o peso resultante. Abaixo do padrão não há desconto (nem acréscimo).
+   * dados: {pesoLiquido kg, impureza, impurezaPadrao, umidade, umidadePadrao, descImpurezaPct, descUmidadePct, outrosPct, pesoRomaneio}
+   */
+  function descontosCarga(dados) {
+    const d = dados || {}, pend = [], linhas = [];
+    const P = d.pesoLiquido;
+    if (!(finito(P) && P > 0)) return {status: STATUS.DADOS_INSUFICIENTES, linhas, pendencias: ['Informe o peso líquido da carga (kg).']};
+    const pct = v => finito(v) && v >= 0 && v < 100;
+    let peso = P;
+    const aplicar = (id, rotulo, valor, padrao, tabela, formula) => {
+      if (finito(tabela)) {
+        if (!pct(tabela)) { pend.push(`${rotulo}: percentual da tabela do comprador inválido.`); return; }
+        const kg = peso * tabela / 100;
+        linhas.push({id, rotulo, metodo: 'tabela_comprador', percentual: arred(tabela, 4), base: arred(peso, 3), descontoKg: arred(kg, 3)}); peso -= kg; return;
+      }
+      if (!finito(valor) && !finito(padrao)) return;
+      if (!finito(valor)) { pend.push(`${rotulo}: informe o valor medido na amostra.`); return; }
+      if (!finito(padrao)) { pend.push(`${rotulo}: informe o padrão do contrato ou o percentual da tabela do comprador.`); return; }
+      if (!pct(valor) || !pct(padrao)) { pend.push(`${rotulo}: percentuais devem estar entre 0 e 100.`); return; }
+      const fim = valor > padrao ? peso * (100 - valor) / (100 - padrao) : peso, kg = peso - fim;
+      linhas.push({id, rotulo, metodo: 'balanco_massa', formula, medido: valor, padrao, percentual: arred(kg / peso * 100, 4), base: arred(peso, 3), descontoKg: arred(kg, 3)}); peso = fim;
+    };
+    aplicar('impureza', 'Impureza e matérias estranhas', d.impureza, d.impurezaPadrao, d.descImpurezaPct, 'F-DESC-IMPUREZA');
+    aplicar('umidade', 'Umidade', d.umidade, d.umidadePadrao, d.descUmidadePct, 'F-DESC-UMIDADE');
+    if (finito(d.outrosPct)) {
+      if (pct(d.outrosPct)) { const kg = peso * d.outrosPct / 100; linhas.push({id: 'outros', rotulo: 'Outros descontos do comprador', metodo: 'tabela_comprador', percentual: arred(d.outrosPct, 4), base: arred(peso, 3), descontoKg: arred(kg, 3)}); peso -= kg; }
+      else pend.push('Outros descontos: percentual inválido.');
+    }
+    const total = P - peso;
+    const r = {status: pend.length ? STATUS.DADOS_INSUFICIENTES : STATUS.OK, pesoLiquido: P, linhas, descontoTotalKg: arred(total, 3), descontoTotalPct: arred(total / P * 100, 4),
+      pesoFinalKg: arred(peso, 3), sacas60: arred(peso / 60, 3), pendencias: pend};
+    if (finito(d.pesoRomaneio) && d.pesoRomaneio > 0) r.diferencaRomaneioKg = arred(d.pesoRomaneio - peso, 3);
+    if (!linhas.length && !pend.length) r.pendencias.push('Nenhum desconto informado: preencha o padrão do contrato ou o percentual da tabela do comprador.');
+    return r;
+  }
+
+  return {STATUS, calculos, avaliar, congelar, resumir, avaliarSecagem, descontosCarga, classificarGraos, avaliarBicos, avaliarSensor, avaliarDistribuicaoLongitudinal, avaliarPerdas, avaliarDistribuicaoTransversal, avaliarTaxaAplicacao, avaliarDose, auditarBanco};
 }));

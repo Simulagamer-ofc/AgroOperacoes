@@ -1909,6 +1909,18 @@
       "descricao": "Massa final estimada = massa inicial × (100 − umidade inicial) ÷ (100 − umidade final), umidades em base úmida (%)",
       "origem": "Balanço de matéria seca (a matéria seca se conserva na secagem).",
       "tipo": "calculo"
+    },
+    {
+      "id": "F-DESC-IMPUREZA",
+      "descricao": "Peso sem o excesso de impureza = peso × (100 − impureza medida) ÷ (100 − impureza padrão); desconto = peso − peso sem o excesso",
+      "origem": "Balanço de massa (o produto limpo se conserva; remove-se impureza até o padrão). O padrão vem do contrato ou da tabela do comprador — a IN 11/2007 e a IN 60/2011 não estabelecem desconto.",
+      "tipo": "calculo"
+    },
+    {
+      "id": "F-DESC-UMIDADE",
+      "descricao": "Desconto de umidade = peso × (umidade medida − umidade padrão) ÷ (100 − umidade padrão), quando a medida é maior que o padrão",
+      "origem": "Mesmo balanço de matéria seca de F-QUEBRA-UMIDADE. O padrão vem do contrato ou da tabela do comprador; tabelas comerciais podem incluir quebra técnica e diferir deste valor.",
+      "tipo": "calculo"
     }
   ],
   "tabelasClassificacao": [

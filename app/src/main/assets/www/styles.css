@@ -137,7 +137,7 @@ body{background:var(--bg)}
 .nx-nota{color:#bbd2dc;font-size:.85rem;margin:16px 0 0}
 :root[data-theme="light"] .nx-tile.ok{background:rgba(24,166,106,.1);border-color:rgba(24,166,106,.35)}:root[data-theme="light"] .nx-tile.baixo{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.4)}:root[data-theme="light"] .nx-tile.baixo strong{color:#b06d00}:root[data-theme="light"] .nx-leg li,:root[data-theme="light"] .nx-trilho b,:root[data-theme="light"] .kpis.nexus .hint,:root[data-theme="light"] .nx-nota{color:var(--text)}
 /* Controle de gastos */
-.nx-gastos{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 24px;margin-top:18px}.nx-gastos h3{margin:0 0 8px;font-size:1.35rem}.nx-gastos p{margin:0;color:#bbd2dc;font-size:1.05rem}.nx-gastos button{border:0;background:#20445b;color:#e8f5fb;border-radius:12px;padding:16px 26px;font-size:1rem}
+.nx-gastos{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 24px;margin-top:18px}.nx-gastos h3{margin:0 0 8px;font-size:1.35rem}.nx-gastos p{margin:0;color:#bbd2dc;font-size:1.05rem}.nx-gastos-btns{display:flex;gap:10px;flex-wrap:wrap}.nx-gastos button{border:0;background:#20445b;color:#e8f5fb;border-radius:12px;padding:16px 26px;font-size:1rem}
 :root[data-theme="light"] .nx-gastos p{color:var(--muted)}:root[data-theme="light"] .nx-gastos button{background:var(--bg);color:var(--text);border:1px solid var(--line)}
 .nx-acoes{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 0}.nx-acoes button{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:999px;padding:10px 16px;font-size:.92rem}.nx-acoes button:hover{border-color:var(--blue)}
 .grid.nexus{grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.grid.nexus .panel h3,.grid.nexus .section-title h3{font-size:1.35rem}
@@ -161,3 +161,5 @@ body{background:var(--bg)}
 /* Pizza de custos: cores próprias (não confundem com a situação das operações), validadas para daltonismo */
 .viz-root{--c0:#5f7a88;--c1:#3987e5;--c2:#d95926;--c3:#199e70}:root[data-theme="light"] .viz-root{--c0:#9aa8b3;--c1:#2a78d6;--c2:#eb6834;--c3:#1baf7a}
 .nx-leg.custos span{display:grid;line-height:1.25;min-width:0}.nx-leg.custos span small{color:var(--muted);font-size:.78rem}.nx-leg.custos li{align-items:center}
+
+.sc-desc{border:1px solid var(--line);border-radius:12px;padding:12px 14px}.sc-desc summary{cursor:pointer}.sc-desc .form{margin-top:10px}
