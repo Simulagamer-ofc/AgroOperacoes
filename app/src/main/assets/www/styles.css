@@ -240,3 +240,5 @@ body{background:var(--bg)}
 .etiqueta{display:grid;grid-template-columns:130px 1fr;gap:14px;align-items:center;background:#fff;color:#111;border:1px dashed #888;border-radius:10px;padding:14px;break-inside:avoid}
 .et-qr svg{width:130px;height:130px;display:block}.et-txt{display:grid;gap:3px;font-size:.84rem}.et-txt strong{font-size:1.15rem}
 @media print{.etiqueta{border:1px dashed #999}}
+
+.fx-barra.ch{width:min(26px,70%)}

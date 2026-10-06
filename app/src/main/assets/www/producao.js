@@ -5,7 +5,7 @@
    Custos sem talhão (combustível, manutenção, mão de obra geral…) aparecem à parte e, se o usuário quiser, rateados pela área. */
 
 const KG_SACA_GRAO = 60; // saca comercial de grãos no Brasil
-let prodSafra = '', prodRateio = false;
+let prodSafra = '', prodRateio = false, avisoCarencia = '';
 
 const safrasConhecidas = () => [...new Set([...db.fields.map(f => f.season), ...db.colheitas.map(c => c.season), ...db.vendas.map(v => v.season)].filter(Boolean))].sort().reverse();
 const safraDoTalhao = id => find('fields', id)?.season || '';
@@ -26,7 +26,12 @@ function colheitaForm(fieldId) {
       {k: 'destino', label: 'Destino', placeholder: 'Ex.: armazém próprio, cooperativa'},
       {k: 'notes', label: 'Observações', type: 'textarea'}
     ],
-    onSubmit: v => { if (!(v.kg > 0)) return 'Informe o peso colhido'; db.colheitas.push({id: uid(), ...v}); save(); showToast(`${num(v.kg / KG_SACA_GRAO, 1)} sacas registradas`); }
+    onSubmit: v => {
+      if (!(v.kg > 0)) return 'Informe o peso colhido';
+      const lib = typeof liberacaoColheita === 'function' ? liberacaoColheita(v.fieldId) : null;
+      if (lib && v.date < lib.libera && avisoCarencia !== v.fieldId + v.date) { avisoCarencia = v.fieldId + v.date; return `Atenção: ${lib.a.produto} só libera a colheita a partir de ${fmtDate(lib.libera)}. Toque em salvar de novo para registrar mesmo assim.`; }
+      avisoCarencia = ''; db.colheitas.push({id: uid(), ...v}); save(); showToast(`${num(v.kg / KG_SACA_GRAO, 1)} sacas registradas`);
+    }
   });
 }
 

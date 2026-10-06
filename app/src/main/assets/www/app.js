@@ -24,7 +24,7 @@ const safeStorage = {
 
 // ---------- Banco de dados local ----------
 const DB_KEY = 'agro-db-v1';
-const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs', 'fuel', 'contas', 'colheitas', 'vendas'];
+const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs', 'fuel', 'contas', 'colheitas', 'vendas', 'chuvas', 'monitoramentos', 'aplicacoes', 'equipe', 'apontamentos'];
 const emptyDb = () => ({version: 1, settings: {farm: '', owner: ''}, ...Object.fromEntries(COLLECTIONS.map(c => [c, []]))});
 
 function loadDb() {
@@ -607,7 +607,7 @@ VIEWS.relatorios = () => {
 };
 
 VIEWS.cadastros = () => {
-  const counts = [['Operações', 'operations'], ['Máquinas', 'machines'], ['Registros de horímetro', 'hourLogs'], ['Manutenções', 'maintenances'], ['Talhões', 'fields'], ['Lotes', 'lots'], ['Itens de estoque', 'stock'], ['Movimentações', 'movements'], ['Gastos', 'expenses'], ['Ordens de beneficiamento', 'ubs'], ['Abastecimentos', 'fuel'], ['Contas a pagar e receber', 'contas'], ['Colheitas', 'colheitas'], ['Vendas', 'vendas']];
+  const counts = [['Operações', 'operations'], ['Máquinas', 'machines'], ['Registros de horímetro', 'hourLogs'], ['Manutenções', 'maintenances'], ['Talhões', 'fields'], ['Lotes', 'lots'], ['Itens de estoque', 'stock'], ['Movimentações', 'movements'], ['Gastos', 'expenses'], ['Ordens de beneficiamento', 'ubs'], ['Abastecimentos', 'fuel'], ['Contas a pagar e receber', 'contas'], ['Colheitas', 'colheitas'], ['Vendas', 'vendas'], ['Chuvas', 'chuvas'], ['Monitoramentos de pragas', 'monitoramentos'], ['Aplicações', 'aplicacoes'], ['Equipe', 'equipe'], ['Apontamentos de trabalho', 'apontamentos']];
   return head('Cadastros e backup', 'Dados da propriedade e cópia de segurança dos registros deste dispositivo.') +
     `<section class="settings">
       <article class="card panel"><h3>Propriedade</h3><p>Nome exibido no aplicativo e nos arquivos exportados.</p>
@@ -717,6 +717,8 @@ function loadSamples() {
     {id: uid(), tipo: 'pagar', grupo: 'g1', descricao: 'Fertilizante 04-14-08', categoria: 'Insumos', parceiro: 'Revenda', valor: 18900, vencimento: daysAgo(-35), parcela: '2/2', status: 'aberta', lancarGasto: 'Sim'},
     {id: 'cv1', tipo: 'receber', descricao: 'Venda de soja — 1.200 sc', categoria: 'Venda de grãos', parceiro: 'Cooperativa', valor: 156000, vencimento: daysAgo(-20), status: 'aberta', season: '2025/26', vendaId: 'vd1'});
   db.vendas.push({id: 'vd1', cultura: 'Soja', season: '2025/26', date: daysAgo(10), sacas: 1200, preco: 130, valor: 156000, comprador: 'Cooperativa', recebimento: 'A prazo', vencimento: daysAgo(-20), contaId: 'cv1'});
+  [[1, 18], [6, 32.5], [14, 12], [25, 41]].forEach(([d, mm]) => db.chuvas.push({id: uid(), date: daysAgo(d), mm, fieldId: ''}));
+  db.monitoramentos.push({id: uid(), fieldId: f3, date: daysAgo(2), tipo: 'Praga', alvo: 'Lagarta-do-cartucho', estadio: 'V6', valor: 12, unidade: '% plantas atacadas', pontos: 10});
   db.colheitas.push({id: uid(), fieldId: f1, cultura: 'Soja', season: '2025/26', date: daysAgo(160), kg: 324480, umidade: 13}, {id: uid(), fieldId: f2, cultura: 'Soja', season: '2025/26', date: daysAgo(158), kg: 230640, umidade: 13.5});
   db.expenses.push({id: uid(), date: daysAgo(300), category: 'Insumos', description: 'Custeio da safra 2025/26 (resumo)', value: 380250, fieldId: f1, season: '2025/26'}, {id: uid(), date: daysAgo(300), category: 'Insumos', description: 'Custeio da safra 2025/26 (resumo)', value: 279000, fieldId: f2, season: '2025/26'});
   db.movements.push({id: uid(), itemId: s3, kind: 'Saída', qty: 12, date: today(), fieldId: f1, before: 48, after: 36, unitCost: 3150, value: 37800, notes: 'Adubação de plantio'});

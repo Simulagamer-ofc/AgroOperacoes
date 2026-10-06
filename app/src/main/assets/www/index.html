@@ -13,12 +13,16 @@
 <body>
 <div class="app">
   <aside class="sidebar" id="sidebar">
-    <div class="brand nexus"><strong class="marca">NEXUS<span>AGRO</span></strong><small class="versao">Versão de teste 0.12.0</small><small id="farmName">Minha fazenda</small></div>
+    <div class="brand nexus"><strong class="marca">NEXUS<span>AGRO</span></strong><small class="versao">Versão de teste 0.13.0</small><small id="farmName">Minha fazenda</small></div>
     <nav class="nav" aria-label="Menu principal">
       <button data-route="inicio"><span class="icon">▦</span>Visão geral</button>
       <small class="nav-grupo">Campo</small>
       <button data-route="operacoes"><span class="icon">◷</span>Operações do dia</button>
       <button data-route="talhoes"><span class="icon">▤</span>Talhões</button>
+      <button data-route="chuva"><span class="icon">☂</span>Chuvas</button>
+      <button data-route="pragas"><span class="icon">✱</span>Pragas e doenças (MIP)</button>
+      <button data-route="aplicacoes"><span class="icon">⚗</span>Aplicações e carência</button>
+      <button data-route="maodeobra"><span class="icon">☺</span>Mão de obra</button>
       <small class="nav-grupo">Máquinas</small>
       <button data-route="maquinas"><span class="icon">⚙</span>Máquinas e manutenção</button>
       <button data-route="combustivel"><span class="icon">⛽</span>Combustível</button>
@@ -62,6 +66,7 @@
 <script src="producao.js"></script>
 <script src="lib/qrcode.js"></script>
 <script src="rastreio.js"></script>
+<script src="campo.js"></script>
 <script src="graficos.js"></script>
 </body>
 </html>
