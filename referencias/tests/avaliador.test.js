@@ -370,3 +370,18 @@ test('descontos da carga na moega: balanço de massa, tabela do comprador e nenh
   assert.equal(s.status, STATUS.DADOS_INSUFICIENTES); assert.equal(s.linhas.length, 0); assert.equal(s.pesoFinalKg, 1000);
   assert.equal(A.descontosCarga({umidade: 16, umidadePadrao: 14}).status, STATUS.DADOS_INSUFICIENTES);
 });
+
+test('revisão: entradas inválidas devolvem pendência em vez de travar', () => {
+  const b = bancoValidado();
+  const s = A.avaliarSecagem({equipamentoFamilia: 'secador', produto: 'soja', destino: 'semente', etapa: 'secagem', leituras: [], massaInicial: 1000, umidadeInicial: -1, umidadeFinal: 13}, BANCO);
+  assert.ok(s.pendencias.some(p => p.includes('entre 0 e 100%')) && s.calculos.massaFinalEstimada === undefined);
+  const s2 = A.avaliarSecagem({equipamentoFamilia: 'secador', produto: 'soja', destino: 'semente', etapa: 'secagem', leituras: [], massaInicial: 1000, umidadeInicial: 12, umidadeFinal: 14}, BANCO);
+  assert.ok(s2.pendencias.some(p => p.includes('maior que a inicial')) && s2.calculos.quebraMassa === undefined);
+  assert.equal(A.avaliarDistribuicaoTransversal({valoresSobrepostos: [0, 0, 0]}, b).status, STATUS.DADOS_INSUFICIENTES);
+  assert.equal(A.avaliarDistribuicaoTransversal({valoresSobrepostos: [-5, 10, 12]}, b).status, STATUS.DADOS_INSUFICIENTES);
+  const p = A.avaliarPerdas({massasG: [10, 10, 10, 10, 10], massasPlataformaG: [20, 20, 20, 20, 20], areaM2: 2, produto: 'soja'}, b);
+  assert.equal(p.pmiKgHa, null); assert.ok(p.pendencias.some(x => x.includes('PMI não calculada')));
+  assert.equal(A.classificarGraos({produto: 'soja', valores: {impurezas: 1}}, BANCO).status, STATUS.DADOS_INSUFICIENTES);
+  const quebrado = JSON.parse(JSON.stringify(BANCO)); delete quebrado.tabelasClassificacao[0].defeitos; quebrado.tabelasClassificacao[1].tipos[0].limites = undefined;
+  assert.doesNotThrow(() => A.auditarBanco(quebrado));
+});
