@@ -46,6 +46,30 @@ for m in indice['marcas']:
         if x.get('documentos'):
             item['d'] = [[doc.get('titulo') or 'Documento', doc['url']] for doc in x['documentos']]
         modelos.append(item)
+
+# 2b) Identificação de famílias/modelos (sem ficha técnica), já sem os itens que as fichas acima cobrem.
+#     Família só para agrupar e sugerir o tipo de máquina; nunca as famílias que disparam sugestão na aferição.
+FAMILIA_IDENT = {
+    'semeadora': 'semeadora', 'plantadeira': 'semeadora', 'distribuidor_fertilizante': 'distribuidor', 'pulverizador': 'pulverizador',
+    'carreta_graneleira': 'carreta_graneleira', 'plaina': 'plaina', 'cultivador': 'cultivador', 'escarificador': 'escarificador',
+    'descompactador': 'preparo_solo', 'segadora': 'forragem', 'espalhador_feno': 'forragem', 'enleirador': 'forragem',
+    'misturador_racao': 'forragem', 'distribuidor_esterco': 'forragem', 'enfardadora': 'enfardadora', 'trator': 'trator',
+    'colhedora_forragem': 'colhedora_forragem', 'colheitadeira_graos': 'colhedora', 'plataforma_milho': 'plataforma_milho',
+}
+ident = json.load(open(os.path.join(REF, 'modelos', 'identificacao.json'), encoding='utf-8'))
+for r in ident['equipamentos']:
+    mi = next((i for i, m in enumerate(marcas) if slug(m['marca']) == slug(r['marca'])), None)
+    if mi is None:
+        marcas.append({'marca': r['marca'], 'fonte': None, 'dataConsulta': None})
+        mi = len(marcas) - 1
+    item = {'i': r['id'], 'm': mi, 'n': r['nome'], 'f': FAMILIA_IDENT.get(r['categoriaId']), 'u': r['fontes'][0]['url'], 'c': r['categoria'],
+            'k': 'id', 'v': r['nivel'], 'dc': r['fontes'][0]['consultadoEm']}
+    if r.get('observacao'):
+        item['ob'] = r['observacao']
+    if r['status'] != 'confirmado_em_fonte_oficial':
+        item['st'] = r.get('motivoConfirmar') or r['status']
+    modelos.append(item)
+assert len({x['i'] for x in modelos}) == len(modelos), 'ID repetido no catálogo'
 t1 = gravar('catalogo-modelos.json', {'dataConsulta': indice.get('dataConsulta'), 'marcas': marcas, 'modelos': modelos})
 
 # 3) Lista oficial BNDES/FINAME (compacta)
@@ -73,7 +97,10 @@ for x in modelos:
     t = tipo_de(' '.join(filter(None, [x['n'], x.get('c'), x.get('l')])), x.get('f'))
     b = marca_id(marcas[x['m']]['marca'])
     x['b'], x['t'] = b, t
-    lista_marcas[b]['f'] += 1
+    if x.get('k') == 'id':
+        lista_marcas[b]['i'] = lista_marcas[b].get('i', 0) + 1
+    else:
+        lista_marcas[b]['f'] += 1
     lista_marcas[b]['t'][t] = lista_marcas[b]['t'].get(t, 0) + 1
 for p in prods:
     razao = fabs[p[0]][1]

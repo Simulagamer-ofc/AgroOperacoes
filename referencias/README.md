@@ -8,6 +8,7 @@ Módulo independente da interface. Pode ser incorporado ao Nexus Agro 2.23 ou ao
 | `avaliador.js` | Avaliação (`avaliar`) e fluxos compostos; funciona no navegador (`window.NexusAvaliador`) e no Node |
 | `catalogo-fabricantes.json` | Fabricantes de máquinas e implementos atuantes no Brasil (identificação; sem parâmetros técnicos) |
 | `modelos/` | Modelos por marca, com especificações copiadas do site do fabricante (`indice.json` lista as marcas) |
+| `modelos/identificacao.json` | Identificação de famílias e modelos (marca, nome, categoria e fonte), sem especificações. Vem do pacote “Nexus Agro — Catálogo de identificação” (07/10/2026), já sem os itens que as fichas acima cobrem; `naoImportados` lista os 126 que ficaram de fora e o motivo |
 | `bndes/produtos-agricolas-finame.json` | Lista oficial do BNDES: 11.107 produtos agrícolas credenciados no FINAME, de 1.891 fabricantes (identificação + código FINAME) |
 | `ferramentas/coleta/` | Scripts de coleta e consolidação dos modelos |
 | `tests/avaliador.test.js` | Testes: `node --test referencias/tests/*.test.js` |

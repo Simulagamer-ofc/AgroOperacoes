@@ -7,15 +7,15 @@ let catTipo = '', catPagina = 24;
 const CAT_PASSO = 48;
 
 const iniciais = nome => nome.replace(/[^A-Za-zÀ-ú0-9 ]/g, ' ').split(/\s+/).filter(Boolean).slice(0, 2).map(p => p[0]).join('').toUpperCase();
-const relevancia = m => m.f * 5 + m.b; // fichas técnicas pesam mais que itens só identificados
-const qtdNoTipo = (m, tipo) => tipo ? (m.t[tipo] || 0) : m.f + m.b;
+const relevancia = m => m.f * 5 + (m.i || 0) * 2 + m.b; // fichas técnicas pesam mais que itens só identificados
+const qtdNoTipo = (m, tipo) => tipo ? (m.t[tipo] || 0) : m.f + (m.i || 0) + m.b;
 const rotTipo = (d, id) => (d.tipos.find(t => t[0] === id) || [, 'Outros'])[1];
 
 function cartaoMarca(d, m) {
   const tipos = Object.entries(m.t).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([t]) => rotTipo(d, t));
   return `<button class="marca-card" data-act="nav" data-id="catalogo/marca~${esc(m.id)}">
     <span class="marca-ini" aria-hidden="true">${esc(iniciais(m.nome))}</span>
-    <span class="marca-txt"><strong>${esc(m.nome)}</strong><small>${[m.f ? `${num(m.f)} ${m.f === 1 ? 'ficha' : 'fichas'}` : '', m.b ? `${num(m.b)} BNDES` : ''].filter(Boolean).join(' • ')}</small>
+    <span class="marca-txt"><strong>${esc(m.nome)}</strong><small>${[m.f ? `${num(m.f)} ${m.f === 1 ? 'ficha' : 'fichas'}` : '', m.i ? `${num(m.i)} ${m.i === 1 ? 'identificado' : 'identificados'}` : '', m.b ? `${num(m.b)} BNDES` : ''].filter(Boolean).join(' • ')}</small>
     <small class="marca-tipos">${esc(tipos.join(' · '))}</small></span></button>`;
 }
 
@@ -25,14 +25,14 @@ const itemModelo = r => {
   const sub = bn ? [r.nome, 'FINAME ' + r.codigoFiname] : [r.modelo && r.modelo !== r.nome ? r.modelo : '', r.codigoFiname ? 'FINAME ' + r.codigoFiname : ''];
   return `<button class="cat-item" data-act="nav" data-id="catalogo/${esc(encodeURIComponent(r.id))}" title="${esc([r.nome, r.modelo].filter(Boolean).join(' — '))}">
   <strong>${esc(titulo)}</strong><small>${esc(sub.filter(Boolean).join(' • '))}</small>
-  ${r.fonte === 'finame' ? '<span class="cat-tag bndes">BNDES</span>' : `<span class="cat-tag">${r.temFicha ? 'Ficha técnica' : 'Fabricante'}</span>`}</button>`;
+  ${r.fonte === 'finame' ? '<span class="cat-tag bndes">BNDES</span>' : r.ident ? `<span class="cat-tag ident">${r.aConfirmar ? 'A confirmar' : 'Identificação'}</span>` : `<span class="cat-tag">${r.temFicha ? 'Ficha técnica' : 'Fabricante'}</span>`}</button>`;
 };
 
 // Todos os itens de uma marca (fichas + BNDES), já com tipo
 async function itensDaMarca(b) {
   const [c, f] = await Promise.all([dados('catalogo'), dados('finame')]);
   const out = [];
-  c.modelos.forEach(x => { if (x.b === b) out.push({fonte: 'fabricante', id: x.i, nome: x.n, modelo: x.l || '', tipo: x.t, temFicha: !!x.e}); });
+  c.modelos.forEach(x => { if (x.b === b) out.push({fonte: 'fabricante', id: x.i, nome: x.n, modelo: x.l || '', tipo: x.t, temFicha: !!x.e, ident: x.k === 'id', aConfirmar: !!x.st}); });
   f.produtos.forEach(p => { if (p[4] === b) out.push({fonte: 'finame', id: 'finame-' + p[1], nome: p[2], modelo: p[3], codigoFiname: p[1], tipo: p[5]}); });
   return out;
 }
@@ -55,8 +55,8 @@ async function inicioCatalogo() {
   let d;
   try { d = await dados('marcas'); } catch { corpo.innerHTML = empty('Catálogo indisponível', 'Não foi possível carregar os dados offline.'); return; }
   if (!corpo.isConnected) return; // o usuário já saiu do catálogo
-  const totF = d.marcas.reduce((s, m) => s + m.f, 0), totB = d.marcas.reduce((s, m) => s + m.b, 0);
-  $('#catTopo').innerHTML = head('Catálogo de máquinas e implementos', `${num(d.marcas.length)} marcas • ${num(totF)} modelos com ficha técnica • ${num(totB)} produtos da lista oficial BNDES/FINAME • funciona sem internet`);
+  const totF = d.marcas.reduce((s, m) => s + m.f, 0), totI = d.marcas.reduce((s, m) => s + (m.i || 0), 0), totB = d.marcas.reduce((s, m) => s + m.b, 0);
+  $('#catTopo').innerHTML = head('Catálogo de máquinas e implementos', `${num(d.marcas.length)} marcas • ${num(totF)} modelos com ficha técnica • ${num(totI)} famílias/modelos identificados • ${num(totB)} produtos da lista oficial BNDES/FINAME • funciona sem internet`);
   const porTipo = Object.fromEntries(d.tipos.map(([id]) => [id, d.marcas.reduce((s, m) => s + (m.t[id] || 0), 0)]));
   $('#catTipos').innerHTML = `<button class="${!catTipo ? 'active' : ''}" data-act="cat-tipo" data-id="">Todos</button>` +
     d.tipos.filter(([id]) => porTipo[id]).map(([id, r]) => `<button class="${catTipo === id ? 'active' : ''}" data-act="cat-tipo" data-id="${id}">${esc(r)}</button>`).join('');
@@ -88,7 +88,7 @@ async function buscarModelos(termos, tipo, limite) {
   const out = [];
   for (const x of c.modelos) {
     if (tipo && x.t !== tipo) continue;
-    if (termos.every(t => textoModelo(c, x).includes(t))) out.push({fonte: 'fabricante', id: x.i, nome: x.n, modelo: x.l || '', b: x.b, temFicha: !!x.e});
+    if (termos.every(t => textoModelo(c, x).includes(t))) out.push({fonte: 'fabricante', id: x.i, nome: x.n, modelo: x.l || '', b: x.b, temFicha: !!x.e, ident: x.k === 'id', aConfirmar: !!x.st});
     if (out.length >= limite) return out;
   }
   for (const p of f.produtos) {
@@ -111,10 +111,10 @@ async function paginaMarca(id) {
   const grupos = d.tipos.map(([t, r]) => [t, r, itens.filter(x => x.tipo === t).sort((a, z) => (a.fonte === 'finame') - (z.fonte === 'finame') || a.nome.localeCompare(z.nome, 'pt-BR'))]).filter(g => g[2].length);
   // Abre só o que é curto; listas longas ficam recolhidas (os botões de tipo levam direto a cada uma)
   const aberto = (l, i) => grupos.length === 1 || (i === 0 && l.length <= 24) || l.length <= 6;
-  view.innerHTML = head(m.nome, [m.f ? `${num(m.f)} modelos com ficha técnica do fabricante` : '', m.b ? `${num(m.b)} produtos na lista oficial BNDES/FINAME` : ''].filter(Boolean).join(' • '), btn('← Catálogo', 'nav', 'catalogo', 'secondary')) +
+  view.innerHTML = head(m.nome, [m.f ? `${num(m.f)} modelos com ficha técnica do fabricante` : '', m.i ? `${num(m.i)} famílias/modelos identificados` : '', m.b ? `${num(m.b)} produtos na lista oficial BNDES/FINAME` : ''].filter(Boolean).join(' • '), btn('← Catálogo', 'nav', 'catalogo', 'secondary')) +
     `<div class="filters chips-rolagem">${grupos.map(([t, r, l]) => `<button data-act="cat-ir" data-id="tipo-${t}">${esc(r)} (${l.length})</button>`).join('')}</div>` +
     grupos.map(([t, r, l], i) => `<details class="card cat-tipo" id="tipo-${t}" ${aberto(l, i) ? 'open' : ''}><summary><strong>${esc(r)}</strong><span>${l.length}</span></summary><div class="cat-lista">${l.map(itemModelo).join('')}</div></details>`).join('') +
-    (m.razoes.length ? `<p class="nota">Fabricante na lista do BNDES: ${esc(m.razoes.map(r => r.replace(/\.+$/, '')).join('; '))}. Itens “BNDES” trazem identificação oficial (código FINAME), sem especificações técnicas.${m.f ? ' Itens com “Ficha técnica” vêm do site do fabricante.' : ''}</p>` : '<p class="nota">Itens copiados do site oficial do fabricante.</p>');
+    (m.razoes.length ? `<p class="nota">Fabricante na lista do BNDES: ${esc(m.razoes.map(r => r.replace(/\.+$/, '')).join('; '))}. Itens “BNDES” trazem identificação oficial (código FINAME), sem especificações técnicas.${m.f ? ' Itens com “Ficha técnica” vêm do site do fabricante.' : ''}${m.i ? ' Itens “Identificação” só confirmam o nome da família ou modelo na página do fabricante, sem especificações.' : ''}</p>` : `<p class="nota">${m.i ? 'Itens “Identificação” só confirmam o nome da família ou modelo na página do fabricante, sem especificações.' : 'Itens copiados do site oficial do fabricante.'}</p>`);
 }
 
 Object.assign(ACTIONS, {
