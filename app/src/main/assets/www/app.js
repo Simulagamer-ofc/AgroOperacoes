@@ -44,9 +44,30 @@ function loadDb() {
   return data;
 }
 let db = loadDb();
+// Marca a data de alteração de cada registro e as exclusões (usado na sincronização entre aparelhos).
+// Funciona para qualquer forma de gravação: compara cada registro com o que estava salvo antes.
+let impressoes = null;
+const impressao = r => { const {_mod, ...resto} = r; return JSON.stringify(resto); };
+function carimbar() {
+  const agora = Date.now(), novo = {};
+  db._removidos ||= [];
+  for (const c of COLLECTIONS) {
+    const antes = impressoes?.[c] || null, mapa = novo[c] = {};
+    for (const r of db[c]) {
+      if (!r || !r.id) continue;
+      const h = impressao(r); mapa[r.id] = h;
+      if (antes && antes[r.id] !== h) r._mod = agora;
+    }
+    if (antes) for (const id of Object.keys(antes)) if (!(id in mapa)) db._removidos.push({c, id, at: agora});
+  }
+  if (db._removidos.length > 5000) db._removidos = db._removidos.slice(-5000);
+  impressoes = novo;
+}
 function save() {
+  carimbar();
   if (!safeStorage.set(DB_KEY, JSON.stringify(db))) showToast('Não foi possível salvar no dispositivo (armazenamento cheio?)');
 }
+carimbar(); // estado carregado = referência (nada é marcado como alterado ao abrir)
 
 const find = (col, id) => db[col].find(x => x.id === id);
 const upsert = (col, item) => {
@@ -146,7 +167,8 @@ function openForm({title, sub, fields, values = {}, submit = 'Salvar no disposit
     closeModal(); render();
   };
   modal.classList.add('open');
-  setTimeout(() => form.elements[0]?.focus(), 50);
+  // Foca o primeiro campo só se o usuário ainda não tocou em outro (evita mandar o texto para o campo errado)
+  setTimeout(() => { if (!dialog.contains(document.activeElement)) form.elements[0]?.focus(); }, 50);
 }
 
 function confirmDialog(message, onYes, yesLabel = 'Excluir') {
@@ -377,8 +399,10 @@ function movementForm(itemId, kind) {
       ...(saida || ajuste ? [] : [
         {k: 'value', label: 'Valor total da nota (R$)', type: 'number', min: 0, hint: kind ? 'Opcional, mas sem ele o custo médio deixa de ser calculado.' : 'Só para entradas.'},
         {k: 'supplier', label: 'Fornecedor'}, {k: 'doc', label: 'Nota fiscal / documento'},
+        {k: 'lote', label: 'Lote do fabricante', hint: kind ? '' : 'Só para entradas.'}, {k: 'validade', label: 'Validade', type: 'date', hint: kind ? '' : 'Só para entradas.'},
         {k: 'gasto', label: 'Lançar o valor em Controle de gastos', type: 'select', options: ['Sim', 'Não'], required: true, hint: 'Só para entradas com valor.'}]),
       ...(entrada || ajuste ? [] : [{k: 'fieldId', label: 'Talhão (consumo)', type: 'select', options: fieldOptions}]),
+      ...(saida && s0 && typeof lotesDoItem === 'function' && lotesDoItem(s0.id).length ? [{k: 'lote', label: 'Lote usado', type: 'select', options: () => lotesDoItem(s0.id).map(x => ({value: x.lote, label: `${x.lote} — ${num(x.saldo)} ${s0.unit}${x.validade ? ' • vence ' + fmtDate(x.validade) : ''}`})), hint: 'Sem lote: baixa do lote que vence primeiro.'}] : []),
       {k: 'notes', label: 'Observações', type: 'textarea'}
     ],
     onSubmit: v => {
@@ -386,6 +410,8 @@ function movementForm(itemId, kind) {
       if (!s) return 'Selecione o item';
       if (k === 'Saída' && v.qty > Number(s.qty || 0)) return `Saldo insuficiente (${num(s.qty)} ${s.unit})`;
       if (k !== 'Ajuste de inventário' && !(v.qty > 0)) return 'Informe uma quantidade maior que zero';
+      if (k === 'Saída' && v.lote && typeof lotesDoItem === 'function') { const l = lotesDoItem(s.id).find(x => x.lote === v.lote); if (l && v.qty > l.saldo + 1e-9) return `Saldo do lote ${v.lote}: ${num(l.saldo)} ${s.unit}`; }
+      if (k !== 'Entrada') { delete v.validade; if (k !== 'Saída') delete v.lote; }
       const valor = k === 'Entrada' && Number(v.value) > 0 ? Number(v.value) : 0;
       const tinhaCusto = custoMedio(s) != null || Number(s.qty || 0) <= 0;
       const mov = aplicarMovimento(s, k, Number(v.qty), valor);
@@ -525,7 +551,8 @@ VIEWS.talhao = id => {
   const ops = db.operations.filter(o => o.fieldId === id).sort(byDateDesc);
   const movs = db.movements.filter(m => m.fieldId === id && m.kind === 'Saída').sort(byDateDesc);
   const gastos = db.expenses.filter(g => g.fieldId === id && Number(g.value) > 0).sort(byDateDesc), totG = gastos.reduce((s, g) => s + Number(g.value), 0);
-  return head(f.name, `${num(f.area)} ha • ${[f.crop, f.cultivar, f.season].filter(Boolean).join(' • ')}`, btn('← Talhões', 'nav', 'talhoes', 'secondary') + btn('+ Colheita', 'pd-colheita', id, 'secondary') + btn('+ Operação', 'op-field', id)) +
+  return head(f.name, `${num(f.area)} ha • ${[f.crop, f.cultivar, f.season].filter(Boolean).join(' • ')}`, btn('← Talhões', 'nav', 'talhoes', 'secondary') + btn('⌖ Contorno (GPS)', 'nav', 'contorno/' + id, 'secondary') + btn('+ Colheita', 'pd-colheita', id, 'secondary') + btn('+ Operação', 'op-field', id)) +
+    (f.contorno && typeof svgContorno === 'function' ? `<section class="card panel ctn-resumo">${svgContorno(f.contorno.pontos, {tam: 120, classe: 'ctn-mini', rotulo: 'Contorno de ' + f.name})}<div><strong>Contorno medido por GPS</strong><small>${um1(f.contorno.areaHa)} ha • perímetro ${num(f.contorno.perimetroM)} m • ${fmtDate(f.contorno.data)}${Math.abs(f.contorno.areaHa - Number(f.area || 0)) > 0.05 ? ` • cadastro: ${num(f.area)} ha` : ''}</small></div></section>` : '') +
     `<div class="section-title"><h3>Operações (${ops.length})</h3></div><section class="card list">${ops.length ? ops.map(o => operationRow(o)).join('') : empty('Nenhuma operação neste talhão', '')}</section>` +
     `<div class="section-title"><h3>Insumos aplicados</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Data</th><th>Item</th><th class="num">Quantidade</th><th class="num">Por ha</th><th class="num">Custo</th></tr></thead><tbody>${movs.map(m => { const s = find('stock', m.itemId); return `<tr><td>${fmtDate(m.date)}</td><td>${esc(s?.name || 'Item removido')}</td><td class="num">${num(m.qty)} ${esc(s?.unit || '')}</td><td class="num">${Number(f.area) ? num(m.qty / f.area) : '—'}</td><td class="num">${Number(m.value) > 0 ? `R$ ${num(m.value, 2)}${Number(f.area) ? `<br><small>R$ ${num(m.value / f.area, 2)}/ha</small>` : ''}` : '—'}</td></tr>`; }).join('') || '<tr><td colspan="5">Nenhuma saída de estoque vinculada a este talhão.</td></tr>'}</tbody></table></div></section>` +
     `<div class="section-title"><h3>Gastos (R$ ${num(totG, 2)}${Number(f.area) > 0 && totG ? ` • R$ ${num(totG / f.area, 2)}/ha` : ''})</h3><button data-act="gs-talhao" data-id="${esc(id)}">+ Lançar gasto</button></div><section class="card panel">${gastos.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th class="num">Valor</th></tr></thead><tbody>${gastos.map(g => `<tr><td>${fmtDate(g.date)}</td><td>${esc(g.description)}</td><td>${esc(g.category)}</td><td class="num">R$ ${num(g.value, 2)}</td></tr>`).join('')}</tbody></table></div>` : 'Nenhum gasto vinculado a este talhão.'}</section>`;
@@ -616,6 +643,7 @@ VIEWS.cadastros = () => {
       <article class="card panel"><h3>Registros no dispositivo</h3><table class="tbl"><tbody>${counts.map(([l, c]) => `<tr><td>${l}</td><td class="num">${db[c].length}</td></tr>`).join('')}</tbody></table></article>
       <article class="card panel"><h3>Backup</h3><p>Os dados ficam somente neste aparelho. Exporte um backup regularmente e guarde em local seguro (Drive, e-mail, computador).</p>
         <div class="btn-row">${btn('⬇ Exportar backup', 'backup')}${btn('⬆ Restaurar backup', 'restore', '', 'secondary')}</div><input type="file" id="restoreInput" accept="application/json,.json" hidden></article>
+      ${typeof cartaoSincronizacao === 'function' ? cartaoSincronizacao() : ''}
       <article class="card panel"><h3>Dados de exemplo e limpeza</h3><p>Carregue exemplos para treinar a equipe, ou apague todos os registros deste dispositivo.</p>
         <div class="btn-row">${btn('Carregar exemplos', 'seed', '', 'secondary')}<button class="danger" data-act="wipe">Apagar todos os dados</button></div></article>
     </section>`;
@@ -673,7 +701,7 @@ function restoreBackup(text) {
   confirmDialog(`Restaurar backup de ${parsed.exportedAt ? new Date(parsed.exportedAt).toLocaleString('pt-BR') : 'data desconhecida'} com ${n} registros? Os dados atuais deste dispositivo serão substituídos.`, () => {
     db = {...emptyDb(), ...data}; for (const c of COLLECTIONS) if (!Array.isArray(db[c])) db[c] = [];
     db.settings = {...emptyDb().settings, ...(data.settings && typeof data.settings === 'object' ? data.settings : {})};
-    save(); applySettings(); showToast('Backup restaurado');
+    impressoes = null; save(); applySettings(); showToast('Backup restaurado');
   }, 'Restaurar');
 }
 
@@ -721,6 +749,7 @@ function loadSamples() {
   db.monitoramentos.push({id: uid(), fieldId: f3, date: daysAgo(2), tipo: 'Praga', alvo: 'Lagarta-do-cartucho', estadio: 'V6', valor: 12, unidade: '% plantas atacadas', pontos: 10});
   db.colheitas.push({id: uid(), fieldId: f1, cultura: 'Soja', season: '2025/26', date: daysAgo(160), kg: 324480, umidade: 13}, {id: uid(), fieldId: f2, cultura: 'Soja', season: '2025/26', date: daysAgo(158), kg: 230640, umidade: 13.5});
   db.expenses.push({id: uid(), date: daysAgo(300), category: 'Insumos', description: 'Custeio da safra 2025/26 (resumo)', value: 380250, fieldId: f1, season: '2025/26'}, {id: uid(), date: daysAgo(300), category: 'Insumos', description: 'Custeio da safra 2025/26 (resumo)', value: 279000, fieldId: f2, season: '2025/26'});
+  db.movements.push({id: uid(), itemId: s1, kind: 'Entrada', qty: 18, date: daysAgo(30), before: 0, after: 18, lote: 'TS4-2611', validade: daysAgo(-40), supplier: 'Revenda'});
   db.movements.push({id: uid(), itemId: s3, kind: 'Saída', qty: 12, date: today(), fieldId: f1, before: 48, after: 36, unitCost: 3150, value: 37800, notes: 'Adubação de plantio'});
   db.lots.push({id: l1, code: 'SM-024', species: 'Soja', cultivar: 'BMX Zeus', category: 'C1', fieldId: f1, season: '2025/26', weight: 42000, status: 'Aguardando análise', germination: '', vigor: ''}, {id: l2, code: 'SM-026', species: 'Soja', cultivar: 'NS 7709', category: 'S1', fieldId: f2, season: '2025/26', weight: 38500, status: 'Em beneficiamento', germination: 92, vigor: 86});
   db.ubs.push({id: uid(), lotId: l2, lote: {code: 'SM-026', species: 'Soja', cultivar: 'NS 7709', category: 'S1', season: '2025/26'}, inicio: daysAgo(2), status: 'Em andamento',
@@ -764,7 +793,7 @@ const ACTIONS = {
   'backup': exportBackup,
   'restore': () => $('#restoreInput').click(),
   'seed': () => db.lots.some(l => ['SM-024', 'SM-026'].includes(l.code)) ? showToast('Os dados de exemplo já foram carregados neste aparelho') : confirmDialog('Adicionar dados de exemplo aos registros deste dispositivo?', loadSamples, 'Carregar'),
-  'wipe': () => confirmDialog('Apagar TODOS os dados deste dispositivo? Faça um backup antes. Esta ação não pode ser desfeita.', () => { const settings = db.settings; db = emptyDb(); db.settings = settings; save(); showToast('Dados apagados'); }, 'Apagar tudo')
+  'wipe': () => confirmDialog('Apagar TODOS os dados deste dispositivo? Faça um backup antes. Esta ação não pode ser desfeita.', () => { const settings = db.settings; db = emptyDb(); db.settings = settings; impressoes = null; /* apagar este aparelho não apaga os outros na sincronização */ save(); showToast('Dados apagados'); }, 'Apagar tudo')
 };
 document.addEventListener('click', e => {
   const el = e.target.closest('[data-act]');
