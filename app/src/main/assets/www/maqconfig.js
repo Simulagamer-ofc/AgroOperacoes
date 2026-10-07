@@ -63,6 +63,8 @@ function sugestoesCatalogo(espec) {
       if (/ramal central|barra lateral/i.test(valor)) continue; // atomizadores: não é espaçamento uniforme de barra
       const ms = emMetros(numerosComUnidade(valor, uc || 'cm').filter(t => t.u !== 'in' || !/cm/.test(valor)));
       ms.forEach(v => add('espacamentoBicosM', v, `${num(v * 100, 1)} cm`, campo, valor));
+    } else if (/transport|descarga|sem-fim|rosca/.test(c)) {
+      continue; // transportador de descarga etc.: não é espaçamento de plantio nem largura de trabalho
     } else if (c.includes('espac') && c.includes('linha') || /^n[º°o.]? de linhas \d+ ?cm/.test(c) || c.startsWith('numero de linhas')) {
       // pares “27 x 45 cm” e “6 linhas: 50 cm”
       const pares = [...valor.matchAll(/(\d+)\s*x\s*(\d+(?:[.,]\d+)?)\s*cm/gi), ...valor.matchAll(/(\d+)\s*linhas?\s*:\s*(\d+(?:[.,]\d+)?)\s*cm/gi)];
@@ -83,7 +85,8 @@ function sugestoesCatalogo(espec) {
     } else if (c.includes('pressao') && /escala|faixa|trabalho/.test(c) && !c.includes('hidraul') && !c.includes('sistema')) {
       faixas(valor, ['psi', 'bar']).forEach(f => add('faixaPressaoBar', f, `${num(f.min, 1)} a ${num(f.max, 1)} bar`, campo, valor));
     } else if (/largura de trabalho|faixa de aplicacao|largura de aplicacao|faixa de distribuicao/.test(c) && !c.includes('mm')) {
-      emMetros(numerosComUnidade(valor, uc || 'm')).forEach(v => add('larguraTrabalhoM', v, `${num(v, 2)} m`, campo, valor));
+      // Só com unidade escrita no valor ou no nome do campo (ex.: “89 (2.260)” sem unidade não vira sugestão)
+      emMetros(numerosComUnidade(valor, uc)).forEach(v => add('larguraTrabalhoM', v, `${num(v, 2)} m`, campo, valor));
     }
   }
   return s;
