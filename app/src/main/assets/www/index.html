@@ -13,18 +13,30 @@
 <body>
 <div class="app">
   <aside class="sidebar" id="sidebar">
-    <div class="brand nexus"><strong class="marca">NEXUS<span>AGRO</span></strong><small class="versao">Versão de teste 0.11.0</small><small id="farmName">Minha fazenda</small></div>
+    <div class="brand nexus"><strong class="marca">NEXUS<span>AGRO</span></strong><small class="versao">Versão de teste 0.13.0</small><small id="farmName">Minha fazenda</small></div>
     <nav class="nav" aria-label="Menu principal">
       <button data-route="inicio"><span class="icon">▦</span>Visão geral</button>
+      <small class="nav-grupo">Campo</small>
       <button data-route="operacoes"><span class="icon">◷</span>Operações do dia</button>
-      <button data-route="maquinas"><span class="icon">⚙</span>Máquinas e manutenção</button>
-      <button data-route="afericao"><span class="icon">◎</span>Aferição e calibragem</button>
-      <button data-route="secagem"><span class="icon">♨</span>Secador e moega</button>
-      <button data-route="catalogo"><span class="icon">⌕</span>Catálogo de máquinas</button>
       <button data-route="talhoes"><span class="icon">▤</span>Talhões</button>
+      <button data-route="chuva"><span class="icon">☂</span>Chuvas</button>
+      <button data-route="pragas"><span class="icon">✱</span>Pragas e doenças (MIP)</button>
+      <button data-route="aplicacoes"><span class="icon">⚗</span>Aplicações e carência</button>
+      <button data-route="maodeobra"><span class="icon">☺</span>Mão de obra</button>
+      <small class="nav-grupo">Máquinas</small>
+      <button data-route="maquinas"><span class="icon">⚙</span>Máquinas e manutenção</button>
+      <button data-route="combustivel"><span class="icon">⛽</span>Combustível</button>
+      <button data-route="afericao"><span class="icon">◎</span>Aferição e calibragem</button>
+      <button data-route="catalogo"><span class="icon">⌕</span>Catálogo de máquinas</button>
+      <small class="nav-grupo">Grãos e sementes</small>
+      <button data-route="secagem"><span class="icon">♨</span>Secador e moega</button>
       <button data-route="sementes"><span class="icon">◉</span>Produção de sementes</button>
       <button data-route="lotes"><span class="icon">⌁</span>Lotes e rastreabilidade</button>
+      <button data-route="ubs"><span class="icon">⛭</span>Beneficiamento (UBS)</button>
+      <small class="nav-grupo">Gestão</small>
       <button data-route="estoque"><span class="icon">□</span>Estoque e insumos</button>
+      <button data-route="financeiro"><span class="icon">$</span>Financeiro</button>
+      <button data-route="producao"><span class="icon">▲</span>Produção e margem</button>
       <button data-route="gastos"><span class="icon">$</span>Controle de gastos</button>
       <button data-route="relatorios"><span class="icon">▥</span>Relatórios</button>
       <button data-route="cadastros"><span class="icon">☷</span>Cadastros e backup</button>
@@ -48,6 +60,13 @@
 <script src="maqconfig.js"></script>
 <script src="gastos.js"></script>
 <script src="estoque.js"></script>
+<script src="ubs.js"></script>
+<script src="combustivel.js"></script>
+<script src="financeiro.js"></script>
+<script src="producao.js"></script>
+<script src="lib/qrcode.js"></script>
+<script src="rastreio.js"></script>
+<script src="campo.js"></script>
 <script src="graficos.js"></script>
 </body>
 </html>
