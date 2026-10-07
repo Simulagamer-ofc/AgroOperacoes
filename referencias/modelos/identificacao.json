@@ -1,0 +1,3850 @@
+{
+ "origem": {
+  "titulo": "Nexus Agro — Catálogo de identificação de máquinas e implementos",
+  "versao": "2026.10.07.1",
+  "geradoEm": "2026-10-07",
+  "arquivo": "Nexus_Agro_Catalogo_Claude.zip/catalogo.json",
+  "sha256": "6ae73fbd312188b18bd5b3299bbb43fb79dae940f2e9ab8f29d96655a299fda3",
+  "aviso": "Identificação comercial de famílias e modelos. Sem versões, parâmetros técnicos ou perfis de regulagem."
+ },
+ "equipamentos": [
+  {
+   "id": "kuhn-semeadora-sde-5c9813d9",
+   "marca": "KUHN",
+   "nome": "SDE",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/semeadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-semeadora-sdm-bf984848",
+   "marca": "KUHN",
+   "nome": "SDM",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/semeadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-semeadora-select-m-0a0e7a91",
+   "marca": "KUHN",
+   "nome": "SELECT M",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/semeadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-semeadora-select-c5bd73ae",
+   "marca": "KUHN",
+   "nome": "SELECT",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/semeadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-semeadora-oriza-f6e91e37",
+   "marca": "KUHN",
+   "nome": "ORIZA",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/semeadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-semeadora-quadra-airflow-586dd95d",
+   "marca": "KUHN",
+   "nome": "QUADRA AIRFLOW",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/semeadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "QUADRA é semeadora de grãos finos. AIRFLOW e VENTA não são aliases entre si.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-semeadora-quadra-venta-bbb4e3f7",
+   "marca": "KUHN",
+   "nome": "QUADRA VENTA",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/semeadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "QUADRA é semeadora de grãos finos. AIRFLOW e VENTA não são aliases entre si.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-plantadeira-colina-5d494e11",
+   "marca": "KUHN",
+   "nome": "COLINA",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/plantadeiras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-plantadeira-select-gg-9f579d05",
+   "marca": "KUHN",
+   "nome": "SELECT GG",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/plantadeiras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-plantadeira-plus-15cdecc7",
+   "marca": "KUHN",
+   "nome": "PLUS",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/plantadeiras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-plantadeira-pg-82f576e5",
+   "marca": "KUHN",
+   "nome": "PG",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/plantadeiras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-plantadeira-flex-m-be93d074",
+   "marca": "KUHN",
+   "nome": "FLEX M",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/plantadeiras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-plantadeira-prime-at-m-1d6219df",
+   "marca": "KUHN",
+   "nome": "PRIME AT M",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/plantadeiras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-plantadeira-gran-pg-95a3943b",
+   "marca": "KUHN",
+   "nome": "GRAN PG",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/plantadeiras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-plantadeira-prime-29f34b50",
+   "marca": "KUHN",
+   "nome": "PRIME",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/plantadeiras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-plantadeira-flex-p-3e9d7bab",
+   "marca": "KUHN",
+   "nome": "FLEX P",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/plantadeiras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-plantadeira-prime-at-p-cdc5aabb",
+   "marca": "KUHN",
+   "nome": "PRIME AT P",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/plantadeiras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-plantadeira-gran-prime-bf71586d",
+   "marca": "KUHN",
+   "nome": "GRAN PRIME",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/plantadeiras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-plantadeira-elite-0e476ac2",
+   "marca": "KUHN",
+   "nome": "ELITE",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/plantadeiras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-plantadeira-prime-hd-f1c997ed",
+   "marca": "KUHN",
+   "nome": "PRIME HD",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/plantadeiras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-distribuidor-fertilizante-accura-1200-4be0c66a",
+   "marca": "KUHN",
+   "nome": "ACCURA 1200",
+   "categoria": "Distribuidor fertilizante",
+   "categoriaId": "distribuidor_fertilizante",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/distribuidores-de-fertilizantes",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Manter agrupamentos comerciais até consultar a página da versão. Largura de distribuição depende do produto e ensaio.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-distribuidor-fertilizante-accura-1600-7708740c",
+   "marca": "KUHN",
+   "nome": "ACCURA 1600",
+   "categoria": "Distribuidor fertilizante",
+   "categoriaId": "distribuidor_fertilizante",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/distribuidores-de-fertilizantes",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Manter agrupamentos comerciais até consultar a página da versão. Largura de distribuição depende do produto e ensaio.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-distribuidor-fertilizante-fertiline-feae8849",
+   "marca": "KUHN",
+   "nome": "FERTILINE",
+   "categoria": "Distribuidor fertilizante",
+   "categoriaId": "distribuidor_fertilizante",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/distribuidores-de-fertilizantes",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Manter agrupamentos comerciais até consultar a página da versão. Largura de distribuição depende do produto e ensaio.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-distribuidor-fertilizante-accura-32000-253297da",
+   "marca": "KUHN",
+   "nome": "ACCURA 32000",
+   "categoria": "Distribuidor fertilizante",
+   "categoriaId": "distribuidor_fertilizante",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/distribuidores-de-fertilizantes",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Manter agrupamentos comerciais até consultar a página da versão. Largura de distribuição depende do produto e ensaio.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-distribuidor-fertilizante-accura-12000-15000-63b0e177",
+   "marca": "KUHN",
+   "nome": "ACCURA 12000 / 15000",
+   "categoria": "Distribuidor fertilizante",
+   "categoriaId": "distribuidor_fertilizante",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/distribuidores-de-fertilizantes",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Manter agrupamentos comerciais até consultar a página da versão. Largura de distribuição depende do produto e ensaio.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-distribuidor-fertilizante-accura-4-0-bx-015dafc3",
+   "marca": "KUHN",
+   "nome": "ACCURA 4.0 BX",
+   "categoria": "Distribuidor fertilizante",
+   "categoriaId": "distribuidor_fertilizante",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/distribuidores-de-fertilizantes",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Manter agrupamentos comerciais até consultar a página da versão. Largura de distribuição depende do produto e ensaio.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-distribuidor-fertilizante-accura-st-deb3c549",
+   "marca": "KUHN",
+   "nome": "ACCURA ST",
+   "categoria": "Distribuidor fertilizante",
+   "categoriaId": "distribuidor_fertilizante",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/distribuidores-de-fertilizantes",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Manter agrupamentos comerciais até consultar a página da versão. Largura de distribuição depende do produto e ensaio.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-distribuidor-fertilizante-accura-8-0-hd-46551b11",
+   "marca": "KUHN",
+   "nome": "ACCURA 8.0 HD",
+   "categoria": "Distribuidor fertilizante",
+   "categoriaId": "distribuidor_fertilizante",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/distribuidores-de-fertilizantes",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Manter agrupamentos comerciais até consultar a página da versão. Largura de distribuição depende do produto e ensaio.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-pulverizador-slm-adf87130",
+   "marca": "KUHN",
+   "nome": "SLM",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/pulverizadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-pulverizador-gardien-x-aa3d7202",
+   "marca": "KUHN",
+   "nome": "GARDIEN X",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/pulverizadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-pulverizador-gardien-c-acab789d",
+   "marca": "KUHN",
+   "nome": "GARDIEN C",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/pulverizadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-pulverizador-gardien-h-d1066553",
+   "marca": "KUHN",
+   "nome": "GARDIEN H",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/pulverizadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-pulverizador-gardien-pec-074c5929",
+   "marca": "KUHN",
+   "nome": "GARDIEN PEC",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/pulverizadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-pulverizador-eco-ranger-b33a17fa",
+   "marca": "KUHN",
+   "nome": "ECO RANGER",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/pulverizadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-pulverizador-ranger-s-a8ba40ea",
+   "marca": "KUHN",
+   "nome": "RANGER S",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/pulverizadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-pulverizador-af-2131186f",
+   "marca": "KUHN",
+   "nome": "AF",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/pulverizadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-pulverizador-arbo-6d8feea5",
+   "marca": "KUHN",
+   "nome": "ARBO",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/pulverizadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-pulverizador-suprema-5eff501c",
+   "marca": "KUHN",
+   "nome": "SUPREMA",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/pulverizadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-pulverizador-arbo-axial-a0c28d7d",
+   "marca": "KUHN",
+   "nome": "ARBO AXIAL",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/pulverizadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-pulverizador-arbo-maozinha-ee2519e6",
+   "marca": "KUHN",
+   "nome": "ARBO MÃOZINHA",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/pulverizadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-pulverizador-boxer-2000-m-cec72a6c",
+   "marca": "KUHN",
+   "nome": "BOXER 2000 M",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/pulverizadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-pulverizador-boxer-2500-m-53e7b764",
+   "marca": "KUHN",
+   "nome": "BOXER 2500 M",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/pulverizadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-pulverizador-boxer-2000-h-58dffb7b",
+   "marca": "KUHN",
+   "nome": "BOXER 2000 H",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/pulverizadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-pulverizador-fighter-91dd580d",
+   "marca": "KUHN",
+   "nome": "FIGHTER",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/pulverizadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-pulverizador-stronger-hd-e79fd9ed",
+   "marca": "KUHN",
+   "nome": "STRONGER HD",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/pulverizadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-carreta-graneleira-grain-max-80f61986",
+   "marca": "KUHN",
+   "nome": "GRAIN MAX",
+   "categoria": "Carreta graneleira",
+   "categoriaId": "carreta_graneleira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/carretas-graneleiras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-carreta-graneleira-grain-max-multiuso-ed39d8f9",
+   "marca": "KUHN",
+   "nome": "GRAIN MAX MULTIUSO",
+   "categoria": "Carreta graneleira",
+   "categoriaId": "carreta_graneleira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/carretas-graneleiras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-plaina-plany-67d93ebb",
+   "marca": "KUHN",
+   "nome": "PLANY",
+   "categoria": "Plaina",
+   "categoriaId": "plaina",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/manejo-de-solo",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-cultivador-optimer-98f897e0",
+   "marca": "KUHN",
+   "nome": "OPTIMER",
+   "categoria": "Cultivador",
+   "categoriaId": "cultivador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/manejo-de-solo",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-escarificador-skarific-db1f5db3",
+   "marca": "KUHN",
+   "nome": "SKARIFIC",
+   "categoria": "Escarificador",
+   "categoriaId": "escarificador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/manejo-de-solo",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-escarificador-skarific-duol-354835cb",
+   "marca": "KUHN",
+   "nome": "SKARIFIC DUOL",
+   "categoria": "Escarificador",
+   "categoriaId": "escarificador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/manejo-de-solo",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-descompactador-stinger-0e52ea9f",
+   "marca": "KUHN",
+   "nome": "Stinger",
+   "categoria": "Descompactador",
+   "categoriaId": "descompactador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/cultivos/manejo-de-solo",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-segadora-gmd-10-100-eefaa62e",
+   "marca": "KUHN",
+   "nome": "GMD 10-100",
+   "categoria": "Segadora",
+   "categoriaId": "segadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/segadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-segadora-gmd-1023-f-609df6d1",
+   "marca": "KUHN",
+   "nome": "GMD 1023 F",
+   "categoria": "Segadora",
+   "categoriaId": "segadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/segadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-segadora-gmd-1030-ce3fd6f1",
+   "marca": "KUHN",
+   "nome": "GMD 1030",
+   "categoria": "Segadora",
+   "categoriaId": "segadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/segadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-segadora-fc-104-lift-control-01ea1d81",
+   "marca": "KUHN",
+   "nome": "FC 104 LIFT-CONTROL",
+   "categoria": "Segadora",
+   "categoriaId": "segadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/segadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-segadora-fc-1061-tl-038a79c3",
+   "marca": "KUHN",
+   "nome": "FC 1061 TL",
+   "categoria": "Segadora",
+   "categoriaId": "segadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/segadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-segadora-fc-1025-f-f0e98bdc",
+   "marca": "KUHN",
+   "nome": "FC 1025 F",
+   "categoria": "Segadora",
+   "categoriaId": "segadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/segadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-segadora-fc-1030-d58c63d6",
+   "marca": "KUHN",
+   "nome": "FC 1030",
+   "categoria": "Segadora",
+   "categoriaId": "segadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/segadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-segadora-fc-1015-5ec8ee7a",
+   "marca": "KUHN",
+   "nome": "FC 1015",
+   "categoria": "Segadora",
+   "categoriaId": "segadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/segadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-espalhador-feno-gf-1003-9f4e0584",
+   "marca": "KUHN",
+   "nome": "GF 1003",
+   "categoria": "Espalhador feno",
+   "categoriaId": "espalhador_feno",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/espalhadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-espalhador-feno-gf-8700-44d1a3ed",
+   "marca": "KUHN",
+   "nome": "GF 8700",
+   "categoria": "Espalhador feno",
+   "categoriaId": "espalhador_feno",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/espalhadores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-enleirador-ga-300-gm-7927c379",
+   "marca": "KUHN",
+   "nome": "GA 300 GM",
+   "categoria": "Enleirador",
+   "categoriaId": "enleirador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/enleiradores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-enleirador-ga-1031-9ad21d59",
+   "marca": "KUHN",
+   "nome": "GA 1031",
+   "categoria": "Enleirador",
+   "categoriaId": "enleirador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/enleiradores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "GA 1031 aparece em seções distintas; conferir submodelo no manual.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-enleirador-ga-1001-c6471d5b",
+   "marca": "KUHN",
+   "nome": "GA 1001",
+   "categoria": "Enleirador",
+   "categoriaId": "enleirador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/enleiradores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-enleirador-ga-1002-7b5c6cab",
+   "marca": "KUHN",
+   "nome": "GA 1002",
+   "categoria": "Enleirador",
+   "categoriaId": "enleirador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/enleiradores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-enleirador-ga-1032-3ae5ff13",
+   "marca": "KUHN",
+   "nome": "GA 1032 +",
+   "categoria": "Enleirador",
+   "categoriaId": "enleirador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/enleiradores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-enleirador-ga-10031-1ca160d7",
+   "marca": "KUHN",
+   "nome": "GA 10031",
+   "categoria": "Enleirador",
+   "categoriaId": "enleirador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/enleiradores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "a_confirmar",
+   "motivoConfirmar": "Grafia não confirmada (possível erro de digitação no pacote)."
+  },
+  {
+   "id": "kuhn-enleirador-haybob-85001b5a",
+   "marca": "KUHN",
+   "nome": "HAYBOB",
+   "categoria": "Enleirador",
+   "categoriaId": "enleirador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/enleiradores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-enfardadora-vb-3200-15db8500",
+   "marca": "KUHN",
+   "nome": "VB 3200",
+   "categoria": "Enfardadora",
+   "categoriaId": "enfardadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/enfardadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-enfardadora-vb-7100-f3dd88ef",
+   "marca": "KUHN",
+   "nome": "VB 7100",
+   "categoria": "Enfardadora",
+   "categoriaId": "enfardadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/enfardadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-enfardadora-vbp-3200-125a9a4a",
+   "marca": "KUHN",
+   "nome": "VBP 3200",
+   "categoria": "Enfardadora",
+   "categoriaId": "enfardadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/enfardadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-enfardadora-vbp-7100-db4ec540",
+   "marca": "KUHN",
+   "nome": "VBP 7100",
+   "categoria": "Enfardadora",
+   "categoriaId": "enfardadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/enfardadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-enfardadora-sb-1290-524adc53",
+   "marca": "KUHN",
+   "nome": "SB 1290",
+   "categoria": "Enfardadora",
+   "categoriaId": "enfardadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/fenacao/enfardadoras",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-misturador-racao-profile-2-ds-90661f9e",
+   "marca": "KUHN",
+   "nome": "PROFILE 2 DS",
+   "categoria": "Misturador racao",
+   "categoriaId": "misturador_racao",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/pecuaria/vagoes-misturadores-de-racao",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-misturador-racao-profile-crossmix-2-cs-24fbe7ee",
+   "marca": "KUHN",
+   "nome": "PROFILE CROSSMIX 2 CS",
+   "categoria": "Misturador racao",
+   "categoriaId": "misturador_racao",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/pecuaria/vagoes-misturadores-de-racao",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-misturador-racao-profile-2-m-2e04365b",
+   "marca": "KUHN",
+   "nome": "PROFILE 2 M",
+   "categoria": "Misturador racao",
+   "categoriaId": "misturador_racao",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/pecuaria/vagoes-misturadores-de-racao",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-misturador-racao-profile-6-1-ds-32d18192",
+   "marca": "KUHN",
+   "nome": "PROFILE 6.1 DS",
+   "categoria": "Misturador racao",
+   "categoriaId": "misturador_racao",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/pecuaria/vagoes-misturadores-de-racao",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-misturador-racao-profile-automixer-6-1-ds-937b155d",
+   "marca": "KUHN",
+   "nome": "PROFILE AUTOMIXER 6.1 DS",
+   "categoria": "Misturador racao",
+   "categoriaId": "misturador_racao",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/pecuaria/vagoes-misturadores-de-racao",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-misturador-racao-ra-6-8-1ee67c01",
+   "marca": "KUHN",
+   "nome": "RA 6 & 8",
+   "categoria": "Misturador racao",
+   "categoriaId": "misturador_racao",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/pecuaria/vagoes-misturadores-de-racao",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-misturador-racao-rc-200-b1f1b761",
+   "marca": "KUHN",
+   "nome": "RC 200",
+   "categoria": "Misturador racao",
+   "categoriaId": "misturador_racao",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/pecuaria/vagoes-misturadores-de-racao",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-misturador-racao-ra-12-0831f836",
+   "marca": "KUHN",
+   "nome": "RA 12",
+   "categoria": "Misturador racao",
+   "categoriaId": "misturador_racao",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/pecuaria/vagoes-misturadores-de-racao",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-misturador-racao-euromix-3-cl-b3510468",
+   "marca": "KUHN",
+   "nome": "EUROMIX 3 CL",
+   "categoria": "Misturador racao",
+   "categoriaId": "misturador_racao",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/pecuaria/vagoes-misturadores-de-racao",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-distribuidor-esterco-sl-100-c6df0eb6",
+   "marca": "KUHN",
+   "nome": "SL 100",
+   "categoria": "Distribuidor esterco",
+   "categoriaId": "distribuidor_esterco",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/pecuaria/distribuidores-de-esterco",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-distribuidor-esterco-ps-235-242-8bafa7e5",
+   "marca": "KUHN",
+   "nome": "PS 235-242",
+   "categoria": "Distribuidor esterco",
+   "categoriaId": "distribuidor_esterco",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/pecuaria/distribuidores-de-esterco",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-distribuidor-esterco-ps-250-260-270-280-2ec28fe5",
+   "marca": "KUHN",
+   "nome": "PS 250-260-270-280",
+   "categoria": "Distribuidor esterco",
+   "categoriaId": "distribuidor_esterco",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/pecuaria/distribuidores-de-esterco",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-misturador-racao-spw-intense-861f05ac",
+   "marca": "KUHN",
+   "nome": "SPW INTENSE",
+   "categoria": "Misturador racao",
+   "categoriaId": "misturador_racao",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/pecuaria/misturadores-autopropelidos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kuhn-misturador-racao-spv-power-0a7d5f58",
+   "marca": "KUHN",
+   "nome": "SPV POWER",
+   "categoria": "Misturador racao",
+   "categoriaId": "misturador_racao",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.kuhnbrasil.com.br/pecuaria/misturadores-autopropelidos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "jacto-pulverizador-uniport-2000-plus-78f59af1",
+   "marca": "Jacto",
+   "nome": "Uniport 2000 Plus",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "modelo",
+   "fontes": [
+    {
+     "url": "https://jacto.com/brasil/press/news/tecnologia-reconhecida-pela-eficiencia-na-aplicacao-e-destaque-da-jacto-na-tecnoshow-comigo",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Fonte histórica de lançamento/evento; não prova venda atual.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "jacto-plantadeira-uniport-planter-500-708b253c",
+   "marca": "Jacto",
+   "nome": "Uniport Planter 500",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "modelo",
+   "fontes": [
+    {
+     "url": "https://jacto.com/brasil/press/news/show-rural-jacto-reforca-presenca-em-plantio-e-amplia-oferta-de-servicos-para-a-agricultura-40",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Plantadeira automotriz; fonte histórica.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-7700-dyna-6-f29866c3",
+   "marca": "Massey Ferguson",
+   "nome": "MF 7700 Dyna-6",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.masseyferguson.com/pt_br/product.html",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-7300-dyna-3-0b1cbfa9",
+   "marca": "Massey Ferguson",
+   "nome": "MF 7300 Dyna-3",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.masseyferguson.com/pt_br/product.html",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "massey-ferguson-plantadeira-nova-momentum-a395084f",
+   "marca": "Massey Ferguson",
+   "nome": "Nova Momentum",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.masseyferguson.com/pt_br/product.html",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "massey-ferguson-plantadeira-momentum-dobravel-49e94809",
+   "marca": "Massey Ferguson",
+   "nome": "Momentum Dobrável",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.masseyferguson.com/pt_br/product.html",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "john-deere-trator-5en-c52f9d36",
+   "marca": "John Deere",
+   "nome": "5EN",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.deere.com.br/pt/máquinas-e-implementos-agrícolas/",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "john-deere-plantadeira-2100-2ac8715c",
+   "marca": "John Deere",
+   "nome": "2100",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.deere.com.br/pt/soluções-para-plantio/",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "john-deere-pulverizador-4730-030e1e94",
+   "marca": "John Deere",
+   "nome": "4730",
+   "categoria": "Pulverizador",
+   "categoriaId": "pulverizador",
+   "nivel": "modelo",
+   "fontes": [
+    {
+     "url": "https://www.deere.com.br/pt/máquinas-e-implementos-agrícolas/",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "john-deere-colhedora-forragem-serie-8000-ca9ffa70",
+   "marca": "John Deere",
+   "nome": "Série 8000",
+   "categoria": "Colhedora forragem",
+   "categoriaId": "colhedora_forragem",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.deere.com.br/pt/máquinas-e-implementos-agrícolas/",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-trator-tt3-50-a48ee302",
+   "marca": "New Holland",
+   "nome": "TT3.50",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/produtos/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-trator-serie-30-0cf25a42",
+   "marca": "New Holland",
+   "nome": "Série 30",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/produtos/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-trator-tt-e-ttf-1420b7b0",
+   "marca": "New Holland",
+   "nome": "TT e TTF",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/produtos/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-trator-t6-7aa759e5",
+   "marca": "New Holland",
+   "nome": "T6",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/produtos/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-trator-t3f-78264b82",
+   "marca": "New Holland",
+   "nome": "T3F",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/produtos/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-trator-t6-140-eletro-command-5f5ec730",
+   "marca": "New Holland",
+   "nome": "T6.140 Eletro Command",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/produtos/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-trator-t6-methane-power-68e96c3d",
+   "marca": "New Holland",
+   "nome": "T6 Methane Power",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/produtos/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-trator-t4-75s-b231f50a",
+   "marca": "New Holland",
+   "nome": "T4.75S",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/produtos/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-trator-t7-swb-86f7318f",
+   "marca": "New Holland",
+   "nome": "T7 SWB",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/produtos/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-trator-tt4-b99b1084",
+   "marca": "New Holland",
+   "nome": "TT4",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/produtos/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-trator-t7-lwb-38ae957f",
+   "marca": "New Holland",
+   "nome": "T7 LWB",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/produtos/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-trator-tl5-d480edc0",
+   "marca": "New Holland",
+   "nome": "TL5",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/produtos/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-trator-t7-300-auto-command-a1bfdb7f",
+   "marca": "New Holland",
+   "nome": "T7.300 Auto Command",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/produtos/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-trator-t5-29162e98",
+   "marca": "New Holland",
+   "nome": "T5",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/produtos/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-trator-t8-plm-intelligence-53016d16",
+   "marca": "New Holland",
+   "nome": "T8 PLM Intelligence",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/produtos/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-trator-t9-a9f72dd9",
+   "marca": "New Holland",
+   "nome": "T9",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/produtos/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-colheitadeira-graos-cr6-7016d8fd",
+   "marca": "New Holland",
+   "nome": "CR6",
+   "categoria": "Colheitadeira graos",
+   "categoriaId": "colheitadeira_graos",
+   "nivel": "modelo",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/news/agrishow",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Identificação em comunicação oficial de feira; validar ano e versão.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-colheitadeira-graos-cr7-19bbb6fe",
+   "marca": "New Holland",
+   "nome": "CR7",
+   "categoria": "Colheitadeira graos",
+   "categoriaId": "colheitadeira_graos",
+   "nivel": "modelo",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/news/agrishow",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Identificação em comunicação oficial de feira; validar ano e versão.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-colheitadeira-graos-cr7-31fbef0d",
+   "marca": "New Holland",
+   "nome": "CR7+",
+   "categoria": "Colheitadeira graos",
+   "categoriaId": "colheitadeira_graos",
+   "nivel": "modelo",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/news/agrishow",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Identificação em comunicação oficial de feira; validar ano e versão.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-colheitadeira-graos-cr8-135a964a",
+   "marca": "New Holland",
+   "nome": "CR8",
+   "categoria": "Colheitadeira graos",
+   "categoriaId": "colheitadeira_graos",
+   "nivel": "modelo",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/news/agrishow",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Identificação em comunicação oficial de feira; validar ano e versão.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-colheitadeira-graos-cr9-ebffda0d",
+   "marca": "New Holland",
+   "nome": "CR9",
+   "categoria": "Colheitadeira graos",
+   "categoriaId": "colheitadeira_graos",
+   "nivel": "modelo",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/news/agrishow",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Identificação em comunicação oficial de feira; validar ano e versão.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-colheitadeira-graos-cr10-203eece6",
+   "marca": "New Holland",
+   "nome": "CR10",
+   "categoria": "Colheitadeira graos",
+   "categoriaId": "colheitadeira_graos",
+   "nivel": "modelo",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/news/agrishow",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Identificação em comunicação oficial de feira; validar ano e versão.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-colheitadeira-graos-cr11-50a72d3d",
+   "marca": "New Holland",
+   "nome": "CR11",
+   "categoria": "Colheitadeira graos",
+   "categoriaId": "colheitadeira_graos",
+   "nivel": "modelo",
+   "fontes": [
+    {
+     "url": "https://agriculture.newholland.com/pt-br/brasil/news/agrishow",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Identificação em comunicação oficial de feira; validar ano e versão.",
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "new-holland-plantadeira-pl6000-6e06b0f4",
+   "marca": "New Holland",
+   "nome": "PL6000",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://newholland.com.br/agriculture/lancamentos/plantadeira/",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "case-ih-trator-farmall-c-f276a0ff",
+   "marca": "Case IH",
+   "nome": "Farmall C",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.caseih.com/pt-br/brasil/produtos/tratores/farmall-c",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "valtra-trator-a2r-be4feac6",
+   "marca": "Valtra",
+   "nome": "A2R",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.valtra.com.br/produtos/tratores.html",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "valtra-trator-bh-g4-a3ec91a8",
+   "marca": "Valtra",
+   "nome": "BH G4",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.valtra.com.br/produtos/tratores.html",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "valtra-plantadeira-compact-69e823cc",
+   "marca": "Valtra",
+   "nome": "Compact",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.valtra.com.br/produtos/plantadeiras.html",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "valtra-plantadeira-hitech-compact-e80d06ed",
+   "marca": "Valtra",
+   "nome": "HiTech Compact",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.valtra.com.br/produtos/plantadeiras.html",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "valtra-plantadeira-frontier-60f5f310",
+   "marca": "Valtra",
+   "nome": "Frontier",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.valtra.com.br/produtos/plantadeiras.html",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "valtra-plantadeira-momentum-30-e-40-g2-fdd442bf",
+   "marca": "Valtra",
+   "nome": "Momentum 30 e 40 G2",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.valtra.com.br/produtos/plantadeiras.html",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "jumil-plantadeira-jm-5023-5027-c82e41c7",
+   "marca": "Jumil",
+   "nome": "JM 5023/5027",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://jumil.com.br/implementos-agricolas-para-plantio-e-fertilizacao",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "jumil-plantadeira-jm-garra-2bc2f13a",
+   "marca": "Jumil",
+   "nome": "JM Garra",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://jumil.com.br/implementos-agricolas-para-plantio-e-fertilizacao",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "jumil-plantadeira-jm-2400-natura-13605e34",
+   "marca": "Jumil",
+   "nome": "JM 2400 Natura",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://jumil.com.br/implementos-agricolas-para-plantio-e-fertilizacao",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "jumil-plantadeira-jm-excellence-natura-8a0fa1d8",
+   "marca": "Jumil",
+   "nome": "JM Excellence Natura",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://jumil.com.br/implementos-agricolas-para-plantio-e-fertilizacao",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "jumil-plantadeira-jm-pop-natura-e0013d03",
+   "marca": "Jumil",
+   "nome": "JM Pop Natura",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://jumil.com.br/implementos-agricolas-para-plantio-e-fertilizacao",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "jumil-plantadeira-jm-8080-8090-terra-ss-8340888a",
+   "marca": "Jumil",
+   "nome": "JM 8080/8090 Terra SS",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://jumil.com.br/plantadeira-agricola-jm-8080-8090-terra-ss",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "jumil-distribuidor-fertilizante-precisa-8m3-527d1e36",
+   "marca": "Jumil",
+   "nome": "Precisa 8m³",
+   "categoria": "Distribuidor fertilizante",
+   "categoriaId": "distribuidor_fertilizante",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://jumil.com.br/implementos-agricolas-para-plantio-e-fertilizacao",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "jumil-distribuidor-fertilizante-precisa-6m3-6824044d",
+   "marca": "Jumil",
+   "nome": "Precisa 6m³",
+   "categoria": "Distribuidor fertilizante",
+   "categoriaId": "distribuidor_fertilizante",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://jumil.com.br/implementos-agricolas-para-plantio-e-fertilizacao",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-panther-vtech-a83497d4",
+   "marca": "Vence Tudo",
+   "nome": "Panther VTech",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-sat-437d9516",
+   "marca": "Vence Tudo",
+   "nome": "SAT",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-macanuda-3-20-450a6b06",
+   "marca": "Vence Tudo",
+   "nome": "Macanuda 3,20",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-macanuda-6-1-eaade697",
+   "marca": "Vence Tudo",
+   "nome": "Macanuda 6.1",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-macanuda-center-box-bacd195d",
+   "marca": "Vence Tudo",
+   "nome": "Macanuda Center Box",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-center-box-1a9e2761",
+   "marca": "Vence Tudo",
+   "nome": "Center Box",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-macanuda-top-serie-02-212294ae",
+   "marca": "Vence Tudo",
+   "nome": "Macanuda Top Série 02",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-macanuda-top-fertilizante-serie-02-720d7870",
+   "marca": "Vence Tudo",
+   "nome": "Macanuda Top Fertilizante Série 02",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-flexxa-893658d2",
+   "marca": "Vence Tudo",
+   "nome": "Flexxa",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-flexxa-serie-200-34b16fb3",
+   "marca": "Vence Tudo",
+   "nome": "Flexxa Série 200",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-flexxa-seed-37f95525",
+   "marca": "Vence Tudo",
+   "nome": "Flexxa Seed",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-flexxa-ccs-ce94e948",
+   "marca": "Vence Tudo",
+   "nome": "Flexxa CCS",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-tiger-flex-dois-modulos-4b9b6940",
+   "marca": "Vence Tudo",
+   "nome": "Tiger Flex (Dois Módulos)",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-tiger-flex-tres-modulos-c7c0ff4c",
+   "marca": "Vence Tudo",
+   "nome": "Tiger Flex (Três módulos)",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-panther-sm-b74c583f",
+   "marca": "Vence Tudo",
+   "nome": "Panther SM",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-panther-sulcon-137a11bc",
+   "marca": "Vence Tudo",
+   "nome": "Panther Sulcon",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-summer-4d961d73",
+   "marca": "Vence Tudo",
+   "nome": "Summer",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-summer-pneumatica-3b8443ac",
+   "marca": "Vence Tudo",
+   "nome": "Summer Pneumática",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-fronteira-serie-02-f74c9e10",
+   "marca": "Vence Tudo",
+   "nome": "Fronteira - Série 02",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-premium-cb42983b",
+   "marca": "Vence Tudo",
+   "nome": "Premium",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-pa-arrasto-pantografica-serie-ouro-pneumatica-439fd51c",
+   "marca": "Vence Tudo",
+   "nome": "PA Arrasto Pantográfica Série Ouro Pneumática",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-pa-compact-b3b139c8",
+   "marca": "Vence Tudo",
+   "nome": "PA Compact",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-pa-hidraulica-pneumatica-bcff9c13",
+   "marca": "Vence Tudo",
+   "nome": "PA Hidráulica Pneumática",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-pa-super-serie-3d9befc7",
+   "marca": "Vence Tudo",
+   "nome": "PA Super Série",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-pa-pantografica-8c37825e",
+   "marca": "Vence Tudo",
+   "nome": "PA Pantográfica",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plantadeira-pa-pantografica-6000-especial-ac07b0de",
+   "marca": "Vence Tudo",
+   "nome": "PA Pantográfica 6000 Especial",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-semeadora-pampeana-trigo-17000-a-34000-a55ffcc0",
+   "marca": "Vence Tudo",
+   "nome": "Pampeana Trigo 17000 a 34000",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-semeadora-pampeana-super-1aaddb2c",
+   "marca": "Vence Tudo",
+   "nome": "Pampeana Super",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-semeadora-pampeana-macanuda-ab1dd5ef",
+   "marca": "Vence Tudo",
+   "nome": "Pampeana Macanuda",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-semeadora-arrozeira-hidraulica-2fed90fa",
+   "marca": "Vence Tudo",
+   "nome": "Arrozeira Hidráulica",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-semeadora-arrozeira-super-a318bc1b",
+   "marca": "Vence Tudo",
+   "nome": "Arrozeira Super",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-semeadora-pampeana-arrozeira-60776a45",
+   "marca": "Vence Tudo",
+   "nome": "Pampeana Arrozeira",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-semeadora-braxxia-5d1536f0",
+   "marca": "Vence Tudo",
+   "nome": "Braxxia",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-semeadora-sa-a-b2826de6",
+   "marca": "Vence Tudo",
+   "nome": "SA-A",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-semeadora-sa-h-a9ce3ac3",
+   "marca": "Vence Tudo",
+   "nome": "SA-H",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-semeadora-sa-campo-nativo-dec7fdd9",
+   "marca": "Vence Tudo",
+   "nome": "SA Campo Nativo",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-semeadora-sa-mix-cb993a20",
+   "marca": "Vence Tudo",
+   "nome": "SA MIX",
+   "categoria": "Semeadora",
+   "categoriaId": "semeadora",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plataforma-milho-bocuda-eagle-90b9e3f3",
+   "marca": "Vence Tudo",
+   "nome": "Bocuda Eagle",
+   "categoria": "Plataforma milho",
+   "categoriaId": "plataforma_milho",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plataforma-milho-bocuda-hibrida-46767350",
+   "marca": "Vence Tudo",
+   "nome": "Bocuda Híbrida",
+   "categoria": "Plataforma milho",
+   "categoriaId": "plataforma_milho",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plataforma-milho-bocuda-serie-08-91580f6f",
+   "marca": "Vence Tudo",
+   "nome": "Bocuda Série 08",
+   "categoria": "Plataforma milho",
+   "categoriaId": "plataforma_milho",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plataforma-milho-bocuda-08x-4c562b72",
+   "marca": "Vence Tudo",
+   "nome": "Bocuda 08x",
+   "categoria": "Plataforma milho",
+   "categoriaId": "plataforma_milho",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-carreta-graneleira-granos-frontline-serie-diamante-d8bdc0ec",
+   "marca": "Vence Tudo",
+   "nome": "Granos Frontline - Série Diamante",
+   "categoria": "Carreta graneleira",
+   "categoriaId": "carreta_graneleira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-carreta-graneleira-granos-27500-33000-e-42000-serie-diamante-1c884255",
+   "marca": "Vence Tudo",
+   "nome": "Granos 27500, 33000 e 42000 - Série Diamante",
+   "categoria": "Carreta graneleira",
+   "categoriaId": "carreta_graneleira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-carreta-graneleira-granos-10500-a-16500-serie-diamante-3935c707",
+   "marca": "Vence Tudo",
+   "nome": "Granos 10500 a 16500 - Série Diamante",
+   "categoria": "Carreta graneleira",
+   "categoriaId": "carreta_graneleira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-carreta-graneleira-granos-multiuso-serie-diamante-b9195260",
+   "marca": "Vence Tudo",
+   "nome": "Granos Multiuso - Série Diamante",
+   "categoria": "Carreta graneleira",
+   "categoriaId": "carreta_graneleira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-distribuidor-fertilizante-fertil-b6364c37",
+   "marca": "Vence Tudo",
+   "nome": "Fertil",
+   "categoria": "Distribuidor fertilizante",
+   "categoriaId": "distribuidor_fertilizante",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plaina-pvt-pantografica-83732fa1",
+   "marca": "Vence Tudo",
+   "nome": "PVT Pantográfica",
+   "categoria": "Plaina",
+   "categoriaId": "plaina",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-plaina-multiplan-6ae38440",
+   "marca": "Vence Tudo",
+   "nome": "Multiplan",
+   "categoria": "Plaina",
+   "categoriaId": "plaina",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-classificador-sementes-ca-25-especial-ac26376a",
+   "marca": "Vence Tudo",
+   "nome": "CA 25 Especial",
+   "categoria": "Classificador sementes",
+   "categoriaId": "classificador_sementes",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-classificador-sementes-c40-especial-8ab3133e",
+   "marca": "Vence Tudo",
+   "nome": "C40 Especial",
+   "categoria": "Classificador sementes",
+   "categoriaId": "classificador_sementes",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-guincho-ghar-2000-6e84e3ce",
+   "marca": "Vence Tudo",
+   "nome": "GHAR 2000",
+   "categoria": "Guincho",
+   "categoriaId": "guincho",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vence-tudo-sulcador-sulcon-5804cf13",
+   "marca": "Vence Tudo",
+   "nome": "Sulcon",
+   "categoria": "Sulcador",
+   "categoriaId": "sulcador",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://vencetudo.ind.br/pt-br/produtos",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "baldan-plantadeira-donna-5ba34cd7",
+   "marca": "Baldan",
+   "nome": "DONNA",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://baldan.com.br/cpts/donna05322a/",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "fendt-trator-1100-vario-mt-fd3814fe",
+   "marca": "Fendt",
+   "nome": "1100 Vario MT",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.fendt.com/br/maquinario-agricola/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "fendt-trator-1000-vario-gen4-de31cd55",
+   "marca": "Fendt",
+   "nome": "1000 Vario Gen4",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.fendt.com/br/maquinario-agricola/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "fendt-trator-900-vario-0fd15e62",
+   "marca": "Fendt",
+   "nome": "900 Vario",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.fendt.com/br/maquinario-agricola/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "fendt-trator-800-vario-gen5-2a7b4117",
+   "marca": "Fendt",
+   "nome": "800 Vario Gen5",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.fendt.com/br/maquinario-agricola/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "a_confirmar",
+   "motivoConfirmar": "A página citada mostra “Fendt 800 Vario”, sem “Gen5”."
+  },
+  {
+   "id": "fendt-trator-700-vario-gen7-1-8aed2462",
+   "marca": "Fendt",
+   "nome": "700 Vario Gen7.1",
+   "categoria": "Trator",
+   "categoriaId": "trator",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.fendt.com/br/maquinario-agricola/tratores",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "a_confirmar",
+   "motivoConfirmar": "A página citada mostra “Fendt 700 Vario”, sem “Gen7.1”."
+  },
+  {
+   "id": "vaderstad-plantadeira-tempo-1799b002",
+   "marca": "Väderstad",
+   "nome": "Tempo",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.vaderstad.com/pt-br/planting/plantadeiras-tempo",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vaderstad-plantadeira-tempo-l-8-24-22eec3e9",
+   "marca": "Väderstad",
+   "nome": "Tempo L 8-24",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.vaderstad.com/pt-br/plantio/plantadeiras-tempo/tempo-l-8-24",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "vaderstad-plantadeira-tempo-l-26-com-caixa-central-aa28bafd",
+   "marca": "Väderstad",
+   "nome": "Tempo L 26 com Caixa Central",
+   "categoria": "Plantadeira",
+   "categoriaId": "plantadeira",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://www.vaderstad.com/pt-br/plantio/plantadeiras-tempo/tempo-l-8-32-caixa-central",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "status": "confirmado_em_fonte_oficial"
+  },
+  {
+   "id": "kepler-weber-secador-graos-kw-max-85912f79",
+   "marca": "Kepler Weber",
+   "nome": "KW MAX",
+   "categoria": "Secador graos",
+   "categoriaId": "secador_graos",
+   "nivel": "familia",
+   "fontes": [
+    {
+     "url": "https://kepler.com.br/solucoes/fazendas/secadores-kw-max",
+     "consultadoEm": "2026-10-07"
+    }
+   ],
+   "observacao": "Temperatura do ar não equivale à temperatura da massa. Destino semente exige perfil específico; nenhum limite térmico automático neste pacote.",
+   "status": "confirmado_em_fonte_oficial"
+  }
+ ],
+ "naoImportados": [
+  {
+   "id": "stara-pulverizador-imperador-3-0-09a7dfd5",
+   "marca": "Stara",
+   "nome": "Imperador 3.0",
+   "motivo": "já existe",
+   "existente": "stara-imperador-3-0"
+  },
+  {
+   "id": "stara-pulverizador-imperador-3000-e-4000-2e21d9be",
+   "marca": "Stara",
+   "nome": "Imperador 3000 e 4000",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "stara-pulverizador-imperador-2500-7d213551",
+   "marca": "Stara",
+   "nome": "Imperador 2500",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "stara-pulverizador-imperador-2000-e-2000-pv-2dac8f9e",
+   "marca": "Stara",
+   "nome": "Imperador 2000 e 2000 PV",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "stara-pulverizador-imperador-eco-spray-4d3409ea",
+   "marca": "Stara",
+   "nome": "Imperador Eco Spray",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "stara-plantadeira-estrela-c91b6179",
+   "marca": "Stara",
+   "nome": "Estrela",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "stara-plantadeira-absoluta-f555e9eb",
+   "marca": "Stara",
+   "nome": "Absoluta",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "stara-plantadeira-princesa-7466c67e",
+   "marca": "Stara",
+   "nome": "Princesa",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "stara-plantadeira-cinderela-5a30da3a",
+   "marca": "Stara",
+   "nome": "Cinderela",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "stara-plantadeira-eva-66e8c281",
+   "marca": "Stara",
+   "nome": "Eva",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "stara-semeadora-linha-guapa-5fadb1f1",
+   "marca": "Stara",
+   "nome": "Linha Guapa",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "stara-semeadora-guapita-161a3018",
+   "marca": "Stara",
+   "nome": "Guapita",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "stara-semeadora-ceres-e-ceres-master-9dddd084",
+   "marca": "Stara",
+   "nome": "Ceres e Ceres Master",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "stara-distribuidor-fertilizante-hercules-6-0-a38632aa",
+   "marca": "Stara",
+   "nome": "Hércules 6.0",
+   "motivo": "já existe",
+   "existente": "stara-hercules-6-0"
+  },
+  {
+   "id": "stara-distribuidor-fertilizante-hercules-4-0-27955a6f",
+   "marca": "Stara",
+   "nome": "Hércules 4.0",
+   "motivo": "já existe",
+   "existente": "stara-hercules-4-0"
+  },
+  {
+   "id": "stara-distribuidor-fertilizante-hercules-9-0-0320f112",
+   "marca": "Stara",
+   "nome": "Hércules 9.0",
+   "motivo": "já existe",
+   "existente": "stara-hercules-9-0"
+  },
+  {
+   "id": "stara-distribuidor-fertilizante-bruttus-25000-18000-e-12000-7239476d",
+   "marca": "Stara",
+   "nome": "Bruttus 25000, 18000 e 12000",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "stara-distribuidor-fertilizante-hercules-24000-15000-e-10000-inox-f87213cb",
+   "marca": "Stara",
+   "nome": "Hércules 24000, 15000 e 10000 Inox",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "stara-distribuidor-fertilizante-hercules-24000-c-70b0fcb1",
+   "marca": "Stara",
+   "nome": "Hércules 24000 C",
+   "motivo": "já existe",
+   "existente": "stara-hercules-24000-c"
+  },
+  {
+   "id": "stara-distribuidor-fertilizante-twister-1500-63e01683",
+   "marca": "Stara",
+   "nome": "Twister 1500",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "jacto-pulverizador-pj-401-2814d19c",
+   "marca": "Jacto",
+   "nome": "PJ 401",
+   "motivo": "já existe",
+   "existente": "jacto-pj-401"
+  },
+  {
+   "id": "jacto-pulverizador-condorito-400-74253cfd",
+   "marca": "Jacto",
+   "nome": "Condorito 400",
+   "motivo": "já existe",
+   "existente": "jacto-condorito-400"
+  },
+  {
+   "id": "jacto-pulverizador-condorito-600-0bba241f",
+   "marca": "Jacto",
+   "nome": "Condorito 600",
+   "motivo": "já existe",
+   "existente": "jacto-condorito-600"
+  },
+  {
+   "id": "jacto-pulverizador-condor-600-m12-9de5c9c0",
+   "marca": "Jacto",
+   "nome": "Condor 600 M12",
+   "motivo": "já existe",
+   "existente": "jacto-condor-600-m12"
+  },
+  {
+   "id": "jacto-pulverizador-condor-600-am12-am14-c560dd27",
+   "marca": "Jacto",
+   "nome": "Condor 600 AM12 / AM14",
+   "motivo": "já existe",
+   "existente": "jacto-condor-600-am12-am14"
+  },
+  {
+   "id": "jacto-pulverizador-condor-800-m12-04d154ec",
+   "marca": "Jacto",
+   "nome": "Condor 800 M12",
+   "motivo": "já existe",
+   "existente": "jacto-condor-800-m12"
+  },
+  {
+   "id": "jacto-pulverizador-condor-800-am12-am14-d85db7d8",
+   "marca": "Jacto",
+   "nome": "Condor 800 AM12 / AM14",
+   "motivo": "já existe",
+   "existente": "jacto-condor-800-am12-am14"
+  },
+  {
+   "id": "jacto-pulverizador-condor-800-am-bb0f7d25",
+   "marca": "Jacto",
+   "nome": "Condor 800 AM",
+   "motivo": "já existe",
+   "existente": "jacto-condor-800-am"
+  },
+  {
+   "id": "jacto-pulverizador-condor-1200-ef683d96",
+   "marca": "Jacto",
+   "nome": "Condor 1200",
+   "motivo": "já existe",
+   "existente": "jacto-condor-1200"
+  },
+  {
+   "id": "jacto-pulverizador-falcon-am14-vortex-7daec6f6",
+   "marca": "Jacto",
+   "nome": "Falcon AM14/Vortex",
+   "motivo": "já existe",
+   "existente": "jacto-falcon-am14vortex"
+  },
+  {
+   "id": "jacto-pulverizador-condorito-em-7f3ada7e",
+   "marca": "Jacto",
+   "nome": "Condorito EM",
+   "motivo": "já existe",
+   "existente": "jacto-condorito-em"
+  },
+  {
+   "id": "jacto-pulverizador-condor-em-a67d06d9",
+   "marca": "Jacto",
+   "nome": "Condor EM",
+   "motivo": "já existe",
+   "existente": "jacto-condor-em"
+  },
+  {
+   "id": "jacto-pulverizador-bc-610-pec-937324c9",
+   "marca": "Jacto",
+   "nome": "BC 610 PEC",
+   "motivo": "já existe",
+   "existente": "jacto-bc-610-pec"
+  },
+  {
+   "id": "jacto-pulverizador-ph-400-13ec6e01",
+   "marca": "Jacto",
+   "nome": "PH 400",
+   "motivo": "já existe",
+   "existente": "jacto-ph-400"
+  },
+  {
+   "id": "jacto-pulverizador-coral-pec-4660bc3c",
+   "marca": "Jacto",
+   "nome": "Coral PEC",
+   "motivo": "já existe",
+   "existente": "jacto-coral-pec"
+  },
+  {
+   "id": "jacto-pulverizador-coral-2p-em-4d0554e8",
+   "marca": "Jacto",
+   "nome": "Coral 2P / EM",
+   "motivo": "já existe",
+   "existente": "jacto-coral-2p-em"
+  },
+  {
+   "id": "jacto-pulverizador-coral-b12-8db7646f",
+   "marca": "Jacto",
+   "nome": "Coral B12",
+   "motivo": "já existe",
+   "existente": "jacto-coral-b12"
+  },
+  {
+   "id": "jacto-pulverizador-coral-am14-ed92e7fa",
+   "marca": "Jacto",
+   "nome": "Coral AM14",
+   "motivo": "já existe",
+   "existente": "jacto-coral-am14"
+  },
+  {
+   "id": "jacto-pulverizador-columbia-cross-e9554994",
+   "marca": "Jacto",
+   "nome": "Columbia Cross",
+   "motivo": "já existe",
+   "existente": "jacto-columbia-cross"
+  },
+  {
+   "id": "jacto-pulverizador-columbia-ad18-98da190c",
+   "marca": "Jacto",
+   "nome": "Columbia AD18",
+   "motivo": "já existe",
+   "existente": "jacto-columbia-ad18"
+  },
+  {
+   "id": "jacto-pulverizador-advance-2000-am-18-vortex-c8d09708",
+   "marca": "Jacto",
+   "nome": "Advance 2000 AM 18 Vortex",
+   "motivo": "já existe",
+   "existente": "jacto-advance-2000-am-18-vortex"
+  },
+  {
+   "id": "jacto-pulverizador-advance-2000-am18-30bb6fd3",
+   "marca": "Jacto",
+   "nome": "Advance 2000 AM18",
+   "motivo": "já existe",
+   "existente": "jacto-advance-2000-am18"
+  },
+  {
+   "id": "jacto-pulverizador-advance-3000-am18-4f25a9db",
+   "marca": "Jacto",
+   "nome": "Advance 3000 AM18",
+   "motivo": "já existe",
+   "existente": "jacto-advance-3000-am18"
+  },
+  {
+   "id": "jacto-pulverizador-advance-3000-am-18-vortex-21a3316c",
+   "marca": "Jacto",
+   "nome": "Advance 3000 AM 18 Vortex",
+   "motivo": "já existe",
+   "existente": "jacto-advance-3000-am-18-vortex"
+  },
+  {
+   "id": "jacto-pulverizador-advance-3000-am21-5ce4de2c",
+   "marca": "Jacto",
+   "nome": "Advance 3000 AM21",
+   "motivo": "já existe",
+   "existente": "jacto-advance-3000-am21"
+  },
+  {
+   "id": "jacto-pulverizador-advance-3000-am24-23535ae7",
+   "marca": "Jacto",
+   "nome": "Advance 3000 AM24",
+   "motivo": "já existe",
+   "existente": "jacto-advance-3000-am24"
+  },
+  {
+   "id": "jacto-pulverizador-advance-3000-am24-tandem-arroz-69ab5c65",
+   "marca": "Jacto",
+   "nome": "Advance 3000 AM24 Tandem Arroz",
+   "motivo": "já existe",
+   "existente": "jacto-advance-3000-am24-tandem-arroz"
+  },
+  {
+   "id": "jacto-pulverizador-uniport-2530-5392a7a6",
+   "marca": "Jacto",
+   "nome": "Uniport 2530",
+   "motivo": "já existe",
+   "existente": "jacto-uniport-2530"
+  },
+  {
+   "id": "jacto-pulverizador-uniport-3030-870326b5",
+   "marca": "Jacto",
+   "nome": "Uniport 3030",
+   "motivo": "já existe",
+   "existente": "jacto-uniport-3030"
+  },
+  {
+   "id": "jacto-pulverizador-uniport-4530-84c010dc",
+   "marca": "Jacto",
+   "nome": "Uniport 4530",
+   "motivo": "já existe",
+   "existente": "jacto-uniport-4530"
+  },
+  {
+   "id": "jacto-plantadeira-meridia-200-9dd248b9",
+   "marca": "Jacto",
+   "nome": "Meridia 200",
+   "motivo": "já existe",
+   "existente": "jacto-meridia-200"
+  },
+  {
+   "id": "jacto-plantadeira-lumina-300-2f43530e",
+   "marca": "Jacto",
+   "nome": "Lumina 300",
+   "motivo": "já existe",
+   "existente": "jacto-lumina-300"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-9s-fa6baa9a",
+   "marca": "Massey Ferguson",
+   "nome": "MF 9S",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-9s-340"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-8s-xtra-40078c1e",
+   "marca": "Massey Ferguson",
+   "nome": "MF 8S Xtra",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-8s-265-xtra"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-8s-653a01ae",
+   "marca": "Massey Ferguson",
+   "nome": "MF 8S",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-8s-245"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-8700-s-6404f849",
+   "marca": "Massey Ferguson",
+   "nome": "MF 8700 S",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-8732-s-dyna-vt"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-6700-r-dyna-4-10e9bbac",
+   "marca": "Massey Ferguson",
+   "nome": "MF 6700 R Dyna-4",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-6700-123b7cdf",
+   "marca": "Massey Ferguson",
+   "nome": "MF 6700",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-6711"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-6m-81385995",
+   "marca": "Massey Ferguson",
+   "nome": "MF 6M",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-6m"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-5700-2b356fdb",
+   "marca": "Massey Ferguson",
+   "nome": "MF 5700",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-5709"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-5m-3bda2da1",
+   "marca": "Massey Ferguson",
+   "nome": "MF 5M",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-5m-105"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-4700-bafd214e",
+   "marca": "Massey Ferguson",
+   "nome": "MF 4700",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-4707"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-4400-e5ef66a8",
+   "marca": "Massey Ferguson",
+   "nome": "MF 4400",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-4408"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-4300-43f075e6",
+   "marca": "Massey Ferguson",
+   "nome": "MF 4300",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-4305"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-3700-7c91b89b",
+   "marca": "Massey Ferguson",
+   "nome": "MF 3700",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-3775-plataformado"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-2700-a80ecd32",
+   "marca": "Massey Ferguson",
+   "nome": "MF 2700",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-2750-4wd-4x2"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-3400-a7aa00f6",
+   "marca": "Massey Ferguson",
+   "nome": "MF 3400",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-3406"
+  },
+  {
+   "id": "massey-ferguson-trator-mf-3300-xtra-ececc9cf",
+   "marca": "Massey Ferguson",
+   "nome": "MF 3300 Xtra",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-3305-xtra"
+  },
+  {
+   "id": "massey-ferguson-pulverizador-mf-8225hd-9f019542",
+   "marca": "Massey Ferguson",
+   "nome": "MF 8225HD",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-8225hd"
+  },
+  {
+   "id": "massey-ferguson-pulverizador-mf500r-f2c0b3cc",
+   "marca": "Massey Ferguson",
+   "nome": "MF500R",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-serie-mf530r"
+  },
+  {
+   "id": "massey-ferguson-distribuidor-fertilizante-mf-560r-dry-af5b4b5c",
+   "marca": "Massey Ferguson",
+   "nome": "MF 560R Dry",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "massey-ferguson-plantadeira-mf-100-3f44da20",
+   "marca": "Massey Ferguson",
+   "nome": "MF 100",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-104"
+  },
+  {
+   "id": "massey-ferguson-plantadeira-mf-200-98ab5f89",
+   "marca": "Massey Ferguson",
+   "nome": "MF 200",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-206"
+  },
+  {
+   "id": "massey-ferguson-plantadeira-mf-300-1cd26d6d",
+   "marca": "Massey Ferguson",
+   "nome": "MF 300",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-322"
+  },
+  {
+   "id": "massey-ferguson-plantadeira-mf-400-dad71629",
+   "marca": "Massey Ferguson",
+   "nome": "MF 400",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-407"
+  },
+  {
+   "id": "massey-ferguson-plantadeira-mf-500-9c843c4c",
+   "marca": "Massey Ferguson",
+   "nome": "MF 500",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-508"
+  },
+  {
+   "id": "massey-ferguson-plantadeira-mf-600-72126e33",
+   "marca": "Massey Ferguson",
+   "nome": "MF 600",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-600-versao-l"
+  },
+  {
+   "id": "massey-ferguson-plantadeira-mf-700-9f6d6a2f",
+   "marca": "Massey Ferguson",
+   "nome": "MF 700",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-711"
+  },
+  {
+   "id": "massey-ferguson-enfardadora-mf-1840-98142c7a",
+   "marca": "Massey Ferguson",
+   "nome": "MF 1840",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-1840"
+  },
+  {
+   "id": "massey-ferguson-enfardadora-mf-rb-f-9ab9a5cb",
+   "marca": "Massey Ferguson",
+   "nome": "MF RB F",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-enfardadora-de-fardos-cilindricos-mf-rb-3130f-essencial"
+  },
+  {
+   "id": "massey-ferguson-enfardadora-mf-rb-v-b0272a26",
+   "marca": "Massey Ferguson",
+   "nome": "MF RB V",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-rb-4160-v-classic"
+  },
+  {
+   "id": "massey-ferguson-enfardadora-mf-2234-30c0ff8c",
+   "marca": "Massey Ferguson",
+   "nome": "MF 2234",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-lb2233"
+  },
+  {
+   "id": "massey-ferguson-empacotadora-mf-tw-def45ad9",
+   "marca": "Massey Ferguson",
+   "nome": "MF TW",
+   "motivo": "já existe",
+   "existente": "massey-ferguson-mf-tw-130"
+  },
+  {
+   "id": "massey-ferguson-enleirador-mf-rk-1abf6b73",
+   "marca": "Massey Ferguson",
+   "nome": "MF RK",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "massey-ferguson-segadora-mf-dm-0a7520c1",
+   "marca": "Massey Ferguson",
+   "nome": "MF DM",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "massey-ferguson-espalhador-feno-mf-td-1450518f",
+   "marca": "Massey Ferguson",
+   "nome": "MF TD",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "john-deere-trator-3en-a72b2de6",
+   "marca": "John Deere",
+   "nome": "3EN",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "john-deere-trator-3e-e6196c9b",
+   "marca": "John Deere",
+   "nome": "3E",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "john-deere-trator-5e-4e7f598a",
+   "marca": "John Deere",
+   "nome": "5E",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "john-deere-trator-5m-6574d53a",
+   "marca": "John Deere",
+   "nome": "5M",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "john-deere-trator-6m-9f970dbd",
+   "marca": "John Deere",
+   "nome": "6M",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "john-deere-trator-6j-e6faeab8",
+   "marca": "John Deere",
+   "nome": "6J",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "john-deere-trator-7m-fa2c8912",
+   "marca": "John Deere",
+   "nome": "7M",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "john-deere-trator-8r-136a2af7",
+   "marca": "John Deere",
+   "nome": "8R",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "john-deere-trator-9r-6f515815",
+   "marca": "John Deere",
+   "nome": "9R",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "john-deere-trator-9rx-85b868d6",
+   "marca": "John Deere",
+   "nome": "9RX",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "john-deere-plantadeira-1200-1a03471d",
+   "marca": "John Deere",
+   "nome": "1200",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "john-deere-plantadeira-3100ft-8c0e211f",
+   "marca": "John Deere",
+   "nome": "3100FT",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "john-deere-plantadeira-db-1244b89e",
+   "marca": "John Deere",
+   "nome": "DB",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "john-deere-colheitadeira-graos-serie-s-581989d9",
+   "marca": "John Deere",
+   "nome": "Série S",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "john-deere-pulverizador-4630-151beef0",
+   "marca": "John Deere",
+   "nome": "4630",
+   "motivo": "já existe",
+   "existente": "john-deere-tratos-culturais-pulverizador-4630"
+  },
+  {
+   "id": "john-deere-segadora-630-ae82708f",
+   "marca": "John Deere",
+   "nome": "630",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "case-ih-trator-puma-24b37ca9",
+   "marca": "Case IH",
+   "nome": "Puma",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "case-ih-trator-magnum-17f328c1",
+   "marca": "Case IH",
+   "nome": "Magnum",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "case-ih-pulverizador-patriot-serie-50-c6eb3263",
+   "marca": "Case IH",
+   "nome": "Patriot Série 50",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "case-ih-colheitadeira-graos-af10-56830491",
+   "marca": "Case IH",
+   "nome": "AF10",
+   "motivo": "já existe",
+   "existente": "case-ih-af10"
+  },
+  {
+   "id": "case-ih-colheitadeira-graos-axial-flow-serie-260-automation-0661334f",
+   "marca": "Case IH",
+   "nome": "Axial-Flow Série 260 Automation",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "valtra-trator-a2s-13c89740",
+   "marca": "Valtra",
+   "nome": "A2s",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "valtra-trator-a3f-c08d4d14",
+   "marca": "Valtra",
+   "nome": "A3F",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "valtra-trator-a4s-18837027",
+   "marca": "Valtra",
+   "nome": "A4s",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "valtra-trator-bm-1b8853de",
+   "marca": "Valtra",
+   "nome": "BM",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "valtra-trator-a4-0acae7ce",
+   "marca": "Valtra",
+   "nome": "A4",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "valtra-trator-a5-707331cd",
+   "marca": "Valtra",
+   "nome": "A5",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "valtra-trator-a4-hitech-7d340303",
+   "marca": "Valtra",
+   "nome": "A4 HiTech",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "valtra-trator-a5-hitech-4888af4b",
+   "marca": "Valtra",
+   "nome": "A5 HiTech",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "valtra-trator-m5-44c626f0",
+   "marca": "Valtra",
+   "nome": "M5",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "valtra-trator-bh-hitech-926b5107",
+   "marca": "Valtra",
+   "nome": "BH HiTech",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "valtra-trator-t-cvt-426cbd1b",
+   "marca": "Valtra",
+   "nome": "T CVT",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "valtra-trator-q5-30095580",
+   "marca": "Valtra",
+   "nome": "Q5",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "valtra-trator-s6-b5ad9392",
+   "marca": "Valtra",
+   "nome": "S6",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "valtra-plantadeira-hitech-20f88abe",
+   "marca": "Valtra",
+   "nome": "HiTech",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "valtra-plantadeira-momentum-18-a-24-7db95d75",
+   "marca": "Valtra",
+   "nome": "Momentum 18 a 24",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "valtra-plantadeira-momentum-30-e-40-67904254",
+   "marca": "Valtra",
+   "nome": "Momentum 30 e 40",
+   "motivo": "modelos da família já existem"
+  },
+  {
+   "id": "tatu-marchesan-plantadeira-php-aef6880b",
+   "marca": "Tatu Marchesan",
+   "nome": "PHP",
+   "motivo": "já existe",
+   "existente": "tatu-php-plantio-direto-ou-convencional"
+  },
+  {
+   "id": "tatu-marchesan-semeadora-sda3-d8a6020d",
+   "marca": "Tatu Marchesan",
+   "nome": "SDA3",
+   "motivo": "já existe",
+   "existente": "tatu-sda3semeadeira-direta-articulada"
+  },
+  {
+   "id": "tatu-marchesan-cultivador-ce-cd5a463c",
+   "marca": "Tatu Marchesan",
+   "nome": "CE",
+   "motivo": "já existe",
+   "existente": "tatu-cecultivador-de-enxadas"
+  }
+ ]
+}

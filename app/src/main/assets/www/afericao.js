@@ -90,7 +90,8 @@ async function modeloPorId(id) {
   const c = await dados('catalogo');
   const x = c.modelos.find(m => m.i === id); if (!x) return null;
   return {fonte: 'fabricante', id, marca: c.marcas[x.m].marca, nome: x.n, modelo: x.l || '', familia: x.f, categoria: x.c, url: x.u,
-    especificacoes: x.e || [], origem: x.o, documentos: x.d || [], dataConsulta: c.marcas[x.m].dataConsulta};
+    especificacoes: x.e || [], origem: x.o, documentos: x.d || [], dataConsulta: x.dc || c.marcas[x.m].dataConsulta,
+    identificacao: x.k === 'id', nivel: x.v, observacao: x.ob || '', aConfirmar: x.st || ''};
 }
 
 const linhaResultado = r => `<div class="row clickable" data-act="nav" data-id="catalogo/${esc(encodeURIComponent(r.id))}" style="cursor:pointer"><span class="status ${r.fonte === 'finame' ? 'purple' : 'blue'}"></span><div><strong>${esc(r.marca)} — ${esc(r.nome)}</strong><small>${esc([r.modelo, r.codigoFiname ? 'FINAME ' + r.codigoFiname : '', r.temFicha ? 'ficha técnica' : '', r.temDocs ? 'manuais/folhetos' : ''].filter(Boolean).join(' • '))}</small></div>${chip(r.fonte === 'finame' ? 'BNDES' : 'Fabricante', r.fonte === 'finame' ? 'purple' : 'blue')}</div>`;
@@ -130,7 +131,12 @@ async function detalheCatalogo(id) {
   (m.especificacoes || []).forEach(([s, c, v]) => (secoes[s || 'Especificações'] ||= []).push([c, v]));
   view.innerHTML = head(`${m.marca} — ${m.nome}`, [m.modelo, m.categoria, m.codigoFiname ? 'Código FINAME ' + m.codigoFiname : ''].filter(Boolean).join(' • '),
     btn('← Catálogo', 'nav', 'catalogo', 'secondary') + btn('Cadastrar como máquina', 'cat-cadastrar', id)) +
-    (m.fonte === 'finame'
+    (m.identificacao
+      ? `<section class="card panel"><h3>Identificação ${m.nivel === 'familia' ? 'da família' : 'do modelo'}</h3><table class="tbl"><tbody>
+          <tr><td>Marca</td><td>${esc(m.marca)}</td></tr><tr><td>${m.nivel === 'familia' ? 'Família' : 'Modelo'}</td><td>${esc(m.nome)}</td></tr><tr><td>Categoria</td><td>${esc(m.categoria || '—')}</td></tr></tbody></table>
+          ${m.aConfirmar ? `<p class="pc-aviso">Nome a confirmar: ${esc(m.aConfirmar)}</p>` : ''}${m.observacao ? `<p class="nota">${esc(m.observacao)}</p>` : ''}
+          <p class="nota">Fonte: <a href="${esc(m.url)}" target="_blank" rel="noopener">${esc(m.url)}</a>, consultada em ${fmtDate(m.dataConsulta)}. Só identifica ${m.nivel === 'familia' ? 'a família comercial' : 'o modelo'}: não traz versões, especificações nem parâmetros de regulagem. Para regular, use o manual do modelo e ano da sua máquina.</p></section>`
+      : m.fonte === 'finame'
       ? `<section class="card panel"><h3>Identificação oficial (BNDES/FINAME)</h3><table class="tbl"><tbody>
           <tr><td>Fabricante</td><td>${esc(m.marca)}</td></tr><tr><td>CNPJ</td><td>${esc(m.cnpj.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5'))}</td></tr>
           <tr><td>Produto</td><td>${esc(m.nome)}</td></tr><tr><td>Modelo</td><td>${esc(m.modelo || '—')}</td></tr><tr><td>Código FINAME</td><td>${esc(m.codigoFiname)}</td></tr></tbody></table>
