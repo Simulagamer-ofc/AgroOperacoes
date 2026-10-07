@@ -167,7 +167,8 @@ function openForm({title, sub, fields, values = {}, submit = 'Salvar no disposit
     closeModal(); render();
   };
   modal.classList.add('open');
-  setTimeout(() => form.elements[0]?.focus(), 50);
+  // Foca o primeiro campo só se o usuário ainda não tocou em outro (evita mandar o texto para o campo errado)
+  setTimeout(() => { if (!dialog.contains(document.activeElement)) form.elements[0]?.focus(); }, 50);
 }
 
 function confirmDialog(message, onYes, yesLabel = 'Excluir') {
