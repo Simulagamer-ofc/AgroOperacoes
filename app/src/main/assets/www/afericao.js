@@ -295,10 +295,11 @@ function passoWizard() {
         pergunta('mesmoTempoColeta', 'Todos os bicos foram coletados no mesmo tempo e pressão?') +
         pergunta('pontasMesmoModelo', 'As pontas são todas do mesmo modelo?'),
         campo('modeloPonta', 'Modelo da ponta', inp('modeloPonta', w.modeloPonta, 'placeholder="Ex.: XR 110 02"')) +
-        campo('pressao', 'Pressão na coleta (bar)', num_('pressao', w.pressao)) +
+        campo('pressao', 'Pressão na coleta', num_('pressao', w.pressao)) +
+        campo('unidadePressao', 'Unidade da pressão', sel('unidadePressao', [['bar', 'bar'], ['psi', 'psi (lbf/pol²)']], w.unidadePressao || 'bar', 'bar'), 'A do manômetro usado na coleta.') +
         campo('corIso', 'Cor da ponta (ISO 10625)', `<select data-wz="corIso" id="wz_corIso"><option value="">—</option></select>`, 'Só identifica a classe de vazão.') +
         '<div class="field full" id="pontaCat"></div>' +
-        campo('vazaoCatalogo', 'Vazão da tabela do fabricante (L/min)', num_('vazaoCatalogo', w.vazaoCatalogo), w.fonteVazao ? `Da tabela ${w.fonteVazao.fabricante} ${w.fonteVazao.linha} ${w.fonteVazao.tamanho} a ${num(w.fonteVazao.pressaoBar, 2)} bar — ${w.fonteVazao.fonte}${w.fonteVazao.pagina ? ', p. ' + w.fonteVazao.pagina : ''}.` : 'Do catálogo do modelo exato, na pressão da coleta. Só entra se você digitar ou confirmar no catálogo de pontas acima.'),
+        campo('vazaoCatalogo', 'Vazão da tabela do fabricante (L/min)', num_('vazaoCatalogo', w.vazaoCatalogo), w.fonteVazao ? `Da tabela ${w.fonteVazao.ponta} a ${num(w.fonteVazao.pressao, 2)} ${w.fonteVazao.unidadePressao} — ${w.fonteVazao.fonte}${w.fonteVazao.pagina ? ', p. ' + w.fonteVazao.pagina : ''}.` : 'Do catálogo do modelo exato, na pressão da coleta. Só entra se você digitar ou confirmar no catálogo de pontas acima.'),
         campo('unidadeVazao', 'Unidade das vazões medidas', sel('unidadeVazao', [['L/min', 'L/min'], ['mL/min', 'mL/min']], w.unidadeVazao || 'L/min', 'L/min'), '', true) +
         listaMedidas('vazoes', 'Vazão medida em cada bico', w.unidadeVazao || 'L/min')],
       perdas: () => [
@@ -415,7 +416,7 @@ function coletarWizard() {
     if (atual !== v) delete wz._origem[k];
   }
   // A fonte do catálogo de pontas só vale enquanto a vazão e a pressão forem as confirmadas
-  if (wz.fonteVazao && (umNum(wz.vazaoCatalogo) !== wz.fonteVazao.vazao || umNum(wz.pressao) !== wz.fonteVazao.pressaoBar)) delete wz.fonteVazao;
+  if (wz.fonteVazao && (umNum(wz.vazaoCatalogo) !== wz.fonteVazao.vazao || umNum(wz.pressao) !== wz.fonteVazao.pressao || (wz.unidadePressao || 'bar') !== wz.fonteVazao.unidadePressao)) delete wz.fonteVazao;
 }
 
 function validarPasso() {
@@ -555,7 +556,7 @@ function relatorio(id) {
   const linha = (k, v) => v ? `<tr><td>${esc(k)}</td><td>${esc(String(v))}</td></tr>` : '';
   const tri = v => v === 'sim' ? 'Sim' : v === 'nao' ? 'Não' : 'Não informado';
   const condicoes = {
-    bicos: [['Mesma pressão da tabela do fabricante', tri(e.pressaoColetaIgualCatalogo)], ['Coleta no mesmo tempo e pressão', tri(e.mesmoTempoColeta)], ['Pontas do mesmo modelo', tri(e.pontasMesmoModelo)], ['Modelo da ponta', e.modeloPonta], ['Pressão (bar)', e.pressao], ['Vazão de catálogo (L/min)', e.vazaoCatalogo], ['Origem da vazão de catálogo', e.fonteVazao ? `${e.fonteVazao.fabricante} ${e.fonteVazao.linha} ${e.fonteVazao.tamanho} a ${e.fonteVazao.pressaoBar} bar — ${e.fonteVazao.fonte}${e.fonteVazao.ano ? ' (' + e.fonteVazao.ano + ')' : ''}${e.fonteVazao.pagina ? ', p. ' + e.fonteVazao.pagina : ''} (confirmada pelo usuário)` : (e.vazaoCatalogo ? 'Digitada pelo usuário' : '')], ['Vazões medidas (' + (e.unidadeVazao || 'L/min') + ')', e.vazoes]],
+    bicos: [['Mesma pressão da tabela do fabricante', tri(e.pressaoColetaIgualCatalogo)], ['Coleta no mesmo tempo e pressão', tri(e.mesmoTempoColeta)], ['Pontas do mesmo modelo', tri(e.pontasMesmoModelo)], ['Modelo da ponta', e.modeloPonta], ['Pressão (' + (e.unidadePressao || 'bar') + ')', e.pressao], ['Vazão de catálogo (L/min)', e.vazaoCatalogo], ['Origem da vazão de catálogo', e.fonteVazao ? `${e.fonteVazao.ponta} a ${e.fonteVazao.pressao} ${e.fonteVazao.unidadePressao} — ${e.fonteVazao.fonte}${e.fonteVazao.ano ? ' (' + e.fonteVazao.ano + ')' : ''}${e.fonteVazao.pagina ? ', p. ' + e.fonteVazao.pagina : ''} (confirmada pelo usuário)` : (e.vazaoCatalogo ? 'Digitada pelo usuário' : '')], ['Vazões medidas (' + (e.unidadeVazao || 'L/min') + ')', e.vazoes]],
     perdas: [['Área amostral (m²)', e.areaM2], ['Grãos em vagens incluídos', tri(e.incluiGraosEmVagens)], ['Massas por ponto (g)', e.massasG], ['Massas na plataforma (g)', e.massasPlataformaG]],
     longitudinal: [['Sementes por metro planejadas', e.sementesPorMetro], ['Espaçamentos (cm)', e.espacamentos]],
     transversal: [['Fertilizante nitrogenado', tri(e.fertilizanteNitrogenado)], ['CV com sobreposição', tri(e.cvComSobreposicao)], ['Bandejas', e.valoresSobrepostos]],
