@@ -297,7 +297,8 @@ function passoWizard() {
         campo('modeloPonta', 'Modelo da ponta', inp('modeloPonta', w.modeloPonta, 'placeholder="Ex.: XR 110 02"')) +
         campo('pressao', 'Pressão na coleta (bar)', num_('pressao', w.pressao)) +
         campo('corIso', 'Cor da ponta (ISO 10625)', `<select data-wz="corIso" id="wz_corIso"><option value="">—</option></select>`, 'Só identifica a classe de vazão.') +
-        campo('vazaoCatalogo', 'Vazão da tabela do fabricante (L/min)', num_('vazaoCatalogo', w.vazaoCatalogo), 'Do catálogo do modelo exato, na pressão da coleta. Não é preenchida pelo sistema.'),
+        '<div class="field full" id="pontaCat"></div>' +
+        campo('vazaoCatalogo', 'Vazão da tabela do fabricante (L/min)', num_('vazaoCatalogo', w.vazaoCatalogo), w.fonteVazao ? `Da tabela ${w.fonteVazao.fabricante} ${w.fonteVazao.linha} ${w.fonteVazao.tamanho} a ${num(w.fonteVazao.pressaoBar, 2)} bar — ${w.fonteVazao.fonte}${w.fonteVazao.pagina ? ', p. ' + w.fonteVazao.pagina : ''}.` : 'Do catálogo do modelo exato, na pressão da coleta. Só entra se você digitar ou confirmar no catálogo de pontas acima.'),
         campo('unidadeVazao', 'Unidade das vazões medidas', sel('unidadeVazao', [['L/min', 'L/min'], ['mL/min', 'mL/min']], w.unidadeVazao || 'L/min', 'L/min'), '', true) +
         listaMedidas('vazoes', 'Vazão medida em cada bico', w.unidadeVazao || 'L/min')],
       perdas: () => [
@@ -358,6 +359,7 @@ VIEWS.afericao.after = () => {
     cor.innerHTML = '<option value="">—</option>' + t.linhas.map(l => `<option value="${l.tamanho}" ${l.tamanho === wz.corIso ? 'selected' : ''}>${esc(l.cor)} — classe ${num(l.vazao, 2)} L/min a 3 bar</option>`).join('');
   }).catch(() => { /* sem banco offline: lista de cores fica vazia */ });
   $$('.af-lista').forEach(el => atualizarResumoLista(el.dataset.lista));
+  if (typeof montarSeletorPonta === 'function') montarSeletorPonta();
   for (const k of Object.keys(wz?._origem || {})) { const el = $('#wz_' + k); if (el && !el.parentElement.querySelector('.cfg-origem')) el.insertAdjacentHTML('afterend', '<small class="cfg-origem fabricante">⚙ da configuração da máquina</small>'); }
   const lin = $('#wz_linhasColetadas'), esp = $('#wz_espLinhasM'), larg = $('#wz_larguraM');
   if (lin && esp && larg) { const calc = () => { const n = umNum(lin.value), e = umNum(esp.value); if (n > 0 && e > 0) larg.value = String(Math.round(n * e * 1000) / 1000).replace('.', ','); }; lin.oninput = calc; esp.oninput = calc; }
@@ -412,6 +414,8 @@ function coletarWizard() {
     const v = cfg[ck], atual = typeof v === 'number' ? umNum(wz[k]) : wz[k];
     if (atual !== v) delete wz._origem[k];
   }
+  // A fonte do catálogo de pontas só vale enquanto a vazão e a pressão forem as confirmadas
+  if (wz.fonteVazao && (umNum(wz.vazaoCatalogo) !== wz.fonteVazao.vazao || umNum(wz.pressao) !== wz.fonteVazao.pressaoBar)) delete wz.fonteVazao;
 }
 
 function validarPasso() {
@@ -551,7 +555,7 @@ function relatorio(id) {
   const linha = (k, v) => v ? `<tr><td>${esc(k)}</td><td>${esc(String(v))}</td></tr>` : '';
   const tri = v => v === 'sim' ? 'Sim' : v === 'nao' ? 'Não' : 'Não informado';
   const condicoes = {
-    bicos: [['Mesma pressão da tabela do fabricante', tri(e.pressaoColetaIgualCatalogo)], ['Coleta no mesmo tempo e pressão', tri(e.mesmoTempoColeta)], ['Pontas do mesmo modelo', tri(e.pontasMesmoModelo)], ['Modelo da ponta', e.modeloPonta], ['Pressão (bar)', e.pressao], ['Vazão de catálogo (L/min)', e.vazaoCatalogo], ['Vazões medidas (' + (e.unidadeVazao || 'L/min') + ')', e.vazoes]],
+    bicos: [['Mesma pressão da tabela do fabricante', tri(e.pressaoColetaIgualCatalogo)], ['Coleta no mesmo tempo e pressão', tri(e.mesmoTempoColeta)], ['Pontas do mesmo modelo', tri(e.pontasMesmoModelo)], ['Modelo da ponta', e.modeloPonta], ['Pressão (bar)', e.pressao], ['Vazão de catálogo (L/min)', e.vazaoCatalogo], ['Origem da vazão de catálogo', e.fonteVazao ? `${e.fonteVazao.fabricante} ${e.fonteVazao.linha} ${e.fonteVazao.tamanho} a ${e.fonteVazao.pressaoBar} bar — ${e.fonteVazao.fonte}${e.fonteVazao.ano ? ' (' + e.fonteVazao.ano + ')' : ''}${e.fonteVazao.pagina ? ', p. ' + e.fonteVazao.pagina : ''} (confirmada pelo usuário)` : (e.vazaoCatalogo ? 'Digitada pelo usuário' : '')], ['Vazões medidas (' + (e.unidadeVazao || 'L/min') + ')', e.vazoes]],
     perdas: [['Área amostral (m²)', e.areaM2], ['Grãos em vagens incluídos', tri(e.incluiGraosEmVagens)], ['Massas por ponto (g)', e.massasG], ['Massas na plataforma (g)', e.massasPlataformaG]],
     longitudinal: [['Sementes por metro planejadas', e.sementesPorMetro], ['Espaçamentos (cm)', e.espacamentos]],
     transversal: [['Fertilizante nitrogenado', tri(e.fertilizanteNitrogenado)], ['CV com sobreposição', tri(e.cvComSobreposicao)], ['Bandejas', e.valoresSobrepostos]],
