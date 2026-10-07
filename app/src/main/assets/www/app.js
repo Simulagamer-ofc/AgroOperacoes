@@ -377,8 +377,10 @@ function movementForm(itemId, kind) {
       ...(saida || ajuste ? [] : [
         {k: 'value', label: 'Valor total da nota (R$)', type: 'number', min: 0, hint: kind ? 'Opcional, mas sem ele o custo médio deixa de ser calculado.' : 'Só para entradas.'},
         {k: 'supplier', label: 'Fornecedor'}, {k: 'doc', label: 'Nota fiscal / documento'},
+        {k: 'lote', label: 'Lote do fabricante', hint: kind ? '' : 'Só para entradas.'}, {k: 'validade', label: 'Validade', type: 'date', hint: kind ? '' : 'Só para entradas.'},
         {k: 'gasto', label: 'Lançar o valor em Controle de gastos', type: 'select', options: ['Sim', 'Não'], required: true, hint: 'Só para entradas com valor.'}]),
       ...(entrada || ajuste ? [] : [{k: 'fieldId', label: 'Talhão (consumo)', type: 'select', options: fieldOptions}]),
+      ...(saida && s0 && typeof lotesDoItem === 'function' && lotesDoItem(s0.id).length ? [{k: 'lote', label: 'Lote usado', type: 'select', options: () => lotesDoItem(s0.id).map(x => ({value: x.lote, label: `${x.lote} — ${num(x.saldo)} ${s0.unit}${x.validade ? ' • vence ' + fmtDate(x.validade) : ''}`})), hint: 'Sem lote: baixa do lote que vence primeiro.'}] : []),
       {k: 'notes', label: 'Observações', type: 'textarea'}
     ],
     onSubmit: v => {
@@ -386,6 +388,8 @@ function movementForm(itemId, kind) {
       if (!s) return 'Selecione o item';
       if (k === 'Saída' && v.qty > Number(s.qty || 0)) return `Saldo insuficiente (${num(s.qty)} ${s.unit})`;
       if (k !== 'Ajuste de inventário' && !(v.qty > 0)) return 'Informe uma quantidade maior que zero';
+      if (k === 'Saída' && v.lote && typeof lotesDoItem === 'function') { const l = lotesDoItem(s.id).find(x => x.lote === v.lote); if (l && v.qty > l.saldo + 1e-9) return `Saldo do lote ${v.lote}: ${num(l.saldo)} ${s.unit}`; }
+      if (k !== 'Entrada') { delete v.validade; if (k !== 'Saída') delete v.lote; }
       const valor = k === 'Entrada' && Number(v.value) > 0 ? Number(v.value) : 0;
       const tinhaCusto = custoMedio(s) != null || Number(s.qty || 0) <= 0;
       const mov = aplicarMovimento(s, k, Number(v.qty), valor);
@@ -721,6 +725,7 @@ function loadSamples() {
   db.monitoramentos.push({id: uid(), fieldId: f3, date: daysAgo(2), tipo: 'Praga', alvo: 'Lagarta-do-cartucho', estadio: 'V6', valor: 12, unidade: '% plantas atacadas', pontos: 10});
   db.colheitas.push({id: uid(), fieldId: f1, cultura: 'Soja', season: '2025/26', date: daysAgo(160), kg: 324480, umidade: 13}, {id: uid(), fieldId: f2, cultura: 'Soja', season: '2025/26', date: daysAgo(158), kg: 230640, umidade: 13.5});
   db.expenses.push({id: uid(), date: daysAgo(300), category: 'Insumos', description: 'Custeio da safra 2025/26 (resumo)', value: 380250, fieldId: f1, season: '2025/26'}, {id: uid(), date: daysAgo(300), category: 'Insumos', description: 'Custeio da safra 2025/26 (resumo)', value: 279000, fieldId: f2, season: '2025/26'});
+  db.movements.push({id: uid(), itemId: s1, kind: 'Entrada', qty: 18, date: daysAgo(30), before: 0, after: 18, lote: 'TS4-2611', validade: daysAgo(-40), supplier: 'Revenda'});
   db.movements.push({id: uid(), itemId: s3, kind: 'Saída', qty: 12, date: today(), fieldId: f1, before: 48, after: 36, unitCost: 3150, value: 37800, notes: 'Adubação de plantio'});
   db.lots.push({id: l1, code: 'SM-024', species: 'Soja', cultivar: 'BMX Zeus', category: 'C1', fieldId: f1, season: '2025/26', weight: 42000, status: 'Aguardando análise', germination: '', vigor: ''}, {id: l2, code: 'SM-026', species: 'Soja', cultivar: 'NS 7709', category: 'S1', fieldId: f2, season: '2025/26', weight: 38500, status: 'Em beneficiamento', germination: 92, vigor: 86});
   db.ubs.push({id: uid(), lotId: l2, lote: {code: 'SM-026', species: 'Soja', cultivar: 'NS 7709', category: 'S1', season: '2025/26'}, inicio: daysAgo(2), status: 'Em andamento',

@@ -242,3 +242,9 @@ body{background:var(--bg)}
 @media print{.etiqueta{border:1px dashed #999}}
 
 .fx-barra.ch{width:min(26px,70%)}
+
+.es-lote{font-size:.84rem;padding:8px 10px;border-radius:9px;background:var(--bg);display:flex;justify-content:space-between;gap:8px}.es-lote span:last-child{text-align:right}
+.es-lote.vence{background:rgba(192,133,8,.16);color:#f5b843}.es-lote.vencido{background:rgba(224,90,90,.16);color:#ff8f8f}
+:root[data-theme="light"] .es-lote.vence{color:#8a5f00}:root[data-theme="light"] .es-lote.vencido{color:var(--red)}
+.es-validade-aviso{margin:0 0 14px;padding:12px 14px;border-radius:12px;background:rgba(192,133,8,.14);border:1px solid rgba(192,133,8,.4);font-size:.9rem}
+.tbl.inv input{width:110px;text-align:right;border:1px solid var(--line);border-radius:8px;padding:8px;background:var(--bg);color:var(--text)}.inv-dif.neg{color:#ff8f8f}.inv-dif.pos{color:#65e6a8}
