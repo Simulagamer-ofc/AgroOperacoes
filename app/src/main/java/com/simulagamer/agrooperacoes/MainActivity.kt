@@ -1,13 +1,16 @@
 package com.simulagamer.agrooperacoes
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.print.PrintAttributes
 import android.print.PrintManager
+import android.webkit.GeolocationPermissions
 import android.webkit.JavascriptInterface
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
@@ -18,6 +21,7 @@ import android.webkit.WebViewClient
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.webkit.WebViewAssetLoader
 
 class MainActivity : AppCompatActivity() {
@@ -46,6 +50,16 @@ class MainActivity : AppCompatActivity() {
     private val pickFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         fileChooserCallback?.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(result.resultCode, result.data))
         fileChooserCallback = null
+    }
+
+    // Localização (contorno do talhão por GPS): pede a permissão do Android só quando a página solicita
+    private var geoOrigin: String? = null
+    private var geoCallback: GeolocationPermissions.Callback? = null
+    private val requestLocation = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+        val granted = result.values.any { it }
+        geoCallback?.invoke(geoOrigin, granted, false)
+        geoCallback = null
+        geoOrigin = null
     }
 
     /** Ponte exposta ao JavaScript como `window.AndroidBridge`. */
@@ -91,8 +105,25 @@ class MainActivity : AppCompatActivity() {
             settings.cacheMode = WebSettings.LOAD_DEFAULT
             settings.allowFileAccess = false
             settings.allowContentAccess = true
+            settings.setGeolocationEnabled(true)
             addJavascriptInterface(AndroidBridge(), "AndroidBridge")
             webChromeClient = object : WebChromeClient() {
+                override fun onGeolocationPermissionsShowPrompt(origin: String, callback: GeolocationPermissions.Callback) {
+                    // Só a página do próprio app (assets) pode usar a localização
+                    if (!origin.startsWith("https://appassets.androidplatform.net")) {
+                        callback.invoke(origin, false, false)
+                        return
+                    }
+                    val fine = ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.ACCESS_FINE_LOCATION)
+                    if (fine == PackageManager.PERMISSION_GRANTED) {
+                        callback.invoke(origin, true, false)
+                    } else {
+                        geoOrigin = origin
+                        geoCallback = callback
+                        requestLocation.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
+                    }
+                }
+
                 override fun onShowFileChooser(
                     view: WebView,
                     filePathCallback: ValueCallback<Array<Uri>>,
