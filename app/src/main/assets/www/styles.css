@@ -259,3 +259,5 @@ body{background:var(--bg)}
 .ctn-num{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:10px}.ctn-num span{display:block;color:var(--muted);font-size:.8rem}.ctn-num b{font-size:1.25rem}
 .ctn-resumo{display:flex;gap:16px;align-items:center;margin-top:14px}.ctn-resumo small{display:block;color:var(--muted);margin-top:4px}
 @media(max-width:760px){.ctn-grid{grid-template-columns:minmax(0,1fr)}.ctn-num{grid-template-columns:1fr 1fr}}
+
+.lc-tab select,.lc-tab input{border:1px solid var(--line);border-radius:8px;padding:6px;background:var(--bg);color:var(--text);max-width:170px}.lc-tab input[data-lc-campo=numDoc]{width:80px;margin-top:4px}.lc-tab input.lc-inval{border-color:#e05a5a}.lc-fora{opacity:.45}.lc-tab td{vertical-align:top}

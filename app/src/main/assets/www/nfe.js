@@ -69,7 +69,7 @@ function confirmarNfe() {
     const mov = aplicarMovimento(s, 'Entrada', q, valor);
     db.movements.push({id: uid(), itemId: s.id, kind: 'Entrada', qty: q, date: n.data || today(), supplier: n.emitente, doc: `NF-e ${n.numero}`, lote: it.lote || undefined, validade: it.validade || undefined, nfeChave: n.chave, gastoId, ...mov});
   }
-  db.expenses.push({id: gastoId, date: n.data || today(), category: cat, description: `NF-e ${n.numero} — ${n.emitente}`, value: n.total, supplier: n.emitente, doc: `NF-e ${n.numero}`, nfeChave: n.chave});
+  db.expenses.push({id: gastoId, date: n.data || today(), category: cat, description: `NF-e ${n.numero} — ${n.emitente}`, value: n.total, supplier: n.emitente, parceiroDoc: n.cnpj, doc: `NF-e ${n.numero}`, nfeChave: n.chave});
   if (n.dups.length) n.dups.forEach((d, i) => db.contas.push({id: uid(), tipo: 'pagar', grupo: gastoId, descricao: `NF-e ${n.numero} — ${n.emitente}`, categoria: cat, parceiro: n.emitente, valor: d.valor, vencimento: d.vencimento || n.data, parcela: `${i + 1}/${n.dups.length}`, doc: d.numero, status: 'aberta', expenseId: gastoId, lancarGasto: 'Não'}));
   save(); nfeLida = null; showToast(`NF-e ${n.numero} importada: ${n.itens.length} item(ns) no estoque`); go('estoque');
 }
