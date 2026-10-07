@@ -44,9 +44,30 @@ function loadDb() {
   return data;
 }
 let db = loadDb();
+// Marca a data de alteração de cada registro e as exclusões (usado na sincronização entre aparelhos).
+// Funciona para qualquer forma de gravação: compara cada registro com o que estava salvo antes.
+let impressoes = null;
+const impressao = r => { const {_mod, ...resto} = r; return JSON.stringify(resto); };
+function carimbar() {
+  const agora = Date.now(), novo = {};
+  db._removidos ||= [];
+  for (const c of COLLECTIONS) {
+    const antes = impressoes?.[c] || null, mapa = novo[c] = {};
+    for (const r of db[c]) {
+      if (!r || !r.id) continue;
+      const h = impressao(r); mapa[r.id] = h;
+      if (antes && antes[r.id] !== h) r._mod = agora;
+    }
+    if (antes) for (const id of Object.keys(antes)) if (!(id in mapa)) db._removidos.push({c, id, at: agora});
+  }
+  if (db._removidos.length > 5000) db._removidos = db._removidos.slice(-5000);
+  impressoes = novo;
+}
 function save() {
+  carimbar();
   if (!safeStorage.set(DB_KEY, JSON.stringify(db))) showToast('Não foi possível salvar no dispositivo (armazenamento cheio?)');
 }
+carimbar(); // estado carregado = referência (nada é marcado como alterado ao abrir)
 
 const find = (col, id) => db[col].find(x => x.id === id);
 const upsert = (col, item) => {
@@ -620,6 +641,7 @@ VIEWS.cadastros = () => {
       <article class="card panel"><h3>Registros no dispositivo</h3><table class="tbl"><tbody>${counts.map(([l, c]) => `<tr><td>${l}</td><td class="num">${db[c].length}</td></tr>`).join('')}</tbody></table></article>
       <article class="card panel"><h3>Backup</h3><p>Os dados ficam somente neste aparelho. Exporte um backup regularmente e guarde em local seguro (Drive, e-mail, computador).</p>
         <div class="btn-row">${btn('⬇ Exportar backup', 'backup')}${btn('⬆ Restaurar backup', 'restore', '', 'secondary')}</div><input type="file" id="restoreInput" accept="application/json,.json" hidden></article>
+      ${typeof cartaoSincronizacao === 'function' ? cartaoSincronizacao() : ''}
       <article class="card panel"><h3>Dados de exemplo e limpeza</h3><p>Carregue exemplos para treinar a equipe, ou apague todos os registros deste dispositivo.</p>
         <div class="btn-row">${btn('Carregar exemplos', 'seed', '', 'secondary')}<button class="danger" data-act="wipe">Apagar todos os dados</button></div></article>
     </section>`;
@@ -677,7 +699,7 @@ function restoreBackup(text) {
   confirmDialog(`Restaurar backup de ${parsed.exportedAt ? new Date(parsed.exportedAt).toLocaleString('pt-BR') : 'data desconhecida'} com ${n} registros? Os dados atuais deste dispositivo serão substituídos.`, () => {
     db = {...emptyDb(), ...data}; for (const c of COLLECTIONS) if (!Array.isArray(db[c])) db[c] = [];
     db.settings = {...emptyDb().settings, ...(data.settings && typeof data.settings === 'object' ? data.settings : {})};
-    save(); applySettings(); showToast('Backup restaurado');
+    impressoes = null; save(); applySettings(); showToast('Backup restaurado');
   }, 'Restaurar');
 }
 
@@ -769,7 +791,7 @@ const ACTIONS = {
   'backup': exportBackup,
   'restore': () => $('#restoreInput').click(),
   'seed': () => db.lots.some(l => ['SM-024', 'SM-026'].includes(l.code)) ? showToast('Os dados de exemplo já foram carregados neste aparelho') : confirmDialog('Adicionar dados de exemplo aos registros deste dispositivo?', loadSamples, 'Carregar'),
-  'wipe': () => confirmDialog('Apagar TODOS os dados deste dispositivo? Faça um backup antes. Esta ação não pode ser desfeita.', () => { const settings = db.settings; db = emptyDb(); db.settings = settings; save(); showToast('Dados apagados'); }, 'Apagar tudo')
+  'wipe': () => confirmDialog('Apagar TODOS os dados deste dispositivo? Faça um backup antes. Esta ação não pode ser desfeita.', () => { const settings = db.settings; db = emptyDb(); db.settings = settings; impressoes = null; /* apagar este aparelho não apaga os outros na sincronização */ save(); showToast('Dados apagados'); }, 'Apagar tudo')
 };
 document.addEventListener('click', e => {
   const el = e.target.closest('[data-act]');
