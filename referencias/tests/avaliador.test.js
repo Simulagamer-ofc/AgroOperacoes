@@ -219,7 +219,10 @@ test('dados do aplicativo sincronizados com referencias/ (rode ferramentas/gerar
   assert.equal(fs.readFileSync(path.join(www, 'dados', 'regras-afericao.json'), 'utf8'), fs.readFileSync(path.join(__dirname, '..', 'regras-afericao.json'), 'utf8'));
   const cat = JSON.parse(fs.readFileSync(path.join(www, 'dados', 'catalogo-modelos.json'), 'utf8'));
   const indice = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'modelos', 'indice.json'), 'utf8'));
-  assert.equal(cat.modelos.length, indice.marcas.reduce((s, m) => s + m.totalModelos, 0));
+  const ident = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'modelos', 'identificacao.json'), 'utf8'));
+  assert.equal(cat.modelos.filter(x => x.k !== 'id').length, indice.marcas.reduce((s, m) => s + m.totalModelos, 0));
+  assert.equal(cat.modelos.filter(x => x.k === 'id').length, ident.equipamentos.length);
+  assert.equal(new Set(cat.modelos.map(x => x.i)).size, cat.modelos.length, 'IDs do catálogo únicos');
   const fin = JSON.parse(fs.readFileSync(path.join(www, 'dados', 'finame.json'), 'utf8'));
   assert.equal(fin.produtos.length, JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'bndes', 'produtos-agricolas-finame.json'), 'utf8')).totalProdutos);
 });
