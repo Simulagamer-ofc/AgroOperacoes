@@ -1,0 +1,2786 @@
+{
+ "fabricante": "Albuz",
+ "nota": "Tabelas l/min por bar do catálogo oficial ALBUZ 2025 (francês). Vírgula decimal convertida em ponto apenas na notação. Nenhum valor calculado. corIso derivada do código ISO impresso; linhas no \"code couleur Europe\" ALBUZ (APE, ADE, ATR) têm corIso null.",
+ "fontes": [
+  {
+   "id": "F1",
+   "titulo": "ALBUZ – Catalogue 2025 (FR) – buses céramique",
+   "url": "https://www.albuz-spray.com/pdf/catalogue-ALBUZ-FR-2025.pdf",
+   "ano": "2025",
+   "arquivoLocal": "pontas/albuz/pdf/catalogue-ALBUZ-FR-2025.pdf",
+   "anoObs": "link na página oficial albuz-spray.com/documents.html; capa \"catalogue 2025\"; metadados PDF 2025-09-18. Catálogo UK disponível é de 2021 (não usado)."
+  }
+ ],
+ "linhas": [
+  {
+   "linha": "APE 80°/110°",
+   "tipo": "leque",
+   "angulos": [
+    80,
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "2-4 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.10",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela \"TABLEAU DE DÉBITS\": Couleur | Code | Pression (bar) | classe de gotas | l/mn | l/ha. Vazões no \"Code couleur Europe\" ALBUZ (não ISO 10625): códigos são cor + ângulo como impressos; corIso = null. Cores GRIS, NOIR, IVOIRE e BLANC existem só em 110° (rótulo \"APE 110°\").",
+   "tamanhos": [
+    {
+     "codigo": "APE 80°/110° JAUNE",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.49,
+      "2.5": 0.55,
+      "3": 0.61,
+      "3.5": 0.65,
+      "4": 0.7
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APE 80°/110° ORANGE",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.69,
+      "2.5": 0.77,
+      "3": 0.85,
+      "3.5": 0.92,
+      "4": 0.98
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APE 80°/110° ROUGE",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.99,
+      "2.5": 1.11,
+      "3": 1.21,
+      "3.5": 1.31,
+      "4": 1.4
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APE 80°/110° VERT",
+     "corIso": null,
+     "vazoes": {
+      "2": 1.4,
+      "2.5": 1.57,
+      "3": 1.71,
+      "3.5": 1.85,
+      "4": 1.98
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APE 80°/110° TURQUOISE",
+     "corIso": null,
+     "vazoes": {
+      "2": 1.69,
+      "2.5": 1.89,
+      "3": 2.07,
+      "3.5": 2.24,
+      "4": 2.39
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APE 80°/110° BLEU",
+     "corIso": null,
+     "vazoes": {
+      "2": 1.98,
+      "2.5": 2.21,
+      "3": 2.42,
+      "3.5": 2.62,
+      "4": 2.8
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APE 110° GRIS",
+     "corIso": null,
+     "vazoes": {
+      "2": 2.79,
+      "2.5": 3.11,
+      "3": 3.41,
+      "3.5": 3.69,
+      "4": 3.94
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APE 110° NOIR",
+     "corIso": null,
+     "vazoes": {
+      "2": 3.95,
+      "2.5": 4.41,
+      "3": 4.83,
+      "3.5": 5.22,
+      "4": 5.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APE 110° IVOIRE",
+     "corIso": null,
+     "vazoes": {
+      "2": 5.61,
+      "2.5": 6.28,
+      "3": 6.88,
+      "3.5": 7.43,
+      "4": 7.94
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APE 110° BLANC",
+     "corIso": null,
+     "vazoes": {
+      "2": 7.82,
+      "2.5": 8.85,
+      "3": 9.7,
+      "3.5": 10.48,
+      "4": 11.2
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "ADE 110°",
+   "tipo": "leque_antideriva",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "2-4 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.11",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela \"TABLEAU DE DÉBITS\": Couleur | Code | Pression (bar) | classe de gotas | l/mn | l/ha. Vazões no \"Code couleur Europe\" ALBUZ (não ISO 10625): códigos são cor + ângulo como impressos; corIso = null. Pastille de calibrage (pré-orifício) desmontável.",
+   "tamanhos": [
+    {
+     "codigo": "ADE 110° MARRON",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.35,
+      "2.5": 0.39,
+      "3": 0.43,
+      "3.5": 0.47,
+      "4": 0.5
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ADE 110° JAUNE",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.49,
+      "2.5": 0.55,
+      "3": 0.61,
+      "3.5": 0.65,
+      "4": 0.7
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ADE 110° ORANGE",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.69,
+      "2.5": 0.77,
+      "3": 0.85,
+      "3.5": 0.92,
+      "4": 0.98
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ADE 110° ROUGE",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.99,
+      "2.5": 1.11,
+      "3": 1.21,
+      "3.5": 1.31,
+      "4": 1.4
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ADE 110° VERT",
+     "corIso": null,
+     "vazoes": {
+      "2": 1.4,
+      "2.5": 1.57,
+      "3": 1.71,
+      "3.5": 1.85,
+      "4": 1.98
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "AXI 80°/110°",
+   "tipo": "leque",
+   "angulos": [
+    80,
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "1,5-3 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.12",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela \"TABLEAU DE DÉBITS\": Couleur | Code | Pression (bar) | classe de gotas | l/mn | l/ha. Códigos 110 e 80 do mesmo tamanho impressos no mesmo bloco (mesmas vazões); 08 só 110°. corIso derivada do código ISO impresso (ISO 10625); o nome da cor impresso (FR) confere com o código em todos os tamanhos.",
+   "tamanhos": [
+    {
+     "codigo": "AXI 110015 / AXI 80015",
+     "corIso": "verde",
+     "vazoes": {
+      "1.5": 0.42,
+      "2": 0.49,
+      "2.5": 0.54,
+      "3": 0.6,
+      "3.5": 0.64,
+      "4": 0.69
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AXI 11002 / AXI 8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.56,
+      "2": 0.66,
+      "2.5": 0.73,
+      "3": 0.8,
+      "3.5": 0.86,
+      "4": 0.91
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AXI 110025 / AXI 80025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.5": 0.71,
+      "2": 0.82,
+      "2.5": 0.91,
+      "3": 1.0,
+      "3.5": 1.08,
+      "4": 1.15
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AXI 11003 / AXI 8003",
+     "corIso": "azul",
+     "vazoes": {
+      "1.5": 0.85,
+      "2": 0.98,
+      "2.5": 1.1,
+      "3": 1.2,
+      "3.5": 1.3,
+      "4": 1.39
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AXI 11004 / AXI 8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.5": 1.13,
+      "2": 1.31,
+      "2.5": 1.46,
+      "3": 1.6,
+      "3.5": 1.73,
+      "4": 1.85
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AXI 11005 / AXI 8005",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.5": 1.41,
+      "2": 1.63,
+      "2.5": 1.82,
+      "3": 2.0,
+      "3.5": 2.16,
+      "4": 2.3
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AXI 11006 / AXI 8006",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.5": 1.7,
+      "2": 1.96,
+      "2.5": 2.19,
+      "3": 2.4,
+      "3.5": 2.59,
+      "4": 2.77
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AXI 11008",
+     "corIso": "branco",
+     "vazoes": {
+      "1.5": 2.26,
+      "2": 2.61,
+      "2.5": 2.92,
+      "3": 3.2,
+      "3.5": 3.46,
+      "4": 3.7
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "AXI-TWIN 120°",
+   "tipo": "duplo_leque",
+   "angulos": [
+    120
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "1,5-5 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.13",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela \"TABLEAU DE DÉBITS\": Couleur | Code | Pression (bar) | classe de gotas | l/mn | l/ha. AXI-TWIN 12002 a 5 bar impresso 0,52 (menor que 0,91 a 4 bar) — mantido como impresso. corIso derivada do código ISO impresso (ISO 10625); o nome da cor impresso (FR) confere com o código em todos os tamanhos.",
+   "tamanhos": [
+    {
+     "codigo": "AXI-TWIN 12002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.56,
+      "2": 0.66,
+      "2.5": 0.73,
+      "3": 0.8,
+      "3.5": 0.86,
+      "4": 0.91,
+      "5": 0.52
+     },
+     "unidade": "L/min por bar",
+     "observacao": "valor a 5 bar impresso 0,52 (< 0,91 a 4 bar) — provável erro de impressão, mantido"
+    },
+    {
+     "codigo": "AXI-TWIN 12003",
+     "corIso": "azul",
+     "vazoes": {
+      "1.5": 0.85,
+      "2": 0.98,
+      "2.5": 1.1,
+      "3": 1.2,
+      "3.5": 1.3,
+      "4": 1.39,
+      "5": 1.55
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AXI-TWIN 12004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.5": 1.13,
+      "2": 1.31,
+      "2.5": 1.46,
+      "3": 1.6,
+      "3.5": 1.73,
+      "4": 1.85,
+      "5": 2.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AXI-TWIN 12005",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.5": 1.41,
+      "2": 1.63,
+      "2.5": 1.82,
+      "3": 2.0,
+      "3.5": 2.16,
+      "4": 2.3,
+      "5": 2.58
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "CVI 110°",
+   "tipo": "inducao_ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1,5-5 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.14",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela \"TABLEAU DE DÉBITS\": Couleur | Code | Pression (bar) | classe de gotas | l/mn | l/ha. Injeção de ar compacta (Venturi). corIso derivada do código ISO impresso (ISO 10625); o nome da cor impresso (FR) confere com o código em todos os tamanhos.",
+   "tamanhos": [
+    {
+     "codigo": "CVI 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "1.5": 0.42,
+      "2": 0.49,
+      "2.5": 0.54,
+      "3": 0.6,
+      "4": 0.69,
+      "5": 0.77
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "CVI 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.57,
+      "2": 0.66,
+      "2.5": 0.73,
+      "3": 0.8,
+      "4": 0.91,
+      "5": 1.03
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "CVI 110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.5": 0.71,
+      "2": 0.82,
+      "2.5": 0.91,
+      "3": 1.0,
+      "4": 1.15,
+      "5": 1.29
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "CVI 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "1.5": 0.85,
+      "2": 0.98,
+      "2.5": 1.1,
+      "3": 1.2,
+      "4": 1.39,
+      "5": 1.55
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "CVI 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.5": 1.13,
+      "2": 1.31,
+      "2.5": 1.46,
+      "3": 1.6,
+      "4": 1.85,
+      "5": 2.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "CVI 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.5": 1.41,
+      "2": 1.63,
+      "2.5": 1.82,
+      "3": 2.0,
+      "4": 2.31,
+      "5": 2.58
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "CVI-TWIN 110°",
+   "tipo": "duplo_leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1,5-5 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.15",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela \"TABLEAU DE DÉBITS\": Couleur | Code | Pression (bar) | classe de gotas | l/mn | l/ha. Duplo leque com indução de ar; tabela impressa só de 1,5 a 3 bar. corIso derivada do código ISO impresso (ISO 10625); o nome da cor impresso (FR) confere com o código em todos os tamanhos.",
+   "tamanhos": [
+    {
+     "codigo": "CVI-TWIN 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "1.5": 0.42,
+      "2": 0.49,
+      "2.5": 0.54,
+      "3": 0.6
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "CVI-TWIN 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.57,
+      "2": 0.66,
+      "2.5": 0.73,
+      "3": 0.8
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "CVI-TWIN 110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.5": 0.71,
+      "2": 0.82,
+      "2.5": 0.91,
+      "3": 1.0
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "CVI-TWIN 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "1.5": 0.85,
+      "2": 0.98,
+      "2.5": 1.1,
+      "3": 1.2
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "CVI-TWIN 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.5": 1.13,
+      "2": 1.31,
+      "2.5": 1.46,
+      "3": 1.6
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "CVI-TWIN 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.5": 1.41,
+      "2": 1.63,
+      "2.5": 1.82,
+      "3": 2.0
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "AVI 110°",
+   "tipo": "inducao_ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "3-5 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.16",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela \"TABLEAU DE DÉBITS\": Couleur | Code | Pression (bar) | classe de gotas | l/mn | l/ha. Tamanho 10 impresso \"BLEU CLAIR*\" (* \"cette buse était anciennement noire\"). corIso derivada do código ISO impresso (ISO 10625); o nome da cor impresso (FR) confere com o código em todos os tamanhos.",
+   "tamanhos": [
+    {
+     "codigo": "AVI 11001",
+     "corIso": "laranja",
+     "vazoes": {
+      "3": 0.4,
+      "4": 0.46,
+      "5": 0.52
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "3": 0.6,
+      "4": 0.69,
+      "5": 0.77
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "3": 0.8,
+      "4": 0.91,
+      "5": 1.03
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI 110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "3": 1.0,
+      "4": 1.15,
+      "5": 1.29
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "3": 1.2,
+      "4": 1.39,
+      "5": 1.55
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "3": 1.6,
+      "4": 1.85,
+      "5": 2.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "3": 2.0,
+      "4": 2.31,
+      "5": 2.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI 11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "3": 2.4,
+      "4": 2.77,
+      "5": 3.1
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI 11008",
+     "corIso": "branco",
+     "vazoes": {
+      "3": 3.2,
+      "4": 3.7,
+      "5": 4.13
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI 11010",
+     "corIso": "azul claro",
+     "vazoes": {
+      "3": 4.0,
+      "4": 4.62,
+      "5": 5.16
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "AVI-TWIN 110°",
+   "tipo": "duplo_leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "3-5 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.17",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela \"TABLEAU DE DÉBITS\": Couleur | Code | Pression (bar) | classe de gotas | l/mn | l/ha. Duplo leque com indução de ar. corIso derivada do código ISO impresso (ISO 10625); o nome da cor impresso (FR) confere com o código em todos os tamanhos.",
+   "tamanhos": [
+    {
+     "codigo": "AVI-TWIN 11001",
+     "corIso": "laranja",
+     "vazoes": {
+      "3": 0.4,
+      "4": 0.46,
+      "5": 0.52
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI-TWIN 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "3": 0.6,
+      "4": 0.69,
+      "5": 0.77
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI-TWIN 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "3": 0.8,
+      "4": 0.91,
+      "5": 1.03
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI-TWIN 110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "3": 1.0,
+      "4": 1.15,
+      "5": 1.29
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI-TWIN 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "3": 1.2,
+      "4": 1.39,
+      "5": 1.55
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI-TWIN 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "3": 1.6,
+      "4": 1.85,
+      "5": 2.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI-TWIN 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "3": 2.0,
+      "4": 2.31,
+      "5": 2.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI-TWIN 11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "3": 2.4,
+      "4": 2.77,
+      "5": 3.1
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "AVI-UC 110°",
+   "tipo": "inducao_ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "3-5 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.18",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela \"TABLEAU DE DÉBITS\": Couleur | Code | Pression (bar) | classe de gotas | l/mn | l/ha. Indução de ar, gotas ultra grossas. corIso derivada do código ISO impresso (ISO 10625); o nome da cor impresso (FR) confere com o código em todos os tamanhos.",
+   "tamanhos": [
+    {
+     "codigo": "AVI-UC 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "3": 0.6,
+      "4": 0.69,
+      "5": 0.77
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI-UC 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "3": 0.8,
+      "4": 0.91,
+      "5": 1.03
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI-UC 110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "3": 1.0,
+      "4": 1.15,
+      "5": 1.29
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI-UC 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "3": 1.2,
+      "4": 1.39,
+      "5": 1.55
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI-UC 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "3": 1.6,
+      "4": 1.85,
+      "5": 2.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI-UC 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "3": 2.0,
+      "4": 2.31,
+      "5": 2.58
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "ADI 110°",
+   "tipo": "leque_antideriva",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "2-4 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.19",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela \"TABLEAU DE DÉBITS\": Couleur | Code | Pression (bar) | classe de gotas | l/mn | l/ha. Pastille de calibrage (pré-orifício) desmontável. Prefixo impresso \"ADi\"/\"ADI\". corIso derivada do código ISO impresso (ISO 10625); o nome da cor impresso (FR) confere com o código em todos os tamanhos.",
+   "tamanhos": [
+    {
+     "codigo": "ADi 11001",
+     "corIso": "laranja",
+     "vazoes": {
+      "2": 0.32,
+      "2.5": 0.36,
+      "3": 0.4,
+      "3.5": 0.43,
+      "4": 0.46
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ADi 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "2": 0.49,
+      "2.5": 0.54,
+      "3": 0.6,
+      "3.5": 0.64,
+      "4": 0.69
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ADi 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2": 0.66,
+      "2.5": 0.73,
+      "3": 0.8,
+      "3.5": 0.86,
+      "4": 0.91
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ADI 110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "2": 0.82,
+      "2.5": 0.91,
+      "3": 1.0,
+      "3.5": 1.08,
+      "4": 1.15
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ADi 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "2": 0.98,
+      "2.5": 1.1,
+      "3": 1.2,
+      "3.5": 1.3,
+      "4": 1.39
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ADi 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2": 1.31,
+      "2.5": 1.46,
+      "3": 1.6,
+      "3.5": 1.73,
+      "4": 1.85
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "ATR 80°",
+   "tipo": "cone_vazio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "5-20 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.20",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras; tabela horizontal)",
+   "observacoes": "Tabela horizontal \"TABLEAU DE DÉBITS (l/min)\": pressão (bar) nas linhas, tamanhos nas colunas. Vazões no \"Code couleur Europe\" ALBUZ (não ISO 10625): códigos são linha + cor como impressos; corIso = null.",
+   "tamanhos": [
+    {
+     "codigo": "ATR 80° BLANC",
+     "corIso": null,
+     "vazoes": {
+      "5": 0.27,
+      "6": 0.29,
+      "7": 0.32,
+      "8": 0.34,
+      "9": 0.36,
+      "10": 0.38,
+      "11": 0.39,
+      "12": 0.41,
+      "13": 0.43,
+      "14": 0.44,
+      "15": 0.46,
+      "16": 0.47,
+      "17": 0.48,
+      "18": 0.5,
+      "19": 0.51,
+      "20": 0.52,
+      "21": 0.54,
+      "22": 0.55,
+      "23": 0.56,
+      "24": 0.57,
+      "25": 0.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 80° LILAS",
+     "corIso": null,
+     "vazoes": {
+      "5": 0.36,
+      "6": 0.39,
+      "7": 0.42,
+      "8": 0.45,
+      "9": 0.48,
+      "10": 0.5,
+      "11": 0.52,
+      "12": 0.55,
+      "13": 0.57,
+      "14": 0.59,
+      "15": 0.61,
+      "16": 0.63,
+      "17": 0.64,
+      "18": 0.66,
+      "19": 0.68,
+      "20": 0.7,
+      "21": 0.71,
+      "22": 0.73,
+      "23": 0.74,
+      "24": 0.76,
+      "25": 0.77
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 80° MARRON",
+     "corIso": null,
+     "vazoes": {
+      "5": 0.48,
+      "6": 0.52,
+      "7": 0.56,
+      "8": 0.6,
+      "9": 0.64,
+      "10": 0.67,
+      "11": 0.7,
+      "12": 0.73,
+      "13": 0.76,
+      "14": 0.79,
+      "15": 0.81,
+      "16": 0.84,
+      "17": 0.86,
+      "18": 0.89,
+      "19": 0.91,
+      "20": 0.93,
+      "21": 0.95,
+      "22": 0.98,
+      "23": 1.0,
+      "24": 1.02,
+      "25": 1.04
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 80° JAUNE",
+     "corIso": null,
+     "vazoes": {
+      "5": 0.73,
+      "6": 0.8,
+      "7": 0.86,
+      "8": 0.92,
+      "9": 0.97,
+      "10": 1.03,
+      "11": 1.07,
+      "12": 1.12,
+      "13": 1.17,
+      "14": 1.21,
+      "15": 1.25,
+      "16": 1.29,
+      "17": 1.33,
+      "18": 1.37,
+      "19": 1.4,
+      "20": 1.44,
+      "21": 1.48,
+      "22": 1.51,
+      "23": 1.54,
+      "24": 1.58,
+      "25": 1.61
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 80° ORANGE",
+     "corIso": null,
+     "vazoes": {
+      "5": 0.99,
+      "6": 1.08,
+      "7": 1.17,
+      "8": 1.24,
+      "9": 1.32,
+      "10": 1.39,
+      "11": 1.45,
+      "12": 1.51,
+      "13": 1.57,
+      "14": 1.63,
+      "15": 1.69,
+      "16": 1.74,
+      "17": 1.79,
+      "18": 1.84,
+      "19": 1.89,
+      "20": 1.94,
+      "21": 1.99,
+      "22": 2.03,
+      "23": 2.07,
+      "24": 2.12,
+      "25": 2.16
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 80° ROUGE",
+     "corIso": null,
+     "vazoes": {
+      "5": 1.38,
+      "6": 1.51,
+      "7": 1.62,
+      "8": 1.73,
+      "9": 1.83,
+      "10": 1.92,
+      "11": 2.01,
+      "12": 2.09,
+      "13": 2.17,
+      "14": 2.25,
+      "15": 2.33,
+      "16": 2.4,
+      "17": 2.47,
+      "18": 2.54,
+      "19": 2.6,
+      "20": 2.67,
+      "21": 2.73,
+      "22": 2.79,
+      "23": 2.85,
+      "24": 2.91,
+      "25": 2.97
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 80° GRIS",
+     "corIso": null,
+     "vazoes": {
+      "5": 1.5,
+      "6": 1.63,
+      "7": 1.76,
+      "8": 1.87,
+      "9": 1.98,
+      "10": 2.08,
+      "11": 2.17,
+      "12": 2.26,
+      "13": 2.35,
+      "14": 2.43,
+      "15": 2.51,
+      "16": 2.59,
+      "17": 2.67,
+      "18": 2.74,
+      "19": 2.81,
+      "20": 2.88,
+      "21": 2.95,
+      "22": 3.01,
+      "23": 3.07,
+      "24": 3.14,
+      "25": 3.2
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 80° VERT",
+     "corIso": null,
+     "vazoes": {
+      "5": 1.78,
+      "6": 1.94,
+      "7": 2.09,
+      "8": 2.22,
+      "9": 2.35,
+      "10": 2.47,
+      "11": 2.58,
+      "12": 2.69,
+      "13": 2.79,
+      "14": 2.89,
+      "15": 2.99,
+      "16": 3.08,
+      "17": 3.17,
+      "18": 3.25,
+      "19": 3.34,
+      "20": 3.42,
+      "21": 3.5,
+      "22": 3.57,
+      "23": 3.65,
+      "24": 3.72,
+      "25": 3.8
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 80° NOIR",
+     "corIso": null,
+     "vazoes": {
+      "5": 2.0,
+      "6": 2.18,
+      "7": 2.35,
+      "8": 2.5,
+      "9": 2.64,
+      "10": 2.78,
+      "11": 2.9,
+      "12": 3.03,
+      "13": 3.14,
+      "14": 3.26,
+      "15": 3.36,
+      "16": 3.47,
+      "17": 3.57,
+      "18": 3.67,
+      "19": 3.76,
+      "20": 3.85,
+      "21": 3.94,
+      "22": 4.03,
+      "23": 4.12,
+      "24": 4.2,
+      "25": 4.28
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 80° BLEU",
+     "corIso": null,
+     "vazoes": {
+      "5": 2.45,
+      "6": 2.67,
+      "7": 2.87,
+      "8": 3.06,
+      "9": 3.24,
+      "10": 3.4,
+      "11": 3.56,
+      "12": 3.71,
+      "13": 3.85,
+      "14": 3.99,
+      "15": 4.12,
+      "16": 4.25,
+      "17": 4.37,
+      "18": 4.49,
+      "19": 4.61,
+      "20": 4.72,
+      "21": 4.84,
+      "22": 4.94,
+      "23": 5.05,
+      "24": 5.15,
+      "25": 5.25
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 80° VIOLET",
+     "corIso": null,
+     "vazoes": {
+      "5": 3.05,
+      "6": 3.32,
+      "7": 3.57,
+      "8": 3.81,
+      "9": 4.03,
+      "10": 4.23,
+      "11": 4.43,
+      "12": 4.61,
+      "13": 4.79,
+      "14": 4.96,
+      "15": 5.12,
+      "16": 5.28,
+      "17": 5.43,
+      "18": 5.58,
+      "19": 5.73,
+      "20": 5.87,
+      "21": 6.0,
+      "22": 6.14,
+      "23": 6.27,
+      "24": 6.4,
+      "25": 6.52
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "ATR 60°",
+   "tipo": "cone_vazio",
+   "angulos": [
+    60
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "5-20 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.21",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras; tabela horizontal)",
+   "observacoes": "Tabela horizontal \"TABLEAU DE DÉBITS (l/min)\": pressão (bar) nas linhas, tamanhos nas colunas. Vazões no \"Code couleur Europe\" ALBUZ (não ISO 10625): códigos são linha + cor como impressos; corIso = null.",
+   "tamanhos": [
+    {
+     "codigo": "ATR 60° LILAS",
+     "corIso": null,
+     "vazoes": {
+      "5": 0.36,
+      "6": 0.39,
+      "7": 0.42,
+      "8": 0.45,
+      "9": 0.48,
+      "10": 0.5,
+      "11": 0.52,
+      "12": 0.55,
+      "13": 0.57,
+      "14": 0.59,
+      "15": 0.61,
+      "16": 0.63,
+      "17": 0.64,
+      "18": 0.66,
+      "19": 0.68,
+      "20": 0.7,
+      "21": 0.71,
+      "22": 0.73,
+      "23": 0.74,
+      "24": 0.76,
+      "25": 0.77
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 60° MARRON",
+     "corIso": null,
+     "vazoes": {
+      "5": 0.48,
+      "6": 0.52,
+      "7": 0.56,
+      "8": 0.6,
+      "9": 0.64,
+      "10": 0.67,
+      "11": 0.7,
+      "12": 0.73,
+      "13": 0.76,
+      "14": 0.79,
+      "15": 0.81,
+      "16": 0.84,
+      "17": 0.86,
+      "18": 0.89,
+      "19": 0.91,
+      "20": 0.93,
+      "21": 0.95,
+      "22": 0.98,
+      "23": 1.0,
+      "24": 1.02,
+      "25": 1.04
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 60° JAUNE",
+     "corIso": null,
+     "vazoes": {
+      "5": 0.73,
+      "6": 0.8,
+      "7": 0.86,
+      "8": 0.92,
+      "9": 0.97,
+      "10": 1.03,
+      "11": 1.07,
+      "12": 1.12,
+      "13": 1.17,
+      "14": 1.21,
+      "15": 1.25,
+      "16": 1.29,
+      "17": 1.33,
+      "18": 1.37,
+      "19": 1.4,
+      "20": 1.44,
+      "21": 1.48,
+      "22": 1.51,
+      "23": 1.54,
+      "24": 1.58,
+      "25": 1.61
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 60° ORANGE",
+     "corIso": null,
+     "vazoes": {
+      "5": 0.99,
+      "6": 1.08,
+      "7": 1.17,
+      "8": 1.24,
+      "9": 1.32,
+      "10": 1.39,
+      "11": 1.45,
+      "12": 1.51,
+      "13": 1.57,
+      "14": 1.63,
+      "15": 1.69,
+      "16": 1.74,
+      "17": 1.79,
+      "18": 1.84,
+      "19": 1.89,
+      "20": 1.94,
+      "21": 1.99,
+      "22": 2.03,
+      "23": 2.07,
+      "24": 2.12,
+      "25": 2.16
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 60° ROUGE",
+     "corIso": null,
+     "vazoes": {
+      "5": 1.38,
+      "6": 1.51,
+      "7": 1.62,
+      "8": 1.73,
+      "9": 1.83,
+      "10": 1.92,
+      "11": 2.01,
+      "12": 2.09,
+      "13": 2.17,
+      "14": 2.25,
+      "15": 2.33,
+      "16": 2.4,
+      "17": 2.47,
+      "18": 2.54,
+      "19": 2.6,
+      "20": 2.67,
+      "21": 2.73,
+      "22": 2.79,
+      "23": 2.85,
+      "24": 2.91,
+      "25": 2.97
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 60° GRIS",
+     "corIso": null,
+     "vazoes": {
+      "5": 1.5,
+      "6": 1.63,
+      "7": 1.76,
+      "8": 1.87,
+      "9": 1.98,
+      "10": 2.08,
+      "11": 2.17,
+      "12": 2.26,
+      "13": 2.35,
+      "14": 2.43,
+      "15": 2.51,
+      "16": 2.59,
+      "17": 2.67,
+      "18": 2.74,
+      "19": 2.81,
+      "20": 2.88,
+      "21": 2.95,
+      "22": 3.01,
+      "23": 3.07,
+      "24": 3.14,
+      "25": 3.2
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 60° VERT",
+     "corIso": null,
+     "vazoes": {
+      "5": 1.78,
+      "6": 1.94,
+      "7": 2.09,
+      "8": 2.22,
+      "9": 2.35,
+      "10": 2.47,
+      "11": 2.58,
+      "12": 2.69,
+      "13": 2.79,
+      "14": 2.89,
+      "15": 2.99,
+      "16": 3.08,
+      "17": 3.17,
+      "18": 3.25,
+      "19": 3.34,
+      "20": 3.42,
+      "21": 3.5,
+      "22": 3.57,
+      "23": 3.65,
+      "24": 3.72,
+      "25": 3.8
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 60° NOIR",
+     "corIso": null,
+     "vazoes": {
+      "5": 2.0,
+      "6": 2.18,
+      "7": 2.35,
+      "8": 2.5,
+      "9": 2.64,
+      "10": 2.78,
+      "11": 2.9,
+      "12": 3.03,
+      "13": 3.14,
+      "14": 3.26,
+      "15": 3.36,
+      "16": 3.47,
+      "17": 3.57,
+      "18": 3.67,
+      "19": 3.76,
+      "20": 3.85,
+      "21": 3.94,
+      "22": 4.03,
+      "23": 4.12,
+      "24": 4.2,
+      "25": 4.28
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATR 60° BLEU",
+     "corIso": null,
+     "vazoes": {
+      "5": 2.45,
+      "6": 2.67,
+      "7": 2.87,
+      "8": 3.06,
+      "9": 3.24,
+      "10": 3.4,
+      "11": 3.56,
+      "12": 3.71,
+      "13": 3.85,
+      "14": 3.99,
+      "15": 4.12,
+      "16": 4.25,
+      "17": 4.37,
+      "18": 4.49,
+      "19": 4.61,
+      "20": 4.72,
+      "21": 4.84,
+      "22": 4.94,
+      "23": 5.05,
+      "24": 5.15,
+      "25": 5.25
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "ATI 80°",
+   "tipo": "cone_vazio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "5-20 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.22",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras; tabela horizontal)",
+   "observacoes": "Tabela horizontal \"TABLEAU DE DÉBITS (l/min)\": pressão (bar) nas linhas, tamanhos nas colunas.  corIso derivada do código ISO impresso (ISO 10625) apenas para 01–10; 0050/0075 sem cor ISO.",
+   "tamanhos": [
+    {
+     "codigo": "ATI 80-0050",
+     "corIso": null,
+     "vazoes": {
+      "5": 0.26,
+      "6": 0.28,
+      "7": 0.31,
+      "8": 0.33,
+      "9": 0.35,
+      "10": 0.37,
+      "11": 0.38,
+      "12": 0.4,
+      "13": 0.42,
+      "14": 0.43,
+      "15": 0.45,
+      "16": 0.46,
+      "17": 0.48,
+      "18": 0.49,
+      "19": 0.5,
+      "20": 0.52
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATI 80-0075",
+     "corIso": null,
+     "vazoes": {
+      "5": 0.39,
+      "6": 0.42,
+      "7": 0.46,
+      "8": 0.49,
+      "9": 0.52,
+      "10": 0.55,
+      "11": 0.57,
+      "12": 0.6,
+      "13": 0.62,
+      "14": 0.65,
+      "15": 0.67,
+      "16": 0.69,
+      "17": 0.71,
+      "18": 0.73,
+      "19": 0.75,
+      "20": 0.77
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATI 80-01",
+     "corIso": "laranja",
+     "vazoes": {
+      "5": 0.52,
+      "6": 0.57,
+      "7": 0.61,
+      "8": 0.65,
+      "9": 0.69,
+      "10": 0.73,
+      "11": 0.77,
+      "12": 0.8,
+      "13": 0.83,
+      "14": 0.86,
+      "15": 0.89,
+      "16": 0.92,
+      "17": 0.95,
+      "18": 0.98,
+      "19": 1.01,
+      "20": 1.03
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATI 80-015",
+     "corIso": "verde",
+     "vazoes": {
+      "5": 0.77,
+      "6": 0.85,
+      "7": 0.92,
+      "8": 0.98,
+      "9": 1.04,
+      "10": 1.1,
+      "11": 1.15,
+      "12": 1.2,
+      "13": 1.25,
+      "14": 1.3,
+      "15": 1.34,
+      "16": 1.39,
+      "17": 1.43,
+      "18": 1.47,
+      "19": 1.51,
+      "20": 1.55
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATI 80-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "5": 1.03,
+      "6": 1.13,
+      "7": 1.22,
+      "8": 1.31,
+      "9": 1.39,
+      "10": 1.46,
+      "11": 1.53,
+      "12": 1.6,
+      "13": 1.67,
+      "14": 1.73,
+      "15": 1.79,
+      "16": 1.85,
+      "17": 1.9,
+      "18": 1.96,
+      "19": 2.01,
+      "20": 2.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATI 80-025",
+     "corIso": "lilás",
+     "vazoes": {
+      "5": 1.29,
+      "6": 1.41,
+      "7": 1.53,
+      "8": 1.63,
+      "9": 1.73,
+      "10": 1.83,
+      "11": 1.91,
+      "12": 2.0,
+      "13": 2.08,
+      "14": 2.16,
+      "15": 2.24,
+      "16": 2.31,
+      "17": 2.38,
+      "18": 2.45,
+      "19": 2.52,
+      "20": 2.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATI 80-03",
+     "corIso": "azul",
+     "vazoes": {
+      "5": 1.55,
+      "6": 1.7,
+      "7": 1.83,
+      "8": 1.96,
+      "9": 2.08,
+      "10": 2.19,
+      "11": 2.3,
+      "12": 2.4,
+      "13": 2.5,
+      "14": 2.59,
+      "15": 2.68,
+      "16": 2.77,
+      "17": 2.86,
+      "18": 2.94,
+      "19": 3.02,
+      "20": 3.1
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATI 80-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "5": 2.07,
+      "6": 2.26,
+      "7": 2.44,
+      "8": 2.61,
+      "9": 2.77,
+      "10": 2.92,
+      "11": 3.06,
+      "12": 3.2,
+      "13": 3.33,
+      "14": 3.46,
+      "15": 3.58,
+      "16": 3.7,
+      "17": 3.81,
+      "18": 3.92,
+      "19": 4.03,
+      "20": 4.13
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATI 80-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "5": 2.58,
+      "6": 2.83,
+      "7": 3.06,
+      "8": 3.27,
+      "9": 3.46,
+      "10": 3.65,
+      "11": 3.83,
+      "12": 4.0,
+      "13": 4.16,
+      "14": 4.32,
+      "15": 4.47,
+      "16": 4.62,
+      "17": 4.76,
+      "18": 4.9,
+      "19": 5.03,
+      "20": 5.16
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATI 80-06",
+     "corIso": "cinza",
+     "vazoes": {
+      "5": 3.1,
+      "6": 3.39,
+      "7": 3.67,
+      "8": 3.92,
+      "9": 4.16,
+      "10": 4.38,
+      "11": 4.6,
+      "12": 4.8,
+      "13": 5.0,
+      "14": 5.18,
+      "15": 5.37,
+      "16": 5.54,
+      "17": 5.71,
+      "18": 5.88,
+      "19": 6.04,
+      "20": 6.2
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "ATI 40°/60°",
+   "tipo": "cone_vazio",
+   "angulos": [
+    40,
+    60
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "5-20 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.23",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras; tabela horizontal)",
+   "observacoes": "Tabela horizontal \"TABLEAU DE DÉBITS (l/min)\": pressão (bar) nas linhas, tamanhos nas colunas. Códigos 40-xx e 60-xx do mesmo tamanho compartilham a coluna. corIso derivada do código ISO impresso (ISO 10625) apenas para 01–10; 0050/0075 sem cor ISO.",
+   "tamanhos": [
+    {
+     "codigo": "ATI 60-0075",
+     "corIso": null,
+     "vazoes": {
+      "5": 0.39,
+      "6": 0.42,
+      "7": 0.46,
+      "8": 0.49,
+      "9": 0.52,
+      "10": 0.55,
+      "11": 0.57,
+      "12": 0.6,
+      "13": 0.62,
+      "14": 0.65,
+      "15": 0.67,
+      "16": 0.69,
+      "17": 0.71,
+      "18": 0.73,
+      "19": 0.75,
+      "20": 0.77
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATI 60-01",
+     "corIso": "laranja",
+     "vazoes": {
+      "5": 0.52,
+      "6": 0.57,
+      "7": 0.61,
+      "8": 0.65,
+      "9": 0.69,
+      "10": 0.73,
+      "11": 0.77,
+      "12": 0.8,
+      "13": 0.83,
+      "14": 0.86,
+      "15": 0.89,
+      "16": 0.92,
+      "17": 0.95,
+      "18": 0.98,
+      "19": 1.01,
+      "20": 1.03
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATI 60-015",
+     "corIso": "verde",
+     "vazoes": {
+      "5": 0.77,
+      "6": 0.85,
+      "7": 0.92,
+      "8": 0.98,
+      "9": 1.04,
+      "10": 1.1,
+      "11": 1.15,
+      "12": 1.2,
+      "13": 1.25,
+      "14": 1.3,
+      "15": 1.34,
+      "16": 1.39,
+      "17": 1.43,
+      "18": 1.47,
+      "19": 1.51,
+      "20": 1.55
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATI 40-02 / ATI 60-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "5": 1.03,
+      "6": 1.13,
+      "7": 1.22,
+      "8": 1.31,
+      "9": 1.39,
+      "10": 1.46,
+      "11": 1.53,
+      "12": 1.6,
+      "13": 1.67,
+      "14": 1.73,
+      "15": 1.79,
+      "16": 1.85,
+      "17": 1.9,
+      "18": 1.96,
+      "19": 2.01,
+      "20": 2.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATI 60-025",
+     "corIso": "lilás",
+     "vazoes": {
+      "5": 1.29,
+      "6": 1.41,
+      "7": 1.53,
+      "8": 1.63,
+      "9": 1.73,
+      "10": 1.83,
+      "11": 1.91,
+      "12": 2.0,
+      "13": 2.08,
+      "14": 2.16,
+      "15": 2.24,
+      "16": 2.31,
+      "17": 2.38,
+      "18": 2.45,
+      "19": 2.52,
+      "20": 2.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATI 40-03 / ATI 60-03",
+     "corIso": "azul",
+     "vazoes": {
+      "5": 1.55,
+      "6": 1.7,
+      "7": 1.83,
+      "8": 1.96,
+      "9": 2.08,
+      "10": 2.19,
+      "11": 2.3,
+      "12": 2.4,
+      "13": 2.5,
+      "14": 2.59,
+      "15": 2.68,
+      "16": 2.77,
+      "17": 2.86,
+      "18": 2.94,
+      "19": 3.02,
+      "20": 3.1
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATI 40-04 / ATI 60-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "5": 2.07,
+      "6": 2.26,
+      "7": 2.44,
+      "8": 2.61,
+      "9": 2.77,
+      "10": 2.92,
+      "11": 3.06,
+      "12": 3.2,
+      "13": 3.33,
+      "14": 3.46,
+      "15": 3.58,
+      "16": 3.7,
+      "17": 3.81,
+      "18": 3.92,
+      "19": 4.03,
+      "20": 4.13
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATI 40-05 / ATI 60-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "5": 2.58,
+      "6": 2.83,
+      "7": 3.06,
+      "8": 3.27,
+      "9": 3.46,
+      "10": 3.65,
+      "11": 3.83,
+      "12": 4.0,
+      "13": 4.16,
+      "14": 4.32,
+      "15": 4.47,
+      "16": 4.62,
+      "17": 4.76,
+      "18": 4.9,
+      "19": 5.03,
+      "20": 5.16
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATI 60-06",
+     "corIso": "cinza",
+     "vazoes": {
+      "5": 3.1,
+      "6": 3.39,
+      "7": 3.67,
+      "8": 3.92,
+      "9": 4.16,
+      "10": 4.38,
+      "11": 4.6,
+      "12": 4.8,
+      "13": 5.0,
+      "14": 5.18,
+      "15": 5.37,
+      "16": 5.54,
+      "17": 5.71,
+      "18": 5.88,
+      "19": 6.04,
+      "20": 6.2
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "ATF 60°/80°",
+   "tipo": "cone_cheio",
+   "angulos": [
+    60,
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "3-20 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.24",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras; tabela horizontal)",
+   "observacoes": "Tabela horizontal \"TABLEAU DE DÉBITS (l/min)\": pressão (bar) nas linhas, tamanhos nas colunas. Página tem também tabela 3–5 bar com l/ha (mesmos valores); usada a tabela horizontal 3–20 bar (\"litres / mn\"). Alguns valores impressos com 1 casa (ex.: 1,2 / 1,6 a 12 bar). corIso derivada do código ISO impresso (ISO 10625) apenas para 01–10; 0050/0075 sem cor ISO.",
+   "tamanhos": [
+    {
+     "codigo": "ATF 80-015",
+     "corIso": "verde",
+     "vazoes": {
+      "3": 0.6,
+      "4": 0.69,
+      "5": 0.77,
+      "6": 0.85,
+      "7": 0.92,
+      "8": 0.98,
+      "9": 1.04,
+      "10": 1.1,
+      "11": 1.15,
+      "12": 1.2,
+      "13": 1.25,
+      "14": 1.3,
+      "15": 1.34,
+      "16": 1.39,
+      "17": 1.43,
+      "18": 1.47,
+      "19": 1.51,
+      "20": 1.55
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATF 80-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "3": 0.8,
+      "4": 0.91,
+      "5": 1.03,
+      "6": 1.13,
+      "7": 1.22,
+      "8": 1.31,
+      "9": 1.39,
+      "10": 1.46,
+      "11": 1.53,
+      "12": 1.6,
+      "13": 1.67,
+      "14": 1.73,
+      "15": 1.79,
+      "16": 1.85,
+      "17": 1.9,
+      "18": 1.96,
+      "19": 2.01,
+      "20": 2.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATF 80-025",
+     "corIso": "lilás",
+     "vazoes": {
+      "3": 1.0,
+      "4": 1.15,
+      "5": 1.29,
+      "6": 1.41,
+      "7": 1.53,
+      "8": 1.63,
+      "9": 1.73,
+      "10": 1.83,
+      "11": 1.91,
+      "12": 2.0,
+      "13": 2.08,
+      "14": 2.16,
+      "15": 2.24,
+      "16": 2.31,
+      "17": 2.38,
+      "18": 2.45,
+      "19": 2.52,
+      "20": 2.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATF 60-03 / ATF 80-03",
+     "corIso": "azul",
+     "vazoes": {
+      "3": 1.2,
+      "4": 1.39,
+      "5": 1.55,
+      "6": 1.7,
+      "7": 1.83,
+      "8": 1.96,
+      "9": 2.08,
+      "10": 2.19,
+      "11": 2.3,
+      "12": 2.4,
+      "13": 2.5,
+      "14": 2.59,
+      "15": 2.68,
+      "16": 2.77,
+      "17": 2.86,
+      "18": 2.94,
+      "19": 3.02,
+      "20": 3.1
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATF 60-04 / ATF 80-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "3": 1.6,
+      "4": 1.85,
+      "5": 2.07,
+      "6": 2.26,
+      "7": 2.44,
+      "8": 2.61,
+      "9": 2.77,
+      "10": 2.92,
+      "11": 3.06,
+      "12": 3.2,
+      "13": 3.33,
+      "14": 3.46,
+      "15": 3.58,
+      "16": 3.7,
+      "17": 3.81,
+      "18": 3.92,
+      "19": 4.03,
+      "20": 4.13
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ATF 60-05 / ATF 80-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "3": 2.0,
+      "4": 2.31,
+      "5": 2.58,
+      "6": 2.83,
+      "7": 3.06,
+      "8": 3.27,
+      "9": 3.46,
+      "10": 3.65,
+      "11": 3.83,
+      "12": 4.0,
+      "13": 4.16,
+      "14": 4.32,
+      "15": 4.47,
+      "16": 4.62,
+      "17": 4.76,
+      "18": 4.9,
+      "19": 5.03,
+      "20": 5.16
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "TVI 80°",
+   "tipo": "cone_vazio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "3-20 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.25",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras; tabela horizontal)",
+   "observacoes": "Tabela horizontal \"TABLEAU DE DÉBITS (l/min)\": pressão (bar) nas linhas, tamanhos nas colunas. Cone vazio com indução de ar. Colunas LILAS/ROSE/ORANGE (80-0050/0075/01) começam em 3 bar (\"3 buses TVI LP basse pression\"); demais a partir de 5 bar. Tabela impressa até 25 bar. \"Modèle 80 0050: utilização a partir de 7 bar\". corIso derivada do código ISO impresso (ISO 10625) apenas para 01–10; 0050/0075 sem cor ISO.",
+   "tamanhos": [
+    {
+     "codigo": "TVI 80-0050",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.2,
+      "4": 0.23,
+      "5": 0.26,
+      "6": 0.28,
+      "7": 0.31,
+      "8": 0.33,
+      "9": 0.35,
+      "10": 0.37,
+      "11": 0.38,
+      "12": 0.4,
+      "13": 0.42,
+      "14": 0.43,
+      "15": 0.45,
+      "16": 0.46,
+      "17": 0.48,
+      "18": 0.49,
+      "19": 0.5,
+      "20": 0.52,
+      "21": 0.53,
+      "22": 0.54,
+      "23": 0.55,
+      "24": 0.57,
+      "25": 0.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TVI 80-0075",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.3,
+      "4": 0.35,
+      "5": 0.39,
+      "6": 0.42,
+      "7": 0.46,
+      "8": 0.49,
+      "9": 0.52,
+      "10": 0.55,
+      "11": 0.57,
+      "12": 0.6,
+      "13": 0.62,
+      "14": 0.65,
+      "15": 0.67,
+      "16": 0.69,
+      "17": 0.71,
+      "18": 0.73,
+      "19": 0.75,
+      "20": 0.77,
+      "21": 0.79,
+      "22": 0.81,
+      "23": 0.83,
+      "24": 0.85,
+      "25": 0.87
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TVI 80-01",
+     "corIso": "laranja",
+     "vazoes": {
+      "3": 0.4,
+      "4": 0.46,
+      "5": 0.52,
+      "6": 0.57,
+      "7": 0.61,
+      "8": 0.65,
+      "9": 0.69,
+      "10": 0.73,
+      "11": 0.77,
+      "12": 0.8,
+      "13": 0.83,
+      "14": 0.86,
+      "15": 0.89,
+      "16": 0.92,
+      "17": 0.95,
+      "18": 0.98,
+      "19": 1.01,
+      "20": 1.03,
+      "21": 1.06,
+      "22": 1.08,
+      "23": 1.11,
+      "24": 1.13,
+      "25": 1.15
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TVI 80-015",
+     "corIso": "verde",
+     "vazoes": {
+      "5": 0.77,
+      "6": 0.85,
+      "7": 0.92,
+      "8": 0.98,
+      "9": 1.04,
+      "10": 1.1,
+      "11": 1.15,
+      "12": 1.2,
+      "13": 1.25,
+      "14": 1.3,
+      "15": 1.34,
+      "16": 1.39,
+      "17": 1.43,
+      "18": 1.47,
+      "19": 1.51,
+      "20": 1.55,
+      "21": 1.59,
+      "22": 1.62,
+      "23": 1.66,
+      "24": 1.7,
+      "25": 1.73
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TVI 80-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "5": 1.03,
+      "6": 1.13,
+      "7": 1.22,
+      "8": 1.31,
+      "9": 1.39,
+      "10": 1.46,
+      "11": 1.53,
+      "12": 1.6,
+      "13": 1.67,
+      "14": 1.73,
+      "15": 1.79,
+      "16": 1.85,
+      "17": 1.9,
+      "18": 1.96,
+      "19": 2.01,
+      "20": 2.07,
+      "21": 2.12,
+      "22": 2.17,
+      "23": 2.22,
+      "24": 2.26,
+      "25": 2.31
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TVI 80-025",
+     "corIso": "lilás",
+     "vazoes": {
+      "5": 1.29,
+      "6": 1.41,
+      "7": 1.53,
+      "8": 1.63,
+      "9": 1.73,
+      "10": 1.83,
+      "11": 1.91,
+      "12": 2.0,
+      "13": 2.08,
+      "14": 2.16,
+      "15": 2.24,
+      "16": 2.31,
+      "17": 2.38,
+      "18": 2.45,
+      "19": 2.52,
+      "20": 2.58,
+      "21": 2.65,
+      "22": 2.71,
+      "23": 2.77,
+      "24": 2.83,
+      "25": 2.89
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TVI 80-03",
+     "corIso": "azul",
+     "vazoes": {
+      "5": 1.55,
+      "6": 1.7,
+      "7": 1.83,
+      "8": 1.96,
+      "9": 2.08,
+      "10": 2.19,
+      "11": 2.3,
+      "12": 2.4,
+      "13": 2.5,
+      "14": 2.59,
+      "15": 2.68,
+      "16": 2.77,
+      "17": 2.86,
+      "18": 2.94,
+      "19": 3.02,
+      "20": 3.1,
+      "21": 3.17,
+      "22": 3.25,
+      "23": 3.32,
+      "24": 3.39,
+      "25": 3.46
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TVI 80-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "5": 2.07,
+      "6": 2.26,
+      "7": 2.44,
+      "8": 2.61,
+      "9": 2.77,
+      "10": 2.92,
+      "11": 3.06,
+      "12": 3.2,
+      "13": 3.33,
+      "14": 3.46,
+      "15": 3.58,
+      "16": 3.7,
+      "17": 3.81,
+      "18": 3.92,
+      "19": 4.03,
+      "20": 4.13,
+      "21": 4.23,
+      "22": 4.33,
+      "23": 4.43,
+      "24": 4.53,
+      "25": 4.62
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "AVI 80°",
+   "tipo": "inducao_ar",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "5-20 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.26",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras; tabela horizontal)",
+   "observacoes": "Tabela horizontal \"TABLEAU DE DÉBITS (l/min)\": pressão (bar) nas linhas, tamanhos nas colunas. Leque com indução de ar para arboricultura/viticultura. Valor 8003 a 6 bar impresso \"1,7\" (1 casa). corIso derivada do código ISO impresso (ISO 10625) apenas para 01–10; 0050/0075 sem cor ISO.",
+   "tamanhos": [
+    {
+     "codigo": "AVI 8001",
+     "corIso": "laranja",
+     "vazoes": {
+      "5": 0.52,
+      "6": 0.57,
+      "7": 0.61,
+      "8": 0.65,
+      "9": 0.69,
+      "10": 0.73,
+      "11": 0.77,
+      "12": 0.8,
+      "13": 0.83,
+      "14": 0.86,
+      "15": 0.89,
+      "16": 0.92,
+      "17": 0.95,
+      "18": 0.98,
+      "19": 1.01,
+      "20": 1.03
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI 80015",
+     "corIso": "verde",
+     "vazoes": {
+      "5": 0.77,
+      "6": 0.85,
+      "7": 0.92,
+      "8": 0.98,
+      "9": 1.04,
+      "10": 1.1,
+      "11": 1.15,
+      "12": 1.2,
+      "13": 1.25,
+      "14": 1.3,
+      "15": 1.34,
+      "16": 1.39,
+      "17": 1.43,
+      "18": 1.47,
+      "19": 1.51,
+      "20": 1.55
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI 8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "5": 1.03,
+      "6": 1.13,
+      "7": 1.22,
+      "8": 1.31,
+      "9": 1.39,
+      "10": 1.46,
+      "11": 1.53,
+      "12": 1.6,
+      "13": 1.67,
+      "14": 1.73,
+      "15": 1.79,
+      "16": 1.85,
+      "17": 1.9,
+      "18": 1.96,
+      "19": 2.01,
+      "20": 2.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI 80025",
+     "corIso": "lilás",
+     "vazoes": {
+      "5": 1.29,
+      "6": 1.41,
+      "7": 1.53,
+      "8": 1.63,
+      "9": 1.73,
+      "10": 1.83,
+      "11": 1.91,
+      "12": 2.0,
+      "13": 2.08,
+      "14": 2.16,
+      "15": 2.24,
+      "16": 2.31,
+      "17": 2.38,
+      "18": 2.45,
+      "19": 2.52,
+      "20": 2.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI 8003",
+     "corIso": "azul",
+     "vazoes": {
+      "5": 1.55,
+      "6": 1.7,
+      "7": 1.83,
+      "8": 1.96,
+      "9": 2.08,
+      "10": 2.19,
+      "11": 2.3,
+      "12": 2.4,
+      "13": 2.5,
+      "14": 2.59,
+      "15": 2.68,
+      "16": 2.77,
+      "17": 2.86,
+      "18": 2.94,
+      "19": 3.02,
+      "20": 3.1
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AVI 8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "5": 2.07,
+      "6": 2.26,
+      "7": 2.44,
+      "8": 2.61,
+      "9": 2.77,
+      "10": 2.92,
+      "11": 3.06,
+      "12": 3.2,
+      "13": 3.33,
+      "14": 3.46,
+      "15": 3.58,
+      "16": 3.7,
+      "17": 3.81,
+      "18": 3.92,
+      "19": 4.03,
+      "20": 4.13
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "CVI 80°",
+   "tipo": "inducao_ar",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "10-20 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.27",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras; tabela horizontal)",
+   "observacoes": "Tabela horizontal \"TABLEAU DE DÉBITS (l/min)\": pressão (bar) nas linhas, tamanhos nas colunas. Faixa do pictograma impressa \"10-20 bar\"; \"Pression recommandée : 3 à 10 bar\"; tabela 3 a 18 bar. corIso derivada do código ISO impresso (ISO 10625) apenas para 01–10; 0050/0075 sem cor ISO.",
+   "tamanhos": [
+    {
+     "codigo": "CVI 8001",
+     "corIso": "laranja",
+     "vazoes": {
+      "3": 0.4,
+      "4": 0.46,
+      "5": 0.52,
+      "6": 0.57,
+      "7": 0.61,
+      "8": 0.65,
+      "9": 0.69,
+      "10": 0.73,
+      "11": 0.77,
+      "12": 0.8,
+      "13": 0.83,
+      "14": 0.86,
+      "15": 0.89,
+      "16": 0.92,
+      "17": 0.95,
+      "18": 0.98
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "CVI 80015",
+     "corIso": "verde",
+     "vazoes": {
+      "3": 0.6,
+      "4": 0.69,
+      "5": 0.77,
+      "6": 0.85,
+      "7": 0.92,
+      "8": 0.98,
+      "9": 1.04,
+      "10": 1.1,
+      "11": 1.15,
+      "12": 1.2,
+      "13": 1.25,
+      "14": 1.3,
+      "15": 1.34,
+      "16": 1.39,
+      "17": 1.43,
+      "18": 1.47
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "CVI 8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "3": 0.8,
+      "4": 0.92,
+      "5": 1.03,
+      "6": 1.13,
+      "7": 1.22,
+      "8": 1.31,
+      "9": 1.39,
+      "10": 1.46,
+      "11": 1.53,
+      "12": 1.6,
+      "13": 1.67,
+      "14": 1.73,
+      "15": 1.79,
+      "16": 1.85,
+      "17": 1.9,
+      "18": 1.96
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "CVI 80025",
+     "corIso": "lilás",
+     "vazoes": {
+      "3": 1.0,
+      "4": 1.15,
+      "5": 1.29,
+      "6": 1.41,
+      "7": 1.53,
+      "8": 1.63,
+      "9": 1.73,
+      "10": 1.83,
+      "11": 1.91,
+      "12": 2.0,
+      "13": 2.08,
+      "14": 2.16,
+      "15": 2.24,
+      "16": 2.31,
+      "17": 2.38,
+      "18": 2.45
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "CVI 8003",
+     "corIso": "azul",
+     "vazoes": {
+      "3": 1.2,
+      "4": 1.39,
+      "5": 1.55,
+      "6": 1.7,
+      "7": 1.83,
+      "8": 1.96,
+      "9": 2.08,
+      "10": 2.19,
+      "11": 2.3,
+      "12": 2.4,
+      "13": 2.5,
+      "14": 2.59,
+      "15": 2.68,
+      "16": 2.77,
+      "17": 2.86,
+      "18": 2.94
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "CVI 8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "3": 1.6,
+      "4": 1.85,
+      "5": 2.07,
+      "6": 2.26,
+      "7": 2.44,
+      "8": 2.61,
+      "9": 2.77,
+      "10": 2.92,
+      "11": 3.06,
+      "12": 3.2,
+      "13": 3.33,
+      "14": 3.46,
+      "15": 3.58,
+      "16": 3.7,
+      "17": 3.81,
+      "18": 3.92
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "CVI 8005",
+     "corIso": "marrom",
+     "vazoes": {
+      "3": 2.0,
+      "4": 2.31,
+      "5": 2.58,
+      "6": 2.83,
+      "7": 3.06,
+      "8": 3.27,
+      "9": 3.46,
+      "10": 3.65,
+      "11": 3.83,
+      "12": 4.0,
+      "13": 4.16,
+      "14": 4.32,
+      "15": 4.47,
+      "16": 4.62,
+      "17": 4.76,
+      "18": 4.9
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "CVI 8006",
+     "corIso": "cinza",
+     "vazoes": {
+      "3": 2.4,
+      "4": 2.77,
+      "5": 3.1,
+      "6": 3.39,
+      "7": 3.67,
+      "8": 3.92,
+      "9": 4.16,
+      "10": 4.38,
+      "11": 4.6,
+      "12": 4.8,
+      "13": 5.0,
+      "14": 5.18,
+      "15": 5.37,
+      "16": 5.54,
+      "17": 5.71,
+      "18": 5.88
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  }
+ ]
+}

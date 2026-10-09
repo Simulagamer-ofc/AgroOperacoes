@@ -1,0 +1,5382 @@
+{
+ "fabricante": "Magnojet",
+ "nota": "Pressões copiadas da coluna PSI (lbf/pol²) impressa; o catálogo também imprime bar e kPa (convertidos) — não usados como chave. Nenhuma conversão de unidade feita nos dados. corIso derivada apenas do código ISO (prefixo de ângulo removido quando o código o contém, ex. 90015→015).",
+ "fontes": [
+  {
+   "id": "M1",
+   "titulo": "Catálogo Magnojet 2023 (PDF \"CATÁLOGO 2023\", criado 2023-12-05) – magnojet.com.br (cópia do Internet Archive)",
+   "url": "https://magnojet.com.br/public/uploads/upload_cad_institucional/1709122824_5ff4aced3d692c0a9a4f.pdf",
+   "urlArquivo": "https://web.archive.org/web/20240529002403id_/https://magnojet.com.br/public/uploads/upload_cad_institucional/1709122824_5ff4aced3d692c0a9a4f.pdf",
+   "ano": "2023",
+   "anoObs": "capa \"CATÁLOGO 2023\"; PDF criado em 2023-12-05; Last-Modified no servidor original 2024-02-28; capturado pelo Internet Archive em 2024-05-29. Os catálogos atuais linkados no site (Wix: \"CATÁLOGO V40 DIGITAL.pdf\", \"MAGNOJET-CATALOGO_BR41_DIGITAL-V4.pdf\") redirecionam para *.filesusr.com, bloqueado pelo proxy, e não estão no Internet Archive.",
+   "sha256": "a7133bbcbc8409021c375fa408ebe4696351aa03ea27025ff00a32def2071c47",
+   "arquivoLocal": "pontas/magnojet/pdf/catalogo_2024_1709122824.pdf"
+  }
+ ],
+ "linhas": [
+  {
+   "linha": "MUG",
+   "tipo": "indução de ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 100 lbf/pol² (2,07 - 6,89 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.17",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "MUG 015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86,
+      "100": 0.91
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MUG 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15,
+      "100": 1.21
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MUG 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44,
+      "100": 1.52
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MUG 03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73,
+      "100": 1.82
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MUG 035",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.16,
+      "40": 1.34,
+      "50": 1.5,
+      "60": 1.64,
+      "70": 1.78,
+      "80": 1.9,
+      "90": 2.01,
+      "100": 2.12
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MUG 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3,
+      "100": 2.43
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MUG 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71,
+      "90": 2.88,
+      "100": 3.03
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MUG-SI",
+   "tipo": "indução de ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 60 lbf/pol² (2,07 - 4,14 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.18",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "MUG-SI 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MUG-SI 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MUG-SI 03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MUG-SI 035",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.16,
+      "40": 1.34,
+      "50": 1.5,
+      "60": 1.64
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MUG-SI 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MUG-SI 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MUG-SI 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "30": 1.99,
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MUG-CV",
+   "tipo": "cone vazio",
+   "angulos": [
+    90
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 80 lbf/pol² (2,07 - 5,52 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.19",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "MUG-CV 90015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MUG-CV 9002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MUG-CV 90025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MUG-CV 9003",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MUG-CV 90035",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.16,
+      "40": 1.34,
+      "50": 1.5,
+      "60": 1.64,
+      "70": 1.78,
+      "80": 1.9
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MUG-CV 9004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MD-UG",
+   "tipo": "leque",
+   "angulos": [
+    140
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 60 lbf/pol² (2,07 - 4,14 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.20",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×1.0 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "MD-UG 2",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.32,
+      "40": 1.53,
+      "50": 1.71,
+      "60": 1.87
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MD-UG 2,5",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.65,
+      "40": 1.9,
+      "50": 2.13,
+      "60": 2.33
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MD-UG 3",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.97,
+      "40": 2.28,
+      "50": 2.55,
+      "60": 2.79
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MD-UG 4",
+     "corIso": null,
+     "vazoes": {
+      "30": 2.64,
+      "40": 3.05,
+      "50": 3.41,
+      "60": 3.74
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MD-UG 5",
+     "corIso": null,
+     "vazoes": {
+      "30": 3.25,
+      "40": 3.76,
+      "50": 4.2,
+      "60": 4.6
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MCH-AV",
+   "tipo": "cone cheio",
+   "angulos": [
+    120
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "20 - 60 lbf/pol² (2,07 - 4,14 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.21",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "MCH-AV 12030",
+     "corIso": null,
+     "vazoes": {
+      "20": 8.14,
+      "30": 9.96,
+      "40": 11.51,
+      "50": 12.86,
+      "60": 14.09
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MCV",
+   "tipo": "cone vazio",
+   "angulos": [
+    90
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 60 lbf/pol² (2,07 - 4,14 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.22",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "MCV 90005",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.17,
+      "40": 0.19,
+      "50": 0.21,
+      "60": 0.23
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MCV 9001",
+     "corIso": "laranja",
+     "vazoes": {
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MCV 90015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MCV 9002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MCV 90025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MCV 9003",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MCV 90035",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.16,
+      "40": 1.34,
+      "50": 1.5,
+      "60": 1.64
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MCV 9004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MCV 9005",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MCV 9006",
+     "corIso": "cinza",
+     "vazoes": {
+      "30": 1.99,
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "CH 100",
+   "tipo": "cone cheio",
+   "angulos": [
+    100
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 100 lbf/pol² (2,07 - 6,89 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.23",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "CH 100 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51,
+      "80": 0.54,
+      "90": 0.58,
+      "100": 0.61
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CH 100 015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86,
+      "100": 0.91
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CH 100 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15,
+      "100": 1.21
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CH 100 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44,
+      "100": 1.52
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CH 100 03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73,
+      "100": 1.82
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CH 100 035",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.16,
+      "40": 1.34,
+      "50": 1.5,
+      "60": 1.64,
+      "70": 1.78,
+      "80": 1.9,
+      "90": 2.01,
+      "100": 2.12
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CH 100 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3,
+      "100": 2.43
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CH 100 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71,
+      "90": 2.88,
+      "100": 3.03
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CH 100 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "30": 1.99,
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82,
+      "70": 3.04,
+      "80": 3.25,
+      "90": 3.45,
+      "100": 3.64
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CH 100 08",
+     "corIso": "branco",
+     "vazoes": {
+      "30": 2.66,
+      "40": 3.07,
+      "50": 3.43,
+      "60": 3.76,
+      "70": 4.06,
+      "80": 4.34,
+      "90": 4.6,
+      "100": 4.85
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "BD-AV",
+   "tipo": "leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "15 - 60 lbf/pol² (2,07 - 4,14 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.24",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": "Descartado (não confirmado): p24 BD-AV 11025: 50 psi q=10,72: L/ha ok 9, divergentes [(5, '5', 2572.8), (7, '8', 1837.7)]; 60 psi q=11,74: L/ha ok 8, divergentes [(5, '8', 2817.6)]",
+   "tamanhos": [
+    {
+     "codigo": "BD-AV 11008",
+     "corIso": "branco",
+     "vazoes": {
+      "15": 1.88,
+      "20": 2.17,
+      "30": 2.66,
+      "40": 3.07,
+      "50": 3.43,
+      "60": 3.76
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BD-AV 11010",
+     "corIso": "azul claro",
+     "vazoes": {
+      "15": 2.35,
+      "20": 2.71,
+      "30": 3.32,
+      "40": 3.84,
+      "50": 4.29,
+      "60": 4.7
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BD-AV 11015",
+     "corIso": null,
+     "vazoes": {
+      "15": 3.52,
+      "20": 4.07,
+      "30": 4.98,
+      "40": 5.75,
+      "50": 6.43,
+      "60": 7.05
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BD-AV 11018",
+     "corIso": null,
+     "vazoes": {
+      "15": 4.23,
+      "20": 4.88,
+      "30": 5.98,
+      "40": 6.9,
+      "50": 7.72,
+      "60": 8.46
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BD-AV 11020",
+     "corIso": null,
+     "vazoes": {
+      "15": 4.7,
+      "20": 5.42,
+      "30": 6.64,
+      "40": 7.67,
+      "50": 8.58,
+      "60": 9.39
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "ST",
+   "tipo": "leque",
+   "angulos": [
+    135
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "20 - 90 lbf/pol² (2,07 - 6,21 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.25",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "ST 005",
+     "corIso": null,
+     "vazoes": {
+      "20": 0.14,
+      "30": 0.17,
+      "40": 0.19,
+      "50": 0.21,
+      "60": 0.23,
+      "70": 0.25,
+      "80": 0.27,
+      "90": 0.29
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "20": 0.27,
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51,
+      "80": 0.54,
+      "90": 0.58
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST 015",
+     "corIso": "verde",
+     "vazoes": {
+      "20": 0.41,
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "20": 0.54,
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "20": 0.68,
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST 03",
+     "corIso": "azul",
+     "vazoes": {
+      "20": 0.81,
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST 035",
+     "corIso": null,
+     "vazoes": {
+      "20": 0.95,
+      "30": 1.16,
+      "40": 1.34,
+      "50": 1.5,
+      "60": 1.64,
+      "70": 1.78,
+      "80": 1.9,
+      "90": 2.01
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "20": 1.08,
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "20": 1.36,
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71,
+      "90": 2.88
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "20": 1.63,
+      "30": 1.99,
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82,
+      "70": 3.04,
+      "80": 3.25,
+      "90": 3.45
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "ST/D",
+   "tipo": "duplo leque",
+   "angulos": [
+    130
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 75 lbf/pol² (2,07 - 5,17 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.26",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "ST/D 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51,
+      "75": 0.53
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST/D 015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "75": 0.79
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST/D 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "75": 1.05
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST/D 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "75": 1.31
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST/D 03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "75": 1.58
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST/D 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "75": 2.1
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST/D 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "75": 2.63
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST/D 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "30": 1.99,
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82,
+      "70": 3.04,
+      "75": 3.15
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "ST-IA",
+   "tipo": "indução de ar",
+   "angulos": [
+    110,
+    140
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 90 lbf/pol² (2,07 - 6,21 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.27",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "ST-IA 005",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.17,
+      "40": 0.19,
+      "50": 0.21,
+      "60": 0.23,
+      "70": 0.25,
+      "80": 0.27,
+      "90": 0.29
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST-IA 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51,
+      "80": 0.54,
+      "90": 0.58
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST-IA 015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST-IA 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST-IA 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST-IA 03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST-IA 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "ST-IA/D",
+   "tipo": "duplo leque",
+   "angulos": [
+    130
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 90 lbf/pol² (2,07 - 6,21 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.28",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "ST-IA/D 015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST-IA/D 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST-IA/D 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST-IA/D 03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST-IA/D 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ST-IA/D 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71,
+      "90": 2.88
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "AD",
+   "tipo": "leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "15 - 60 lbf/pol² (1,03 - 4,14 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.29",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": "AD 015: desvio >8% da ISO 10625 em 15 psi=0.23 (ISO≈0.35); 20 psi=0.27 (ISO≈0.41) — valor mantido como impresso (as colunas L/ha impressas são coerentes com o valor impresso); conferir antes de usar | AD 02: desvio >8% da ISO 10625 em 15 psi=0.35 (ISO≈0.47); 20 psi=0.41 (ISO≈0.54) — valor mantido como impresso (as colunas L/ha impressas são coerentes com o valor impresso); conferir antes de usar | AD 025: desvio >8% da ISO 10625 em 15 psi=0.47 (ISO≈0.59); 20 psi=0.54 (ISO≈0.68) — valor mantido como impresso (as colunas L/ha impressas são coerentes com o valor impresso); conferir antes de usar | AD 03: desvio >8% da ISO 10625 em 15 psi=0.59 (ISO≈0.70); 20 psi=0.68 (ISO≈0.81) — valor mantido como impresso (as colunas L/ha impressas são coerentes com o valor impresso); conferir antes de usar | AD 04: desvio >8% da ISO 10625 em 15 psi=0.7 (ISO≈0.94); 20 psi=0.81 (ISO≈1.08) — valor mantido como impresso (as colunas L/ha impressas são coerentes com o valor impresso); conferir antes de usar | AD 05: desvio >8% da ISO 10625 em 15 psi=0.94 (ISO≈1.17); 20 psi=1.08 (ISO≈1.36) — valor mantido como impresso (as colunas L/ha impressas são coerentes com o valor impresso); conferir antes de usar",
+   "tamanhos": [
+    {
+     "codigo": "AD 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "15": 0.23,
+      "20": 0.27,
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 015",
+     "corIso": "verde",
+     "vazoes": {
+      "15": 0.23,
+      "20": 0.27,
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "15": 0.35,
+      "20": 0.41,
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "15": 0.47,
+      "20": 0.54,
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 03",
+     "corIso": "azul",
+     "vazoes": {
+      "15": 0.59,
+      "20": 0.68,
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "15": 0.7,
+      "20": 0.81,
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "15": 0.94,
+      "20": 1.08,
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "AD/D",
+   "tipo": "duplo leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 60 lbf/pol² (2,07 - 4,14 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.30",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "AD/D 015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD/D 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD/D 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD/D 03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD/D 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD/D 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD/D 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "30": 1.99,
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD/D 08",
+     "corIso": "branco",
+     "vazoes": {
+      "30": 2.66,
+      "40": 3.07,
+      "50": 3.43,
+      "60": 3.76
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "AD/T",
+   "tipo": "leque triplo",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30-130 lbf/pol² (2,07 - 8,96 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.31",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "AD/T 02",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15,
+      "100": 1.21,
+      "110": 1.27,
+      "120": 1.33,
+      "130": 1.38
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD/T 025",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44,
+      "100": 1.52,
+      "110": 1.59,
+      "120": 1.66,
+      "130": 1.73
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD/T 03",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.83,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73,
+      "100": 1.82,
+      "110": 1.91,
+      "120": 1.99,
+      "130": 2.07
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD/T 04",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3,
+      "100": 2.43,
+      "110": 2.54,
+      "120": 2.66,
+      "130": 2.77
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD/T 05",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71,
+      "90": 2.88,
+      "100": 3.03,
+      "110": 3.18,
+      "120": 3.32,
+      "130": 3.46
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD/T 06",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.66,
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82,
+      "70": 3.04,
+      "80": 3.25,
+      "90": 3.45,
+      "100": 3.64,
+      "110": 3.82,
+      "120": 3.99,
+      "130": 4.15
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD/T 08",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.99,
+      "40": 3.07,
+      "50": 3.43,
+      "60": 3.76,
+      "70": 4.06,
+      "80": 4.34,
+      "90": 4.6,
+      "100": 4.85,
+      "110": 5.09,
+      "120": 5.31,
+      "130": 5.53
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD/T 10",
+     "corIso": null,
+     "vazoes": {
+      "30": 2.66,
+      "40": 3.84,
+      "50": 4.29,
+      "60": 4.7,
+      "70": 5.07,
+      "80": 5.42,
+      "90": 5.75,
+      "100": 6.06,
+      "110": 6.36,
+      "120": 6.64,
+      "130": 6.91
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "ADGA",
+   "tipo": "leque",
+   "angulos": [
+    120
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "15 - 60 lbf/pol² (1,03 -4,14bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.32",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "ADGA 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "15": 0.23,
+      "20": 0.27,
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ADGA 015",
+     "corIso": "verde",
+     "vazoes": {
+      "15": 0.35,
+      "20": 0.41,
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ADGA 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "15": 0.47,
+      "20": 0.54,
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ADGA 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "15": 0.59,
+      "20": 0.68,
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ADGA 03",
+     "corIso": "azul",
+     "vazoes": {
+      "15": 0.7,
+      "20": 0.81,
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ADGA 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "15": 0.94,
+      "20": 1.08,
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "AD-IA",
+   "tipo": "indução de ar",
+   "angulos": [
+    80,
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30-110 lbf/pol² (2,07 - 7,58 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.33",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "AD-IA 0067",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.21,
+      "40": 0.24,
+      "50": 0.27,
+      "60": 0.29,
+      "70": 0.32,
+      "80": 0.34,
+      "90": 0.36,
+      "100": 0.38,
+      "110": 0.4
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51,
+      "80": 0.54,
+      "90": 0.58,
+      "100": 0.61,
+      "110": 0.64
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA 015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86,
+      "100": 0.91,
+      "110": 0.95
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15,
+      "100": 1.21,
+      "110": 1.27
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44,
+      "100": 1.52,
+      "110": 1.59
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA 03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73,
+      "100": 1.82,
+      "110": 1.91
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3,
+      "100": 2.43,
+      "110": 2.54
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71,
+      "90": 2.88,
+      "100": 3.03,
+      "110": 3.18
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "30": 1.99,
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82,
+      "70": 3.04,
+      "80": 3.25,
+      "90": 3.45,
+      "100": 3.64,
+      "110": 3.82
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA 08",
+     "corIso": "branco",
+     "vazoes": {
+      "30": 2.66,
+      "40": 3.07,
+      "50": 3.43,
+      "60": 3.76,
+      "70": 4.06,
+      "80": 4.34,
+      "90": 4.6,
+      "100": 4.85,
+      "110": 5.09
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "AD-IA/D",
+   "tipo": "duplo leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 110 lbf/pol² (2,07-7,58bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.34",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "AD-IA/D 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51,
+      "80": 0.54,
+      "90": 0.58,
+      "100": 0.61,
+      "110": 0.64
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA/D 015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86,
+      "100": 0.91,
+      "110": 0.95
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA/D 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15,
+      "100": 1.21,
+      "110": 1.27
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA/D 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44,
+      "100": 1.52,
+      "110": 1.59
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA/D 03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73,
+      "100": 1.82,
+      "110": 1.91
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA/D 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3,
+      "100": 2.43,
+      "110": 2.54
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA/D 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71,
+      "90": 2.88,
+      "100": 3.03,
+      "110": 3.18
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA/D 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "30": 1.99,
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82,
+      "70": 3.04,
+      "80": 3.25,
+      "90": 3.45,
+      "100": 3.64,
+      "110": 3.82
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "AD-IA/T",
+   "tipo": "leque triplo",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 130 lbf/pol² (2,07 - 8,96 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.35",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "AD-IA/T 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15,
+      "100": 1.21,
+      "110": 1.27,
+      "120": 1.33,
+      "130": 1.38
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA/T 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44,
+      "100": 1.52,
+      "110": 1.59,
+      "120": 1.66,
+      "130": 1.73
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA/T 03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73,
+      "100": 1.82,
+      "110": 1.91,
+      "120": 1.99,
+      "130": 2.07
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA/T 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3,
+      "100": 2.42,
+      "110": 2.54,
+      "120": 2.66,
+      "130": 2.77
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA/T 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71,
+      "90": 2.88,
+      "100": 3.03,
+      "110": 3.18,
+      "120": 3.32,
+      "130": 3.46
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD-IA/T 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "30": 1.99,
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82,
+      "70": 3.04,
+      "80": 3.25,
+      "90": 3.45,
+      "100": 3.64,
+      "110": 3.82,
+      "120": 3.99,
+      "130": 4.15
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "BD",
+   "tipo": "leque",
+   "angulos": [
+    80,
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "15 - 60 lbf/pol² (1,03 - 4,14 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.36",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "BD 005",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.12,
+      "20": 0.14,
+      "30": 0.17,
+      "40": 0.19,
+      "50": 0.21,
+      "60": 0.23
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BD 01",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.23,
+      "20": 0.27,
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BD 015",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.35,
+      "20": 0.41,
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BD 02",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.47,
+      "20": 0.54,
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BD 025",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.59,
+      "20": 0.68,
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BD 03",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.7,
+      "20": 0.81,
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BD 04",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.94,
+      "20": 1.08,
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BD 05",
+     "corIso": null,
+     "vazoes": {
+      "15": 1.17,
+      "20": 1.36,
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BD 06",
+     "corIso": null,
+     "vazoes": {
+      "15": 1.41,
+      "20": 1.63,
+      "30": 1.99,
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BD 08",
+     "corIso": null,
+     "vazoes": {
+      "15": 1.88,
+      "20": 2.17,
+      "30": 2.66,
+      "40": 3.07,
+      "50": 3.43,
+      "60": 3.76
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BD 10",
+     "corIso": null,
+     "vazoes": {
+      "15": 2.35,
+      "20": 2.71,
+      "30": 3.32,
+      "40": 3.84,
+      "50": 4.29,
+      "60": 4.7
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "AS 7030",
+   "tipo": "leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 70 lbf/pol² (2,07 - 4,83 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.37",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "AS 7030 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS 7030 015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS 7030 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS 7030 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS 7030 03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS 7030 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS 7030 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS 7030 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "30": 1.99,
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82,
+      "70": 3.04
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "AS-IA 7030",
+   "tipo": "indução de ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 100 lbf/pol² (2,07-6,89bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.38",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "AS-IA 7030 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51,
+      "80": 0.54,
+      "90": 0.58,
+      "100": 0.61
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS-IA 7030 015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86,
+      "100": 0.91
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS-IA 7030 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15,
+      "100": 1.21
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS-IA 7030 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44,
+      "100": 1.52
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS-IA 7030 03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73,
+      "100": 1.82
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS-IA 7030 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3,
+      "100": 2.43
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS-IA 7030 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71,
+      "90": 2.88,
+      "100": 3.03
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "AS-IA",
+   "tipo": "indução de ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 110 lbf/pol² (2,07 - 7,58 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.39",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "AS-IA 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51,
+      "80": 0.54,
+      "90": 0.58,
+      "100": 0.61,
+      "110": 0.64
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS-IA 015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86,
+      "100": 0.91,
+      "110": 0.95
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS-IA 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15,
+      "100": 1.21,
+      "110": 1.27
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS-IA 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44,
+      "100": 1.52,
+      "110": 1.59
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS-IA 03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73,
+      "100": 1.82,
+      "110": 1.91
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS-IA 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3,
+      "100": 2.43,
+      "110": 2.54
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AS-IA 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71,
+      "90": 2.88,
+      "100": 3.03,
+      "110": 3.18
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MD-IA/D",
+   "tipo": "indução de ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 110 lbf/pol² (2,07 - 7,58 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.40",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "MD-IA/D 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51,
+      "80": 0.54,
+      "90": 0.58,
+      "100": 0.61,
+      "110": 0.64
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MD-IA/D 015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86,
+      "100": 0.91,
+      "110": 0.95
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MD-IA/D 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15,
+      "100": 1.21,
+      "110": 1.27
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MD-IA/D 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44,
+      "100": 1.52,
+      "110": 1.59
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MD-IA/D 03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73,
+      "100": 1.82,
+      "110": 1.91
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MD-IA/D 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3,
+      "100": 2.43,
+      "110": 2.54
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MD-IA/D 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71,
+      "90": 2.88,
+      "100": 3.03,
+      "110": 3.18
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MDC",
+   "tipo": "leque",
+   "angulos": [
+    130
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "15 -50 lbf/pol² (1,03 - 3,45 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.41",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×1.0 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "MDC 0,5",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.23,
+      "20": 0.27,
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.42
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MDC 0,75",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.35,
+      "20": 0.41,
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MDC 1",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.47,
+      "20": 0.54,
+      "30": 0.66,
+      "40": 0.76,
+      "50": 0.85
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MDC 1,5",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.7,
+      "20": 0.81,
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MDC 2",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.93,
+      "20": 1.08,
+      "30": 1.32,
+      "40": 1.53,
+      "50": 1.71
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MDC 2,5",
+     "corIso": null,
+     "vazoes": {
+      "15": 1.16,
+      "20": 1.35,
+      "30": 1.65,
+      "40": 1.9,
+      "50": 2.13
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MDC 3",
+     "corIso": null,
+     "vazoes": {
+      "15": 1.4,
+      "20": 1.61,
+      "30": 1.97,
+      "40": 2.28,
+      "50": 2.55
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MDC 4",
+     "corIso": null,
+     "vazoes": {
+      "15": 1.87,
+      "20": 2.16,
+      "30": 2.64,
+      "40": 3.05,
+      "50": 3.41
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MDC 5",
+     "corIso": null,
+     "vazoes": {
+      "15": 2.3,
+      "20": 2.66,
+      "30": 3.25,
+      "40": 3.76,
+      "50": 4.2
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MDC 7,5",
+     "corIso": null,
+     "vazoes": {
+      "15": 3.47,
+      "20": 4.01,
+      "30": 4.91,
+      "40": 5.67,
+      "50": 6.34
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "TM-IA",
+   "tipo": "indução de ar",
+   "angulos": [
+    150
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 90 lbf/pol² (2,07 - 6,21 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.42",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×1.0 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "TM-IA 0,5",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.42,
+      "60": 0.46,
+      "70": 0.5,
+      "80": 0.53,
+      "90": 0.56
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TM-IA 0,75",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TM-IA 1",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.76,
+      "50": 0.85,
+      "60": 0.93,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.14
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TM-IA 1,5",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TM-IA 2",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.32,
+      "40": 1.53,
+      "50": 1.71,
+      "60": 1.87,
+      "70": 2.02,
+      "80": 2.16,
+      "90": 2.29
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TM-IA 2,5",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.65,
+      "40": 1.9,
+      "50": 2.13,
+      "60": 2.33,
+      "70": 2.52,
+      "80": 2.69,
+      "90": 2.85
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TM-IA 3",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.97,
+      "40": 2.28,
+      "50": 2.55,
+      "60": 2.79,
+      "70": 3.01,
+      "80": 3.22,
+      "90": 3.42
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TM-IA 4",
+     "corIso": null,
+     "vazoes": {
+      "30": 2.64,
+      "40": 3.05,
+      "50": 3.41,
+      "60": 3.74,
+      "70": 4.04,
+      "80": 4.32,
+      "90": 4.58
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TM-IA 5",
+     "corIso": null,
+     "vazoes": {
+      "30": 3.25,
+      "40": 3.76,
+      "50": 4.2,
+      "60": 4.6,
+      "70": 4.97,
+      "80": 5.31,
+      "90": 5.64
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TM-IA 7,5",
+     "corIso": null,
+     "vazoes": {
+      "30": 4.91,
+      "40": 5.67,
+      "50": 6.34,
+      "60": 6.95,
+      "70": 7.5,
+      "80": 8.02,
+      "90": 8.51
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "PB",
+   "tipo": "leque",
+   "angulos": [
+    60
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "15 - 60 lbf/pol² (1,03 - 4,14 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.43",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": "PB 015: desvio >8% da ISO 10625 em 15 psi=0.23 (ISO≈0.35); 20 psi=0.27 (ISO≈0.41) — valor mantido como impresso (as colunas L/ha impressas são coerentes com o valor impresso); conferir antes de usar | PB 02: desvio >8% da ISO 10625 em 15 psi=0.35 (ISO≈0.47); 20 psi=0.41 (ISO≈0.54) — valor mantido como impresso (as colunas L/ha impressas são coerentes com o valor impresso); conferir antes de usar | PB 03: desvio >8% da ISO 10625 em 15 psi=0.47 (ISO≈0.70); 20 psi=0.54 (ISO≈0.81) — valor mantido como impresso (as colunas L/ha impressas são coerentes com o valor impresso); conferir antes de usar | PB 05: desvio >8% da ISO 10625 em 15 psi=0.94 (ISO≈1.17); 20 psi=1.08 (ISO≈1.36) — valor mantido como impresso (as colunas L/ha impressas são coerentes com o valor impresso); conferir antes de usar | PB 06: desvio >8% da ISO 10625 em 15 psi=1.17 (ISO≈1.41); 20 psi=1.36 (ISO≈1.63) — valor mantido como impresso (as colunas L/ha impressas são coerentes com o valor impresso); conferir antes de usar",
+   "tamanhos": [
+    {
+     "codigo": "PB 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "15": 0.23,
+      "20": 0.27,
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "PB 015",
+     "corIso": "verde",
+     "vazoes": {
+      "15": 0.23,
+      "20": 0.27,
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "PB 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "15": 0.35,
+      "20": 0.41,
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "PB 03",
+     "corIso": "azul",
+     "vazoes": {
+      "15": 0.47,
+      "20": 0.54,
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "PB 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "15": 0.94,
+      "20": 1.08,
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "PB 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "15": 0.94,
+      "20": 1.08,
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "PB 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "15": 1.17,
+      "20": 1.36,
+      "30": 1.99,
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "PB-IA",
+   "tipo": "indução de ar",
+   "angulos": [
+    60
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 110 lbf/pol² (2,07-7,58 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.44",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "PB-IA 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51,
+      "80": 0.54,
+      "90": 0.58,
+      "100": 0.61,
+      "110": 0.64
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "PB-IA 015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86,
+      "100": 0.91,
+      "110": 0.95
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "PB-IA 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15,
+      "100": 1.21,
+      "110": 1.27
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "PB-IA 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44,
+      "100": 1.52,
+      "110": 1.59
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "PB-IA 03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73,
+      "100": 1.82,
+      "110": 1.91
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "PB-IA 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3,
+      "100": 2.43,
+      "110": 2.54
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "PB-IA 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71,
+      "90": 2.88,
+      "100": 3.03,
+      "110": 3.18
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "PB-IA 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "30": 1.99,
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82,
+      "70": 3.04,
+      "80": 3.25,
+      "90": 3.45,
+      "100": 3.64,
+      "110": 3.82
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MAG",
+   "tipo": "cone vazio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "60 - 150 lbf/pol² (4,14 - 10,34 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.45",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "MAG 1",
+     "corIso": null,
+     "vazoes": {
+      "60": 0.32,
+      "70": 0.34,
+      "80": 0.36,
+      "90": 0.38,
+      "100": 0.41,
+      "110": 0.42,
+      "120": 0.44,
+      "130": 0.46,
+      "140": 0.48,
+      "150": 0.5
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MAG 1,5",
+     "corIso": null,
+     "vazoes": {
+      "60": 0.43,
+      "70": 0.45,
+      "80": 0.48,
+      "90": 0.52,
+      "100": 0.54,
+      "110": 0.56,
+      "120": 0.58,
+      "130": 0.6,
+      "140": 0.62,
+      "150": 0.66
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MAG 2",
+     "corIso": null,
+     "vazoes": {
+      "60": 0.64,
+      "70": 0.68,
+      "80": 0.72,
+      "90": 0.76,
+      "100": 0.8,
+      "110": 0.84,
+      "120": 0.88,
+      "130": 0.92,
+      "140": 0.94,
+      "150": 1.0
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MAG 3",
+     "corIso": null,
+     "vazoes": {
+      "60": 0.88,
+      "70": 0.94,
+      "80": 1.0,
+      "90": 1.06,
+      "100": 1.12,
+      "110": 1.18,
+      "120": 1.24,
+      "130": 1.28,
+      "140": 1.33,
+      "150": 1.34
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MAG 4",
+     "corIso": null,
+     "vazoes": {
+      "60": 1.25,
+      "70": 1.34,
+      "80": 1.42,
+      "90": 1.51,
+      "100": 1.6,
+      "110": 1.68,
+      "120": 1.76,
+      "130": 1.85,
+      "140": 1.92,
+      "150": 2.0
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MAG 5",
+     "corIso": null,
+     "vazoes": {
+      "60": 1.6,
+      "70": 1.72,
+      "80": 1.84,
+      "90": 1.93,
+      "100": 2.0,
+      "110": 2.12,
+      "120": 2.2,
+      "130": 2.28,
+      "140": 2.38,
+      "150": 2.44
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MAG 6",
+     "corIso": null,
+     "vazoes": {
+      "60": 2.1,
+      "70": 2.24,
+      "80": 2.4,
+      "90": 2.54,
+      "100": 2.66,
+      "110": 2.8,
+      "120": 2.94,
+      "130": 3.06,
+      "140": 3.16,
+      "150": 3.24
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MGA 90°",
+   "tipo": null,
+   "angulos": [
+    90
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "40 - 150 lbf/pol² (2,76 - 10,34 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.47 e p.48",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": "Descartado (não confirmado): p48 MGA 90° 035: 150 psi: passes OCR None/2,60",
+   "tamanhos": [
+    {
+     "codigo": "MGA 90° 005",
+     "corIso": null,
+     "vazoes": {
+      "40": 0.19,
+      "50": 0.21,
+      "60": 0.23,
+      "70": 0.25,
+      "80": 0.27,
+      "90": 0.29,
+      "100": 0.3,
+      "110": 0.32,
+      "120": 0.33,
+      "130": 0.35,
+      "140": 0.36,
+      "150": 0.37
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 90° 0067",
+     "corIso": null,
+     "vazoes": {
+      "40": 0.24,
+      "50": 0.27,
+      "60": 0.29,
+      "70": 0.32,
+      "80": 0.34,
+      "90": 0.36,
+      "100": 0.38,
+      "110": 0.4,
+      "120": 0.42,
+      "130": 0.43,
+      "140": 0.45,
+      "150": 0.46
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 90° 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51,
+      "80": 0.54,
+      "90": 0.58,
+      "100": 0.61,
+      "110": 0.64,
+      "120": 0.66,
+      "130": 0.69,
+      "140": 0.72,
+      "150": 0.74
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 90° 015",
+     "corIso": "verde",
+     "vazoes": {
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86,
+      "100": 0.91,
+      "110": 0.95,
+      "120": 1.0,
+      "130": 1.04,
+      "140": 1.08,
+      "150": 1.11
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 90° 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15,
+      "100": 1.21,
+      "110": 1.27,
+      "120": 1.33,
+      "130": 1.38,
+      "140": 1.44,
+      "150": 1.49
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 90° 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44,
+      "100": 1.52,
+      "110": 1.59,
+      "120": 1.66,
+      "130": 1.73,
+      "140": 1.79,
+      "150": 1.86
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 90° 03",
+     "corIso": "azul",
+     "vazoes": {
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73,
+      "100": 1.82,
+      "110": 1.91,
+      "120": 1.99,
+      "130": 2.07,
+      "140": 2.15,
+      "150": 2.23
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 90° 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3,
+      "100": 2.42,
+      "110": 2.54,
+      "120": 2.66,
+      "130": 2.77,
+      "140": 2.87,
+      "150": 2.97
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 90° 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71,
+      "90": 2.88,
+      "100": 3.03,
+      "110": 3.18,
+      "120": 3.32,
+      "130": 3.46,
+      "140": 3.59,
+      "150": 3.71
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 90° 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82,
+      "70": 3.04,
+      "80": 3.25,
+      "90": 3.45,
+      "100": 3.64,
+      "110": 3.82,
+      "120": 3.99,
+      "130": 4.15,
+      "140": 4.31,
+      "150": 4.46
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MGA 60°",
+   "tipo": null,
+   "angulos": [
+    60
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "40 - 150 lbf/pol² (2,76 - 10,34 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.49 e p.50",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "MGA 60° 0067",
+     "corIso": null,
+     "vazoes": {
+      "40": 0.24,
+      "50": 0.27,
+      "60": 0.29,
+      "70": 0.32,
+      "80": 0.34,
+      "90": 0.36,
+      "100": 0.38,
+      "110": 0.4,
+      "120": 0.42,
+      "130": 0.43,
+      "140": 0.45,
+      "150": 0.46
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 60° 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51,
+      "80": 0.54,
+      "90": 0.58,
+      "100": 0.61,
+      "110": 0.64,
+      "120": 0.66,
+      "130": 0.69,
+      "140": 0.72,
+      "150": 0.74
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 60° 015",
+     "corIso": "verde",
+     "vazoes": {
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86,
+      "100": 0.91,
+      "110": 0.95,
+      "120": 1.0,
+      "130": 1.04,
+      "140": 1.08,
+      "150": 1.11
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 60° 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15,
+      "100": 1.21,
+      "110": 1.27,
+      "120": 1.33,
+      "130": 1.38,
+      "140": 1.44,
+      "150": 1.49
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 60° 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44,
+      "100": 1.52,
+      "110": 1.59,
+      "120": 1.66,
+      "130": 1.73,
+      "140": 1.79,
+      "150": 1.86
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 60° 03",
+     "corIso": "azul",
+     "vazoes": {
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73,
+      "100": 1.82,
+      "110": 1.91,
+      "120": 1.99,
+      "130": 2.07,
+      "140": 2.15,
+      "150": 2.23
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 60° 035",
+     "corIso": null,
+     "vazoes": {
+      "40": 1.34,
+      "50": 1.5,
+      "60": 1.64,
+      "70": 1.78,
+      "80": 1.9,
+      "90": 2.01,
+      "100": 2.12,
+      "110": 2.23,
+      "120": 2.33,
+      "130": 2.42,
+      "140": 2.51,
+      "150": 2.6
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 60° 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3,
+      "100": 2.43,
+      "110": 2.54,
+      "120": 2.66,
+      "130": 2.77,
+      "140": 2.87,
+      "150": 2.97
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 60° 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71,
+      "90": 2.88,
+      "100": 3.03,
+      "110": 3.18,
+      "120": 3.32,
+      "130": 3.46,
+      "140": 3.59,
+      "150": 3.71
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 60° 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82,
+      "70": 3.04,
+      "80": 3.25,
+      "90": 3.45,
+      "100": 3.64,
+      "110": 3.82,
+      "120": 3.99,
+      "130": 4.15,
+      "140": 4.31,
+      "150": 4.46
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MGA 40°",
+   "tipo": null,
+   "angulos": [
+    40
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "40 - 150 lbf/pol² (2,76 - 10,34 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.51 e p.52",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": "Descartado (não confirmado): MGA 40° 05 — linha(s) ['150'] psi não lida(s) pelo OCR",
+   "tamanhos": [
+    {
+     "codigo": "MGA 40° 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51,
+      "80": 0.54,
+      "90": 0.58,
+      "100": 0.61,
+      "110": 0.64,
+      "120": 0.66,
+      "130": 0.69,
+      "140": 0.72,
+      "150": 0.74
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 40° 015",
+     "corIso": "verde",
+     "vazoes": {
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86,
+      "100": 0.91,
+      "110": 0.95,
+      "120": 1.0,
+      "130": 1.04,
+      "140": 1.08,
+      "150": 1.11
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 40° 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15,
+      "100": 1.21,
+      "110": 1.27,
+      "120": 1.33,
+      "130": 1.38,
+      "140": 1.44,
+      "150": 1.49
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 40° 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44,
+      "100": 1.52,
+      "110": 1.59,
+      "120": 1.66,
+      "130": 1.73,
+      "140": 1.79,
+      "150": 1.86
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 40° 03",
+     "corIso": "azul",
+     "vazoes": {
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73,
+      "100": 1.82,
+      "110": 1.91,
+      "120": 1.99,
+      "130": 2.07,
+      "140": 2.15,
+      "150": 2.23
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 40° 035",
+     "corIso": null,
+     "vazoes": {
+      "40": 1.34,
+      "50": 1.5,
+      "60": 1.64,
+      "70": 1.78,
+      "80": 1.9,
+      "90": 2.01,
+      "100": 2.12,
+      "110": 2.23,
+      "120": 2.33,
+      "130": 2.42,
+      "140": 2.51,
+      "150": 2.6
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MGA 40° 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3,
+      "100": 2.43,
+      "110": 2.54,
+      "120": 2.66,
+      "130": 2.77,
+      "140": 2.87,
+      "150": 2.97
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "BX-AP 70°",
+   "tipo": null,
+   "angulos": [
+    70
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "40 - 120 lbf/pol² (2,76 - 8,27 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.53",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "BX-AP 70° 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51,
+      "80": 0.54,
+      "90": 0.58,
+      "100": 0.61,
+      "110": 0.64,
+      "120": 0.66
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BX-AP 70° 015",
+     "corIso": "verde",
+     "vazoes": {
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86,
+      "100": 0.91,
+      "110": 0.95,
+      "120": 1.0
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BX-AP 70° 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15,
+      "100": 1.21,
+      "110": 1.27,
+      "120": 1.33
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BX-AP 70° 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44,
+      "100": 1.52,
+      "110": 1.59,
+      "120": 1.66
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BX-AP 70° 03",
+     "corIso": "azul",
+     "vazoes": {
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73,
+      "100": 1.82,
+      "110": 1.91,
+      "120": 1.99
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BX-AP 70° 035",
+     "corIso": null,
+     "vazoes": {
+      "40": 1.34,
+      "50": 1.5,
+      "60": 1.64,
+      "70": 1.78,
+      "80": 1.9,
+      "90": 2.01,
+      "100": 2.12,
+      "110": 2.23,
+      "120": 2.33
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BX-AP 70° 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3,
+      "100": 2.43,
+      "110": 2.54,
+      "120": 2.66
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BX-AP 70° 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71,
+      "90": 2.88,
+      "100": 3.03,
+      "110": 3.18,
+      "120": 3.32
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "BX-AP 90°",
+   "tipo": null,
+   "angulos": [
+    90
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "40 - 120 lbf/pol² (2,76 - 8,27 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.54",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": "Nota: block 0 size label 01 read only in OCR pass B",
+   "tamanhos": [
+    {
+     "codigo": "BX-AP 90° 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51,
+      "80": 0.54,
+      "90": 0.58,
+      "100": 0.61,
+      "110": 0.64,
+      "120": 0.66
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BX-AP 90° 015",
+     "corIso": "verde",
+     "vazoes": {
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86,
+      "100": 0.91,
+      "110": 0.95,
+      "120": 1.0
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BX-AP 90° 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15,
+      "100": 1.21,
+      "110": 1.27,
+      "120": 1.33
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BX-AP 90° 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44,
+      "100": 1.52,
+      "110": 1.59,
+      "120": 1.66
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BX-AP 90° 03",
+     "corIso": "azul",
+     "vazoes": {
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73,
+      "100": 1.82,
+      "110": 1.91,
+      "120": 1.99
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BX-AP 90° 035",
+     "corIso": null,
+     "vazoes": {
+      "40": 1.34,
+      "50": 1.5,
+      "60": 1.64,
+      "70": 1.78,
+      "80": 1.9,
+      "90": 2.01,
+      "100": 2.12,
+      "110": 2.23,
+      "120": 2.33
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BX-AP 90° 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3,
+      "100": 2.43,
+      "110": 2.54,
+      "120": 2.66
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "BX-AP 90° 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71,
+      "90": 2.88,
+      "100": 3.03,
+      "110": 3.18,
+      "120": 3.32
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "CV-IA",
+   "tipo": "cone vazio",
+   "angulos": [
+    100
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "40 - 150 lbf/pol² (2,76 -10,34 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.55",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "CV-IA 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51,
+      "80": 0.54,
+      "90": 0.58,
+      "100": 0.61,
+      "110": 0.64,
+      "120": 0.66,
+      "130": 0.69,
+      "140": 0.72,
+      "150": 0.74
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CV-IA 015",
+     "corIso": "verde",
+     "vazoes": {
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81,
+      "90": 0.86,
+      "100": 0.91,
+      "110": 0.95,
+      "120": 1.0,
+      "130": 1.04,
+      "140": 1.08,
+      "150": 1.11
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CV-IA 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.01,
+      "80": 1.08,
+      "90": 1.15,
+      "100": 1.21,
+      "110": 1.27,
+      "120": 1.33,
+      "130": 1.38,
+      "140": 1.44,
+      "150": 1.49
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CV-IA 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36,
+      "90": 1.44,
+      "100": 1.52,
+      "110": 1.59,
+      "120": 1.66,
+      "130": 1.73,
+      "140": 1.79,
+      "150": 1.86
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CV-IA 03",
+     "corIso": "azul",
+     "vazoes": {
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63,
+      "90": 1.73,
+      "100": 1.82,
+      "110": 1.91,
+      "120": 1.99,
+      "130": 2.07,
+      "140": 2.15,
+      "150": 2.23
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CV-IA 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17,
+      "90": 2.3,
+      "100": 2.43,
+      "110": 2.54,
+      "120": 2.66,
+      "130": 2.77,
+      "140": 2.87,
+      "150": 2.97
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CV-IA 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71,
+      "90": 2.88,
+      "100": 3.03,
+      "110": 3.18,
+      "120": 3.32,
+      "130": 3.46,
+      "140": 3.59,
+      "150": 3.71
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MAG CH",
+   "tipo": "cone cheio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "50 - 150 lbf/pol² (3,45 -10,34 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.56",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": "Nota: cabeçalho L/ha imprime 4,5,6,7,8,9 km/h mas os valores dessas 6 colunas correspondem a 3,4,5,6,7,8 km/h (as colunas 10–25 km/h coincidem com o cabeçalho); conferência L/ha feita com essa correspondência | Nota: block 3 size label 2 read only in OCR pass B",
+   "tamanhos": [
+    {
+     "codigo": "MAG CH 0,5",
+     "corIso": null,
+     "vazoes": {
+      "50": 0.56,
+      "60": 0.6,
+      "70": 0.66,
+      "80": 0.7,
+      "90": 0.74,
+      "100": 0.8,
+      "110": 0.82,
+      "120": 0.86,
+      "130": 0.88,
+      "140": 0.93,
+      "150": 0.94
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MAG CH 0,75",
+     "corIso": null,
+     "vazoes": {
+      "50": 0.75,
+      "60": 0.82,
+      "70": 0.9,
+      "80": 0.94,
+      "90": 1.0,
+      "100": 1.04,
+      "110": 1.1,
+      "120": 1.14,
+      "130": 1.2,
+      "140": 1.22,
+      "150": 1.3
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MAG CH 1",
+     "corIso": null,
+     "vazoes": {
+      "50": 1.0,
+      "60": 1.12,
+      "70": 1.2,
+      "80": 1.22,
+      "90": 1.26,
+      "100": 1.3,
+      "110": 1.34,
+      "120": 1.46,
+      "130": 1.48,
+      "140": 1.5,
+      "150": 1.55
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MAG CH 2",
+     "corIso": null,
+     "vazoes": {
+      "50": 1.28,
+      "60": 1.4,
+      "70": 1.52,
+      "80": 1.6,
+      "90": 1.72,
+      "100": 1.78,
+      "110": 1.84,
+      "120": 1.88,
+      "130": 1.94,
+      "140": 2.0,
+      "150": 2.17
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MAG CH 3",
+     "corIso": null,
+     "vazoes": {
+      "50": 1.5,
+      "60": 1.64,
+      "70": 1.78,
+      "80": 1.88,
+      "90": 2.0,
+      "100": 2.08,
+      "110": 2.2,
+      "120": 2.28,
+      "130": 2.4,
+      "140": 2.46,
+      "150": 2.55
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MAG CH 4",
+     "corIso": null,
+     "vazoes": {
+      "50": 1.94,
+      "60": 2.11,
+      "70": 2.28,
+      "80": 2.42,
+      "90": 2.56,
+      "100": 2.68,
+      "110": 2.82,
+      "120": 2.94,
+      "130": 3.0,
+      "140": 3.16,
+      "150": 3.25
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MAG CH 5",
+     "corIso": null,
+     "vazoes": {
+      "50": 2.13,
+      "60": 2.32,
+      "70": 2.55,
+      "80": 2.65,
+      "90": 2.82,
+      "100": 2.98,
+      "110": 3.13,
+      "120": 3.26,
+      "130": 3.38,
+      "140": 3.52,
+      "150": 3.75
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MAG CH 6",
+     "corIso": null,
+     "vazoes": {
+      "50": 2.4,
+      "60": 2.64,
+      "70": 2.85,
+      "80": 3.02,
+      "90": 3.2,
+      "100": 3.34,
+      "110": 3.55,
+      "120": 3.67,
+      "130": 3.86,
+      "140": 3.94,
+      "150": 4.08
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "APS",
+   "tipo": "leque",
+   "angulos": [
+    30,
+    60
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "15 - 60 lbf/pol² (2,07 - 4,14 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.57",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "APS 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "15": 0.23,
+      "20": 0.27,
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "APS 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "15": 0.47,
+      "20": 0.54,
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "APS 03",
+     "corIso": "azul",
+     "vazoes": {
+      "15": 0.7,
+      "20": 0.81,
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "APS 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "15": 0.94,
+      "20": 1.08,
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MJE",
+   "tipo": "leque",
+   "angulos": [],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 75 lbf/pol² (2,07 - 5,17 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.60",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×largura de faixa impressa) sem nenhuma divergência",
+   "observacoes": "Nota: block 2 size label 012 read only in OCR pass B",
+   "tamanhos": [
+    {
+     "codigo": "MJE 008",
+     "corIso": null,
+     "vazoes": {
+      "30": 2.65,
+      "45": 3.3,
+      "60": 4.45,
+      "75": 4.95
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MJE 010",
+     "corIso": null,
+     "vazoes": {
+      "30": 3.4,
+      "45": 4.1,
+      "60": 4.85,
+      "75": 5.5
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MJE 012",
+     "corIso": null,
+     "vazoes": {
+      "30": 3.8,
+      "45": 4.65,
+      "60": 5.35,
+      "75": 6.0
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MJE 015",
+     "corIso": null,
+     "vazoes": {
+      "30": 5.0,
+      "45": 6.0,
+      "60": 7.0,
+      "75": 8.0
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MJE 020",
+     "corIso": null,
+     "vazoes": {
+      "30": 6.5,
+      "45": 7.9,
+      "60": 9.6,
+      "75": 10.2
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MJE 024",
+     "corIso": null,
+     "vazoes": {
+      "30": 7.7,
+      "45": 9.6,
+      "60": 11.1,
+      "75": 12.4
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MJE 032",
+     "corIso": null,
+     "vazoes": {
+      "30": 10.1,
+      "45": 12.2,
+      "60": 13.8,
+      "75": 14.8
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MJS",
+   "tipo": null,
+   "angulos": [],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "15 - 30 lbf/pol² (1,03 - 2,07 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.61",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "MJS 1",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.1,
+      "20": 0.12,
+      "30": 0.15
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MJS 2",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.13,
+      "20": 0.15,
+      "30": 0.18
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MJS 3",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.2,
+      "20": 0.25,
+      "30": 0.3
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MJS 4",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.3,
+      "20": 0.34,
+      "30": 0.4
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MJS 5",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.4,
+      "20": 0.5,
+      "30": 0.6
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MJ6",
+   "tipo": null,
+   "angulos": [],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "15 - 50 lbf/pol² (1,03 - 3,45 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.62",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "MJ6 015",
+     "corIso": "verde",
+     "vazoes": {
+      "15": 0.35,
+      "20": 0.41,
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MJ6 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "15": 0.47,
+      "20": 0.54,
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MJ6 03",
+     "corIso": "azul",
+     "vazoes": {
+      "15": 0.7,
+      "20": 0.81,
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MJ6 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "15": 0.94,
+      "20": 1.08,
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MJ6 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "15": 1.17,
+      "20": 1.36,
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MJ6 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "15": 1.41,
+      "20": 1.63,
+      "30": 1.99,
+      "40": 2.3,
+      "50": 2.57
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MJ6 08",
+     "corIso": "branco",
+     "vazoes": {
+      "15": 1.88,
+      "20": 2.17,
+      "30": 2.66,
+      "40": 3.07,
+      "50": 3.43
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MF",
+   "tipo": "leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "30 - 60 lbf/pol² (2,07 - 4,14 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.64",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "MF 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MF 015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MF 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MF 03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MF 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.72,
+      "60": 1.88
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MF 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MF 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "30": 1.99,
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "TP",
+   "tipo": "leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 - 60 lbf/pol² (2,07 - 4,14 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.65",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "TP 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "30": 0.32,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.46
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TP 015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64,
+      "60": 0.7
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TP 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "40": 0.78,
+      "50": 0.88,
+      "60": 0.95
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TP 03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 1.0,
+      "40": 1.16,
+      "50": 1.3,
+      "60": 1.43
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TP 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.32,
+      "40": 1.56,
+      "50": 1.74,
+      "60": 1.89
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TP 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.67,
+      "40": 1.94,
+      "50": 2.18,
+      "60": 2.39
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TP 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "30": 2.02,
+      "40": 2.34,
+      "50": 2.64,
+      "60": 2.86
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MDP",
+   "tipo": "leque",
+   "angulos": [
+    130
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "15 - 50 lbf/pol² (1,03 - 3,45 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.66",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "MDP 075",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.35,
+      "20": 0.41,
+      "30": 0.5,
+      "40": 0.58,
+      "50": 0.64
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MDP 1",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.47,
+      "20": 0.54,
+      "30": 0.66,
+      "40": 0.76,
+      "50": 0.85
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MDP 1,5",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.7,
+      "20": 0.81,
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MDP 2",
+     "corIso": null,
+     "vazoes": {
+      "15": 0.93,
+      "20": 1.08,
+      "30": 1.32,
+      "40": 1.53,
+      "50": 1.71
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MDP 2,5",
+     "corIso": null,
+     "vazoes": {
+      "15": 1.16,
+      "20": 1.35,
+      "30": 1.65,
+      "40": 1.9,
+      "50": 2.13
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MDP 3",
+     "corIso": null,
+     "vazoes": {
+      "15": 1.4,
+      "20": 1.61,
+      "30": 1.97,
+      "40": 2.28,
+      "50": 2.55
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MDP 4",
+     "corIso": null,
+     "vazoes": {
+      "15": 1.87,
+      "20": 2.16,
+      "30": 2.64,
+      "40": 3.05,
+      "50": 3.41
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MDP 5",
+     "corIso": null,
+     "vazoes": {
+      "15": 2.3,
+      "20": 2.66,
+      "30": 3.25,
+      "40": 3.76,
+      "50": 4.2
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MDP 7,5",
+     "corIso": null,
+     "vazoes": {
+      "15": 3.47,
+      "20": 4.01,
+      "30": 4.91,
+      "40": 5.67,
+      "50": 6.34
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "MCP",
+   "tipo": null,
+   "angulos": [
+    90
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "30 - 90 lbf/pol² (2,07 - 6,21 bar)",
+   "fonte": "M1",
+   "pagina": "PDF p.67",
+   "metodoExtracao": "OCR (RapidOCR/ONNX PP-OCRv4, 2 passagens independentes a 300 e 400 dpi; tesseract não instalado) conferido por L/ha: o PDF não tem camada de texto (tabelas em curvas vetoriais); só entram tamanhos em que toda vazão é idêntica nas duas passagens, a pressão psi é coerente com as colunas bar/kPa impressas e ≥8 colunas L/ha impressas da mesma linha batem com vazão×600/(v×0.5 m) sem nenhuma divergência",
+   "observacoes": null,
+   "tamanhos": [
+    {
+     "codigo": "MCP 05",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.18,
+      "40": 0.2,
+      "50": 0.22,
+      "60": 0.25,
+      "70": 0.26,
+      "80": 0.28,
+      "90": 0.31
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MCP 1",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.22,
+      "40": 0.26,
+      "50": 0.28,
+      "60": 0.32,
+      "70": 0.34,
+      "80": 0.36,
+      "90": 0.37
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MCP 1,5",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.3,
+      "40": 0.36,
+      "50": 0.4,
+      "60": 0.43,
+      "70": 0.46,
+      "80": 0.5,
+      "90": 0.53
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MCP 2",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.46,
+      "40": 0.52,
+      "50": 0.58,
+      "60": 0.64,
+      "70": 0.68,
+      "80": 0.72,
+      "90": 0.78
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MCP 3",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.64,
+      "40": 0.72,
+      "50": 0.8,
+      "60": 0.88,
+      "70": 0.94,
+      "80": 1.02,
+      "90": 1.08
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "MCP 4",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.88,
+      "40": 1.0,
+      "50": 1.12,
+      "60": 1.25,
+      "70": 1.32,
+      "80": 1.4,
+      "90": 1.56
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  }
+ ]
+}

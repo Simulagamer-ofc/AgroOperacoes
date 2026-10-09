@@ -1,0 +1,5116 @@
+{
+ "fabricante": "Jacto",
+ "razaoSocial": "Máquinas Agrícolas Jacto S.A.",
+ "nota": "Folhetos oficiais baixados via API pública do site jacto.com (categoria \"Bicos e Acessórios\"). Todas as tabelas de vazão dos folhetos estão em psi/lbf/pol²; nenhuma conversão foi feita, por isso faixaPressaoRecomendadaBar = null e a faixa impressa vai em faixaPressaoImpressa. corIso derivada do código de vazão pela norma ISO 10625 quando o folheto declara \"Identificação de vazão: Pela Cor (Norma ISO)\"; a cor não aparece como texto no PDF.",
+ "fontes": [
+  {
+   "id": "F1",
+   "titulo": "Folheto Jacto JSF (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492544612_Folheto_Jacto_JSF_PT_930001863.pdf",
+   "ano": "10/2015",
+   "anoObs": "data impressa no rodapé: 10/2015 (cód. impresso 930001863); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/46.pdf"
+  },
+  {
+   "id": "F2",
+   "titulo": "Folheto Jacto API (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492523302_Folheto_Jacto_API_PT_930000176.pdf",
+   "ano": "09/2014",
+   "anoObs": "data impressa no rodapé: 09/2014 (cód. impresso 930000176); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/23.pdf"
+  },
+  {
+   "id": "F3",
+   "titulo": "Folheto Jacto AXI (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492535791_Folheto_Jacto_AXI__PT_930000238.pdf",
+   "ano": "05/2015",
+   "anoObs": "data impressa no rodapé: 05/2015 (cód. impresso 930000238); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/28.pdf"
+  },
+  {
+   "id": "F4",
+   "titulo": "Folheto Jacto JHS (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492539714_Folheto_Jacto_JHS_PT_930001900.pdf",
+   "ano": "10/2013",
+   "anoObs": "data impressa no rodapé: 10/2013 (cód. impresso 930001900); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/35.pdf"
+  },
+  {
+   "id": "F5",
+   "titulo": "Folheto Jacto JUF (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492545537_Folheto_Jacto_JUF_PT_930001866.pdf",
+   "ano": "07/2014",
+   "anoObs": "data impressa no rodapé: 07/2014 (cód. impresso 930001866); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/47.pdf"
+  },
+  {
+   "id": "F6",
+   "titulo": "Folheto Jacto JTT (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_file_file_pt_BR_1618861063890_jacto-fl-bico-JTT-lay-01.pdf",
+   "ano": "07/2014",
+   "anoObs": "data impressa no rodapé: 07/2014 (cód. impresso 930000378); arquivo publicado/atualizado no site em 2021-04-19",
+   "arquivoLocal": "pontas/jacto/pdf/108.pdf"
+  },
+  {
+   "id": "F7",
+   "titulo": "Folheto Jacto JIC (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_file_file_pt_BR_1689345429932_jacto-fl-bico-JIC-digital-1-sai.pdf",
+   "ano": "2023",
+   "anoObs": "sem data impressa; arquivo publicado/atualizado no site em 2023-07-14",
+   "arquivoLocal": "pontas/jacto/pdf/356.pdf"
+  },
+  {
+   "id": "F8",
+   "titulo": "Folheto Jacto J3D (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_file_file_pt_BR_1592934721227_J3D.pdf",
+   "ano": "2020",
+   "anoObs": "sem data impressa; arquivo publicado/atualizado no site em 2020-06-23",
+   "arquivoLocal": "pontas/jacto/pdf/83.pdf"
+  },
+  {
+   "id": "F9",
+   "titulo": "Folheto Jacto ADI (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_file_file_pt_BR_1581085761773_Sem_titulo-1.pdf",
+   "ano": "09/2014",
+   "anoObs": "data impressa no rodapé: 09/2014 (cód. impresso 930000173); arquivo publicado/atualizado no site em 2020-02-07",
+   "arquivoLocal": "pontas/jacto/pdf/22.pdf"
+  },
+  {
+   "id": "F10",
+   "titulo": "Folheto Jacto JLD (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492544429_Folheto_Jacto_JLD_PT_930001860.pdf",
+   "ano": "07/2014",
+   "anoObs": "data impressa no rodapé: 07/2014 (cód. impresso 930001860); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/45.pdf"
+  },
+  {
+   "id": "F11",
+   "titulo": "Folheto Jacto JGC (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492543823_Folheto_Jacto_JGC_PT_930002209.pdf",
+   "ano": "2018",
+   "anoObs": "sem data impressa; arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/42.pdf"
+  },
+  {
+   "id": "F12",
+   "titulo": "Folheto Jacto JDF (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492543171_Folheto_Jacto_JDF_PT_930001851.pdf",
+   "ano": "09/2014",
+   "anoObs": "data impressa no rodapé: 09/2014 (cód. impresso 9300001851); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/40.pdf"
+  },
+  {
+   "id": "F13",
+   "titulo": "Folheto Jacto JEF (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492543596_Folheto_Jacto_JEF_PT_930001854.pdf",
+   "ano": "07/2014",
+   "anoObs": "data impressa no rodapé: 07/2014 (cód. impresso 930001854); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/41.pdf"
+  },
+  {
+   "id": "F14",
+   "titulo": "Folheto Jacto AVI (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492535269_Folheto_Jacto_AVI_PT_930001872.pdf",
+   "ano": "03/2014",
+   "anoObs": "data impressa no rodapé: 03/2014 (cód. impresso 930000283); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/26.pdf"
+  },
+  {
+   "id": "F15",
+   "titulo": "Folheto Jacto AVI TWIN (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492535596_Folheto_Jacto_AVI_TWIN_PT_930000286.pdf",
+   "ano": "02/2014",
+   "anoObs": "data impressa no rodapé: 02/2014 (cód. impresso 930000286); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/27.pdf"
+  },
+  {
+   "id": "F16",
+   "titulo": "Folheto Jacto AXI TWIN (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492536138_Folheto_Jacto_AXI_TWIN_PT_930000384.pdf",
+   "ano": "02/2014",
+   "anoObs": "data impressa no rodapé: 02/2014 (cód. impresso 930000384); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/29.pdf"
+  },
+  {
+   "id": "F17",
+   "titulo": "Folheto Jacto CVI (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492536332_Folheto_Jacto_CVI_PT_930001391.pdf",
+   "ano": "09/2014",
+   "anoObs": "data impressa no rodapé: 09/2014 (cód. impresso 930001391); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/30.pdf"
+  },
+  {
+   "id": "F18",
+   "titulo": "Folheto Jacto AIRMIX (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492540705_Folheto_Jacto_AIR_MIX_PT_930001660.pdf",
+   "ano": "03/2014",
+   "anoObs": "data impressa no rodapé: 03/2014 (cód. impresso 930000238); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/37.pdf"
+  },
+  {
+   "id": "F19",
+   "titulo": "Folheto Jacto JAP (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492542443_Folheto_Jacto_JAP_PT_930001869.pdf",
+   "ano": "07/2014",
+   "anoObs": "data impressa no rodapé: 07/2014 (cód. impresso 930001869); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/39.pdf"
+  },
+  {
+   "id": "F20",
+   "titulo": "Folheto Jacto JGT (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492544004_Folheto_Jacto_JGT_PT_930002206.pdf",
+   "ano": "2018",
+   "anoObs": "sem data impressa; arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/43.pdf"
+  },
+  {
+   "id": "F21",
+   "titulo": "Folheto Jacto TTI (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_file_file_pt_BR_1580480756624_TTI_versao17.pdf",
+   "ano": "03/2019",
+   "anoObs": "data impressa no rodapé: 03/2019 (cód. impresso 930002682); arquivo publicado/atualizado no site em 2020-01-31",
+   "arquivoLocal": "pontas/jacto/pdf/175.pdf"
+  },
+  {
+   "id": "F22",
+   "titulo": "Folheto Jacto - JMD (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_file_file_pt_BR_1618861129240_jacto-fl-bico-JMD-lay-alt-sai-02.pdf",
+   "ano": "07/2014",
+   "anoObs": "data impressa no rodapé: 07/2014 (cód. impresso 930000378); arquivo publicado/atualizado no site em 2021-04-19",
+   "arquivoLocal": "pontas/jacto/pdf/177.pdf"
+  },
+  {
+   "id": "F23",
+   "titulo": "Folheto Jacto ATR (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492535328_Folheto_Jacto_ATR_PT_930001389.pdf",
+   "ano": "09/2014",
+   "anoObs": "data impressa no rodapé: 09/2014 (cód. impresso 930001389); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/25.pdf"
+  },
+  {
+   "id": "F24",
+   "titulo": "Folheto Jacto JA (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492538259_Folheto_Jacto_JA_PT_930000188.pdf",
+   "ano": "03/2014",
+   "anoObs": "data impressa no rodapé: 03/2014 (cód. impresso 930000188); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/33.pdf"
+  },
+  {
+   "id": "F25",
+   "titulo": "Folheto Jacto JHC (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492544219_Folheto_Jacto_JHC_PT_930001857.pdf",
+   "ano": "07/2014",
+   "anoObs": "data impressa no rodapé: 07/2014 (cód. impresso 930001857); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/44.pdf"
+  },
+  {
+   "id": "F26",
+   "titulo": "Folheto Jacto JCI (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_file_file_pt_BR_1549274936595_JCI.pdf",
+   "ano": "2020",
+   "anoObs": "sem data impressa; arquivo publicado/atualizado no site em 2020-09-16",
+   "arquivoLocal": "pontas/jacto/pdf/158.pdf"
+  },
+  {
+   "id": "F27",
+   "titulo": "Folheto Jacto JAC (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_file_file_pt_BR_1663333865153_jacto-fl-bico-JAC-digital-PT.pdf",
+   "ano": "07/2014",
+   "anoObs": "data impressa no rodapé: 07/2014 (cód. impresso 930000378); arquivo publicado/atualizado no site em 2022-09-16",
+   "arquivoLocal": "pontas/jacto/pdf/288.pdf"
+  },
+  {
+   "id": "F28",
+   "titulo": "Folheto Jacto JFC (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492539240_Folheto_Jacto_JFC_PT_930002224.pdf",
+   "ano": "2018",
+   "anoObs": "sem data impressa; arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/34.pdf"
+  },
+  {
+   "id": "F29",
+   "titulo": "Folheto Jacto JDC (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_file_file_pt_BR_1663267032067_jacto-fl-bico-JDC-digital-PT.pdf",
+   "ano": "07/2014",
+   "anoObs": "data impressa no rodapé: 07/2014 (cód. impresso 930000378); arquivo publicado/atualizado no site em 2022-09-15",
+   "arquivoLocal": "pontas/jacto/pdf/287.pdf"
+  },
+  {
+   "id": "F30",
+   "titulo": "Folheto Jacto DISC & CORE (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492536539_Folheto_Jacto_DISC_&_CORE_PT_930000378.pdf",
+   "ano": "07/2014",
+   "anoObs": "data impressa no rodapé: 07/2014 (cód. impresso 930000378); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/31.pdf"
+  },
+  {
+   "id": "F31",
+   "titulo": "Folheto Jacto J – Série J (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492538036_Folheto_Jacto_J_PT_930000318.pdf",
+   "ano": "07/2014",
+   "anoObs": "data impressa no rodapé: 07/2014 (cód. impresso 930000318); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/32.pdf"
+  },
+  {
+   "id": "F32",
+   "titulo": "Folheto Jacto JMI (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_file_file_pt_BR_1549275240155_JMI.pdf",
+   "ano": "2020",
+   "anoObs": "sem data impressa; arquivo publicado/atualizado no site em 2020-09-16",
+   "arquivoLocal": "pontas/jacto/pdf/159.pdf"
+  },
+  {
+   "id": "F33",
+   "titulo": "Folheto Jacto TVI (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_file_file_pt_BR_1701952430565_TVI.pdf",
+   "ano": "2023",
+   "anoObs": "sem data impressa; arquivo publicado/atualizado no site em 2023-12-07",
+   "arquivoLocal": "pontas/jacto/pdf/36.pdf"
+  },
+  {
+   "id": "F34",
+   "titulo": "Folheto Jacto JAI (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492541407_Folheto_Jacto_JAI_PT_930001848.pdf",
+   "ano": "07/2014",
+   "anoObs": "data impressa no rodapé: 07/2014 (cód. impresso 930001848); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/38.pdf"
+  },
+  {
+   "id": "F35",
+   "titulo": "Guia de Bolso Bicos Jacto (digital, PT/ES/EN) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_file_file_pt_BR_1711399107308_Guia_Bolso_Bicos-digital.pdf",
+   "ano": "2024",
+   "anoObs": "sem data impressa; arquivo publicado/atualizado no site em 2024-08-27",
+   "arquivoLocal": "pontas/jacto/pdf/163.pdf"
+  }
+ ],
+ "linhas": [
+  {
+   "linha": "JSF",
+   "tipo": "leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "20 a 75 psi",
+   "fonte": "F1",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "JSF 11001",
+     "corIso": "laranja",
+     "vazoes": {
+      "15": 0.23,
+      "20": 0.27,
+      "30": 0.33,
+      "45": 0.4,
+      "60": 0.46,
+      "75": 0.52
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JSF 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "15": 0.35,
+      "20": 0.42,
+      "30": 0.49,
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JSF 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "15": 0.46,
+      "20": 0.56,
+      "30": 0.65,
+      "45": 0.8,
+      "60": 0.92,
+      "75": 1.03
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JSF 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "15": 0.69,
+      "20": 0.85,
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JSF 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "15": 0.92,
+      "20": 1.13,
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.88,
+      "75": 2.07
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JSF 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "15": 1.15,
+      "20": 1.41,
+      "30": 1.63,
+      "45": 2.0,
+      "60": 2.31,
+      "75": 2.58
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JSF 11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "15": 1.39,
+      "20": 1.7,
+      "30": 1.96,
+      "45": 2.4,
+      "60": 2.77,
+      "75": 3.1
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JSF 11008",
+     "corIso": "branco",
+     "vazoes": {
+      "15": 1.85,
+      "20": 2.26,
+      "30": 2.61,
+      "45": 3.2,
+      "60": 3.7,
+      "75": 4.13
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "JSF 11008 a 45/60 psi impresso com 1 casa decimal (3.2 / 3.7)."
+  },
+  {
+   "linha": "API",
+   "tipo": "leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "20 a 60 psi",
+   "fonte": "F2",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "API 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "20": 0.42,
+      "30": 0.49,
+      "45": 0.6,
+      "60": 0.69
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "API 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "20": 0.57,
+      "30": 0.66,
+      "45": 0.8,
+      "60": 0.91
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "API 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "20": 0.85,
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "API 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "20": 1.13,
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "API 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "20": 1.41,
+      "30": 1.63,
+      "45": 2.0,
+      "60": 2.3
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "API 11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "20": 1.7,
+      "30": 1.96,
+      "45": 2.4,
+      "60": 2.77
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "AXI",
+   "tipo": "leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "15 a 60 psi",
+   "fonte": "F3",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "AXI 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "20": 0.42,
+      "30": 0.49,
+      "45": 0.6,
+      "60": 0.69
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AXI 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "20": 0.57,
+      "30": 0.66,
+      "45": 0.8,
+      "60": 0.91
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AXI 110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "20": 0.71,
+      "30": 0.82,
+      "45": 1.0,
+      "60": 1.15
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AXI 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "20": 0.8,
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AXI 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "20": 1.13,
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AXI 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "20": 1.41,
+      "30": 1.63,
+      "45": 2.0,
+      "60": 2.3
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AXI 11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "20": 1.7,
+      "30": 1.96,
+      "45": 2.4,
+      "60": 2.77
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "AXI 11003 a 20 psi impresso 0.80 (outras linhas 110-03 trazem 0,85) — mantido como impresso."
+  },
+  {
+   "linha": "JHS",
+   "tipo": "leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "20 a 60 psi",
+   "fonte": "F4",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "JHS 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "20": 0.42,
+      "30": 0.49,
+      "45": 0.6,
+      "60": 0.69
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JHS 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "20": 0.57,
+      "30": 0.66,
+      "45": 0.8,
+      "60": 0.91
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JHS 110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "20": 0.71,
+      "30": 0.82,
+      "45": 1.0,
+      "60": 1.15
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JHS 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "20": 0.85,
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JHS 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "20": 1.13,
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JHS 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "20": 1.41,
+      "30": 1.63,
+      "45": 2.0,
+      "60": 2.3
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JHS 11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "20": 1.7,
+      "30": 1.96,
+      "45": 2.4,
+      "60": 2.77
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JHS 11008",
+     "corIso": "branco",
+     "vazoes": {
+      "20": 2.13,
+      "30": 2.61,
+      "45": 3.2,
+      "60": 3.7
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "JUF",
+   "tipo": "leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "15 a 75 psi",
+   "fonte": "F5",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "JUF 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "15": 0.35,
+      "20": 0.42,
+      "30": 0.49,
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JUF 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "15": 0.46,
+      "20": 0.57,
+      "30": 0.65,
+      "45": 0.8,
+      "60": 0.92,
+      "75": 1.03
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JUF 110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "15": 0.58,
+      "20": 0.71,
+      "30": 0.82,
+      "45": 1.0,
+      "60": 1.15,
+      "75": 1.29
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JUF 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "15": 0.69,
+      "20": 0.85,
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JUF 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "15": 0.92,
+      "20": 1.13,
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JUF 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "15": 1.15,
+      "20": 1.41,
+      "30": 1.63,
+      "45": 2.0,
+      "60": 2.31,
+      "75": 2.58
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JUF 11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "15": 1.39,
+      "20": 1.7,
+      "30": 1.96,
+      "45": 2.4,
+      "60": 2.77,
+      "75": 3.1
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JUF 11008",
+     "corIso": "branco",
+     "vazoes": {
+      "15": 1.85,
+      "20": 2.26,
+      "30": 2.61,
+      "45": 3.2,
+      "60": 3.7,
+      "75": 4.13
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "JTT",
+   "tipo": "leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "15 a 90 psi",
+   "fonte": "F6",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "JTT 11001",
+     "corIso": "laranja",
+     "vazoes": {
+      "15": 0.23,
+      "20": 0.27,
+      "30": 0.33,
+      "45": 0.38,
+      "60": 0.45,
+      "75": 0.53,
+      "90": 0.57
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JTT 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "15": 0.35,
+      "20": 0.42,
+      "30": 0.49,
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77,
+      "90": 0.85
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JTT 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "15": 0.46,
+      "20": 0.57,
+      "30": 0.65,
+      "45": 0.8,
+      "60": 0.92,
+      "75": 1.03,
+      "90": 1.13
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JTT 110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "15": 0.58,
+      "20": 0.71,
+      "30": 0.82,
+      "45": 1.0,
+      "60": 1.15,
+      "75": 1.29,
+      "90": 1.42
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JTT 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "15": 0.69,
+      "20": 0.85,
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55,
+      "90": 1.7
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JTT 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "15": 0.92,
+      "20": 1.13,
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07,
+      "90": 2.26
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JTT 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "15": 1.15,
+      "20": 1.41,
+      "30": 1.63,
+      "45": 2.0,
+      "60": 2.31,
+      "75": 2.58,
+      "90": 2.83
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JTT 11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "15": 1.39,
+      "20": 1.7,
+      "30": 1.96,
+      "45": 2.4,
+      "60": 2.77,
+      "75": 3.1,
+      "90": 3.39
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JTT 11008",
+     "corIso": "branco",
+     "vazoes": {
+      "15": 1.85,
+      "20": 2.26,
+      "30": 2.61,
+      "45": 3.2,
+      "60": 3.7,
+      "75": 4.13,
+      "90": 4.53
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "JIC",
+   "tipo": "leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "20 a 90 psi",
+   "fonte": "F7",
+   "pagina": "PDF p.3",
+   "tamanhos": [
+    {
+     "codigo": "JIC 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "20": 0.42,
+      "30": 0.49,
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77,
+      "90": 0.85
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JIC 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "20": 0.57,
+      "30": 0.65,
+      "45": 0.8,
+      "60": 0.92,
+      "75": 1.03,
+      "90": 1.13
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JIC 110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "20": 0.71,
+      "30": 0.82,
+      "45": 1.0,
+      "60": 1.15,
+      "75": 1.29,
+      "90": 1.42
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JIC 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "20": 0.85,
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55,
+      "90": 1.7
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JIC 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "20": 1.13,
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07,
+      "90": 2.26
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JIC 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "20": 1.41,
+      "30": 1.63,
+      "45": 2.0,
+      "60": 2.31,
+      "75": 2.58,
+      "90": 2.83
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "J3D",
+   "tipo": "leque",
+   "angulos": [
+    100
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "15 a 90 psi",
+   "fonte": "F8",
+   "pagina": "PDF p.3, 4",
+   "tamanhos": [
+    {
+     "codigo": "J3D - 100015",
+     "corIso": "verde",
+     "vazoes": {
+      "15": 0.35,
+      "20": 0.4,
+      "30": 0.49,
+      "40": 0.57,
+      "50": 0.63,
+      "60": 0.7,
+      "70": 0.75,
+      "80": 0.8,
+      "90": 0.85
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "J3D - 10002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "15": 0.46,
+      "20": 0.54,
+      "30": 0.66,
+      "40": 0.76,
+      "50": 0.85,
+      "60": 0.93,
+      "70": 1.0,
+      "80": 1.07,
+      "90": 1.14
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "J3D - 100025",
+     "corIso": "lilás",
+     "vazoes": {
+      "15": 0.58,
+      "20": 0.67,
+      "30": 0.82,
+      "40": 0.95,
+      "50": 1.06,
+      "60": 1.16,
+      "70": 1.25,
+      "80": 1.34,
+      "90": 1.42
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "J3D - 10003",
+     "corIso": "azul",
+     "vazoes": {
+      "15": 0.7,
+      "20": 0.8,
+      "30": 0.98,
+      "40": 1.14,
+      "50": 1.27,
+      "60": 1.39,
+      "70": 1.5,
+      "80": 1.61,
+      "90": 1.7
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "J3D - 10004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "15": 0.93,
+      "20": 1.07,
+      "30": 1.31,
+      "40": 1.51,
+      "50": 1.69,
+      "60": 1.85,
+      "70": 2.0,
+      "80": 2.14,
+      "90": 2.27
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "J3D - 10005",
+     "corIso": "marrom",
+     "vazoes": {
+      "15": 1.16,
+      "20": 1.34,
+      "30": 1.64,
+      "40": 1.89,
+      "50": 2.12,
+      "60": 2.32,
+      "70": 2.5,
+      "80": 2.68,
+      "90": 2.84
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "J3D - 10006",
+     "corIso": "cinza",
+     "vazoes": {
+      "15": 1.39,
+      "20": 1.61,
+      "30": 1.97,
+      "40": 2.27,
+      "50": 2.54,
+      "60": 2.78,
+      "70": 3.0,
+      "80": 3.21,
+      "90": 3.41
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "J3D - 10008",
+     "corIso": "branco",
+     "vazoes": {
+      "15": 1.39,
+      "20": 1.61,
+      "30": 2.62,
+      "40": 3.03,
+      "50": 3.39,
+      "60": 3.71,
+      "70": 4.01,
+      "80": 4.28,
+      "90": 4.54
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "J3D 10008 a 15 e 20 psi: vazões impressas (1,39 / 1,61) idênticas às da J3D 10006 — mantido como impresso; provável erro tipográfico."
+  },
+  {
+   "linha": "ADI",
+   "tipo": "leque antideriva",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "30 a 75 psi",
+   "fonte": "F9",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "ADI 11001",
+     "corIso": "laranja",
+     "vazoes": {
+      "30": 0.32,
+      "45": 0.4,
+      "60": 0.46,
+      "75": 0.56
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ADI 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.49,
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ADI 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "45": 0.8,
+      "60": 0.91,
+      "75": 1.03
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ADI 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 0.85,
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ADI 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.13,
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "JLD",
+   "tipo": "leque antideriva",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "30 a 75 psi",
+   "fonte": "F10",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "JLD 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "15": 0.35,
+      "20": 0.42,
+      "30": 0.49,
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JLD 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "15": 0.46,
+      "20": 0.57,
+      "30": 0.65,
+      "45": 0.8,
+      "60": 0.92,
+      "75": 1.03
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JLD 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "15": 0.69,
+      "20": 0.85,
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JLD 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "15": 0.92,
+      "20": 1.13,
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JLD 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "15": 1.15,
+      "20": 1.41,
+      "30": 1.63,
+      "45": 2.0,
+      "60": 2.31,
+      "75": 2.58
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JLD 11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "15": 1.39,
+      "20": 1.7,
+      "30": 1.96,
+      "45": 2.4,
+      "60": 2.77,
+      "75": 3.1
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JLD 11008",
+     "corIso": "branco",
+     "vazoes": {
+      "15": 1.85,
+      "20": 2.26,
+      "30": 2.61,
+      "45": 3.2,
+      "60": 3.7,
+      "75": 4.13
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "JGC",
+   "tipo": "leque antideriva",
+   "angulos": [
+    120
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "20 a 115 psi",
+   "fonte": "F11",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "JGC 120.01",
+     "corIso": "laranja",
+     "vazoes": {
+      "20": 0.28,
+      "30": 0.33,
+      "45": 0.4,
+      "60": 0.46,
+      "75": 0.52,
+      "90": 0.57,
+      "105": 0.61,
+      "115": 0.65
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JGC 120.015",
+     "corIso": "verde",
+     "vazoes": {
+      "20": 0.42,
+      "30": 0.49,
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77,
+      "90": 0.85,
+      "105": 0.92,
+      "115": 0.98
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JGC 120.02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "20": 0.57,
+      "30": 0.65,
+      "45": 0.8,
+      "60": 0.92,
+      "75": 1.03,
+      "90": 1.13,
+      "105": 1.22,
+      "115": 1.31
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JGC 120.025",
+     "corIso": "lilás",
+     "vazoes": {
+      "20": 0.71,
+      "30": 0.82,
+      "45": 1.0,
+      "60": 1.15,
+      "75": 1.29,
+      "90": 1.41,
+      "105": 1.53,
+      "115": 1.63
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JGC 120.03",
+     "corIso": "azul",
+     "vazoes": {
+      "20": 0.85,
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55,
+      "90": 1.7,
+      "105": 1.83,
+      "115": 1.96
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JGC 120.04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "20": 1.13,
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07,
+      "90": 2.26,
+      "105": 2.44,
+      "115": 2.61
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JGC 120.05",
+     "corIso": "marrom",
+     "vazoes": {
+      "20": 1.41,
+      "30": 1.63,
+      "45": 2.0,
+      "60": 2.31,
+      "75": 2.58,
+      "90": 2.83,
+      "105": 3.06,
+      "115": 3.27
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JGC 120.06",
+     "corIso": "cinza",
+     "vazoes": {
+      "20": 1.7,
+      "30": 1.96,
+      "45": 2.4,
+      "60": 2.77,
+      "75": 3.1,
+      "90": 3.39,
+      "105": 3.67,
+      "115": 3.92
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JGC 120.08",
+     "corIso": "branco",
+     "vazoes": {
+      "20": 2.26,
+      "30": 2.61,
+      "45": 3.2,
+      "60": 3.7,
+      "75": 4.13,
+      "90": 4.53,
+      "105": 4.89,
+      "115": 5.23
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "JDF",
+   "tipo": "leque",
+   "angulos": [
+    105
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "15 a 45 psi",
+   "fonte": "F12",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "JDF 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "15": 0.23,
+      "20": 0.28,
+      "30": 0.33,
+      "40": 0.37,
+      "45": 0.4
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JDF 015",
+     "corIso": "verde",
+     "vazoes": {
+      "15": 0.35,
+      "20": 0.42,
+      "30": 0.49,
+      "40": 0.55,
+      "45": 0.6
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JDF 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "15": 0.46,
+      "20": 0.57,
+      "30": 0.65,
+      "40": 0.73,
+      "45": 0.8
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JDF 03",
+     "corIso": "azul",
+     "vazoes": {
+      "15": 0.69,
+      "20": 0.85,
+      "30": 0.98,
+      "40": 1.1,
+      "45": 1.2
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JDF 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "15": 0.92,
+      "20": 1.13,
+      "30": 1.31,
+      "40": 1.46,
+      "45": 1.6
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JDF 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "15": 1.15,
+      "20": 1.41,
+      "30": 1.63,
+      "40": 1.83,
+      "45": 2.0
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JDF 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "15": 1.39,
+      "20": 1.7,
+      "30": 1.96,
+      "40": 2.19,
+      "45": 2.4
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JDF 08",
+     "corIso": "branco",
+     "vazoes": {
+      "15": 1.85,
+      "20": 2.26,
+      "30": 2.61,
+      "40": 3.2,
+      "45": 3.7
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JDF 10",
+     "corIso": "azul claro",
+     "vazoes": {
+      "15": 2.3,
+      "20": 2.8,
+      "30": 3.3,
+      "40": 3.7,
+      "45": 4
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JDF 15",
+     "corIso": "verde claro",
+     "vazoes": {
+      "15": 3.5,
+      "20": 4.2,
+      "30": 4.9,
+      "40": 5.5,
+      "45": 6
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "JDF 10 e JDF 15 trazem vazões com 1 casa decimal (e \"4\" / \"6\" a 45 psi) conforme impresso."
+  },
+  {
+   "linha": "JEF",
+   "tipo": "leque",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "30 a 60 psi",
+   "fonte": "F13",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "JEF 8001",
+     "corIso": "laranja",
+     "vazoes": {
+      "30": 0.33,
+      "35": 0.37,
+      "45": 0.4,
+      "60": 0.46
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JEF 80015",
+     "corIso": "verde",
+     "vazoes": {
+      "30": 0.49,
+      "25": 0.55,
+      "45": 0.6,
+      "60": 0.69
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JEF 8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.65,
+      "35": 0.73,
+      "45": 0.8,
+      "60": 0.92
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JEF 8003",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 0.98,
+      "35": 1.1,
+      "45": 1.2,
+      "60": 1.39
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JEF 8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.31,
+      "35": 1.46,
+      "45": 1.6,
+      "60": 1.85
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JEF 8005",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.63,
+      "35": 1.83,
+      "45": 2.0,
+      "60": 2.31
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "No tamanho JEF 80015 a 2ª linha impressa traz pressão \"25\" (as demais pontas JEF usam 35 psi nessa posição); valor mantido como impresso."
+  },
+  {
+   "linha": "AVI",
+   "tipo": "indução de ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "45 a 105 psi",
+   "fonte": "F14",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "AVI 11001",
+     "corIso": "laranja",
+     "vazoes": {
+      "45": 0.4,
+      "60": 0.46,
+      "75": 0.52,
+      "90": 0.57,
+      "105": 0.61
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AVI 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77,
+      "90": 0.85,
+      "105": 0.92
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AVI 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "45": 0.8,
+      "60": 0.91,
+      "75": 1.03,
+      "90": 1.13,
+      "105": 1.22
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AVI 110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "45": 1.0,
+      "60": 1.15,
+      "75": 1.29,
+      "90": 1.41,
+      "105": 1.53
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AVI 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55,
+      "90": 1.7,
+      "105": 1.83
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AVI 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07,
+      "90": 2.26,
+      "105": 2.44
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AVI 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "45": 2.0,
+      "60": 2.31,
+      "75": 2.58,
+      "90": 2.83,
+      "105": 3.06
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AVI 11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "45": 2.4,
+      "60": 2.77,
+      "75": 3.1,
+      "90": 3.39,
+      "105": 3.67
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AVI 11008",
+     "corIso": "branco",
+     "vazoes": {
+      "45": 3.2,
+      "60": 3.7,
+      "75": 4.13,
+      "90": 4.53,
+      "105": 4.89
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AVI 11010",
+     "corIso": "azul claro",
+     "vazoes": {
+      "45": 4.0,
+      "60": 4.62,
+      "75": 5.16,
+      "90": 5.66,
+      "105": 6.11
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "AVI TWIN",
+   "tipo": "duplo leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "45 a 105 psi",
+   "fonte": "F15",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "AVI TWIN 11001",
+     "corIso": "laranja",
+     "vazoes": {
+      "45": 0.4,
+      "60": 0.46,
+      "75": 0.52,
+      "90": 0.57,
+      "105": 0.61
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AVI TWIN 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77,
+      "90": 0.85,
+      "105": 0.92
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AVI TWIN 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "45": 0.8,
+      "60": 0.91,
+      "75": 1.03,
+      "90": 1.13,
+      "105": 1.22
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AVI TWIN 110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "45": 1.0,
+      "60": 1.15,
+      "75": 1.29,
+      "90": 1.41,
+      "105": 1.53
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AVI TWIN 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55,
+      "90": 1.7,
+      "105": 1.83
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AVI TWIN 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07,
+      "90": 2.26,
+      "105": 2.44
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AVI TWIN 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "45": 2.0,
+      "60": 2.31,
+      "75": 2.58,
+      "90": 2.83,
+      "105": 3.06
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AVI TWIN 11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "45": 2.4,
+      "60": 2.77,
+      "75": 3.1,
+      "90": 3.39,
+      "105": 3.67
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "AXI TWIN",
+   "tipo": "duplo leque",
+   "angulos": [
+    120
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "15 a 60 psi",
+   "fonte": "F16",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "AXI TWIN 12002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "20": 0.57,
+      "30": 0.66,
+      "45": 0.8,
+      "60": 0.91
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AXI TWIN 12003",
+     "corIso": "azul",
+     "vazoes": {
+      "20": 0.85,
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AXI TWIN 12004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "20": 1.13,
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AXI TWIN 12005",
+     "corIso": "marrom",
+     "vazoes": {
+      "20": 1.41,
+      "30": 1.63,
+      "45": 2.0,
+      "60": 2.3
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "CVI",
+   "tipo": "indução de ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "20 a 60 psi",
+   "fonte": "F17",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "CVI 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "20": 0.42,
+      "30": 0.49,
+      "45": 0.6,
+      "60": 0.69
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CVI 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "20": 0.57,
+      "30": 0.66,
+      "45": 0.8,
+      "60": 0.91
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CVI 110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "20": 0.71,
+      "30": 0.82,
+      "45": 1.0,
+      "60": 1.15
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CVI 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "20": 0.85,
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CVI 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "20": 1.13,
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "CVI 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "20": 1.41,
+      "30": 1.63,
+      "45": 2.0,
+      "60": 2.3
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "AIRMIX",
+   "tipo": "indução de ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "20 a 80 psi",
+   "fonte": "F18",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "AirMix 11001",
+     "corIso": "laranja",
+     "vazoes": {
+      "20": 0.27,
+      "30": 0.33,
+      "40": 0.38,
+      "50": 0.43,
+      "60": 0.47,
+      "70": 0.51,
+      "80": 0.54
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AirMix 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "20": 0.41,
+      "30": 0.5,
+      "40": 0.57,
+      "50": 0.64,
+      "60": 0.7,
+      "70": 0.76,
+      "80": 0.81
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AirMix 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "20": 0.54,
+      "30": 0.66,
+      "40": 0.77,
+      "50": 0.86,
+      "60": 0.94,
+      "70": 1.02,
+      "80": 1.09
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AirMix 110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "20": 0.68,
+      "30": 0.83,
+      "40": 0.96,
+      "50": 1.07,
+      "60": 1.17,
+      "70": 1.27,
+      "80": 1.36
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AirMix 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "20": 0.81,
+      "30": 1.0,
+      "40": 1.15,
+      "50": 1.29,
+      "60": 1.41,
+      "70": 1.52,
+      "80": 1.63
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AirMix 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "20": 1.09,
+      "30": 1.33,
+      "40": 1.53,
+      "50": 1.71,
+      "60": 1.88,
+      "70": 2.03,
+      "80": 2.17
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AirMix 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "20": 1.36,
+      "30": 1.66,
+      "40": 1.92,
+      "50": 2.14,
+      "60": 2.35,
+      "70": 2.54,
+      "80": 2.71
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AirMix 11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "20": 1.63,
+      "30": 1.99,
+      "40": 2.3,
+      "50": 2.57,
+      "60": 2.82,
+      "70": 3.05,
+      "80": 3.26
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "JAP",
+   "tipo": "indução de ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "30 a 120 psi",
+   "fonte": "F19",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "JAP 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "15": 0.35,
+      "20": 0.42,
+      "30": 0.49,
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77,
+      "90": 0.85,
+      "105": 0.92,
+      "120": 0.98
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAP 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "15": 0.46,
+      "20": 0.57,
+      "30": 0.65,
+      "45": 0.8,
+      "60": 0.92,
+      "75": 1.03,
+      "90": 1.13,
+      "105": 1.22,
+      "120": 1.31
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAP 110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "15": 0.58,
+      "20": 0.71,
+      "30": 0.82,
+      "45": 1.0,
+      "60": 1.15,
+      "75": 1.29,
+      "90": 1.14,
+      "105": 1.53,
+      "120": 1.63
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAP 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "15": 0.69,
+      "20": 0.85,
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55,
+      "90": 1.7,
+      "105": 1.83,
+      "120": 1.96
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAP 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "15": 0.92,
+      "20": 1.13,
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07,
+      "90": 2.26,
+      "105": 2.44,
+      "120": 2.61
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAP 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "15": 1.15,
+      "20": 1.41,
+      "30": 1.63,
+      "45": 2.0,
+      "60": 2.31,
+      "75": 2.58,
+      "90": 2.83,
+      "105": 3.06,
+      "120": 3.27
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "JAP 110025 a 90 psi: vazão impressa 1.14 (menor que a de 75 psi = 1.29) — mantido como impresso; provável erro tipográfico do folheto."
+  },
+  {
+   "linha": "JGT",
+   "tipo": "duplo leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "30 a 115 psi",
+   "fonte": "F20",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "JGT 110.02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.65,
+      "45": 0.8,
+      "60": 0.92,
+      "75": 1.03,
+      "90": 1.13,
+      "105": 1.22,
+      "115": 1.31
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JGT 110.025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.82,
+      "45": 1.0,
+      "60": 1.15,
+      "75": 1.29,
+      "90": 1.41,
+      "105": 1.53,
+      "115": 1.63
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JGT 110.03",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55,
+      "90": 1.7,
+      "105": 1.83,
+      "115": 1.96
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JGT 110.035",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.14,
+      "45": 1.4,
+      "60": 1.62,
+      "75": 1.81,
+      "90": 1.98,
+      "105": 2.14,
+      "115": 2.29
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JGT 110.04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07,
+      "90": 2.26,
+      "105": 2.44,
+      "115": 2.61
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JGT 110.05",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.63,
+      "45": 2.0,
+      "60": 2.31,
+      "75": 2.58,
+      "90": 2.83,
+      "105": 3.06,
+      "115": 3.27
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JGT 110.06",
+     "corIso": "cinza",
+     "vazoes": {
+      "30": 1.96,
+      "45": 2.4,
+      "60": 2.77,
+      "75": 3.1,
+      "90": 3.39,
+      "105": 3.67,
+      "115": 3.92
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JGT 110.08",
+     "corIso": "branco",
+     "vazoes": {
+      "30": 2.61,
+      "45": 3.2,
+      "60": 3.7,
+      "75": 4.13,
+      "90": 4.53,
+      "105": 4.89,
+      "115": 5.23
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "TTI",
+   "tipo": "indução de ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "15 a 100 psi",
+   "fonte": "F21",
+   "pagina": "PDF p.3",
+   "tamanhos": [
+    {
+     "codigo": "TTI 110015",
+     "corIso": "verde",
+     "vazoes": {
+      "15": 0.35,
+      "30": 0.49,
+      "45": 0.6,
+      "60": 0.69,
+      "70": 0.75,
+      "90": 0.84,
+      "100": 0.89
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TTI 11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "15": 0.47,
+      "30": 0.66,
+      "45": 0.8,
+      "60": 0.93,
+      "70": 1.0,
+      "90": 1.14,
+      "100": 1.2
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TTI 110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "15": 0.58,
+      "30": 0.82,
+      "45": 1.01,
+      "60": 1.16,
+      "70": 1.26,
+      "90": 1.42,
+      "100": 1.5
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TTI 11003",
+     "corIso": "azul",
+     "vazoes": {
+      "15": 0.69,
+      "30": 0.68,
+      "45": 1.2,
+      "60": 1.38,
+      "70": 1.49,
+      "90": 1.7,
+      "100": 1.79
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TTI 11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "15": 0.93,
+      "30": 1.31,
+      "45": 1.61,
+      "60": 1.85,
+      "70": 2.0,
+      "90": 2.27,
+      "100": 2.39
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TTI 11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "15": 1.16,
+      "30": 1.64,
+      "45": 2.0,
+      "60": 2.31,
+      "70": 2.5,
+      "90": 2.84,
+      "100": 2.99
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "TTI 11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "15": 1.39,
+      "30": 1.97,
+      "45": 2.41,
+      "60": 2.79,
+      "70": 3.01,
+      "90": 3.41,
+      "100": 3.59
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "TTI 11003 a 30 psi: vazão impressa 0,68 (menor que a de 15 psi = 0,69) — mantido como impresso; provável erro tipográfico."
+  },
+  {
+   "linha": "JMD",
+   "tipo": "indução de ar",
+   "angulos": [
+    130
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "30 a 100 psi",
+   "fonte": "F22",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "JMD 13002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "45": 0.8,
+      "60": 0.93,
+      "70": 1.0,
+      "90": 1.14,
+      "100": 1.2
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JMD 130025",
+     "corIso": "lilás",
+     "vazoes": {
+      "30": 0.82,
+      "45": 1.01,
+      "60": 1.16,
+      "70": 1.26,
+      "90": 1.42,
+      "100": 1.5
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JMD 130003",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.38,
+      "70": 1.49,
+      "90": 1.7,
+      "100": 1.79
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JMD 13004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.31,
+      "45": 1.61,
+      "60": 1.85,
+      "70": 2.0,
+      "90": 2.27,
+      "100": 2.39
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JMD 13005",
+     "corIso": "marrom",
+     "vazoes": {
+      "30": 1.64,
+      "45": 2.0,
+      "60": 2.32,
+      "70": 2.51,
+      "90": 2.84,
+      "100": 2.99
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JMD 13006",
+     "corIso": "cinza",
+     "vazoes": {
+      "30": 1.97,
+      "45": 2.41,
+      "60": 2.79,
+      "70": 3.01,
+      "90": 3.41,
+      "100": 3.59
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Código \"JMD 130003\" está impresso assim no folheto (provavelmente 13003); cor ISO não atribuída a ele."
+  },
+  {
+   "linha": "ATR",
+   "tipo": "cone vazio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "60 a 300 psi",
+   "fonte": "F23",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "ATR 0,5",
+     "corIso": null,
+     "vazoes": {
+      "60": 0.24,
+      "75": 0.27,
+      "105": 0.32,
+      "150": 0.38,
+      "300": 0.52
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ATR 1,0",
+     "corIso": null,
+     "vazoes": {
+      "60": 0.32,
+      "75": 0.36,
+      "105": 0.42,
+      "150": 0.5,
+      "300": 0.7
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ATR 1,5",
+     "corIso": null,
+     "vazoes": {
+      "60": 0.43,
+      "75": 0.48,
+      "105": 0.56,
+      "150": 0.67,
+      "300": 0.93
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ATR 2,0",
+     "corIso": null,
+     "vazoes": {
+      "60": 0.65,
+      "75": 0.73,
+      "105": 0.86,
+      "150": 1.03,
+      "300": 1.44
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ATR 3,0",
+     "corIso": null,
+     "vazoes": {
+      "60": 0.89,
+      "75": 0.99,
+      "105": 1.17,
+      "150": 1.39,
+      "300": 1.94
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ATR 4,0",
+     "corIso": null,
+     "vazoes": {
+      "60": 1.23,
+      "75": 1.38,
+      "105": 1.62,
+      "150": 1.92,
+      "300": 2.67
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ATR 4,5",
+     "corIso": null,
+     "vazoes": {
+      "60": 1.34,
+      "75": 1.5,
+      "105": 1.76,
+      "150": 2.08,
+      "300": 2.88
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ATR 5,0",
+     "corIso": null,
+     "vazoes": {
+      "60": 1.59,
+      "75": 1.78,
+      "105": 2.09,
+      "150": 2.47,
+      "300": 3.42
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ATR 6,0",
+     "corIso": null,
+     "vazoes": {
+      "60": 1.79,
+      "75": 2.0,
+      "105": 2.35,
+      "150": 2.78,
+      "300": 3.85
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "ATR 7,0",
+     "corIso": null,
+     "vazoes": {
+      "60": 2.19,
+      "75": 2.45,
+      "105": 2.87,
+      "150": 3.4,
+      "300": 4.72
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "JA",
+   "tipo": "cone vazio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "60 a 300 psi",
+   "fonte": "F24",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "JA-1",
+     "corIso": null,
+     "vazoes": {
+      "60": 0.32,
+      "90": 0.38,
+      "120": 0.42,
+      "150": 0.5
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JA-2",
+     "corIso": null,
+     "vazoes": {
+      "60": 0.64,
+      "90": 0.76,
+      "120": 0.86,
+      "150": 1.0
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JA-3",
+     "corIso": null,
+     "vazoes": {
+      "60": 0.88,
+      "90": 1.06,
+      "120": 1.21,
+      "150": 1.34
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JA-4",
+     "corIso": null,
+     "vazoes": {
+      "60": 1.25,
+      "90": 1.51,
+      "120": 1.72,
+      "150": 1.91
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JA-5",
+     "corIso": null,
+     "vazoes": {
+      "60": 1.6,
+      "90": 1.93,
+      "120": 2.2,
+      "150": 2.55
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "JHC",
+   "tipo": "cone vazio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "45 a 150 psi",
+   "fonte": "F25",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "JHC 80015",
+     "corIso": "verde",
+     "vazoes": {
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77,
+      "105": 0.91,
+      "135": 1.03,
+      "150": 1.09
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JHC 8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "45": 0.8,
+      "60": 0.92,
+      "75": 1.03,
+      "105": 1.15,
+      "135": 1.22,
+      "150": 1.45
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JHC 8003",
+     "corIso": "azul",
+     "vazoes": {
+      "45": 1.18,
+      "60": 1.36,
+      "75": 1.52,
+      "105": 1.8,
+      "135": 2.04,
+      "150": 2.15
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JHC 8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07,
+      "105": 2.45,
+      "135": 2.77,
+      "150": 2.92
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JHC 8005",
+     "corIso": "marrom",
+     "vazoes": {
+      "45": 2.0,
+      "60": 2.31,
+      "75": 2.58,
+      "105": 3.05,
+      "135": 3.46,
+      "150": 3.65
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JHC 8006",
+     "corIso": "cinza",
+     "vazoes": {
+      "45": 2.4,
+      "60": 2.77,
+      "75": 3.1,
+      "105": 3.67,
+      "135": 4.16,
+      "150": 4.38
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Pressões não equidistantes (45, 60, 75, 105, 135, 150 psi) conforme impresso."
+  },
+  {
+   "linha": "JCI",
+   "tipo": "cone vazio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "60 a 300 psi",
+   "fonte": "F26",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "JCI 80 0050",
+     "corIso": null,
+     "vazoes": {
+      "60": 0.23,
+      "75": 0.26,
+      "105": 0.31,
+      "150": 0.37,
+      "300": 0.52
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JCI 80 0075",
+     "corIso": null,
+     "vazoes": {
+      "60": 0.35,
+      "75": 0.39,
+      "105": 0.46,
+      "150": 0.55,
+      "300": 0.77
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JCI 80 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "60": 0.45,
+      "75": 0.52,
+      "105": 0.61,
+      "150": 0.73,
+      "300": 1.04
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JCI 80 015",
+     "corIso": "verde",
+     "vazoes": {
+      "60": 0.69,
+      "75": 0.77,
+      "105": 0.92,
+      "150": 1.1,
+      "300": 1.57
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JCI 80 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "60": 0.91,
+      "75": 1.03,
+      "105": 1.22,
+      "150": 1.46,
+      "300": 2.1
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JCI 80 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "60": 1.15,
+      "75": 1.29,
+      "105": 1.53,
+      "150": 1.83,
+      "300": 2.59
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JCI 80 03",
+     "corIso": "azul",
+     "vazoes": {
+      "60": 1.39,
+      "75": 1.55,
+      "105": 1.83,
+      "150": 2.19,
+      "300": 3.1
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JCI 80 035",
+     "corIso": null,
+     "vazoes": {
+      "60": 1.65,
+      "75": 1.84,
+      "105": 2.18,
+      "150": 2.6,
+      "300": 3.67
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JCI 80 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "60": 1.85,
+      "75": 2.07,
+      "105": 2.44,
+      "150": 2.92,
+      "300": 4.15
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JCI 80 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "60": 2.3,
+      "75": 2.58,
+      "105": 3.06,
+      "150": 3.66,
+      "300": 5.2
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "JAC",
+   "tipo": "cone vazio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "45 a 300 psi",
+   "fonte": "F27",
+   "pagina": "PDF p.3",
+   "tamanhos": [
+    {
+     "codigo": "JAC 80 0075",
+     "corIso": null,
+     "vazoes": {
+      "45": 0.3,
+      "60": 0.35,
+      "75": 0.39,
+      "105": 0.46,
+      "150": 0.55,
+      "300": 0.77
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAC 80 01",
+     "corIso": "laranja",
+     "vazoes": {
+      "45": 0.4,
+      "60": 0.45,
+      "75": 0.52,
+      "105": 0.61,
+      "150": 0.73,
+      "300": 1.04
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAC 80 015",
+     "corIso": "verde",
+     "vazoes": {
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77,
+      "105": 0.92,
+      "150": 1.1,
+      "300": 1.57
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAC 80 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "45": 0.8,
+      "60": 0.91,
+      "75": 1.03,
+      "105": 1.22,
+      "150": 1.46,
+      "300": 2.1
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAC 80 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "45": 1.0,
+      "60": 1.15,
+      "75": 1.29,
+      "105": 1.53,
+      "150": 1.83,
+      "300": 2.59
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAC 80 03",
+     "corIso": "azul",
+     "vazoes": {
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55,
+      "105": 1.83,
+      "150": 2.19,
+      "300": 3.1
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "JFC",
+   "tipo": "cone cheio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "45 a 105 psi",
+   "fonte": "F28",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "JFC 80015",
+     "corIso": "verde",
+     "vazoes": {
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77,
+      "90": 0.85,
+      "105": 0.92
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JFC 8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "45": 0.8,
+      "60": 0.92,
+      "75": 1.03,
+      "90": 1.13,
+      "105": 1.22
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JFC 80025",
+     "corIso": "lilás",
+     "vazoes": {
+      "45": 1.0,
+      "60": 1.15,
+      "75": 1.29,
+      "90": 1.41,
+      "105": 1.53
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JFC 8003",
+     "corIso": "azul",
+     "vazoes": {
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55,
+      "90": 1.7,
+      "105": 1.83
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JFC 8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07,
+      "90": 2.26,
+      "105": 2.44
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)"
+  },
+  {
+   "linha": "JDC (cone vazio, caracol JDC-2)",
+   "tipo": "cone vazio",
+   "angulos": [
+    55,
+    75,
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "45 a 300 psi",
+   "fonte": "F29",
+   "pagina": "PDF p.3",
+   "tamanhos": [
+    {
+     "codigo": "JDC-4 (disco) + JDC-2 (caracol)",
+     "corIso": null,
+     "vazoes": {
+      "45": 0.79,
+      "60": 0.9,
+      "75": 1.0,
+      "105": 1.18,
+      "150": 1.41,
+      "300": 2.0
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JDC-5 (disco) + JDC-2 (caracol)",
+     "corIso": null,
+     "vazoes": {
+      "45": 1.31,
+      "60": 1.48,
+      "75": 1.65,
+      "105": 1.96,
+      "150": 2.32,
+      "300": 3.3
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JDC-6 (disco) + JDC-2 (caracol)",
+     "corIso": null,
+     "vazoes": {
+      "45": 1.59,
+      "60": 1.8,
+      "75": 2.0,
+      "105": 2.38,
+      "150": 2.81,
+      "300": 4.03
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Identificação pelo número do bico (disco/caracol); ângulo por combinação: JDC-4 55°, JDC-5 75°, JDC-6 80°."
+  },
+  {
+   "linha": "JDC (cone cheio, caracol JDC-3)",
+   "tipo": "cone cheio",
+   "angulos": [
+    55,
+    75,
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "45 a 300 psi",
+   "fonte": "F29",
+   "pagina": "PDF p.3",
+   "tamanhos": [
+    {
+     "codigo": "JDC-4 (disco) + JDC-3 (caracol)",
+     "corIso": null,
+     "vazoes": {
+      "45": 1.39,
+      "60": 1.6,
+      "75": 1.79,
+      "105": 2.11,
+      "150": 2.51,
+      "300": 3.57
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JDC-5 (disco) + JDC-3 (caracol)",
+     "corIso": null,
+     "vazoes": {
+      "45": 2.41,
+      "60": 2.8,
+      "75": 3.12,
+      "105": 3.71,
+      "150": 4.42,
+      "300": 6.28
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JDC-6 (disco) + JDC-3 (caracol)",
+     "corIso": null,
+     "vazoes": {
+      "45": 2.79,
+      "60": 3.18,
+      "75": 3.53,
+      "105": 4.21,
+      "150": 5.03,
+      "300": 7.11
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Identificação pelo número do bico (disco/caracol)."
+  },
+  {
+   "linha": "DISC & CORE (cone vazio)",
+   "tipo": "cone vazio",
+   "angulos": [],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "40 a 300 psi",
+   "fonte": "F30",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "AD 1 + AC 13",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.2,
+      "45": 0.24,
+      "60": 0.27,
+      "75": 0.3,
+      "90": 0.33,
+      "120": 0.37,
+      "150": 0.41,
+      "225": 0.49,
+      "300": 0.56
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 2 + AC 13",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.26,
+      "45": 0.31,
+      "60": 0.35,
+      "75": 0.39,
+      "90": 0.42,
+      "120": 0.48,
+      "150": 0.53,
+      "225": 0.64,
+      "300": 0.73
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 3 + AC 13",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.3,
+      "45": 0.36,
+      "60": 0.41,
+      "75": 0.45,
+      "90": 0.49,
+      "120": 0.56,
+      "150": 0.61,
+      "225": 0.74,
+      "300": 0.84
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 4 + AC 13",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.38,
+      "45": 0.45,
+      "60": 0.52,
+      "75": 0.57,
+      "90": 0.62,
+      "120": 0.7,
+      "150": 0.78,
+      "225": 0.93,
+      "300": 1.06
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 5 + AC 13",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.46,
+      "45": 0.55,
+      "60": 0.62,
+      "75": 0.69,
+      "90": 0.75,
+      "120": 0.85,
+      "150": 0.94,
+      "225": 1.13,
+      "300": 1.29
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 1 + AC 23",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.23,
+      "45": 0.28,
+      "60": 0.32,
+      "75": 0.35,
+      "90": 0.38,
+      "120": 0.43,
+      "150": 0.48,
+      "225": 0.57,
+      "300": 0.65
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 2 + AC 23",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.31,
+      "45": 0.37,
+      "60": 0.43,
+      "75": 0.47,
+      "90": 0.51,
+      "120": 0.58,
+      "150": 0.64,
+      "225": 0.77,
+      "300": 0.88
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 3 + AC 23",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.37,
+      "45": 0.44,
+      "60": 0.51,
+      "75": 0.56,
+      "90": 0.61,
+      "120": 0.69,
+      "150": 0.76,
+      "225": 0.92,
+      "300": 1.04
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 4 + AC 23",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.47,
+      "45": 0.56,
+      "60": 0.64,
+      "75": 0.71,
+      "90": 0.77,
+      "120": 0.88,
+      "150": 0.97,
+      "225": 1.16,
+      "300": 1.32
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 5 + AC 23",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.6,
+      "45": 0.72,
+      "60": 0.82,
+      "75": 0.91,
+      "90": 0.99,
+      "120": 1.12,
+      "150": 1.24,
+      "225": 1.49,
+      "300": 1.7
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 6 + AC 23",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.71,
+      "45": 0.85,
+      "60": 0.97,
+      "75": 1.07,
+      "90": 1.16,
+      "120": 1.32,
+      "150": 1.46,
+      "225": 1.72,
+      "300": 2.0
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 1 + AC 25",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.34,
+      "45": 0.41,
+      "60": 0.46,
+      "75": 0.51,
+      "90": 0.55,
+      "120": 0.63,
+      "150": 0.7,
+      "225": 0.84,
+      "300": 0.95
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 2 + AC 25",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.49,
+      "45": 0.59,
+      "60": 0.67,
+      "75": 0.74,
+      "90": 0.8,
+      "120": 0.91,
+      "150": 1.01,
+      "225": 1.21,
+      "300": 1.38
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 3 + AC 25",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.6,
+      "45": 0.72,
+      "60": 0.81,
+      "75": 0.9,
+      "90": 0.98,
+      "120": 1.11,
+      "150": 1.23,
+      "225": 1.48,
+      "300": 1.68
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 4 + AC 25",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.85,
+      "45": 1.02,
+      "60": 1.16,
+      "75": 1.28,
+      "90": 1.39,
+      "120": 1.58,
+      "150": 1.75,
+      "225": 2.1,
+      "300": 2.39
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 5 + AC 25",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.17,
+      "45": 1.41,
+      "60": 1.6,
+      "75": 1.77,
+      "90": 1.92,
+      "120": 2.19,
+      "150": 2.42,
+      "225": 2.9,
+      "300": 3.3
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 6 + AC 25",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.44,
+      "45": 1.73,
+      "60": 1.97,
+      "75": 2.18,
+      "90": 2.37,
+      "120": 2.69,
+      "150": 2.98,
+      "225": 3.57,
+      "300": 4.07
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 7 + AC 25",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.73,
+      "45": 2.07,
+      "60": 2.36,
+      "75": 2.61,
+      "90": 2.83,
+      "120": 3.22,
+      "150": 3.57,
+      "225": 4.28,
+      "300": 4.87
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 1 + AC 45",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.4,
+      "45": 0.48,
+      "60": 0.55,
+      "75": 0.61,
+      "90": 0.66,
+      "120": 0.75,
+      "150": 0.83,
+      "225": 1.0,
+      "300": 1.14
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 2 + AC 45",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.61,
+      "45": 0.73,
+      "60": 0.83,
+      "75": 0.92,
+      "90": 1.0,
+      "120": 1.14,
+      "150": 1.26,
+      "225": 1.51,
+      "300": 1.72
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 3 + AC 45",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.77,
+      "45": 0.92,
+      "60": 1.05,
+      "75": 1.16,
+      "90": 1.26,
+      "120": 1.43,
+      "150": 1.58,
+      "225": 1.9,
+      "300": 2.16
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 4 + AC 45",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.13,
+      "45": 1.35,
+      "60": 1.54,
+      "75": 1.7,
+      "90": 1.85,
+      "120": 2.1,
+      "150": 2.32,
+      "225": 2.79,
+      "300": 3.17
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 5 + AC 45",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.6,
+      "45": 1.92,
+      "60": 2.19,
+      "75": 2.42,
+      "90": 2.63,
+      "120": 2.99,
+      "150": 3.31,
+      "225": 3.97,
+      "300": 4.52
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 6 + AC 45",
+     "corIso": null,
+     "vazoes": {
+      "30": 2.05,
+      "45": 2.46,
+      "60": 2.79,
+      "75": 3.09,
+      "90": 3.35,
+      "120": 3.82,
+      "150": 4.22,
+      "225": 5.07,
+      "300": 5.77
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 7 + AC 45",
+     "corIso": null,
+     "vazoes": {
+      "30": 2.51,
+      "45": 3.01,
+      "60": 3.43,
+      "75": 3.79,
+      "90": 4.11,
+      "120": 4.68,
+      "150": 5.18,
+      "225": 6.21,
+      "300": 7.07
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 2 + AC 46",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.77,
+      "45": 0.92,
+      "60": 1.05,
+      "75": 1.16,
+      "90": 1.26,
+      "120": 1.43,
+      "150": 1.58,
+      "225": 1.9,
+      "300": 2.16
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 3 + AC 46",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.0,
+      "45": 1.2,
+      "60": 1.37,
+      "75": 1.51,
+      "90": 1.64,
+      "120": 1.87,
+      "150": 2.06,
+      "225": 2.48,
+      "300": 2.82
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 4 + AC 46",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.69,
+      "45": 2.03,
+      "60": 2.32,
+      "75": 2.56,
+      "90": 2.78,
+      "120": 3.16,
+      "150": 3.5,
+      "225": 4.2,
+      "300": 4.78
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 5 + AC 46",
+     "corIso": null,
+     "vazoes": {
+      "30": 2.59,
+      "45": 3.11,
+      "60": 3.54,
+      "75": 3.91,
+      "90": 4.24,
+      "120": 4.83,
+      "150": 5.34,
+      "225": 6.41,
+      "300": 7.3
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 6 + AC 46",
+     "corIso": null,
+     "vazoes": {
+      "30": 3.43,
+      "45": 4.12,
+      "60": 4.69,
+      "75": 5.18,
+      "90": 5.62,
+      "120": 6.4,
+      "150": 7.08,
+      "225": 8.49,
+      "300": 9.67
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 7 + AC 46",
+     "corIso": null,
+     "vazoes": {
+      "30": 4.26,
+      "45": 5.11,
+      "60": 5.82,
+      "75": 6.43,
+      "90": 6.98,
+      "120": 7.94,
+      "150": 8.78,
+      "225": 10.54,
+      "300": 12.0
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Disco AD n + caracol (core) AC nn; ângulos variam por combinação e pressão (colunas de ângulo a 150/300 psi não incluídas)."
+  },
+  {
+   "linha": "DISC & CORE (cone cheio)",
+   "tipo": "cone cheio",
+   "angulos": [],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "40 a 300 psi",
+   "fonte": "F30",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "AD 1 + AC 31",
+     "corIso": null,
+     "vazoes": {
+      "120": 0.83,
+      "150": 0.92,
+      "225": 1.1,
+      "300": 1.25
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 2 + AC 31",
+     "corIso": null,
+     "vazoes": {
+      "120": 1.27,
+      "150": 1.41,
+      "225": 1.69,
+      "300": 1.92
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 3 + AC 31",
+     "corIso": null,
+     "vazoes": {
+      "120": 1.36,
+      "150": 1.5,
+      "225": 1.8,
+      "300": 2.05
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 1 + AC 35",
+     "corIso": null,
+     "vazoes": {
+      "120": 0.83,
+      "150": 0.92,
+      "225": 1.1,
+      "300": 1.25
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 2 + AC 35",
+     "corIso": null,
+     "vazoes": {
+      "120": 1.43,
+      "150": 1.58,
+      "225": 1.9,
+      "300": 2.16
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 3 + AC 35",
+     "corIso": null,
+     "vazoes": {
+      "120": 1.99,
+      "150": 2.2,
+      "225": 2.64,
+      "300": 3.0
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 4 + AC 35",
+     "corIso": null,
+     "vazoes": {
+      "120": 3.24,
+      "150": 3.58,
+      "225": 4.3,
+      "300": 4.89
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 5 + AC 35",
+     "corIso": null,
+     "vazoes": {
+      "30": 2.18,
+      "45": 2.62,
+      "60": 2.98,
+      "75": 3.3,
+      "90": 3.58,
+      "120": 4.08,
+      "150": 4.51,
+      "225": 5.41,
+      "300": 6.16
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 2 + AC 56",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.73,
+      "45": 0.88,
+      "60": 1.0,
+      "75": 1.11,
+      "90": 1.2,
+      "120": 1.37,
+      "150": 1.52,
+      "225": 1.82,
+      "300": 2.07
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 3 + AC 56",
+     "corIso": null,
+     "vazoes": {
+      "30": 0.99,
+      "45": 1.19,
+      "60": 1.36,
+      "75": 1.5,
+      "90": 1.63,
+      "120": 1.85,
+      "150": 2.05,
+      "225": 2.46,
+      "300": 2.8
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 4 + AC 56",
+     "corIso": null,
+     "vazoes": {
+      "30": 1.71,
+      "45": 2.05,
+      "60": 2.33,
+      "75": 2.58,
+      "90": 2.8,
+      "120": 3.19,
+      "150": 3.52,
+      "225": 4.23,
+      "300": 4.81
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 5 + AC 56",
+     "corIso": null,
+     "vazoes": {
+      "30": 2.89,
+      "45": 3.46,
+      "60": 3.94,
+      "75": 4.36,
+      "90": 4.73,
+      "120": 5.39,
+      "150": 5.96,
+      "225": 7.15,
+      "300": 8.14
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 6 + AC 56",
+     "corIso": null,
+     "vazoes": {
+      "30": 4.26,
+      "45": 5.11,
+      "60": 5.82,
+      "75": 6.43,
+      "90": 6.98,
+      "120": 7.94,
+      "150": 8.78,
+      "225": 10.54,
+      "300": 12.0
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "AD 7 + AC 56",
+     "corIso": null,
+     "vazoes": {
+      "30": 5.72,
+      "45": 6.87,
+      "60": 7.81,
+      "75": 8.64,
+      "90": 9.38,
+      "120": 10.67,
+      "150": 11.8,
+      "225": 14.17,
+      "300": 16.12
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Células impressas como \"-\" (combinação não recomendada a 30–90 psi) foram omitidas."
+  },
+  {
+   "linha": "J (cone vazio, caracol J-2)",
+   "tipo": "cone vazio",
+   "angulos": [],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "75 a 300 psi",
+   "fonte": "F31",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "J4-2 (cone vazio)",
+     "corIso": null,
+     "vazoes": {
+      "75": 1.07,
+      "100": 1.21,
+      "150": 1.48,
+      "200": 1.7,
+      "250": 1.9,
+      "300": 2.07
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "J5-2 (cone vazio)",
+     "corIso": null,
+     "vazoes": {
+      "75": 1.56,
+      "100": 1.82,
+      "150": 2.22,
+      "200": 2.54,
+      "250": 2.63,
+      "300": 3.1
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "J6-2 (cone vazio)",
+     "corIso": null,
+     "vazoes": {
+      "75": 2.26,
+      "100": 2.63,
+      "150": 3.21,
+      "200": 3.68,
+      "250": 4.12,
+      "300": 4.5
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela \"Vazão dos Bicos – Série J\" (disco J-4/J-5/J-6 + caracol J-2). Uso em turboatomizador."
+  },
+  {
+   "linha": "J (cone cheio, caracol J-3)",
+   "tipo": "cone cheio",
+   "angulos": [],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "75 a 300 psi",
+   "fonte": "F31",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "J4-3 (cone cheio)",
+     "corIso": null,
+     "vazoes": {
+      "75": 1.56,
+      "100": 1.81,
+      "150": 2.21,
+      "200": 2.55,
+      "250": 2.86,
+      "300": 3.14
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "J5-3 (cone cheio)",
+     "corIso": null,
+     "vazoes": {
+      "75": 2.65,
+      "100": 3.05,
+      "150": 3.69,
+      "200": 4.28,
+      "250": 4.77,
+      "300": 5.22
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "J6-3 (cone cheio)",
+     "corIso": null,
+     "vazoes": {
+      "75": 4.42,
+      "100": 5.07,
+      "150": 6.19,
+      "200": 7.15,
+      "250": 7.99,
+      "300": 8.73
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela \"Vazão dos Bicos – Série J\" (disco + caracol J-3)."
+  },
+  {
+   "linha": "JMI",
+   "tipo": "leque",
+   "angulos": [
+    30,
+    145
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "7 a 60 psi",
+   "fonte": "F32",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "JMI 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "7.5": 0.42,
+      "15": 0.59,
+      "22.5": 0.72,
+      "30": 0.82,
+      "37.5": 0.92,
+      "45": 1.0,
+      "52.5": 1.08,
+      "60": 1.15
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JMI 03",
+     "corIso": "azul",
+     "vazoes": {
+      "7.5": 0.51,
+      "15": 0.71,
+      "22.5": 0.86,
+      "30": 0.99,
+      "37.5": 1.1,
+      "45": 1.2,
+      "52.5": 1.29,
+      "60": 1.38
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JMI 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "7.5": 0.68,
+      "15": 0.94,
+      "22.5": 1.15,
+      "30": 1.32,
+      "37.5": 1.47,
+      "45": 1.6,
+      "52.5": 1.72,
+      "60": 1.84
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JMI 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "7.5": 0.85,
+      "15": 1.18,
+      "22.5": 1.43,
+      "30": 1.65,
+      "37.5": 1.83,
+      "45": 2.0,
+      "52.5": 2.15,
+      "60": 2.3
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JMI 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "7.5": 1.02,
+      "15": 1.42,
+      "22.5": 1.72,
+      "30": 1.98,
+      "37.5": 2.2,
+      "45": 2.4,
+      "52.5": 2.58,
+      "60": 2.76
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JMI 08",
+     "corIso": "branco",
+     "vazoes": {
+      "7.5": 1.35,
+      "15": 1.89,
+      "22.5": 2.29,
+      "30": 2.63,
+      "37.5": 2.93,
+      "45": 3.2,
+      "52.5": 3.45,
+      "60": 3.67
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JMI 10",
+     "corIso": "azul claro",
+     "vazoes": {
+      "7.5": 1.69,
+      "15": 2.36,
+      "22.5": 2.87,
+      "30": 3.29,
+      "37.5": 3.66,
+      "45": 4.0,
+      "52.5": 4.31,
+      "60": 4.59
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Leque plano uniforme (faixa). Ângulo varia 30° a 145° conforme pressão/tamanho."
+  },
+  {
+   "linha": "TVI",
+   "tipo": "cone vazio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "75 a 225 lbf/pol²",
+   "fonte": "F33",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "TVI 800050",
+     "corIso": null,
+     "vazoes": {
+      "105": 0.31,
+      "120": 0.33,
+      "135": 0.35,
+      "150": 0.37,
+      "225": 0.45
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "TVI 800075",
+     "corIso": null,
+     "vazoes": {
+      "75": 0.39,
+      "90": 0.42,
+      "105": 0.46,
+      "120": 0.49,
+      "135": 0.52,
+      "150": 0.55,
+      "225": 0.67
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "TVI 80015",
+     "corIso": "verde",
+     "vazoes": {
+      "75": 0.77,
+      "90": 0.85,
+      "105": 0.92,
+      "120": 0.98,
+      "135": 1.04,
+      "150": 1.1,
+      "225": 1.34
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "TVI 8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "75": 1.03,
+      "90": 1.13,
+      "105": 1.22,
+      "120": 1.31,
+      "135": 1.39,
+      "150": 1.46,
+      "225": 1.79
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "TVI 80025",
+     "corIso": "lilás",
+     "vazoes": {
+      "75": 1.29,
+      "90": 1.41,
+      "105": 1.53,
+      "120": 1.63,
+      "135": 1.73,
+      "150": 1.83,
+      "225": 2.24
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "TVI 8003",
+     "corIso": "azul",
+     "vazoes": {
+      "75": 1.55,
+      "90": 1.7,
+      "105": 1.83,
+      "120": 1.96,
+      "135": 2.08,
+      "150": 2.19,
+      "225": 2.68
+     },
+     "unidade": "L/min por lbf/pol²"
+    }
+   ],
+   "metodoExtracao": "leitura visual da página renderizada (texto do PDF não extraível)",
+   "observacoes": "Cone vazio com indução de ar. Fonte do PDF sem mapeamento Unicode; valores lidos visualmente. TVI 800050 a 75 e 90 lbf/pol² impresso \"NR*\" (não recomendado) — omitidos."
+  },
+  {
+   "linha": "JAI",
+   "tipo": "indução de ar",
+   "angulos": [
+    120
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "30 a 120 psi",
+   "fonte": "F34",
+   "pagina": "PDF p.2",
+   "tamanhos": [
+    {
+     "codigo": "JAI 120015",
+     "corIso": "verde",
+     "vazoes": {
+      "15": 0.35,
+      "20": 0.42,
+      "30": 0.49,
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77,
+      "90": 0.85,
+      "105": 0.92,
+      "120": 0.98
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAI 12002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "15": 0.46,
+      "20": 0.57,
+      "30": 0.65,
+      "45": 0.8,
+      "60": 0.92,
+      "75": 1.03,
+      "90": 1.13,
+      "105": 1.22,
+      "120": 1.31
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAI 120025",
+     "corIso": "lilás",
+     "vazoes": {
+      "15": 0.58,
+      "20": 0.71,
+      "30": 0.82,
+      "45": 1.0,
+      "60": 1.15,
+      "75": 1.29,
+      "90": 1.14,
+      "105": 1.53,
+      "120": 1.63
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAI 12003",
+     "corIso": "azul",
+     "vazoes": {
+      "15": 0.69,
+      "20": 0.85,
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55,
+      "90": 1.7,
+      "105": 1.83,
+      "120": 1.96
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAI 12004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "15": 0.92,
+      "20": 1.13,
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07,
+      "90": 2.26,
+      "105": 2.44,
+      "120": 2.61
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAI 12005",
+     "corIso": "marrom",
+     "vazoes": {
+      "15": 1.15,
+      "20": 1.41,
+      "30": 1.63,
+      "45": 2.0,
+      "60": 2.31,
+      "75": 2.58,
+      "90": 2.83,
+      "105": 3.06,
+      "120": 3.27
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAI 12006",
+     "corIso": "cinza",
+     "vazoes": {
+      "15": 1.39,
+      "20": 1.7,
+      "30": 1.96,
+      "45": 2.4,
+      "60": 2.77,
+      "75": 3.1,
+      "90": 3.39,
+      "105": 3.67,
+      "120": 3.92
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAI 12008",
+     "corIso": "branco",
+     "vazoes": {
+      "15": 1.85,
+      "20": 2.26,
+      "30": 2.61,
+      "45": 3.2,
+      "60": 3.7,
+      "75": 4.13,
+      "90": 4.53,
+      "105": 4.89,
+      "120": 5.23
+     },
+     "unidade": "L/min por psi"
+    }
+   ],
+   "metodoExtracao": "leitura visual da página renderizada (texto do PDF não extraível)",
+   "observacoes": "Tabela desenhada como vetores (sem texto). JAI 120025 a 90 psi impresso 1,14 (menor que 75 psi) — mantido como impresso."
+  },
+  {
+   "linha": "OCI",
+   "tipo": "leque",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "30 a 60 psi",
+   "fonte": "F35",
+   "pagina": "PDF p.10 (impressas 17–18)",
+   "tamanhos": [
+    {
+     "codigo": "OCI 8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "45": 0.8,
+      "60": 0.91
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "OCI 8003",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "OCI 8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    }
+   ],
+   "metodoExtracao": "leitura visual da página renderizada (texto do PDF não extraível)",
+   "observacoes": "Leque plano descentralizado (off-center), ângulo 15°+65° (80°)."
+  },
+  {
+   "linha": "AVI OC",
+   "tipo": "indução de ar",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "45 a 105 psi",
+   "fonte": "F35",
+   "pagina": "PDF p.16 (impressas 29–30)",
+   "tamanhos": [
+    {
+     "codigo": "AVI OC 80015",
+     "corIso": "verde",
+     "vazoes": {
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77,
+      "90": 0.85,
+      "105": 0.92
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "AVI OC 8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "45": 0.8,
+      "60": 0.91,
+      "75": 1.03,
+      "90": 1.13,
+      "105": 1.22
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "AVI OC 80025",
+     "corIso": "lilás",
+     "vazoes": {
+      "45": 1.0,
+      "60": 1.15,
+      "75": 1.29,
+      "90": 1.14,
+      "105": 1.53
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "AVI OC 8003",
+     "corIso": "azul",
+     "vazoes": {
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55,
+      "90": 1.7,
+      "105": 1.83
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "AVI OC 8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07,
+      "90": 2.26,
+      "105": 2.44
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    }
+   ],
+   "metodoExtracao": "leitura visual da página renderizada (texto do PDF não extraível)",
+   "observacoes": "Leque descentralizado com indução de ar (15°+65°). 1º bloco rotulado apenas \"80015\" no guia. AVI OC 80025 a 90 psi impresso 1,14 — mantido."
+  },
+  {
+   "linha": "AVI FASTCAP",
+   "tipo": "indução de ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": null,
+   "fonte": "F35",
+   "pagina": "PDF p.17 (impressas 31–32)",
+   "tamanhos": [
+    {
+     "codigo": "AVI 11001 (FASTCAP)",
+     "corIso": "laranja",
+     "vazoes": {
+      "45": 0.4,
+      "60": 0.46,
+      "75": 0.52,
+      "105": 0.61
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "AVI 110015 (FASTCAP)",
+     "corIso": "verde",
+     "vazoes": {
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77,
+      "105": 0.92
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "AVI 11002 (FASTCAP)",
+     "corIso": "amarelo",
+     "vazoes": {
+      "45": 0.8,
+      "60": 0.91,
+      "75": 1.03,
+      "105": 1.22
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "AVI 110025 (FASTCAP)",
+     "corIso": "lilás",
+     "vazoes": {
+      "45": 1.0,
+      "60": 1.15,
+      "75": 1.29,
+      "105": 1.53
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "AVI 11003 (FASTCAP)",
+     "corIso": "azul",
+     "vazoes": {
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55,
+      "105": 1.83
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "AVI 11004 (FASTCAP)",
+     "corIso": "vermelho",
+     "vazoes": {
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07,
+      "105": 2.44
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "AVI 11005 (FASTCAP)",
+     "corIso": "marrom",
+     "vazoes": {
+      "45": 2.0,
+      "60": 2.31,
+      "75": 2.58,
+      "105": 3.06
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    }
+   ],
+   "metodoExtracao": "leitura visual da página renderizada (texto do PDF não extraível)",
+   "observacoes": "Tabela do guia lista 45, 60, 75 e 105 psi (sem 90). Faixa de pressão não lida."
+  },
+  {
+   "linha": "AVI TWIN FASTCAP",
+   "tipo": "duplo leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": null,
+   "fonte": "F35",
+   "pagina": "PDF p.19 (impressas 35–36)",
+   "tamanhos": [
+    {
+     "codigo": "AVI TWIN 11001 (FASTCAP)",
+     "corIso": "laranja",
+     "vazoes": {
+      "45": 0.4,
+      "60": 0.46,
+      "75": 0.52,
+      "90": 0.57,
+      "105": 0.61
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "AVI TWIN 110015 (FASTCAP)",
+     "corIso": "verde",
+     "vazoes": {
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77,
+      "90": 0.85,
+      "105": 0.92
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "AVI TWIN 11002 (FASTCAP)",
+     "corIso": "amarelo",
+     "vazoes": {
+      "45": 0.8,
+      "60": 0.91,
+      "75": 1.03,
+      "90": 1.13,
+      "105": 1.22
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "AVI TWIN 110025 (FASTCAP)",
+     "corIso": "lilás",
+     "vazoes": {
+      "45": 1.0,
+      "60": 1.15,
+      "75": 1.29,
+      "90": 1.41,
+      "105": 1.53
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "AVI TWIN 11003 (FASTCAP)",
+     "corIso": "azul",
+     "vazoes": {
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55,
+      "90": 1.7,
+      "105": 1.83
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "AVI TWIN 11004 (FASTCAP)",
+     "corIso": "vermelho",
+     "vazoes": {
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07,
+      "90": 2.26,
+      "105": 2.44
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "AVI TWIN 11005 (FASTCAP)",
+     "corIso": "marrom",
+     "vazoes": {
+      "45": 2.0,
+      "60": 2.31,
+      "75": 2.58,
+      "90": 2.83,
+      "105": 3.06
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    }
+   ],
+   "metodoExtracao": "leitura visual da página renderizada (texto do PDF não extraível)",
+   "observacoes": "Duplo leque com indução de ar. Faixa de pressão não lida."
+  },
+  {
+   "linha": "ESI",
+   "tipo": "leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "20 a 60 psi",
+   "fonte": "F35",
+   "pagina": "PDF p.28 (impressas 53–54)",
+   "tamanhos": [
+    {
+     "codigo": "ESI 015",
+     "corIso": "verde",
+     "vazoes": {
+      "20": 0.42,
+      "30": 0.49,
+      "45": 0.6,
+      "60": 0.69
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "ESI 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "20": 0.57,
+      "30": 0.66,
+      "45": 0.8,
+      "60": 0.91
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "ESI 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "20": 0.71,
+      "30": 0.82,
+      "45": 1.0,
+      "60": 1.15
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "ESI 03",
+     "corIso": "azul",
+     "vazoes": {
+      "20": 0.8,
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "ESI 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "20": 1.13,
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "ESI 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "20": 1.41,
+      "30": 1.63,
+      "45": 2.0,
+      "60": 2.3
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "ESI 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "20": 1.7,
+      "30": 1.96,
+      "45": 2.4,
+      "60": 2.77
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    }
+   ],
+   "metodoExtracao": "leitura visual da página renderizada (texto do PDF não extraível)",
+   "observacoes": "\"Jato sólido (6 jatos)\" — fertilizante líquido; tipo não se encaixa nas categorias, classificado como \"leque\" por aproximação. ESI 03 a 20 psi impresso 0,80."
+  },
+  {
+   "linha": "XT",
+   "tipo": "leque",
+   "angulos": [
+    95,
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "30 a 60 psi",
+   "fonte": "F35",
+   "pagina": "PDF p.43 (impressas 83–84)",
+   "tamanhos": [
+    {
+     "codigo": "XT 10",
+     "corIso": null,
+     "vazoes": {
+      "30": 3.4,
+      "45": 4.0,
+      "60": 4.5
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "XT 20",
+     "corIso": null,
+     "vazoes": {
+      "30": 6.4,
+      "45": 7.9,
+      "60": 9.1
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "XT 24",
+     "corIso": null,
+     "vazoes": {
+      "30": 7.9,
+      "45": 9.6,
+      "60": 11.0
+     },
+     "unidade": "L/min por lbf/pol²"
+    }
+   ],
+   "metodoExtracao": "leitura visual da página renderizada (texto do PDF não extraível)",
+   "observacoes": "Bico de ponta de barra (leque descentralizado, aço inox/plástico); identificação \"pela cor\", não ISO."
+  },
+  {
+   "linha": "MVI",
+   "tipo": "indução de ar",
+   "angulos": [
+    130,
+    160
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": "20 a 60 psi",
+   "fonte": "F35",
+   "pagina": "PDF p.44 (impressas 85–86)",
+   "tamanhos": [
+    {
+     "codigo": "MVI 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "20": 0.55,
+      "30": 0.67,
+      "45": 0.81,
+      "60": 0.94
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "MVI 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "20": 1.15,
+      "30": 1.32,
+      "45": 1.6,
+      "60": 1.84
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    }
+   ],
+   "metodoExtracao": "leitura visual da página renderizada (texto do PDF não extraível)",
+   "observacoes": "Leque plano uniforme defletor com indução de ar."
+  },
+  {
+   "linha": "KLC",
+   "tipo": "leque",
+   "angulos": [
+    130,
+    160
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoRecomendadaBar": null,
+   "faixaPressaoImpressa": null,
+   "fonte": "F35",
+   "pagina": "PDF p.45 (impressas 87–88)",
+   "tamanhos": [
+    {
+     "codigo": "1/4 KLC - 5",
+     "corIso": null,
+     "vazoes": {
+      "15": 2.32,
+      "30": 3.28,
+      "45": 4.02
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    },
+    {
+     "codigo": "1/4 KLC - 18",
+     "corIso": null,
+     "vazoes": {
+      "15": 8.34,
+      "30": 11.8,
+      "45": 14.44
+     },
+     "unidade": "L/min por lbf/pol² (psi)"
+    }
+   ],
+   "metodoExtracao": "leitura visual da página renderizada (texto do PDF não extraível)",
+   "observacoes": "Leque defletor extra amplo, latão; identificação pela numeração do bico. Faixa de aplicação 1 a 10 m."
+  }
+ ]
+}
