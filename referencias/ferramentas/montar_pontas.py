@@ -13,7 +13,6 @@ MANUAIS = {('Jacto','J3D - 10008','15'):'igual à J3D 10006 (provável erro de i
  ('Jacto','AXI 11003','20'):'diferente das demais pontas 110-03 do mesmo folheto',
  ('TeeJet','TTI11010','*'):'de 2 a 7 bar o catálogo imprime as vazões da capacidade 15, não 10 (erro de impressão; igual no Catálogo 52-PT)',
  **{('Hypro (Pentair)','LDC90-01',x):'linha aparentemente deslocada uma pressão (abaixo da classe ISO 01 de 1,5 a 3,5 bar; igual na seção em espanhol)' for x in ('1.5','2','2.5','3','3.5')},
- **{('Magnojet', f'AD/T {c}', '30'): 'a 30 psi o catálogo repete a vazão do tamanho anterior (erro de impressão; confirmado pelas colunas de L/ha)' for c in ('025', '03', '04', '05', '06', '08', '10')},
  ('TeeJet','DGTJ60-110015','4'):'salto de 0,64 para 0,76 entre 3,5 e 4 bar, incoerente com os demais tamanhos (igual no Catálogo 52-PT)'}
 ISO = {'01':.4,'015':.6,'02':.8,'025':1.0,'03':1.2,'04':1.6,'05':2.0,'06':2.4,'08':3.2,'10':4.0}
 PSI = 0.0689476
