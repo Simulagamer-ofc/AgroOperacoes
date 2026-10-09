@@ -1,0 +1,375 @@
+{
+ "fabricante": "Hypro (Pentair)",
+ "nota": "Somente tabelas impressas em L/min por bar dos PDFs oficiais Hypro (Hypro EU / Pentair) hospedados em documents.kramp.com. Nada convertido. Chaves de pressão = bar como impresso (ex.: \"2.0\" nas folhas LD/F110, \"2\" na GuardianAIR). corIso derivada do código de tamanho (ISO 10625).",
+ "fontes": [
+  {
+   "id": "E1",
+   "titulo": "Hypro EU – GuardianAIR™ finer air-induction nozzles (GA110 …AZ), folha técnica oficial Hypro (Hypro EU Limited / Pentair) hospedada pelo distribuidor Kramp",
+   "url": "https://documents.kramp.com/Hypro_GA_EN.pdf",
+   "ano": "2013",
+   "arquivoLocal": "pontas/hypro_eu/pdf/Hypro_GA_EN.pdf",
+   "anoObs": "rodapé impresso \"04/13 © 2013 PENTAIR\"; metadados PDF CreationDate 2014-03-28. O arquivo Hypro_GA_NL.pdf (https://documents.kramp.com/Hypro_GA_NL.pdf) é a mesma folha em inglês, com tabela idêntica (verificado por extração)."
+  },
+  {
+   "id": "E2",
+   "titulo": "Hypro EU – Flat Fan Lo-Drift™ 110° Nozzles (catálogo Hypro \"Hypro Text Section\", p.9), catálogo oficial Hypro hospedado pelo distribuidor Kramp",
+   "url": "https://documents.kramp.com/Hypro_LD_EN_3.pdf",
+   "ano": "2007",
+   "arquivoLocal": "pontas/hypro_eu/pdf/Hypro_LD_EN_3.pdf",
+   "anoObs": "cabeçalho impresso \"16/8/07\"; metadados PDF CreationDate 2007-10-12. Hypro_LD_EN_2.pdf no mesmo servidor tem conteúdo idêntico."
+  },
+  {
+   "id": "E3",
+   "titulo": "Hypro EU – Hypro Flat Fan 110° Nozzle (F110; catálogo Hypro \"Hypro Text Section\", p.12), catálogo oficial Hypro hospedado pelo distribuidor Kramp",
+   "url": "https://documents.kramp.com/Hypro_VP_EN_2.pdf",
+   "ano": "2007",
+   "arquivoLocal": "pontas/hypro_eu/pdf/Hypro_VP_EN_2.pdf",
+   "anoObs": "cabeçalho impresso \"16/8/07\"; metadados PDF CreationDate 2007-10-12. Apesar do nome do arquivo (\"VP\"), o conteúdo é o bico Flat Fan 110° (F110)."
+  }
+ ],
+ "linhas": [
+  {
+   "linha": "GuardianAIR 110° (GA110 …AZ, versão EU)",
+   "tipo": "inducao_ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": null,
+   "fonte": "E1",
+   "pagina": "PDF p.1",
+   "metodoExtracao": "pdftotext -layout (linhas de tabela: pressão, vazão)",
+   "observacoes": "Leque plano com indução de ar (\"finer air-induction\"). Tabela \"Pressure Bar / Flow L/min\" de 1 a 6 bar; vazões impressas com 3 casas. Linha distinta da GuardianAIR Ceramic 120° (GAC) de hypro.json. Tamanho 035 sem cor ISO 10625 padronizada (corIso null). Classificações LERAP/JKI impressas não incluídas. corIso derivada do código de tamanho (ISO 10625), não da cor impressa.",
+   "tamanhos": [
+    {
+     "codigo": "GA110-015AZ",
+     "corIso": "verde",
+     "vazoes": {
+      "1": 0.346,
+      "1.5": 0.424,
+      "2": 0.49,
+      "3": 0.6,
+      "4": 0.693,
+      "5": 0.775,
+      "6": 0.849
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "GA110-02AZ",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1": 0.462,
+      "1.5": 0.566,
+      "2": 0.653,
+      "3": 0.8,
+      "4": 0.924,
+      "5": 1.033,
+      "6": 1.131
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "GA110-025AZ",
+     "corIso": "lilás",
+     "vazoes": {
+      "1": 0.577,
+      "1.5": 0.707,
+      "2": 0.816,
+      "3": 1.0,
+      "4": 1.155,
+      "5": 1.291,
+      "6": 1.414
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "GA110-03AZ",
+     "corIso": "azul",
+     "vazoes": {
+      "1": 0.693,
+      "1.5": 0.849,
+      "2": 0.98,
+      "3": 1.2,
+      "4": 1.386,
+      "5": 1.549,
+      "6": 1.697
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "GA110-035AZ",
+     "corIso": null,
+     "vazoes": {
+      "1": 0.808,
+      "1.5": 0.99,
+      "2": 1.143,
+      "3": 1.4,
+      "4": 1.617,
+      "5": 1.807,
+      "6": 1.98
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "GA110-04AZ",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1": 0.924,
+      "1.5": 1.131,
+      "2": 1.306,
+      "3": 1.6,
+      "4": 1.848,
+      "5": 2.066,
+      "6": 2.263
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "GA110-05AZ",
+     "corIso": "marrom",
+     "vazoes": {
+      "1": 1.155,
+      "1.5": 1.414,
+      "2": 1.633,
+      "3": 2.0,
+      "4": 2.309,
+      "5": 2.582,
+      "6": 2.828
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "Lo-Drift 110° (LD…F110)",
+   "tipo": "leque_antideriva",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": null,
+   "fonte": "E2",
+   "pagina": "PDF p.1",
+   "metodoExtracao": "pdftotext -layout (linhas de tabela: pressão, vazão)",
+   "observacoes": "Leque antideriva Lo-Drift 110° (\"The original drift reducing nozzle\"); tabela de 2.0, 3.0 e 4.0 bar. Pré-orifício não descrito neste PDF (marcado true por ser a linha Lo-Drift, como LDC em hypro.json). Linha distinta da Lo-Drift Ceramic (LDC 90°/120°) de hypro.json. \"*Also available as 80° nozzles\" impresso, sem tabela própria para 80°. Cores impressas (Green, Yellow, Lilac, Blue, Red, Brown, Grey, White) concordam com a corIso. corIso derivada do código de tamanho (ISO 10625), não da cor impressa.",
+   "tamanhos": [
+    {
+     "codigo": "LD015F110",
+     "corIso": "verde",
+     "vazoes": {
+      "2.0": 0.49,
+      "3.0": 0.6,
+      "4.0": 0.693
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "LD02F110",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.653,
+      "3.0": 0.8,
+      "4.0": 0.924
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "LD025F110",
+     "corIso": "lilás",
+     "vazoes": {
+      "2.0": 0.816,
+      "3.0": 1.0,
+      "4.0": 1.155
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "LD03F110",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.98,
+      "3.0": 1.2,
+      "4.0": 1.386
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "LD04F110",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.306,
+      "3.0": 1.6,
+      "4.0": 1.848
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "LD05F110",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.633,
+      "3.0": 2.0,
+      "4.0": 2.309
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "LD06F110",
+     "corIso": "cinza",
+     "vazoes": {
+      "2.0": 1.96,
+      "3.0": 2.4,
+      "4.0": 2.771
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "LD08F110",
+     "corIso": "branco",
+     "vazoes": {
+      "2.0": 2.613,
+      "3.0": 3.2,
+      "4.0": 3.695
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "Flat Fan 110° (F110)",
+   "tipo": "leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": null,
+   "fonte": "E3",
+   "pagina": "PDF p.1",
+   "metodoExtracao": "pdftotext -layout (linhas de tabela: pressão, vazão)",
+   "observacoes": "Leque plano convencional 110° (códigos BCPC F110/x/3); tabela de 2.0, 3.0 e 4.0 bar. Tamanhos 01 a 20; cores impressas (Orange … Black) concordam com a corIso. corIso derivada do código de tamanho (ISO 10625), não da cor impressa.",
+   "tamanhos": [
+    {
+     "codigo": "01F110OR",
+     "corIso": "laranja",
+     "vazoes": {
+      "2.0": 0.327,
+      "3.0": 0.4,
+      "4.0": 0.462
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "015F110RG",
+     "corIso": "verde",
+     "vazoes": {
+      "2.0": 0.49,
+      "3.0": 0.6,
+      "4.0": 0.693
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "02F110YE",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.653,
+      "3.0": 0.8,
+      "4.0": 0.924
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "025F110VI",
+     "corIso": "lilás",
+     "vazoes": {
+      "2.0": 0.816,
+      "3.0": 1.0,
+      "4.0": 1.155
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "03F110UB",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.98,
+      "3.0": 1.2,
+      "4.0": 1.386
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "04F110RE",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.306,
+      "3.0": 1.6,
+      "4.0": 1.848
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "05F110LB",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.633,
+      "3.0": 2.0,
+      "4.0": 2.309
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "06F110GY",
+     "corIso": "cinza",
+     "vazoes": {
+      "2.0": 1.96,
+      "3.0": 2.4,
+      "4.0": 2.771
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "08F110WH",
+     "corIso": "branco",
+     "vazoes": {
+      "2.0": 2.613,
+      "3.0": 3.2,
+      "4.0": 3.695
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "10F110CB",
+     "corIso": "azul claro",
+     "vazoes": {
+      "2.0": 3.266,
+      "3.0": 4.0,
+      "4.0": 4.619
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "15F110LG",
+     "corIso": "verde claro",
+     "vazoes": {
+      "2.0": 4.899,
+      "3.0": 6.0,
+      "4.0": 6.928
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "20F110BL",
+     "corIso": "preto",
+     "vazoes": {
+      "2.0": 6.532,
+      "3.0": 8.0,
+      "4.0": 9.238
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  }
+ ]
+}
