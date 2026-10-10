@@ -18,6 +18,8 @@ const lcData = iso => iso ? iso.slice(8, 10) + iso.slice(5, 7) + iso.slice(0, 4)
 const lcValor = v => String(Math.round(Math.abs(Number(v) || 0) * 100)).padStart(3, '0'); // 2 casas fixas, sem separador (0 → 000)
 const lcPct = v => String(Math.round((Number(v) || 0) * 100)).padStart(5, '0');           // N5 com 2 casas: 100% → 10000
 const lcTxt = s => String(s ?? '').replace(/[|\r\n\t]/g, ' ').replace(/[\x00-\x1f]/g, '').trim(); // "|" e não imprimíveis não podem aparecer
+const lcMax = (s, n) => [...lcTxt(s)].slice(0, n).join('').trim(); // corta no tamanho máximo do campo (leiaute 1.3)
+const lcNumDoc = s => String(s ?? '').replace(/^\s*NF-?e\s*(n[º°o.]*\s*)?/i, '').trim(); // só o número do documento
 const lcNome = s => semAcentoApp(s).replace(/[^a-z0-9]+/g, ' ').trim();
 
 // Dígitos verificadores (módulo 11) de CPF e CNPJ
@@ -29,8 +31,8 @@ const docValido = d => cpfValido(d) || cnpjValido(d);
 function lancamentosAno(ano) {
   const ini = `${ano}-01-01`, fim = `${ano}-12-31`, out = [];
   const comConta = new Set(db.contas.filter(c => c.expenseId).map(c => c.expenseId));
-  db.contas.filter(c => c.status === 'paga' && c.pagoEm >= ini && c.pagoEm <= fim).forEach(c => out.push({ref: 'conta:' + c.id, data: c.pagoEm, valor: Number(c.valorPago) || 0, entrada: c.tipo === 'receber', hist: c.descricao + (c.parcela ? ` (${c.parcela})` : ''), parceiro: c.parceiro || '', doc: c.doc || '', nfe: false}));
-  db.expenses.filter(g => Number(g.value) > 0 && !g.contaId && !comConta.has(g.id) && g.date >= ini && g.date <= fim).forEach(g => out.push({ref: 'gasto:' + g.id, data: g.date, valor: Number(g.value), entrada: false, hist: g.description, parceiro: g.supplier || '', doc: g.doc || '', nfe: !!g.nfeChave, docParceiro: g.parceiroDoc || ''}));
+  db.contas.filter(c => c.status === 'paga' && c.pagoEm >= ini && c.pagoEm <= fim).forEach(c => out.push({ref: 'conta:' + c.id, data: c.pagoEm, valor: Number(c.valorPago) || 0, entrada: c.tipo === 'receber', hist: c.descricao + (c.parcela ? ` (${c.parcela})` : ''), parceiro: c.parceiro || '', doc: lcNumDoc(c.doc), nfe: false}));
+  db.expenses.filter(g => Number(g.value) > 0 && !g.contaId && !comConta.has(g.id) && g.date >= ini && g.date <= fim).forEach(g => out.push({ref: 'gasto:' + g.id, data: g.date, valor: Number(g.value), entrada: false, hist: g.description, parceiro: g.supplier || '', doc: lcNumDoc(g.doc), nfe: !!g.nfeChave, docParceiro: g.parceiroDoc || ''}));
   db.maintenances.filter(m => Number(m.cost) > 0 && m.status === 'Concluída' && (m.doneDate || m.date) >= ini && (m.doneDate || m.date) <= fim).forEach(m => out.push({ref: 'manut:' + m.id, data: m.doneDate || m.date, valor: Number(m.cost), entrada: false, hist: `Manutenção: ${m.description}${machineName(m.machineId) ? ' — ' + machineName(m.machineId) : ''}`, parceiro: '', doc: '', nfe: false}));
   const cfg = lcCfg();
   return out.sort((a, b) => a.data.localeCompare(b.data) || (b.entrada - a.entrada)).map(l => {
@@ -42,16 +44,19 @@ function lancamentosAno(ano) {
 
 function validarLcdpr(ano, lanc) {
   const c = lcCfg(), p = c.produtor, e = [];
-  if (!cpfValido(p.cpf)) e.push('Produtor: CPF inválido.');
-  if (!p.nome) e.push('Produtor: nome.');
-  for (const [k, r] of [['endereco', 'endereço'], ['num', 'número'], ['bairro', 'bairro'], ['uf', 'UF'], ['email', 'e-mail']]) if (!p[k]) e.push(`Produtor: ${r}.`);
-  if (soDig(p.codMun).length !== 7) e.push('Produtor: código do município (IBGE, 7 dígitos).');
-  if (soDig(p.cep).length !== 8) e.push('Produtor: CEP (8 dígitos).');
+  const faltaP = [];
+  if (!soDig(p.cpf)) faltaP.push('CPF');
+  for (const [k, r] of [['nome', 'nome'], ['endereco', 'endereço'], ['num', 'número'], ['bairro', 'bairro'], ['uf', 'UF']]) if (!p[k]) faltaP.push(r);
+  if (soDig(p.codMun).length !== 7) faltaP.push('código do município (IBGE, 7 dígitos)');
+  if (soDig(p.cep).length !== 8) faltaP.push('CEP (8 dígitos)');
+  if (!p.email) faltaP.push('e-mail');
+  if (faltaP.length) e.push(`Produtor — falta: ${faltaP.join(', ')}.`);
+  if (soDig(p.cpf) && !cpfValido(p.cpf)) e.push('Produtor: CPF inválido (confira os dígitos).');
   if (!c.imoveis.length) e.push('Cadastre pelo menos um imóvel rural.');
   c.imoveis.forEach(i => {
     const n = `Imóvel ${i.cod} (${i.nome || 'sem nome'})`;
-    if (!i.nome || !i.endereco || !i.bairro) e.push(`${n}: nome, endereço e bairro.`);
-    if (!i.uf || soDig(i.codMun).length !== 7 || soDig(i.cep).length !== 8) e.push(`${n}: UF, município (7 dígitos) e CEP (8 dígitos).`);
+    const falta = [!i.nome && 'nome', !i.endereco && 'endereço', !i.bairro && 'bairro', !i.uf && 'UF', soDig(i.codMun).length !== 7 && 'código do município (7 dígitos)', soDig(i.cep).length !== 8 && 'CEP (8 dígitos)'].filter(Boolean);
+    if (falta.length) e.push(`${n} — falta: ${falta.join(', ')}.`);
     if (i.cafir && soDig(i.cafir).length !== 8) e.push(`${n}: CAFIR deve ter 8 dígitos (com DV).`);
     if (i.caepf && soDig(i.caepf).length !== 14) e.push(`${n}: CAEPF deve ter 14 dígitos.`);
     if (i.tipo === '1' && !i.caepf) e.push(`${n}: CAEPF obrigatório na exploração individual.`);
@@ -60,40 +65,42 @@ function validarLcdpr(ano, lanc) {
     if (Math.abs(soma - 100) > 0.001 && !(i.tipo === '3' || i.tipo === '5')) e.push(`${n}: participações somam ${num(soma, 2)}% (devem somar 100%).`);
     (i.terceiros || []).forEach(t => { if (!docValido(t.doc)) e.push(`${n}: CPF/CNPJ inválido do terceiro ${t.nome || ''}.`); });
   });
-  c.contas.forEach(b => { if (soDig(b.banco).length !== 3 || soDig(b.agencia).length < 1 || soDig(b.agencia).length > 4 || !soDig(b.numero)) e.push(`Conta ${b.cod}: banco (3 dígitos), agência (até 4, sem DV) e número com DV.`); });
+  c.contas.forEach(b => { if (soDig(b.banco).length !== 3 || soDig(b.agencia).length < 1 || soDig(b.agencia).length > 4 || !soDig(b.numero)) e.push(`Conta ${b.cod}: confira banco (3 dígitos), agência (até 4 dígitos, sem DV) e número da conta com DV.`); });
   const usados = lanc.filter(l => l.incluir);
   if (!usados.length) e.push(`Nenhum lançamento incluído em ${ano}.`);
   const codsImovel = new Set(c.imoveis.map(i => i.cod)), codsConta = new Set(['000', '999', ...c.contas.map(b => b.cod)]);
   const semDoc = usados.filter(l => !docValido(l.idPartic)), semImovel = usados.filter(l => l.imovel !== '000' && !codsImovel.has(l.imovel)), semConta = usados.filter(l => !codsConta.has(l.conta));
-  if (semDoc.length) e.push(`${semDoc.length} lançamento(s) sem CPF/CNPJ válido do participante.`);
-  if (semImovel.length) e.push(`${semImovel.length} lançamento(s) sem imóvel cadastrado.`);
-  if (semConta.length) e.push(`${semConta.length} lançamento(s) sem conta (use 000 = espécie, 999 = numerário em trânsito ou uma conta cadastrada).`);
+  const nl = n => `${n} ${n === 1 ? 'lançamento' : 'lançamentos'}`;
+  if (semDoc.length) e.push(`${nl(semDoc.length)} sem CPF/CNPJ válido do participante.`);
+  if (semImovel.length) e.push(`${nl(semImovel.length)} sem imóvel cadastrado.`);
+  if (semConta.length) e.push(`${nl(semConta.length)} sem conta (use 000 = espécie, 999 = numerário em trânsito ou uma conta cadastrada).`);
   if (c.contador.cpfCnpj && !docValido(c.contador.cpfCnpj)) e.push('Contador: CPF/CNPJ inválido.');
   return e;
 }
 
 function gerarLcdpr(ano) {
   const c = lcCfg(), p = c.produtor, lanc = lancamentosAno(ano).filter(l => l.incluir), linhas = [];
-  const L = (...campos) => linhas.push(campos.map(x => lcTxt(x)).join('|'));
+  // Campo C sem tamanho no leiaute = até 255; os demais são cortados no tamanho do leiaute ao montar cada registro
+  const L = (...campos) => linhas.push(campos.map(x => lcMax(x, 255)).join('|'));
   const dtIni = p.inicioAno && p.inicioAno.startsWith(ano) ? p.inicioAno : `${ano}-01-01`;
   L('0000', 'LCDPR', LC_VERSAO, soDig(p.cpf), p.nome, p.indSitIni || '0', p.sitEspecial || '0', p.dtSitEsp ? lcData(p.dtSitEsp) : '', lcData(dtIni), lcData(`${ano}-12-31`));
   L('0010', c.formaApur || '1');
-  L('0030', p.endereco, p.num, p.compl, p.bairro, p.uf, soDig(p.codMun), soDig(p.cep), soDig(p.tel), p.email);
+  L('0030', lcMax(p.endereco, 150), lcMax(p.num, 6), lcMax(p.compl, 50), lcMax(p.bairro, 50), p.uf, soDig(p.codMun), soDig(p.cep), soDig(p.tel).slice(0, 15), lcMax(p.email, 115));
   c.imoveis.forEach(i => {
-    L('0040', i.cod, 'BR', 'BRL', soDig(i.cafir), soDig(i.caepf), soDig(i.ie), i.nome, i.endereco, i.num, i.compl, i.bairro, i.uf, soDig(i.codMun), soDig(i.cep), i.tipo || '1', lcPct(i.participacao ?? 100));
-    (i.terceiros || []).forEach(t => L('0045', i.cod, t.tipo, soDig(t.doc), t.nome, lcPct(t.perc)));
+    L('0040', i.cod, 'BR', 'BRL', soDig(i.cafir), soDig(i.caepf), soDig(i.ie).slice(0, 14), lcMax(i.nome, 50), lcMax(i.endereco, 150), lcMax(i.num, 6), lcMax(i.compl, 50), lcMax(i.bairro, 50), i.uf, soDig(i.codMun), soDig(i.cep), i.tipo || '1', lcPct(i.participacao ?? 100));
+    (i.terceiros || []).forEach(t => L('0045', i.cod, t.tipo, soDig(t.doc), lcMax(t.nome, 50), lcPct(t.perc)));
   });
-  c.contas.forEach(b => L('0050', b.cod, 'BR', soDig(b.banco).padStart(3, '0'), b.nomeBanco, soDig(b.agencia), soDig(b.numero).padStart(16, '0')));
+  c.contas.forEach(b => L('0050', b.cod, 'BR', soDig(b.banco).padStart(3, '0'), lcMax(b.nomeBanco, 30), soDig(b.agencia).padStart(4, '0'), soDig(b.numero).padStart(16, '0')));
   let saldo = 0; const mes = {};
   lanc.forEach(l => {
     const ent = l.entrada ? l.valor : 0, sai = l.entrada ? 0 : l.valor; saldo = Math.round((saldo + ent - sai) * 100) / 100;
-    L('Q100', lcData(l.data), l.imovel, l.conta, l.numDoc, l.tipoDoc, l.hist, l.idPartic, l.tipoLanc, lcValor(ent), lcValor(sai), lcValor(saldo), saldo < 0 ? 'N' : 'P');
+    L('Q100', lcData(l.data), l.imovel, l.conta, lcNumDoc(l.numDoc), l.tipoDoc, l.hist, l.idPartic, l.tipoLanc, lcValor(ent), lcValor(sai), lcValor(saldo), saldo < 0 ? 'N' : 'P');
     const k = l.data.slice(5, 7) + l.data.slice(0, 4); (mes[k] ||= {e: 0, s: 0}); mes[k].e += ent; mes[k].s += sai;
   });
   let acum = 0;
   Object.keys(mes).sort((a, b) => a.slice(2).localeCompare(b.slice(2)) || a.localeCompare(b)).forEach(k => { acum = Math.round((acum + mes[k].e - mes[k].s) * 100) / 100; L('Q200', k, lcValor(mes[k].e), lcValor(mes[k].s), lcValor(acum), acum < 0 ? 'N' : 'P'); });
   const ct = c.contador || {};
-  L('9999', ct.nome, soDig(ct.cpfCnpj), ct.crc, ct.email, soDig(ct.tel), String(linhas.length + 1));
+  L('9999', ct.nome, soDig(ct.cpfCnpj), ct.crc, lcMax(ct.email, 115), soDig(ct.tel).slice(0, 15), String(linhas.length + 1));
   return linhas.join('\r\n') + '\r\n';
 }
 
@@ -114,11 +121,11 @@ VIEWS.lcdpr = () => {
       <article class="card kpi ${erros.length ? 'alerta' : ''}"><div class="label">Pendências</div><div class="value">${erros.length}</div><div class="hint">${erros.length ? 'corrija para gerar' : 'pronto para gerar'}</div></article>
     </section>
     <section class="grid">
-      <article class="card panel"><h3>Produtor (registros 0000, 0010, 0030)</h3>${p.cpf ? `<p><strong>${esc(p.nome)}</strong> • CPF ${esc(p.cpf)}<br><small style="color:var(--muted)">${esc([p.endereco, p.num, p.bairro, p.uf, p.cep].filter(Boolean).join(', '))}</small></p>` : '<p class="nota">Não informado.</p>'}<p class="nota">Apuração: ${c.formaApur === '2' ? '20% da receita bruta' : 'Livro Caixa'}</p>${btn('Editar produtor', 'lc-produtor', '', 'secondary')}</article>
-      <article class="card panel"><h3>Imóveis (0040/0045) e contas (0050)</h3>
+      <article class="card panel"><h3>Produtor</h3>${p.cpf || p.nome ? `<p><strong>${esc(p.nome)}</strong> • ${p.cpf ? 'CPF ' + esc(p.cpf) : 'CPF não informado'}<br><small style="color:var(--muted)">${esc([p.endereco, p.num, p.bairro, p.uf, p.cep].filter(Boolean).join(', '))}</small></p>` : '<p class="nota">Não informado.</p>'}<p class="nota">Apuração: ${c.formaApur === '2' ? '20% da receita bruta' : 'Livro Caixa'}</p>${btn('Editar produtor', 'lc-produtor', '', 'secondary')}</article>
+      <article class="card panel"><h3>Imóveis e contas bancárias</h3>
         ${c.imoveis.map(i => `<p><strong>${i.cod} — ${esc(i.nome)}</strong> ${mini('Editar', 'lc-imovel', i.cod)} ${mini('+ Terceiro', 'lc-terceiro', i.cod)}<br><small style="color:var(--muted)">${esc((LC_EXPLORACAO.find(x => x[0] === i.tipo) || [])[1] || '')} • ${num(i.participacao ?? 100, 2)}%${(i.terceiros || []).length ? ' • terceiros: ' + i.terceiros.map(t => `${esc(t.nome)} ${num(t.perc, 2)}%`).join(', ') : ''}</small></p>`).join('') || '<p class="nota">Nenhum imóvel.</p>'}
         ${c.contas.map(b => `<p><strong>Conta ${b.cod}</strong> — ${esc(b.nomeBanco)} ag. ${esc(b.agencia)} c/c ${esc(b.numero)} ${mini('Editar', 'lc-conta', b.cod)}</p>`).join('')}
-        <div class="btn-row">${btn('+ Imóvel', 'lc-imovel', '', 'secondary')}${btn('+ Conta bancária', 'lc-conta', '', 'secondary')}${btn('Contador (9999)', 'lc-contador', '', 'secondary')}</div></article>
+        <div class="btn-row">${btn('+ Imóvel', 'lc-imovel', '', 'secondary')}${btn('+ Conta bancária', 'lc-conta', '', 'secondary')}${btn('Contador', 'lc-contador', '', 'secondary')}</div></article>
     </section>
     <div class="section-title"><h3>Lançamentos de ${lcAno} (${lanc.filter(l => l.incluir).length} de ${lanc.length} incluídos)</h3></div>
     <section class="card panel">${lanc.length ? `<div class="tbl-wrap"><table class="tbl lc-tab"><thead><tr><th></th><th>Data</th><th>Histórico</th><th class="num">Valor</th><th>Tipo</th><th>CPF/CNPJ do participante</th><th>Imóvel</th><th>Conta</th><th>Documento</th></tr></thead><tbody>
@@ -128,7 +135,7 @@ VIEWS.lcdpr = () => {
         <td><select data-lc-campo="imovel">${imovOpt(l.imovel)}</select></td><td><select data-lc-campo="conta">${contasOpt(l.conta)}</select></td>
         <td><select data-lc-campo="tipoDoc">${opt(LC_TIPO_DOC, l.tipoDoc)}</select><input data-lc-campo="numDoc" value="${esc(l.numDoc || '')}" placeholder="nº"></td></tr>`).join('')}
     </tbody></table></div><p class="nota">Inclua só receitas e despesas da atividade rural (empréstimos recebidos não entram). O CPF/CNPJ digitado para um fornecedor ou cliente é lembrado nos próximos lançamentos dele.</p>` : empty('Nenhum lançamento de caixa neste ano', 'Contas pagas/recebidas, gastos e manutenções à vista do ano aparecem aqui.')}</section>
-    <section class="card panel" style="margin-top:16px"><h3>Arquivo</h3>${erros.length ? `<ul class="pend">${erros.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '<p>Tudo conferido pelas regras do manual (Pontos de atenção da RFB): contas e imóveis existentes, participações em 100%, CPF/CNPJ válidos, saldos e resumo mensal calculados.</p>'}
+    <section class="card panel" style="margin-top:16px"><h3>Arquivo</h3>${erros.length ? `<p><strong>Para gerar o arquivo, complete:</strong></p><ul class="pend">${erros.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '<p>Tudo conferido pelas regras do manual (Pontos de atenção da RFB): contas e imóveis existentes, participações em 100%, CPF/CNPJ válidos, saldos e resumo mensal calculados.</p>'}
       <div class="actions"><button class="primary" data-act="lc-gerar" ${erros.length ? 'disabled' : ''}>Gerar arquivo LCDPR ${lcAno}</button></div>
       <p class="nota">Leiaute 1.3 (ADE COPES nº 1/2020). O arquivo é transmitido pelo e-CAC com certificado digital; confira com o seu contador antes de enviar.</p></section>`;
 };
@@ -155,18 +162,18 @@ Object.assign(ACTIONS, {
       {k: 'sitEspecial', label: 'Situação especial', type: 'select', options: [{value: '0', label: 'Normal'}, {value: '1', label: 'Falecimento'}, {value: '2', label: 'Espólio'}, {value: '3', label: 'Saída definitiva do país'}], required: true}, {k: 'dtSitEsp', label: 'Data da situação especial', type: 'date'}],
     onSubmit: v => { if (!cpfValido(v.cpf)) return 'CPF inválido'; const {formaApur, ...prod} = v; c.produtor = prod; c.formaApur = formaApur; save(); }}); },
   'lc-imovel': cod => { const c = lcCfg(), i = c.imoveis.find(x => x.cod === cod) || {}; openForm({title: i.cod ? `Imóvel ${i.cod}` : 'Novo imóvel rural', values: {tipo: '1', participacao: 100, ...i},
-    fields: [{k: 'nome', label: 'Nome do imóvel', required: true, full: true}, {k: 'cafir', label: 'CAFIR (8 dígitos com DV)'}, {k: 'caepf', label: 'CAEPF (14 dígitos)'}, {k: 'ie', label: 'Inscrição estadual'},
+    fields: [{k: 'nome', label: 'Nome do imóvel', required: true, full: true, hint: 'Até 50 caracteres no arquivo.'}, {k: 'cafir', label: 'CAFIR (8 dígitos com DV)'}, {k: 'caepf', label: 'CAEPF (14 dígitos)'}, {k: 'ie', label: 'Inscrição estadual'},
       {k: 'endereco', label: 'Endereço', required: true, full: true}, {k: 'num', label: 'Número'}, {k: 'compl', label: 'Complemento'}, {k: 'bairro', label: 'Bairro / distrito', required: true}, {k: 'uf', label: 'UF', type: 'select', options: UFS, required: true},
       {k: 'codMun', label: 'Código do município (IBGE)', required: true}, {k: 'cep', label: 'CEP', required: true}, {k: 'tipo', label: 'Tipo de exploração', type: 'select', options: LC_EXPLORACAO.map(([value, label]) => ({value, label})), required: true},
       {k: 'participacao', label: 'Sua participação (%)', type: 'number', min: 0, required: true}],
     onSubmit: v => { const novo = {...i, ...v, cod: i.cod || proxCod(c.imoveis), terceiros: i.terceiros || []}; if (i.cod) c.imoveis = c.imoveis.map(x => x.cod === i.cod ? novo : x); else c.imoveis.push(novo); save(); }}); },
-  'lc-terceiro': cod => { const c = lcCfg(), i = c.imoveis.find(x => x.cod === cod); if (!i) return; openForm({title: `Terceiro no imóvel ${cod}`, sub: 'Condômino, arrendador, parceiro ou comodante (registro 0045).', values: {tipo: '1'},
+  'lc-terceiro': cod => { const c = lcCfg(), i = c.imoveis.find(x => x.cod === cod); if (!i) return; openForm({title: `Terceiro no imóvel ${cod}`, sub: 'Condômino, arrendador, parceiro ou comodante.', values: {tipo: '1'},
     fields: [{k: 'tipo', label: 'Tipo', type: 'select', options: LC_CONTRAPARTE.map(([value, label]) => ({value, label})), required: true}, {k: 'doc', label: 'CPF ou CNPJ', required: true}, {k: 'nome', label: 'Nome', required: true}, {k: 'perc', label: 'Participação (%)', type: 'number', min: 0, required: true}],
     onSubmit: v => { if (!docValido(v.doc)) return 'CPF/CNPJ inválido'; (i.terceiros ||= []).push(v); save(); }}); },
   'lc-conta': cod => { const c = lcCfg(), b = c.contas.find(x => x.cod === cod) || {}; openForm({title: b.cod ? `Conta ${b.cod}` : 'Nova conta bancária', values: b,
-    fields: [{k: 'banco', label: 'Código do banco (COMPE, 3 dígitos)', required: true}, {k: 'nomeBanco', label: 'Nome do banco', required: true}, {k: 'agencia', label: 'Agência (sem dígito)', required: true}, {k: 'numero', label: 'Conta com dígito', required: true}],
+    fields: [{k: 'banco', label: 'Código do banco (COMPE, 3 dígitos)', required: true}, {k: 'nomeBanco', label: 'Nome do banco', required: true, hint: 'Até 30 caracteres no arquivo.'}, {k: 'agencia', label: 'Agência (sem dígito, até 4)', required: true}, {k: 'numero', label: 'Conta com dígito', required: true}],
     onSubmit: v => { const nova = {...b, ...v, cod: b.cod || proxCod(c.contas)}; if (b.cod) c.contas = c.contas.map(x => x.cod === b.cod ? nova : x); else { c.contas.push(nova); c.contaPadrao ||= nova.cod; } save(); }}); },
-  'lc-contador': () => { const c = lcCfg(); openForm({title: 'Contador (registro 9999)', sub: 'Opcional.', values: c.contador, fields: [{k: 'nome', label: 'Nome'}, {k: 'cpfCnpj', label: 'CPF/CNPJ'}, {k: 'crc', label: 'CRC'}, {k: 'email', label: 'E-mail'}, {k: 'tel', label: 'Telefone'}],
+  'lc-contador': () => { const c = lcCfg(); openForm({title: 'Contador', sub: 'Opcional.', values: c.contador, fields: [{k: 'nome', label: 'Nome'}, {k: 'cpfCnpj', label: 'CPF/CNPJ'}, {k: 'crc', label: 'CRC'}, {k: 'email', label: 'E-mail'}, {k: 'tel', label: 'Telefone'}],
     onSubmit: v => { if (v.cpfCnpj && !docValido(v.cpfCnpj)) return 'CPF/CNPJ inválido'; c.contador = v; save(); }}); },
   'lc-gerar': () => { const lanc = lancamentosAno(lcAno); if (validarLcdpr(lcAno, lanc).length) { showToast('Corrija as pendências antes de gerar'); return; } downloadFile(`LCDPR-${soDig(lcCfg().produtor.cpf)}-${lcAno}.txt`, 'text/plain', gerarLcdpr(lcAno)); }
 });

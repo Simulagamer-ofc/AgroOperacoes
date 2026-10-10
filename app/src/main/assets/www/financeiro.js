@@ -57,19 +57,27 @@ function baixarConta(id) {
   openForm({
     title: pagar ? `Pagar — ${c.descricao}` : `Receber — ${c.descricao}`,
     sub: `${c.parcela ? 'Parcela ' + c.parcela + ' • ' : ''}vencimento ${fmtDate(c.vencimento)} • ${brl2(c.valor)}`,
-    values: {pagoEm: today(), valorPago: c.valor},
+    values: {pagoEm: today(), valorPago: c.valor, parcial: 'saldo'},
     fields: [{k: 'pagoEm', label: pagar ? 'Data do pagamento' : 'Data do recebimento', type: 'date', required: true},
       {k: 'valorPago', label: 'Valor efetivo (R$)', type: 'number', min: 0, required: true, hint: 'Com juros, multa ou desconto, informe o valor que de fato saiu ou entrou.'},
-      {k: 'conta', label: 'Forma / conta', placeholder: 'Ex.: Pix, boleto, banco'}],
+      {k: 'conta', label: 'Forma / conta', placeholder: 'Ex.: Pix, boleto, banco'},
+      {k: 'parcial', label: 'Se o valor for menor que o da conta', type: 'select', options: [{value: 'saldo', label: 'Pagamento parcial: manter o restante em aberto'}, {value: 'quitar', label: 'Quitar a conta (desconto)'}], required: true}],
     onSubmit: v => {
       if (!(v.valorPago > 0)) return 'Informe o valor';
+      // Pagamento parcial: esta conta fica paga pelo valor efetivo e o restante vira uma conta em aberto no mesmo vencimento
+      const resto = Math.round((Number(c.valor) - v.valorPago) * 100) / 100, parcial = v.parcial === 'saldo' && resto > 0;
+      if (parcial) {
+        const {gastoGeradoId, pagoEm, valorPago, formaPagamento, saldoContaId, ...base} = c;
+        const saldo = {...base, id: uid(), valor: resto, status: 'aberta', saldoDe: c.id};
+        db.contas.push(saldo); Object.assign(c, {valor: v.valorPago, valorOriginal: c.valorOriginal ?? c.valor, saldoContaId: saldo.id});
+      }
       Object.assign(c, {status: 'paga', pagoEm: v.pagoEm, valorPago: v.valorPago, formaPagamento: v.conta});
       // Conta a pagar sem gasto ligado: vira gasto na data do pagamento (custo pelo valor efetivo)
       if (pagar && !c.expenseId && c.lancarGasto === 'Sim' && CAT_GASTO.includes(c.categoria)) {
         const g = {id: uid(), date: v.pagoEm, category: c.categoria, description: c.descricao + (c.parcela ? ` (${c.parcela})` : ''), value: v.valorPago, supplier: c.parceiro, doc: c.doc, machineId: c.machineId || '', fieldId: c.fieldId || '', season: c.season || '', contaId: c.id};
         db.expenses.push(g); c.gastoGeradoId = g.id;
       }
-      save(); showToast(pagar ? 'Pagamento registrado' : 'Recebimento registrado');
+      save(); showToast(parcial ? `${pagar ? 'Pagamento' : 'Recebimento'} parcial registrado • restante em aberto` : pagar ? 'Pagamento registrado' : 'Recebimento registrado');
     }
   });
 }
@@ -77,6 +85,9 @@ function estornarConta(id) {
   const c = find('contas', id); if (!c) return;
   confirmDialog(`Desfazer a baixa de “${c.descricao}”? A conta volta para em aberto.`, () => {
     if (c.gastoGeradoId) db.expenses = db.expenses.filter(g => g.id !== c.gastoGeradoId);
+    // Pagamento parcial: o restante ainda em aberto volta para esta conta
+    const saldo = c.saldoContaId && find('contas', c.saldoContaId);
+    if (saldo && saldo.status !== 'paga') { c.valor = Math.round((Number(c.valor) + Number(saldo.valor)) * 100) / 100; db.contas = db.contas.filter(x => x.id !== saldo.id); delete c.saldoContaId; delete c.valorOriginal; }
     delete c.gastoGeradoId; c.status = 'aberta'; delete c.pagoEm; delete c.valorPago; save();
   }, 'Desfazer');
 }
@@ -130,7 +141,7 @@ VIEWS.financeiro = () => {
     corpo = `<section class="card panel viz-root"><div class="section-title" style="margin:0 0 8px"><h3>Entradas e saídas por mês</h3>${btn(db.settings.saldoInicial != null && db.settings.saldoInicial !== '' ? 'Saldo inicial: ' + brl2(db.settings.saldoInicial) : 'Informar saldo inicial', 'fin-saldo', '', 'secondary')}</div>
       ${graficoFluxo(fx.lista)}
       <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Mês</th><th class="num">Entradas</th><th class="num">Saídas</th><th class="num">Resultado</th>${fx.temSaldo ? '<th class="num">Saldo</th>' : ''}</tr></thead><tbody>${fx.lista.map(x => { const r = x.ent + x.entPrev - x.sai - x.saiPrev; return `<tr><td>${x.rot}</td><td class="num">${brl2(x.ent + x.entPrev)}${x.entPrev ? `<br><small>previsto ${brl2(x.entPrev)}</small>` : ''}</td><td class="num">${brl2(x.sai + x.saiPrev)}${x.saiPrev ? `<br><small>previsto ${brl2(x.saiPrev)}</small>` : ''}</td><td class="num"><strong>${r < 0 ? '− ' : ''}${brl2(Math.abs(r))}</strong></td>${fx.temSaldo ? `<td class="num">${x.saldo < 0 ? '− ' : ''}${brl2(Math.abs(x.saldo))}</td>` : ''}</tr>`; }).join('')}</tbody></table></div>
-      ${fx.atrasadas.length ? `<p class="nota">${fx.atrasadas.length} conta(s) vencida(s) antes de ${fx.lista[0].rot} ainda em aberto não entram nos meses acima — veja em “A pagar” / “A receber”.</p>` : ''}
+      ${fx.atrasadas.length ? `<p class="nota">${fx.atrasadas.length === 1 ? '1 conta vencida' : fx.atrasadas.length + ' contas vencidas'} antes de ${fx.lista[0].rot} ainda em aberto ${fx.atrasadas.length === 1 ? 'não entra' : 'não entram'} nos meses acima — veja em “A pagar” / “A receber”.</p>` : ''}
       <p class="nota">Regime de caixa: pagas e recebidas pela data do pagamento; em aberto pelo vencimento. Gastos e manutenções sem conta a pagar ligada contam como pagos à vista na data do lançamento.${fx.temSaldo ? '' : ' Informe o saldo inicial para ver o saldo acumulado.'}</p></section>`;
   } else {
     const tipo = finAba, filtros = {abertas: ['Em aberto', c => c.status !== 'paga'], vencidas: ['Vencidas', contaVencida], pagas: [tipo === 'pagar' ? 'Pagas' : 'Recebidas', c => c.status === 'paga'], todas: ['Todas', () => true]};
@@ -138,7 +149,7 @@ VIEWS.financeiro = () => {
     const linha = c => {
       const v = contaVencida(c), dias = Math.round((new Date(c.vencimento + 'T12:00:00') - new Date(t + 'T12:00:00')) / 864e5);
       const sit = c.status === 'paga' ? chip(`${tipo === 'pagar' ? 'Paga' : 'Recebida'} ${fmtDate(c.pagoEm)}`, 'green') : v ? chip(`Vencida há ${-dias} d`, 'red') : dias <= 7 ? chip(dias === 0 ? 'Vence hoje' : `Vence em ${dias} d`, 'orange') : chip('Em aberto', 'gray');
-      return `<tr><td>${fmtDate(c.vencimento)}</td><td><strong>${esc(c.descricao)}</strong>${c.parcela ? ` <small>(${esc(c.parcela)})</small>` : ''}<br><small style="color:var(--muted)">${esc([c.categoria, c.parceiro, c.doc].filter(Boolean).join(' • '))}</small></td><td class="num">${brl2(c.status === 'paga' ? c.valorPago : c.valor)}</td><td>${sit}</td><td><div class="row-actions">${c.status === 'paga' ? mini('Desfazer baixa', 'fin-estornar', c.id) : mini(tipo === 'pagar' ? 'Pagar' : 'Receber', 'fin-baixar', c.id)}${mini('Editar', 'fin-edit', c.id)}${mini('Excluir', 'fin-del', c.id, 'del')}</div></td></tr>`;
+      return `<tr><td>${fmtDate(c.vencimento)}</td><td><strong>${esc(c.descricao)}</strong>${c.parcela ? ` <small>(${esc(c.parcela)})</small>` : ''}${c.saldoDe ? ' <small>(restante de pagamento parcial)</small>' : ''}<br><small style="color:var(--muted)">${esc([c.categoria, c.parceiro, c.doc].filter(Boolean).join(' • '))}</small></td><td class="num">${brl2(c.status === 'paga' ? c.valorPago : c.valor)}</td><td>${sit}</td><td><div class="row-actions">${c.status === 'paga' ? mini('Desfazer baixa', 'fin-estornar', c.id) : mini(tipo === 'pagar' ? 'Pagar' : 'Receber', 'fin-baixar', c.id)}${mini('Editar', 'fin-edit', c.id)}${mini('Excluir', 'fin-del', c.id, 'del')}</div></td></tr>`;
     };
     corpo = `<div class="filters">${Object.entries(filtros).map(([k, [r, f]]) => `<button class="${k === finFiltro ? 'active' : ''}" data-act="fin-filtro" data-id="${k}">${r} (${db.contas.filter(c => c.tipo === tipo && f(c)).length})</button>`).join('')}</div>
       <section class="card panel">${lista.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Vencimento</th><th>Descrição</th><th class="num">Valor</th><th>Situação</th><th></th></tr></thead><tbody>${lista.map(linha).join('')}</tbody></table></div>` : empty('Nenhuma conta aqui', tipo === 'pagar' ? 'Lance boletos, parcelas e compras a prazo.' : 'Lance vendas a prazo e outros valores a receber.', {act: tipo === 'pagar' ? 'fin-pagar' : 'fin-receber', label: tipo === 'pagar' ? '+ Conta a pagar' : '+ Conta a receber'})}</section>`;
@@ -158,7 +169,7 @@ Object.assign(ACTIONS, {
   'fin-pagar': () => contaForm('pagar'), 'fin-receber': () => contaForm('receber'),
   'fin-edit': id => { const c = find('contas', id); if (c) contaForm(c.tipo, c); },
   'fin-baixar': baixarConta, 'fin-estornar': estornarConta,
-  'fin-del': id => { const c = find('contas', id); if (!c) return; confirmDialog(`Excluir “${c.descricao}${c.parcela ? ' ' + c.parcela : ''}”?${c.gastoGeradoId ? ' O gasto gerado no pagamento também será excluído.' : ''}`, () => { if (c.gastoGeradoId) db.expenses = db.expenses.filter(g => g.id !== c.gastoGeradoId); remove('contas', id); }); },
+  'fin-del': id => { const c = find('contas', id); if (!c) return; confirmDialog(`Excluir “${c.descricao}${c.parcela ? ' ' + c.parcela : ''}”?${c.gastoGeradoId ? ' O gasto gerado no pagamento também será excluído.' : ''}`, () => { if (c.gastoGeradoId) db.expenses = db.expenses.filter(g => g.id !== c.gastoGeradoId); remove('contas', id); showToast('Excluído'); }); },
   'fin-aba': id => { finAba = id; finFiltro = 'abertas'; render(); },
   'fin-filtro': id => { finFiltro = id; render(); },
   'fin-saldo': () => openForm({title: 'Saldo inicial do caixa', sub: 'Saldo das contas da fazenda antes do primeiro mês do fluxo. Deixe em branco para não mostrar saldo.', values: {saldo: db.settings.saldoInicial ?? ''}, fields: [{k: 'saldo', label: 'Saldo (R$)', type: 'number'}],
