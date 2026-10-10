@@ -5,8 +5,9 @@
    (não há interpolação nem conversão pela raiz da pressão). O usuário confirma antes de usar. */
 
 ARQ.pontas = 'dados/pontas.json';
-const chaveBar = p => String(Math.round(Number(p) * 100) / 100); // "3", "1.5", "2.75"
-const barTxt = p => num(Number(p), Number(p) % 1 ? (Number(p) * 10 % 1 ? 2 : 1) : 0);
+// Chave da tabela ("3", "1.5", "22.5"): só casa com a pressão digitada exatamente igual (2,999 não vira 3)
+const chaveBar = p => String(Number(p));
+const barTxt = p => String(Number(p)).replace('.', ','); // como digitada/tabelada, sem arredondar
 const PSI_BAR = 0.0689476; // 1 psi em bar
 const unP = l => l.unidadePressao || 'bar';
 const TIPO_PONTA = {leque: 'leque', leque_antideriva: 'leque antideriva', inducao_ar: 'indução de ar', duplo_leque: 'duplo leque', leque_triplo: 'leque triplo', cone_vazio: 'cone vazio', cone_cheio: 'cone cheio'};
@@ -28,7 +29,7 @@ async function montarSeletorPonta() {
     <div class="pc-sel">
       <select id="pcFab" aria-label="Fabricante da ponta"><option value="">Fabricante</option>${d.fabricantes.map(f => op(f.id, f.nome, wz.pontaFab)).join('')}</select>
       <select id="pcLinha" aria-label="Linha da ponta" ${fab ? '' : 'disabled'}><option value="">Linha / modelo</option>${(fab?.linhas || []).map(l => op(l.id, l.linha + (tipoP(l) ? ' — ' + tipoP(l) : ''), wz.pontaLinha)).join('')}</select>
-      <select id="pcTam" aria-label="Tamanho da ponta" ${lin ? '' : 'disabled'}><option value="">Tamanho</option>${(lin?.tamanhos || []).map(t => op(t.codigo, t.codigo + (t.corIso ? ' (' + t.corIso + ')' : ''), wz.pontaTam)).join('')}</select>
+      <select id="pcTam" aria-label="Tamanho da ponta" ${lin ? '' : 'disabled'}><option value="">Tamanho</option>${(lin?.tamanhos || []).map(t => op(t.codigo, t.codigo + (t.corIso ? ' (' + corIsoTxt(t.corIso) + ')' : ''), wz.pontaTam)).join('')}</select>
     </div><div id="pcRes">${tam ? resultadoPonta(fab, lin, tam) : ''}</div></details>`;
   const muda = (k, limpar) => e => { wz[k] = e.target.value; limpar.forEach(x => { wz[x] = ''; }); montarSeletorPonta(); };
   $('#pcFab').onchange = muda('pontaFab', ['pontaLinha', 'pontaTam']);
@@ -75,7 +76,7 @@ async function telaPontas(arg) {
     el.innerHTML = head(`${fab.nome} ${lin.linha}`, [tipoP(lin), lin.angulos?.length ? 'ângulos ' + lin.angulos.join('°, ') + '°' : '', lin.faixaPressao ? `faixa de trabalho ${barTxt(lin.faixaPressao[0])}–${barTxt(lin.faixaPressao[1])} ${u}` : ''].filter(Boolean).join(' • '), btn('← ' + fab.nome, 'nav', 'pontas/' + encodeURIComponent(fab.id), 'secondary')) +
       `<section class="card panel"><p class="nota" style="margin-top:0">Vazão por ponta, em L/min, conforme a tabela do fabricante. Pressão em ${u}, como impressa no folheto${u === 'psi' ? ' (equivalência em bar só para referência)' : ''}. Células vazias: pressão não tabelada para esse tamanho ou valor impresso não sugerido.</p>
       <div class="tbl-wrap"><table class="tbl pc-tab"><thead><tr><th>Tamanho</th>${ps.map(p => `<th class="num">${barTxt(p)} ${u}${u === 'psi' ? `<br><small>${num(p * PSI_BAR, 2)} bar</small>` : ''}</th>`).join('')}</tr></thead><tbody>
-      ${lin.tamanhos.map(t => `<tr><td><strong>${esc(t.codigo)}</strong>${t.corIso ? `<br><small>${esc(t.corIso)}</small>` : ''}</td>${ps.map(p => `<td class="num">${t.vazoes[chaveBar(p)] != null ? num(t.vazoes[chaveBar(p)], 2) : ''}</td>`).join('')}</tr>`).join('')}
+      ${lin.tamanhos.map(t => `<tr><td><strong>${esc(t.codigo)}</strong>${t.corIso ? `<br><small>${esc(corIsoTxt(t.corIso))}</small>` : ''}</td>${ps.map(p => `<td class="num">${t.vazoes[chaveBar(p)] != null ? num(t.vazoes[chaveBar(p)], 2) : ''}</td>`).join('')}</tr>`).join('')}
       </tbody></table></div>
       <p class="nota">Fonte: ${fonte.url ? `<a href="${esc(fonte.url)}" target="_blank" rel="noopener">${esc(fonte.titulo || fonte.url)}</a>` : esc(fonte.titulo || '—')}${fonte.ano ? ' (' + fonte.ano + ')' : ''}${lin.pagina ? ', página ' + esc(String(lin.pagina)) : ''}.${lin.preOrificioOuInducao ? ' Ponta com pré-orifício ou indução de ar: use só os valores tabelados.' : ''}${lin.observacao ? ' ' + esc(lin.observacao) : ''}</p>
       ${(fab.naoSugeridos || []).some(x => x.linha === lin.linha) ? `<p class="nota">Valores impressos não sugeridos: ${(fab.naoSugeridos || []).filter(x => x.linha === lin.linha).map(x => `${esc(x.tamanho)} a ${barTxt(x.pressao)} ${u} (impresso ${num(x.impresso, 2)} — ${esc(x.motivo)})`).join('; ')}.</p>` : ''}</section>`;
@@ -102,7 +103,7 @@ Object.assign(ACTIONS, {
       if (!tam || !(pres > 0) || ($('#wz_unidadePressao')?.value || 'bar') !== u || tam.vazoes[chaveBar(pres)] !== vaz) return showToast('Confira a pressão e a ponta escolhidas');
       coletarWizard();
       const fonte = fonteDaLinha(fab, lin);
-      wz.vazaoCatalogo = String(vaz).replace('.', ',');
+      wz.vazaoCatalogo = String(vaz).replace('.', ','); delete wz._avisoVazao;
       if (!wz.modeloPonta) wz.modeloPonta = nomePonta(fab, lin, tam);
       wz.fonteVazao = {ponta: nomePonta(fab, lin, tam), fabricante: fab.nome, linha: lin.linha, tamanho: tam.codigo, pressao: pres, unidadePressao: u, vazao: vaz, fonte: fonte.titulo || '', url: fonte.url || '', ano: fonte.ano || '', pagina: lin.pagina || '', catalogoVersao: c.versao};
       render(); showToast(`Vazão da tabela: ${num(vaz, 2)} L/min`);

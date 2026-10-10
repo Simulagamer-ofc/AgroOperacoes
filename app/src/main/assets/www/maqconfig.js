@@ -38,10 +38,11 @@ function numerosComUnidade(texto, unidadePadrao) {
 }
 const arr2 = v => Math.round(v * 10000) / 10000; // metros com 4 casas: não perde 50,8 cm nem 7,62 m
 const emMetros = toks => toks.filter(t => ['cm', 'mm', 'm', 'in', 'pol', 'pés', 'pes', 'ft'].includes(t.u)).map(t => arr2(t.v * UNID[t.u]));
-// Faixas “2 a 6 km/h”, “6-10km/h”, “Até 12 km/h”, “30 a 75 psi”
+// Faixas “2 a 6 km/h”, “6-10km/h”, “Até 12 km/h”, “30 a 75 psi”. Faixa com outra unidade escrita (mph, m/s, rpm…) é descartada, nunca herda km/h
 function faixas(texto, unidades) {
-  const out = [], re = /(?:(\d+(?:[.,]\d+)?)\s*(?:a|-|–)\s*|at[ée]\s*)(\d+(?:[.,]\d+)?)\s*(km\/h|km|psi|bar)?/gi;
+  const out = [], re = /(?:(\d+(?:[.,]\d+)?)\s*(?:a|-|–)\s*|at[ée]\s*)(\d+(?:[.,]\d+)?)\s*(km\/h|km|mph|m\/min|m\/s|m\/h|psi|bar|kpa|mpa|rpm|spm)?/gi;
   for (const m of texto.matchAll(re)) {
+    if (!m[3] && /^\s*(?:[a-z]+\/[a-z]+|rpm|spm|mph|mm|cm|m(?:etros?)?\b|hp|cv|kw|%|percent|°)/i.test(texto.slice(m.index + m[0].length))) continue;
     const u = (m[3] || unidades[0] || '').toLowerCase();
     if (!unidades.includes(u)) continue;
     const f = UNID[u];
@@ -124,15 +125,18 @@ function avisosConfig(w) {
   const m = w.machineId ? find('machines', w.machineId) : null, out = [];
   if (!m?.config) return out;
   const fora = (v, f) => v != null && f && ((f.min != null && v < f.min) || (f.max != null && v > f.max));
-  const vel = umNum(w.velocidadeKmH) ?? (umNum(w.distVel) > 0 && umNum(w.tempoVel) > 0 ? 3.6 * umNum(w.distVel) / umNum(w.tempoVel) : undefined);
+  // Só os avisos do que esta avaliação usa: velocidade (taxa) e pressão (bicos)
+  const vel = w.tipo !== 'taxa' ? undefined : umNum(w.velocidadeKmH) ?? (umNum(w.distVel) > 0 && umNum(w.tempoVel) > 0 ? 3.6 * umNum(w.distVel) / umNum(w.tempoVel) : undefined);
   const fv = cfgValor(m, 'faixaVelocidadeKmH');
   if (fora(vel, fv)) out.push(`Velocidade ${num(vel, 1)} km/h fora da faixa de trabalho da configuração da máquina (${num(fv.min, 1)} a ${num(fv.max, 1)} km/h — ${origemTexto(m.config.faixaVelocidadeKmH)}).`);
-  const fp = cfgValor(m, 'faixaPressaoBar'), pr = umNum(w.pressao);
-  if (fora(pr, fp)) out.push(`Pressão ${num(pr, 1)} bar fora da faixa do comando (${num(fp.min, 1)} a ${num(fp.max, 1)} bar — ${origemTexto(m.config.faixaPressaoBar)}).`);
+  // A faixa do comando está em bar; a pressão da coleta, na unidade do manômetro
+  const fp = cfgValor(m, 'faixaPressaoBar'), pr = w.tipo === 'bicos' ? umNum(w.pressao) : undefined, psi = w.unidadePressao === 'psi';
+  const prBar = pr != null && psi ? pr * UNID.psi : pr;
+  if (fora(prBar, fp)) out.push(`Pressão ${num(pr, 1)} ${psi ? `psi (${num(prBar, 2)} bar)` : 'bar'} fora da faixa do comando (${num(fp.min, 1)} a ${num(fp.max, 1)} bar — ${origemTexto(m.config.faixaPressaoBar)}).`);
   const eb = cfgValor(m, 'espacamentoBicosM'), ebw = umNum(w.espacamentoBicosM);
   if (w.tipo === 'taxa' && eb && ebw && Math.abs(ebw - eb) > 0.001) out.push(`Espaçamento entre bicos usado (${num(ebw, 3)} m) diferente da configuração da máquina (${num(eb, 3)} m).`);
   const el = cfgValor(m, 'espacamentoLinhasM'), elw = umNum(w.espLinhasM);
-  if (w.tipo === 'dose' && el && elw && Math.abs(elw - el) > 0.001) out.push(`Espaçamento entre linhas usado (${num(elw, 3)} m) diferente da configuração da máquina (${num(el, 3)} m).`);
+  if (w.tipo === 'dose' && w.familia !== 'distribuidor_lanco' && el && elw && Math.abs(elw - el) > 0.001) out.push(`Espaçamento entre linhas usado (${num(elw, 3)} m) diferente da configuração da máquina (${num(el, 3)} m).`);
   const nb = qtdBicosConfig(w), nv = numeros(w.vazoes).vals.length;
   if (w.tipo === 'bicos' && nb && nv && nv !== nb) out.push(`Foram medidos ${nv} bicos; a configuração da máquina tem ${nb}.`);
   return out;

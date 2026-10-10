@@ -32,13 +32,13 @@ const FAMILIA_DO_CATALOGO = {pulverizador_autopropelido: 'pulverizador_barra', p
 const TIPO_MAQUINA_DO_CATALOGO = f => !f ? 'Outro' : f === 'trator' ? 'Trator' : f.startsWith('colhedora') ? 'Colheitadeira' : f.startsWith('pulverizador') ? 'Pulverizador' : f === 'semeadora' ? 'Plantadeira' : 'Implemento';
 
 const TIPOS = {
-  bicos: {titulo: 'Vazão de bicos', familias: ['pulverizador_barra'], validada: true, desc: 'Compara a vazão de cada ponta com a tabela do fabricante (Embrapa, ±10%).'},
+  bicos: {titulo: 'Vazão de bicos', familias: ['pulverizador_barra'], validada: true, desc: 'Compara a vazão de cada ponta com a tabela do fabricante pelo critério validado.'},
   taxa: {titulo: 'Taxa de aplicação (L/ha)', familias: ['pulverizador_barra'], desc: 'Calcula L/ha pela vazão, velocidade e espaçamento.'},
   sensor: {titulo: 'Sensor de velocidade / fluxômetro', familias: ['pulverizador_barra'], desc: 'Compara a leitura do controlador com um instrumento de referência.'},
   longitudinal: {titulo: 'Distribuição de sementes na linha', familias: ['semeadora_precisao'], desc: 'Classifica espaçamentos em duplos, aceitáveis e falhos.'},
   dose: {titulo: 'Dose de adubo ou semente (kg/ha)', familias: ['semeadora_precisao', 'semeadora_fluxo_continuo', 'adubadora_linha', 'distribuidor_lanco'], desc: 'Calcula kg/ha pela massa coletada em percurso conhecido.'},
   transversal: {titulo: 'Distribuição a lanço (CV transversal)', familias: ['distribuidor_lanco'], desc: 'Calcula o coeficiente de variação das bandejas.'},
-  perdas: {titulo: 'Perdas na colheita', familias: ['colhedora'], validada: true, desc: 'Média de pontos com armação de 2 m² (Embrapa Soja: até 60 kg/ha, só soja).'}
+  perdas: {titulo: 'Perdas na colheita', familias: ['colhedora'], validada: true, desc: 'Média de pontos com armação de 2 m², comparada com a referência validada da cultura (quando houver).'}
 };
 const PRODUTOS = [['soja', 'Soja'], ['milho', 'Milho'], ['trigo', 'Trigo'], ['feijao', 'Feijão'], ['arroz', 'Arroz'], ['algodao', 'Algodão'], ['cafe', 'Café'], ['cana', 'Cana-de-açúcar'], ['outro', 'Outro']];
 
@@ -52,6 +52,19 @@ function numeros(txt) {
 const MILHAR = /^-?\d{1,3}(\.\d{3})+(,\d*)?$/;
 const umNum = v => { const t = String(v ?? '').trim(); if (t === '' || MILHAR.test(t)) return undefined; const n = Number(t.replace(',', '.')); return Number.isFinite(n) ? n : undefined; };
 const triEstado = v => v === 'sim' ? true : v === 'nao' ? false : undefined;
+// Mensagem para valor recusado: "0.800" com ponto é ambíguo (decimal ou milhar)
+const msgInvalido = t => `“${t}”. Use vírgula para decimais: ${t.replace(/\./g, ',')}${/^-?0\./.test(t) ? '' : ` (ou ${t.replace(/\./g, '').replace(/,.*/, '')} sem ponto, se for milhar)`}`;
+// Valor exibido coerente com o resultado: se o arredondamento cair do outro lado do limite, mostra mais casas (até 3)
+function numLimite(v, dec, a) {
+  if (v == null || !a || !['OK', 'ATENCAO', 'FORA_DO_PADRAO'].includes(a.status) || (a.limiteMin == null && a.limiteMax == null)) return num(v, dec);
+  const fora = a.status === 'FORA_DO_PADRAO';
+  const foraEm = x => (a.limiteMin != null && (a.limiteMinExclusivo ? x <= a.limiteMin : x < a.limiteMin)) || (a.limiteMax != null && (a.limiteMaxExclusivo ? x >= a.limiteMax : x > a.limiteMax));
+  for (let d = Math.max(dec, 2); d <= 3; d++) { const r = Math.round(v * 10 ** d) / 10 ** d; if (foraEm(r) === fora) return num(r, d === Math.max(dec, 2) ? dec : d); }
+  return num(v, 3);
+}
+// Nomes das cores ISO 10625 iguais na lista de cores e no catálogo de pontas
+const COR_ISO = {amarela: 'amarelo', vermelha: 'vermelho', branca: 'branco', 'violeta (lilás)': 'lilás (violeta)', 'lilás': 'lilás (violeta)', 'azul-claro': 'azul claro', 'verde-amarelado': 'verde claro (verde-amarelado)', 'verde claro': 'verde claro (verde-amarelado)'};
+const corIsoTxt = c => COR_ISO[c] || c || '';
 const statusChip = s => chip(STATUS_INFO[s]?.rotulo || s, STATUS_INFO[s]?.cor || 'gray');
 
 // ---------- Catálogo ----------
@@ -305,7 +318,7 @@ function passoWizard() {
         campo('unidadePressao', 'Unidade da pressão', sel('unidadePressao', [['bar', 'bar'], ['psi', 'psi (lbf/pol²)']], w.unidadePressao || 'bar', 'bar'), 'A do manômetro usado na coleta.') +
         campo('corIso', 'Cor da ponta (ISO 10625)', `<select data-wz="corIso" id="wz_corIso"><option value="">—</option></select>`, 'Só identifica a classe de vazão.') +
         '<div class="field full" id="pontaCat"></div>' +
-        campo('vazaoCatalogo', 'Vazão da tabela do fabricante (L/min)', num_('vazaoCatalogo', w.vazaoCatalogo), w.fonteVazao ? `Da tabela ${w.fonteVazao.ponta} a ${String(w.fonteVazao.pressao).replace('.', ',')} ${w.fonteVazao.unidadePressao} — ${w.fonteVazao.fonte}${w.fonteVazao.pagina ? ', p. ' + w.fonteVazao.pagina : ''}.` : 'Do catálogo do modelo exato, na pressão da coleta. Só entra se você digitar ou confirmar no catálogo de pontas acima.'),
+        campo('vazaoCatalogo', 'Vazão da tabela do fabricante (L/min)', num_('vazaoCatalogo', w.vazaoCatalogo), w._avisoVazao ? w._avisoVazao : w.fonteVazao ? `Da tabela ${w.fonteVazao.ponta} a ${String(w.fonteVazao.pressao).replace('.', ',')} ${w.fonteVazao.unidadePressao} — ${w.fonteVazao.fonte}${w.fonteVazao.pagina ? ', p. ' + w.fonteVazao.pagina : ''}.` : 'Do catálogo do modelo exato, na pressão da coleta. Só entra se você digitar ou confirmar no catálogo de pontas acima.'),
         campo('unidadeVazao', 'Unidade das vazões medidas', sel('unidadeVazao', [['L/min', 'L/min'], ['mL/min', 'mL/min']], w.unidadeVazao || 'L/min', 'L/min'), '', true) +
         listaMedidas('vazoes', 'Vazão medida em cada bico', w.unidadeVazao || 'L/min')],
       perdas: () => [
@@ -363,7 +376,7 @@ VIEWS.afericao.after = () => {
   const cor = $('#wz_corIso');
   if (cor) dados('regras').then(b => {
     const t = b.tabelasReferencia.find(x => x.id === 'ISO10625-CORES');
-    cor.innerHTML = '<option value="">—</option>' + t.linhas.map(l => `<option value="${l.tamanho}" ${l.tamanho === wz.corIso ? 'selected' : ''}>${esc(l.cor)} — classe ${num(l.vazao, 2)} L/min a 3 bar</option>`).join('');
+    cor.innerHTML = '<option value="">—</option>' + t.linhas.map(l => `<option value="${l.tamanho}" ${l.tamanho === wz.corIso ? 'selected' : ''}>${esc(corIsoTxt(l.cor))} — classe ${num(l.vazao, 2)} L/min a 3 bar</option>`).join('');
   }).catch(() => { /* sem banco offline: lista de cores fica vazia */ });
   $$('.af-lista').forEach(el => atualizarResumoLista(el.dataset.lista));
   if (typeof montarSeletorPonta === 'function') montarSeletorPonta();
@@ -385,17 +398,48 @@ function atualizarResumoLista(k) {
   ins.forEach(i => {
     const tag = i.parentElement.querySelector('.af-lm-tag'), v = umNum(i.value);
     tag.textContent = ''; tag.className = 'af-lm-tag';
-    if (k !== 'vazoes' || v === undefined || !(cat > 0) || !limitesBico) return;
+    if (k !== 'vazoes' || v === undefined || !(cat > 0)) return;
     const d = (v * f - cat) / cat * 100;
     tag.textContent = `${d > 0 ? '+' : ''}${num(d, 1)}%`;
-    tag.classList.add(d < limitesBico[0] || d > limitesBico[1] ? 'fora' : 'ok');
+    // ok/fora só quando o critério validado se aplica (coleta na pressão da tabela); senão, só o desvio, neutro
+    if (limitesBico && wz?.pressaoColetaIgualCatalogo === 'sim') tag.classList.add(d < limitesBico[0] || d > limitesBico[1] ? 'fora' : 'ok');
   });
 }
 document.addEventListener('input', e => {
   const k = e.target.dataset?.lm || (e.target.id === 'wz_vazaoCatalogo' || e.target.id === 'wz_unidadeVazao' ? 'vazoes' : null);
   if (k) atualizarResumoLista(k);
 });
-document.addEventListener('change', e => { if (e.target.id === 'wz_unidadeVazao') atualizarResumoLista('vazoes'); });
+document.addEventListener('change', e => {
+  if (e.target.id === 'wz_unidadeVazao') atualizarResumoLista('vazoes');
+  if (e.target.id === 'wz_unidadePressao') conferirFonteVazao();
+  if (e.target.dataset?.lmColar) distribuirColado(e.target, false); // sem aviso: o toque seguinte (ex.: Avaliar) não pode cair sobre o toast
+});
+document.addEventListener('input', e => { if (e.target.id === 'wz_pressao') conferirFonteVazao(); });
+document.addEventListener('paste', e => { const ta = e.target.closest?.('[data-lm-colar]'); if (ta) setTimeout(() => distribuirColado(ta, true), 0); });
+// Texto colado vai para os campos individuais (depois do último preenchido), e a caixa é limpa: prévia e avaliação usam os mesmos valores
+function distribuirColado(ta, avisar) {
+  const k = ta.dataset.lmColar, toks = ta.value.trim().split(/[\s;]+/).filter(Boolean);
+  if (!toks.length || !ta.isConnected) return;
+  const ins = $$(`input[data-lm="${k}"]`, ta.closest('[data-lista]'));
+  let i = ins.length; while (i > 0 && !ins[i - 1].value.trim()) i--;
+  for (const t of toks) { if (i >= ins.length) ins.push(adicionarMedida(k)); ins[i++].value = t; }
+  ta.value = '';
+  atualizarResumoLista(k);
+  if (avisar) showToast(`${toks.length} ${toks.length === 1 ? 'valor incluído' : 'valores incluídos'} na lista — confira`);
+}
+// A vazão confirmada no catálogo de pontas vale só para a pressão confirmada: mudou a pressão (ou a unidade), a vazão sai e precisa ser confirmada de novo
+function conferirFonteVazao() {
+  const fv = wz?.fonteVazao; if (!fv) return;
+  const el = $('#wz_vazaoCatalogo'), pres = $('#wz_pressao'), un = $('#wz_unidadePressao');
+  const vaz = umNum(el ? el.value : wz.vazaoCatalogo);
+  const presMudou = umNum(pres ? pres.value : wz.pressao) !== fv.pressao || ((un ? un.value : wz.unidadePressao) || 'bar') !== fv.unidadePressao;
+  if (vaz === fv.vazao && !presMudou) return;
+  delete wz.fonteVazao; // vazão digitada diferente da tabela: fica, como digitada pelo usuário
+  if (vaz !== fv.vazao) return;
+  wz.vazaoCatalogo = ''; wz._avisoVazao = 'A pressão mudou: confirme de novo a vazão da tabela.';
+  if (el) { el.value = ''; const h = el.parentElement.querySelector('.hint'); if (h) h.textContent = wz._avisoVazao; }
+  atualizarResumoLista('vazoes');
+}
 document.addEventListener('keydown', e => {
   const k = e.target.dataset?.lm; if (!k || e.key !== 'Enter') return;
   e.preventDefault();
@@ -411,10 +455,11 @@ function adicionarMedida(k) {
 
 function coletarWizard() {
   $$('[data-wz]').forEach(el => { wz[el.dataset.wz] = el.value; });
-  // Listas: campos individuais (ou o texto colado, se houver) viram a mesma lista de texto usada pelo cálculo
+  // Listas: texto colado ainda na caixa vai para os campos; os campos individuais viram a lista de texto usada pelo cálculo
+  $$('[data-lm-colar]').forEach(ta => distribuirColado(ta, false));
   $$('[data-lista]').forEach(el => {
-    const k = el.dataset.lista, colado = el.querySelector(`[data-lm-colar="${k}"]`)?.value.trim();
-    wz[k] = colado || $$(`input[data-lm="${k}"]`, el).map(i => i.value.trim()).filter(Boolean).join(' ');
+    const k = el.dataset.lista;
+    wz[k] = $$(`input[data-lm="${k}"]`, el).map(i => i.value.trim()).filter(Boolean).join(' ');
   });
   const cfg = configDaMaquina(wz.machineId);
   for (const [k, ck] of Object.entries(wz._origem || {})) {
@@ -422,7 +467,8 @@ function coletarWizard() {
     if (atual !== v) delete wz._origem[k];
   }
   // A fonte do catálogo de pontas só vale enquanto a vazão e a pressão forem as confirmadas
-  if (wz.fonteVazao && (umNum(wz.vazaoCatalogo) !== wz.fonteVazao.vazao || umNum(wz.pressao) !== wz.fonteVazao.pressao || (wz.unidadePressao || 'bar') !== wz.fonteVazao.unidadePressao)) delete wz.fonteVazao;
+  if (wz.vazaoCatalogo) delete wz._avisoVazao;
+  conferirFonteVazao();
 }
 
 function validarPasso() {
@@ -434,11 +480,14 @@ function validarPasso() {
   }
   if (w.passo === 2) {
     const lista = {bicos: 'vazoes', perdas: 'massasG', longitudinal: 'espacamentos', transversal: 'valoresSobrepostos'}[w.tipo];
-    if (lista) { const n = numeros(w[lista]); if (n.erros.length) return `Valores não numéricos: ${n.erros.slice(0, 3).join(', ')}`; if (!n.vals.length) return 'Informe as medições'; }
-    if (w.tipo === 'perdas') { const n = numeros(w.massasPlataformaG); if (n.erros.length) return `Valores não numéricos: ${n.erros.slice(0, 3).join(', ')}`; }
+    const conferir = txt => { const n = numeros(txt), amb = n.erros.find(t => MILHAR.test(t)); if (amb) return `Valor ambíguo: ${msgInvalido(amb)}`; if (n.erros.length) return `Valores não numéricos: ${n.erros.slice(0, 3).join(', ')}`; const neg = String(txt || '').trim().split(/[\s;]+/).filter(t => umNum(t) < 0); if (neg.length) return `Valores negativos não são aceitos: ${neg.slice(0, 3).join(', ')}`; return ''; };
+    if (lista) { const e = conferir(w[lista]); if (e) return e; if (!numeros(w[lista]).vals.length) return 'Informe as medições'; }
+    if (w.tipo === 'perdas') { const e = conferir(w.massasPlataformaG); if (e) return e; }
     // Campos numéricos únicos: valor digitado que não é número não pode virar “não informado” em silêncio
     const invalido = $$('input[data-wz][inputmode="decimal"]').find(el => el.value.trim() !== '' && umNum(el.value) === undefined);
-    if (invalido) return `Valor inválido: “${invalido.value.trim()}” — use só números, com vírgula para decimais e sem ponto de milhar`;
+    if (invalido) return MILHAR.test(invalido.value.trim()) ? `Valor ambíguo: ${msgInvalido(invalido.value.trim())}` : `Valor inválido: “${invalido.value.trim()}” — use só números, com vírgula para decimais e sem ponto de milhar`;
+    const negativo = $$('input[data-wz][inputmode="decimal"]').find(el => umNum(el.value) < 0);
+    if (negativo) return `Valores negativos não são aceitos: ${negativo.value.trim()}`;
   }
   return '';
 }
@@ -483,7 +532,7 @@ function blocoResultado(r, w) {
   const acao = r.status === 'SEM_REFERENCIA' ? (p.acaoRecomendada || ACAO_SEM_REF) : r.status === 'DADOS_INSUFICIENTES' ? 'Completar os dados indicados nas pendências e avaliar novamente.' : (p.acaoRecomendada || '');
   const calc = [];
   if (r.media != null) calc.push(['Vazão média', `${num(r.media, 3)} L/min`], ['CV entre bicos', `${num(r.cv, 2)}%`]);
-  if (r.pttKgHa != null) calc.push(['Perda total (média)', `${num(r.pttKgHa, 1)} kg/ha (${num(r.pttSc60Ha, 2)} sc/ha)`]);
+  if (r.pttKgHa != null) calc.push(['Perda total (média)', `${numLimite(p.valorMedido ?? r.pttKgHa, 1, p)} kg/ha (${num(r.pttSc60Ha, 2)} sc/ha)`]);
   if (r.ppcKgHa != null) calc.push(['Perda na plataforma', `${num(r.ppcKgHa, 1)} kg/ha`], ['Perdas internas (PMI = PTT − PPC)', `${num(r.pmiKgHa, 1)} kg/ha`]);
   if (r.xrefCm != null) calc.push(['Xref', `${num(r.xrefCm, 2)} cm`], ['Aceitáveis', `${num(r.pctAceitaveis, 1)}% (${r.aceitaveis})`], ['Duplos', `${num(r.pctDuplos, 1)}% (${r.duplos})`], ['Falhos', `${num(r.pctFalhos, 1)}% (${r.falhos})`], ['Espaçamentos medidos', r.n]);
   if (r.cv != null && r.media == null) calc.push(['CV transversal', `${num(r.cv, 2)}%`]);
@@ -543,7 +592,7 @@ Object.assign(ACTIONS, {
     const w = wz, mq = w.machineId ? find('machines', w.machineId) : null;
     const reg = {id: uid(), data: w.data, hora: w.hora, responsavel: w.responsavel, tipo: w.tipo, familia: w.familia, produto: w.produto, fieldId: w.fieldId,
       maquina: mq ? {id: mq.id, name: mq.name, model: mq.model, hours: mq.hours, catalogo: mq.catalogo || null} : null,
-      entradas: Object.fromEntries(Object.entries(w).filter(([k]) => !['passo', 'resultado', '_ocupado'].includes(k))),
+      entradas: Object.fromEntries(Object.entries(w).filter(([k]) => !['passo', 'resultado', '_ocupado', '_avisoVazao'].includes(k))),
       propriedade: db.settings.farm || '', talhao: fieldName(w.fieldId),
       resultado: AV().congelar(w.resultado), bancoVersao: w.resultado.avaliacao?.bancoVersao || principal(w.resultado)?.bancoVersao || null,
       criadoEm: new Date().toISOString()};
@@ -562,14 +611,19 @@ function relatorio(id) {
   const linha = (k, v) => v ? `<tr><td>${esc(k)}</td><td>${esc(String(v))}</td></tr>` : '';
   const tri = v => v === 'sim' ? 'Sim' : v === 'nao' ? 'Não' : 'Não informado';
   const condicoes = {
-    bicos: [['Mesma pressão da tabela do fabricante', tri(e.pressaoColetaIgualCatalogo)], ['Coleta no mesmo tempo e pressão', tri(e.mesmoTempoColeta)], ['Pontas do mesmo modelo', tri(e.pontasMesmoModelo)], ['Modelo da ponta', e.modeloPonta], ['Pressão (' + (e.unidadePressao || 'bar') + ')', e.pressao], ['Vazão de catálogo (L/min)', e.vazaoCatalogo], ['Origem da vazão de catálogo', e.fonteVazao ? `${e.fonteVazao.ponta} a ${e.fonteVazao.pressao} ${e.fonteVazao.unidadePressao} — ${e.fonteVazao.fonte}${e.fonteVazao.ano ? ' (' + e.fonteVazao.ano + ')' : ''}${e.fonteVazao.pagina ? ', p. ' + e.fonteVazao.pagina : ''} (confirmada pelo usuário)` : (e.vazaoCatalogo ? 'Digitada pelo usuário' : '')], ['Vazões medidas (' + (e.unidadeVazao || 'L/min') + ')', e.vazoes]],
+    bicos: [['Mesma pressão da tabela do fabricante', tri(e.pressaoColetaIgualCatalogo)], ['Coleta no mesmo tempo e pressão', tri(e.mesmoTempoColeta)], ['Pontas do mesmo modelo', tri(e.pontasMesmoModelo)], ['Modelo da ponta', e.modeloPonta], ['Pressão (' + (e.unidadePressao || 'bar') + ')', e.pressao], ['Vazão de catálogo (L/min)', e.vazaoCatalogo], ['Origem da vazão de catálogo', e.fonteVazao ? `${e.fonteVazao.ponta} a ${String(e.fonteVazao.pressao).replace('.', ',')} ${e.fonteVazao.unidadePressao} — ${e.fonteVazao.fonte}${e.fonteVazao.ano ? ' (' + e.fonteVazao.ano + ')' : ''}${e.fonteVazao.pagina ? ', p. ' + e.fonteVazao.pagina : ''} (confirmada pelo usuário)` : (e.vazaoCatalogo ? 'Digitada pelo usuário' : '')], ['Vazões medidas (' + (e.unidadeVazao || 'L/min') + ')', e.vazoes]],
     perdas: [['Área amostral (m²)', e.areaM2], ['Grãos em vagens incluídos', tri(e.incluiGraosEmVagens)], ['Massas por ponto (g)', e.massasG], ['Massas na plataforma (g)', e.massasPlataformaG]],
     longitudinal: [['Sementes por metro planejadas', e.sementesPorMetro], ['Espaçamentos (cm)', e.espacamentos]],
     transversal: [['Fertilizante nitrogenado', tri(e.fertilizanteNitrogenado)], ['CV com sobreposição', tri(e.cvComSobreposicao)], ['Bandejas', e.valoresSobrepostos]],
     sensor: [['Ponto verificado', e.ponto], ['Comparado com instrumento de referência', tri(e.comparadoComInstrumentoReferencia)], ['Leitura do controlador', e.leituraControlador], ['Referência', e.referencia]],
-    taxa: [['Vazão média por bico (L/min)', e.vazaoMediaBico], ['Velocidade (km/h)', e.velocidadeKmH], ['Distância/tempo', e.distVel && e.tempoVel ? `${e.distVel} m em ${e.tempoVel} s` : ''], ['Espaçamento entre bicos (m)', e.espacamentoBicosM], ['Taxa planejada (L/ha)', e.taxaPlanejada]],
+    taxa: [['Vazão média por bico (L/min)', e.vazaoMediaBico], ['Velocidade (km/h)', e.velocidadeKmH], ['Distância/tempo', e.distVel && e.tempoVel && !e.velocidadeKmH ? `${e.distVel} m em ${e.tempoVel} s` : ''], ['Espaçamento entre bicos (m)', e.espacamentoBicosM], ['Taxa planejada (L/ha)', e.taxaPlanejada]],
     dose: [['Massa coletada (kg)', e.massaKg], ['Distância (m)', e.distanciaM], ['Largura (m)', e.larguraM], ['Dose planejada (kg/ha)', e.dosePlanejada]]
   }[a.tipo] || [];
+  // Só o que vale para o tipo e o equipamento escolhidos (campos de outra escolha podem ter ficado gravados nas entradas)
+  const comLinhas = a.tipo === 'dose' && a.familia !== 'distribuidor_lanco';
+  const cfgDoTipo = {taxa: ['espacamentoBicosM'], bicos: ['modeloPonta'], dose: comLinhas ? ['espLinhasM'] : []}[a.tipo] || [];
+  const origemCfg = Object.keys(e._origem || {}).filter(k => cfgDoTipo.includes(k));
+  const avisosRel = (e.avisos || []).filter(x => !(x.startsWith('Velocidade ') && a.tipo !== 'taxa') && !(x.startsWith('Pressão ') && a.tipo !== 'bicos'));
   return `<div class="no-print">${head('Relatório de aferição', `${TIPOS[a.tipo]?.titulo || a.tipo} • ${fmtDate(a.data)} ${a.hora}`, btn('← Aferições', 'nav', 'afericao', 'secondary') + btn('Imprimir / PDF', 'af-imprimir', '', 'secondary') + `<button class="danger" data-act="af-excluir" data-id="${esc(a.id)}">Excluir</button>`)}</div>
   <article class="card panel relatorio">
     <header class="rel-head"><div><strong>${esc((a.propriedade ?? db.settings.farm) || 'Nexus Agro')}</strong><br><small>Medição e comparação com referência técnica</small></div><small>Registro ${esc(a.id)}</small></header>
@@ -582,13 +636,13 @@ function relatorio(id) {
       ${linha('Cultura / produto', (PRODUTOS.find(x => x[0] === a.produto) || [])[1])}${linha('Talhão / local', a.talhao ?? fieldName(a.fieldId))}
       ${linha('Data / hora', `${fmtDate(a.data)} ${a.hora}`)}${linha('Responsável', a.responsavel)}${linha('Propriedade', a.propriedade ?? db.settings.farm)}
     </tbody></table>
-    <h3>3. Condições da leitura</h3><table class="tbl"><tbody>${condicoes.map(([k, v]) => linha(k, v)).join('')}${linha('Linhas coletadas', e.linhasColetadas)}${linha('Espaçamento entre linhas (m)', e.espLinhasM)}
-      ${Object.keys(e._origem || {}).length ? linha('Valores vindos da configuração da máquina', Object.keys(e._origem).map(k => `${ROTULO_CFG[k] || k}: ${e[k]}`).join(' • ')) : ''}</tbody></table>
+    <h3>3. Condições da leitura</h3><table class="tbl"><tbody>${condicoes.map(([k, v]) => linha(k, v)).join('')}${comLinhas ? linha('Linhas coletadas', e.linhasColetadas) + linha('Espaçamento entre linhas (m)', e.espLinhasM) : ''}
+      ${origemCfg.length ? linha('Valores vindos da configuração da máquina', origemCfg.map(k => `${ROTULO_CFG[k] || k}: ${e[k]}`).join(' • ')) : ''}</tbody></table>
     <h3>4. Referência e condições de aplicação</h3><table class="tbl"><tbody>${p.regraId ? linha('Regra / versão', `${p.regraId} v${p.regraVersao}`) + linha('Título', p.regraTitulo) + linha('Fonte', p.fonte) + linha('Banco de referências', a.bancoVersao ? 'versão ' + a.bancoVersao : '') + linha('Data da análise', p.dataAnalise ? new Date(p.dataAnalise).toLocaleString('pt-BR') : '') : linha('Referência', 'Nenhuma referência validada aplicável a esta condição.')}</tbody></table>
     <h3>5. Instrumentos e observações</h3><table class="tbl"><tbody>${linha('Instrumento', e.instrumento || 'Não informado')}${linha('Rastreabilidade metrológica do instrumento', 'Não informada')}${linha('Observações', e.observacoes)}</tbody></table>
     <h3>6. Pendências e alcance do documento</h3>
     ${(r.pendencias || []).length ? `<ul class="pend">${[...new Set(r.pendencias)].map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '<p>Sem pendências registradas.</p>'}
-    ${(e.avisos || []).length ? `<p><strong>Avisos da configuração da máquina</strong> (não alteram o resultado):</p><ul class="pend">${e.avisos.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
+    ${avisosRel.length ? `<p><strong>Avisos da configuração da máquina</strong> (não alteram o resultado):</p><ul class="pend">${avisosRel.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
     <p class="nota">Este documento registra uma <strong>medição e comparação</strong> com referência técnica operacional. <strong>Não é certificado de calibração, laudo laboratorial nem certificação de conformidade.</strong> O resultado, a regra, a versão e os limites ficaram gravados no momento da análise e não mudam se as referências forem atualizadas.</p>
   </article>`;
 }
