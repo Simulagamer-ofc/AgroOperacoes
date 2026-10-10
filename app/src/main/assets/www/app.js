@@ -516,7 +516,7 @@ function operationRow(o, actions = true) {
 
 // ---------- Telas ----------
 const VIEWS = {};
-const TITLES = {inicio: 'Visão geral', operacoes: 'Operações do dia', maquinas: 'Máquinas e manutenção', talhoes: 'Talhões', sementes: 'Produção de sementes', lotes: 'Lotes e rastreabilidade', estoque: 'Estoque e insumos', relatorios: 'Relatórios', cadastros: 'Cadastros e backup', busca: 'Pesquisa'};
+const TITLES = {inicio: 'Visão geral', operacoes: 'Operações do dia', maquinas: 'Máquinas e manutenção', talhoes: 'Talhões', sementes: 'Sementes e lotes', lotes: 'Lotes e rastreabilidade', estoque: 'Estoque e insumos', relatorios: 'Relatórios', cadastros: 'Cadastros e backup', busca: 'Pesquisa'};
 
 VIEWS.inicio = (anchor) => {
   const t = today();
@@ -885,6 +885,13 @@ function go(route, anchor) {
   if (location.hash === target) render(anchor); else { pendingAnchor = anchor; location.hash = target; }
 }
 let pendingAnchor;
+// Telas agrupadas num só item do menu, com abas no topo (a rota de cada aba continua valendo em links e atalhos)
+const ABAS = {
+  financeiro: [['gastos', 'Gastos'], ['financeiro', 'Contas'], ['lcdpr', 'LCDPR']],
+  sementes: [['sementes', 'Painel'], ['lotes', 'Lotes'], ['ubs', 'Beneficiamento']]
+};
+const GRUPO_DA_ROTA = Object.fromEntries(Object.entries(ABAS).flatMap(([g, l]) => l.map(([r]) => [r, g])));
+const barraAbas = name => { const g = GRUPO_DA_ROTA[name]; return g ? `<nav class="abas" aria-label="Seções">${ABAS[g].map(([r, t]) => `<button class="${r === name ? 'active' : ''}" data-act="nav" data-id="${r}"${r === name ? ' aria-current="page"' : ''}>${esc(t)}</button>`).join('')}</nav>` : ''; };
 function render(anchor = pendingAnchor) {
   pendingAnchor = undefined;
   const {name, arg} = parseRoute();
@@ -896,7 +903,10 @@ function render(anchor = pendingAnchor) {
   }
   $('#viewTitle').textContent = TITLES[key] || (name === 'talhao' ? 'Talhões' : 'Nexus Agro');
   document.title = `${TITLES[key] || 'Nexus Agro'} — Nexus Agro`;
-  $$('[data-route]').forEach(b => b.classList.toggle('active', b.dataset.route === key));
+  const menu = GRUPO_DA_ROTA[key] || key;
+  $$('[data-route]').forEach(b => b.classList.toggle('active', b.dataset.route === menu));
+  // Abas só nas telas de lista do grupo (não no detalhe de um lote ou de uma ordem)
+  if (GRUPO_DA_ROTA[name] && !arg) view.querySelector('.view-head')?.insertAdjacentHTML('afterend', barraAbas(name));
   try { VIEWS[name].after?.(anchor); } catch (err) { falhaInesperada(err); }
   const h2 = view.querySelector('.view-head h2'), igual = t => semAcentoApp(t).replace(/[^a-z]/g, '');
   if (h2 && igual(h2.textContent) === igual($('#viewTitle').textContent)) h2.classList.add('repetido');
