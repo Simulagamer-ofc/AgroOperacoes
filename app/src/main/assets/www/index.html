@@ -9,11 +9,32 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/svg+xml" href="icon.svg">
   <link rel="stylesheet" href="styles.css">
+  <!-- Estilo inicial local: evita mostrar o painel antes da abertura Nexus. -->
+  <style>
+    .nexus-splash{display:none}
+    html.nexus-booting{overflow:hidden}
+    html.nexus-booting .nexus-splash{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:#061625;color:#e8f5fb;text-align:center;padding:24px;isolation:isolate}
+    .nexus-splash-arte{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:85% center;opacity:.9;z-index:-2}
+    .nexus-splash:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,22,37,.35),rgba(6,22,37,.2) 35%,rgba(6,22,37,.95));z-index:-1}
+    .nexus-splash-conteudo{align-self:end;margin-bottom:clamp(24px,8vh,90px);max-width:100%}
+    .nexus-splash-marca{font:800 clamp(30px,6vw,56px)/1.1 Inter,system-ui,sans-serif;letter-spacing:.08em;margin:0 0 14px;overflow-wrap:anywhere}
+    .nexus-splash-marca span{color:#65e6a8}
+    .nexus-splash-status{font:400 14px/1.5 Inter,system-ui,sans-serif;color:#d1e7ef;margin:0;display:flex;align-items:center;justify-content:center;gap:10px}
+    .nexus-splash-spinner{width:18px;height:18px;flex:none;border:2px solid #456676;border-top-color:#65e6a8;border-radius:50%;animation:nexus-spin 1s linear infinite}
+    @keyframes nexus-spin{to{transform:rotate(360deg)}}
+    @media(max-aspect-ratio:3/4){.nexus-splash-arte{top:8%;height:60%;object-position:85% center}.nexus-splash:before{background:linear-gradient(180deg,rgba(6,22,37,.1),transparent 45%,#061625 78%)}}
+    @media(prefers-reduced-motion:reduce){.nexus-splash-spinner{animation:none}}
+  </style>
+  <script src="splash.js"></script>
 </head>
 <body>
+<div class="nexus-splash" id="nexusSplash" role="status" aria-live="polite" aria-label="Nexus Agro, carregando o sistema">
+  <img class="nexus-splash-arte" src="img/nexus-globo.jpg" alt="" aria-hidden="true" fetchpriority="high">
+  <div class="nexus-splash-conteudo"><p class="nexus-splash-marca">NEXUS <span>AGRO</span></p><p class="nexus-splash-status"><span class="nexus-splash-spinner" aria-hidden="true"></span>Carregando o sistema…</p></div>
+</div>
 <div class="app">
   <aside class="sidebar" id="sidebar">
-    <div class="brand nexus"><strong class="marca">NEXUS<span>AGRO</span></strong><small class="versao" title="Versão de teste 0.19.1">v0.19.1</small><small id="farmName">Minha fazenda</small></div>
+    <div class="brand nexus"><strong class="marca">NEXUS<span>AGRO</span></strong><small class="versao" title="Versão de teste 0.19.2">v0.19.2</small><small id="farmName">Minha fazenda</small></div>
     <nav class="nav" aria-label="Menu principal">
       <button data-route="inicio"><span class="icon">▦</span>Visão geral</button>
       <small class="nav-grupo">Campo</small>

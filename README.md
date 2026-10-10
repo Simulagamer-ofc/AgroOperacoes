@@ -4,7 +4,7 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.19.1-beta1` — painel com o visual aprovado: custos por categoria em barras horizontais, evolução mensal em colunas, rosca de operações e insumos em atenção. O filtro de 7/30/90 dias aplica-se aos custos por categoria, às operações e aos indicadores adicionais. A evolução mensal mostra seis meses (com o mês atual identificado como parcial); estoque mostra o saldo atual. Os quadros usam somente registros reais e mostram estados vazios quando não há dados. Ações rápidas, operações, alertas e indicadores adicionais continuam disponíveis na seção expansível abaixo do painel.
+`0.19.2-beta1` — abertura com o globo Nexus por 5 segundos, disponível offline no navegador/PWA e APK, sem repetir ao trocar de menu; tipografia unificada entre telas. Painel com o visual aprovado: custos por categoria em barras horizontais, evolução mensal em colunas, rosca de operações e insumos em atenção. O filtro de 7/30/90 dias aplica-se aos custos por categoria, às operações e aos indicadores adicionais. A evolução mensal mostra seis meses (com o mês atual identificado como parcial); estoque mostra o saldo atual. Os quadros usam somente registros reais e mostram estados vazios quando não há dados. Ações rápidas, operações, alertas e indicadores adicionais continuam disponíveis na seção expansível abaixo do painel.
 
 ### Funcionalidades
 
