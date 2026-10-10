@@ -145,9 +145,9 @@ function registrarEtapaUbs(ordemId) {
   openForm({title: `${e.nome} — lote ${l.code}`, sub, values: {data: today(), ...(e.tipo === 'ensaque' && db.settings.kgPorSaca ? {kgPorSaca: db.settings.kgPorSaca} : {})}, fields, onSubmit});
   // Percentual do descarte enquanto digita
   const d = $('#f_descarteKg', dialog), h = d?.parentElement.querySelector('.hint');
-  if (d && h) d.addEventListener('input', () => { const x = Number(d.value.replace(',', '.')); h.textContent = x > 0 ? `${pctDe(x, c.restante)} do que entrou na etapa (${kgFmt(c.restante)})` : ''; });
+  if (d && h) d.addEventListener('input', () => { const x = numeroBR(d.value); h.textContent = x > 0 ? `${pctDe(x, c.restante)} do que entrou na etapa (${kgFmt(c.restante)})` : ''; });
   const sa = $('#f_sacas', dialog), kp = $('#f_kgPorSaca', dialog), hk = kp?.parentElement.querySelector('.hint');
-  if (sa && kp && hk) { const base = hk.textContent; const at = () => { const n = Number(sa.value), k = Number(kp.value.replace(',', '.')); hk.textContent = n > 0 && k > 0 ? `${kgFmt(n * k)} ensacados • rendimento ${pctDe(n * k, c.entrada)}` : base; }; sa.oninput = at; kp.oninput = at; }
+  if (sa && kp && hk) { const base = hk.textContent; const at = () => { const n = Number(sa.value), k = numeroBR(kp.value); hk.textContent = n > 0 && k > 0 ? `${kgFmt(n * k)} ensacados • rendimento ${pctDe(n * k, c.entrada)}` : base; }; sa.oninput = at; kp.oninput = at; }
 }
 
 function configurarEtapasUbs() {

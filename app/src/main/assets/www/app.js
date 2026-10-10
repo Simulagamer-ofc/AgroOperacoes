@@ -666,7 +666,7 @@ function lotDetail(id) {
 
 let reportDays = 30;
 VIEWS.relatorios = () => {
-  const from = daysAgo(reportDays);
+  const from = daysAgo(reportDays - 1); // mesmo período de “N dias” usado no Controle de gastos
   const ops = db.operations.filter(o => o.date >= from && o.date <= today() && o.status !== 'Cancelada');
   const byType = OP_TYPES.map(t => [t, ops.filter(o => o.type === t)]).filter(([, l]) => l.length);
   const maxType = Math.max(1, ...byType.map(([, l]) => l.length));
@@ -683,7 +683,7 @@ VIEWS.relatorios = () => {
       <article class="card kpi"><div class="label">Operações no período</div><div class="value">${ops.length}</div><div class="hint">${ops.filter(o => o.status === 'Concluída').length} concluídas</div></article>
       <article class="card kpi"><div class="label">Área trabalhada</div><div class="value">${num(area)}</div><div class="hint">ha em operações concluídas</div></article>
       <article class="card kpi"><div class="label">Horas de máquina</div><div class="value">${num(hoursBy.reduce((s, [, h]) => s + h, 0))}</div><div class="hint">pelos registros de horímetro</div></article>
-      <article class="card kpi"><div class="label">Custo de manutenção</div><div class="value">R$ ${num(maintCost, 2)}</div><div class="hint">${custosManut.length} ${custosManut.length === 1 ? 'ordem com custo' : 'ordens com custo'}</div></article>
+      <article class="card kpi"><div class="label">Custo de manutenção</div><div class="value">R$ ${num(maintCost, 2)}</div><div class="hint">${custosManut.length} ${custosManut.length === 1 ? 'ordem concluída com custo' : 'ordens concluídas com custo'}</div></article>
       <article class="card kpi clickable" data-act="nav" data-id="gastos" style="cursor:pointer"><div class="label">Outros gastos</div><div class="value">R$ ${num(outrosGastos, 2)}</div><div class="hint">combustível, peças, mão de obra e demais • ver detalhes</div></article>
     </section>
     <section class="grid">
@@ -848,7 +848,7 @@ const ACTIONS = {
   'lot-new': () => lotForm(), 'lot-edit': id => lotForm(find('lots', id)), 'lot-event': id => lotEventForm(id),
   'st-new': () => stockForm(), 'st-edit': id => stockForm(find('stock', id)),
   // As movimentações ficam: são o histórico de insumos aplicados nos talhões e lotes (aparecem como “Item removido”)
-  'st-del': id => confirmDialog('Excluir este item do estoque? O histórico de movimentações e de insumos aplicados nos talhões é mantido.', () => remove('stock', id)),
+  'st-del': id => confirmDialog('Excluir este item do estoque? O histórico de movimentações e de insumos aplicados nos talhões é mantido.', () => { if (remove('stock', id) !== false) showToast('Excluído'); }),
   'mov-new': id => movementForm(id),
   'st-ajuste': id => movementForm(id, 'Ajuste de inventário'),
   'rep-days': id => { reportDays = Number(id); render(); },
