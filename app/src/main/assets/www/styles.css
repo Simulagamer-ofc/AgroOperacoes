@@ -273,7 +273,7 @@ body{background:var(--bg)}
 
 /* =================== Usabilidade no celular (revisão UX) =================== */
 /* Números e unidades nunca quebram linha ("R$" / valor, "18,0" / "mm") */
-.kpi .value,.tbl td.num,.es-kpis .kpi .value,.es-saldo b,.ubs-num b,.ctn-num b,.item-card .big,.nx-tile strong,.pc-sug b,.ubs-rend b,.nx-total strong{white-space:nowrap}
+.kpi .value,.tbl-wrap .tbl td.num,.es-kpis .kpi .value,.es-saldo b,.ubs-num b,.ctn-num b,.item-card .big,.nx-tile strong,.pc-sug b,.ubs-rend b,.nx-total strong{white-space:nowrap}
 .kpi .value{overflow:hidden;text-overflow:ellipsis}
 /* Ícone colorido do cartão (KPI) não cobre o rótulo */
 .kpi .badge~.label{padding-right:48px}
