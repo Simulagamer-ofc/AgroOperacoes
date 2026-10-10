@@ -18,18 +18,25 @@ const estoquePerto = s => nivelEstoque(s).cls === 'perto';
 const valorItem = s => custoMedio(s) != null ? custoMedio(s) * Number(s.qty || 0) : null;
 const brl = v => 'R$ ' + num(v, 2);
 
-// Saldo por lote: entradas com lote menos saídas do lote; saídas sem lote baixam do lote que vence primeiro (PVPS)
+// Saldo por lote: entradas com lote menos saídas do lote; saídas sem lote baixam do lote que vence primeiro (PVPS).
+// Ajuste de inventário para baixo (saldo antes − depois) também baixa pelo PVPS; para cima é entrada sem lote.
+// A soma dos lotes nunca passa do saldo do item.
 const AVISO_VALIDADE_DIAS = 60; // aviso da tela: lote vencendo em até 60 dias
 function lotesDoItem(itemId) {
   const movs = db.movements.filter(m => m.itemId === itemId).sort((a, b) => a.date.localeCompare(b.date));
   const lotes = {};
   for (const m of movs) if (m.kind === 'Entrada' && m.lote) { const l = (lotes[m.lote] ||= {lote: m.lote, validade: m.validade || '', saldo: 0}); l.saldo += Number(m.qty) || 0; if (m.validade && (!l.validade || m.validade < l.validade)) l.validade = m.validade; }
+  const pvps = () => Object.values(lotes).sort((a, b) => (a.validade || '9999').localeCompare(b.validade || '9999'));
+  const baixar = resta => { for (const l of pvps()) { if (resta <= 0) break; const tira = Math.min(resta, l.saldo); l.saldo -= tira; resta -= tira; } };
   for (const m of movs) {
+    if (m.kind === 'Ajuste de inventário') { const d = Number(m.before) - Number(m.after); if (d > 0) baixar(d); continue; }
     if (m.kind !== 'Saída') continue;
     let resta = Number(m.qty) || 0;
     if (m.lote && lotes[m.lote]) { const tira = Math.min(resta, lotes[m.lote].saldo); lotes[m.lote].saldo -= tira; resta -= tira; }
-    for (const l of Object.values(lotes).sort((a, b) => (a.validade || '9999').localeCompare(b.validade || '9999'))) { if (resta <= 0) break; const tira = Math.min(resta, l.saldo); l.saldo -= tira; resta -= tira; }
+    baixar(resta);
   }
+  const s = find('stock', itemId), excesso = Object.values(lotes).reduce((t, l) => t + l.saldo, 0) - Math.max(0, Number(s?.qty) || 0);
+  if (s && excesso > 1e-9) baixar(excesso);
   return Object.values(lotes).filter(l => l.saldo > 1e-9).sort((a, b) => (a.validade || '9999').localeCompare(b.validade || '9999'));
 }
 const diasAte = d => Math.round((new Date(d + 'T12:00:00') - new Date(today() + 'T12:00:00')) / 864e5);
@@ -132,7 +139,7 @@ Object.assign(ACTIONS, {
     const data = $('#invData').value || today(), resp = $('#invResp').value.trim(), dif = l.filter(x => Math.abs(x.v - Number(x.s.qty || 0)) > 1e-9);
     confirmDialog(`${l.length} ${l.length === 1 ? 'item contado' : 'itens contados'}; ${dif.length} com diferença. Registrar os ajustes em ${fmtDate(data)}?`, () => {
       dif.forEach(({s, v}) => { const mov = aplicarMovimento(s, 'Ajuste de inventário', v, 0); db.movements.push({id: uid(), itemId: s.id, kind: 'Ajuste de inventário', qty: v, date: data, notes: `Inventário${resp ? ' — ' + resp : ''}`, ...mov}); });
-      db.settings.ultimoInventario = data; save(); showToast(dif.length ? `${dif.length} ajuste(s) registrados` : 'Contagem confere com o app'); go('estoque');
+      db.settings.ultimoInventario = data; save(); showToast(dif.length ? (dif.length === 1 ? '1 ajuste registrado' : `${dif.length} ajustes registrados`) : 'Contagem confere com o app'); go('estoque');
     }, 'Registrar');
   }
 });

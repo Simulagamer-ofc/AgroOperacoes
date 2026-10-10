@@ -15,9 +15,14 @@ function lerXmlNfe(texto) {
   if (!inf) throw new Error('Não é um XML de NF-e (sem infNFe)');
   const emit = tagNfe(inf, 'emit'), ide = tagNfe(inf, 'ide');
   const itens = [...inf.getElementsByTagNameNS('*', 'det')].map(det => {
-    const p = tagNfe(det, 'prod'), r = tagNfe(p, 'rastro');
+    const p = tagNfe(det, 'prod');
+    // Um item pode ter vários lotes (rastro se repete, cada um com nLote, qLote e dVal)
+    const lotes = [...(p?.getElementsByTagNameNS('*', 'rastro') || [])].map(r => ({lote: txtNfe(r, 'nLote'), qtd: numNfe(txtNfe(r, 'qLote')), validade: txtNfe(r, 'dVal')}));
+    const qtd = numNfe(txtNfe(p, 'qCom')), somaLotes = lotes.reduce((t, l) => t + l.qtd, 0);
     return {nItem: det.getAttribute('nItem'), codigo: txtNfe(p, 'cProd'), nome: txtNfe(p, 'xProd'), ncm: txtNfe(p, 'NCM'), unidade: txtNfe(p, 'uCom'),
-      qtd: numNfe(txtNfe(p, 'qCom')), valor: numNfe(txtNfe(p, 'vProd')), desconto: numNfe(txtNfe(p, 'vDesc')), lote: r ? txtNfe(r, 'nLote') : '', validade: r ? txtNfe(r, 'dVal') : ''};
+      qtd, valor: numNfe(txtNfe(p, 'vProd')), desconto: numNfe(txtNfe(p, 'vDesc')), lote: lotes[0]?.lote || '', validade: lotes[0]?.validade || '', lotes,
+      // Divide por lote só quando as quantidades dos lotes fecham com a do item
+      porLote: lotes.length > 1 && lotes.every(l => l.qtd > 0) && Math.abs(somaLotes - qtd) <= 1e-6 * Math.max(1, qtd)};
   });
   const dups = [...inf.getElementsByTagNameNS('*', 'dup')].map(d => ({numero: txtNfe(d, 'nDup'), vencimento: txtNfe(d, 'dVenc'), valor: numNfe(txtNfe(d, 'vDup'))}));
   return {chave: (inf.getAttribute('Id') || '').replace(/^NFe/, ''), numero: txtNfe(ide, 'nNF'), serie: txtNfe(ide, 'serie'), data: (txtNfe(ide, 'dhEmi') || txtNfe(ide, 'dEmi')).slice(0, 10),
@@ -36,7 +41,7 @@ function itemParecido(nome) {
 function telaConferenciaNfe() {
   const n = nfeLida, ja = db.expenses.some(g => g.nfeChave && g.nfeChave === n.chave);
   const opcoes = sel => `<option value="">— escolher —</option><option value="__novo" ${sel === '__novo' ? 'selected' : ''}>+ Criar item novo</option>${db.stock.map(s => `<option value="${esc(s.id)}" ${s.id === sel ? 'selected' : ''}>${esc(s.name)} (${esc(s.unit)})</option>`).join('')}`;
-  return head(`NF-e ${n.numero}${n.serie ? '-' + n.serie : ''} — ${n.emitente}`, `${fmtDate(n.data)} • total R$ ${num(n.total, 2)} • ${n.itens.length} ${n.itens.length === 1 ? 'item' : 'itens'}${n.dups.length ? ` • ${n.dups.length} duplicata(s)` : ' • sem duplicatas (à vista)'}`, btn('Cancelar', 'nfe-cancelar', '', 'secondary')) +
+  return head(`NF-e ${n.numero}${n.serie ? '-' + n.serie : ''} — ${n.emitente}`, `${fmtDate(n.data)} • total R$ ${num(n.total, 2)} • ${n.itens.length} ${n.itens.length === 1 ? 'item' : 'itens'}${n.dups.length ? ` • ${n.dups.length} ${n.dups.length === 1 ? 'duplicata' : 'duplicatas'}` : ' • sem duplicatas (à vista)'}`, btn('Cancelar', 'nfe-cancelar', '', 'secondary')) +
     (ja ? `<div class="es-validade-aviso">⚠ Esta nota (chave ${esc(n.chave)}) já foi importada. Importar de novo duplicaria o estoque e o gasto.</div>` : '') +
     `<section class="card panel"><p class="nota" style="margin-top:0">Confira cada item: escolha o item do estoque (ou crie um) e a quantidade <strong>na unidade do estoque</strong>. Quando a unidade da nota for diferente, a quantidade fica em branco para você converter.</p>
     <div class="tbl-wrap"><table class="tbl nfe-tab"><thead><tr><th>Item da nota</th><th class="num">Nota</th><th>Item do estoque</th><th class="num">Qtd. no estoque</th><th>Lote / validade</th></tr></thead><tbody>
@@ -45,7 +50,8 @@ function telaConferenciaNfe() {
       <td class="num">${num(it.qtd, 4)} ${esc(it.unidade)}<br><small>R$ ${num(it.valor - it.desconto, 2)}</small></td>
       <td><select data-nfe-item="${i}">${opcoes(sel)}</select>${alvo && !mesmaUn ? `<br><small class="nfe-aviso">Unidade do estoque: ${esc(alvo.unit)} — converta a quantidade</small>` : ''}</td>
       <td class="num"><input data-nfe-qtd="${i}" inputmode="decimal" value="${esc(it.qtdEst ?? (mesmaUn ? String(it.qtd).replace('.', ',') : ''))}"></td>
-      <td><small>${it.lote ? 'Lote ' + esc(it.lote) : '—'}${it.validade ? '<br>val. ' + fmtDate(it.validade) : ''}</small></td></tr>`; }).join('')}
+      <td><small>${it.lotes?.length > 1 ? it.lotes.map(l => `Lote ${esc(l.lote)} • ${num(l.qtd, 4)} ${esc(it.unidade)}${l.validade ? ' • val. ' + fmtDate(l.validade) : ''}`).join('<br>') + (it.porLote ? '<br>uma entrada por lote' : `<br><span class="nfe-aviso">⚠ Os lotes somam ${num(it.lotes.reduce((t, l) => t + l.qtd, 0), 4)} ${esc(it.unidade)} e o item ${num(it.qtd, 4)}: entra uma só vez, com o lote ${esc(it.lote)}</span>`)
+        : `${it.lote ? 'Lote ' + esc(it.lote) : '—'}${it.validade ? '<br>val. ' + fmtDate(it.validade) : ''}`}</small></td></tr>`; }).join('')}
     </tbody></table></div>
     ${n.dups.length ? `<h3 style="margin-top:16px">Duplicatas → Financeiro (a pagar)</h3><table class="tbl"><tbody>${n.dups.map(d => `<tr><td>${esc(d.numero)}</td><td>${fmtDate(d.vencimento)}</td><td class="num">R$ ${num(d.valor, 2)}</td></tr>`).join('')}</tbody></table>` : ''}
     <div class="form" style="margin-top:14px"><div class="field"><label for="nfeCat">Categoria do gasto</label><select id="nfeCat">${CAT_GASTO.map(c => `<option ${c === 'Insumos' ? 'selected' : ''}>${esc(c)}</option>`).join('')}</select></div></div>
@@ -66,12 +72,19 @@ function confirmarNfe() {
     let s = it.sel === '__novo' ? null : find('stock', it.sel);
     if (!s) { s = {id: uid(), name: it.nome, category: cat === 'Combustível' ? 'Combustível' : cat === 'Peças' ? 'Peças' : 'Outro', unit: it.unidade || 'un', qty: 0, min: '', location: ''}; db.stock.push(s); }
     const q = umNum(it.qtdEst), valor = Math.max(0, it.valor - it.desconto);
-    const mov = aplicarMovimento(s, 'Entrada', q, valor);
-    db.movements.push({id: uid(), itemId: s.id, kind: 'Entrada', qty: q, date: n.data || today(), supplier: n.emitente, doc: `NF-e ${n.numero}`, lote: it.lote || undefined, validade: it.validade || undefined, nfeChave: n.chave, gastoId, ...mov});
+    // Vários lotes: uma entrada por lote, quantidade (na unidade do estoque) e valor proporcionais ao qLote; o último absorve o arredondamento
+    const partes = it.porLote ? it.lotes.map(l => ({...l, f: l.qtd / it.qtd})) : [{lote: it.lote, validade: it.validade, f: 1}];
+    let qRest = q, vRest = valor;
+    partes.forEach((l, k) => {
+      const ult = k === partes.length - 1, ql = ult ? qRest : Math.round(q * l.f * 1e4) / 1e4, vl = ult ? Math.round(vRest * 100) / 100 : Math.round(valor * l.f * 100) / 100;
+      qRest -= ql; vRest -= vl;
+      const mov = aplicarMovimento(s, 'Entrada', ql, vl);
+      db.movements.push({id: uid(), itemId: s.id, kind: 'Entrada', qty: ql, date: n.data || today(), supplier: n.emitente, doc: `NF-e ${n.numero}`, lote: l.lote || undefined, validade: l.validade || undefined, nfeChave: n.chave, gastoId, ...mov});
+    });
   }
   db.expenses.push({id: gastoId, date: n.data || today(), category: cat, description: `NF-e ${n.numero} — ${n.emitente}`, value: n.total, supplier: n.emitente, parceiroDoc: n.cnpj, doc: `NF-e ${n.numero}`, nfeChave: n.chave});
   if (n.dups.length) n.dups.forEach((d, i) => db.contas.push({id: uid(), tipo: 'pagar', grupo: gastoId, descricao: `NF-e ${n.numero} — ${n.emitente}`, categoria: cat, parceiro: n.emitente, valor: d.valor, vencimento: d.vencimento || n.data, parcela: `${i + 1}/${n.dups.length}`, doc: d.numero, status: 'aberta', expenseId: gastoId, lancarGasto: 'Não'}));
-  save(); nfeLida = null; showToast(`NF-e ${n.numero} importada: ${n.itens.length} item(ns) no estoque`); go('estoque');
+  save(); nfeLida = null; showToast(`NF-e ${n.numero} importada: ${n.itens.length} ${n.itens.length === 1 ? 'item' : 'itens'} no estoque`); go('estoque');
 }
 
 VIEWS.nfe = () => nfeLida ? telaConferenciaNfe() : head('Importar NF-e', 'Escolha o arquivo XML da nota de compra', btn('← Estoque', 'nav', 'estoque', 'secondary')) + `<section class="card">${empty('Nenhuma nota carregada', 'Toque em “Importar NF-e (XML)” no estoque e escolha o arquivo XML enviado pelo fornecedor.', {act: 'nfe-abrir', label: 'Escolher XML'})}</section>`;

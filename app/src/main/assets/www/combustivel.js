@@ -74,7 +74,8 @@ function abastecimentoForm(machineId) {
         if (v.value > 0 && v.gasto === 'Sim') db.expenses.push({id: uid(), date: v.date, category: 'Combustível', description: `Abastecimento ${m.name} — ${num(v.liters)} L`, value: v.value, machineId: m.id, fuelId: reg.id});
       }
       // Horímetro do abastecimento atualiza a máquina (como no registro de horímetro)
-      if (Number(v.hours) > Number(m.hours || 0)) { db.hourLogs.push({id: uid(), machineId: m.id, date: v.date, hours: v.hours, previous: Number(m.hours || 0), notes: 'Abastecimento'}); m.hours = v.hours; }
+      // Guarda o id do registro de horímetro para desfazer ao excluir o abastecimento
+      if (Number(v.hours) > Number(m.hours || 0)) { const hl = {id: uid(), machineId: m.id, date: v.date, hours: v.hours, previous: Number(m.hours || 0), notes: 'Abastecimento', fuelId: reg.id}; db.hourLogs.push(hl); m.hours = v.hours; reg.hourLogId = hl.id; }
       db.fuel.push(reg); save();
       const r = resumoConsumo(m.id);
       showToast(r && r.ultimo.ate.id === reg.id ? `${m.name}: ${um1(r.ultimo.lh)} L/h desde o último tanque cheio` : `Abastecimento de ${m.name} salvo`);
@@ -82,20 +83,35 @@ function abastecimentoForm(machineId) {
   });
 }
 
+// Custo do abastecimento: valor pago (posto) ou custo médio do item na saída do estoque.
+// Registro antigo do tanque da fazenda sem custo: usa o custo da movimentação ou, se não houver, o custo médio atual do item (estimado).
+function custoAbast(f) {
+  if (Number(f.value) > 0) return {v: Number(f.value)};
+  if (f.origem !== 'estoque') return {v: 0, falta: 'posto'};
+  const mov = db.movements.find(m => m.fuelId === f.id && m.kind === 'Saída');
+  if (Number(mov?.value) > 0) return {v: Number(mov.value)};
+  const cm = custoMedio(find('stock', f.itemId || mov?.itemId));
+  return cm != null ? {v: cm * Number(f.liters || 0), est: true} : {v: 0, falta: 'estoque'};
+}
+
 const PERIODOS_COMB = [['mes', 'Este mês'], ['30', '30 dias'], ['90', '90 dias'], ['365', '12 meses'], ['tudo', 'Tudo']];
 const inicioComb = () => combPeriodo === 'tudo' ? '' : combPeriodo === 'mes' ? today().slice(0, 8) + '01' : daysAgo(Number(combPeriodo) - 1);
 
 VIEWS.combustivel = () => {
   const desde = inicioComb(), lista = db.fuel.filter(f => f.date >= desde && f.date <= today()).sort(byDateDesc);
-  const litros = lista.reduce((s, f) => s + Number(f.liters || 0), 0), valor = lista.reduce((s, f) => s + (Number(f.value) || 0), 0), semValor = lista.filter(f => !(Number(f.value) > 0)).length;
+  const custos = new Map(lista.map(f => [f.id, custoAbast(f)]));
+  const litros = lista.reduce((s, f) => s + Number(f.liters || 0), 0), valor = lista.reduce((s, f) => s + custos.get(f.id).v, 0);
+  const semPosto = lista.filter(f => custos.get(f.id).falta === 'posto').length, semCusto = lista.filter(f => custos.get(f.id).falta === 'estoque').length, estimados = lista.filter(f => custos.get(f.id).est).length;
+  const plural = (n, um, varios) => `${n} ${n === 1 ? um : varios}`;
+  const dicaCusto = [semPosto && plural(semPosto, 'compra no posto sem valor informado', 'compras no posto sem valor informado'), semCusto && plural(semCusto, 'saída do tanque com item sem custo médio', 'saídas do tanque com item sem custo médio'), estimados && plural(estimados, 'estimado pelo custo médio atual', 'estimados pelo custo médio atual')].filter(Boolean).join(' • ');
   const maquinas = db.machines.map(m => ({m, r: resumoConsumo(m.id), l: lista.filter(f => f.machineId === m.id).reduce((s, f) => s + Number(f.liters || 0), 0)})).filter(x => x.r || x.l);
   const avisos = maquinas.filter(x => x.r?.acima);
-  const linha = f => `<tr><td>${fmtDate(f.date)}</td><td><strong>${esc(machineName(f.machineId) || 'Máquina removida')}</strong>${f.operator ? `<br><small style="color:var(--muted)">${esc(f.operator)}</small>` : ''}</td><td class="num">${num(f.liters)} L</td><td class="num">${num(f.hours)} h</td><td>${f.cheio === 'Sim' ? chip('Tanque cheio', 'blue') : chip('Parcial', 'gray')}</td><td>${f.origem === 'estoque' ? 'Estoque' : 'Posto'}</td><td class="num">${Number(f.value) > 0 ? 'R$ ' + num(f.value, 2) : '—'}</td><td>${mini('Excluir', 'cb-del', f.id, 'del')}</td></tr>`;
+  const linha = f => `<tr><td>${fmtDate(f.date)}</td><td><strong>${esc(machineName(f.machineId) || 'Máquina removida')}</strong>${f.operator ? `<br><small style="color:var(--muted)">${esc(f.operator)}</small>` : ''}</td><td class="num">${num(f.liters)} L</td><td class="num">${num(f.hours)} h</td><td>${f.cheio === 'Sim' ? chip('Tanque cheio', 'blue') : chip('Parcial', 'gray')}</td><td>${f.origem === 'estoque' ? 'Estoque' : 'Posto'}</td><td class="num">${(c => c.v > 0 ? `R$ ${num(c.v, 2)}${c.est ? '<br><small>estimado</small>' : ''}` : '—')(custos.get(f.id))}</td><td>${mini('Excluir', 'cb-del', f.id, 'del')}</td></tr>`;
   return head('Combustível', 'Abastecimentos por máquina e consumo pelo método do tanque cheio', btn('+ Abastecimento', 'cb-new')) +
     `<div class="filters">${PERIODOS_COMB.map(([k, r]) => `<button class="${k === combPeriodo ? 'active' : ''}" data-act="cb-periodo" data-id="${k}">${r}</button>`).join('')}</div>
     <section class="es-kpis">
-      <article class="card kpi"><div class="label">Litros abastecidos</div><div class="value">${num(litros)} L</div><div class="hint">${lista.length} abastecimento(s)</div></article>
-      <article class="card kpi"><div class="label">Custo do combustível</div><div class="value">R$ ${num(valor, 2)}</div><div class="hint">${semValor ? `${semValor} sem valor (item sem custo médio)` : 'pelo custo médio ou valor pago'}</div></article>
+      <article class="card kpi"><div class="label">Litros abastecidos</div><div class="value">${num(litros)} L</div><div class="hint">${plural(lista.length, 'abastecimento', 'abastecimentos')}</div></article>
+      <article class="card kpi"><div class="label">Custo do combustível</div><div class="value">R$ ${num(valor, 2)}</div><div class="hint">${dicaCusto || 'pelo custo médio ou valor pago'}</div></article>
       <article class="card kpi ${avisos.length ? 'aviso' : ''}"><div class="label">Consumo acima do normal</div><div class="value">${avisos.length}</div><div class="hint">${esc(avisos.map(x => x.m.name).join(', ') || 'mais de 20% acima da média da própria máquina')}</div></article>
       <article class="card kpi"><div class="label">Máquinas com consumo medido</div><div class="value">${maquinas.filter(x => x.r).length}</div><div class="hint">precisam de 2 tanques cheios</div></article>
     </section>
@@ -110,9 +126,17 @@ Object.assign(ACTIONS, {
   'cb-new': id => abastecimentoForm(id),
   'cb-periodo': id => { combPeriodo = id; render(); },
   'cb-del': id => confirmDialog('Excluir este abastecimento? Se saiu do estoque, o combustível volta para o saldo.', () => {
+    const f = find('fuel', id), m = f && find('machines', f.machineId);
     db.movements.filter(m => m.fuelId === id && m.kind === 'Saída').forEach(m => { const s = find('stock', m.itemId); if (s) s.qty = Number(s.qty || 0) + Number(m.qty); });
     db.movements = db.movements.filter(m => m.fuelId !== id); db.expenses = db.expenses.filter(g => g.fuelId !== id);
-    remove('fuel', id);
+    // Desfaz o horímetro lançado pelo abastecimento (registros antigos: procura pelo mesmo dia e leitura)
+    const hl = f && (db.hourLogs.find(h => h.id === f.hourLogId) || db.hourLogs.find(h => h.fuelId === id) || (!f.hourLogId ? db.hourLogs.find(h => h.notes === 'Abastecimento' && h.machineId === f.machineId && h.date === f.date && Number(h.hours) === Number(f.hours)) : null));
+    if (hl) {
+      db.hourLogs = db.hourLogs.filter(h => h.id !== hl.id);
+      // Só volta o horímetro se esta leitura ainda for a última da máquina
+      if (m && Number(m.hours) === Number(hl.hours)) m.hours = Math.max(Number(hl.previous) || 0, ...db.hourLogs.filter(h => h.machineId === m.id).map(h => Number(h.hours) || 0));
+    }
+    remove('fuel', id); showToast('Excluído');
   })
 });
 

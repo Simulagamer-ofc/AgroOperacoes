@@ -7,10 +7,13 @@ const CAT_GASTO = ['Combustível', 'Peças', 'Mão de obra', 'Insumos', 'Serviç
 const CAT_MANUT = 'Manutenção';
 let gastoPeriodo = 'mes', gastoCat = '';
 
-// Todos os custos com valor: despesas lançadas + manutenções com custo (data de conclusão, ou de abertura)
+// Todos os custos com valor: despesas lançadas + manutenções concluídas com custo (data de conclusão, ou de abertura).
+// Ordem aberta ainda é previsão (orçamento): fica fora, como no fluxo de caixa e no LCDPR — ver custoManutPrevisto.
+const manutPrevista = m => Number(m.cost) > 0 && m.status !== 'Concluída' && m.status !== 'Cancelada';
+const custoManutPrevisto = () => db.maintenances.filter(manutPrevista).reduce((s, m) => s + Number(m.cost), 0);
 function lancamentosCusto(desde = '', ate = '9999') {
   const out = db.expenses.filter(g => Number(g.value) > 0).map(g => ({id: g.id, origem: 'gasto', date: g.date, value: Number(g.value), category: g.category || 'Outros', machineId: g.machineId || '', fieldId: g.fieldId || '', season: g.season || '', desc: g.description || ''}));
-  db.maintenances.filter(m => Number(m.cost) > 0).forEach(m => out.push({id: m.id, origem: 'manutencao', date: m.doneDate || m.date || '', value: Number(m.cost), category: CAT_MANUT, machineId: m.machineId || '', fieldId: '', season: '', desc: m.description || 'Manutenção'}));
+  db.maintenances.filter(m => Number(m.cost) > 0 && m.status === 'Concluída').forEach(m => out.push({id: m.id, origem: 'manutencao', date: m.doneDate || m.date || '', value: Number(m.cost), category: CAT_MANUT, machineId: m.machineId || '', fieldId: '', season: '', desc: m.description || 'Manutenção'}));
   return out.filter(x => x.date >= desde && x.date <= ate).sort((a, b) => b.date.localeCompare(a.date));
 }
 const somaValor = l => l.reduce((s, x) => s + x.value, 0);
@@ -41,6 +44,20 @@ function gastoForm(g = {}) {
       // Safra do talhão quando não informada
       if (!v.season && v.fieldId) v.season = find('fields', v.fieldId)?.season || '';
       const {pagamento, parcelas, vencimento, ...dados} = v, id = g.id || uid();
+      // Gasto a prazo já lançado: o novo valor é redistribuído só entre as parcelas em aberto (as pagas ficam como estão)
+      const parc = g.id ? db.contas.filter(c => c.expenseId === g.id) : [];
+      let novasParc = null;
+      if (parc.length && Math.abs(Number(dados.value) - Number(g.value)) > 0.004) {
+        const abertas = parc.filter(c => c.status !== 'paga').sort((a, b) => (a.vencimento || '').localeCompare(b.vencimento || '')), pago = parc.filter(c => c.status === 'paga').reduce((s, c) => s + (Number(c.valor) || 0), 0);
+        const resto = Math.round((Number(dados.value) - pago) * 100) / 100;
+        if (!abertas.length) return 'Todas as parcelas deste gasto já foram pagas. Para mudar o valor, desfaça a baixa em Financeiro.';
+        if (!(resto > 0)) return `O valor não pode ser menor ou igual ao já pago nas parcelas (R$ ${num(pago, 2)}).`;
+        const cada = Math.floor(resto / abertas.length * 100) / 100;
+        novasParc = abertas.map((c, i) => [c, i === abertas.length - 1 ? Math.round((resto - cada * (abertas.length - 1)) * 100) / 100 : cada]);
+      }
+      if (novasParc) novasParc.forEach(([c, valor]) => { c.valor = valor; });
+      // Parcelas em aberto acompanham descrição, categoria e vínculos do gasto
+      parc.filter(c => c.status !== 'paga').forEach(c => Object.assign(c, {descricao: dados.description, categoria: dados.category, parceiro: dados.supplier, doc: dados.doc, machineId: dados.machineId, fieldId: dados.fieldId, season: dados.season}));
       if (!g.id && pagamento === 'A prazo') {
         const n = Math.round(Number(parcelas) || 0);
         if (!(n >= 1 && n <= 120)) return 'Informe o número de parcelas (1 a 120)';
@@ -48,7 +65,7 @@ function gastoForm(g = {}) {
         gerarParcelas({tipo: 'pagar', grupo: uid(), descricao: dados.description, categoria: dados.category, parceiro: dados.supplier, doc: dados.doc, machineId: dados.machineId, fieldId: dados.fieldId, season: dados.season, expenseId: id, lancarGasto: 'Não'}, dados.value, n, vencimento).forEach(p => db.contas.push(p));
       }
       upsert('expenses', {...g, ...dados, id});
-      showToast(!g.id && pagamento === 'A prazo' ? 'Gasto salvo • parcelas lançadas em Financeiro' : 'Gasto salvo');
+      showToast(!g.id && pagamento === 'A prazo' ? 'Gasto salvo • parcelas lançadas em Financeiro' : novasParc ? `Gasto salvo • ${novasParc.length === 1 ? 'parcela em aberto atualizada' : novasParc.length + ' parcelas em aberto atualizadas'} em Financeiro` : 'Gasto salvo');
     }
   });
 }
@@ -73,13 +90,15 @@ VIEWS.gastos = () => {
     const acoes = x.origem === 'gasto' ? `<div class="row-actions">${mini('Editar', 'gs-edit', x.id)}${mini('Excluir', 'gs-del', x.id, 'del')}</div>` : `<div class="row-actions">${mini('Abrir manutenção', 'mt-edit', x.id)}</div>`;
     return `<tr><td>${fmtDate(x.date)}</td><td><strong>${esc(x.desc)}</strong>${vinc ? `<br><small style="color:var(--muted)">${esc(vinc)}</small>` : ''}</td><td>${chip(x.category, x.origem === 'manutencao' ? 'orange' : 'blue')}</td><td class="num">R$ ${num(x.value, 2)}</td><td>${acoes}</td></tr>`;
   };
-  const rotPeriodo = desde ? `desde ${fmtDate(desde)}` : 'todos os lançamentos';
-  return head('Controle de gastos', `${lista.length} lançamento(s) • ${rotPeriodo}`, btn('Exportar (CSV)', 'gs-csv', '', 'secondary') + btn('+ Lançar gasto', 'gs-new')) +
+  const nomePeriodo = (PERIODOS_GASTO.find(p => p[0] === gastoPeriodo) || [, ''])[1];
+  const rotPeriodo = desde ? `${gastoPeriodo === 'mes' ? 'este mês' : 'últimos ' + nomePeriodo} (desde ${fmtDate(desde)})` : 'todo o período';
+  const previsto = custoManutPrevisto();
+  return head('Controle de gastos', `${lista.length} ${lista.length === 1 ? 'lançamento' : 'lançamentos'} • ${rotPeriodo}`, btn('Exportar (CSV)', 'gs-csv', '', 'secondary') + btn('+ Lançar gasto', 'gs-new')) +
     `<div class="filters">${PERIODOS_GASTO.map(([k, r]) => `<button class="${k === gastoPeriodo ? 'active' : ''}" data-act="gs-periodo" data-id="${k}">${r}</button>`).join('')}</div>
     <section class="kpis">
       <article class="card kpi"><div class="label">${gastoCat ? esc(gastoCat) : 'Total de gastos'}</div><div class="value">R$ ${num(total, 2)}</div><div class="hint">${esc(rotPeriodo)}</div></article>
-      <article class="card kpi"><div class="label">Manutenção</div><div class="value">R$ ${num(somaValor(todos.filter(x => x.origem === 'manutencao')), 2)}</div><div class="hint">lançado nas ordens de manutenção</div></article>
-      <article class="card kpi"><div class="label">Outras despesas</div><div class="value">R$ ${num(somaValor(todos.filter(x => x.origem === 'gasto')), 2)}</div><div class="hint">lançadas nesta tela</div></article>
+      <article class="card kpi"><div class="label">Manutenção</div><div class="value">R$ ${num(somaValor(todos.filter(x => x.origem === 'manutencao')), 2)}</div><div class="hint">ordens concluídas • ${esc(rotPeriodo)}${previsto ? ` • fora do total: R$ ${num(previsto, 2)} em ordens abertas (previsão)` : ''}</div></article>
+      <article class="card kpi"><div class="label">Outras despesas</div><div class="value">R$ ${num(somaValor(todos.filter(x => x.origem === 'gasto')), 2)}</div><div class="hint">lançadas nesta tela • ${esc(rotPeriodo)}</div></article>
     </section>
     <section class="grid">
       <article class="card panel"><h3>Por categoria</h3>${porCat.length ? `<table class="tbl"><tbody>${porCat.map(([c, v]) => `<tr class="clickable" data-act="gs-cat" data-id="${esc(c === gastoCat ? '' : c)}" style="cursor:pointer"><td>${c === gastoCat ? '<strong>' + esc(c) + '</strong>' : esc(c)}</td><td style="width:40%"><div class="bar"><span style="width:${v / maxCat * 100}%"></span></div></td><td class="num">R$ ${num(v, 2)}</td></tr>`).join('')}</tbody></table><p class="nota">${gastoCat ? 'Toque na categoria de novo para ver todas.' : 'Toque numa categoria para filtrar a lista.'}</p>` : 'Nenhum gasto no período.'}</article>
@@ -103,7 +122,7 @@ Object.assign(ACTIONS, {
   'gs-edit': id => gastoForm(find('expenses', id)),
   'gs-del': id => {
     const abertas = db.contas.filter(c => c.expenseId === id && c.status !== 'paga').length;
-    confirmDialog(`Excluir este gasto?${abertas ? ` As ${abertas} parcela(s) em aberto em Financeiro também serão excluídas.` : ''}`, () => { db.contas = db.contas.filter(c => !(c.expenseId === id && c.status !== 'paga')); remove('expenses', id); });
+    confirmDialog(`Excluir este gasto?${abertas ? (abertas === 1 ? ' A parcela em aberto em Financeiro também será excluída.' : ` As ${abertas} parcelas em aberto em Financeiro também serão excluídas.`) : ''}`, () => { db.contas = db.contas.filter(c => !(c.expenseId === id && c.status !== 'paga')); remove('expenses', id); showToast('Excluído'); });
   },
   'gs-periodo': id => { gastoPeriodo = id; gastoCat = ''; render(); },
   'gs-cat': id => { gastoCat = id; render(); },

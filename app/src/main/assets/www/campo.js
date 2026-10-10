@@ -21,10 +21,14 @@ VIEWS.chuva = () => {
   const porMes = meses.map(m => { const vals = locais.map(l => soma(db.chuvas.filter(c => (c.fieldId || '') === l && c.date.startsWith(m.k)))).filter((v, i) => db.chuvas.some(c => (c.fieldId || '') === locais[i] && c.date.startsWith(m.k))); return {...m, mm: vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0}; });
   const max = Math.max(1, ...porMes.map(m => m.mm));
   const lista = db.chuvas.slice().sort(byDateDesc).slice(0, 30);
+  // KPIs: média entre os pluviômetros com leitura na janela (mesmo critério do gráfico mensal)
+  const media = (de, ate) => { const l = db.chuvas.filter(c => c.date >= de && c.date <= ate), n = new Set(l.map(c => c.fieldId || '')).size; return {mm: n ? soma(l) / n : 0, n}; };
+  const plu = n => `${n} ${n === 1 ? 'pluviômetro' : 'pluviômetros'} com leitura`;
+  const m30 = media(ini30, t), mAno = media(anoIni, t);
   return head('Chuvas', 'Pluviometria por talhão ou da sede', btn('+ Chuva', 'ch-new')) +
     (db.chuvas.length ? `<section class="es-kpis">
-      <article class="card kpi"><div class="label">Últimos 30 dias</div><div class="value">${um1(soma(db.chuvas.filter(c => c.date >= ini30 && c.date <= t)) / Math.max(1, locais.length))} mm</div><div class="hint">média entre ${locais.length} ${locais.length === 1 ? 'pluviômetro' : 'pluviômetros'}</div></article>
-      <article class="card kpi"><div class="label">No ano</div><div class="value">${um1(soma(db.chuvas.filter(c => c.date >= anoIni && c.date <= t)) / Math.max(1, locais.length))} mm</div><div class="hint">desde 01/01</div></article>
+      <article class="card kpi"><div class="label">Últimos 30 dias</div><div class="value">${um1(m30.mm)} mm</div><div class="hint">${m30.n > 1 ? 'média entre ' + plu(m30.n) : m30.n ? plu(1) : 'sem leitura no período'}</div></article>
+      <article class="card kpi"><div class="label">No ano</div><div class="value">${um1(mAno.mm)} mm</div><div class="hint">desde 01/01${mAno.n > 1 ? ' • média entre ' + plu(mAno.n) : ''}</div></article>
       <article class="card kpi"><div class="label">Última chuva</div><div class="value">${lista[0] ? um1(lista[0].mm) + ' mm' : '—'}</div><div class="hint">${lista[0] ? fmtDate(lista[0].date) + ' • ' + esc(talhaoOuGeral(lista[0].fieldId)) : ''}</div></article>
       <article class="card kpi"><div class="label">Dias sem chuva</div><div class="value">${(() => { const u = db.chuvas.filter(c => Number(c.mm) > 0 && c.date <= t).sort(byDateDesc)[0]; return u ? diasEntre(u.date, t) : '—'; })()}</div><div class="hint">desde a última chuva registrada</div></article>
     </section>
@@ -123,7 +127,7 @@ function apontamentoForm() {
       const ap = {id: uid(), ...v, tipo: p.tipo, valor: 0};
       if (p.tipo !== 'Fixo (mensal)' && Number(p.valor) > 0) {
         ap.valor = Math.round(v.quantidade * Number(p.valor) * 100) / 100;
-        const g = {id: uid(), date: v.date, category: 'Mão de obra', description: `${p.nome} — ${num(v.quantidade)} ${p.tipo === 'Diarista' ? 'diária(s)' : 'h'}${v.atividade ? ' • ' + v.atividade : ''}`, value: ap.valor, fieldId: v.fieldId || '', season: v.fieldId ? find('fields', v.fieldId)?.season || '' : '', apontamentoId: ap.id};
+        const g = {id: uid(), date: v.date, category: 'Mão de obra', description: `${p.nome} — ${num(v.quantidade)} ${p.tipo === 'Diarista' ? (Number(v.quantidade) > 1 ? 'diárias' : 'diária') : 'h'}${v.atividade ? ' • ' + v.atividade : ''}`, value: ap.valor, fieldId: v.fieldId || '', season: v.fieldId ? find('fields', v.fieldId)?.season || '' : '', apontamentoId: ap.id};
         db.expenses.push(g); ap.gastoId = g.id;
       }
       db.apontamentos.push(ap); save(); showToast(ap.valor ? `Apontado • R$ ${num(ap.valor, 2)} em mão de obra` : 'Apontado');
@@ -145,16 +149,16 @@ VIEWS.maodeobra = () => {
 
 Object.assign(TITLES, {chuva: 'Chuvas', pragas: 'Pragas e doenças (MIP)', aplicacoes: 'Aplicações e carência', maodeobra: 'Mão de obra'});
 Object.assign(ACTIONS, {
-  'ch-new': chuvaForm, 'ch-del': id => confirmDialog('Excluir este registro de chuva?', () => remove('chuvas', id)),
-  'mip-new': () => monitoramentoForm(), 'mip-edit': id => monitoramentoForm(find('monitoramentos', id)), 'mip-del': id => confirmDialog('Excluir este monitoramento?', () => remove('monitoramentos', id)),
+  'ch-new': chuvaForm, 'ch-del': id => confirmDialog('Excluir este registro de chuva?', () => { remove('chuvas', id); showToast('Excluído'); }),
+  'mip-new': () => monitoramentoForm(), 'mip-edit': id => monitoramentoForm(find('monitoramentos', id)), 'mip-del': id => confirmDialog('Excluir este monitoramento?', () => { remove('monitoramentos', id); showToast('Excluído'); }),
   'ap-new': aplicacaoForm,
   'ap-del': id => confirmDialog('Excluir esta aplicação? Se tirou produto do estoque, ele volta ao saldo.', () => {
     const a = find('aplicacoes', id); const m = a?.movId && find('movements', a.movId);
     if (m) { const s = find('stock', m.itemId); if (s) s.qty = Number(s.qty || 0) + Number(m.qty); db.movements = db.movements.filter(x => x.id !== m.id); }
-    remove('aplicacoes', id);
+    remove('aplicacoes', id); showToast('Excluído');
   }),
   'mo-pessoa': () => pessoaForm(), 'mo-edit': id => pessoaForm(find('equipe', id)), 'mo-apont': apontamentoForm,
-  'mo-del': id => confirmDialog('Excluir este apontamento? O gasto de mão de obra gerado também será excluído.', () => { const a = find('apontamentos', id); if (a?.gastoId) db.expenses = db.expenses.filter(g => g.id !== a.gastoId); remove('apontamentos', id); })
+  'mo-del': id => confirmDialog('Excluir este apontamento? O gasto de mão de obra gerado também será excluído.', () => { const a = find('apontamentos', id); if (a?.gastoId) db.expenses = db.expenses.filter(g => g.id !== a.gastoId); remove('apontamentos', id); showToast('Excluído'); })
 });
 
 // Alertas: alvo no nível de ação e talhão em carência com colheita programada
