@@ -20,6 +20,9 @@ function mesclar(local, remoto) {
   const remov = [...(local._removidos || []), ...(remoto._removidos || [])];
   const removidoEm = (c, id) => Math.max(0, ...remov.filter(r => r.c === c && r.id === id).map(r => r.at));
   const movsLocal = new Set((local.movements || []).map(m => m.id)), movsRemoto = new Set((remoto.movements || []).map(m => m.id));
+  // Movimento excluído em algum aparelho depois da última alteração dele (a exclusão já devolveu o saldo naquele aparelho)
+  const movExcluido = m => { const rem = removidoEm('movements', m.id); return rem > 0 && rem >= (m._mod || 0); };
+  const somaMovs = (lista, itemId, filtro) => (lista || []).filter(m => m.itemId === itemId && filtro(m)).reduce((s, m) => s + deltaMov(m), 0);
   for (const c of COLLECTIONS) {
     const L = new Map((local[c] || []).map(r => [r.id, r])), R = remoto[c] || [];
     for (const r of R) {
@@ -28,16 +31,17 @@ function mesclar(local, remoto) {
       if (!l) { if (rem >= (r._mod || 0) && rem) continue; L.set(r.id, r); res.novos++; continue; }
       if ((r._mod || 0) > (l._mod || 0)) {
         // Estoque: o saldo do vencedor não inclui os lançamentos que só o outro aparelho tem
+        // e ainda conta os que o outro aparelho excluiu (sem saber da exclusão)
         if (c === 'stock') {
-          const soNoLocal = local.movements.filter(m => m.itemId === r.id && !movsRemoto.has(m.id)).reduce((s, m) => s + deltaMov(m), 0);
-          r.qty = Number(r.qty || 0) + soNoLocal;
+          const soNoLocal = somaMovs(local.movements, r.id, m => !movsRemoto.has(m.id) && !movExcluido(m));
+          r.qty = Number(r.qty || 0) + soNoLocal - somaMovs(remoto.movements, r.id, movExcluido);
         }
-        if (c === 'machines') r.hours = Math.max(Number(r.hours) || 0, Number(l.hours) || 0);
+        // Máquina: a versão mais recente vale inteira, inclusive o horímetro (permite corrigir uma leitura digitada errada)
         L.set(r.id, r); res.atualizados++;
       } else if (c === 'stock') {
-        const soNoRemoto = (remoto.movements || []).filter(m => m.itemId === r.id && !movsLocal.has(m.id)).reduce((s, m) => s + deltaMov(m), 0);
-        if (soNoRemoto) { l.qty = Number(l.qty || 0) + soNoRemoto; res.atualizados++; }
-      } else if (c === 'machines' && Number(r.hours) > Number(l.hours || 0)) { l.hours = Number(r.hours); res.atualizados++; }
+        const ajuste = somaMovs(remoto.movements, r.id, m => !movsLocal.has(m.id) && !movExcluido(m)) - somaMovs(local.movements, r.id, movExcluido);
+        if (ajuste) { l.qty = Number(l.qty || 0) + ajuste; res.atualizados++; }
+      } else if (c === 'machines' && (r._mod || 0) === (l._mod || 0) && Number(r.hours) > Number(l.hours || 0)) { l.hours = Number(r.hours); res.atualizados++; }
     }
     // Exclusões feitas em qualquer aparelho, posteriores à última alteração do registro
     for (const [id, l] of L) { const rem = removidoEm(c, id); if (rem && rem >= (l._mod || 0) && (local[c] || []).some(x => x.id === id)) { L.delete(id); res.removidos++; } else if (rem && rem >= (l._mod || 0)) L.delete(id); }
@@ -51,13 +55,18 @@ function receberArquivoSync(texto) {
   let p; try { p = JSON.parse(texto); } catch { showToast('Arquivo inválido'); return; }
   if (p?.app !== 'agro-operacoes' || !p.data) { showToast('Este arquivo não é do Nexus Agro'); return; }
   if (p.aparelho && p.aparelho === db.settings.aparelhoId) { showToast('Este arquivo foi gerado neste mesmo aparelho'); return; }
-  confirmDialog(`Juntar os dados de “${p.nomeAparelho || 'outro aparelho'}” (gerado em ${p.exportedAt ? new Date(p.exportedAt).toLocaleString('pt-BR') : 'data desconhecida'}) com os deste aparelho? Uma cópia do estado atual fica guardada para desfazer.`, () => {
-    safeStorage.set(SYNC_ANTES, JSON.stringify(db));
-    const remoto = {...emptyDb(), ...p.data}; for (const c of COLLECTIONS) if (!Array.isArray(remoto[c])) remoto[c] = [];
-    const r = mesclar(db, remoto);
+  const juntar = comCopia => {
+    const r = mesclar(db, normalizarDb(p.data));
     impressoes = null; // a mesclagem não é uma alteração local
     db.settings.ultimaSync = {em: new Date().toISOString(), de: p.nomeAparelho || '', ...r};
-    save(); showToast(`Sincronizado: ${r.novos} novos, ${r.atualizados} atualizados, ${r.removidos} removidos`);
+    save(); showToast(`Sincronizado: ${r.novos} novos, ${r.atualizados} atualizados, ${r.removidos} removidos${comCopia ? '' : ' • sem cópia para desfazer'}`);
+  };
+  confirmDialog(`Juntar os dados de “${p.nomeAparelho || 'outro aparelho'}” (gerado em ${p.exportedAt ? new Date(p.exportedAt).toLocaleString('pt-BR') : 'data desconhecida'}) com os deste aparelho? Uma cópia do estado atual fica guardada para desfazer.`, () => {
+    const atual = JSON.stringify(db);
+    // Sem espaço: apaga a cópia antiga (seria de outro estado) e tenta de novo
+    if (safeStorage.set(SYNC_ANTES, atual) || (safeStorage.del(SYNC_ANTES), safeStorage.set(SYNC_ANTES, atual))) return juntar(true);
+    // Abre depois que o confirmDialog atual fechar
+    setTimeout(() => confirmDialog('Não há espaço no aparelho para guardar a cópia do estado atual: esta sincronização NÃO poderá ser desfeita. Se quiser, exporte um backup antes. Juntar mesmo assim?', () => juntar(false), 'Juntar sem cópia'), 0);
   }, 'Juntar');
 }
 
@@ -82,6 +91,6 @@ Object.assign(ACTIONS, {
   'sync-gerar': () => { const n = $('#s_aparelho'); if (n) db.settings.nomeAparelho = n.value.trim(); gerarArquivoSync(); },
   'sync-receber': () => $('#syncInput').click(),
   'sync-desfazer': () => confirmDialog('Voltar ao estado de antes da última sincronização?', () => {
-    try { const ant = JSON.parse(safeStorage.get(SYNC_ANTES)); if (ant) { db = {...emptyDb(), ...ant}; for (const c of COLLECTIONS) if (!Array.isArray(db[c])) db[c] = []; impressoes = null; save(); safeStorage.set(SYNC_ANTES, ''); showToast('Sincronização desfeita'); } } catch { showToast('Não foi possível desfazer'); }
+    try { const ant = JSON.parse(safeStorage.get(SYNC_ANTES)); if (ant) { db = normalizarDb(ant); impressoes = null; save(); safeStorage.set(SYNC_ANTES, ''); showToast('Sincronização desfeita'); } } catch { showToast('Não foi possível desfazer'); }
   }, 'Desfazer')
 });
