@@ -104,7 +104,8 @@ class MainActivity : AppCompatActivity() {
             settings.domStorageEnabled = true
             settings.cacheMode = WebSettings.LOAD_DEFAULT
             settings.allowFileAccess = false
-            settings.allowContentAccess = true
+            // Não carrega URLs content:// (o <input type="file"> funciona sem isso)
+            settings.allowContentAccess = false
             settings.setGeolocationEnabled(true)
             addJavascriptInterface(AndroidBridge(), "AndroidBridge")
             webChromeClient = object : WebChromeClient() {
@@ -131,7 +132,11 @@ class MainActivity : AppCompatActivity() {
                 ): Boolean {
                     fileChooserCallback?.onReceiveValue(null)
                     fileChooserCallback = filePathCallback
-                    return runCatching { pickFile.launch(fileChooserParams.createIntent()) }
+                    // Backup/sincronização (.json): mostra todos os arquivos — o Android costuma não reconhecer o tipo JSON
+                    // (arquivos do WhatsApp chegam como application/octet-stream). O conteúdo é validado no JavaScript.
+                    val intent = fileChooserParams.createIntent()
+                    if (fileChooserParams.acceptTypes.all { it.isBlank() || it.contains("json") }) intent.type = "*/*"
+                    return runCatching { pickFile.launch(intent) }
                         .onFailure {
                             fileChooserCallback = null
                             filePathCallback.onReceiveValue(null)
@@ -142,6 +147,15 @@ class MainActivity : AppCompatActivity() {
             webViewClient = object : WebViewClient() {
                 override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest) =
                     assetLoader.shouldInterceptRequest(request.url)
+
+                // Links externos (site do fabricante, mapas, e-mail) abrem no navegador/app do sistema
+                override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+                    val url = request.url
+                    if (url.host == "appassets.androidplatform.net") return false
+                    if (url.scheme !in listOf("http", "https", "mailto", "tel")) return false
+                    runCatching { startActivity(Intent(Intent.ACTION_VIEW, url)) }
+                    return true
+                }
             }
         }
         setContentView(webView)
@@ -155,7 +169,12 @@ class MainActivity : AppCompatActivity() {
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (webView.canGoBack()) webView.goBack() else finish()
+                // Primeiro a página fecha o que estiver aberto (formulário, menu); só depois volta a tela ou sai
+                webView.evaluateJavascript("window.voltarApp ? voltarApp() : false") { tratado ->
+                    if (tratado != "true") {
+                        if (webView.canGoBack()) webView.goBack() else finish()
+                    }
+                }
             }
         })
     }

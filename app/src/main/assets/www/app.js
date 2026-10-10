@@ -1,5 +1,5 @@
 'use strict';
-/* Agro Operações — app offline (dados salvos no dispositivo via localStorage). */
+/* Nexus Agro — app offline (dados salvos no dispositivo via localStorage). */
 
 // ---------- Utilidades ----------
 const $ = (sel, el = document) => el.querySelector(sel);
@@ -15,7 +15,7 @@ const num = (v, dec = 0) => Number(v || 0).toLocaleString('pt-BR', {minimumFract
 // Exatamente uma casa decimal (consumo, rendimento, percentuais)
 const um1 = v => Number(v).toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1});
 const daysAgo = n => { const d = new Date(); d.setDate(d.getDate() - n); return isoDate(d); };
-const byDateDesc = (a, b) => (b.date + (b.time || '')).localeCompare(a.date + (a.time || ''));
+const byDateDesc = (a, b) => String((b.date || '') + (b.time || '')).localeCompare((a.date || '') + (a.time || ''));
 const safeStorage = {
   get(k) { try { return localStorage.getItem(k); } catch { return null; } },
   set(k, v) { try { localStorage.setItem(k, v); return true; } catch { return false; } },
@@ -26,6 +26,13 @@ const safeStorage = {
 const DB_KEY = 'agro-db-v1';
 const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs', 'fuel', 'contas', 'colheitas', 'vendas', 'chuvas', 'monitoramentos', 'aplicacoes', 'equipe', 'apontamentos'];
 const emptyDb = () => ({version: 1, settings: {farm: '', owner: ''}, ...Object.fromEntries(COLLECTIONS.map(c => [c, []]))});
+// Completa um banco vindo de fora (armazenamento, backup, sincronização): todas as coleções como listas e configurações completas
+function normalizarDb(data) {
+  const d = {...emptyDb(), ...(data && typeof data === 'object' ? data : {})};
+  for (const c of COLLECTIONS) if (!Array.isArray(d[c])) d[c] = [];
+  d.settings = {...emptyDb().settings, ...(d.settings && typeof d.settings === 'object' ? d.settings : {})};
+  return d;
+}
 
 function loadDb() {
   let data = null;
@@ -38,10 +45,7 @@ function loadDb() {
       legacy.forEach(op => data.operations.push({id: uid(), date: today(), time: op.time || '', type: op.type || 'Outra', fieldId: '', place: op.place || '', machineId: '', status: 'Programada', notes: op.notes || ''}));
     } catch { /* ignora */ }
   }
-  const base = emptyDb();
-  for (const c of COLLECTIONS) if (!Array.isArray(data[c])) data[c] = [];
-  data.settings = {...base.settings, ...(data.settings || {})};
-  return data;
+  return normalizarDb(data);
 }
 let db = loadDb();
 // Marca a data de alteração de cada registro e as exclusões (usado na sincronização entre aparelhos).
@@ -63,9 +67,12 @@ function carimbar() {
   if (db._removidos.length > 5000) db._removidos = db._removidos.slice(-5000);
   impressoes = novo;
 }
+// Retorna false se não conseguiu gravar (o aviso de erro fica na tela e não é coberto pelo “salvo” do formulário)
 function save() {
   carimbar();
-  if (!safeStorage.set(DB_KEY, JSON.stringify(db))) showToast('Não foi possível salvar no dispositivo (armazenamento cheio?)');
+  const ok = safeStorage.set(DB_KEY, JSON.stringify(db));
+  if (!ok) showToast('Não foi possível salvar no dispositivo (armazenamento cheio?)', true);
+  return ok;
 }
 carimbar(); // estado carregado = referência (nada é marcado como alterado ao abrir)
 
@@ -73,9 +80,9 @@ const find = (col, id) => db[col].find(x => x.id === id);
 const upsert = (col, item) => {
   const i = db[col].findIndex(x => x.id === item.id);
   if (i >= 0) db[col][i] = item; else db[col].push(item);
-  save();
+  return save();
 };
-const remove = (col, id) => { db[col] = db[col].filter(x => x.id !== id); save(); };
+const remove = (col, id) => { db[col] = db[col].filter(x => x.id !== id); return save(); };
 
 // ---------- Regras de negócio ----------
 const OP_TYPES = ['Plantio', 'Aplicação', 'Adubação', 'Colheita', 'Preparo de solo', 'Transporte', 'Beneficiamento de sementes', 'Tratamento de sementes', 'Manutenção', 'Outra'];
@@ -112,8 +119,14 @@ function alerts() {
 
 // ---------- Interface: elementos gerais ----------
 const root = document.documentElement, sidebar = $('#sidebar'), overlay = $('#overlay'), modal = $('#modal'), dialog = $('#dialog'), toastEl = $('#toast'), view = $('#view');
-let toastTimer;
-function showToast(message) { toastEl.textContent = message; toastEl.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2800); }
+let toastTimer, toastErroAte = 0;
+// erro = true: o aviso fica ~4 s e as mensagens comuns desse intervalo não o substituem
+function showToast(message, erro = false) {
+  const agora = Date.now();
+  if (!erro && agora < toastErroAte) return;
+  if (erro) toastErroAte = agora + 4000;
+  toastEl.textContent = message; toastEl.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('show'), erro ? 4500 : 2800);
+}
 save(); // grava migrações do banco (agora o aviso de armazenamento cheio já pode ser exibido)
 const savedTheme = safeStorage.get('agro-theme'); if (savedTheme) root.dataset.theme = savedTheme;
 $('#themeBtn').onclick = () => { const next = (root.dataset.theme || 'dark') === 'dark' ? 'light' : 'dark'; root.dataset.theme = next; safeStorage.set('agro-theme', next); };
@@ -126,15 +139,44 @@ $('#date').textContent = new Date().toLocaleDateString('pt-BR', {weekday: 'long'
 $('#searchForm').onsubmit = e => { e.preventDefault(); const q = $('#searchInput').value.trim(); if (q) go('busca/' + encodeURIComponent(q)); };
 function applySettings() {
   $('#farmName').textContent = db.settings.farm || 'Minha fazenda';
-  const initials = (db.settings.owner || db.settings.farm || 'Agro Operações').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
-  $('#avatar').textContent = initials || 'AO';
+  const initials = (db.settings.owner || db.settings.farm || 'Nexus Agro').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+  $('#avatar').textContent = initials || 'NA';
 }
 applySettings();
 
 // ---------- Modal e formulários genéricos ----------
-function closeModal() { modal.classList.remove('open'); dialog.innerHTML = ''; }
-modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+function closeModal() { modal.classList.remove('open'); dialog.innerHTML = ''; descartarAte = 0; }
+// Campo alterado pelo usuário desde que o diálogo abriu (valor diferente do original)
+const tocados = new WeakSet();
+['input', 'change'].forEach(t => dialog.addEventListener(t, e => tocados.add(e.target)));
+const modalAlterado = () => $$('input, select, textarea', dialog).some(el => tocados.has(el) && (el.type === 'checkbox' || el.type === 'radio' ? el.checked !== el.defaultChecked : el.tagName === 'SELECT' ? [...el.options].some(o => o.selected !== o.defaultSelected) : el.value !== el.defaultValue));
+// Toque fora, Esc ou voltar do Android: com dados digitados, só fecha se repetir em até 3 s (Cancelar fecha direto)
+let descartarAte = 0;
+function pedirFecharModal() {
+  if (modalAlterado() && Date.now() > descartarAte) { descartarAte = Date.now() + 3000; showToast('Descartar o que foi digitado? Repita para descartar ou toque em Cancelar.'); return; }
+  closeModal();
+}
+modal.addEventListener('click', e => { if (e.target === modal) pedirFecharModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) pedirFecharModal(); });
+// Botão voltar do Android (MainActivity): fecha diálogo ou menu antes de voltar a tela; true = tratado aqui
+window.voltarApp = () => {
+  if (modal.classList.contains('open')) { pedirFecharModal(); return true; }
+  if (sidebar.classList.contains('open')) { closeMenu(); return true; }
+  return false;
+};
+
+// Número digitado no padrão brasileiro: "1250", "1250,5", "1.250,50", "1250.5" (ponto decimal só sem 3 dígitos depois dele).
+// "1.250" (ponto + 3 dígitos, sem vírgula) é ambíguo: undefined, como texto inválido.
+const ambiguoBR = t => /^-?[1-9]\d{0,2}\.\d{3}$/.test(String(t ?? '').trim());
+function numeroBR(str) {
+  const t = String(str ?? '').trim();
+  let s = null;
+  if (/^-?\d+$|^-?\d*,\d+$/.test(t)) s = t.replace(',', '.');
+  else if (/^-?\d*\.\d+$/.test(t) && (!/\.\d{3}$/.test(t) || /^-?0?\./.test(t))) s = t;
+  else if (/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(t) && !ambiguoBR(t)) s = t.replace(/\./g, '').replace(',', '.');
+  const n = s === null ? NaN : Number(s);
+  return Number.isFinite(n) ? n : undefined;
+}
 
 /**
  * Abre um formulário.
@@ -152,16 +194,27 @@ function openForm({title, sub, fields, values = {}, submit = 'Salvar no disposit
       return `<select ${common}>${f.required ? '' : '<option value="">—</option>'}${opts.map(o => `<option value="${esc(o.value)}" ${String(o.value) === String(v) ? 'selected' : ''}>${esc(o.label)}</option>`).join('')}</select>`;
     }
     if (f.type === 'textarea') return `<textarea ${common} rows="3" placeholder="${esc(f.placeholder || '')}">${esc(v)}</textarea>`;
-    return `<input ${common} type="${f.type || 'text'}" value="${esc(v)}" ${f.type === 'number' ? `step="${f.step || 'any'}" inputmode="decimal"` : ''} ${f.min != null ? `min="${f.min}"` : ''} placeholder="${esc(f.placeholder || '')}">`;
+    // Números como texto (o campo numérico do navegador lê "1.250" como 1,25 e "1250,50" como 125050): lidos por numeroBR
+    if (f.type === 'number') return `<input ${common} type="text" inputmode="decimal" autocomplete="off" value="${esc(typeof v === 'number' ? String(v).replace('.', ',') : v)}" placeholder="${esc(f.placeholder || '')}">`;
+    return `<input ${common} type="${f.type || 'text'}" value="${esc(v)}" ${f.min != null ? `min="${f.min}"` : ''} placeholder="${esc(f.placeholder || '')}">`;
   };
   dialog.innerHTML = `<h3>${esc(title)}</h3>${sub ? `<p class="sub">${esc(sub)}</p>` : ''}<form novalidate><div class="form">${fields.map(f => `<div class="field ${f.full || f.type === 'textarea' ? 'full' : ''}"><label for="f_${f.k}">${esc(f.label)}${f.required ? ' *' : ''}</label>${input(f)}${f.hint ? `<span class="hint">${esc(f.hint)}</span>` : ''}</div>`).join('')}</div><div class="actions"><button type="button" class="secondary" data-close>Cancelar</button><button class="primary" type="submit">${esc(submit)}</button></div></form>`;
   const form = $('form', dialog);
   $('[data-close]', dialog).onclick = closeModal;
+  // Erro de um campo numérico: aparece abaixo do campo e no aviso do navegador
+  const marcar = (el, msg) => { el.setCustomValidity(msg); let s = el.parentElement.querySelector('.erro-campo'); if (!s && msg) { s = Object.assign(document.createElement('span'), {className: 'hint erro-campo'}); s.style.color = 'var(--red)'; el.after(s); } if (s) s.textContent = msg; };
+  form.addEventListener('input', e => { if (e.target.parentElement?.querySelector('.erro-campo')) marcar(e.target, ''); });
   form.onsubmit = e => {
     e.preventDefault();
-    if (!form.checkValidity()) { form.reportValidity(); return; }
     const out = {};
-    fields.forEach(f => { const raw = form.elements[f.k].value.trim(); out[f.k] = f.type === 'number' ? (raw === '' ? '' : Number(raw.replace(',', '.'))) : raw; });
+    fields.forEach(f => {
+      const el = form.elements[f.k], raw = el.value.trim();
+      if (f.type !== 'number') { out[f.k] = raw; return; }
+      const n = raw === '' ? '' : numeroBR(raw);
+      marcar(el, n === undefined ? (ambiguoBR(raw) ? `Valor ambíguo: escreva ${raw.replace('.', '')} ou ${raw},00` : 'Número inválido') : n !== '' && f.min != null && n < f.min ? `O valor mínimo é ${num(f.min)}` : '');
+      out[f.k] = n;
+    });
+    if (!form.checkValidity()) { const inv = form.querySelector(':invalid'); form.reportValidity(); if (inv?.validity.customError) showToast(inv.validationMessage); return; }
     const err = onSubmit(out);
     if (err) { showToast(err); return; }
     closeModal(); render();
@@ -323,7 +376,7 @@ function lotForm(l = {}) {
       {k: 'notes', label: 'Observações', type: 'textarea'}
     ],
     onSubmit: v => {
-      const dup = db.lots.find(x => x.code.toLowerCase() === v.code.toLowerCase() && x.id !== l.id);
+      const dup = db.lots.find(x => String(x.code || '').toLowerCase() === v.code.toLowerCase() && x.id !== l.id);
       if (dup) return 'Já existe um lote com esse código';
       const item = {...l, ...v, id: l.id || uid()};
       if (!l.id) db.lotEvents.push({id: uid(), lotId: item.id, date: today(), title: 'Lote cadastrado', text: `Situação inicial: ${v.status}`});
@@ -429,7 +482,7 @@ function movementForm(itemId, kind) {
     const qEl = $('#f_qty', dialog), vEl = $('#f_value', dialog), itEl = $('#f_itemId', dialog), hint = vEl?.parentElement.querySelector('.hint');
     const base = hint?.textContent || '';
     const atual = () => {
-      const s = find('stock', itEl.value), q = Number(String(qEl.value).replace(',', '.')), val = Number(String(vEl.value).replace(',', '.'));
+      const s = find('stock', itEl.value), q = numeroBR(qEl.value), val = numeroBR(vEl.value);
       if (!hint) return;
       if (!(s && q > 0 && val > 0)) { hint.textContent = base; return; }
       const avg = custoMedio(s), before = Number(s.qty || 0), novo = before <= 0 ? val / q : avg != null ? (before * avg + val) / (before + q) : null;
@@ -463,7 +516,7 @@ VIEWS.inicio = (anchor) => {
   const running = db.operations.filter(o => o.status === 'Em andamento');
   const al = alerts();
   const isEmpty = COLLECTIONS.every(c => !db[c].length);
-  const upcoming = db.operations.filter(o => o.status === 'Em andamento' || (o.date >= t && o.status === 'Programada') || o.date === t).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time)).slice(0, 8);
+  const upcoming = db.operations.filter(o => o.status === 'Em andamento' || (o.date >= t && o.status === 'Programada') || o.date === t).sort((a, b) => String((a.date || '') + (a.time || '')).localeCompare((b.date || '') + (b.time || ''))).slice(0, 8);
   // Alertas de manutenção e estoque (os demais alertas continuam na lista “Atenção”)
   const mtAbertas = db.maintenances.filter(m => m.status !== 'Concluída').length;
   const revisoes = db.machines.filter(m => !isInactive(m) && Number(m.nextService) > 0 && hoursToService(m) <= SERVICE_WARN_HOURS).length;
@@ -504,8 +557,8 @@ VIEWS.operacoes = () => {
 };
 
 VIEWS.maquinas = () => {
-  const ms = db.machines.slice().sort((a, b) => a.name.localeCompare(b.name));
-  const mts = db.maintenances.slice().sort((a, b) => (a.status === 'Concluída') - (b.status === 'Concluída') || b.date.localeCompare(a.date));
+  const ms = db.machines.slice().sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')));
+  const mts = db.maintenances.slice().sort((a, b) => (a.status === 'Concluída') - (b.status === 'Concluída') || String(b.date || '').localeCompare(String(a.date || '')));
   return head('Máquinas e manutenção', 'Horímetro, revisões programadas e ordens de manutenção.', btn('Registrar horímetro', 'hour-new', '', 'secondary') + btn('Abrir manutenção', 'mt-new', '', 'secondary') + btn('+ Nova máquina', 'mc-new')) +
     (ms.length ? `<section class="cards">${ms.map(m => {
       const st = machineStatus(m), left = hoursToService(m), temRev = Number(m.nextService) > 0;
@@ -514,7 +567,7 @@ VIEWS.maquinas = () => {
       const intervalo = Number(m.interval) || 250, pct = temRev ? Math.max(0, Math.min(100, 100 - left / intervalo * 100)) : 0;
       const corRev = !temRev ? '' : left <= 0 ? 'rev-vencida' : left <= SERVICE_WARN_HOURS ? 'rev-alerta' : 'rev-ok';
       const textoRev = !temRev ? 'Sem revisão programada' : left <= 0 ? `! Revisão vencida há ${num(-left)} h` : `Revisão em ${num(left)} h (${num(m.nextService)} h)`;
-      const af = db.afericoes.filter(a => a.maquina?.id === m.id).sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora))[0];
+      const af = db.afericoes.filter(a => a.maquina?.id === m.id).sort((a, b) => String((b.data || '') + (b.hora || '')).localeCompare((a.data || '') + (a.hora || '')))[0];
       const cfgN = m.config ? Object.keys(m.config).length : 0;
       const extras = [cfgN ? `Configuração para aferição: ${cfgN} ${cfgN === 1 ? 'parâmetro' : 'parâmetros'}` : '', m.catalogo ? `Catálogo: ${esc(m.catalogo.marca)} ${esc(m.catalogo.nome)}` : '', af ? `Última aferição: ${fmtDate(af.data)} — ${esc({OK: 'dentro da referência', ATENCAO: 'atenção', FORA_DO_PADRAO: 'fora da referência', SEM_REFERENCIA: 'não avaliada', DADOS_INSUFICIENTES: 'dados insuficientes'}[af.resultado.status] || '')}` : '', typeof textoReaferir === 'function' ? textoReaferir(m) : ''].filter(Boolean);
       return `<article class="card item-card maq-card"><header><div><h4>${esc(m.name)}</h4><div class="meta">${esc([m.type, m.model].filter(Boolean).join(' • '))}</div></div>${chip(st, color)}</header>
@@ -533,7 +586,7 @@ VIEWS.maquinas = () => {
 };
 
 VIEWS.talhoes = () => {
-  const fs = db.fields.slice().sort((a, b) => a.name.localeCompare(b.name, 'pt-BR', {numeric: true}));
+  const fs = db.fields.slice().sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'pt-BR', {numeric: true}));
   const total = fs.reduce((s, f) => s + Number(f.area || 0), 0);
   return head('Talhões', `${fs.length} talhões • ${num(total)} ha cadastrados`, btn('+ Novo talhão', 'fd-new')) +
     (fs.length ? `<section class="cards">${fs.map(f => {
@@ -575,7 +628,7 @@ VIEWS.sementes = () => {
 
 VIEWS.lotes = id => {
   if (id) return lotDetail(id);
-  const lots = db.lots.slice().sort((a, b) => b.code.localeCompare(a.code, 'pt-BR', {numeric: true}));
+  const lots = db.lots.slice().sort((a, b) => String(b.code || '').localeCompare(String(a.code || ''), 'pt-BR', {numeric: true}));
   return head('Lotes e rastreabilidade', 'Histórico completo de cada lote: origem, operações, análises e eventos.', btn('+ Novo lote', 'lot-new')) +
     (lots.length ? `<section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Lote</th><th>Cultivar</th><th>Origem</th><th class="num">Peso (kg)</th><th class="num">Germ.</th><th>Situação</th></tr></thead><tbody>${lots.map(l => `<tr class="clickable" data-act="nav" data-id="lotes/${esc(l.id)}" style="cursor:pointer"><td><strong>${esc(l.code)}</strong></td><td>${esc(l.cultivar)}</td><td>${esc(fieldName(l.fieldId) || '—')}</td><td class="num">${l.weight ? num(l.weight) : '—'}</td><td class="num">${l.germination !== '' && l.germination != null ? num(l.germination) + '%' : '—'}</td><td>${chip(l.status, LOT_COLOR[l.status])}</td></tr>`).join('')}</tbody></table></div></section>` : `<section class="card">${empty('Nenhum lote cadastrado', '', {act: 'lot-new', label: '+ Novo lote'})}</section>`);
 };
@@ -690,17 +743,19 @@ window.onNativeFileSaved = ok => showToast(ok ? 'Arquivo salvo com sucesso' : 'E
 
 function exportBackup() {
   const payload = JSON.stringify({app: 'agro-operacoes', exportedAt: new Date().toISOString(), data: db}, null, 1);
-  downloadFile(`agro-operacoes-backup-${today()}.json`, 'application/json', payload);
+  downloadFile(`nexus-agro-backup-${today()}.json`, 'application/json', payload);
 }
 function restoreBackup(text) {
   let parsed;
   try { parsed = JSON.parse(text); } catch { showToast('Arquivo inválido'); return; }
   const data = parsed?.app === 'agro-operacoes' ? parsed.data : null;
-  if (!data || !COLLECTIONS.some(c => Array.isArray(data[c]))) { showToast('Este arquivo não é um backup do Agro Operações'); return; }
+  if (!data || !COLLECTIONS.some(c => Array.isArray(data[c]))) { showToast('Este arquivo não é um backup do Nexus Agro'); return; }
   const n = COLLECTIONS.reduce((s, c) => s + (data[c]?.length || 0), 0);
   confirmDialog(`Restaurar backup de ${parsed.exportedAt ? new Date(parsed.exportedAt).toLocaleString('pt-BR') : 'data desconhecida'} com ${n} registros? Os dados atuais deste dispositivo serão substituídos.`, () => {
-    db = {...emptyDb(), ...data}; for (const c of COLLECTIONS) if (!Array.isArray(db[c])) db[c] = [];
-    db.settings = {...emptyDb().settings, ...(data.settings && typeof data.settings === 'object' ? data.settings : {})};
+    const deste = db.settings;
+    db = normalizarDb(data);
+    // Identidade deste aparelho e última sincronização continuam as daqui (o backup pode ter vindo de outro aparelho)
+    for (const k of ['aparelhoId', 'nomeAparelho', 'ultimaSync']) { if (deste[k] !== undefined) db.settings[k] = deste[k]; else delete db.settings[k]; }
     impressoes = null; save(); applySettings(); showToast('Backup restaurado');
   }, 'Restaurar');
 }
@@ -717,7 +772,7 @@ function exportCsv(kind) {
 }
 
 function loadSamples() {
-  const f1 = uid(), f2 = uid(), f3 = uid(), m1 = uid(), m2 = uid(), m3 = uid(), s1 = uid(), s2 = uid(), s3 = uid(), l1 = uid(), l2 = uid();
+  const f1 = uid(), f2 = uid(), f3 = uid(), m1 = uid(), m2 = uid(), m3 = uid(), s1 = uid(), s2 = uid(), s3 = uid(), l1 = uid(), l2 = uid(), grupo = uid(), conta = uid(), venda = uid();
   db.fields.push({id: f1, name: 'Talhão 07', area: 84.5, crop: 'Soja', cultivar: 'BMX Zeus', season: '2026/27', plantingDate: today()}, {id: f2, name: 'Talhão 08', area: 62, crop: 'Soja', cultivar: 'NS 7709', season: '2026/27'}, {id: f3, name: 'Talhão 12', area: 110, crop: 'Milho', cultivar: 'P3898', season: '2026/27'});
   db.machines.push({id: m1, name: 'Trator 7230J', type: 'Trator', model: 'John Deere 7230J', hours: 1492, interval: 250, nextService: 1500}, {id: m2, name: 'Colheitadeira 01', type: 'Colheitadeira', model: 'S540', hours: 3120, interval: 250, nextService: 3250}, {id: m3, name: 'Pulverizador 4730', type: 'Pulverizador', model: 'JD 4730', hours: 860, interval: 200, nextService: 1000});
   db.hourLogs.push({id: uid(), machineId: m1, date: daysAgo(1), hours: 1492, previous: 1480});
@@ -741,10 +796,10 @@ function loadSamples() {
   db.expenses.push({id: uid(), date: daysAgo(4), category: 'Combustível', description: 'Diesel S10 — 1.500 L', value: 9150, machineId: '', fieldId: '', season: '2026/27'},
     {id: uid(), date: daysAgo(15), category: 'Mão de obra', description: 'Diárias de plantio', value: 2400, fieldId: f1, season: '2026/27'},
     {id: uid(), date: daysAgo(2), category: 'Peças', description: 'Pontas de pulverização', value: 980, machineId: m3, season: '2026/27'});
-  db.contas.push({id: uid(), tipo: 'pagar', grupo: 'g1', descricao: 'Fertilizante 04-14-08', categoria: 'Insumos', parceiro: 'Revenda', valor: 18900, vencimento: daysAgo(-5), parcela: '1/2', status: 'aberta', lancarGasto: 'Sim'},
-    {id: uid(), tipo: 'pagar', grupo: 'g1', descricao: 'Fertilizante 04-14-08', categoria: 'Insumos', parceiro: 'Revenda', valor: 18900, vencimento: daysAgo(-35), parcela: '2/2', status: 'aberta', lancarGasto: 'Sim'},
-    {id: 'cv1', tipo: 'receber', descricao: 'Venda de soja — 1.200 sc', categoria: 'Venda de grãos', parceiro: 'Cooperativa', valor: 156000, vencimento: daysAgo(-20), status: 'aberta', season: '2025/26', vendaId: 'vd1'});
-  db.vendas.push({id: 'vd1', cultura: 'Soja', season: '2025/26', date: daysAgo(10), sacas: 1200, preco: 130, valor: 156000, comprador: 'Cooperativa', recebimento: 'A prazo', vencimento: daysAgo(-20), contaId: 'cv1'});
+  db.contas.push({id: uid(), tipo: 'pagar', grupo, descricao: 'Fertilizante 04-14-08', categoria: 'Insumos', parceiro: 'Revenda', valor: 18900, vencimento: daysAgo(-5), parcela: '1/2', status: 'aberta', lancarGasto: 'Sim'},
+    {id: uid(), tipo: 'pagar', grupo, descricao: 'Fertilizante 04-14-08', categoria: 'Insumos', parceiro: 'Revenda', valor: 18900, vencimento: daysAgo(-35), parcela: '2/2', status: 'aberta', lancarGasto: 'Sim'},
+    {id: conta, tipo: 'receber', descricao: 'Venda de soja — 1.200 sc', categoria: 'Venda de grãos', parceiro: 'Cooperativa', valor: 156000, vencimento: daysAgo(-20), status: 'aberta', season: '2025/26', vendaId: venda});
+  db.vendas.push({id: venda, cultura: 'Soja', season: '2025/26', date: daysAgo(10), sacas: 1200, preco: 130, valor: 156000, comprador: 'Cooperativa', recebimento: 'A prazo', vencimento: daysAgo(-20), contaId: conta});
   [[1, 18], [6, 32.5], [14, 12], [25, 41]].forEach(([d, mm]) => db.chuvas.push({id: uid(), date: daysAgo(d), mm, fieldId: ''}));
   db.monitoramentos.push({id: uid(), fieldId: f3, date: daysAgo(2), tipo: 'Praga', alvo: 'Lagarta-do-cartucho', estadio: 'V6', valor: 12, unidade: '% plantas atacadas', pontos: 10});
   db.colheitas.push({id: uid(), fieldId: f1, cultura: 'Soja', season: '2025/26', date: daysAgo(160), kg: 324480, umidade: 13}, {id: uid(), fieldId: f2, cultura: 'Soja', season: '2025/26', date: daysAgo(158), kg: 230640, umidade: 13.5});
@@ -817,7 +872,7 @@ function render(anchor = pendingAnchor) {
   const {name, arg} = parseRoute();
   const key = name === 'talhao' ? 'talhoes' : name;
   view.innerHTML = VIEWS[name](arg || anchor);
-  $('#viewTitle').textContent = TITLES[key] || (name === 'talhao' ? 'Talhões' : 'Agro Operações');
+  $('#viewTitle').textContent = TITLES[key] || (name === 'talhao' ? 'Talhões' : 'Nexus Agro');
   document.title = `${TITLES[key] || 'Nexus Agro'} — Nexus Agro`;
   $$('[data-route]').forEach(b => b.classList.toggle('active', b.dataset.route === key));
   VIEWS[name].after?.(anchor);
@@ -828,7 +883,7 @@ const semAcentoApp = s => String(s || '').normalize('NFD').replace(/[\u0300-\u03
 // Menus "⋯ Mais": fecham ao tocar fora ou ao escolher uma opção
 document.addEventListener('click', e => $$('.menu-mais[open]').forEach(d => { if (!d.contains(e.target) || e.target.closest('.menu-lista button')) d.open = false; }));
 let lastRoute = '';
-addEventListener('hashchange', () => { const r = location.hash; if (r !== lastRoute) { lastRoute = r; render(); scrollTo(0, 0); } });
+addEventListener('hashchange', () => { const r = location.hash; if (r !== lastRoute) { lastRoute = r; if (modal.classList.contains('open')) closeModal(); render(); scrollTo(0, 0); } });
 lastRoute = location.hash;
 // Renderiza depois que todos os scripts (inclusive afericao.js) foram carregados
 addEventListener('DOMContentLoaded', () => render());
