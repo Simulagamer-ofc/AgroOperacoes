@@ -5,7 +5,8 @@
 const DADOS = {};
 const ARQ = {regras: 'dados/regras-afericao.json', catalogo: 'dados/catalogo-modelos.json', finame: 'dados/finame.json'};
 async function dados(nome) {
-  if (!DADOS[nome]) DADOS[nome] = fetch(ARQ[nome]).then(r => { if (!r.ok) throw new Error(ARQ[nome]); return r.json(); });
+  // Se falhar, esquece a tentativa para que a próxima abertura da tela tente de novo
+  if (!DADOS[nome]) DADOS[nome] = fetch(ARQ[nome]).then(r => { if (!r.ok) throw new Error(ARQ[nome]); return r.json(); }).catch(e => { delete DADOS[nome]; throw e; });
   return DADOS[nome];
 }
 const semAcento = s => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
@@ -55,7 +56,7 @@ const triEstado = v => v === 'sim' ? true : v === 'nao' ? false : undefined;
 const statusChip = s => chip(STATUS_INFO[s]?.rotulo || s, STATUS_INFO[s]?.cor || 'gray');
 
 // ---------- Catálogo ----------
-let catBusca = '', catMarca = '', catFonte = 'fabricante';
+let catBusca = ''; // busca do Catálogo de máquinas (catalogo.js)
 function textoModelo(c, x) { return semAcento([c.marcas[x.m].marca, x.n, x.l, x.c, x.f].join(' ')); }
 
 async function buscarCatalogo(q, marca, fonte, limite = 60) {
@@ -94,34 +95,6 @@ async function modeloPorId(id) {
     identificacao: x.k === 'id', nivel: x.v, observacao: x.ob || '', aConfirmar: x.st || ''};
 }
 
-const linhaResultado = r => `<div class="row clickable" data-act="nav" data-id="catalogo/${esc(encodeURIComponent(r.id))}" style="cursor:pointer"><span class="status ${r.fonte === 'finame' ? 'purple' : 'blue'}"></span><div><strong>${esc(r.marca)} — ${esc(r.nome)}</strong><small>${esc([r.modelo, r.codigoFiname ? 'FINAME ' + r.codigoFiname : '', r.temFicha ? 'ficha técnica' : '', r.temDocs ? 'manuais/folhetos' : ''].filter(Boolean).join(' • '))}</small></div>${chip(r.fonte === 'finame' ? 'BNDES' : 'Fabricante', r.fonte === 'finame' ? 'purple' : 'blue')}</div>`;
-
-VIEWS.catalogo = arg => {
-  if (arg) { setTimeout(() => detalheCatalogo(decodeURIComponent(arg)), 0); return '<div class="empty">Carregando…</div>'; }
-  setTimeout(atualizarCatalogo, 0);
-  return head('Catálogo de máquinas e implementos', 'Disponível sem internet. Fontes: sites oficiais dos fabricantes e lista oficial do BNDES/FINAME.') +
-    `<div class="filters"><button class="${catFonte === 'fabricante' ? 'active' : ''}" data-act="cat-fonte" data-id="fabricante">Fichas dos fabricantes</button><button class="${catFonte === 'finame' ? 'active' : ''}" data-act="cat-fonte" data-id="finame">Lista oficial BNDES/FINAME</button></div>
-     <section class="card panel"><div class="form"><div class="field"><label for="catQ">Buscar (marca, modelo, tipo ou código FINAME)</label><input id="catQ" type="search" value="${esc(catBusca)}" placeholder="Ex.: Imperador 3000, plantadeira 13 linhas, 0123456"></div>
-     <div class="field"><label for="catMarca">${catFonte === 'finame' ? 'Fabricante contém' : 'Marca'}</label>${catFonte === 'finame' ? `<input id="catMarca" value="${esc(catMarca)}" placeholder="Ex.: Kuhn">` : '<select id="catMarca"><option value="">Todas</option></select>'}</div></div></section>
-     <div class="section-title"><h3 id="catTotal">Resultados</h3></div><section class="card list" id="catLista"><div class="empty">Carregando catálogo…</div></section>`;
-};
-VIEWS.catalogo.after = () => {
-  const q = $('#catQ'), mk = $('#catMarca');
-  if (!q) return;
-  let t; const disparar = () => { clearTimeout(t); t = setTimeout(() => { catBusca = q.value; catMarca = mk.value; atualizarCatalogo(); }, 200); };
-  q.oninput = disparar; mk.oninput = disparar; mk.onchange = disparar;
-  if (catFonte === 'fabricante') dados('catalogo').then(c => {
-    mk.innerHTML = '<option value="">Todas</option>' + c.marcas.map(m => `<option ${m.marca === catMarca ? 'selected' : ''}>${esc(m.marca)}</option>`).join('');
-  }).catch(() => {});
-};
-async function atualizarCatalogo() {
-  const lista = $('#catLista'); if (!lista) return;
-  try {
-    const res = await buscarCatalogo(catBusca, catMarca, catFonte);
-    $('#catTotal').textContent = res.length >= 60 ? 'Primeiros 60 resultados — refine a busca' : `${res.length} resultado(s)`;
-    lista.innerHTML = res.length ? res.map(linhaResultado).join('') : empty('Nada encontrado', 'Tente outro termo ou a outra fonte.');
-  } catch (e) { lista.innerHTML = empty('Catálogo indisponível', 'Não foi possível carregar os dados offline.'); }
-}
 async function detalheCatalogo(id) {
   const rota = location.hash;
   const m = await modeloPorId(id);
@@ -166,7 +139,7 @@ async function vincularMaquina(machineId) {
   if ($('#vdesv')) $('#vdesv').onclick = () => { delete mq.catalogo; save(); closeModal(); render(); showToast('Vínculo removido'); };
   $('#vres').onclick = async e => {
     const el = e.target.closest('[data-pick]'); if (!el) return;
-    const m = await modeloPorId(el.dataset.pick);
+    const m = await modeloPorId(el.dataset.pick); if (!m) return showToast('Modelo não encontrado no catálogo');
     mq.catalogo = {id: m.id, fonte: m.fonte, marca: m.marca, nome: m.nome, modelo: m.modelo, familia: m.familia || null, codigoFiname: m.codigoFiname || null, vinculadoEm: new Date().toISOString()};
     if (!mq.model) mq.model = `${m.marca} ${m.nome}`;
     save(); closeModal(); render(); showToast('Máquina vinculada ao catálogo');
@@ -175,9 +148,8 @@ async function vincularMaquina(machineId) {
 }
 
 Object.assign(ACTIONS, {
-  'cat-fonte': id => { catFonte = id; catMarca = ''; render(); },
   'cat-cadastrar': async id => {
-    const m = await modeloPorId(id);
+    const m = await modeloPorId(id); if (!m) return showToast('Modelo não encontrado no catálogo');
     machineForm({name: m.nome, model: `${m.marca} ${m.nome}`.trim(), type: TIPO_MAQUINA_DO_CATALOGO(m.familia),
       catalogo: {id: m.id, fonte: m.fonte, marca: m.marca, nome: m.nome, modelo: m.modelo, familia: m.familia || null, codigoFiname: m.codigoFiname || null, vinculadoEm: new Date().toISOString()}});
   },

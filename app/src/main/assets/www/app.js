@@ -27,9 +27,17 @@ const DB_KEY = 'agro-db-v1';
 const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs', 'fuel', 'contas', 'colheitas', 'vendas', 'chuvas', 'monitoramentos', 'aplicacoes', 'equipe', 'apontamentos'];
 const emptyDb = () => ({version: 1, settings: {farm: '', owner: ''}, ...Object.fromEntries(COLLECTIONS.map(c => [c, []]))});
 
+let avisoBanco = ''; // mostrado depois que a tela abrir
 function loadDb() {
   let data = null;
-  try { data = JSON.parse(safeStorage.get(DB_KEY) || 'null'); } catch { data = null; }
+  const bruto = safeStorage.get(DB_KEY);
+  try { data = JSON.parse(bruto || 'null'); } catch {
+    // Dados ilegíveis: guarda uma cópia intacta antes de começar do zero (nada é sobrescrito sem cópia)
+    const copia = 'agro-db-corrompido-' + Date.now();
+    avisoBanco = safeStorage.set(copia, bruto) ? `Os dados salvos neste aparelho estavam danificados. Uma cópia foi guardada (${copia}); restaure um backup em Cadastros e backup.` : 'Os dados salvos neste aparelho estavam danificados e não puderam ser lidos. Restaure um backup em Cadastros e backup.';
+    data = null;
+  }
+  if (data && typeof data !== 'object') data = null;
   if (!data) {
     data = emptyDb();
     // Migra operações da versão 0.1.0-beta1
@@ -441,7 +449,7 @@ function movementForm(itemId, kind) {
 
 // ---------- Componentes de lista ----------
 const chip = (text, color) => `<span class="chip ${color || 'gray'}">${esc(text)}</span>`;
-const empty = (title, text, action) => `<div class="empty"><strong>${esc(title)}</strong>${esc(text)}${action ? `<div><button class="primary" data-act="${action.act}">${esc(action.label)}</button></div>` : ''}</div>`;
+const empty = (title, text, action) => `<div class="empty"><strong>${esc(title)}</strong>${esc(text)}${action ? `<div><button class="primary" data-act="${action.act}"${action.id ? ` data-id="${esc(action.id)}"` : ''}>${esc(action.label)}</button></div>` : ''}</div>`;
 const head = (title, text, buttons = '') => `<section class="view-head"><div><h2>${esc(title)}</h2><p>${esc(text)}</p></div><div class="btns">${buttons}</div></section>`;
 const btn = (label, act, id = '', cls = 'primary') => `<button class="${cls}" data-act="${act}" ${id ? `data-id="${esc(id)}"` : ''}>${esc(label)}</button>`;
 const mini = (label, act, id, cls = '') => `<button class="${cls}" data-act="${act}" data-id="${esc(id)}">${esc(label)}</button>`;
@@ -799,8 +807,18 @@ document.addEventListener('click', e => {
   const el = e.target.closest('[data-act]');
   if (!el || !ACTIONS[el.dataset.act]) return;
   e.preventDefault();
-  ACTIONS[el.dataset.act](el.dataset.id);
+  try { const r = ACTIONS[el.dataset.act](el.dataset.id); if (r?.catch) r.catch(falhaInesperada); } catch (err) { falhaInesperada(err); }
 });
+// Erro inesperado: avisa o usuário em vez de deixar a tela travada (os dados já salvos não são afetados)
+let ultimaFalha = 0;
+function falhaInesperada(err) {
+  console.error(err);
+  if (Date.now() - ultimaFalha < 2000) return;
+  ultimaFalha = Date.now();
+  showToast('Algo deu errado nesta tela. Seus dados salvos não foram afetados — tente de novo ou volte ao início.');
+}
+addEventListener('error', e => falhaInesperada(e.error || e.message));
+addEventListener('unhandledrejection', e => falhaInesperada(e.reason));
 
 // ---------- Roteamento por hash (permite voltar com o botão do Android) ----------
 function parseRoute() {
@@ -816,11 +834,15 @@ function render(anchor = pendingAnchor) {
   pendingAnchor = undefined;
   const {name, arg} = parseRoute();
   const key = name === 'talhao' ? 'talhoes' : name;
-  view.innerHTML = VIEWS[name](arg || anchor);
+  try { view.innerHTML = VIEWS[name](arg || anchor); } catch (err) {
+    console.error(err);
+    view.innerHTML = `<section class="card">${empty('Não foi possível abrir esta tela', 'Seus dados salvos não foram afetados. Volte ao início e tente de novo; se continuar, faça um backup em Cadastros e backup.', {act: 'nav', id: 'inicio', label: 'Voltar ao início'})}</section>`;
+    return;
+  }
   $('#viewTitle').textContent = TITLES[key] || (name === 'talhao' ? 'Talhões' : 'Agro Operações');
   document.title = `${TITLES[key] || 'Nexus Agro'} — Nexus Agro`;
   $$('[data-route]').forEach(b => b.classList.toggle('active', b.dataset.route === key));
-  VIEWS[name].after?.(anchor);
+  try { VIEWS[name].after?.(anchor); } catch (err) { falhaInesperada(err); }
   const h2 = view.querySelector('.view-head h2'), igual = t => semAcentoApp(t).replace(/[^a-z]/g, '');
   if (h2 && igual(h2.textContent) === igual($('#viewTitle').textContent)) h2.classList.add('repetido');
 }
@@ -831,7 +853,7 @@ let lastRoute = '';
 addEventListener('hashchange', () => { const r = location.hash; if (r !== lastRoute) { lastRoute = r; render(); scrollTo(0, 0); } });
 lastRoute = location.hash;
 // Renderiza depois que todos os scripts (inclusive afericao.js) foram carregados
-addEventListener('DOMContentLoaded', () => render());
+addEventListener('DOMContentLoaded', () => { render(); if (avisoBanco) showToast(avisoBanco); });
 
 // ---------- Rede, instalação e service worker ----------
 const setNetwork = () => { $('#netStatus').textContent = navigator.onLine ? 'Disponível offline' : 'Modo offline ativo'; };
