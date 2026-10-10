@@ -1,0 +1,427 @@
+{
+ "fabricante": "Hypro (Pentair)",
+ "nota": "Somente tabelas \"Unidades métricas\" (BAR, LPM) impressas no folheto Hypro em português enviado pelo usuário. Nada convertido de GPM/PSI (tabelas EUA usadas apenas para verificação cruzada). Chaves de pressão = bar como impresso.",
+ "fontes": [
+  {
+   "id": "B1",
+   "titulo": "Hypro – Guardian 120° e Total Range (folheto em português, PDF enviado pelo usuário; sem metadados)",
+   "url": "",
+   "ano": "2016 (segundo o nome do arquivo; não impresso)",
+   "arquivoLocal": "pontas/hypro_br/pdf/hypro_guardian_tr_pt.pdf",
+   "sha256": "7a197c8ec07e40d1eb5aeee53709fc52eec5f80d7167b7b31b7244e8913670b3",
+   "anoObs": "Nenhum ano impresso no PDF; PDF sem metadados (sem Producer/Creator/CreationDate). Páginas impressas 144, 145, 152, 153 (trecho de catálogo maior)."
+  }
+ ],
+ "linhas": [
+  {
+   "linha": "Guardian 120° (GRD120)",
+   "tipo": "leque_antideriva",
+   "angulos": [
+    120
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1-8 BAR (20-115 psi)",
+   "fonte": "B1",
+   "pagina": "PDF p.2 (impressa 145)",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Leque 120° inclinado 20°, sem indução de ar, \"Design com pré-orifício\". Tabela \"Unidades métricas\" (BAR, LPM; vírgula decimal). Códigos FastCap impressos GRD120-015…GRD120-08. corIso derivada do código de tamanho (ISO 10625), não impressa como texto. Verificado: L/ha impresso (50 cm), tabela EUA da mesma folha (PDF p.1) e ISO 10625. Verificação cruzada (d) com a tabela EUA da mesma folha: aprovado se a vazão métrica (convertida só para checagem) concorda com o valor EUA escalado por √p do psi mais próximo em até 3% OU dentro do erro explicado pelo arredondamento do GPM impresso com 2 casas (±0,005 GPM propagado pela escala √p), o que for maior. Checagens (a) token impresso, (b) monotonicidade, (c) L/ha impresso (50 cm) e (e) ISO 10625 ±8% obrigatórias.",
+   "tamanhos": [
+    {
+     "codigo": "GRD120-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.57,
+      "2": 0.65,
+      "3": 0.8,
+      "4": 0.92,
+      "5": 1.03,
+      "6": 1.13,
+      "7": 1.22,
+      "8": 1.31
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "GRD120-025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.5": 0.71,
+      "2": 0.82,
+      "3": 1.0,
+      "4": 1.15,
+      "5": 1.29,
+      "6": 1.41,
+      "7": 1.53,
+      "8": 1.63
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "GRD120-03",
+     "corIso": "azul",
+     "vazoes": {
+      "1.5": 0.85,
+      "2": 0.98,
+      "3": 1.2,
+      "4": 1.39,
+      "5": 1.55,
+      "6": 1.7,
+      "7": 1.83,
+      "8": 1.96
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "GRD120-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.5": 1.13,
+      "2": 1.31,
+      "3": 1.6,
+      "4": 1.85,
+      "5": 2.07,
+      "6": 2.26,
+      "7": 2.44,
+      "8": 2.61
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "GRD120-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.5": 1.41,
+      "2": 1.63,
+      "3": 2.0,
+      "4": 2.31,
+      "5": 2.58,
+      "6": 2.83,
+      "7": 3.06,
+      "8": 3.27
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "GRD120-06",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.5": 1.7,
+      "2": 1.96,
+      "3": 2.4,
+      "4": 2.77,
+      "5": 3.1,
+      "6": 3.39,
+      "7": 3.67,
+      "8": 3.92
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "GRD120-08",
+     "corIso": "branco",
+     "vazoes": {
+      "1.5": 2.26,
+      "2": 2.61,
+      "3": 3.2,
+      "4": 3.7,
+      "5": 4.13,
+      "6": 4.53,
+      "7": 4.89,
+      "8": 5.23
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "Total Range 80° (TR80)",
+   "tipo": "leque",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "1-5 BAR (20-70 PSI)",
+   "fonte": "B1",
+   "pagina": "PDF p.4 (impressa 153)",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Inserto de aço inoxidável em corpo de poliacetal; orifício elíptico; sem pré-orifício declarado. A tabela métrica impressa tem UMA coluna de vazão (LPM) comum a 80° e 110° (só o tamanho de gota difere por ângulo), por isso TR80 e TR110 têm vazões idênticas. Códigos impressos TR80-01…TR80-15 (10 e 15 marcados \"*\" = todo em aço inoxidável). corIso derivada do código (ISO 10625), não impressa. Verificação cruzada (d) com a tabela EUA da mesma folha: aprovado se a vazão métrica (convertida só para checagem) concorda com o valor EUA escalado por √p do psi mais próximo em até 3% OU dentro do erro explicado pelo arredondamento do GPM impresso com 2 casas (±0,005 GPM propagado pela escala √p), o que for maior. Checagens (a) token impresso, (b) monotonicidade, (c) L/ha impresso (50 cm) e (e) ISO 10625 ±8% obrigatórias.",
+   "tamanhos": [
+    {
+     "codigo": "TR80-01",
+     "corIso": "laranja",
+     "vazoes": {
+      "1": 0.23,
+      "1.5": 0.28,
+      "2": 0.33,
+      "3": 0.4,
+      "4": 0.46,
+      "5": 0.52
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR80-015",
+     "corIso": "verde",
+     "vazoes": {
+      "1": 0.35,
+      "1.5": 0.42,
+      "2": 0.49,
+      "3": 0.6,
+      "4": 0.69,
+      "5": 0.77
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR80-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1": 0.46,
+      "1.5": 0.57,
+      "2": 0.65,
+      "3": 0.8,
+      "4": 0.92,
+      "5": 1.03
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR80-03",
+     "corIso": "azul",
+     "vazoes": {
+      "1": 0.69,
+      "1.5": 0.85,
+      "2": 0.98,
+      "3": 1.2,
+      "4": 1.39,
+      "5": 1.55
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR80-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1": 0.92,
+      "1.5": 1.13,
+      "2": 1.31,
+      "3": 1.6,
+      "4": 1.85,
+      "5": 2.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR80-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "1": 1.15,
+      "1.5": 1.41,
+      "2": 1.63,
+      "3": 2.0,
+      "4": 2.31,
+      "5": 2.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR80-06",
+     "corIso": "cinza",
+     "vazoes": {
+      "1": 1.39,
+      "1.5": 1.7,
+      "2": 1.96,
+      "3": 2.4,
+      "4": 2.77,
+      "5": 3.1
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR80-08",
+     "corIso": "branco",
+     "vazoes": {
+      "1": 1.85,
+      "1.5": 2.26,
+      "2": 2.61,
+      "3": 3.2,
+      "4": 3.7,
+      "5": 4.13
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR80-10",
+     "corIso": "azul claro",
+     "vazoes": {
+      "1": 2.31,
+      "1.5": 2.83,
+      "2": 3.27,
+      "3": 4.0,
+      "4": 4.62,
+      "5": 5.16
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR80-15",
+     "corIso": "verde claro",
+     "vazoes": {
+      "1": 3.46,
+      "1.5": 4.24,
+      "2": 4.9,
+      "3": 6.0,
+      "4": 6.93,
+      "5": 7.75
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "Total Range 110° (TR110)",
+   "tipo": "leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "1-5 BAR (20-70 PSI)",
+   "fonte": "B1",
+   "pagina": "PDF p.4 (impressa 153)",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Inserto de aço inoxidável em corpo de poliacetal; orifício elíptico; sem pré-orifício declarado. A tabela métrica impressa tem UMA coluna de vazão (LPM) comum a 80° e 110° (só o tamanho de gota difere por ângulo), por isso TR80 e TR110 têm vazões idênticas. Códigos impressos TR110-01…TR110-15 (10 e 15 marcados \"*\" = todo em aço inoxidável). corIso derivada do código (ISO 10625), não impressa. Verificação cruzada (d) com a tabela EUA da mesma folha: aprovado se a vazão métrica (convertida só para checagem) concorda com o valor EUA escalado por √p do psi mais próximo em até 3% OU dentro do erro explicado pelo arredondamento do GPM impresso com 2 casas (±0,005 GPM propagado pela escala √p), o que for maior. Checagens (a) token impresso, (b) monotonicidade, (c) L/ha impresso (50 cm) e (e) ISO 10625 ±8% obrigatórias.",
+   "tamanhos": [
+    {
+     "codigo": "TR110-01",
+     "corIso": "laranja",
+     "vazoes": {
+      "1": 0.23,
+      "1.5": 0.28,
+      "2": 0.33,
+      "3": 0.4,
+      "4": 0.46,
+      "5": 0.52
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR110-015",
+     "corIso": "verde",
+     "vazoes": {
+      "1": 0.35,
+      "1.5": 0.42,
+      "2": 0.49,
+      "3": 0.6,
+      "4": 0.69,
+      "5": 0.77
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR110-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1": 0.46,
+      "1.5": 0.57,
+      "2": 0.65,
+      "3": 0.8,
+      "4": 0.92,
+      "5": 1.03
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR110-03",
+     "corIso": "azul",
+     "vazoes": {
+      "1": 0.69,
+      "1.5": 0.85,
+      "2": 0.98,
+      "3": 1.2,
+      "4": 1.39,
+      "5": 1.55
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR110-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1": 0.92,
+      "1.5": 1.13,
+      "2": 1.31,
+      "3": 1.6,
+      "4": 1.85,
+      "5": 2.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR110-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "1": 1.15,
+      "1.5": 1.41,
+      "2": 1.63,
+      "3": 2.0,
+      "4": 2.31,
+      "5": 2.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR110-06",
+     "corIso": "cinza",
+     "vazoes": {
+      "1": 1.39,
+      "1.5": 1.7,
+      "2": 1.96,
+      "3": 2.4,
+      "4": 2.77,
+      "5": 3.1
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR110-08",
+     "corIso": "branco",
+     "vazoes": {
+      "1": 1.85,
+      "1.5": 2.26,
+      "2": 2.61,
+      "3": 3.2,
+      "4": 3.7,
+      "5": 4.13
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR110-10",
+     "corIso": "azul claro",
+     "vazoes": {
+      "1": 2.31,
+      "1.5": 2.83,
+      "2": 3.27,
+      "3": 4.0,
+      "4": 4.62,
+      "5": 5.16
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR110-15",
+     "corIso": "verde claro",
+     "vazoes": {
+      "1": 3.46,
+      "1.5": 4.24,
+      "2": 4.9,
+      "3": 6.0,
+      "4": 6.93,
+      "5": 7.75
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  }
+ ]
+}
