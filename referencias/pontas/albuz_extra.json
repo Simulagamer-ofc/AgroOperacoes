@@ -1,0 +1,1508 @@
+{
+ "fabricante": "Albuz",
+ "nota": "Linhas adicionais ALBUZ (DISC & CORE, MSI, MVI, ESI, FESI, OCI, CVI-OC, EXA, AVI-OC) do catálogo oficial ALBUZ 2025 (francês), pp.28 e 30-37. Vírgula decimal convertida em ponto apenas na notação. Nenhum valor calculado. Conferido com o catálogo UK 2022 (ver relatório). AMT (p.29, pastilha jato 0°) não incluída.",
+ "fontes": [
+  {
+   "id": "F1",
+   "titulo": "ALBUZ – Catalogue 2025 (FR) – buses céramique",
+   "url": "https://www.albuz-spray.com/pdf/catalogue-ALBUZ-FR-2025.pdf",
+   "ano": "2025",
+   "arquivoLocal": "pontas/albuz/pdf/catalogue-ALBUZ-FR-2025.pdf",
+   "anoObs": "link na página oficial albuz-spray.com/documents.html; capa \"catalogue 2025\"; metadados PDF 2025-09-18. Catálogo UK disponível é de 2021 (não usado)."
+  }
+ ],
+ "linhas": [
+  {
+   "linha": "DISC & CORE cône creux",
+   "tipo": "cone_vazio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "3-20 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.28",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela \"TABLEAU CÔNE CREUX\". Combinação disco (AD) + núcleo/turbilhonador (AC); código = os dois rótulos impressos na linha da tabela. Tabela \"l / mn\" 3–20 bar com colunas \"Angles\" 10 bar / 20 bar (ângulos por combinação na observação de cada tamanho); pictograma da página \"80°\". \"Pression recommandée : 10 bar\". Sem código de cor ISO; corIso = null.",
+   "tamanhos": [
+    {
+     "codigo": "AD 1 AC 13",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.24,
+      "4": 0.27,
+      "5": 0.3,
+      "6": 0.33,
+      "10": 0.41,
+      "15": 0.49,
+      "20": 0.56
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 0,80 mm; ângulo impresso: 70° a 10 bar, 79° a 20 bar"
+    },
+    {
+     "codigo": "AD 2 AC 13",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.31,
+      "4": 0.35,
+      "5": 0.39,
+      "6": 0.42,
+      "10": 0.53,
+      "15": 0.64,
+      "20": 0.73
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,02 mm; ângulo impresso: 87° a 10 bar, 97° a 20 bar"
+    },
+    {
+     "codigo": "AD 3 AC 13",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.36,
+      "4": 0.41,
+      "5": 0.45,
+      "6": 0.49,
+      "10": 0.61,
+      "15": 0.74,
+      "20": 0.84
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,20 mm; ângulo impresso: 89° a 10 bar, 98° a 20 bar"
+    },
+    {
+     "codigo": "AD 4 AC 13",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.45,
+      "4": 0.52,
+      "5": 0.57,
+      "6": 0.62,
+      "10": 0.78,
+      "15": 0.93,
+      "20": 1.06
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,56 mm; ângulo impresso: 99° a 10 bar, 103° a 20 bar"
+    },
+    {
+     "codigo": "AD 5 AC 13",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.55,
+      "4": 0.62,
+      "5": 0.69,
+      "6": 0.75,
+      "10": 0.94,
+      "15": 1.13,
+      "20": 1.29
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 2,00 mm; ângulo impresso: 102° a 10 bar, 105° a 20 bar"
+    },
+    {
+     "codigo": "AD 1 AC 23",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.28,
+      "4": 0.32,
+      "5": 0.35,
+      "6": 0.38,
+      "10": 0.48,
+      "15": 0.57,
+      "20": 0.65
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 0,80 mm; ângulo impresso: 66° a 10 bar, 74° a 20 bar"
+    },
+    {
+     "codigo": "AD 2 AC 23",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.37,
+      "4": 0.43,
+      "5": 0.47,
+      "6": 0.51,
+      "10": 0.64,
+      "15": 0.77,
+      "20": 0.88
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,02 mm; ângulo impresso: 83° a 10 bar, 93° a 20 bar"
+    },
+    {
+     "codigo": "AD 3 AC 23",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.44,
+      "4": 0.51,
+      "5": 0.56,
+      "6": 0.61,
+      "10": 0.76,
+      "15": 0.92,
+      "20": 1.04
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,20 mm; ângulo impresso: 84° a 10 bar, 92° a 20 bar"
+    },
+    {
+     "codigo": "AD 4 AC 23",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.56,
+      "4": 0.64,
+      "5": 0.71,
+      "6": 0.77,
+      "10": 0.97,
+      "15": 1.16,
+      "20": 1.32
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,56 mm; ângulo impresso: 92° a 10 bar, 98° a 20 bar"
+    },
+    {
+     "codigo": "AD 5 AC 23",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.72,
+      "4": 0.82,
+      "5": 0.91,
+      "6": 0.99,
+      "10": 1.24,
+      "15": 1.49,
+      "20": 1.7
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 2,00 mm; ângulo impresso: 96° a 10 bar, 99° a 20 bar"
+    },
+    {
+     "codigo": "AD 6 AC 23",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.85,
+      "4": 0.97,
+      "5": 1.07,
+      "6": 1.16,
+      "10": 1.46,
+      "15": 1.75,
+      "20": 2.0
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 2,40 mm; ângulo impresso: 99° a 10 bar, 101° a 20 bar"
+    },
+    {
+     "codigo": "AD 1 AC 25",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.41,
+      "4": 0.46,
+      "5": 0.51,
+      "6": 0.55,
+      "10": 0.7,
+      "15": 0.84,
+      "20": 0.95
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 0,80 mm; ângulo impresso: 50° a 10 bar, 60° a 20 bar"
+    },
+    {
+     "codigo": "AD 2 AC 25",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.59,
+      "4": 0.67,
+      "5": 0.74,
+      "6": 0.8,
+      "10": 1.01,
+      "15": 1.21,
+      "20": 1.38
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,02 mm; ângulo impresso: 57° a 10 bar, 66° a 20 bar"
+    },
+    {
+     "codigo": "AD 3 AC 25",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.72,
+      "4": 0.81,
+      "5": 0.9,
+      "6": 0.98,
+      "10": 1.23,
+      "15": 1.48,
+      "20": 1.68
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,20 mm; ângulo impresso: 63° a 10 bar, 69° a 20 bar"
+    },
+    {
+     "codigo": "AD 4 AC 25",
+     "corIso": null,
+     "vazoes": {
+      "3": 1.02,
+      "4": 1.16,
+      "5": 1.28,
+      "6": 1.39,
+      "10": 1.75,
+      "15": 2.1,
+      "20": 2.39
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,56 mm; ângulo impresso: 75° a 10 bar, 80° a 20 bar"
+    },
+    {
+     "codigo": "AD 5 AC 25",
+     "corIso": null,
+     "vazoes": {
+      "3": 1.41,
+      "4": 1.6,
+      "5": 1.77,
+      "6": 1.92,
+      "10": 2.42,
+      "15": 2.9,
+      "20": 3.3
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 2;00 mm; ângulo impresso: 77° a 10 bar, 80° a 20 bar"
+    },
+    {
+     "codigo": "AD 6 AC 25",
+     "corIso": null,
+     "vazoes": {
+      "3": 1.73,
+      "4": 1.97,
+      "5": 2.18,
+      "6": 2.37,
+      "10": 2.98,
+      "15": 3.57,
+      "20": 4.07
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 2,40 mm; ângulo impresso: 82° a 10 bar, 85° a 20 bar"
+    },
+    {
+     "codigo": "AD 7 AC 25",
+     "corIso": null,
+     "vazoes": {
+      "3": 2.07,
+      "4": 2.36,
+      "5": 2.61,
+      "6": 2.83,
+      "10": 3.57,
+      "15": 4.28,
+      "20": 4.87
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 2,80 mm; ângulo impresso: 88° a 10 bar, 91° a 20 bar"
+    },
+    {
+     "codigo": "AD 1 AC 45",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.48,
+      "4": 0.55,
+      "5": 0.61,
+      "6": 0.66,
+      "10": 0.83,
+      "15": 1.0,
+      "20": 1.14
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 0,80 mm; ângulo impresso: 32° a 10 bar, 39° a 20 bar"
+    },
+    {
+     "codigo": "AD 2 AC 45",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.73,
+      "4": 0.83,
+      "5": 0.92,
+      "6": 1.0,
+      "10": 1.26,
+      "15": 1.51,
+      "20": 1.72
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,02 mm; ângulo impresso: 46° a 10 bar, 53° a 20 bar"
+    },
+    {
+     "codigo": "AD 3 AC 45",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.92,
+      "4": 1.05,
+      "5": 1.16,
+      "6": 1.26,
+      "10": 1.58,
+      "15": 1.9,
+      "20": 2.16
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,20 mm; ângulo impresso: 48° a 10 bar, 52° a 20 bar"
+    },
+    {
+     "codigo": "AD 4 AC 45",
+     "corIso": null,
+     "vazoes": {
+      "3": 1.35,
+      "4": 1.54,
+      "5": 1.7,
+      "6": 1.85,
+      "10": 2.32,
+      "15": 2.79,
+      "20": 3.17
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,56 mm; ângulo impresso: 59° a 10 bar, 60° a 20 bar"
+    },
+    {
+     "codigo": "AD 5 AC 45",
+     "corIso": null,
+     "vazoes": {
+      "3": 1.92,
+      "4": 2.19,
+      "5": 2.42,
+      "6": 2.63,
+      "10": 3.31,
+      "15": 3.97,
+      "20": 4.52
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 2,00 mm; ângulo impresso: 68° a 10 bar, 70° a 20 bar"
+    },
+    {
+     "codigo": "AD 6 AC 45",
+     "corIso": null,
+     "vazoes": {
+      "3": 2.46,
+      "4": 2.79,
+      "5": 3.09,
+      "6": 3.35,
+      "10": 4.22,
+      "15": 5.07,
+      "20": 5.77
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 2,40 mm; ângulo impresso: 72° a 10 bar, 75° a 20 bar"
+    },
+    {
+     "codigo": "AD 7 AC 45",
+     "corIso": null,
+     "vazoes": {
+      "3": 3.01,
+      "4": 3.43,
+      "5": 3.79,
+      "6": 4.11,
+      "10": 5.18,
+      "15": 6.21,
+      "20": 7.07
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 2,80 mm; ângulo impresso: 79° a 10 bar, 80° a 20 bar"
+    },
+    {
+     "codigo": "AD 1 AC 46",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.55,
+      "4": 0.62,
+      "5": 0.69,
+      "6": 0.75,
+      "10": 0.94,
+      "15": 1.13,
+      "20": 1.29
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 0,80 mm; ângulo impresso: 23° a 10 bar, 27° a 20 bar"
+    },
+    {
+     "codigo": "AD 2 AC 46",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.92,
+      "4": 1.05,
+      "5": 1.16,
+      "6": 1.26,
+      "10": 1.58,
+      "15": 1.9,
+      "20": 2.16
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,02 mm; ângulo impresso: 26° a 10 bar, 30° a 20 bar"
+    },
+    {
+     "codigo": "AD 3 AC 46",
+     "corIso": null,
+     "vazoes": {
+      "3": 1.2,
+      "4": 1.37,
+      "5": 1.51,
+      "6": 1.64,
+      "10": 2.06,
+      "15": 2.48,
+      "20": 2.82
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,20 mm; ângulo impresso: 30° a 10 bar, 30° a 20 bar"
+    },
+    {
+     "codigo": "AD 4 AC 46",
+     "corIso": null,
+     "vazoes": {
+      "3": 2.03,
+      "4": 2.32,
+      "5": 2.56,
+      "6": 2.78,
+      "10": 3.5,
+      "15": 4.2,
+      "20": 4.78
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,56 mm; ângulo impresso: 35 a 10 bar, 35 a 20 bar"
+    },
+    {
+     "codigo": "AD 5 AC 46",
+     "corIso": null,
+     "vazoes": {
+      "3": 3.11,
+      "4": 3.54,
+      "5": 3.91,
+      "6": 4.24,
+      "10": 5.34,
+      "15": 6.41,
+      "20": 7.3
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 2,00 mm; ângulo impresso: 40° a 10 bar, 42° a 20 bar"
+    },
+    {
+     "codigo": "AD 6 AC 46",
+     "corIso": null,
+     "vazoes": {
+      "3": 4.12,
+      "4": 4.69,
+      "5": 5.18,
+      "6": 5.62,
+      "10": 7.08,
+      "15": 8.49,
+      "20": 9.67
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 2,40 mm; ângulo impresso: 45 a 10 bar, 46 a 20 bar"
+    },
+    {
+     "codigo": "AD 7 AC 46",
+     "corIso": null,
+     "vazoes": {
+      "3": 5.49,
+      "4": 6.4,
+      "5": 7.1,
+      "6": 7.84,
+      "10": 10.16,
+      "15": 12.43,
+      "20": 14.33
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 3,23 mm; ângulo impresso: 55° a 10 bar, 53° a 20 bar"
+    }
+   ]
+  },
+  {
+   "linha": "DISC & CORE cône plein",
+   "tipo": "cone_cheio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "3-20 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.28",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela \"TABLEAU CÔNE PLEIN\". Combinação disco (AD) + núcleo/turbilhonador (AC); código = os dois rótulos impressos na linha da tabela. Tabela \"l / mn\" 3–20 bar com colunas \"Angles\" 10 bar / 20 bar (ângulos por combinação na observação de cada tamanho); pictograma da página \"80°\". \"Pression recommandée : 10 bar\". Sem código de cor ISO; corIso = null. Valor AD 2 AC 56 a 20 bar impresso \"20,7\" (mantido).",
+   "tamanhos": [
+    {
+     "codigo": "AD 1 AC 31",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.53,
+      "4": 0.61,
+      "5": 0.67,
+      "6": 0.73,
+      "10": 0.92,
+      "15": 1.1,
+      "20": 1.25
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 0,80 mm; ângulo impresso: 39° a 10 bar, 39° a 20 bar"
+    },
+    {
+     "codigo": "AD 2 AC 31",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.82,
+      "4": 0.93,
+      "5": 1.03,
+      "6": 1.12,
+      "10": 1.41,
+      "15": 1.69,
+      "20": 1.92
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,02 mm; ângulo impresso: 87° a 10 bar, 95° a 20 bar"
+    },
+    {
+     "codigo": "AD 3 AC 31",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.87,
+      "4": 0.99,
+      "5": 1.1,
+      "6": 1.19,
+      "10": 1.5,
+      "15": 1.8,
+      "20": 2.05
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,20 mm; ângulo impresso: 65° a 10 bar, 62° a 20 bar"
+    },
+    {
+     "codigo": "AD 1 AC 35",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.53,
+      "4": 0.61,
+      "5": 0.67,
+      "6": 0.73,
+      "10": 0.92,
+      "15": 1.1,
+      "20": 1.25
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 0,80 mm; ângulo impresso: 34° a 10 bar, 40° a 20 bar"
+    },
+    {
+     "codigo": "AD 2 AC 35",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.92,
+      "4": 1.05,
+      "5": 1.16,
+      "6": 1.26,
+      "10": 1.58,
+      "15": 1.9,
+      "20": 2.16
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,02 mm; ângulo impresso: 39° a 10 bar, 39° a 20 bar"
+    },
+    {
+     "codigo": "AD 3 AC 35",
+     "corIso": null,
+     "vazoes": {
+      "3": 1.28,
+      "4": 1.46,
+      "5": 1.61,
+      "6": 1.75,
+      "10": 2.2,
+      "15": 2.64,
+      "20": 3.0
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,20 mm; ângulo impresso: 44° a 10 bar, 42° a 20 bar"
+    },
+    {
+     "codigo": "AD 4 AC 35",
+     "corIso": null,
+     "vazoes": {
+      "3": 2.08,
+      "4": 2.37,
+      "5": 2.62,
+      "6": 2.84,
+      "10": 3.58,
+      "15": 4.3,
+      "20": 4.89
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,56 mm; ângulo impresso: 77° a 10 bar, 72° a 20 bar"
+    },
+    {
+     "codigo": "AD 5 AC 35",
+     "corIso": null,
+     "vazoes": {
+      "3": 2.62,
+      "4": 2.98,
+      "5": 3.3,
+      "6": 3.58,
+      "10": 4.51,
+      "15": 5.41,
+      "20": 6.16
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 2,00 mm; ângulo impresso: 37° a 10 bar, 34° a 20 bar"
+    },
+    {
+     "codigo": "AD 2 AC 56",
+     "corIso": null,
+     "vazoes": {
+      "3": 0.88,
+      "4": 1.0,
+      "5": 1.11,
+      "6": 1.2,
+      "10": 1.52,
+      "15": 1.82,
+      "20": 20.7
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,02 mm; ângulo impresso: 21° a 10 bar, 20° a 20 bar; valor a 20 bar impresso \"20,7\" (os demais da linha vão de 0,88 a 1,82; provável erro de impressão de 2,07) — mantido como impresso, igual no catálogo UK 2022"
+    },
+    {
+     "codigo": "AD 3 AC 56",
+     "corIso": null,
+     "vazoes": {
+      "3": 1.19,
+      "4": 1.36,
+      "5": 1.5,
+      "6": 1.63,
+      "10": 2.05,
+      "15": 2.46,
+      "20": 2.8
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,20 mm; ângulo impresso: 28° a 10 bar, 32° a 20 bar"
+    },
+    {
+     "codigo": "AD 4 AC 56",
+     "corIso": null,
+     "vazoes": {
+      "3": 2.05,
+      "4": 2.33,
+      "5": 2.58,
+      "6": 2.8,
+      "10": 3.52,
+      "15": 4.23,
+      "20": 4.81
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 1,56 mm; ângulo impresso: 35° a 10 bar, 38° a 20 bar; valor a 6 bar impresso com 1 casa: \"2,8\""
+    },
+    {
+     "codigo": "AD 5 AC 56",
+     "corIso": null,
+     "vazoes": {
+      "3": 3.46,
+      "4": 3.94,
+      "5": 4.36,
+      "6": 4.73,
+      "10": 5.96,
+      "15": 7.15,
+      "20": 8.14
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 2,00 mm; ângulo impresso: 43° a 10 bar, 40° a 20 bar"
+    },
+    {
+     "codigo": "AD 6 AC 56",
+     "corIso": null,
+     "vazoes": {
+      "3": 5.11,
+      "4": 5.82,
+      "5": 6.43,
+      "6": 6.98,
+      "10": 8.78,
+      "15": 10.54,
+      "20": 12.0
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 2,10 mm; ângulo impresso: 56° a 10 bar, 49° a 20 bar"
+    },
+    {
+     "codigo": "AD 7 AC 56",
+     "corIso": null,
+     "vazoes": {
+      "3": 6.87,
+      "4": 7.81,
+      "5": 8.64,
+      "6": 9.38,
+      "10": 11.8,
+      "15": 14.17,
+      "20": 16.12
+     },
+     "unidade": "L/min por bar",
+     "observacao": "disco AD + núcleo (core) AC impressos em colunas separadas; diâmetro do orifício impresso 2,30 mm; ângulo impresso: 68° a 10 bar, 64° a 20 bar"
+    }
+   ]
+  },
+  {
+   "linha": "MSI 130°-160°",
+   "tipo": "leque",
+   "angulos": [
+    130,
+    160
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "0,5-4 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.30",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela vertical \"TABLEAU DE DÉBITS\": Couleur/Code | Pression (bar) | l/mn | l/ha (coluna l/mn usada). Buse à miroir grand angle (jato plano muito largo, ângulo 130°-160° conforme \"TABLEAU D'ANGLE\"); uso em barra com espaçamento de 1 m; \"Pression recommandée : 1 bar\". A página tem também uma tabela horizontal \"TABLEAU DE DÉBITS (l/min)\" com os mesmos tamanhos; nela alguns valores aparecem com 1 casa (\"1,3\" a 3,5 bar em 03; \"3,7\" a 4 bar em 08), aqui usou-se a tabela vertical (2 casas); as duas tabelas do FR 2025 concordam numericamente. DIVERGÊNCIA FR 2025 x UK 2022: 51 dos 64 valores diferem (a tabela UK 2022 traz outra série, ex.: 025 a 0,5 bar FR 0,41 x UK 0,42; 15 a 0,5 bar FR 2,45 x UK 2,54; 15 a 4 bar FR 6,93 x UK 6,89); mantidos os valores do FR 2025. corIso derivada do código de tamanho ISO impresso; o nome da cor impresso (FR) confere com o código em todos os tamanhos.",
+   "tamanhos": [
+    {
+     "codigo": "MSI 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "0.5": 0.41,
+      "1": 0.58,
+      "1.5": 0.71,
+      "2": 0.82,
+      "2.5": 0.91,
+      "3": 1.0,
+      "3.5": 1.08,
+      "4": 1.15
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "MSI 03",
+     "corIso": "azul",
+     "vazoes": {
+      "0.5": 0.49,
+      "1": 0.69,
+      "1.5": 0.85,
+      "2": 0.98,
+      "2.5": 1.1,
+      "3": 1.2,
+      "3.5": 1.3,
+      "4": 1.39
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "MSI 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "0.5": 0.65,
+      "1": 0.92,
+      "1.5": 1.13,
+      "2": 1.31,
+      "2.5": 1.46,
+      "3": 1.6,
+      "3.5": 1.73,
+      "4": 1.85
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "MSI 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "0.5": 0.82,
+      "1": 1.15,
+      "1.5": 1.41,
+      "2": 1.63,
+      "2.5": 1.83,
+      "3": 2.0,
+      "3.5": 2.16,
+      "4": 2.31
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "MSI 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "0.5": 0.98,
+      "1": 1.39,
+      "1.5": 1.7,
+      "2": 1.96,
+      "2.5": 2.19,
+      "3": 2.4,
+      "3.5": 2.59,
+      "4": 2.77
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "MSI 08",
+     "corIso": "branco",
+     "vazoes": {
+      "0.5": 1.31,
+      "1": 1.85,
+      "1.5": 2.26,
+      "2": 2.61,
+      "2.5": 2.92,
+      "3": 3.2,
+      "3.5": 3.46,
+      "4": 3.7
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "MSI 10",
+     "corIso": "azul claro",
+     "vazoes": {
+      "0.5": 1.63,
+      "1": 2.31,
+      "1.5": 2.83,
+      "2": 3.27,
+      "2.5": 3.65,
+      "3": 4.0,
+      "3.5": 4.32,
+      "4": 4.62
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "MSI 15",
+     "corIso": "verde claro",
+     "vazoes": {
+      "0.5": 2.45,
+      "1": 3.46,
+      "1.5": 4.24,
+      "2": 4.9,
+      "2.5": 5.48,
+      "3": 6.0,
+      "3.5": 6.48,
+      "4": 6.93
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "MVI 130°-160°",
+   "tipo": "inducao_ar",
+   "angulos": [
+    130,
+    160
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1,5-4 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.31",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela vertical \"TABLEAU DE DÉBITS\": Couleur/Code | Pression (bar) | l/mn | l/ha (coluna l/mn usada). Buse miroir anti-dérive à aspiration d'air (Venturi), jato plano grande ângulo 130°-160°; \"Pression recommandée : 1,5 bar\". Tabela vertical l/ha com 100 cm entre bicos. A página tem também uma tabela horizontal (l/min) com os mesmos tamanhos (alguns valores com menos casas, ex. \"0,6\", \"2,3\"); usada a tabela vertical. corIso derivada do código de tamanho ISO impresso; o nome da cor impresso (FR) confere com o código em todos os tamanhos.",
+   "tamanhos": [
+    {
+     "codigo": "MVI 015",
+     "corIso": "verde",
+     "vazoes": {
+      "1.5": 0.43,
+      "2": 0.49,
+      "2.5": 0.55,
+      "3": 0.6,
+      "3.5": 0.65,
+      "4": 0.69
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "MVI 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.57,
+      "2": 0.66,
+      "2.5": 0.73,
+      "3": 0.8,
+      "3.5": 0.86,
+      "4": 0.92
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "MVI 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.5": 0.72,
+      "2": 0.82,
+      "2.5": 0.92,
+      "3": 1.0,
+      "3.5": 1.08,
+      "4": 1.15
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "MVI 03",
+     "corIso": "azul",
+     "vazoes": {
+      "1.5": 0.86,
+      "2": 0.99,
+      "2.5": 1.1,
+      "3": 1.2,
+      "3.5": 1.29,
+      "4": 1.38
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "MVI 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.5": 1.15,
+      "2": 1.32,
+      "2.5": 1.47,
+      "3": 1.6,
+      "3.5": 1.72,
+      "4": 1.84
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "MVI 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.5": 1.43,
+      "2": 1.65,
+      "2.5": 1.83,
+      "3": 2.0,
+      "3.5": 2.15,
+      "4": 2.3
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "MVI 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.5": 1.72,
+      "2": 1.98,
+      "2.5": 2.2,
+      "3": 2.4,
+      "3.5": 2.58,
+      "4": 2.76
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "MVI 08",
+     "corIso": "branco",
+     "vazoes": {
+      "1.5": 2.29,
+      "2": 2.63,
+      "2.5": 2.93,
+      "3": 3.2,
+      "3.5": 3.45,
+      "4": 3.67
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "MVI 10",
+     "corIso": "azul claro",
+     "vazoes": {
+      "1.5": 2.87,
+      "2": 3.29,
+      "2.5": 3.66,
+      "3": 4.0,
+      "3.5": 4.31,
+      "4": 4.59
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "ESI 6 filets",
+   "tipo": "leque",
+   "angulos": [],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1-4 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.32",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "jatos para fertilizante líquido. Tabela vertical \"TABLEAU DE DÉBITS\": Couleur/Code | Pression (bar) | l/mn | l/ha (coluna l/mn usada). Buse 6 filets (6 jatos de gotas muito grossas) para adubação líquida; orifício de calibragem em cerâmica rosa ALBUZ (pré-orifício dosador); sem ângulo de leque impresso; \"Pression recommandée : 1,5 bar\"; altura de trabalho 60 cm; l/ha com 50 cm entre bicos. Vazões para líquido de densidade 1 (água); a página traz fatores de conversão para solução nitrogenada (densidade 1,28 → fator 1,13). corIso derivada do código de tamanho ISO impresso; o nome da cor impresso (FR) confere com o código em todos os tamanhos.",
+   "tamanhos": [
+    {
+     "codigo": "ESI 015",
+     "corIso": "verde",
+     "vazoes": {
+      "1": 0.37,
+      "1.5": 0.44,
+      "2": 0.5,
+      "2.5": 0.55,
+      "3": 0.6,
+      "3.5": 0.64,
+      "4": 0.68
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ESI 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1": 0.52,
+      "1.5": 0.61,
+      "2": 0.68,
+      "2.5": 0.74,
+      "3": 0.8,
+      "3.5": 0.85,
+      "4": 0.9
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ESI 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1": 0.64,
+      "1.5": 0.76,
+      "2": 0.85,
+      "2.5": 0.93,
+      "3": 1.0,
+      "3.5": 1.06,
+      "4": 1.12
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ESI 03",
+     "corIso": "azul",
+     "vazoes": {
+      "1": 0.77,
+      "1.5": 0.91,
+      "2": 1.02,
+      "2.5": 1.12,
+      "3": 1.2,
+      "3.5": 1.28,
+      "4": 1.35
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ESI 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1": 1.03,
+      "1.5": 1.21,
+      "2": 1.36,
+      "2.5": 1.49,
+      "3": 1.6,
+      "3.5": 1.7,
+      "4": 1.8
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ESI 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "1": 1.35,
+      "1.5": 1.56,
+      "2": 1.73,
+      "2.5": 1.87,
+      "3": 2.0,
+      "3.5": 2.11,
+      "4": 2.22
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ESI 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "1": 1.62,
+      "1.5": 1.87,
+      "2": 2.07,
+      "2.5": 2.25,
+      "3": 2.4,
+      "3.5": 2.54,
+      "4": 2.66
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "FESI 6 filets écrou monobloc",
+   "tipo": "leque",
+   "angulos": [],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1-4 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.33",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "jatos para fertilizante líquido. Tabela vertical \"TABLEAU DE DÉBITS\": Couleur/Code | Pression (bar) | l/mn | l/ha (coluna l/mn usada). Buse 6 filets com écrou monobloc (capa integrada) para adubação líquida; orifício de calibragem em cerâmica rosa ALBUZ; sem ângulo de leque impresso; \"Pression recommandée : 1,5 bar\"; altura 60 cm; l/ha com 50 cm entre bicos. Vazões para líquido de densidade 1 (água); a página traz fatores de conversão para solução nitrogenada (densidade 1,28 → fator 1,13). corIso derivada do código de tamanho ISO impresso; o nome da cor impresso (FR) confere com o código em todos os tamanhos.",
+   "tamanhos": [
+    {
+     "codigo": "FESI 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "1": 1.35,
+      "1.5": 1.56,
+      "2": 1.73,
+      "2.5": 1.87,
+      "3": 2.0,
+      "3.5": 2.11,
+      "4": 2.22
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "FESI 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "1": 1.62,
+      "1.5": 1.87,
+      "2": 2.07,
+      "2.5": 2.25,
+      "3": 2.4,
+      "3.5": 2.54,
+      "4": 2.66
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "FESI 08",
+     "corIso": "branco",
+     "vazoes": {
+      "1": 1.91,
+      "1.5": 2.31,
+      "2": 2.64,
+      "2.5": 2.94,
+      "3": 3.2,
+      "3.5": 3.44,
+      "4": 3.66
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "FESI 10",
+     "corIso": "azul claro",
+     "vazoes": {
+      "1": 2.39,
+      "1.5": 2.89,
+      "2": 3.31,
+      "2.5": 3.67,
+      "3": 4.0,
+      "3.5": 4.3,
+      "4": 4.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "FESI 15",
+     "corIso": "verde claro",
+     "vazoes": {
+      "1": 3.58,
+      "1.5": 4.33,
+      "2": 4.96,
+      "2.5": 5.51,
+      "3": 6.0,
+      "3.5": 6.45,
+      "4": 6.87
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "OCI 80°",
+   "tipo": "leque",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "2-4 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.34",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "ponta de borda (descentralizada). Tabela \"TABLEAU DE DÉBITS\": COULEUR | Code ISO | (bar) | l/mn | l/ha (50 cm). Buse bout de rampe, jato plano excêntrico 80°; \"Pression recommandée : 2 bar\". corIso derivada do código de tamanho ISO impresso; o nome da cor impresso (FR) confere com o código em todos os tamanhos.",
+   "tamanhos": [
+    {
+     "codigo": "OCI 8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2": 0.65,
+      "3": 0.8,
+      "4": 0.91
+     },
+     "unidade": "L/min por bar",
+     "observacao": "filtro impresso: 100 Mesh"
+    },
+    {
+     "codigo": "OCI 8003",
+     "corIso": "azul",
+     "vazoes": {
+      "2": 0.98,
+      "3": 1.2,
+      "4": 1.39
+     },
+     "unidade": "L/min por bar",
+     "observacao": "filtro impresso: 50 Mesh"
+    },
+    {
+     "codigo": "OCI 8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2": 1.31,
+      "3": 1.6,
+      "4": 1.85
+     },
+     "unidade": "L/min por bar",
+     "observacao": "filtro impresso: 50 Mesh"
+    }
+   ]
+  },
+  {
+   "linha": "CVI-OC 80°",
+   "tipo": "inducao_ar",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "2-4 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.35",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "ponta de borda (descentralizada). Buse bout de rampe à aspiration d'air, basse pression (Venturi), jato plano 80°. Na tabela o código é impresso \"CVI 80 02\" (prefixo CVI, sem \"-OC\"); classe de gota (TG/G) impressa entre pressão e vazão. Pictograma \"2-4 bar\"; texto: \"Fonctionne sur un grand champ de pressions (de 1,5 bar à 3 bar)\"; \"Pression recommandée : 2 bar\"; tabela impressa de 1,5 a 3 bar. corIso derivada do código de tamanho ISO impresso; o nome da cor impresso (FR) confere com o código em todos os tamanhos.",
+   "tamanhos": [
+    {
+     "codigo": "CVI 8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.57,
+      "2": 0.66,
+      "2.5": 0.73,
+      "3": 0.8
+     },
+     "unidade": "L/min por bar",
+     "observacao": "filtro impresso: 100 Mesh"
+    },
+    {
+     "codigo": "CVI 80025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.5": 0.71,
+      "2": 0.82,
+      "2.5": 0.91,
+      "3": 1.0
+     },
+     "unidade": "L/min por bar",
+     "observacao": "filtro impresso: 50 Mesh"
+    },
+    {
+     "codigo": "CVI 8003",
+     "corIso": "azul",
+     "vazoes": {
+      "1.5": 0.85,
+      "2": 0.98,
+      "2.5": 1.1,
+      "3": 1.2
+     },
+     "unidade": "L/min por bar",
+     "observacao": "filtro impresso: 50 Mesh"
+    }
+   ]
+  },
+  {
+   "linha": "EXA 3 filets",
+   "tipo": "leque",
+   "angulos": [],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "1-3,5 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.36",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "jatos para fertilizante líquido. Tabela vertical \"TABLEAU DE DÉBITS\": Couleur/Code | Pression (bar) | l/mn | l/ha (coluna l/mn usada). Buse 3 filets (3 jatos de gotas muito grossas) para adubação líquida; sem ângulo de leque impresso; \"Pression recommandée : 1,5 bar\"; l/ha com 50 cm entre bicos. Vazões no \"Code couleur Europe\" ALBUZ (não ISO 10625): código = linha + cor impressa; corIso = null. NOIR a 1 bar impresso \"3\" (sem casas decimais). GRIS a 3,5 bar: FR 2025 3,68 x UK 2022 3,66 (mantido FR). Vazões para líquido de densidade 1 (água); a página traz fatores de conversão para solução nitrogenada (densidade 1,28 → fator 1,13).",
+   "tamanhos": [
+    {
+     "codigo": "EXA JAUNE",
+     "corIso": null,
+     "vazoes": {
+      "1": 0.35,
+      "1.5": 0.43,
+      "2": 0.5,
+      "2.5": 0.56,
+      "3": 0.61,
+      "3.5": 0.66
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "EXA ROUGE",
+     "corIso": null,
+     "vazoes": {
+      "1": 0.59,
+      "1.5": 0.71,
+      "2": 0.8,
+      "2.5": 0.89,
+      "3": 0.97,
+      "3.5": 1.04
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "EXA VERT",
+     "corIso": null,
+     "vazoes": {
+      "1": 0.67,
+      "1.5": 0.81,
+      "2": 0.92,
+      "2.5": 1.01,
+      "3": 1.1,
+      "3.5": 1.18
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "EXA BLEU",
+     "corIso": null,
+     "vazoes": {
+      "1": 0.86,
+      "1.5": 1.03,
+      "2": 1.17,
+      "2.5": 1.29,
+      "3": 1.4,
+      "3.5": 1.5
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "EXA BLANC",
+     "corIso": null,
+     "vazoes": {
+      "1": 1.39,
+      "1.5": 1.63,
+      "2": 1.83,
+      "2.5": 2.0,
+      "3": 2.15,
+      "3.5": 2.29
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "EXA MARRON",
+     "corIso": null,
+     "vazoes": {
+      "1": 1.9,
+      "1.5": 2.24,
+      "2": 2.51,
+      "2.5": 2.74,
+      "3": 2.95,
+      "3.5": 3.14
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "EXA GRIS",
+     "corIso": null,
+     "vazoes": {
+      "1": 2.25,
+      "1.5": 2.63,
+      "2": 2.95,
+      "2.5": 3.21,
+      "3": 3.45,
+      "3.5": 3.68
+     },
+     "unidade": "L/min por bar",
+     "observacao": "a 3,5 bar o FR 2025 imprime 3,68 (l/ha 736); o catálogo UK 2022 imprime 3,66 — mantido o FR"
+    },
+    {
+     "codigo": "EXA NOIR",
+     "corIso": null,
+     "vazoes": {
+      "1": 3.0,
+      "1.5": 3.51,
+      "2": 3.93,
+      "2.5": 4.28,
+      "3": 4.6,
+      "3.5": 4.89
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "AVI-OC 80°",
+   "tipo": "inducao_ar",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "3-5 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.37",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "ponta de borda (descentralizada). Buse bout de rampe à aspiration d'air (Venturi), jato plano 80°; \"Fonctionne sur un grand champ de pressions (de 3 bar à 5 bar)\"; \"Pression recommandée : 3 bar\". Tabela COULEUR | Code ISO | (bar) | l/mn | l/ha (50 cm). corIso derivada do código de tamanho ISO impresso; o nome da cor impresso (FR) confere com o código em todos os tamanhos.",
+   "tamanhos": [
+    {
+     "codigo": "AVI-OC 8001",
+     "corIso": "laranja",
+     "vazoes": {
+      "3": 0.4,
+      "4": 0.46,
+      "5": 0.52
+     },
+     "unidade": "L/min por bar",
+     "observacao": "filtro impresso: 100 Mesh"
+    },
+    {
+     "codigo": "AVI-OC 80015",
+     "corIso": "verde",
+     "vazoes": {
+      "3": 0.6,
+      "4": 0.69,
+      "5": 0.77
+     },
+     "unidade": "L/min por bar",
+     "observacao": "filtro impresso: 100 Mesh"
+    },
+    {
+     "codigo": "AVI-OC 8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "3": 0.8,
+      "4": 0.91,
+      "5": 1.03
+     },
+     "unidade": "L/min por bar",
+     "observacao": "filtro impresso: 100 Mesh; rótulo \"ZNT\" impresso junto ao código"
+    },
+    {
+     "codigo": "AVI-OC 80025",
+     "corIso": "lilás",
+     "vazoes": {
+      "3": 1.0,
+      "4": 1.15,
+      "5": 1.29
+     },
+     "unidade": "L/min por bar",
+     "observacao": "filtro impresso: 50 Mesh; rótulo \"ZNT\" impresso junto ao código"
+    },
+    {
+     "codigo": "AVI-OC 8003",
+     "corIso": "azul",
+     "vazoes": {
+      "3": 1.2,
+      "4": 1.39,
+      "5": 1.55
+     },
+     "unidade": "L/min por bar",
+     "observacao": "filtro impresso: 50 Mesh; rótulo \"ZNT\" impresso junto ao código"
+    },
+    {
+     "codigo": "AVI-OC 8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "3": 1.6,
+      "4": 1.85,
+      "5": 2.07
+     },
+     "unidade": "L/min por bar",
+     "observacao": "filtro impresso: 50 Mesh"
+    },
+    {
+     "codigo": "AVI-OC 8005",
+     "corIso": "marrom",
+     "vazoes": {
+      "3": 2.0,
+      "4": 2.31,
+      "5": 2.58
+     },
+     "unidade": "L/min por bar",
+     "observacao": "filtro impresso: 50 Mesh"
+    }
+   ]
+  }
+ ]
+}

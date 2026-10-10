@@ -1,5 +1,5 @@
 """Monta dados/pontas.json com vários fabricantes.
-Uso (na raiz): python3 referencias/ferramentas/montar_pontas.py app/src/main/assets/www/dados/pontas.json referencias/pontas/{jacto,jacto_extra,teejet,hypro,hypro_eu,hypro_br,lechler,albuz,magnojet}.json
+Uso (na raiz): python3 referencias/ferramentas/montar_pontas.py app/src/main/assets/www/dados/pontas.json referencias/pontas/{jacto,jacto_extra,teejet,hypro,hypro_eu,hypro_br,lechler,albuz,albuz_extra,magnojet}.json
 Os arquivos de referencias/pontas/ são as extrações dos catálogos oficiais (fonte, página e método em cada linha).
 Regras: só linhas extraídas como texto (pdftotext/OCR conferido); unidade como impressa;
 células que contradizem a própria tabela (vazão menor que numa pressão menor, ou fora de ±8% da classe ISO
@@ -13,6 +13,7 @@ MANUAIS = {('Jacto','J3D - 10008','15'):'igual à J3D 10006 (provável erro de i
  ('Jacto','AXI 11003','20'):'diferente das demais pontas 110-03 do mesmo folheto',
  ('TeeJet','TTI11010','*'):'de 2 a 7 bar o catálogo imprime as vazões da capacidade 15, não 10 (erro de impressão; igual no Catálogo 52-PT)',
  **{('Hypro (Pentair)','LDC90-01',x):'linha aparentemente deslocada uma pressão (abaixo da classe ISO 01 de 1,5 a 3,5 bar; igual na seção em espanhol)' for x in ('1.5','2','2.5','3','3.5')},
+ ('Albuz','AD 2 AC 56','20'):'impresso "20,7" numa linha que vai de 0,88 a 1,82 (provável 2,07; igual na edição inglesa)',
  ('TeeJet','DGTJ60-110015','4'):'salto de 0,64 para 0,76 entre 3,5 e 4 bar, incoerente com os demais tamanhos (igual no Catálogo 52-PT)'}
 ISO = {'01':.4,'015':.6,'02':.8,'025':1.0,'03':1.2,'04':1.6,'05':2.0,'06':2.4,'08':3.2,'10':4.0}
 PSI = 0.0689476
@@ -46,7 +47,8 @@ for arq in entradas:
         tipo = TIPOS.get(tipo.lower(), tipo)
         # Classe ISO: ±8% em leque comum; ±15% nas demais pontas de leque (pré-orifício, indução, duplo/triplo) — só pega erro de impressão
         tol = 0.08 if tipo == 'leque' and not l.get('preOrificioOuInducao') else 0.15
-        iso_ok = tipo not in ('cone_vazio', 'cone_cheio')
+        # jatos para adubo líquido (ESI, FESI, EXA) não seguem a curva das pontas de leque
+        iso_ok = tipo not in ('cone_vazio', 'cone_cheio') and 'fertilizante' not in (l.get('observacoes') or l.get('observacao') or '').lower()
         tams = []
         for t in l['tamanhos']:
             if t['codigo'] == 'JMD 130003' or (nome, t['codigo']) in FORA_TAMANHO: continue
