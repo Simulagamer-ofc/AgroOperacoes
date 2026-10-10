@@ -361,19 +361,19 @@ body{background:var(--bg)}
 @media(pointer:coarse){.abas button{min-height:44px}}
 
 /* Painel aprovado na prévia: mesmas cores, proporções e quatro quadros. */
-.app.nx-home{grid-template-columns:180px minmax(0,1fr);font-size:14px}
+.app.nx-home{grid-template-columns:180px minmax(0,1fr)}
 .app.nx-home .sidebar{--muted:#a0c4d0;padding:24px 16px;overflow-y:auto;border:0}
 .app.nx-home .brand.nexus{padding:0 0 18px;gap:4px}
-.app.nx-home .brand.nexus .marca{font-size:22px;line-height:normal;letter-spacing:2px}
+.app.nx-home .brand.nexus .marca{font-size:2rem;line-height:1.05;letter-spacing:.02em}
 .app.nx-home .brand.nexus .marca span{color:var(--destaque)}
-.app.nx-home .brand.nexus #farmName{color:var(--muted);font-size:12px}
-.app.nx-home .brand.nexus .versao{font-size:12px;margin-top:0}
+.app.nx-home .brand.nexus #farmName{color:var(--muted);font-size:.78rem}
+.app.nx-home .brand.nexus .versao{font-size:.72rem;margin-top:6px}
 .app.nx-home .nav{gap:5px}
-.app.nx-home .nav button{padding:12px 10px;font-size:14px;border-radius:8px;letter-spacing:0;color:var(--muted)}
+.app.nx-home .nav button{padding:12px 10px;font-size:1.02rem;border-radius:8px;letter-spacing:0;color:var(--muted)}
 .app.nx-home .nav button.active{background:#173653;color:#e8f5fb;box-shadow:inset 3px 0 var(--destaque);font-weight:400}
 .app.nx-home .nav-grupo{font-size:12px;color:var(--muted);padding:12px 10px 0}
 .app.nx-home main{display:flex;flex-direction:column}
-.app.nx-home .content{margin:0 auto;padding:22px;width:100%;max-width:1700px;font-family:system-ui,sans-serif}
+.app.nx-home .content{margin:0 auto;padding:22px;width:100%;max-width:1700px}
 /* Pesquisa, alertas e instalação permanecem disponíveis depois do painel. */
 .app.nx-home .topbar{order:1;position:static;min-height:64px;padding:10px 22px;flex-wrap:wrap}
 .app.nx-home .topbar h1{display:none}
@@ -381,15 +381,15 @@ body{background:var(--bg)}
 .nx-dashboard{--s1:#3d9be9;--s2:#f5b843;--s3:#65e6a8;--s4:#5f7a88;--nx-track:#1b4055;--nx-selected:#06251b;--nx-column:#65e6a8}
 :root[data-theme="light"] .nx-dashboard{--s1:#2a78d6;--s2:#9a6a00;--s3:#137a52;--s4:#5f7a88;--nx-track:#dbe7ef;--nx-selected:#fff;--nx-column:#18a66a}
 .nx-dashboard-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.nx-dashboard-head h2{font-size:24px;margin:0 0 4px;font-weight:700}
-.nx-caption{color:var(--muted);font-size:12px;margin:0}
+.nx-dashboard-head h2{font-size:2.1rem;margin:0 0 4px;font-weight:800;letter-spacing:.01em;overflow-wrap:anywhere}
+.nx-caption{color:var(--muted);font-size:.82rem;margin:0;overflow-wrap:anywhere}
 .nx-periods{display:flex;gap:5px}
 .nx-periods button{font:inherit;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px 11px;min-height:40px}
 .nx-periods button[aria-pressed="true"]{color:var(--nx-selected);background:var(--destaque);border-color:var(--destaque)}
 .nx-dashboard-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:20px 0}
 .nx-panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;min-width:0}
-.nx-panel h3{font-size:15px;margin:0 0 5px;font-weight:700}
-.nx-metric{font-size:27px;font-weight:700;margin:7px 0;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.nx-panel h3{font-size:1rem;margin:0 0 5px;font-weight:700}
+.nx-metric{font-size:1.75rem;font-weight:700;margin:7px 0;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 .nx-dashboard-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:stretch}
 .nx-cost-rows{display:grid;gap:15px;margin-top:22px}
 .nx-row-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:7px;align-items:baseline}
@@ -418,7 +418,7 @@ body{background:var(--bg)}
 .nx-home-more{margin-top:18px;color:var(--muted)}
 .nx-home-more>summary{cursor:pointer;padding:10px 0;min-height:44px}
 .nx-home-more .nx-acoes{margin-top:8px}
-.nx-dashboard .viz-vazio{font-size:14px;margin:0;padding:26px 0}
+.nx-dashboard .viz-vazio{font-size:.88rem;margin:0;padding:26px 0}
 .nx-dashboard .viz-tab{font-size:12px;margin-top:12px}
 @media(max-width:800px){
   .app.nx-home{display:block}.app.nx-home .sidebar{position:fixed;left:-280px;z-index:12;width:270px;height:100dvh}.app.nx-home .sidebar.open{left:0}
@@ -428,8 +428,11 @@ body{background:var(--bg)}
 }
 @media(max-width:560px){
   .nx-dashboard-grid{grid-template-columns:minmax(0,1fr)}
-  .nx-dashboard-kpis{gap:7px}.nx-stat{padding:12px 9px}.nx-metric{font-size:21px}
+  .nx-dashboard-kpis{gap:7px}.nx-stat{padding:12px 9px}.nx-metric{font-size:1.45rem}
   .nx-months{gap:5px}.nx-row-head{flex-wrap:wrap;gap:4px 12px}
 }
 @media(pointer:coarse){.nx-periods button{min-height:44px}.nx-dashboard .nx-stock-link{min-height:44px}}
 @media print{.nx-home-more{display:none}.nx-dashboard-grid{grid-template-columns:1fr 1fr}.nx-dashboard{--nx-track:#eee;--nx-column:#137a52}}
+
+/* O título do painel segue a mesma escala do cabeçalho das demais telas. */
+@media(max-width:760px){.nx-dashboard-head h2{font-size:1.08rem;line-height:1.2}}
