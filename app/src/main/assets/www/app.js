@@ -520,28 +520,14 @@ const TITLES = {inicio: 'Visão geral', operacoes: 'Operações do dia', maquina
 
 VIEWS.inicio = (anchor) => {
   const t = today();
-  const todays = db.operations.filter(o => o.date === t);
-  const running = db.operations.filter(o => o.status === 'Em andamento');
   const al = alerts();
   const isEmpty = COLLECTIONS.every(c => !db[c].length);
   const upcoming = db.operations.filter(o => o.status === 'Em andamento' || (o.date >= t && o.status === 'Programada') || o.date === t).sort((a, b) => String((a.date || '') + (a.time || '')).localeCompare((b.date || '') + (b.time || ''))).slice(0, 8);
-  // Alertas de manutenção e estoque (os demais alertas continuam na lista “Atenção”)
-  const mtAbertas = db.maintenances.filter(m => m.status !== 'Concluída').length;
-  const revisoes = db.machines.filter(m => !isInactive(m) && Number(m.nextService) > 0 && hoursToService(m) <= SERVICE_WARN_HOURS).length;
-  const estBaixo = db.stock.filter(stockLow).length;
-  const partes = [mtAbertas && `${mtAbertas} ${mtAbertas === 1 ? 'manutenção' : 'manutenções'}`, revisoes && `${revisoes} ${revisoes === 1 ? 'revisão' : 'revisões'}`, estBaixo && `${estBaixo} estoque baixo`].filter(Boolean);
-  const tipos = [...new Set(todays.map(o => o.type))];
   return `
-    <section class="hero"><img class="hero-arte" src="img/centro-operacoes.jpg" alt="" aria-hidden="true">
-      <div class="hero-txt"><h2>Centro de operações</h2><p>${esc(db.settings.farm ? `Planeje, registre e conclua o trabalho no campo — ${db.settings.farm}.` : 'Planeje, registre e conclua o trabalho no campo.')}</p></div>
-      <button class="primary hero-cta" data-act="op-new">+ Nova operação</button></section>
-    <section class="kpis nexus">
-      <article class="card kpi"><div class="label">Operações hoje</div><div class="value">${todays.length}</div><div class="hint">${esc(tipos.join(', ') || 'Nenhuma operação hoje')}</div></article>
-      <article class="card kpi"><div class="label">Em andamento</div><div class="value">${running.length}</div><div class="hint">${running.length === 1 ? 'Operação aberta' : 'Operações abertas'}</div></article>
-      <article class="card kpi"><div class="label">Alertas de manutenção e estoque</div><div class="value">${mtAbertas + revisoes + estBaixo}</div><div class="hint">${esc(partes.join(' · ') || 'Tudo em dia')}</div></article>
-    </section>
-    <div class="nx-acoes"><button data-act="hour-new">◷ Registrar horímetro</button><button data-act="mt-new">⚙ Abrir manutenção</button><button data-act="mov-new">⇄ Movimentar estoque</button><button data-act="cb-new">⛽ Abastecimento</button><button data-act="af-nova">◎ Nova aferição</button></div>
-    ${isEmpty ? `<section class="card" style="margin-top:18px">${empty('Nenhum dado cadastrado ainda', 'Comece cadastrando talhões, máquinas e insumos — ou carregue dados de exemplo para conhecer o aplicativo.', {act: 'seed', label: 'Carregar dados de exemplo'})}</section>` : (typeof painelNexus === 'function' ? painelNexus() : '')}
+    ${typeof painelNexus === 'function' ? painelNexus() : ''}
+    <details class="nx-home-more"><summary>Operações, ações rápidas e indicadores adicionais</summary>
+    <div class="nx-acoes"><button data-act="op-new">+ Nova operação</button><button data-act="hour-new">◷ Registrar horímetro</button><button data-act="mt-new">⚙ Abrir manutenção</button><button data-act="mov-new">⇄ Movimentar estoque</button><button data-act="cb-new">⛽ Abastecimento</button><button data-act="af-nova">◎ Nova aferição</button></div>
+    ${isEmpty ? `<section class="card" style="margin-top:18px">${empty('Nenhum dado cadastrado ainda', 'Comece cadastrando talhões, máquinas e insumos.', {act: 'nav', id: 'cadastros', label: 'Abrir cadastros e backup'})}</section>` : ''}
     <section class="grid nexus">
       <article class="card panel"><div class="section-title" style="margin:0 0 4px"><h3>Operações de hoje</h3><button data-act="nav" data-id="operacoes">Ver todas</button></div>
         ${upcoming.length ? upcoming.map(o => operationRow(o, false)).join('') : empty('Sem operações para hoje', 'Toque em “Nova operação” para registrar.')}
@@ -550,9 +536,16 @@ VIEWS.inicio = (anchor) => {
         ${al.length ? al.map(a => `<div class="alert clickable" data-act="nav" data-id="${esc(a.route)}"><span class="alert-icon ${a.color}">${a.icon}</span><div style="flex:1"><strong>${esc(a.title)}</strong><small>${esc(a.text)}</small>${a.progress != null ? `<div class="progress"><span style="width:${a.progress}%"></span></div>` : ''}</div></div>`).join('') : empty('Tudo em dia', 'Nenhuma pendência encontrada.')}
       </article>
     </section>
-    ${!isEmpty && typeof painelGraficos === 'function' ? painelGraficos() : ''}`;
+    ${!isEmpty && typeof painelGraficos === 'function' ? painelGraficos() : ''}
+    </details>`;
 };
-VIEWS.inicio.after = anchor => { if (anchor) document.getElementById(anchor)?.scrollIntoView({behavior: 'smooth'}); };
+VIEWS.inicio.after = anchor => {
+  if (!anchor) return;
+  const alvo = document.getElementById(anchor);
+  const secao = alvo?.closest('.nx-home-more');
+  if (secao) secao.open = true;
+  alvo?.scrollIntoView({behavior: 'smooth'});
+};
 
 let opFilter = 'hoje';
 VIEWS.operacoes = () => {
@@ -901,6 +894,7 @@ function render(anchor = pendingAnchor) {
     view.innerHTML = `<section class="card">${empty('Não foi possível abrir esta tela', 'Seus dados salvos não foram afetados. Volte ao início e tente de novo; se continuar, faça um backup em Cadastros e backup.', {act: 'nav', id: 'inicio', label: 'Voltar ao início'})}</section>`;
     return;
   }
+  document.querySelector('.app').classList.toggle('nx-home', key === 'inicio');
   $('#viewTitle').textContent = TITLES[key] || (name === 'talhao' ? 'Talhões' : 'Nexus Agro');
   document.title = `${TITLES[key] || 'Nexus Agro'} — Nexus Agro`;
   const menu = GRUPO_DA_ROTA[key] || key;

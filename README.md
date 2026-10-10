@@ -4,7 +4,7 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.9.0-beta1` — nova aparência Nexus Agro (tema escuro, faixa “Centro de operações”, rosca da situação das operações, últimos sete dias, estoque de insumos e controle de gastos; tema claro opcional), configuração da máquina a partir do catálogo, aferição e calibragem simplificada (3 passos, um campo por medição, resultado que aponta o item a corrigir), indicadores com gráficos na Visão Geral, catálogo organizado por marca e tipo, cartões de máquina enxutos, classificação oficial de soja (IN 11/2007) e milho (IN 60/2011) na moega, secador e moega, aferição e calibragem com referências técnicas validadas e catálogo de máquinas offline.
+`0.19.0-beta1` — painel com o visual aprovado: custos por categoria em barras horizontais, evolução mensal em colunas, rosca de operações e insumos em atenção. O filtro de 7/30/90 dias aplica-se aos custos por categoria, às operações e aos indicadores adicionais. A evolução mensal mostra seis meses (com o mês atual identificado como parcial); estoque mostra o saldo atual. Os quadros usam somente registros reais e mostram estados vazios quando não há dados. Ações rápidas, operações, alertas e indicadores adicionais continuam disponíveis na seção expansível abaixo do painel.
 
 ### Funcionalidades
 
