@@ -870,7 +870,7 @@ function falhaInesperada(err) {
   console.error(err);
   if (Date.now() - ultimaFalha < 2000) return;
   ultimaFalha = Date.now();
-  showToast('Algo deu errado nesta tela. Seus dados salvos não foram afetados — tente de novo ou volte ao início.');
+  showToast('Algo deu errado nesta tela. Seus dados salvos não foram afetados — tente de novo ou volte ao início.', true);
 }
 addEventListener('error', e => falhaInesperada(e.error || e.message));
 addEventListener('unhandledrejection', e => falhaInesperada(e.reason));
@@ -908,7 +908,7 @@ let lastRoute = '';
 addEventListener('hashchange', () => { const r = location.hash; if (r !== lastRoute) { lastRoute = r; if (modal.classList.contains('open')) closeModal(); render(); scrollTo(0, 0); } });
 lastRoute = location.hash;
 // Renderiza depois que todos os scripts (inclusive afericao.js) foram carregados
-addEventListener('DOMContentLoaded', () => { render(); if (avisoBanco) showToast(avisoBanco); });
+addEventListener('DOMContentLoaded', () => { render(); if (avisoBanco) showToast(avisoBanco, true); });
 
 // ---------- Rede, instalação e service worker ----------
 const setNetwork = () => { $('#netStatus').textContent = navigator.onLine ? 'Disponível offline' : 'Modo offline ativo'; };
