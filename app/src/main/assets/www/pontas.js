@@ -9,6 +9,8 @@ const chaveBar = p => String(Math.round(Number(p) * 100) / 100); // "3", "1.5", 
 const barTxt = p => num(Number(p), Number(p) % 1 ? (Number(p) * 10 % 1 ? 2 : 1) : 0);
 const PSI_BAR = 0.0689476; // 1 psi em bar
 const unP = l => l.unidadePressao || 'bar';
+const TIPO_PONTA = {leque: 'leque', leque_antideriva: 'leque antideriva', inducao_ar: 'indução de ar', duplo_leque: 'duplo leque', leque_triplo: 'leque triplo', cone_vazio: 'cone vazio', cone_cheio: 'cone cheio'};
+const tipoP = l => TIPO_PONTA[l.tipo] || l.tipo || '';
 const nomePonta = (fab, lin, tam) => `${fab.nome} ${tam.codigo.startsWith(lin.linha.split(' ')[0]) ? tam.codigo : lin.linha + ' ' + tam.codigo}`;
 const linhaPonta = (d, fab, lin) => d.fabricantes.find(f => f.id === fab)?.linhas.find(l => l.id === lin);
 const fonteDaLinha = (fab, l) => fab.fontes.find(f => f.id === l.fonte) || {};
@@ -25,7 +27,7 @@ async function montarSeletorPonta() {
   box.innerHTML = `<details class="pc-box" ${wz.pontaFab ? 'open' : ''}><summary>Buscar a vazão no catálogo de pontas (${d.fabricantes.length} fabricantes)</summary>
     <div class="pc-sel">
       <select id="pcFab" aria-label="Fabricante da ponta"><option value="">Fabricante</option>${d.fabricantes.map(f => op(f.id, f.nome, wz.pontaFab)).join('')}</select>
-      <select id="pcLinha" aria-label="Linha da ponta" ${fab ? '' : 'disabled'}><option value="">Linha / modelo</option>${(fab?.linhas || []).map(l => op(l.id, l.linha + (l.tipo ? ' — ' + l.tipo : ''), wz.pontaLinha)).join('')}</select>
+      <select id="pcLinha" aria-label="Linha da ponta" ${fab ? '' : 'disabled'}><option value="">Linha / modelo</option>${(fab?.linhas || []).map(l => op(l.id, l.linha + (tipoP(l) ? ' — ' + tipoP(l) : ''), wz.pontaLinha)).join('')}</select>
       <select id="pcTam" aria-label="Tamanho da ponta" ${lin ? '' : 'disabled'}><option value="">Tamanho</option>${(lin?.tamanhos || []).map(t => op(t.codigo, t.codigo + (t.corIso ? ' (' + t.corIso + ')' : ''), wz.pontaTam)).join('')}</select>
     </div><div id="pcRes">${tam ? resultadoPonta(fab, lin, tam) : ''}</div></details>`;
   const muda = (k, limpar) => e => { wz[k] = e.target.value; limpar.forEach(x => { wz[x] = ''; }); montarSeletorPonta(); };
@@ -70,7 +72,7 @@ async function telaPontas(arg) {
   if (fab && lid) {
     const lin = linhaPonta(d, fid, lid); if (!lin) { el.innerHTML = empty('Linha não encontrada', ''); return; }
     const ps = [...new Set(lin.tamanhos.flatMap(pressoesDe))].sort((a, b) => a - b), fonte = fonteDaLinha(fab, lin), u = unP(lin);
-    el.innerHTML = head(`${fab.nome} ${lin.linha}`, [lin.tipo, lin.angulos?.length ? 'ângulos ' + lin.angulos.join('°, ') + '°' : '', lin.faixaPressao ? `faixa de trabalho ${barTxt(lin.faixaPressao[0])}–${barTxt(lin.faixaPressao[1])} ${u}` : ''].filter(Boolean).join(' • '), btn('← ' + fab.nome, 'nav', 'pontas/' + encodeURIComponent(fab.id), 'secondary')) +
+    el.innerHTML = head(`${fab.nome} ${lin.linha}`, [tipoP(lin), lin.angulos?.length ? 'ângulos ' + lin.angulos.join('°, ') + '°' : '', lin.faixaPressao ? `faixa de trabalho ${barTxt(lin.faixaPressao[0])}–${barTxt(lin.faixaPressao[1])} ${u}` : ''].filter(Boolean).join(' • '), btn('← ' + fab.nome, 'nav', 'pontas/' + encodeURIComponent(fab.id), 'secondary')) +
       `<section class="card panel"><p class="nota" style="margin-top:0">Vazão por ponta, em L/min, conforme a tabela do fabricante. Pressão em ${u}, como impressa no folheto${u === 'psi' ? ' (equivalência em bar só para referência)' : ''}. Células vazias: pressão não tabelada para esse tamanho ou valor impresso não sugerido.</p>
       <div class="tbl-wrap"><table class="tbl pc-tab"><thead><tr><th>Tamanho</th>${ps.map(p => `<th class="num">${barTxt(p)} ${u}${u === 'psi' ? `<br><small>${num(p * PSI_BAR, 2)} bar</small>` : ''}</th>`).join('')}</tr></thead><tbody>
       ${lin.tamanhos.map(t => `<tr><td><strong>${esc(t.codigo)}</strong>${t.corIso ? `<br><small>${esc(t.corIso)}</small>` : ''}</td>${ps.map(p => `<td class="num">${t.vazoes[chaveBar(p)] != null ? num(t.vazoes[chaveBar(p)], 2) : ''}</td>`).join('')}</tr>`).join('')}
@@ -81,7 +83,7 @@ async function telaPontas(arg) {
   }
   if (fab) {
     el.innerHTML = head(fab.nome, `${fab.linhas.length} ${fab.linhas.length === 1 ? 'linha' : 'linhas'} de pontas`, btn('← Fabricantes', 'nav', 'pontas', 'secondary')) +
-      `<div class="pc-grade">${fab.linhas.map(l => `<button class="card pc-card" data-act="nav" data-id="pontas/${esc(encodeURIComponent(fab.id) + '~' + encodeURIComponent(l.id))}"><strong>${esc(l.linha)}</strong><small>${esc(l.tipo || '')}</small><small>${l.tamanhos.length} tamanhos • ${barTxt(Math.min(...l.tamanhos.flatMap(pressoesDe)))}–${barTxt(Math.max(...l.tamanhos.flatMap(pressoesDe)))} ${unP(l)}</small></button>`).join('')}</div>
+      `<div class="pc-grade">${fab.linhas.map(l => `<button class="card pc-card" data-act="nav" data-id="pontas/${esc(encodeURIComponent(fab.id) + '~' + encodeURIComponent(l.id))}"><strong>${esc(l.linha)}</strong><small>${esc(tipoP(l))}</small><small>${l.tamanhos.length} tamanhos • ${barTxt(Math.min(...l.tamanhos.flatMap(pressoesDe)))}–${barTxt(Math.max(...l.tamanhos.flatMap(pressoesDe)))} ${unP(l)}</small></button>`).join('')}</div>
       <section class="card panel"><h3>Fontes</h3><ul class="pc-fontes">${fab.fontes.map(f => `<li>${f.url ? `<a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.titulo)}</a>` : esc(f.titulo)}${f.ano ? ' (' + f.ano + ')' : ''}</li>`).join('')}</ul></section>`;
     return;
   }

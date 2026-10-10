@@ -1,0 +1,2300 @@
+{
+ "fabricante": "Lechler",
+ "nota": "Tabelas l/min por bar do catálogo oficial Lechler Agrardüsen 2025 (alemão). Pressões impressas com vírgula decimal (\"3,0\") gravadas com ponto (\"3.0\"); vazões idem. Nenhum valor calculado/convertido. corIso derivada do código de tamanho ISO (01–10), null para 005/0067.",
+ "fontes": [
+  {
+   "id": "F1",
+   "titulo": "Lechler – Agrardüsen und Zubehör (Agrarkatalog 2025, DE)",
+   "url": "https://www.lechler.com/fileadmin/media/kataloge/pdfs/agrar/DE/lechler_agrar_katalog_2025.pdf",
+   "ano": "2025",
+   "arquivoLocal": "pontas/lechler/pdf/lechler_agrar_katalog_2025_DE.pdf",
+   "anoObs": "link na página oficial lechler.com/de/mediahub/kataloge; metadados PDF CreationDate 2025-11-07, ModDate 2025-12-18; nenhuma edição EN/PT encontrada no site"
+  }
+ ],
+ "linhas": [
+  {
+   "linha": "ID (ID-120 / ID-90)",
+   "tipo": "inducao_ar",
+   "angulos": [
+    120,
+    90
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "ID-01 bis -015: 3 – 4 – 8 bar; ID-02 bis -10: 2 – 4 – 8 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.51",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela vertical: Düsengröße | Tropfengröße ISO 25358 | pressão (coluna sem rótulo de texto; ícone de manômetro; bar conforme \"Druckbereiche\" da página anterior) | [l/min] | l/ha. Códigos de ângulos diferentes impressos no mesmo bloco compartilham a mesma linha de vazões (código \"A / B\").  corIso derivada do código de tamanho (ISO 10625); cor não impressa como texto.",
+   "tamanhos": [
+    {
+     "codigo": "ID-120-01 / ID-90-01",
+     "corIso": "laranja",
+     "vazoes": {
+      "3.0": 0.39,
+      "4.0": 0.45,
+      "5.0": 0.51,
+      "6.0": 0.55,
+      "7.0": 0.6,
+      "8.0": 0.64
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ID-120-015 / ID-90-015",
+     "corIso": "verde",
+     "vazoes": {
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76,
+      "6.0": 0.83,
+      "7.0": 0.9,
+      "8.0": 0.96
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ID-120-02 / ID-90-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "3.0": 0.8,
+      "4.0": 0.92,
+      "5.0": 1.03,
+      "6.0": 1.13,
+      "7.0": 1.22,
+      "8.0": 1.3
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ID-120-025 / ID-90-025",
+     "corIso": "lilás",
+     "vazoes": {
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.15,
+      "5.0": 1.28,
+      "6.0": 1.4,
+      "7.0": 1.52,
+      "8.0": 1.62
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ID-120-03 / ID-90-03",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.97,
+      "3.0": 1.19,
+      "4.0": 1.37,
+      "5.0": 1.53,
+      "6.0": 1.68,
+      "7.0": 1.81,
+      "8.0": 1.94
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ID-120-04 / ID-90-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23,
+      "7.0": 2.41,
+      "8.0": 2.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ID-120-05 / ID-90-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.28,
+      "5.0": 2.55,
+      "6.0": 2.79,
+      "7.0": 3.01,
+      "8.0": 3.22
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ID-120-06 / ID-90-06",
+     "corIso": "cinza",
+     "vazoes": {
+      "2.0": 1.93,
+      "3.0": 2.36,
+      "4.0": 2.73,
+      "5.0": 3.05,
+      "6.0": 3.34,
+      "7.0": 3.61,
+      "8.0": 3.86
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ID-120-08",
+     "corIso": "branco",
+     "vazoes": {
+      "2.0": 2.58,
+      "3.0": 3.16,
+      "4.0": 3.65,
+      "5.0": 4.08,
+      "6.0": 4.47,
+      "7.0": 4.83,
+      "8.0": 5.16
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ID-120-10",
+     "corIso": "azul claro",
+     "vazoes": {
+      "2.0": 3.22,
+      "3.0": 3.94,
+      "4.0": 4.55,
+      "5.0": 5.09,
+      "6.0": 5.57,
+      "7.0": 6.02,
+      "8.0": 6.43
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "IDK / IDKN (IDK 120 / IDK 90 / IDKN 120)",
+   "tipo": "inducao_ar",
+   "angulos": [
+    120,
+    90
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "IDK 01 bis -10: 1–1,5–3–6 bar; IDKN 03 bis -04: 1–1,5–3–6 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.53",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela vertical: Düsengröße | Tropfengröße ISO 25358 | pressão (coluna sem rótulo de texto; ícone de manômetro; bar conforme \"Druckbereiche\" da página anterior) | [l/min] | l/ha. Códigos de ângulos diferentes impressos no mesmo bloco compartilham a mesma linha de vazões (código \"A / B\"). Injetor compacto. IDK 120-08 a 6,0 bar impresso 3,34 (menor que 3,65 a 4,0 bar; igual ao valor do IDK 120-06) — mantido como impresso. corIso derivada do código de tamanho (ISO 10625); cor não impressa como texto.",
+   "tamanhos": [
+    {
+     "codigo": "IDK 120-01 / IDK 90-01",
+     "corIso": "laranja",
+     "vazoes": {
+      "1.0": 0.23,
+      "1.5": 0.28,
+      "2.0": 0.32,
+      "3.0": 0.39,
+      "4.0": 0.45,
+      "6.0": 0.55
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDK 120-015 / IDK 90-015",
+     "corIso": "verde",
+     "vazoes": {
+      "1.0": 0.34,
+      "1.5": 0.42,
+      "2.0": 0.48,
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "6.0": 0.83
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDK 120-02 / IDK 90-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.0": 0.46,
+      "1.5": 0.56,
+      "2.0": 0.65,
+      "3.0": 0.8,
+      "4.0": 0.92,
+      "6.0": 1.13
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDK 120-025 / IDK 90-025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.0": 0.57,
+      "1.5": 0.7,
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.15,
+      "6.0": 1.4
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDK 120-03 / IDK 90-03 / IDKN 120-03",
+     "corIso": "azul",
+     "vazoes": {
+      "1.0": 0.69,
+      "1.5": 0.84,
+      "2.0": 0.97,
+      "3.0": 1.19,
+      "4.0": 1.37,
+      "6.0": 1.68
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDK 120-04 / IDK 90-04 / IDKN 120-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.0": 0.91,
+      "1.5": 1.12,
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "6.0": 2.23
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDK 120-05 / IDK 90-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.0": 1.14,
+      "1.5": 1.39,
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.28,
+      "5.0": 2.55,
+      "6.0": 2.79
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDK 120-06 / IDK 90-06",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.0": 1.36,
+      "1.5": 1.67,
+      "2.0": 1.93,
+      "3.0": 2.36,
+      "4.0": 2.73,
+      "6.0": 3.34
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDK 120-08",
+     "corIso": "branco",
+     "vazoes": {
+      "1.0": 1.82,
+      "1.5": 2.23,
+      "2.0": 2.58,
+      "3.0": 3.16,
+      "4.0": 3.65,
+      "6.0": 3.34
+     },
+     "unidade": "L/min por bar",
+     "observacao": "valor a 6,0 bar impresso 3,34 (< 3,65 a 4,0 bar) — provável erro de impressão, mantido"
+    },
+    {
+     "codigo": "IDK 120-10",
+     "corIso": "azul claro",
+     "vazoes": {
+      "1.0": 2.27,
+      "1.5": 2.79,
+      "2.0": 3.22,
+      "3.0": 3.94,
+      "4.0": 4.55,
+      "6.0": 5.57
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "XD 120",
+   "tipo": "leque_antideriva",
+   "angulos": [
+    120
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1,5–8 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.55",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela vertical: Düsengröße | Tropfengröße ISO 25358 | pressão (coluna sem rótulo de texto; ícone de manômetro; bar conforme \"Druckbereiche\" da página anterior) | [l/min] | l/ha. Códigos de ângulos diferentes impressos no mesmo bloco compartilham a mesma linha de vazões (código \"A / B\"). Leque com pré-atomizador/Dosierblende (não-Venturi). O bloco do tamanho 05 está rotulado \"XDT 120-05\" na própria tabela do XD 120 (provável erro tipográfico) — código mantido como impresso. corIso derivada do código de tamanho (ISO 10625); cor não impressa como texto.",
+   "tamanhos": [
+    {
+     "codigo": "XD 120-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.56,
+      "2.0": 0.65,
+      "3.0": 0.8,
+      "4.0": 0.92,
+      "5.0": 1.03,
+      "6.0": 1.13,
+      "7.0": 1.22,
+      "8.0": 1.3
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XD 120-025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.5": 0.7,
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.15,
+      "5.0": 1.28,
+      "6.0": 1.4,
+      "7.0": 1.52,
+      "8.0": 1.62
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XD 120-03",
+     "corIso": "azul",
+     "vazoes": {
+      "1.5": 0.84,
+      "2.0": 0.97,
+      "3.0": 1.19,
+      "4.0": 1.37,
+      "5.0": 1.53,
+      "6.0": 1.68,
+      "7.0": 1.81,
+      "8.0": 1.94
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XD 120-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.5": 1.12,
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23,
+      "7.0": 2.41,
+      "8.0": 2.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XDT 120-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.5": 1.39,
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.28,
+      "5.0": 2.55,
+      "6.0": 2.79,
+      "7.0": 3.01,
+      "8.0": 3.22
+     },
+     "unidade": "L/min por bar",
+     "observacao": "rótulo impresso assim na tabela do XD 120 (PDF p.55); provavelmente XD 120-05"
+    },
+    {
+     "codigo": "XD 120-06",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.5": 1.67,
+      "2.0": 1.93,
+      "3.0": 2.36,
+      "4.0": 2.73,
+      "5.0": 3.05,
+      "6.0": 3.34,
+      "7.0": 3.61,
+      "8.0": 3.86
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XD 120-08",
+     "corIso": "branco",
+     "vazoes": {
+      "1.5": 2.23,
+      "2.0": 2.58,
+      "3.0": 3.16,
+      "4.0": 3.65,
+      "5.0": 4.08,
+      "6.0": 4.47,
+      "7.0": 4.83,
+      "8.0": 5.16
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XD 120-10",
+     "corIso": "azul claro",
+     "vazoes": {
+      "1.5": 2.79,
+      "2.0": 3.22,
+      "3.0": 3.94,
+      "4.0": 4.55,
+      "5.0": 5.09,
+      "6.0": 5.57,
+      "7.0": 6.02,
+      "8.0": 6.43
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XD 120-15",
+     "corIso": "verde claro",
+     "vazoes": {
+      "1.5": 4.24,
+      "3.0": 5.91,
+      "4.0": 6.93,
+      "5.0": 7.65,
+      "6.0": 8.36,
+      "7.0": 9.08
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "PRE 130",
+   "tipo": "leque_antideriva",
+   "angulos": [
+    130
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1,5–8 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.57",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela vertical: Düsengröße | Tropfengröße ISO 25358 | pressão (coluna sem rótulo de texto; ícone de manômetro; bar conforme \"Druckbereiche\" da página anterior) | [l/min] | l/ha. Códigos de ângulos diferentes impressos no mesmo bloco compartilham a mesma linha de vazões (código \"A / B\"). Leque para pré-emergência, com Dosierblende e Vorkammer. Curva de vazão impressa difere da lei sqrt(p) ISO: +9,6% a 1,5 bar e -8,5% a 8,0 bar vs nominal 05 — mantida como impressa. corIso derivada do código de tamanho (ISO 10625); cor não impressa como texto.",
+   "tamanhos": [
+    {
+     "codigo": "PRE 130-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.5": 1.55,
+      "2.0": 1.73,
+      "3.0": 2.0,
+      "4.0": 2.24,
+      "5.0": 2.45,
+      "6.0": 2.64,
+      "7.0": 2.82,
+      "8.0": 2.99
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "AD (AD 120 / AD 90)",
+   "tipo": "leque_antideriva",
+   "angulos": [
+    120,
+    90
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1,5–3–6 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.59",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela vertical: Düsengröße | Tropfengröße ISO 25358 | pressão (coluna sem rótulo de texto; ícone de manômetro; bar conforme \"Druckbereiche\" da página anterior) | [l/min] | l/ha. Códigos de ângulos diferentes impressos no mesmo bloco compartilham a mesma linha de vazões (código \"A / B\"). Antidrift com pré-orifício (Vorkammer). corIso derivada do código de tamanho (ISO 10625); cor não impressa como texto.",
+   "tamanhos": [
+    {
+     "codigo": "AD 120-015 / AD 90-015",
+     "corIso": "verde",
+     "vazoes": {
+      "1.5": 0.42,
+      "2.0": 0.48,
+      "2.5": 0.54,
+      "3.0": 0.59,
+      "3.5": 0.63,
+      "4.0": 0.68,
+      "4.5": 0.72,
+      "5.0": 0.76,
+      "6.0": 0.83
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AD 120-02 / AD 90-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.56,
+      "2.0": 0.65,
+      "2.5": 0.73,
+      "3.0": 0.8,
+      "3.5": 0.86,
+      "4.0": 0.92,
+      "4.5": 0.98,
+      "5.0": 1.03,
+      "6.0": 1.13
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AD 120-03 / AD 90-03",
+     "corIso": "azul",
+     "vazoes": {
+      "1.5": 0.84,
+      "2.0": 0.97,
+      "2.5": 1.08,
+      "3.0": 1.19,
+      "3.5": 1.28,
+      "4.0": 1.37,
+      "4.5": 1.46,
+      "5.0": 1.53,
+      "6.0": 1.68
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AD 120-04 / AD 90-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.5": 1.12,
+      "2.0": 1.29,
+      "2.5": 1.44,
+      "3.0": 1.58,
+      "3.5": 1.71,
+      "4.0": 1.82,
+      "4.5": 1.94,
+      "5.0": 2.04,
+      "6.0": 2.23
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "LU (LU 120 / LU 90)",
+   "tipo": "leque",
+   "angulos": [
+    120,
+    90
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "1,5–2,5–5 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.61",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela vertical: Düsengröße | Tropfengröße ISO 25358 | pressão (coluna sem rótulo de texto; ícone de manômetro; bar conforme \"Druckbereiche\" da página anterior) | [l/min] | l/ha. Códigos de ângulos diferentes impressos no mesmo bloco compartilham a mesma linha de vazões (código \"A / B\").  corIso derivada do código de tamanho (ISO 10625); cor não impressa como texto.",
+   "tamanhos": [
+    {
+     "codigo": "LU 120-01 / LU 90-01",
+     "corIso": "laranja",
+     "vazoes": {
+      "1.5": 0.28,
+      "2.0": 0.32,
+      "3.0": 0.39,
+      "4.0": 0.45,
+      "5.0": 0.51
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "LU 120-015 / LU 90-015",
+     "corIso": "verde",
+     "vazoes": {
+      "1.5": 0.42,
+      "2.0": 0.48,
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "LU 120-02 / LU 90-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.56,
+      "2.0": 0.65,
+      "3.0": 0.8,
+      "4.0": 0.92,
+      "5.0": 1.03
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "LU 120-025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.5": 0.7,
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.15,
+      "5.0": 1.28
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "LU 120-03 / LU 90-03",
+     "corIso": "azul",
+     "vazoes": {
+      "1.5": 0.84,
+      "2.0": 0.97,
+      "3.0": 1.19,
+      "4.0": 1.37,
+      "5.0": 1.53
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "LU 120-04 / LU 90-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.5": 1.12,
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "LU 120-05 / LU 90-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.5": 1.39,
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.28,
+      "5.0": 2.55
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "LU 120-06 / LU 90-06",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.5": 1.67,
+      "2.0": 1.93,
+      "3.0": 2.36,
+      "4.0": 2.73,
+      "5.0": 3.05
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "LU 120-08 / LU 90-08",
+     "corIso": "branco",
+     "vazoes": {
+      "1.5": 2.23,
+      "2.0": 2.58,
+      "3.0": 3.16,
+      "4.0": 3.65,
+      "5.0": 4.08
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "QS 80",
+   "tipo": "leque",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "1,5–5 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.63",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela vertical: Düsengröße | Tropfengröße ISO 25358 | pressão (coluna sem rótulo de texto; ícone de manômetro; bar conforme \"Druckbereiche\" da página anterior) | [l/min] | l/ha. Códigos de ângulos diferentes impressos no mesmo bloco compartilham a mesma linha de vazões (código \"A / B\").  corIso derivada do código de tamanho (ISO 10625); cor não impressa como texto.",
+   "tamanhos": [
+    {
+     "codigo": "QS 80-015",
+     "corIso": "verde",
+     "vazoes": {
+      "1.5": 0.42,
+      "2.0": 0.48,
+      "2.5": 0.54,
+      "3.0": 0.59,
+      "3.5": 0.63,
+      "4.0": 0.68,
+      "5.0": 0.76
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QS 80-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.56,
+      "2.0": 0.65,
+      "2.5": 0.73,
+      "3.0": 0.8,
+      "3.5": 0.86,
+      "4.0": 0.92,
+      "5.0": 1.03
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QS 80-025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.5": 0.7,
+      "2.0": 0.81,
+      "2.5": 0.91,
+      "3.0": 0.99,
+      "3.5": 1.07,
+      "4.0": 1.15,
+      "5.0": 1.28
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "ST / SC (ST 110 / ST 80 / SC 110 / SC 80)",
+   "tipo": "leque",
+   "angulos": [
+    110,
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "SC 025 bis -05: 2–3–5 bar; ST 01 bis -08: 2–3–5 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.65",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela vertical: Düsengröße | Tropfengröße ISO 25358 | pressão (coluna sem rótulo de texto; ícone de manômetro; bar conforme \"Druckbereiche\" da página anterior) | [l/min] | l/ha. Códigos de ângulos diferentes impressos no mesmo bloco compartilham a mesma linha de vazões (código \"A / B\"). Blocos 025–05 rotulados \"SC/ST\" no catálogo. corIso derivada do código de tamanho (ISO 10625); cor não impressa como texto.",
+   "tamanhos": [
+    {
+     "codigo": "ST 110-01 / ST 80-01",
+     "corIso": "laranja",
+     "vazoes": {
+      "2.0": 0.32,
+      "2.5": 0.36,
+      "3.0": 0.39,
+      "4.0": 0.45,
+      "5.0": 0.51
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ST 110-015 / ST 80-015",
+     "corIso": "verde",
+     "vazoes": {
+      "2.0": 0.48,
+      "2.5": 0.54,
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ST 110-02 / ST 80-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "2.5": 0.73,
+      "3.0": 0.8,
+      "4.0": 0.92,
+      "5.0": 1.03
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "SC/ST 110-025",
+     "corIso": "lilás",
+     "vazoes": {
+      "2.0": 0.81,
+      "2.5": 0.91,
+      "3.0": 0.99,
+      "4.0": 1.15,
+      "5.0": 1.28
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "SC/ST 110-03 / SC/ST 80-03",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.97,
+      "2.5": 1.08,
+      "3.0": 1.19,
+      "4.0": 1.37,
+      "5.0": 1.53
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "SC/ST 110-04 / SC/ST 80-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "2.5": 1.44,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "SC/ST 110-05 / SC/ST 80-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.61,
+      "2.5": 1.8,
+      "3.0": 1.97,
+      "4.0": 2.28,
+      "5.0": 2.55
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ST 110-06 / ST 80-06",
+     "corIso": "cinza",
+     "vazoes": {
+      "2.0": 1.93,
+      "2.5": 2.16,
+      "3.0": 2.36,
+      "4.0": 2.73,
+      "5.0": 3.05
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ST 110-08 / ST 80-08",
+     "corIso": "branco",
+     "vazoes": {
+      "2.0": 2.58,
+      "2.5": 2.88,
+      "3.0": 3.16,
+      "4.0": 3.65,
+      "5.0": 4.08
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "XDT 130",
+   "tipo": "duplo_leque",
+   "angulos": [
+    130
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1,5–3–8 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.67",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela vertical: Düsengröße | Tropfengröße ISO 25358 | pressão (coluna sem rótulo de texto; ícone de manômetro; bar conforme \"Druckbereiche\" da página anterior) | [l/min] | l/ha. Códigos de ângulos diferentes impressos no mesmo bloco compartilham a mesma linha de vazões (código \"A / B\"). Duplo leque simétrico 40°/40° com Dosierblende. corIso derivada do código de tamanho (ISO 10625); cor não impressa como texto.",
+   "tamanhos": [
+    {
+     "codigo": "XDT 130-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.56,
+      "2.0": 0.65,
+      "3.0": 0.8,
+      "4.0": 0.92,
+      "5.0": 1.03,
+      "6.0": 1.13,
+      "7.0": 1.22,
+      "8.0": 1.3
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XDT 130-025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.5": 0.7,
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.15,
+      "5.0": 1.28,
+      "6.0": 1.4,
+      "7.0": 1.52,
+      "8.0": 1.62
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XDT 130-03",
+     "corIso": "azul",
+     "vazoes": {
+      "1.5": 0.84,
+      "2.0": 0.97,
+      "3.0": 1.19,
+      "4.0": 1.37,
+      "5.0": 1.53,
+      "6.0": 1.68,
+      "7.0": 1.81,
+      "8.0": 1.94
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XDT 130-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.5": 1.12,
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23,
+      "7.0": 2.41,
+      "8.0": 2.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XDT 130-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.5": 1.39,
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.28,
+      "5.0": 2.55,
+      "6.0": 2.79,
+      "7.0": 3.01,
+      "8.0": 3.22
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XDT 130-06",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.5": 1.67,
+      "2.0": 1.93,
+      "3.0": 2.36,
+      "4.0": 2.73,
+      "5.0": 3.05,
+      "6.0": 3.34,
+      "7.0": 3.61,
+      "8.0": 3.86
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XDT 130-08",
+     "corIso": "branco",
+     "vazoes": {
+      "1.5": 2.23,
+      "2.0": 2.58,
+      "3.0": 3.16,
+      "4.0": 3.65,
+      "5.0": 4.08,
+      "6.0": 4.47,
+      "7.0": 4.83,
+      "8.0": 5.16
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "IDTA 120",
+   "tipo": "duplo_leque",
+   "angulos": [
+    120
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1–4–8 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.69",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela vertical: Düsengröße | Tropfengröße ISO 25358 | pressão (coluna sem rótulo de texto; ícone de manômetro; bar conforme \"Druckbereiche\" da página anterior) | [l/min] | l/ha. Códigos de ângulos diferentes impressos no mesmo bloco compartilham a mesma linha de vazões (código \"A / B\"). Duplo leque assimétrico com indução de ar (30°/50°). corIso derivada do código de tamanho (ISO 10625); cor não impressa como texto.",
+   "tamanhos": [
+    {
+     "codigo": "IDTA 120-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.0": 0.46,
+      "1.5": 0.56,
+      "2.0": 0.65,
+      "3.0": 0.8,
+      "4.0": 0.92,
+      "5.0": 1.03,
+      "6.0": 1.13,
+      "7.0": 1.22,
+      "8.0": 1.3
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDTA 120-025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.0": 0.57,
+      "1.5": 0.7,
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.15,
+      "5.0": 1.28,
+      "6.0": 1.4,
+      "7.0": 1.52,
+      "8.0": 1.62
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDTA 120-03",
+     "corIso": "azul",
+     "vazoes": {
+      "1.0": 0.69,
+      "1.5": 0.84,
+      "2.0": 0.97,
+      "3.0": 1.19,
+      "4.0": 1.37,
+      "5.0": 1.53,
+      "6.0": 1.68,
+      "7.0": 1.81,
+      "8.0": 1.94
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDTA 120-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.0": 0.91,
+      "1.5": 1.12,
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23,
+      "7.0": 2.41,
+      "8.0": 2.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDTA 120-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.0": 1.14,
+      "1.5": 1.39,
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.28,
+      "5.0": 2.55,
+      "6.0": 2.79,
+      "7.0": 3.01,
+      "8.0": 3.22
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDTA 120-06",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.0": 1.36,
+      "1.5": 1.67,
+      "2.0": 1.93,
+      "3.0": 2.36,
+      "4.0": 2.73,
+      "5.0": 3.05,
+      "6.0": 3.34,
+      "7.0": 3.61,
+      "8.0": 3.86
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDTA 120-08",
+     "corIso": "branco",
+     "vazoes": {
+      "1.0": 1.82,
+      "1.5": 2.23,
+      "2.0": 2.58,
+      "3.0": 3.16,
+      "4.0": 3.65,
+      "5.0": 4.08,
+      "6.0": 4.47,
+      "7.0": 4.83,
+      "8.0": 5.16
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "IDKT 120",
+   "tipo": "duplo_leque",
+   "angulos": [
+    120
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "IDKT 015 bis -025: 1,5–3–6 bar; IDKT 03 bis -06: 1–1,5–3–6 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.71",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela vertical: Düsengröße | Tropfengröße ISO 25358 | pressão (coluna sem rótulo de texto; ícone de manômetro; bar conforme \"Druckbereiche\" da página anterior) | [l/min] | l/ha. Códigos de ângulos diferentes impressos no mesmo bloco compartilham a mesma linha de vazões (código \"A / B\"). Duplo leque simétrico compacto com indução de ar. corIso derivada do código de tamanho (ISO 10625); cor não impressa como texto.",
+   "tamanhos": [
+    {
+     "codigo": "IDKT 120-015",
+     "corIso": "verde",
+     "vazoes": {
+      "1.5": 0.42,
+      "2.0": 0.48,
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76,
+      "6.0": 0.83
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDKT 120-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.56,
+      "2.0": 0.65,
+      "3.0": 0.8,
+      "4.0": 0.92,
+      "5.0": 1.03,
+      "6.0": 1.13
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDKT 120-025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.5": 0.7,
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.15,
+      "5.0": 1.28,
+      "6.0": 1.4
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDKT 120-03",
+     "corIso": "azul",
+     "vazoes": {
+      "1.0": 0.69,
+      "1.5": 0.84,
+      "2.0": 0.97,
+      "3.0": 1.19,
+      "4.0": 1.37,
+      "5.0": 1.53,
+      "6.0": 1.68
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDKT 120-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.0": 0.91,
+      "1.5": 1.12,
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDKT 120-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.0": 1.14,
+      "1.5": 1.39,
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.28,
+      "5.0": 2.55,
+      "6.0": 2.79
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDKT 120-06",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.0": 1.36,
+      "1.5": 1.67,
+      "2.0": 1.93,
+      "3.0": 2.36,
+      "4.0": 2.73,
+      "5.0": 3.05,
+      "6.0": 3.34
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDKT 120-08",
+     "corIso": "branco",
+     "vazoes": {
+      "1.0": 1.82,
+      "1.5": 2.23,
+      "2.0": 2.58,
+      "3.0": 3.16,
+      "4.0": 3.65,
+      "5.0": 4.08,
+      "6.0": 4.47
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDKT 120-10",
+     "corIso": "azul claro",
+     "vazoes": {
+      "1.0": 2.27,
+      "1.5": 2.79,
+      "2.0": 3.22,
+      "3.0": 3.94,
+      "4.0": 4.55,
+      "5.0": 5.09,
+      "6.0": 5.57
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "DF 120",
+   "tipo": "duplo_leque",
+   "angulos": [
+    120
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "2–3–5 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.73",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras)",
+   "observacoes": "Tabela vertical: Düsengröße | Tropfengröße ISO 25358 | pressão (coluna sem rótulo de texto; ícone de manômetro; bar conforme \"Druckbereiche\" da página anterior) | [l/min] | l/ha. Códigos de ângulos diferentes impressos no mesmo bloco compartilham a mesma linha de vazões (código \"A / B\"). Duplo leque padrão 30°/30°. corIso derivada do código de tamanho (ISO 10625); cor não impressa como texto.",
+   "tamanhos": [
+    {
+     "codigo": "DF 120-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "2.5": 0.73,
+      "3.0": 0.8,
+      "3.5": 0.86,
+      "4.0": 0.92,
+      "4.5": 0.98,
+      "5.0": 1.03
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "DF 120-03",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.97,
+      "2.5": 1.08,
+      "3.0": 1.19,
+      "3.5": 1.28,
+      "4.0": 1.37,
+      "4.5": 1.46,
+      "5.0": 1.53
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "DF 120-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "2.5": 1.44,
+      "3.0": 1.58,
+      "3.5": 1.71,
+      "4.0": 1.82,
+      "4.5": 1.94,
+      "5.0": 2.04
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "DF 120-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.61,
+      "2.5": 1.8,
+      "3.0": 1.97,
+      "3.5": 2.13,
+      "4.0": 2.28,
+      "4.5": 2.42,
+      "5.0": 2.55
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "DF 120-06",
+     "corIso": "cinza",
+     "vazoes": {
+      "2.0": 1.93,
+      "2.5": 2.16,
+      "3.0": 2.36,
+      "3.5": 2.55,
+      "4.0": 2.73,
+      "4.5": 2.9,
+      "5.0": 3.05
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "ID-90 (Raumkulturen)",
+   "tipo": "inducao_ar",
+   "angulos": [
+    90
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "2–8–15–20 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.79",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); tabela horizontal",
+   "observacoes": "Tabela horizontal (Raumkulturen): linha de pressões em bar no topo, vazões [l/min] por tamanho. Códigos de ângulos diferentes impressos no mesmo bloco compartilham a mesma linha de vazões (código \"A / B\"). Mesmo bico da linha ID, tabela para culturas perenes (pomar/vinha) até 20 bar. corIso derivada do código de tamanho (ISO 10625); cor não impressa como texto.",
+   "tamanhos": [
+    {
+     "codigo": "ID-90-01",
+     "corIso": "laranja",
+     "vazoes": {
+      "2.0": 0.32,
+      "3.0": 0.39,
+      "4.0": 0.45,
+      "5.0": 0.51,
+      "6.0": 0.55,
+      "7.0": 0.6,
+      "8.0": 0.64,
+      "9.0": 0.68,
+      "10.0": 0.72,
+      "11.0": 0.75,
+      "12.0": 0.78,
+      "13.0": 0.82,
+      "14.0": 0.85,
+      "15.0": 0.88,
+      "16.0": 0.91,
+      "17.0": 0.93,
+      "19.0": 0.99,
+      "20.0": 1.01
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ID-90-015",
+     "corIso": "verde",
+     "vazoes": {
+      "2.0": 0.48,
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76,
+      "6.0": 0.83,
+      "7.0": 0.9,
+      "8.0": 0.96,
+      "9.0": 1.02,
+      "10.0": 1.07,
+      "11.0": 1.13,
+      "12.0": 1.18,
+      "13.0": 1.22,
+      "14.0": 1.27,
+      "15.0": 1.31,
+      "16.0": 1.36,
+      "17.0": 1.4,
+      "19.0": 1.48,
+      "20.0": 1.52
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ID-90-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "3.0": 0.8,
+      "4.0": 0.92,
+      "5.0": 1.03,
+      "6.0": 1.13,
+      "7.0": 1.22,
+      "8.0": 1.3,
+      "9.0": 1.38,
+      "10.0": 1.45,
+      "11.0": 1.53,
+      "12.0": 1.6,
+      "13.0": 1.67,
+      "14.0": 1.73,
+      "15.0": 1.79,
+      "16.0": 1.85,
+      "17.0": 1.9,
+      "19.0": 2.01,
+      "20.0": 2.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ID-90-025",
+     "corIso": "lilás",
+     "vazoes": {
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.15,
+      "5.0": 1.28,
+      "6.0": 1.4,
+      "7.0": 1.52,
+      "8.0": 1.62,
+      "9.0": 1.71,
+      "10.0": 1.81,
+      "11.0": 1.9,
+      "12.0": 1.98,
+      "13.0": 2.06,
+      "14.0": 2.14,
+      "15.0": 2.21,
+      "16.0": 2.29,
+      "17.0": 2.36,
+      "19.0": 2.49,
+      "20.0": 2.56
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ID-90-03",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.97,
+      "3.0": 1.19,
+      "4.0": 1.37,
+      "5.0": 1.53,
+      "6.0": 1.68,
+      "7.0": 1.81,
+      "8.0": 1.94,
+      "9.0": 2.06,
+      "10.0": 2.17,
+      "11.0": 2.28,
+      "12.0": 2.38,
+      "13.0": 2.48,
+      "14.0": 2.57,
+      "15.0": 2.66,
+      "16.0": 2.75,
+      "17.0": 2.83,
+      "19.0": 2.99,
+      "20.0": 3.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ID-90-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23,
+      "7.0": 2.41,
+      "8.0": 2.58,
+      "9.0": 2.74,
+      "10.0": 2.88,
+      "11.0": 3.03,
+      "12.0": 3.16,
+      "13.0": 3.29,
+      "14.0": 3.41,
+      "15.0": 3.53,
+      "16.0": 3.65,
+      "17.0": 3.76,
+      "19.0": 3.98,
+      "20.0": 4.08
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ID-90-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.28,
+      "5.0": 2.55,
+      "6.0": 2.79,
+      "7.0": 3.01,
+      "8.0": 3.22,
+      "9.0": 3.42,
+      "10.0": 3.6,
+      "11.0": 3.77,
+      "12.0": 3.94,
+      "13.0": 4.1,
+      "14.0": 4.26,
+      "15.0": 4.41,
+      "16.0": 4.55,
+      "17.0": 4.69,
+      "19.0": 4.96,
+      "20.0": 5.09
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ID-90-06",
+     "corIso": "cinza",
+     "vazoes": {
+      "2.0": 1.93,
+      "3.0": 2.36,
+      "4.0": 2.73,
+      "5.0": 3.05,
+      "6.0": 3.34,
+      "7.0": 3.61,
+      "8.0": 3.86,
+      "9.0": 4.09,
+      "10.0": 4.32,
+      "11.0": 4.52,
+      "12.0": 4.72,
+      "13.0": 4.91,
+      "14.0": 5.1,
+      "15.0": 5.28,
+      "16.0": 5.45,
+      "17.0": 5.62,
+      "19.0": 5.94,
+      "20.0": 6.09
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "IDK 90 (Raumkulturen)",
+   "tipo": "inducao_ar",
+   "angulos": [
+    90
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "2–8–15–20 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.81",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); tabela horizontal",
+   "observacoes": "Tabela horizontal (Raumkulturen): linha de pressões em bar no topo, vazões [l/min] por tamanho. Códigos de ângulos diferentes impressos no mesmo bloco compartilham a mesma linha de vazões (código \"A / B\"). Tabela para culturas perenes até 20 bar. corIso derivada do código de tamanho (ISO 10625); cor não impressa como texto.",
+   "tamanhos": [
+    {
+     "codigo": "IDK 90-0067",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 0.22,
+      "3.0": 0.27,
+      "4.0": 0.31,
+      "5.0": 0.35,
+      "6.0": 0.38,
+      "7.0": 0.41,
+      "8.0": 0.44,
+      "9.0": 0.47,
+      "10.0": 0.49,
+      "11.0": 0.52,
+      "12.0": 0.54,
+      "13.0": 0.56,
+      "14.0": 0.58,
+      "15.0": 0.6,
+      "16.0": 0.62,
+      "17.0": 0.64,
+      "19.0": 0.68,
+      "20.0": 0.7
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDK 90-01",
+     "corIso": "laranja",
+     "vazoes": {
+      "2.0": 0.32,
+      "3.0": 0.39,
+      "4.0": 0.45,
+      "5.0": 0.51,
+      "6.0": 0.55,
+      "7.0": 0.6,
+      "8.0": 0.64,
+      "9.0": 0.68,
+      "10.0": 0.72,
+      "11.0": 0.75,
+      "12.0": 0.78,
+      "13.0": 0.82,
+      "14.0": 0.85,
+      "15.0": 0.88,
+      "16.0": 0.91,
+      "17.0": 0.93,
+      "19.0": 0.99,
+      "20.0": 1.01
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDK 90-015",
+     "corIso": "verde",
+     "vazoes": {
+      "2.0": 0.48,
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76,
+      "6.0": 0.83,
+      "7.0": 0.9,
+      "8.0": 0.96,
+      "9.0": 1.02,
+      "10.0": 1.07,
+      "11.0": 1.13,
+      "12.0": 1.18,
+      "13.0": 1.22,
+      "14.0": 1.27,
+      "15.0": 1.31,
+      "16.0": 1.36,
+      "17.0": 1.4,
+      "19.0": 1.48,
+      "20.0": 1.52
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDK 90-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "3.0": 0.8,
+      "4.0": 0.92,
+      "5.0": 1.03,
+      "6.0": 1.13,
+      "7.0": 1.22,
+      "8.0": 1.3,
+      "9.0": 1.38,
+      "10.0": 1.45,
+      "11.0": 1.53,
+      "12.0": 1.6,
+      "13.0": 1.67,
+      "14.0": 1.73,
+      "15.0": 1.79,
+      "16.0": 1.85,
+      "17.0": 1.9,
+      "19.0": 2.01,
+      "20.0": 2.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDK 90-025",
+     "corIso": "lilás",
+     "vazoes": {
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.15,
+      "5.0": 1.28,
+      "6.0": 1.4,
+      "7.0": 1.52,
+      "8.0": 1.62,
+      "9.0": 1.71,
+      "10.0": 1.81,
+      "11.0": 1.9,
+      "12.0": 1.98,
+      "13.0": 2.06,
+      "14.0": 2.14,
+      "15.0": 2.21,
+      "16.0": 2.29,
+      "17.0": 2.36,
+      "19.0": 2.49,
+      "20.0": 2.56
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDK 90-03",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.97,
+      "3.0": 1.19,
+      "4.0": 1.37,
+      "5.0": 1.53,
+      "6.0": 1.68,
+      "7.0": 1.81,
+      "8.0": 1.94,
+      "9.0": 2.06,
+      "10.0": 2.17,
+      "11.0": 2.28,
+      "12.0": 2.38,
+      "13.0": 2.48,
+      "14.0": 2.57,
+      "15.0": 2.66,
+      "16.0": 2.75,
+      "17.0": 2.83,
+      "19.0": 2.99,
+      "20.0": 3.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDK 90-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23,
+      "7.0": 2.41,
+      "8.0": 2.58,
+      "9.0": 2.74,
+      "10.0": 2.88,
+      "11.0": 3.03,
+      "12.0": 3.16,
+      "13.0": 3.29,
+      "14.0": 3.41,
+      "15.0": 3.53,
+      "16.0": 3.65,
+      "17.0": 3.76,
+      "19.0": 3.98,
+      "20.0": 4.08
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDK 90-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.28,
+      "5.0": 2.55,
+      "6.0": 2.79,
+      "7.0": 3.01,
+      "8.0": 3.22,
+      "9.0": 3.42,
+      "10.0": 3.6,
+      "11.0": 3.77,
+      "12.0": 3.94,
+      "13.0": 4.1,
+      "14.0": 4.26,
+      "15.0": 4.41,
+      "16.0": 4.55,
+      "17.0": 4.69,
+      "19.0": 4.96,
+      "20.0": 5.09
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "IDK 90-06",
+     "corIso": "cinza",
+     "vazoes": {
+      "2.0": 1.93,
+      "3.0": 2.36,
+      "4.0": 2.73,
+      "5.0": 3.05,
+      "6.0": 3.34,
+      "7.0": 3.61,
+      "8.0": 3.86,
+      "9.0": 4.09,
+      "10.0": 4.32,
+      "11.0": 4.52,
+      "12.0": 4.72,
+      "13.0": 4.91,
+      "14.0": 5.1,
+      "15.0": 5.28,
+      "16.0": 5.45,
+      "17.0": 5.62,
+      "19.0": 5.94,
+      "20.0": 6.09
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "AD 90 (Raumkulturen)",
+   "tipo": "leque_antideriva",
+   "angulos": [
+    90
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "2–8–15–20 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.83",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); tabela horizontal",
+   "observacoes": "Tabela horizontal (Raumkulturen): linha de pressões em bar no topo, vazões [l/min] por tamanho. Códigos de ângulos diferentes impressos no mesmo bloco compartilham a mesma linha de vazões (código \"A / B\"). Tabela para culturas perenes até 20 bar. corIso derivada do código de tamanho (ISO 10625); cor não impressa como texto.",
+   "tamanhos": [
+    {
+     "codigo": "AD 90-0067",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 0.22,
+      "3.0": 0.27,
+      "4.0": 0.31,
+      "5.0": 0.35,
+      "6.0": 0.38,
+      "7.0": 0.41,
+      "8.0": 0.44,
+      "9.0": 0.47,
+      "10.0": 0.49,
+      "11.0": 0.52,
+      "12.0": 0.54,
+      "13.0": 0.56,
+      "14.0": 0.58,
+      "15.0": 0.6,
+      "16.0": 0.62,
+      "17.0": 0.64,
+      "19.0": 0.68,
+      "20.0": 0.7
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AD 90-01",
+     "corIso": "laranja",
+     "vazoes": {
+      "2.0": 0.32,
+      "3.0": 0.39,
+      "4.0": 0.45,
+      "5.0": 0.51,
+      "6.0": 0.55,
+      "7.0": 0.6,
+      "8.0": 0.64,
+      "9.0": 0.68,
+      "10.0": 0.72,
+      "11.0": 0.75,
+      "12.0": 0.78,
+      "13.0": 0.82,
+      "14.0": 0.85,
+      "15.0": 0.88,
+      "16.0": 0.91,
+      "17.0": 0.93,
+      "19.0": 0.99,
+      "20.0": 1.01
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AD 90-015",
+     "corIso": "verde",
+     "vazoes": {
+      "2.0": 0.48,
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76,
+      "6.0": 0.83,
+      "7.0": 0.9,
+      "8.0": 0.96,
+      "9.0": 1.02,
+      "10.0": 1.07,
+      "11.0": 1.13,
+      "12.0": 1.18,
+      "13.0": 1.22,
+      "14.0": 1.27,
+      "15.0": 1.31,
+      "16.0": 1.36,
+      "17.0": 1.4,
+      "19.0": 1.48,
+      "20.0": 1.52
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AD 90-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "3.0": 0.8,
+      "4.0": 0.92,
+      "5.0": 1.03,
+      "6.0": 1.13,
+      "7.0": 1.22,
+      "8.0": 1.3,
+      "9.0": 1.38,
+      "10.0": 1.45,
+      "11.0": 1.53,
+      "12.0": 1.6,
+      "13.0": 1.67,
+      "14.0": 1.73,
+      "15.0": 1.79,
+      "16.0": 1.85,
+      "17.0": 1.9,
+      "19.0": 2.01,
+      "20.0": 2.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AD 90-03",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.97,
+      "3.0": 1.19,
+      "4.0": 1.37,
+      "5.0": 1.53,
+      "6.0": 1.68,
+      "7.0": 1.81,
+      "8.0": 1.94,
+      "9.0": 2.06,
+      "10.0": 2.17,
+      "11.0": 2.28,
+      "12.0": 2.38,
+      "13.0": 2.48,
+      "14.0": 2.57,
+      "15.0": 2.66,
+      "16.0": 2.75,
+      "17.0": 2.83,
+      "19.0": 2.99,
+      "20.0": 3.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AD 90-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23,
+      "7.0": 2.41,
+      "8.0": 2.58,
+      "9.0": 2.74,
+      "10.0": 2.88,
+      "11.0": 3.03,
+      "12.0": 3.16,
+      "13.0": 3.29,
+      "14.0": 3.41,
+      "15.0": 3.53,
+      "16.0": 3.65,
+      "17.0": 3.76,
+      "19.0": 3.98,
+      "20.0": 4.08
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "TR 80 / TR 60",
+   "tipo": "cone_vazio",
+   "angulos": [
+    80,
+    60
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "TR 80: 3–8–20 bar; TR 60: 2–8–20 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.85",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); tabela horizontal",
+   "observacoes": "Tabela horizontal (Raumkulturen): linha de pressões em bar no topo, vazões [l/min] por tamanho. Códigos de ângulos diferentes impressos no mesmo bloco compartilham a mesma linha de vazões (código \"A / B\"). Cone vazio (cerâmica). Tamanhos 005 e 0067 sem cor ISO. corIso derivada do código de tamanho (ISO 10625); cor não impressa como texto.",
+   "tamanhos": [
+    {
+     "codigo": "TR 60-005 / TR 80-005",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 0.16,
+      "3.0": 0.2,
+      "4.0": 0.23,
+      "5.0": 0.25,
+      "6.0": 0.28,
+      "7.0": 0.3,
+      "8.0": 0.32,
+      "9.0": 0.34,
+      "10.0": 0.36,
+      "11.0": 0.38,
+      "12.0": 0.39,
+      "13.0": 0.41,
+      "14.0": 0.42,
+      "15.0": 0.44,
+      "16.0": 0.45,
+      "17.0": 0.47,
+      "19.0": 0.49,
+      "20.0": 0.51
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR 60-0067 / TR 80-0067",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 0.22,
+      "3.0": 0.27,
+      "4.0": 0.31,
+      "5.0": 0.35,
+      "6.0": 0.38,
+      "7.0": 0.41,
+      "8.0": 0.44,
+      "9.0": 0.47,
+      "10.0": 0.49,
+      "11.0": 0.52,
+      "12.0": 0.54,
+      "13.0": 0.56,
+      "14.0": 0.58,
+      "15.0": 0.6,
+      "16.0": 0.62,
+      "17.0": 0.64,
+      "19.0": 0.68,
+      "20.0": 0.7
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR 60-01 / TR 80-01",
+     "corIso": "laranja",
+     "vazoes": {
+      "2.0": 0.32,
+      "3.0": 0.39,
+      "4.0": 0.45,
+      "5.0": 0.51,
+      "6.0": 0.55,
+      "7.0": 0.6,
+      "8.0": 0.64,
+      "9.0": 0.68,
+      "10.0": 0.72,
+      "11.0": 0.75,
+      "12.0": 0.78,
+      "13.0": 0.82,
+      "14.0": 0.85,
+      "15.0": 0.88,
+      "16.0": 0.91,
+      "17.0": 0.93,
+      "19.0": 0.99,
+      "20.0": 1.01
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR 60-015 / TR 80-015",
+     "corIso": "verde",
+     "vazoes": {
+      "2.0": 0.48,
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76,
+      "6.0": 0.83,
+      "7.0": 0.9,
+      "8.0": 0.96,
+      "9.0": 1.02,
+      "10.0": 1.07,
+      "11.0": 1.13,
+      "12.0": 1.18,
+      "13.0": 1.22,
+      "14.0": 1.27,
+      "15.0": 1.31,
+      "16.0": 1.36,
+      "17.0": 1.4,
+      "19.0": 1.48,
+      "20.0": 1.52
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR 60-02 / TR 80-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "3.0": 0.8,
+      "4.0": 0.92,
+      "5.0": 1.03,
+      "6.0": 1.13,
+      "7.0": 1.22,
+      "8.0": 1.3,
+      "9.0": 1.38,
+      "10.0": 1.45,
+      "11.0": 1.53,
+      "12.0": 1.6,
+      "13.0": 1.67,
+      "14.0": 1.73,
+      "15.0": 1.79,
+      "16.0": 1.85,
+      "17.0": 1.9,
+      "19.0": 2.01,
+      "20.0": 2.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR 60-025",
+     "corIso": "lilás",
+     "vazoes": {
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.15,
+      "5.0": 1.28,
+      "6.0": 1.4,
+      "7.0": 1.52,
+      "8.0": 1.62,
+      "9.0": 1.71,
+      "10.0": 1.81,
+      "11.0": 1.9,
+      "12.0": 1.98,
+      "13.0": 2.06,
+      "14.0": 2.14,
+      "15.0": 2.21,
+      "16.0": 2.29,
+      "17.0": 2.36,
+      "19.0": 2.49,
+      "20.0": 2.56
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR 60-03 / TR 80-03",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.97,
+      "3.0": 1.19,
+      "4.0": 1.37,
+      "5.0": 1.53,
+      "6.0": 1.68,
+      "7.0": 1.81,
+      "8.0": 1.94,
+      "9.0": 2.06,
+      "10.0": 2.17,
+      "11.0": 2.28,
+      "12.0": 2.38,
+      "13.0": 2.48,
+      "14.0": 2.57,
+      "15.0": 2.66,
+      "16.0": 2.75,
+      "17.0": 2.83,
+      "19.0": 2.99,
+      "20.0": 3.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR 60-04 / TR 80-04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23,
+      "7.0": 2.41,
+      "8.0": 2.58,
+      "9.0": 2.74,
+      "10.0": 2.88,
+      "11.0": 3.03,
+      "12.0": 3.16,
+      "13.0": 3.29,
+      "14.0": 3.41,
+      "15.0": 3.53,
+      "16.0": 3.65,
+      "17.0": 3.76,
+      "19.0": 3.98,
+      "20.0": 4.08
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TR 60-05 / TR 80-05",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.28,
+      "5.0": 2.55,
+      "6.0": 2.79,
+      "7.0": 3.01,
+      "8.0": 3.22,
+      "9.0": 3.42,
+      "10.0": 3.6,
+      "11.0": 3.77,
+      "12.0": 3.94,
+      "13.0": 4.1,
+      "14.0": 4.26,
+      "15.0": 4.41,
+      "16.0": 4.55,
+      "17.0": 4.69,
+      "19.0": 4.96,
+      "20.0": 5.09
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "ITR 80",
+   "tipo": "cone_vazio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "3–10–30 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.87",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); tabela horizontal",
+   "observacoes": "Tabela horizontal (Raumkulturen): linha de pressões em bar no topo, vazões [l/min] por tamanho. Códigos de ângulos diferentes impressos no mesmo bloco compartilham a mesma linha de vazões (código \"A / B\"). Cone vazio com indução de ar; tabela impressa de 3 a 20 bar. corIso derivada do código de tamanho (ISO 10625); cor não impressa como texto.",
+   "tamanhos": [
+    {
+     "codigo": "ITR 80-01",
+     "corIso": "laranja",
+     "vazoes": {
+      "3.0": 0.39,
+      "4.0": 0.45,
+      "5.0": 0.51,
+      "6.0": 0.55,
+      "7.0": 0.6,
+      "8.0": 0.64,
+      "9.0": 0.68,
+      "10.0": 0.72,
+      "11.0": 0.75,
+      "12.0": 0.78,
+      "13.0": 0.82,
+      "14.0": 0.85,
+      "15.0": 0.88,
+      "16.0": 0.91,
+      "17.0": 0.93,
+      "19.0": 0.99,
+      "20.0": 1.01
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ITR 80-015",
+     "corIso": "verde",
+     "vazoes": {
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76,
+      "6.0": 0.83,
+      "7.0": 0.9,
+      "8.0": 0.96,
+      "9.0": 1.02,
+      "10.0": 1.07,
+      "11.0": 1.13,
+      "12.0": 1.18,
+      "13.0": 1.22,
+      "14.0": 1.27,
+      "15.0": 1.31,
+      "16.0": 1.36,
+      "17.0": 1.4,
+      "19.0": 1.48,
+      "20.0": 1.52
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "ITR 80-02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "3.0": 0.8,
+      "4.0": 0.92,
+      "5.0": 1.03,
+      "6.0": 1.13,
+      "7.0": 1.22,
+      "8.0": 1.3,
+      "9.0": 1.38,
+      "10.0": 1.45,
+      "11.0": 1.53,
+      "12.0": 1.6,
+      "13.0": 1.67,
+      "14.0": 1.73,
+      "15.0": 1.79,
+      "16.0": 1.85,
+      "17.0": 1.9,
+      "19.0": 2.01,
+      "20.0": 2.07
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  }
+ ]
+}

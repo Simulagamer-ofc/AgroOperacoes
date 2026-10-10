@@ -1,0 +1,5003 @@
+{
+ "fabricante": "TeeJet",
+ "razaoSocial": "TeeJet Technologies (Spraying Systems Co.)",
+ "nota": "Fonte: TeeJet Catalog 52-M (métrico; pressão em bar, vazão em l/min), seções 03 (Broadcast Nozzles) e 06 (Air Blast Nozzles), baixadas de teejet.com/resources/catalogs. Valores copiados como impressos; nenhum valor calculado ou convertido. Chaves de pressão como impressas (ex. \"1.0\").",
+ "fontes": [
+  {
+   "id": "F1",
+   "titulo": "TeeJet Technologies Catalog 52-M (metric) – Section 03: Broadcast Nozzles",
+   "url": "https://www.teejet.com/-/media/dam/agricultural/usa/sales-material/catalog/cat52-m_03-broadcast_nozzles.pdf",
+   "ano": "2026",
+   "anoObs": "Catálogo 52-M; PDF criado 2026-05-22 (metadados). Páginas impressas 14–57 = PDF p.1–44 (impressa = PDF + 13).",
+   "arquivoLocal": "pontas/teejet/pdf/cat52-m_03-broadcast_nozzles.pdf"
+  },
+  {
+   "id": "F2",
+   "titulo": "TeeJet Technologies Catalog 52-M (metric) – Section 06: Air Blast Nozzles",
+   "url": "https://www.teejet.com/-/media/dam/agricultural/usa/sales-material/catalog/cat52-m_06-air_blast_nozzles.pdf",
+   "ano": "2026",
+   "anoObs": "Catálogo 52-M; PDF criado 2026-05-22 (metadados). Página impressa = PDF + 79.",
+   "arquivoLocal": "pontas/teejet/pdf/cat52-m_06-air_blast_nozzles.pdf"
+  }
+ ],
+ "linhas": [
+  {
+   "linha": "APTJ",
+   "tipo": "duplo_leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "1.5 a 7 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.2",
+   "paginaImpressa": "15",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "Ponta dupla (twin) não-indução para PWM; catálogo: \"Non-air induction Twin spray tip\". Nome comercial é logotipo (não extraível). corIso derivada do código de vazão ISO (ISO 10625); a cor não é texto no PDF.",
+   "tamanhos": [
+    {
+     "codigo": "APTJ-110015VP",
+     "corIso": "verde",
+     "vazoes": {
+      "1.5": 0.45,
+      "2.0": 0.5,
+      "3.0": 0.59,
+      "4.0": 0.65,
+      "5.0": 0.71,
+      "6.0": 0.76,
+      "7.0": 0.81
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APTJ-11002VP",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.6,
+      "2.0": 0.67,
+      "3.0": 0.78,
+      "4.0": 0.87,
+      "5.0": 0.95,
+      "6.0": 1.01,
+      "7.0": 1.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APTJ-110025VP",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.5": 0.75,
+      "2.0": 0.84,
+      "3.0": 0.98,
+      "4.0": 1.09,
+      "5.0": 1.19,
+      "6.0": 1.27,
+      "7.0": 1.35
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APTJ-11003VP",
+     "corIso": "azul",
+     "vazoes": {
+      "1.5": 0.91,
+      "2.0": 1.01,
+      "3.0": 1.17,
+      "4.0": 1.3,
+      "5.0": 1.42,
+      "6.0": 1.52,
+      "7.0": 1.6
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APTJ-11004VP",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.5": 1.2,
+      "2.0": 1.34,
+      "3.0": 1.56,
+      "4.0": 1.74,
+      "5.0": 1.89,
+      "6.0": 2.03,
+      "7.0": 2.15
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APTJ-11005VP",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.5": 1.48,
+      "2.0": 1.66,
+      "3.0": 1.96,
+      "4.0": 2.2,
+      "5.0": 2.4,
+      "6.0": 2.58,
+      "7.0": 2.75
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APTJ-11006VP",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.5": 1.76,
+      "2.0": 1.98,
+      "3.0": 2.35,
+      "4.0": 2.65,
+      "5.0": 2.91,
+      "6.0": 3.14,
+      "7.0": 3.35
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APTJ-11008VP",
+     "corIso": "branco",
+     "vazoes": {
+      "1.5": 2.34,
+      "2.0": 2.64,
+      "3.0": 3.14,
+      "4.0": 3.55,
+      "5.0": 3.9,
+      "6.0": 4.22,
+      "7.0": 4.51
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APTJ-11010VP",
+     "corIso": "azul claro",
+     "vazoes": {
+      "1.5": 2.9,
+      "2.0": 3.28,
+      "3.0": 3.92,
+      "4.0": 4.45,
+      "5.0": 4.91,
+      "6.0": 5.32,
+      "7.0": 5.69
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "APTJ-11012VP",
+     "corIso": null,
+     "vazoes": {
+      "1.5": 3.51,
+      "2.0": 3.97,
+      "3.0": 4.71,
+      "4.0": 5.31,
+      "5.0": 5.84,
+      "6.0": 6.31,
+      "7.0": 6.73
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "TT",
+   "tipo": "leque_antideriva",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "1 a 6 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.4",
+   "paginaImpressa": "17",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "Turbo TeeJet (leque de ângulo amplo, 15° de inclinação); catálogo não menciona pré-orifício. corIso derivada do código de vazão ISO (ISO 10625); a cor não é texto no PDF.",
+   "tamanhos": [
+    {
+     "codigo": "TT11001",
+     "corIso": "laranja",
+     "vazoes": {
+      "1.0": 0.23,
+      "2.0": 0.32,
+      "3.0": 0.39,
+      "4.0": 0.45,
+      "5.0": 0.5,
+      "6.0": 0.55
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TT110015",
+     "corIso": "verde",
+     "vazoes": {
+      "1.0": 0.34,
+      "2.0": 0.48,
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76,
+      "6.0": 0.83
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TT11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.0": 0.46,
+      "2.0": 0.65,
+      "3.0": 0.79,
+      "4.0": 0.91,
+      "5.0": 1.02,
+      "6.0": 1.12
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TT110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.0": 0.57,
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.14,
+      "5.0": 1.28,
+      "6.0": 1.4
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TT11003",
+     "corIso": "azul",
+     "vazoes": {
+      "1.0": 0.68,
+      "2.0": 0.96,
+      "3.0": 1.18,
+      "4.0": 1.36,
+      "5.0": 1.52,
+      "6.0": 1.67
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TT11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.0": 0.91,
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TT11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.0": 1.14,
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.27,
+      "5.0": 2.54,
+      "6.0": 2.79
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TT11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.0": 1.37,
+      "2.0": 1.94,
+      "3.0": 2.37,
+      "4.0": 2.74,
+      "5.0": 3.06,
+      "6.0": 3.35
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TT11008",
+     "corIso": "branco",
+     "vazoes": {
+      "1.0": 1.82,
+      "2.0": 2.58,
+      "3.0": 3.16,
+      "4.0": 3.65,
+      "5.0": 4.08,
+      "6.0": 4.47
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TT11010",
+     "corIso": "azul claro",
+     "vazoes": {
+      "1.0": 2.28,
+      "2.0": 3.23,
+      "3.0": 3.95,
+      "4.0": 4.56,
+      "5.0": 5.1,
+      "6.0": 5.59
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TT11012",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 2.73,
+      "2.0": 3.86,
+      "3.0": 4.73,
+      "4.0": 5.46,
+      "5.0": 6.11,
+      "6.0": 6.69
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "AIXR",
+   "tipo": "inducao_ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1 a 6 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.6",
+   "paginaImpressa": "19",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "AIXR (indução de ar, pré-orifício removível). corIso derivada do código de vazão ISO (ISO 10625); a cor não é texto no PDF.",
+   "tamanhos": [
+    {
+     "codigo": "AIXR110015",
+     "corIso": "verde",
+     "vazoes": {
+      "1.0": 0.34,
+      "2.0": 0.48,
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76,
+      "6.0": 0.83
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AIXR11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.0": 0.46,
+      "2.0": 0.65,
+      "3.0": 0.79,
+      "4.0": 0.91,
+      "5.0": 1.02,
+      "6.0": 1.12
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AIXR110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.0": 0.57,
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.14,
+      "5.0": 1.28,
+      "6.0": 1.4
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AIXR11003",
+     "corIso": "azul",
+     "vazoes": {
+      "1.0": 0.68,
+      "2.0": 0.96,
+      "3.0": 1.18,
+      "4.0": 1.36,
+      "5.0": 1.52,
+      "6.0": 1.67
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AIXR11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.0": 0.91,
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AIXR11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.0": 1.14,
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.27,
+      "5.0": 2.54,
+      "6.0": 2.79
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AIXR11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.0": 1.37,
+      "2.0": 1.94,
+      "3.0": 2.37,
+      "4.0": 2.74,
+      "5.0": 3.06,
+      "6.0": 3.35
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AIXR11008",
+     "corIso": "branco",
+     "vazoes": {
+      "1.0": 1.82,
+      "2.0": 2.58,
+      "3.0": 3.16,
+      "4.0": 3.65,
+      "5.0": 4.08,
+      "6.0": 4.47
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AIXR11010",
+     "corIso": "azul claro",
+     "vazoes": {
+      "1.0": 2.28,
+      "2.0": 3.23,
+      "3.0": 3.95,
+      "4.0": 4.56,
+      "5.0": 5.1,
+      "6.0": 5.59
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "AI",
+   "tipo": "inducao_ar",
+   "angulos": [
+    80,
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "2 a 8 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.8",
+   "paginaImpressa": "21",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "AI TeeJet; o catálogo lista 80° e 110° na mesma linha da tabela (mesmas vazões) — gerados códigos separados como impresso. AI11008 só em 110°. corIso derivada do código de vazão ISO (ISO 10625); a cor não é texto no PDF.",
+   "tamanhos": [
+    {
+     "codigo": "AI80015",
+     "corIso": "verde",
+     "vazoes": {
+      "2.0": 0.48,
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76,
+      "6.0": 0.83,
+      "7.0": 0.9,
+      "8.0": 0.96
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI110015",
+     "corIso": "verde",
+     "vazoes": {
+      "2.0": 0.48,
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76,
+      "6.0": 0.83,
+      "7.0": 0.9,
+      "8.0": 0.96
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "3.0": 0.79,
+      "4.0": 0.91,
+      "5.0": 1.02,
+      "6.0": 1.12,
+      "7.0": 1.21,
+      "8.0": 1.29
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "3.0": 0.79,
+      "4.0": 0.91,
+      "5.0": 1.02,
+      "6.0": 1.12,
+      "7.0": 1.21,
+      "8.0": 1.29
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI80025",
+     "corIso": "lilás",
+     "vazoes": {
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.14,
+      "5.0": 1.28,
+      "6.0": 1.4,
+      "7.0": 1.51,
+      "8.0": 1.62
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.14,
+      "5.0": 1.28,
+      "6.0": 1.4,
+      "7.0": 1.51,
+      "8.0": 1.62
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI8003",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.96,
+      "3.0": 1.18,
+      "4.0": 1.36,
+      "5.0": 1.52,
+      "6.0": 1.67,
+      "7.0": 1.8,
+      "8.0": 1.93
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI11003",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.96,
+      "3.0": 1.18,
+      "4.0": 1.36,
+      "5.0": 1.52,
+      "6.0": 1.67,
+      "7.0": 1.8,
+      "8.0": 1.93
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23,
+      "7.0": 2.41,
+      "8.0": 2.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23,
+      "7.0": 2.41,
+      "8.0": 2.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI8005",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.27,
+      "5.0": 2.54,
+      "6.0": 2.79,
+      "7.0": 3.01,
+      "8.0": 3.22
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.27,
+      "5.0": 2.54,
+      "6.0": 2.79,
+      "7.0": 3.01,
+      "8.0": 3.22
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI8006",
+     "corIso": "cinza",
+     "vazoes": {
+      "2.0": 1.94,
+      "3.0": 2.37,
+      "4.0": 2.74,
+      "5.0": 3.06,
+      "6.0": 3.35,
+      "7.0": 3.62,
+      "8.0": 3.87
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "2.0": 1.94,
+      "3.0": 2.37,
+      "4.0": 2.74,
+      "5.0": 3.06,
+      "6.0": 3.35,
+      "7.0": 3.62,
+      "8.0": 3.87
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI11008",
+     "corIso": "branco",
+     "vazoes": {
+      "2.0": 2.58,
+      "3.0": 3.16,
+      "4.0": 3.65,
+      "5.0": 4.08,
+      "6.0": 4.47,
+      "7.0": 4.83,
+      "8.0": 5.16
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "AIC",
+   "tipo": "inducao_ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "2 a 8 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.10",
+   "paginaImpressa": "23",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "AIC TeeJet (indução de ar). corIso derivada do código de vazão ISO (ISO 10625); a cor não é texto no PDF.",
+   "tamanhos": [
+    {
+     "codigo": "AIC110015",
+     "corIso": "verde",
+     "vazoes": {
+      "2.0": 0.48,
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76,
+      "6.0": 0.83,
+      "7.0": 0.9,
+      "8.0": 0.96
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AIC11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "3.0": 0.79,
+      "4.0": 0.91,
+      "5.0": 1.02,
+      "6.0": 1.12,
+      "7.0": 1.21,
+      "8.0": 1.29
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AIC110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.14,
+      "5.0": 1.28,
+      "6.0": 1.4,
+      "7.0": 1.51,
+      "8.0": 1.62
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AIC11003",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.96,
+      "3.0": 1.18,
+      "4.0": 1.36,
+      "5.0": 1.52,
+      "6.0": 1.67,
+      "7.0": 1.8,
+      "8.0": 1.93
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AIC11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23,
+      "7.0": 2.41,
+      "8.0": 2.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AIC11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.27,
+      "5.0": 2.54,
+      "6.0": 2.79,
+      "7.0": 3.01,
+      "8.0": 3.22
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AIC11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "2.0": 1.94,
+      "3.0": 2.37,
+      "4.0": 2.74,
+      "5.0": 3.06,
+      "6.0": 3.35,
+      "7.0": 3.62,
+      "8.0": 3.87
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AIC11008",
+     "corIso": "branco",
+     "vazoes": {
+      "2.0": 2.58,
+      "3.0": 3.16,
+      "4.0": 3.65,
+      "5.0": 4.08,
+      "6.0": 4.47,
+      "7.0": 4.83,
+      "8.0": 5.16
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AIC11010",
+     "corIso": "azul claro",
+     "vazoes": {
+      "2.0": 3.23,
+      "3.0": 3.95,
+      "4.0": 4.56,
+      "5.0": 5.1,
+      "6.0": 5.59,
+      "7.0": 6.03,
+      "8.0": 6.45
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AIC11015",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 4.83,
+      "3.0": 5.92,
+      "4.0": 6.84,
+      "5.0": 7.64,
+      "6.0": 8.37,
+      "7.0": 9.04,
+      "8.0": 9.67
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "TTI",
+   "tipo": "inducao_ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1 a 7 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.12",
+   "paginaImpressa": "25",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "Turbo TeeJet Induction. corIso derivada do código de vazão ISO (ISO 10625); a cor não é texto no PDF. ATENÇÃO TTI11010: PROVÁVEL ERRO DE IMPRESSÃO NO CATÁLOGO: de 2.0 a 7.0 bar as vazões impressas (4.83…9.04) são as da capacidade 15 (ex. XR11015), não 10; apenas 1.0 bar (2.28) é coerente com tamanho 10. Idêntico no Catálogo 52-PT (2024). Copiado como impresso — NÃO usar para calibração sem confirmar com a TeeJet.",
+   "tamanhos": [
+    {
+     "codigo": "TTI11001",
+     "corIso": "laranja",
+     "vazoes": {
+      "1.0": 0.23,
+      "2.0": 0.32,
+      "3.0": 0.39,
+      "4.0": 0.45,
+      "5.0": 0.5,
+      "6.0": 0.55,
+      "7.0": 0.6
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTI110015",
+     "corIso": "verde",
+     "vazoes": {
+      "1.0": 0.34,
+      "2.0": 0.48,
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76,
+      "6.0": 0.83,
+      "7.0": 0.9
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTI11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.0": 0.46,
+      "2.0": 0.65,
+      "3.0": 0.79,
+      "4.0": 0.91,
+      "5.0": 1.02,
+      "6.0": 1.12,
+      "7.0": 1.21
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTI110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.0": 0.57,
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.14,
+      "5.0": 1.28,
+      "6.0": 1.4,
+      "7.0": 1.51
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTI11003",
+     "corIso": "azul",
+     "vazoes": {
+      "1.0": 0.68,
+      "2.0": 0.96,
+      "3.0": 1.18,
+      "4.0": 1.36,
+      "5.0": 1.52,
+      "6.0": 1.67,
+      "7.0": 1.8
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTI11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.0": 0.91,
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23,
+      "7.0": 2.41
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTI11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.0": 1.14,
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.27,
+      "5.0": 2.54,
+      "6.0": 2.79,
+      "7.0": 3.01
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTI11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.0": 1.37,
+      "2.0": 1.94,
+      "3.0": 2.37,
+      "4.0": 2.74,
+      "5.0": 3.06,
+      "6.0": 3.35,
+      "7.0": 3.62
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTI11008",
+     "corIso": "branco",
+     "vazoes": {
+      "1.0": 1.82,
+      "2.0": 2.58,
+      "3.0": 3.16,
+      "4.0": 3.65,
+      "5.0": 4.08,
+      "6.0": 4.47,
+      "7.0": 4.83
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTI11010",
+     "corIso": "azul claro",
+     "vazoes": {
+      "1.0": 2.28,
+      "2.0": 4.83,
+      "3.0": 5.92,
+      "4.0": 6.84,
+      "5.0": 7.64,
+      "6.0": 8.37,
+      "7.0": 9.04
+     },
+     "unidade": "L/min por bar",
+     "alerta": "PROVÁVEL ERRO DE IMPRESSÃO NO CATÁLOGO: de 2.0 a 7.0 bar as vazões impressas (4.83…9.04) são as da capacidade 15 (ex. XR11015), não 10; apenas 1.0 bar (2.28) é coerente com tamanho 10. Idêntico no Catálogo 52-PT (2024). Copiado como impresso — NÃO usar para calibração sem confirmar com a TeeJet."
+    }
+   ]
+  },
+  {
+   "linha": "TTI60",
+   "tipo": "inducao_ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1.5 a 7 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.14",
+   "paginaImpressa": "27",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "Turbo TeeJet Induction duplo (twin, 60° entre leques); tipo registrado como indução de ar. corIso derivada do código de vazão ISO (ISO 10625); a cor não é texto no PDF.",
+   "tamanhos": [
+    {
+     "codigo": "TTI60-11002VP",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.56,
+      "2.0": 0.65,
+      "3.0": 0.79,
+      "4.0": 0.91,
+      "5.0": 1.02,
+      "6.0": 1.12,
+      "7.0": 1.21
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTI60-110025VP",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.5": 0.7,
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.14,
+      "5.0": 1.28,
+      "6.0": 1.4,
+      "7.0": 1.51
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTI60-11003VP",
+     "corIso": "azul",
+     "vazoes": {
+      "1.5": 0.83,
+      "2.0": 0.96,
+      "3.0": 1.18,
+      "4.0": 1.36,
+      "5.0": 1.52,
+      "6.0": 1.67,
+      "7.0": 1.8
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTI60-11004VP",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.5": 1.12,
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23,
+      "7.0": 2.41
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTI60-11005VP",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.5": 1.39,
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.27,
+      "5.0": 2.54,
+      "6.0": 2.79,
+      "7.0": 3.01
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTI60-11006VP",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.5": 1.68,
+      "2.0": 1.94,
+      "3.0": 2.37,
+      "4.0": 2.74,
+      "5.0": 3.06,
+      "6.0": 3.35,
+      "7.0": 3.62
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTI60-11008VP",
+     "corIso": "branco",
+     "vazoes": {
+      "1.5": 2.23,
+      "2.0": 2.58,
+      "3.0": 3.16,
+      "4.0": 3.65,
+      "5.0": 4.08,
+      "6.0": 4.47,
+      "7.0": 4.83
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "XR",
+   "tipo": "leque",
+   "angulos": [
+    80,
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "1 a 4 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.16",
+   "paginaImpressa": "29",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "XR TeeJet; 80° e 110° compartilham a mesma linha da tabela — códigos separados como impresso. XR80035 só 80°. 10 e 15 (†) somente em aço inox. corIso derivada do código de vazão ISO (ISO 10625); a cor não é texto no PDF.",
+   "tamanhos": [
+    {
+     "codigo": "XR8001",
+     "corIso": "laranja",
+     "vazoes": {
+      "1.0": 0.23,
+      "1.5": 0.28,
+      "2.0": 0.32,
+      "2.5": 0.36,
+      "3.0": 0.39,
+      "4.0": 0.45
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR11001",
+     "corIso": "laranja",
+     "vazoes": {
+      "1.0": 0.23,
+      "1.5": 0.28,
+      "2.0": 0.32,
+      "2.5": 0.36,
+      "3.0": 0.39,
+      "4.0": 0.45
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR80015",
+     "corIso": "verde",
+     "vazoes": {
+      "1.0": 0.34,
+      "1.5": 0.42,
+      "2.0": 0.48,
+      "2.5": 0.54,
+      "3.0": 0.59,
+      "4.0": 0.68
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR110015",
+     "corIso": "verde",
+     "vazoes": {
+      "1.0": 0.34,
+      "1.5": 0.42,
+      "2.0": 0.48,
+      "2.5": 0.54,
+      "3.0": 0.59,
+      "4.0": 0.68
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.0": 0.46,
+      "1.5": 0.56,
+      "2.0": 0.65,
+      "2.5": 0.72,
+      "3.0": 0.79,
+      "4.0": 0.91
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.0": 0.46,
+      "1.5": 0.56,
+      "2.0": 0.65,
+      "2.5": 0.72,
+      "3.0": 0.79,
+      "4.0": 0.91
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR80025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.0": 0.57,
+      "1.5": 0.7,
+      "2.0": 0.81,
+      "2.5": 0.9,
+      "3.0": 0.99,
+      "4.0": 1.14
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.0": 0.57,
+      "1.5": 0.7,
+      "2.0": 0.81,
+      "2.5": 0.9,
+      "3.0": 0.99,
+      "4.0": 1.14
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR8003",
+     "corIso": "azul",
+     "vazoes": {
+      "1.0": 0.68,
+      "1.5": 0.83,
+      "2.0": 0.96,
+      "2.5": 1.08,
+      "3.0": 1.18,
+      "4.0": 1.36
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR11003",
+     "corIso": "azul",
+     "vazoes": {
+      "1.0": 0.68,
+      "1.5": 0.83,
+      "2.0": 0.96,
+      "2.5": 1.08,
+      "3.0": 1.18,
+      "4.0": 1.36
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR80035",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 0.8,
+      "1.5": 0.98,
+      "2.0": 1.13,
+      "2.5": 1.26,
+      "3.0": 1.38,
+      "4.0": 1.59
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.0": 0.91,
+      "1.5": 1.12,
+      "2.0": 1.29,
+      "2.5": 1.44,
+      "3.0": 1.58,
+      "4.0": 1.82
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.0": 0.91,
+      "1.5": 1.12,
+      "2.0": 1.29,
+      "2.5": 1.44,
+      "3.0": 1.58,
+      "4.0": 1.82
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR8005",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.0": 1.14,
+      "1.5": 1.39,
+      "2.0": 1.61,
+      "2.5": 1.8,
+      "3.0": 1.97,
+      "4.0": 2.27
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.0": 1.14,
+      "1.5": 1.39,
+      "2.0": 1.61,
+      "2.5": 1.8,
+      "3.0": 1.97,
+      "4.0": 2.27
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR8006",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.0": 1.37,
+      "1.5": 1.68,
+      "2.0": 1.94,
+      "2.5": 2.16,
+      "3.0": 2.37,
+      "4.0": 2.74
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.0": 1.37,
+      "1.5": 1.68,
+      "2.0": 1.94,
+      "2.5": 2.16,
+      "3.0": 2.37,
+      "4.0": 2.74
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR8008",
+     "corIso": "branco",
+     "vazoes": {
+      "1.0": 1.82,
+      "1.5": 2.23,
+      "2.0": 2.58,
+      "2.5": 2.88,
+      "3.0": 3.16,
+      "4.0": 3.65
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR11008",
+     "corIso": "branco",
+     "vazoes": {
+      "1.0": 1.82,
+      "1.5": 2.23,
+      "2.0": 2.58,
+      "2.5": 2.88,
+      "3.0": 3.16,
+      "4.0": 3.65
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR8010",
+     "corIso": "azul claro",
+     "vazoes": {
+      "1.0": 2.28,
+      "1.5": 2.79,
+      "2.0": 3.23,
+      "2.5": 3.61,
+      "3.0": 3.95,
+      "4.0": 4.56
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR11010",
+     "corIso": "azul claro",
+     "vazoes": {
+      "1.0": 2.28,
+      "1.5": 2.79,
+      "2.0": 3.23,
+      "2.5": 3.61,
+      "3.0": 3.95,
+      "4.0": 4.56
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR8015",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 3.42,
+      "1.5": 4.19,
+      "2.0": 4.83,
+      "2.5": 5.4,
+      "3.0": 5.92,
+      "4.0": 6.84
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR11015",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 3.42,
+      "1.5": 4.19,
+      "2.0": 4.83,
+      "2.5": 5.4,
+      "3.0": 5.92,
+      "4.0": 6.84
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "XRC",
+   "tipo": "leque",
+   "angulos": [
+    80,
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "1 a 4 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.18",
+   "paginaImpressa": "31",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "XRC TeeJet; 80° e 110° compartilham a linha da tabela — códigos separados como impresso. corIso derivada do código de vazão ISO (ISO 10625); a cor não é texto no PDF. ATENÇÃO XR8015: Impresso como \"XR8015 †\" na tabela da página XRC (provável erro de impressão para XRC8015); código mantido como impresso. Tabela sem 2.5 bar. ATENÇÃO XR11015: Impresso como \"XR11015 †\" na tabela da página XRC (provável erro de impressão para XRC11015); código mantido como impresso. Tabela sem 2.5 bar.",
+   "tamanhos": [
+    {
+     "codigo": "XRC80015",
+     "corIso": "verde",
+     "vazoes": {
+      "1.0": 0.34,
+      "1.5": 0.42,
+      "2.0": 0.48,
+      "3.0": 0.59,
+      "4.0": 0.68
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XRC8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.0": 0.46,
+      "1.5": 0.56,
+      "2.0": 0.65,
+      "3.0": 0.79,
+      "4.0": 0.91
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XRC11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.0": 0.46,
+      "1.5": 0.56,
+      "2.0": 0.65,
+      "3.0": 0.79,
+      "4.0": 0.91
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XRC80025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.0": 0.57,
+      "1.5": 0.7,
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.14
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XRC110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.0": 0.57,
+      "1.5": 0.7,
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.14
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XRC8003",
+     "corIso": "azul",
+     "vazoes": {
+      "1.0": 0.68,
+      "1.5": 0.83,
+      "2.0": 0.96,
+      "3.0": 1.18,
+      "4.0": 1.36
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XRC11003",
+     "corIso": "azul",
+     "vazoes": {
+      "1.0": 0.68,
+      "1.5": 0.83,
+      "2.0": 0.96,
+      "3.0": 1.18,
+      "4.0": 1.36
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XRC8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.0": 0.91,
+      "1.5": 1.12,
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XRC11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.0": 0.91,
+      "1.5": 1.12,
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XRC8005",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.0": 1.14,
+      "1.5": 1.39,
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.27
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XRC11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.0": 1.14,
+      "1.5": 1.39,
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.27
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XRC8006",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.0": 1.37,
+      "1.5": 1.68,
+      "2.0": 1.94,
+      "3.0": 2.37,
+      "4.0": 2.74
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XRC11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.0": 1.37,
+      "1.5": 1.68,
+      "2.0": 1.94,
+      "3.0": 2.37,
+      "4.0": 2.74
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XRC8008",
+     "corIso": "branco",
+     "vazoes": {
+      "1.0": 1.82,
+      "1.5": 2.23,
+      "2.0": 2.58,
+      "3.0": 3.16,
+      "4.0": 3.65
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XRC11008",
+     "corIso": "branco",
+     "vazoes": {
+      "1.0": 1.82,
+      "1.5": 2.23,
+      "2.0": 2.58,
+      "3.0": 3.16,
+      "4.0": 3.65
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XRC8010",
+     "corIso": "azul claro",
+     "vazoes": {
+      "1.0": 2.28,
+      "1.5": 2.79,
+      "2.0": 3.23,
+      "3.0": 3.95,
+      "4.0": 4.56
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XRC11010",
+     "corIso": "azul claro",
+     "vazoes": {
+      "1.0": 2.28,
+      "1.5": 2.79,
+      "2.0": 3.23,
+      "3.0": 3.95,
+      "4.0": 4.56
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "XR8015",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 3.42,
+      "1.5": 4.19,
+      "2.0": 4.83,
+      "3.0": 5.92,
+      "4.0": 6.84
+     },
+     "unidade": "L/min por bar",
+     "alerta": "Impresso como \"XR8015 †\" na tabela da página XRC (provável erro de impressão para XRC8015); código mantido como impresso. Tabela sem 2.5 bar."
+    },
+    {
+     "codigo": "XR11015",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 3.42,
+      "1.5": 4.19,
+      "2.0": 4.83,
+      "3.0": 5.92,
+      "4.0": 6.84
+     },
+     "unidade": "L/min por bar",
+     "alerta": "Impresso como \"XR11015 †\" na tabela da página XRC (provável erro de impressão para XRC11015); código mantido como impresso. Tabela sem 2.5 bar."
+    },
+    {
+     "codigo": "XRC11020",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 4.56,
+      "1.5": 5.58,
+      "2.0": 6.44,
+      "3.0": 7.89,
+      "4.0": 9.11
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "TP",
+   "tipo": "leque",
+   "angulos": [
+    65,
+    80,
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "2 a 4 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.20",
+   "paginaImpressa": "33",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "TP TeeJet VisiFlo (TPU não aparece com tabela própria); 65°, 80° e 110° compartilham a linha da tabela — códigos separados como impresso. corIso derivada do código de vazão ISO (ISO 10625); a cor não é texto no PDF.",
+   "tamanhos": [
+    {
+     "codigo": "TP650050",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 0.16,
+      "2.5": 0.18,
+      "3.0": 0.2,
+      "3.5": 0.22,
+      "4.0": 0.23
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP800050",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 0.16,
+      "2.5": 0.18,
+      "3.0": 0.2,
+      "3.5": 0.22,
+      "4.0": 0.23
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP1100050",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 0.16,
+      "2.5": 0.18,
+      "3.0": 0.2,
+      "3.5": 0.22,
+      "4.0": 0.23
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP650067",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 0.21,
+      "2.5": 0.24,
+      "3.0": 0.26,
+      "3.5": 0.28,
+      "4.0": 0.3
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP800067",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 0.21,
+      "2.5": 0.24,
+      "3.0": 0.26,
+      "3.5": 0.28,
+      "4.0": 0.3
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP1100067",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 0.21,
+      "2.5": 0.24,
+      "3.0": 0.26,
+      "3.5": 0.28,
+      "4.0": 0.3
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP6501",
+     "corIso": "laranja",
+     "vazoes": {
+      "2.0": 0.32,
+      "2.5": 0.36,
+      "3.0": 0.39,
+      "3.5": 0.42,
+      "4.0": 0.45
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP8001",
+     "corIso": "laranja",
+     "vazoes": {
+      "2.0": 0.32,
+      "2.5": 0.36,
+      "3.0": 0.39,
+      "3.5": 0.42,
+      "4.0": 0.45
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP11001",
+     "corIso": "laranja",
+     "vazoes": {
+      "2.0": 0.32,
+      "2.5": 0.36,
+      "3.0": 0.39,
+      "3.5": 0.42,
+      "4.0": 0.45
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP65015",
+     "corIso": "verde",
+     "vazoes": {
+      "2.0": 0.48,
+      "2.5": 0.54,
+      "3.0": 0.59,
+      "3.5": 0.64,
+      "4.0": 0.68
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP80015",
+     "corIso": "verde",
+     "vazoes": {
+      "2.0": 0.48,
+      "2.5": 0.54,
+      "3.0": 0.59,
+      "3.5": 0.64,
+      "4.0": 0.68
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP110015",
+     "corIso": "verde",
+     "vazoes": {
+      "2.0": 0.48,
+      "2.5": 0.54,
+      "3.0": 0.59,
+      "3.5": 0.64,
+      "4.0": 0.68
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP6502",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "2.5": 0.72,
+      "3.0": 0.79,
+      "3.5": 0.85,
+      "4.0": 0.91
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "2.5": 0.72,
+      "3.0": 0.79,
+      "3.5": 0.85,
+      "4.0": 0.91
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "2.5": 0.72,
+      "3.0": 0.79,
+      "3.5": 0.85,
+      "4.0": 0.91
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP6503",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.96,
+      "2.5": 1.08,
+      "3.0": 1.18,
+      "3.5": 1.27,
+      "4.0": 1.36
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP8003",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.96,
+      "2.5": 1.08,
+      "3.0": 1.18,
+      "3.5": 1.27,
+      "4.0": 1.36
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP11003",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.96,
+      "2.5": 1.08,
+      "3.0": 1.18,
+      "3.5": 1.27,
+      "4.0": 1.36
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP6504",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "2.5": 1.44,
+      "3.0": 1.58,
+      "3.5": 1.71,
+      "4.0": 1.82
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "2.5": 1.44,
+      "3.0": 1.58,
+      "3.5": 1.71,
+      "4.0": 1.82
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "2.5": 1.44,
+      "3.0": 1.58,
+      "3.5": 1.71,
+      "4.0": 1.82
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP6505",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.61,
+      "2.5": 1.8,
+      "3.0": 1.97,
+      "3.5": 2.13,
+      "4.0": 2.27
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP8005",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.61,
+      "2.5": 1.8,
+      "3.0": 1.97,
+      "3.5": 2.13,
+      "4.0": 2.27
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.61,
+      "2.5": 1.8,
+      "3.0": 1.97,
+      "3.5": 2.13,
+      "4.0": 2.27
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP6506",
+     "corIso": "cinza",
+     "vazoes": {
+      "2.0": 1.94,
+      "2.5": 2.16,
+      "3.0": 2.37,
+      "3.5": 2.56,
+      "4.0": 2.74
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP8006",
+     "corIso": "cinza",
+     "vazoes": {
+      "2.0": 1.94,
+      "2.5": 2.16,
+      "3.0": 2.37,
+      "3.5": 2.56,
+      "4.0": 2.74
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "2.0": 1.94,
+      "2.5": 2.16,
+      "3.0": 2.37,
+      "3.5": 2.56,
+      "4.0": 2.74
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP6508",
+     "corIso": "branco",
+     "vazoes": {
+      "2.0": 2.58,
+      "2.5": 2.88,
+      "3.0": 3.16,
+      "3.5": 3.41,
+      "4.0": 3.65
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP8008",
+     "corIso": "branco",
+     "vazoes": {
+      "2.0": 2.58,
+      "2.5": 2.88,
+      "3.0": 3.16,
+      "3.5": 3.41,
+      "4.0": 3.65
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP11008",
+     "corIso": "branco",
+     "vazoes": {
+      "2.0": 2.58,
+      "2.5": 2.88,
+      "3.0": 3.16,
+      "3.5": 3.41,
+      "4.0": 3.65
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP6510",
+     "corIso": "azul claro",
+     "vazoes": {
+      "2.0": 3.23,
+      "2.5": 3.61,
+      "3.0": 3.95,
+      "3.5": 4.27,
+      "4.0": 4.56
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP8010",
+     "corIso": "azul claro",
+     "vazoes": {
+      "2.0": 3.23,
+      "2.5": 3.61,
+      "3.0": 3.95,
+      "3.5": 4.27,
+      "4.0": 4.56
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP11010",
+     "corIso": "azul claro",
+     "vazoes": {
+      "2.0": 3.23,
+      "2.5": 3.61,
+      "3.0": 3.95,
+      "3.5": 4.27,
+      "4.0": 4.56
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP6515",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 4.83,
+      "2.5": 5.4,
+      "3.0": 5.92,
+      "3.5": 6.39,
+      "4.0": 6.84
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP8015",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 4.83,
+      "2.5": 5.4,
+      "3.0": 5.92,
+      "3.5": 6.39,
+      "4.0": 6.84
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP11015",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 4.83,
+      "2.5": 5.4,
+      "3.0": 5.92,
+      "3.5": 6.39,
+      "4.0": 6.84
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP6520",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 6.44,
+      "2.5": 7.2,
+      "3.0": 7.89,
+      "3.5": 8.52,
+      "4.0": 9.11
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP8020",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 6.44,
+      "2.5": 7.2,
+      "3.0": 7.89,
+      "3.5": 8.52,
+      "4.0": 9.11
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TP11020",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 6.44,
+      "2.5": 7.2,
+      "3.0": 7.89,
+      "3.5": 8.52,
+      "4.0": 9.11
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "DG",
+   "tipo": "leque_antideriva",
+   "angulos": [
+    80,
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "2 a 4 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.22",
+   "paginaImpressa": "35",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "DG TeeJet Drift Guard (pré-orifício); 80° e 110° compartilham a linha da tabela. corIso derivada do código de vazão ISO (ISO 10625); a cor não é texto no PDF.",
+   "tamanhos": [
+    {
+     "codigo": "DG80015",
+     "corIso": "verde",
+     "vazoes": {
+      "2.0": 0.48,
+      "2.5": 0.54,
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "DG110015",
+     "corIso": "verde",
+     "vazoes": {
+      "2.0": 0.48,
+      "2.5": 0.54,
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "DG8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "2.5": 0.72,
+      "3.0": 0.79,
+      "4.0": 0.91,
+      "5.0": 1.02
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "DG11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "2.5": 0.72,
+      "3.0": 0.79,
+      "4.0": 0.91,
+      "5.0": 1.02
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "DG8003",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.96,
+      "2.5": 1.08,
+      "3.0": 1.18,
+      "4.0": 1.36,
+      "5.0": 1.52
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "DG11003",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.96,
+      "2.5": 1.08,
+      "3.0": 1.18,
+      "4.0": 1.36,
+      "5.0": 1.52
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "DG8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "2.5": 1.44,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "DG11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "2.5": 1.44,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "DG8005",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.61,
+      "2.5": 1.8,
+      "3.0": 1.97,
+      "4.0": 2.27,
+      "5.0": 2.54
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "DG11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.61,
+      "2.5": 1.8,
+      "3.0": 1.97,
+      "4.0": 2.27,
+      "5.0": 2.54
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "TTJ60",
+   "tipo": "duplo_leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "1.5 a 6 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.24",
+   "paginaImpressa": "37",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "Turbo TwinJet (dois leques 110°, 60° entre eles). corIso derivada do código de vazão ISO (ISO 10625); a cor não é texto no PDF.",
+   "tamanhos": [
+    {
+     "codigo": "TTJ60-11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.56,
+      "2.0": 0.65,
+      "3.0": 0.79,
+      "4.0": 0.91,
+      "5.0": 1.02,
+      "6.0": 1.12
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTJ60-110025",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.5": 0.7,
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.14,
+      "5.0": 1.28,
+      "6.0": 1.4
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTJ60-11003",
+     "corIso": "azul",
+     "vazoes": {
+      "1.5": 0.83,
+      "2.0": 0.96,
+      "3.0": 1.18,
+      "4.0": 1.36,
+      "5.0": 1.52,
+      "6.0": 1.67
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTJ60-11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.5": 1.12,
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTJ60-11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.5": 1.39,
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.27,
+      "5.0": 2.54,
+      "6.0": 2.79
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTJ60-11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.5": 1.68,
+      "2.0": 1.94,
+      "3.0": 2.37,
+      "4.0": 2.74,
+      "5.0": 3.06,
+      "6.0": 3.35
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTJ60-11008",
+     "corIso": "branco",
+     "vazoes": {
+      "1.5": 2.23,
+      "2.0": 2.58,
+      "3.0": 3.16,
+      "4.0": 3.65,
+      "5.0": 4.08,
+      "6.0": 4.47
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TTJ60-11010",
+     "corIso": "azul claro",
+     "vazoes": {
+      "1.5": 2.79,
+      "2.0": 3.23,
+      "3.0": 3.95,
+      "4.0": 4.56,
+      "5.0": 5.1,
+      "6.0": 5.59
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "AITTJ60",
+   "tipo": "inducao_ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1.5 a 6 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.26",
+   "paginaImpressa": "39",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "Air Induction Turbo TwinJet (duplo leque com indução); tipo registrado como indução de ar. corIso derivada do código de vazão ISO (ISO 10625); a cor não é texto no PDF.",
+   "tamanhos": [
+    {
+     "codigo": "AITTJ60-11002VP",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.56,
+      "2.0": 0.65,
+      "3.0": 0.79,
+      "4.0": 0.91,
+      "5.0": 1.02,
+      "6.0": 1.12
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITTJ60-110025VP",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.5": 0.7,
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.14,
+      "5.0": 1.28,
+      "6.0": 1.4
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITTJ60-11003VP",
+     "corIso": "azul",
+     "vazoes": {
+      "1.5": 0.83,
+      "2.0": 0.96,
+      "3.0": 1.18,
+      "4.0": 1.36,
+      "5.0": 1.52,
+      "6.0": 1.67
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITTJ60-11004VP",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.5": 1.12,
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITTJ60-11005VP",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.5": 1.39,
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.27,
+      "5.0": 2.54,
+      "6.0": 2.79
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITTJ60-11006VP",
+     "corIso": "cinza",
+     "vazoes": {
+      "1.5": 1.68,
+      "2.0": 1.94,
+      "3.0": 2.37,
+      "4.0": 2.74,
+      "5.0": 3.06,
+      "6.0": 3.35
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITTJ60-11008VP",
+     "corIso": "branco",
+     "vazoes": {
+      "1.5": 2.23,
+      "2.0": 2.58,
+      "3.0": 3.16,
+      "4.0": 3.65,
+      "5.0": 4.08,
+      "6.0": 4.47
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITTJ60-11010VP",
+     "corIso": "azul claro",
+     "vazoes": {
+      "1.5": 2.79,
+      "2.0": 3.23,
+      "3.0": 3.95,
+      "4.0": 4.56,
+      "5.0": 5.1,
+      "6.0": 5.59
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITTJ60-11015VP",
+     "corIso": null,
+     "vazoes": {
+      "1.5": 4.19,
+      "2.0": 4.83,
+      "3.0": 5.92,
+      "4.0": 6.84,
+      "5.0": 7.64,
+      "6.0": 8.37
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "AI3070",
+   "tipo": "inducao_ar",
+   "angulos": [],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1.5 a 6 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.28",
+   "paginaImpressa": "41",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "Duplo padrão com indução (30° à frente / 70° atrás — inclinações, não ângulo de leque; ângulo do leque não impresso no código). Código do tamanho é o sufixo após \"AI3070-\". corIso derivada do código de vazão ISO (ISO 10625); a cor não é texto no PDF.",
+   "tamanhos": [
+    {
+     "codigo": "AI3070-015VP",
+     "corIso": "verde",
+     "vazoes": {
+      "1.5": 0.42,
+      "2.0": 0.48,
+      "3.0": 0.59,
+      "4.0": 0.68,
+      "5.0": 0.76,
+      "6.0": 0.83
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI3070-02VP",
+     "corIso": "amarelo",
+     "vazoes": {
+      "1.5": 0.56,
+      "2.0": 0.65,
+      "3.0": 0.79,
+      "4.0": 0.91,
+      "5.0": 1.02,
+      "6.0": 1.12
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI3070-025VP",
+     "corIso": "lilás",
+     "vazoes": {
+      "1.5": 0.7,
+      "2.0": 0.81,
+      "3.0": 0.99,
+      "4.0": 1.14,
+      "5.0": 1.28,
+      "6.0": 1.4
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI3070-03VP",
+     "corIso": "azul",
+     "vazoes": {
+      "1.5": 0.83,
+      "2.0": 0.96,
+      "3.0": 1.18,
+      "4.0": 1.36,
+      "5.0": 1.52,
+      "6.0": 1.67
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI3070-04VP",
+     "corIso": "vermelho",
+     "vazoes": {
+      "1.5": 1.12,
+      "2.0": 1.29,
+      "3.0": 1.58,
+      "4.0": 1.82,
+      "5.0": 2.04,
+      "6.0": 2.23
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AI3070-05VP",
+     "corIso": "marrom",
+     "vazoes": {
+      "1.5": 1.39,
+      "2.0": 1.61,
+      "3.0": 1.97,
+      "4.0": 2.27,
+      "5.0": 2.54,
+      "6.0": 2.79
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "TJ",
+   "tipo": "duplo_leque",
+   "angulos": [
+    65,
+    80,
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "2 a 4 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.30",
+   "paginaImpressa": "43",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "TwinJet TJ60; 65°/80°/110° compartilham a linha da tabela — códigos separados como impresso. TJ60-650134 é tamanho não-ISO. corIso derivada do código de vazão ISO (ISO 10625); a cor não é texto no PDF.",
+   "tamanhos": [
+    {
+     "codigo": "TJ60-6501",
+     "corIso": "laranja",
+     "vazoes": {
+      "2.0": 0.32,
+      "2.5": 0.36,
+      "3.0": 0.39,
+      "3.5": 0.42,
+      "4.0": 0.45
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-8001",
+     "corIso": "laranja",
+     "vazoes": {
+      "2.0": 0.32,
+      "2.5": 0.36,
+      "3.0": 0.39,
+      "3.5": 0.42,
+      "4.0": 0.45
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-650134",
+     "corIso": null,
+     "vazoes": {
+      "2.0": 0.43,
+      "2.5": 0.48,
+      "3.0": 0.53,
+      "3.5": 0.57,
+      "4.0": 0.61
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-6502",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "2.5": 0.72,
+      "3.0": 0.79,
+      "3.5": 0.85,
+      "4.0": 0.91
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "2.5": 0.72,
+      "3.0": 0.79,
+      "3.5": 0.85,
+      "4.0": 0.91
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "2.5": 0.72,
+      "3.0": 0.79,
+      "3.5": 0.85,
+      "4.0": 0.91
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-6503",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.96,
+      "2.5": 1.08,
+      "3.0": 1.18,
+      "3.5": 1.27,
+      "4.0": 1.36
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-8003",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.96,
+      "2.5": 1.08,
+      "3.0": 1.18,
+      "3.5": 1.27,
+      "4.0": 1.36
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-11003",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.96,
+      "2.5": 1.08,
+      "3.0": 1.18,
+      "3.5": 1.27,
+      "4.0": 1.36
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-6504",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "2.5": 1.44,
+      "3.0": 1.58,
+      "3.5": 1.71,
+      "4.0": 1.82
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "2.5": 1.44,
+      "3.0": 1.58,
+      "3.5": 1.71,
+      "4.0": 1.82
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "2.5": 1.44,
+      "3.0": 1.58,
+      "3.5": 1.71,
+      "4.0": 1.82
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-8005",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.61,
+      "2.5": 1.8,
+      "3.0": 1.97,
+      "3.5": 2.13,
+      "4.0": 2.27
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-11005",
+     "corIso": "marrom",
+     "vazoes": {
+      "2.0": 1.61,
+      "2.5": 1.8,
+      "3.0": 1.97,
+      "3.5": 2.13,
+      "4.0": 2.27
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-6506",
+     "corIso": "cinza",
+     "vazoes": {
+      "2.0": 1.94,
+      "2.5": 2.16,
+      "3.0": 2.37,
+      "3.5": 2.56,
+      "4.0": 2.74
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-8006",
+     "corIso": "cinza",
+     "vazoes": {
+      "2.0": 1.94,
+      "2.5": 2.16,
+      "3.0": 2.37,
+      "3.5": 2.56,
+      "4.0": 2.74
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "2.0": 1.94,
+      "2.5": 2.16,
+      "3.0": 2.37,
+      "3.5": 2.56,
+      "4.0": 2.74
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-6508",
+     "corIso": "branco",
+     "vazoes": {
+      "2.0": 2.58,
+      "2.5": 2.88,
+      "3.0": 3.16,
+      "3.5": 3.41,
+      "4.0": 3.65
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-8008",
+     "corIso": "branco",
+     "vazoes": {
+      "2.0": 2.58,
+      "2.5": 2.88,
+      "3.0": 3.16,
+      "3.5": 3.41,
+      "4.0": 3.65
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-11008",
+     "corIso": "branco",
+     "vazoes": {
+      "2.0": 2.58,
+      "2.5": 2.88,
+      "3.0": 3.16,
+      "3.5": 3.41,
+      "4.0": 3.65
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-8010",
+     "corIso": "azul claro",
+     "vazoes": {
+      "2.0": 3.23,
+      "2.5": 3.61,
+      "3.0": 3.95,
+      "3.5": 4.27,
+      "4.0": 4.56
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TJ60-11010",
+     "corIso": "azul claro",
+     "vazoes": {
+      "2.0": 3.23,
+      "2.5": 3.61,
+      "3.0": 3.95,
+      "3.5": 4.27,
+      "4.0": 4.56
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "DGTJ60",
+   "tipo": "duplo_leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "2 a 4 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.32",
+   "paginaImpressa": "45",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "Drift Guard TwinJet (pré-orifício removível). corIso derivada do código de vazão ISO (ISO 10625); a cor não é texto no PDF. ATENÇÃO DGTJ60-110015: Salto 3.5→4.0 bar (0.64→0.76) incoerente com os demais tamanhos (4.0 bar = +9.7% sobre ISO nominal); idêntico no Catálogo 52-PT. Copiado como impresso. ATENÇÃO DGTJ60-11006: NÃO MONOTÔNICO NO CATÁLOGO: 2.0 bar = 1.94 > 2.5 bar = 1.80 (provável erro de impressão; 2.5 bar esperado ~2.16). Idêntico no Catálogo 52-PT (2024). Copiado como impresso.",
+   "tamanhos": [
+    {
+     "codigo": "DGTJ60-110015",
+     "corIso": "verde",
+     "vazoes": {
+      "2.0": 0.48,
+      "2.5": 0.54,
+      "3.0": 0.59,
+      "3.5": 0.64,
+      "4.0": 0.76
+     },
+     "unidade": "L/min por bar",
+     "alerta": "Salto 3.5→4.0 bar (0.64→0.76) incoerente com os demais tamanhos (4.0 bar = +9.7% sobre ISO nominal); idêntico no Catálogo 52-PT. Copiado como impresso."
+    },
+    {
+     "codigo": "DGTJ60-11002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "2.0": 0.65,
+      "2.5": 0.72,
+      "3.0": 0.79,
+      "3.5": 0.85,
+      "4.0": 0.91
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "DGTJ60-11003",
+     "corIso": "azul",
+     "vazoes": {
+      "2.0": 0.96,
+      "2.5": 1.08,
+      "3.0": 1.18,
+      "3.5": 1.27,
+      "4.0": 1.36
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "DGTJ60-11004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "2.0": 1.29,
+      "2.5": 1.44,
+      "3.0": 1.58,
+      "3.5": 1.71,
+      "4.0": 1.82
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "DGTJ60-11006",
+     "corIso": "cinza",
+     "vazoes": {
+      "2.0": 1.94,
+      "2.5": 1.8,
+      "3.0": 2.37,
+      "3.5": 2.56,
+      "4.0": 2.74
+     },
+     "unidade": "L/min por bar",
+     "alerta": "NÃO MONOTÔNICO NO CATÁLOGO: 2.0 bar = 1.94 > 2.5 bar = 1.80 (provável erro de impressão; 2.5 bar esperado ~2.16). Idêntico no Catálogo 52-PT (2024). Copiado como impresso."
+    },
+    {
+     "codigo": "DGTJ60-11008",
+     "corIso": "branco",
+     "vazoes": {
+      "2.0": 2.58,
+      "2.5": 2.88,
+      "3.0": 3.16,
+      "3.5": 3.41,
+      "4.0": 3.65
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "TF",
+   "tipo": "leque_antideriva",
+   "angulos": [],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1 a 3 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.34",
+   "paginaImpressa": "47",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "Turbo FloodJet (pré-orifício). Código impresso \"TF-†N\", †=\"Specify material\" (VS ou VP); gravado sem o †. Duas colunas de gota (VS/VP) — vazão única. Espaçamento de tabela 75/100 cm.",
+   "tamanhos": [
+    {
+     "codigo": "TF-2",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 0.91,
+      "1.5": 1.11,
+      "2.0": 1.29,
+      "2.5": 1.44,
+      "3.0": 1.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TF-2.5",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 1.14,
+      "1.5": 1.4,
+      "2.0": 1.61,
+      "2.5": 1.8,
+      "3.0": 1.97
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TF-3",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 1.37,
+      "1.5": 1.68,
+      "2.0": 1.94,
+      "2.5": 2.17,
+      "3.0": 2.37
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TF-4",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 1.82,
+      "1.5": 2.23,
+      "2.0": 2.57,
+      "2.5": 2.88,
+      "3.0": 3.15
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TF-5",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 2.28,
+      "1.5": 2.79,
+      "2.0": 3.22,
+      "2.5": 3.6,
+      "3.0": 3.95
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TF-7.5",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 3.42,
+      "1.5": 4.19,
+      "2.0": 4.84,
+      "2.5": 5.41,
+      "3.0": 5.92
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TF-10",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 4.56,
+      "1.5": 5.58,
+      "2.0": 6.45,
+      "2.5": 7.21,
+      "3.0": 7.9
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "QCTF",
+   "tipo": "leque_antideriva",
+   "angulos": [],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "1 a 3 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.36",
+   "paginaImpressa": "49",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "Quick Turbo FloodJet (QCTF-VS), pré-orifício; tabela para 100/150 cm de espaçamento. Vazões impressas com 2 casas.",
+   "tamanhos": [
+    {
+     "codigo": "QCTF-VS15",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 6.84,
+      "1.5": 8.38,
+      "2.0": 9.67,
+      "3.0": 11.85
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCTF-VS20",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 9.12,
+      "1.5": 11.17,
+      "2.0": 12.9,
+      "3.0": 15.8
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCTF-VS30",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 13.67,
+      "1.5": 16.64,
+      "2.0": 19.33,
+      "3.0": 23.68
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCTF-VS40",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 18.23,
+      "1.5": 22.33,
+      "2.0": 25.78,
+      "3.0": 31.58
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCTF-VS50",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 22.79,
+      "1.5": 27.91,
+      "2.0": 32.23,
+      "3.0": 39.47
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCTF-VS60",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 27.35,
+      "1.5": 33.5,
+      "2.0": 38.68,
+      "3.0": 47.37
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCTF-VS80",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 36.46,
+      "1.5": 44.65,
+      "2.0": 51.56,
+      "3.0": 63.15
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCTF-VS100",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 45.58,
+      "1.5": 55.82,
+      "2.0": 64.46,
+      "3.0": 78.95
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCTF-VS120",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 54.69,
+      "1.5": 66.98,
+      "2.0": 77.34,
+      "3.0": 94.73
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "TK",
+   "tipo": "leque",
+   "angulos": [],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "1 a 3 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.38",
+   "paginaImpressa": "51",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "FloodJet (deflexão). Notação impressa \"[3/8K, 1/2K]-40\" = mesma vazão para 3/8K-40 e 1/2K-40 — expandida em códigos separados; QCK-/TK- listados na mesma célula também viram códigos separados.",
+   "tamanhos": [
+    {
+     "codigo": "1/4K-27",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 12.3,
+      "1.5": 15.1,
+      "2.0": 17.4,
+      "3.0": 21.3
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "3/8K-30",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 13.7,
+      "1.5": 16.8,
+      "2.0": 19.4,
+      "3.0": 23.7
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TK-30",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 13.7,
+      "1.5": 16.8,
+      "2.0": 19.4,
+      "3.0": 23.7
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCK-30",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 13.7,
+      "1.5": 16.8,
+      "2.0": 19.4,
+      "3.0": 23.7
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "3/8K-35",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 16.0,
+      "1.5": 19.6,
+      "2.0": 22.6,
+      "3.0": 27.7
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "3/8K-40",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 18.2,
+      "1.5": 22.3,
+      "2.0": 25.7,
+      "3.0": 31.5
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "1/2K-40",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 18.2,
+      "1.5": 22.3,
+      "2.0": 25.7,
+      "3.0": 31.5
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCK-40",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 18.2,
+      "1.5": 22.3,
+      "2.0": 25.7,
+      "3.0": 31.5
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "3/8K-45",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 20.5,
+      "1.5": 25.1,
+      "2.0": 29.0,
+      "3.0": 35.5
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "1/2K-50",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 22.8,
+      "1.5": 27.9,
+      "2.0": 32.2,
+      "3.0": 39.5
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCK-50",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 22.8,
+      "1.5": 27.9,
+      "2.0": 32.2,
+      "3.0": 39.5
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "1/2K-60",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 27.3,
+      "1.5": 33.4,
+      "2.0": 38.6,
+      "3.0": 47.3
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCK-60",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 27.3,
+      "1.5": 33.4,
+      "2.0": 38.6,
+      "3.0": 47.3
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "1/2K-70",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 31.9,
+      "1.5": 39.1,
+      "2.0": 45.1,
+      "3.0": 55.3
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "1/2K-80",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 36.5,
+      "1.5": 44.7,
+      "2.0": 51.6,
+      "3.0": 63.2
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "3/4K-80",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 36.5,
+      "1.5": 44.7,
+      "2.0": 51.6,
+      "3.0": 63.2
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCK-80",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 36.5,
+      "1.5": 44.7,
+      "2.0": 51.6,
+      "3.0": 63.2
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "1/2K-90",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 41.0,
+      "1.5": 50.2,
+      "2.0": 58.0,
+      "3.0": 71.0
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "3/4K-90",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 41.0,
+      "1.5": 50.2,
+      "2.0": 58.0,
+      "3.0": 71.0
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "3/4K-100",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 45.6,
+      "1.5": 55.8,
+      "2.0": 64.5,
+      "3.0": 79.0
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCK-100",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 45.6,
+      "1.5": 55.8,
+      "2.0": 64.5,
+      "3.0": 79.0
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "3/4K-110",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 50.1,
+      "1.5": 61.4,
+      "2.0": 70.9,
+      "3.0": 86.8
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "1/2K-120",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 54.7,
+      "1.5": 67.0,
+      "2.0": 77.4,
+      "3.0": 94.7
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "3/4K-120",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 54.7,
+      "1.5": 67.0,
+      "2.0": 77.4,
+      "3.0": 94.7
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCK-120",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 54.7,
+      "1.5": 67.0,
+      "2.0": 77.4,
+      "3.0": 94.7
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "3/4K-140",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 63.8,
+      "1.5": 78.1,
+      "2.0": 90.2,
+      "3.0": 111.0
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCK-150",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 68.4,
+      "1.5": 83.8,
+      "2.0": 96.7,
+      "3.0": 118.0
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "3/4K-160",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 72.9,
+      "1.5": 89.3,
+      "2.0": 103.0,
+      "3.0": 126.0
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "3/4K-180",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 82.0,
+      "1.5": 100.0,
+      "2.0": 116.0,
+      "3.0": 142.0
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCK-180",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 82.0,
+      "1.5": 100.0,
+      "2.0": 116.0,
+      "3.0": 142.0
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "3/4K-210",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 95.7,
+      "1.5": 117.0,
+      "2.0": 135.0,
+      "3.0": 166.0
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "QCK-210",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 95.7,
+      "1.5": 117.0,
+      "2.0": 135.0,
+      "3.0": 166.0
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "FL",
+   "tipo": "cone_cheio",
+   "angulos": [],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "1 a 3 bar",
+   "fonte": "F1",
+   "pagina": "PDF p.42",
+   "paginaImpressa": "55",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); vazão = coluna CAPACITY ONE TIP IN l/min, pressão = coluna bar",
+   "observacoes": "FullJet de ângulo amplo (cone cheio); catálogo cita ângulo \"até 120°\".",
+   "tamanhos": [
+    {
+     "codigo": "FL-5",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 1.19,
+      "1.5": 1.43,
+      "2.0": 1.69,
+      "2.5": 1.81,
+      "3.0": 1.97
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "FL-6.5",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 1.56,
+      "1.5": 1.89,
+      "2.0": 2.14,
+      "2.5": 2.34,
+      "3.0": 2.56
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "FL-8",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 1.9,
+      "1.5": 2.29,
+      "2.0": 2.6,
+      "2.5": 2.89,
+      "3.0": 3.15
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "FL-10",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 2.37,
+      "1.5": 2.86,
+      "2.0": 3.39,
+      "2.5": 3.62,
+      "3.0": 3.93
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "FL-15",
+     "corIso": null,
+     "vazoes": {
+      "1.0": 3.56,
+      "1.5": 4.29,
+      "2.0": 4.84,
+      "2.5": 5.43,
+      "3.0": 5.9
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "TX",
+   "tipo": "cone_vazio",
+   "angulos": [],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "2 a 20 bar",
+   "fonte": "F2",
+   "pagina": "PDF p.2",
+   "paginaImpressa": "81",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); tabela horizontal, cada valor associado à coluna de pressão (bar) mais próxima",
+   "observacoes": "ConeJet TX (VS aço inox / VK cerâmica); ângulo do cone não faz parte do código. Tabela horizontal 2–20 bar.",
+   "tamanhos": [
+    {
+     "codigo": "TX-VS1",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.055,
+      "3": 0.065,
+      "4": 0.074,
+      "5": 0.081,
+      "6": 0.087,
+      "7": 0.093,
+      "8": 0.098,
+      "9": 0.103,
+      "10": 0.108,
+      "11": 0.112,
+      "12": 0.116,
+      "13": 0.12,
+      "14": 0.124,
+      "15": 0.127,
+      "16": 0.131,
+      "17": 0.134,
+      "18": 0.137,
+      "19": 0.14,
+      "20": 0.143
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TX-VS2",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.11,
+      "3": 0.131,
+      "4": 0.148,
+      "5": 0.164,
+      "6": 0.177,
+      "7": 0.189,
+      "8": 0.201,
+      "9": 0.211,
+      "10": 0.221,
+      "11": 0.231,
+      "12": 0.24,
+      "13": 0.248,
+      "14": 0.256,
+      "15": 0.264,
+      "16": 0.272,
+      "17": 0.279,
+      "18": 0.286,
+      "19": 0.293,
+      "20": 0.299
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TX-VK3",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.164,
+      "3": 0.196,
+      "4": 0.223,
+      "5": 0.245,
+      "6": 0.266,
+      "7": 0.284,
+      "8": 0.301,
+      "9": 0.317,
+      "10": 0.332,
+      "11": 0.346,
+      "12": 0.359,
+      "13": 0.372,
+      "14": 0.384,
+      "15": 0.396,
+      "16": 0.407,
+      "17": 0.418,
+      "18": 0.429,
+      "19": 0.439,
+      "20": 0.449
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TX-VK4",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.218,
+      "3": 0.262,
+      "4": 0.299,
+      "5": 0.331,
+      "6": 0.36,
+      "7": 0.386,
+      "8": 0.41,
+      "9": 0.433,
+      "10": 0.454,
+      "11": 0.474,
+      "12": 0.493,
+      "13": 0.512,
+      "14": 0.529,
+      "15": 0.546,
+      "16": 0.562,
+      "17": 0.578,
+      "18": 0.594,
+      "19": 0.608,
+      "20": 0.623
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TX-VK6",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.327,
+      "3": 0.393,
+      "4": 0.448,
+      "5": 0.496,
+      "6": 0.539,
+      "7": 0.579,
+      "8": 0.615,
+      "9": 0.649,
+      "10": 0.681,
+      "11": 0.711,
+      "12": 0.74,
+      "13": 0.767,
+      "14": 0.794,
+      "15": 0.819,
+      "16": 0.844,
+      "17": 0.867,
+      "18": 0.89,
+      "19": 0.912,
+      "20": 0.934
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TX-VK8",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.433,
+      "3": 0.525,
+      "4": 0.603,
+      "5": 0.671,
+      "6": 0.732,
+      "7": 0.788,
+      "8": 0.84,
+      "9": 0.888,
+      "10": 0.934,
+      "11": 0.978,
+      "12": 1.02,
+      "13": 1.06,
+      "14": 1.1,
+      "15": 1.13,
+      "16": 1.17,
+      "17": 1.2,
+      "18": 1.24,
+      "19": 1.27,
+      "20": 1.3
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TX-VK10",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.541,
+      "3": 0.657,
+      "4": 0.753,
+      "5": 0.838,
+      "6": 0.915,
+      "7": 0.985,
+      "8": 1.05,
+      "9": 1.11,
+      "10": 1.17,
+      "11": 1.22,
+      "12": 1.27,
+      "13": 1.32,
+      "14": 1.37,
+      "15": 1.42,
+      "16": 1.46,
+      "17": 1.5,
+      "18": 1.55,
+      "19": 1.59,
+      "20": 1.63
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TX-VK12",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.649,
+      "3": 0.788,
+      "4": 0.904,
+      "5": 1.01,
+      "6": 1.1,
+      "7": 1.18,
+      "8": 1.26,
+      "9": 1.33,
+      "10": 1.4,
+      "11": 1.47,
+      "12": 1.53,
+      "13": 1.59,
+      "14": 1.65,
+      "15": 1.7,
+      "16": 1.75,
+      "17": 1.81,
+      "18": 1.86,
+      "19": 1.9,
+      "20": 1.95
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TX-VK18",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.968,
+      "3": 1.18,
+      "4": 1.37,
+      "5": 1.53,
+      "6": 1.67,
+      "7": 1.8,
+      "8": 1.93,
+      "9": 2.04,
+      "10": 2.15,
+      "11": 2.25,
+      "12": 2.35,
+      "13": 2.45,
+      "14": 2.54,
+      "15": 2.63,
+      "16": 2.72,
+      "17": 2.8,
+      "18": 2.88,
+      "19": 2.96,
+      "20": 3.03
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TX-VK26",
+     "corIso": null,
+     "vazoes": {
+      "2": 1.4,
+      "3": 1.71,
+      "4": 1.97,
+      "5": 2.2,
+      "6": 2.41,
+      "7": 2.6,
+      "8": 2.78,
+      "9": 2.95,
+      "10": 3.11,
+      "11": 3.26,
+      "12": 3.4,
+      "13": 3.54,
+      "14": 3.67,
+      "15": 3.8,
+      "16": 3.92,
+      "17": 4.04,
+      "18": 4.16,
+      "19": 4.27,
+      "20": 4.38
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "TXA/TXB",
+   "tipo": "cone_vazio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "2 a 20 bar",
+   "fonte": "F2",
+   "pagina": "PDF p.4",
+   "paginaImpressa": "83",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); tabela horizontal, cada valor associado à coluna de pressão (bar) mais próxima",
+   "observacoes": "ConeJet VisiFlo; código impresso \"TX†...VK\" com nota \"†Specify A or B\" — expandido em TXA... e TXB... (mesma vazão).",
+   "tamanhos": [
+    {
+     "codigo": "TXA800050VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.164,
+      "3": 0.196,
+      "4": 0.223,
+      "5": 0.245,
+      "6": 0.266,
+      "7": 0.284,
+      "8": 0.301,
+      "9": 0.317,
+      "10": 0.332,
+      "11": 0.346,
+      "12": 0.359,
+      "13": 0.372,
+      "14": 0.384,
+      "15": 0.396,
+      "16": 0.407,
+      "17": 0.418,
+      "18": 0.429,
+      "19": 0.439,
+      "20": 0.449
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXB800050VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.164,
+      "3": 0.196,
+      "4": 0.223,
+      "5": 0.245,
+      "6": 0.266,
+      "7": 0.284,
+      "8": 0.301,
+      "9": 0.317,
+      "10": 0.332,
+      "11": 0.346,
+      "12": 0.359,
+      "13": 0.372,
+      "14": 0.384,
+      "15": 0.396,
+      "16": 0.407,
+      "17": 0.418,
+      "18": 0.429,
+      "19": 0.439,
+      "20": 0.449
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXA800067VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.218,
+      "3": 0.262,
+      "4": 0.299,
+      "5": 0.331,
+      "6": 0.36,
+      "7": 0.386,
+      "8": 0.41,
+      "9": 0.433,
+      "10": 0.454,
+      "11": 0.474,
+      "12": 0.493,
+      "13": 0.512,
+      "14": 0.529,
+      "15": 0.546,
+      "16": 0.562,
+      "17": 0.578,
+      "18": 0.594,
+      "19": 0.608,
+      "20": 0.623
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXB800067VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.218,
+      "3": 0.262,
+      "4": 0.299,
+      "5": 0.331,
+      "6": 0.36,
+      "7": 0.386,
+      "8": 0.41,
+      "9": 0.433,
+      "10": 0.454,
+      "11": 0.474,
+      "12": 0.493,
+      "13": 0.512,
+      "14": 0.529,
+      "15": 0.546,
+      "16": 0.562,
+      "17": 0.578,
+      "18": 0.594,
+      "19": 0.608,
+      "20": 0.623
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXA8001VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.327,
+      "3": 0.393,
+      "4": 0.448,
+      "5": 0.496,
+      "6": 0.539,
+      "7": 0.579,
+      "8": 0.615,
+      "9": 0.649,
+      "10": 0.681,
+      "11": 0.711,
+      "12": 0.74,
+      "13": 0.767,
+      "14": 0.794,
+      "15": 0.819,
+      "16": 0.844,
+      "17": 0.867,
+      "18": 0.89,
+      "19": 0.912,
+      "20": 0.934
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXB8001VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.327,
+      "3": 0.393,
+      "4": 0.448,
+      "5": 0.496,
+      "6": 0.539,
+      "7": 0.579,
+      "8": 0.615,
+      "9": 0.649,
+      "10": 0.681,
+      "11": 0.711,
+      "12": 0.74,
+      "13": 0.767,
+      "14": 0.794,
+      "15": 0.819,
+      "16": 0.844,
+      "17": 0.867,
+      "18": 0.89,
+      "19": 0.912,
+      "20": 0.934
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXA80015VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.487,
+      "3": 0.591,
+      "4": 0.678,
+      "5": 0.754,
+      "6": 0.823,
+      "7": 0.886,
+      "8": 0.944,
+      "9": 0.999,
+      "10": 1.05,
+      "11": 1.1,
+      "12": 1.15,
+      "13": 1.19,
+      "14": 1.23,
+      "15": 1.28,
+      "16": 1.32,
+      "17": 1.35,
+      "18": 1.39,
+      "19": 1.43,
+      "20": 1.46
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXB80015VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.487,
+      "3": 0.591,
+      "4": 0.678,
+      "5": 0.754,
+      "6": 0.823,
+      "7": 0.886,
+      "8": 0.944,
+      "9": 0.999,
+      "10": 1.05,
+      "11": 1.1,
+      "12": 1.15,
+      "13": 1.19,
+      "14": 1.23,
+      "15": 1.28,
+      "16": 1.32,
+      "17": 1.35,
+      "18": 1.39,
+      "19": 1.43,
+      "20": 1.46
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXA8002VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.649,
+      "3": 0.788,
+      "4": 0.904,
+      "5": 1.01,
+      "6": 1.1,
+      "7": 1.18,
+      "8": 1.26,
+      "9": 1.33,
+      "10": 1.4,
+      "11": 1.47,
+      "12": 1.53,
+      "13": 1.59,
+      "14": 1.65,
+      "15": 1.7,
+      "16": 1.75,
+      "17": 1.81,
+      "18": 1.86,
+      "19": 1.9,
+      "20": 1.95
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXB8002VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.649,
+      "3": 0.788,
+      "4": 0.904,
+      "5": 1.01,
+      "6": 1.1,
+      "7": 1.18,
+      "8": 1.26,
+      "9": 1.33,
+      "10": 1.4,
+      "11": 1.47,
+      "12": 1.53,
+      "13": 1.59,
+      "14": 1.65,
+      "15": 1.7,
+      "16": 1.75,
+      "17": 1.81,
+      "18": 1.86,
+      "19": 1.9,
+      "20": 1.95
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXA8003VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.968,
+      "3": 1.18,
+      "4": 1.37,
+      "5": 1.53,
+      "6": 1.67,
+      "7": 1.8,
+      "8": 1.93,
+      "9": 2.04,
+      "10": 2.15,
+      "11": 2.25,
+      "12": 2.35,
+      "13": 2.45,
+      "14": 2.54,
+      "15": 2.63,
+      "16": 2.72,
+      "17": 2.8,
+      "18": 2.88,
+      "19": 2.96,
+      "20": 3.03
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXB8003VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.968,
+      "3": 1.18,
+      "4": 1.37,
+      "5": 1.53,
+      "6": 1.67,
+      "7": 1.8,
+      "8": 1.93,
+      "9": 2.04,
+      "10": 2.15,
+      "11": 2.25,
+      "12": 2.35,
+      "13": 2.45,
+      "14": 2.54,
+      "15": 2.63,
+      "16": 2.72,
+      "17": 2.8,
+      "18": 2.88,
+      "19": 2.96,
+      "20": 3.03
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXA8004VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 1.29,
+      "3": 1.58,
+      "4": 1.82,
+      "5": 2.03,
+      "6": 2.23,
+      "7": 2.4,
+      "8": 2.57,
+      "9": 2.72,
+      "10": 2.87,
+      "11": 3.01,
+      "12": 3.14,
+      "13": 3.27,
+      "14": 3.39,
+      "15": 3.51,
+      "16": 3.62,
+      "17": 3.73,
+      "18": 3.84,
+      "19": 3.94,
+      "20": 4.04
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXB8004VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 1.29,
+      "3": 1.58,
+      "4": 1.82,
+      "5": 2.03,
+      "6": 2.23,
+      "7": 2.4,
+      "8": 2.57,
+      "9": 2.72,
+      "10": 2.87,
+      "11": 3.01,
+      "12": 3.14,
+      "13": 3.27,
+      "14": 3.39,
+      "15": 3.51,
+      "16": 3.62,
+      "17": 3.73,
+      "18": 3.84,
+      "19": 3.94,
+      "20": 4.04
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "TXR",
+   "tipo": "cone_vazio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "2 a 25 bar",
+   "fonte": "F2",
+   "pagina": "PDF p.6",
+   "paginaImpressa": "85",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); tabela horizontal, cada valor associado à coluna de pressão (bar) mais próxima",
+   "observacoes": "ConeJet TXR (cerâmica VK). Tabela horizontal 2–22 bar.",
+   "tamanhos": [
+    {
+     "codigo": "TXR800053VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.173,
+      "3": 0.209,
+      "4": 0.239,
+      "5": 0.265,
+      "6": 0.289,
+      "7": 0.31,
+      "8": 0.33,
+      "9": 0.349,
+      "10": 0.367,
+      "11": 0.383,
+      "12": 0.399,
+      "13": 0.414,
+      "14": 0.429,
+      "15": 0.443,
+      "16": 0.457,
+      "17": 0.47,
+      "18": 0.483,
+      "19": 0.495,
+      "20": 0.507,
+      "21": 0.519,
+      "22": 0.53
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXR800071VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.23,
+      "3": 0.28,
+      "4": 0.321,
+      "5": 0.357,
+      "6": 0.39,
+      "7": 0.419,
+      "8": 0.447,
+      "9": 0.473,
+      "10": 0.497,
+      "11": 0.521,
+      "12": 0.543,
+      "13": 0.564,
+      "14": 0.584,
+      "15": 0.604,
+      "16": 0.623,
+      "17": 0.641,
+      "18": 0.659,
+      "19": 0.676,
+      "20": 0.693,
+      "21": 0.709,
+      "22": 0.725
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXR8001VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.325,
+      "3": 0.394,
+      "4": 0.452,
+      "5": 0.503,
+      "6": 0.549,
+      "7": 0.591,
+      "8": 0.63,
+      "9": 0.666,
+      "10": 0.701,
+      "11": 0.733,
+      "12": 0.764,
+      "13": 0.794,
+      "14": 0.823,
+      "15": 0.85,
+      "16": 0.877,
+      "17": 0.903,
+      "18": 0.928,
+      "19": 0.952,
+      "20": 0.976,
+      "21": 0.999,
+      "22": 1.02
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXR80013VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.433,
+      "3": 0.525,
+      "4": 0.603,
+      "5": 0.671,
+      "6": 0.732,
+      "7": 0.788,
+      "8": 0.84,
+      "9": 0.888,
+      "10": 0.934,
+      "11": 0.978,
+      "12": 1.02,
+      "13": 1.06,
+      "14": 1.1,
+      "15": 1.13,
+      "16": 1.17,
+      "17": 1.2,
+      "18": 1.24,
+      "19": 1.27,
+      "20": 1.3,
+      "21": 1.33,
+      "22": 1.36
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXR80015VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.487,
+      "3": 0.591,
+      "4": 0.678,
+      "5": 0.754,
+      "6": 0.823,
+      "7": 0.886,
+      "8": 0.944,
+      "9": 0.999,
+      "10": 1.05,
+      "11": 1.1,
+      "12": 1.15,
+      "13": 1.19,
+      "14": 1.23,
+      "15": 1.28,
+      "16": 1.32,
+      "17": 1.35,
+      "18": 1.39,
+      "19": 1.43,
+      "20": 1.46,
+      "21": 1.5,
+      "22": 1.53
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXR80017VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.541,
+      "3": 0.657,
+      "4": 0.753,
+      "5": 0.838,
+      "6": 0.915,
+      "7": 0.985,
+      "8": 1.05,
+      "9": 1.11,
+      "10": 1.17,
+      "11": 1.22,
+      "12": 1.27,
+      "13": 1.32,
+      "14": 1.37,
+      "15": 1.42,
+      "16": 1.46,
+      "17": 1.51,
+      "18": 1.55,
+      "19": 1.59,
+      "20": 1.63,
+      "21": 1.67,
+      "22": 1.7
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXR8002VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.649,
+      "3": 0.788,
+      "4": 0.904,
+      "5": 1.01,
+      "6": 1.1,
+      "7": 1.18,
+      "8": 1.26,
+      "9": 1.33,
+      "10": 1.4,
+      "11": 1.47,
+      "12": 1.53,
+      "13": 1.59,
+      "14": 1.65,
+      "15": 1.7,
+      "16": 1.75,
+      "17": 1.81,
+      "18": 1.86,
+      "19": 1.9,
+      "20": 1.95,
+      "21": 2.0,
+      "22": 2.04
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXR80028VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.893,
+      "3": 1.08,
+      "4": 1.24,
+      "5": 1.38,
+      "6": 1.51,
+      "7": 1.62,
+      "8": 1.73,
+      "9": 1.83,
+      "10": 1.93,
+      "11": 2.02,
+      "12": 2.1,
+      "13": 2.18,
+      "14": 2.26,
+      "15": 2.34,
+      "16": 2.41,
+      "17": 2.48,
+      "18": 2.55,
+      "19": 2.62,
+      "20": 2.68,
+      "21": 2.75,
+      "22": 2.81
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXR8003VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 0.968,
+      "3": 1.18,
+      "4": 1.37,
+      "5": 1.53,
+      "6": 1.67,
+      "7": 1.8,
+      "8": 1.93,
+      "9": 2.04,
+      "10": 2.15,
+      "11": 2.26,
+      "12": 2.35,
+      "13": 2.45,
+      "14": 2.54,
+      "15": 2.63,
+      "16": 2.72,
+      "17": 2.8,
+      "18": 2.88,
+      "19": 2.96,
+      "20": 3.03,
+      "21": 3.11,
+      "22": 3.18
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXR80036VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 1.15,
+      "3": 1.41,
+      "4": 1.62,
+      "5": 1.81,
+      "6": 1.98,
+      "7": 2.14,
+      "8": 2.29,
+      "9": 2.42,
+      "10": 2.55,
+      "11": 2.68,
+      "12": 2.79,
+      "13": 2.91,
+      "14": 3.02,
+      "15": 3.12,
+      "16": 3.22,
+      "17": 3.32,
+      "18": 3.42,
+      "19": 3.51,
+      "20": 3.6,
+      "21": 3.69,
+      "22": 3.77
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXR8004VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 1.29,
+      "3": 1.58,
+      "4": 1.82,
+      "5": 2.03,
+      "6": 2.23,
+      "7": 2.4,
+      "8": 2.57,
+      "9": 2.72,
+      "10": 2.87,
+      "11": 3.01,
+      "12": 3.14,
+      "13": 3.27,
+      "14": 3.39,
+      "15": 3.51,
+      "16": 3.62,
+      "17": 3.73,
+      "18": 3.84,
+      "19": 3.94,
+      "20": 4.04,
+      "21": 4.14,
+      "22": 4.24
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "TXR80049VK",
+     "corIso": null,
+     "vazoes": {
+      "2": 1.58,
+      "3": 1.93,
+      "4": 2.22,
+      "5": 2.48,
+      "6": 2.72,
+      "7": 2.93,
+      "8": 3.13,
+      "9": 3.32,
+      "10": 3.5,
+      "11": 3.67,
+      "12": 3.83,
+      "13": 3.99,
+      "14": 4.14,
+      "15": 4.28,
+      "16": 4.42,
+      "17": 4.55,
+      "18": 4.69,
+      "19": 4.81,
+      "20": 4.94,
+      "21": 5.06,
+      "22": 5.18
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  },
+  {
+   "linha": "AITXA/AITXB",
+   "tipo": "cone_vazio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "4 a 20 bar",
+   "fonte": "F2",
+   "pagina": "PDF p.8",
+   "paginaImpressa": "87",
+   "metodoExtracao": "pdftotext -bbox (coordenadas de palavras); tabela horizontal, cada valor associado à coluna de pressão (bar) mais próxima",
+   "observacoes": "Cone vazio com indução de ar (pré-orifício removível); código impresso \"AITX†...VK\" com nota \"†Specify A or B\" — expandido em AITXA/AITXB.",
+   "tamanhos": [
+    {
+     "codigo": "AITXA8001VK",
+     "corIso": null,
+     "vazoes": {
+      "4": 0.449,
+      "5": 0.499,
+      "6": 0.545,
+      "7": 0.586,
+      "8": 0.625,
+      "9": 0.661,
+      "10": 0.695,
+      "11": 0.727,
+      "12": 0.758,
+      "13": 0.787,
+      "14": 0.816,
+      "15": 0.843,
+      "16": 0.869,
+      "17": 0.895,
+      "18": 0.92,
+      "19": 0.944,
+      "20": 0.967
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITXB8001VK",
+     "corIso": null,
+     "vazoes": {
+      "4": 0.449,
+      "5": 0.499,
+      "6": 0.545,
+      "7": 0.586,
+      "8": 0.625,
+      "9": 0.661,
+      "10": 0.695,
+      "11": 0.727,
+      "12": 0.758,
+      "13": 0.787,
+      "14": 0.816,
+      "15": 0.843,
+      "16": 0.869,
+      "17": 0.895,
+      "18": 0.92,
+      "19": 0.944,
+      "20": 0.967
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITXA80015VK",
+     "corIso": null,
+     "vazoes": {
+      "4": 0.674,
+      "5": 0.753,
+      "6": 0.824,
+      "7": 0.889,
+      "8": 0.95,
+      "9": 1.01,
+      "10": 1.06,
+      "11": 1.11,
+      "12": 1.16,
+      "13": 1.21,
+      "14": 1.25,
+      "15": 1.3,
+      "16": 1.34,
+      "17": 1.38,
+      "18": 1.42,
+      "19": 1.46,
+      "20": 1.49
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITXB80015VK",
+     "corIso": null,
+     "vazoes": {
+      "4": 0.674,
+      "5": 0.753,
+      "6": 0.824,
+      "7": 0.889,
+      "8": 0.95,
+      "9": 1.01,
+      "10": 1.06,
+      "11": 1.11,
+      "12": 1.16,
+      "13": 1.21,
+      "14": 1.25,
+      "15": 1.3,
+      "16": 1.34,
+      "17": 1.38,
+      "18": 1.42,
+      "19": 1.46,
+      "20": 1.49
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITXA8002VK",
+     "corIso": null,
+     "vazoes": {
+      "4": 0.92,
+      "5": 1.03,
+      "6": 1.13,
+      "7": 1.22,
+      "8": 1.3,
+      "9": 1.38,
+      "10": 1.46,
+      "11": 1.53,
+      "12": 1.6,
+      "13": 1.67,
+      "14": 1.73,
+      "15": 1.79,
+      "16": 1.85,
+      "17": 1.91,
+      "18": 1.96,
+      "19": 2.02,
+      "20": 2.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITXB8002VK",
+     "corIso": null,
+     "vazoes": {
+      "4": 0.92,
+      "5": 1.03,
+      "6": 1.13,
+      "7": 1.22,
+      "8": 1.3,
+      "9": 1.38,
+      "10": 1.46,
+      "11": 1.53,
+      "12": 1.6,
+      "13": 1.67,
+      "14": 1.73,
+      "15": 1.79,
+      "16": 1.85,
+      "17": 1.91,
+      "18": 1.96,
+      "19": 2.02,
+      "20": 2.07
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITXA80025VK",
+     "corIso": null,
+     "vazoes": {
+      "4": 1.12,
+      "5": 1.25,
+      "6": 1.37,
+      "7": 1.48,
+      "8": 1.58,
+      "9": 1.67,
+      "10": 1.77,
+      "11": 1.85,
+      "12": 1.93,
+      "13": 2.01,
+      "14": 2.09,
+      "15": 2.16,
+      "16": 2.23,
+      "17": 2.3,
+      "18": 2.37,
+      "19": 2.43,
+      "20": 2.49
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITXB80025VK",
+     "corIso": null,
+     "vazoes": {
+      "4": 1.12,
+      "5": 1.25,
+      "6": 1.37,
+      "7": 1.48,
+      "8": 1.58,
+      "9": 1.67,
+      "10": 1.77,
+      "11": 1.85,
+      "12": 1.93,
+      "13": 2.01,
+      "14": 2.09,
+      "15": 2.16,
+      "16": 2.23,
+      "17": 2.3,
+      "18": 2.37,
+      "19": 2.43,
+      "20": 2.49
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITXA8003VK",
+     "corIso": null,
+     "vazoes": {
+      "4": 1.34,
+      "5": 1.5,
+      "6": 1.65,
+      "7": 1.78,
+      "8": 1.91,
+      "9": 2.02,
+      "10": 2.14,
+      "11": 2.24,
+      "12": 2.34,
+      "13": 2.44,
+      "14": 2.54,
+      "15": 2.63,
+      "16": 2.72,
+      "17": 2.8,
+      "18": 2.88,
+      "19": 2.96,
+      "20": 3.04
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITXB8003VK",
+     "corIso": null,
+     "vazoes": {
+      "4": 1.34,
+      "5": 1.5,
+      "6": 1.65,
+      "7": 1.78,
+      "8": 1.91,
+      "9": 2.02,
+      "10": 2.14,
+      "11": 2.24,
+      "12": 2.34,
+      "13": 2.44,
+      "14": 2.54,
+      "15": 2.63,
+      "16": 2.72,
+      "17": 2.8,
+      "18": 2.88,
+      "19": 2.96,
+      "20": 3.04
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITXA8004VK",
+     "corIso": null,
+     "vazoes": {
+      "4": 1.79,
+      "5": 2.0,
+      "6": 2.2,
+      "7": 2.38,
+      "8": 2.54,
+      "9": 2.7,
+      "10": 2.85,
+      "11": 2.99,
+      "12": 3.13,
+      "13": 3.26,
+      "14": 3.38,
+      "15": 3.5,
+      "16": 3.62,
+      "17": 3.74,
+      "18": 3.85,
+      "19": 3.95,
+      "20": 4.06
+     },
+     "unidade": "L/min por bar"
+    },
+    {
+     "codigo": "AITXB8004VK",
+     "corIso": null,
+     "vazoes": {
+      "4": 1.79,
+      "5": 2.0,
+      "6": 2.2,
+      "7": 2.38,
+      "8": 2.54,
+      "9": 2.7,
+      "10": 2.85,
+      "11": 2.99,
+      "12": 3.13,
+      "13": 3.26,
+      "14": 3.38,
+      "15": 3.5,
+      "16": 3.62,
+      "17": 3.74,
+      "18": 3.85,
+      "19": 3.95,
+      "20": 4.06
+     },
+     "unidade": "L/min por bar"
+    }
+   ]
+  }
+ ]
+}

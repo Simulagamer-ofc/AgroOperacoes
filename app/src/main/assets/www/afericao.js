@@ -305,7 +305,7 @@ function passoWizard() {
         campo('unidadePressao', 'Unidade da pressão', sel('unidadePressao', [['bar', 'bar'], ['psi', 'psi (lbf/pol²)']], w.unidadePressao || 'bar', 'bar'), 'A do manômetro usado na coleta.') +
         campo('corIso', 'Cor da ponta (ISO 10625)', `<select data-wz="corIso" id="wz_corIso"><option value="">—</option></select>`, 'Só identifica a classe de vazão.') +
         '<div class="field full" id="pontaCat"></div>' +
-        campo('vazaoCatalogo', 'Vazão da tabela do fabricante (L/min)', num_('vazaoCatalogo', w.vazaoCatalogo), w.fonteVazao ? `Da tabela ${w.fonteVazao.ponta} a ${num(w.fonteVazao.pressao, 2)} ${w.fonteVazao.unidadePressao} — ${w.fonteVazao.fonte}${w.fonteVazao.pagina ? ', p. ' + w.fonteVazao.pagina : ''}.` : 'Do catálogo do modelo exato, na pressão da coleta. Só entra se você digitar ou confirmar no catálogo de pontas acima.'),
+        campo('vazaoCatalogo', 'Vazão da tabela do fabricante (L/min)', num_('vazaoCatalogo', w.vazaoCatalogo), w.fonteVazao ? `Da tabela ${w.fonteVazao.ponta} a ${String(w.fonteVazao.pressao).replace('.', ',')} ${w.fonteVazao.unidadePressao} — ${w.fonteVazao.fonte}${w.fonteVazao.pagina ? ', p. ' + w.fonteVazao.pagina : ''}.` : 'Do catálogo do modelo exato, na pressão da coleta. Só entra se você digitar ou confirmar no catálogo de pontas acima.'),
         campo('unidadeVazao', 'Unidade das vazões medidas', sel('unidadeVazao', [['L/min', 'L/min'], ['mL/min', 'mL/min']], w.unidadeVazao || 'L/min', 'L/min'), '', true) +
         listaMedidas('vazoes', 'Vazão medida em cada bico', w.unidadeVazao || 'L/min')],
       perdas: () => [

@@ -1,0 +1,783 @@
+{
+ "fabricante": "Jacto",
+ "nota": "Linhas da Jacto antes lidas apenas visualmente, agora reextraídas de texto/ OCR. Pressões como impressas (psi = lbf/pol²); nenhuma conversão. corIso derivada apenas do código ISO. Campos tipo/angulos/preOrificioOuInducao herdados de jacto.json (descritivos, não são valores de vazão).",
+ "fontes": [
+  {
+   "id": "F33",
+   "titulo": "Folheto Jacto TVI (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_file_file_pt_BR_1701952430565_TVI.pdf",
+   "ano": "2023",
+   "anoObs": "sem data impressa; arquivo publicado/atualizado no site em 2023-12-07",
+   "arquivoLocal": "pontas/jacto/pdf/36.pdf"
+  },
+  {
+   "id": "F34",
+   "titulo": "Folheto Jacto JAI (PT) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_files_0_1492541407_Folheto_Jacto_JAI_PT_930001848.pdf",
+   "ano": "07/2014",
+   "anoObs": "data impressa no rodapé: 07/2014 (cód. impresso 930001848); arquivo publicado/atualizado no site em 2018-04-18",
+   "arquivoLocal": "pontas/jacto/pdf/38.pdf"
+  },
+  {
+   "id": "F35",
+   "titulo": "Guia de Bolso Bicos Jacto (digital, PT/ES/EN) – jacto.com",
+   "url": "https://s3.amazonaws.com/1-jacto.com.br/files/product_file_file_pt_BR_1711399107308_Guia_Bolso_Bicos-digital.pdf",
+   "ano": "2024",
+   "anoObs": "sem data impressa; arquivo publicado/atualizado no site em 2024-08-27",
+   "arquivoLocal": "pontas/jacto/pdf/163.pdf"
+  }
+ ],
+ "linhas": [
+  {
+   "linha": "TVI",
+   "tipo": "cone vazio",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "75 a 225 lbf/pol²",
+   "fonte": "F33",
+   "pagina": "PDF p.2",
+   "metodoExtracao": "texto do PDF: códigos de glifo crus (fonte CID sem ToUnicode) lidos do content stream e decodificados por mapa glifo→caractere aprendido por alinhamento com OCR (RapidOCR/ONNX, PP-OCRv4) da página renderizada; mapa bijetivo sem conflitos; cada valor conferido 1:1 contra o OCR da mesma célula; conferido por L/ha (cada linha: ≥12 colunas L/ha impressas = vazão×600/(v×espaçamento), no máximo 1 célula isolada divergente) e idêntico à leitura visual anterior de jacto.json",
+   "observacoes": "Cone vazio com indução de ar. A tabela visível é uma imagem raster (Im1) sobreposta a uma camada de texto oculta com a mesma tabela; vazões/pressões da camada de texto = OCR da imagem visível em 100% das células. Rótulos de modelo na camada de texto dizem \"TVI 80050\"/\"TVI 80075\" (também o rodapé: \"TVI 80050 - RG 810.358\"), mas a imagem visível imprime \"800050\"/\"800075\"; usado o impresso visível. TVI 800050 a 75 e 90 lbf/pol² impresso \"NR*\" (não recomendado) — omitidos. Separador decimal: vírgula na imagem; o glifo da camada oculta é ponto.",
+   "tamanhos": [
+    {
+     "codigo": "TVI 800050",
+     "corIso": null,
+     "vazoes": {
+      "105": 0.31,
+      "120": 0.33,
+      "135": 0.35,
+      "150": 0.37,
+      "225": 0.45
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "TVI 800075",
+     "corIso": null,
+     "vazoes": {
+      "75": 0.39,
+      "90": 0.42,
+      "105": 0.46,
+      "120": 0.49,
+      "135": 0.52,
+      "150": 0.55,
+      "225": 0.67
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "TVI 80015",
+     "corIso": "verde",
+     "vazoes": {
+      "75": 0.77,
+      "90": 0.85,
+      "105": 0.92,
+      "120": 0.98,
+      "135": 1.04,
+      "150": 1.1,
+      "225": 1.34
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "TVI 8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "75": 1.03,
+      "90": 1.13,
+      "105": 1.22,
+      "120": 1.31,
+      "135": 1.39,
+      "150": 1.46,
+      "225": 1.79
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "TVI 80025",
+     "corIso": "lilás",
+     "vazoes": {
+      "75": 1.29,
+      "90": 1.41,
+      "105": 1.53,
+      "120": 1.63,
+      "135": 1.73,
+      "150": 1.83,
+      "225": 2.24
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "TVI 8003",
+     "corIso": "azul",
+     "vazoes": {
+      "75": 1.55,
+      "90": 1.7,
+      "105": 1.83,
+      "120": 1.96,
+      "135": 2.08,
+      "150": 2.19,
+      "225": 2.68
+     },
+     "unidade": "L/min por lbf/pol²"
+    }
+   ]
+  },
+  {
+   "linha": "JAI",
+   "tipo": "indução de ar",
+   "angulos": [
+    120
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "30 a 120 psi",
+   "fonte": "F34",
+   "pagina": "PDF p.2",
+   "metodoExtracao": "OCR (RapidOCR/ONNX, PP-OCRv4 — tesseract não disponível) da página renderizada a 400 e 300 dpi; números são vetores/imagem sem camada de texto; as duas passagens concordam em todas as vazões; conferido por L/ha (cada linha: ≥12 colunas L/ha impressas = vazão×600/(v×espaçamento), no máximo 1 célula isolada divergente, explicada por fusão de células no OCR ou erro tipográfico na coluna L/ha) e idêntico à leitura visual anterior de jacto.json",
+   "observacoes": "Tabela desenhada como vetores (sem texto extraível). JAI 120025 a 90 psi impresso 1,14 (menor que a 75 psi, 1,29) — mantido como impresso; as colunas L/ha impressas nessa linha (274 a 5 km/h …) também correspondem a 1,14, ou seja, o erro (provável 1,41) está consistente na linha inteira do catálogo.",
+   "tamanhos": [
+    {
+     "codigo": "JAI 120015",
+     "corIso": "verde",
+     "vazoes": {
+      "15": 0.35,
+      "20": 0.42,
+      "30": 0.49,
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77,
+      "90": 0.85,
+      "105": 0.92,
+      "120": 0.98
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAI 12002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "15": 0.46,
+      "20": 0.57,
+      "30": 0.65,
+      "45": 0.8,
+      "60": 0.92,
+      "75": 1.03,
+      "90": 1.13,
+      "105": 1.22,
+      "120": 1.31
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAI 120025",
+     "corIso": "lilás",
+     "vazoes": {
+      "15": 0.58,
+      "20": 0.71,
+      "30": 0.82,
+      "45": 1.0,
+      "60": 1.15,
+      "75": 1.29,
+      "90": 1.14,
+      "105": 1.53,
+      "120": 1.63
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAI 12003",
+     "corIso": "azul",
+     "vazoes": {
+      "15": 0.69,
+      "20": 0.85,
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55,
+      "90": 1.7,
+      "105": 1.83,
+      "120": 1.96
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAI 12004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "15": 0.92,
+      "20": 1.13,
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07,
+      "90": 2.26,
+      "105": 2.44,
+      "120": 2.61
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAI 12005",
+     "corIso": "marrom",
+     "vazoes": {
+      "15": 1.15,
+      "20": 1.41,
+      "30": 1.63,
+      "45": 2.0,
+      "60": 2.31,
+      "75": 2.58,
+      "90": 2.83,
+      "105": 3.06,
+      "120": 3.27
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAI 12006",
+     "corIso": "cinza",
+     "vazoes": {
+      "15": 1.39,
+      "20": 1.7,
+      "30": 1.96,
+      "45": 2.4,
+      "60": 2.77,
+      "75": 3.1,
+      "90": 3.39,
+      "105": 3.67,
+      "120": 3.92
+     },
+     "unidade": "L/min por psi"
+    },
+    {
+     "codigo": "JAI 12008",
+     "corIso": "branco",
+     "vazoes": {
+      "15": 1.85,
+      "20": 2.26,
+      "30": 2.61,
+      "45": 3.2,
+      "60": 3.7,
+      "75": 4.13,
+      "90": 4.53,
+      "105": 4.89,
+      "120": 5.23
+     },
+     "unidade": "L/min por psi"
+    }
+   ]
+  },
+  {
+   "linha": "OCI",
+   "tipo": "leque",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "30 a 60 psi",
+   "fonte": "F35",
+   "pagina": "PDF p.10 (impressas 17–18)",
+   "metodoExtracao": "OCR (RapidOCR/ONNX, PP-OCRv4 — tesseract não disponível) da página renderizada a 600 e 400 dpi; números são vetores/imagem sem camada de texto; as duas passagens concordam em todas as vazões; conferido por L/ha (cada linha: ≥12 colunas L/ha impressas = vazão×600/(v×espaçamento), no máximo 1 célula isolada divergente, explicada por fusão de células no OCR ou erro tipográfico na coluna L/ha) e idêntico à leitura visual anterior de jacto.json",
+   "observacoes": "Leque plano descentralizado (off-center), ângulo 15°+65° (80°). Página do guia sem camada de texto para a tabela (imagem).",
+   "tamanhos": [
+    {
+     "codigo": "OCI 8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "30": 0.66,
+      "45": 0.8,
+      "60": 0.91
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "OCI 8003",
+     "corIso": "azul",
+     "vazoes": {
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "OCI 8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85
+     },
+     "unidade": "L/min por lbf/pol²"
+    }
+   ]
+  },
+  {
+   "linha": "AVI OC",
+   "tipo": "indução de ar",
+   "angulos": [
+    80
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "45 a 105 psi",
+   "fonte": "F35",
+   "pagina": "PDF p.16 (impressas 29–30)",
+   "metodoExtracao": "OCR (RapidOCR/ONNX, PP-OCRv4 — tesseract não disponível) da página renderizada a 600 e 400 dpi; números são vetores/imagem sem camada de texto; as duas passagens concordam em todas as vazões; conferido por L/ha (cada linha: ≥12 colunas L/ha impressas = vazão×600/(v×espaçamento), no máximo 1 célula isolada divergente, explicada por fusão de células no OCR ou erro tipográfico na coluna L/ha) e idêntico à leitura visual anterior de jacto.json",
+   "observacoes": "Leque descentralizado com indução de ar (15°+65°). 1º bloco rotulado apenas \"80015\" no guia. AVI OC 80025 DESCARTADO: a 90 psi a coluna L/min imprime 1,14, mas as 15 colunas L/ha impressas na mesma linha (338 a 5 km/h, 282, 242 …) correspondem a 1,41 L/min — vazão não confirmada.",
+   "tamanhos": [
+    {
+     "codigo": "AVI OC 80015",
+     "corIso": "verde",
+     "vazoes": {
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77,
+      "90": 0.85,
+      "105": 0.92
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "AVI OC 8002",
+     "corIso": "amarelo",
+     "vazoes": {
+      "45": 0.8,
+      "60": 0.91,
+      "75": 1.03,
+      "90": 1.13,
+      "105": 1.22
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "AVI OC 8003",
+     "corIso": "azul",
+     "vazoes": {
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55,
+      "90": 1.7,
+      "105": 1.83
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "AVI OC 8004",
+     "corIso": "vermelho",
+     "vazoes": {
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07,
+      "90": 2.26,
+      "105": 2.44
+     },
+     "unidade": "L/min por lbf/pol²"
+    }
+   ]
+  },
+  {
+   "linha": "AVI FASTCAP",
+   "tipo": "indução de ar",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "45 a 105 psi",
+   "fonte": "F35",
+   "pagina": "PDF p.17 (impressas 31–32)",
+   "metodoExtracao": "texto do PDF: códigos de glifo crus (fonte CID sem ToUnicode) lidos do content stream e decodificados por mapa glifo→caractere aprendido por alinhamento com OCR (RapidOCR/ONNX, PP-OCRv4) da página renderizada; mapa bijetivo sem conflitos; cada valor conferido 1:1 contra o OCR da mesma célula; conferido por L/ha (cada linha: ≥12 colunas L/ha impressas = vazão×600/(v×espaçamento), no máximo 1 célula isolada divergente) e idêntico à leitura visual anterior de jacto.json",
+   "observacoes": "Tabela do guia lista 45, 60, 75 e 105 psi (sem 90). A página tem duas cópias da camada de texto (XObjects /X33 e /X34); usada a /X34, que coincide com o OCR da página renderizada.",
+   "tamanhos": [
+    {
+     "codigo": "AVI 11001 (FASTCAP)",
+     "corIso": "laranja",
+     "vazoes": {
+      "45": 0.4,
+      "60": 0.46,
+      "75": 0.52,
+      "105": 0.61
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "AVI 110015 (FASTCAP)",
+     "corIso": "verde",
+     "vazoes": {
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77,
+      "105": 0.92
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "AVI 11002 (FASTCAP)",
+     "corIso": "amarelo",
+     "vazoes": {
+      "45": 0.8,
+      "60": 0.91,
+      "75": 1.03,
+      "105": 1.22
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "AVI 110025 (FASTCAP)",
+     "corIso": "lilás",
+     "vazoes": {
+      "45": 1.0,
+      "60": 1.15,
+      "75": 1.29,
+      "105": 1.53
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "AVI 11003 (FASTCAP)",
+     "corIso": "azul",
+     "vazoes": {
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55,
+      "105": 1.83
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "AVI 11004 (FASTCAP)",
+     "corIso": "vermelho",
+     "vazoes": {
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07,
+      "105": 2.44
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "AVI 11005 (FASTCAP)",
+     "corIso": "marrom",
+     "vazoes": {
+      "45": 2.0,
+      "60": 2.31,
+      "75": 2.58,
+      "105": 3.06
+     },
+     "unidade": "L/min por lbf/pol²"
+    }
+   ]
+  },
+  {
+   "linha": "AVI TWIN FASTCAP",
+   "tipo": "duplo leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "45 a 105 psi",
+   "fonte": "F35",
+   "pagina": "PDF p.19 (impressas 35–36)",
+   "metodoExtracao": "texto do PDF: códigos de glifo crus (fonte CID sem ToUnicode) lidos do content stream e decodificados por mapa glifo→caractere aprendido por alinhamento com OCR (RapidOCR/ONNX, PP-OCRv4) da página renderizada; mapa bijetivo sem conflitos; cada valor conferido 1:1 contra o OCR da mesma célula; conferido por L/ha (cada linha: ≥12 colunas L/ha impressas = vazão×600/(v×espaçamento), no máximo 1 célula isolada divergente) e idêntico à leitura visual anterior de jacto.json",
+   "observacoes": "Duplo leque com indução de ar. Duas cópias da camada de texto (/X37, /X38); usada a /X38, que coincide com o OCR.",
+   "tamanhos": [
+    {
+     "codigo": "AVI TWIN 11001 (FASTCAP)",
+     "corIso": "laranja",
+     "vazoes": {
+      "45": 0.4,
+      "60": 0.46,
+      "75": 0.52,
+      "90": 0.57,
+      "105": 0.61
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "AVI TWIN 110015 (FASTCAP)",
+     "corIso": "verde",
+     "vazoes": {
+      "45": 0.6,
+      "60": 0.69,
+      "75": 0.77,
+      "90": 0.85,
+      "105": 0.92
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "AVI TWIN 11002 (FASTCAP)",
+     "corIso": "amarelo",
+     "vazoes": {
+      "45": 0.8,
+      "60": 0.91,
+      "75": 1.03,
+      "90": 1.13,
+      "105": 1.22
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "AVI TWIN 110025 (FASTCAP)",
+     "corIso": "lilás",
+     "vazoes": {
+      "45": 1.0,
+      "60": 1.15,
+      "75": 1.29,
+      "90": 1.41,
+      "105": 1.53
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "AVI TWIN 11003 (FASTCAP)",
+     "corIso": "azul",
+     "vazoes": {
+      "45": 1.2,
+      "60": 1.39,
+      "75": 1.55,
+      "90": 1.7,
+      "105": 1.83
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "AVI TWIN 11004 (FASTCAP)",
+     "corIso": "vermelho",
+     "vazoes": {
+      "45": 1.6,
+      "60": 1.85,
+      "75": 2.07,
+      "90": 2.26,
+      "105": 2.44
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "AVI TWIN 11005 (FASTCAP)",
+     "corIso": "marrom",
+     "vazoes": {
+      "45": 2.0,
+      "60": 2.31,
+      "75": 2.58,
+      "90": 2.83,
+      "105": 3.06
+     },
+     "unidade": "L/min por lbf/pol²"
+    }
+   ]
+  },
+  {
+   "linha": "ESI",
+   "tipo": "leque",
+   "angulos": [
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "20 a 60 psi",
+   "fonte": "F35",
+   "pagina": "PDF p.28 (impressas 53–54)",
+   "metodoExtracao": "texto do PDF: códigos de glifo crus (fonte CID sem ToUnicode) lidos do content stream e decodificados por mapa glifo→caractere aprendido por alinhamento com OCR (RapidOCR/ONNX, PP-OCRv4) da página renderizada; mapa bijetivo sem conflitos; cada valor conferido 1:1 contra o OCR da mesma célula; conferido por L/ha (cada linha: ≥12 colunas L/ha impressas = vazão×600/(v×espaçamento), no máximo 1 célula isolada divergente) e idêntico à leitura visual anterior de jacto.json",
+   "observacoes": "\"Jato sólido (6 jatos)\" — fertilizante líquido; classificado como \"leque\" por aproximação. ESI 03 a 20 psi impresso 0,80 (L/ha da linha consistentes com 0,80). Colunas L/ha com erros de impressão que não afetam as vazões: ESI 015 a 60 psi/10 km/h impresso 63 (calc. 83); ESI 03 a 30 psi/7 km/h impresso 68 (calc. 168).",
+   "tamanhos": [
+    {
+     "codigo": "ESI 015",
+     "corIso": "verde",
+     "vazoes": {
+      "20": 0.42,
+      "30": 0.49,
+      "45": 0.6,
+      "60": 0.69
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "ESI 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "20": 0.57,
+      "30": 0.66,
+      "45": 0.8,
+      "60": 0.91
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "ESI 025",
+     "corIso": "lilás",
+     "vazoes": {
+      "20": 0.71,
+      "30": 0.82,
+      "45": 1.0,
+      "60": 1.15
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "ESI 03",
+     "corIso": "azul",
+     "vazoes": {
+      "20": 0.8,
+      "30": 0.98,
+      "45": 1.2,
+      "60": 1.39
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "ESI 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "20": 1.13,
+      "30": 1.31,
+      "45": 1.6,
+      "60": 1.85
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "ESI 05",
+     "corIso": "marrom",
+     "vazoes": {
+      "20": 1.41,
+      "30": 1.63,
+      "45": 2.0,
+      "60": 2.3
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "ESI 06",
+     "corIso": "cinza",
+     "vazoes": {
+      "20": 1.7,
+      "30": 1.96,
+      "45": 2.4,
+      "60": 2.77
+     },
+     "unidade": "L/min por lbf/pol²"
+    }
+   ]
+  },
+  {
+   "linha": "XT",
+   "tipo": "leque",
+   "angulos": [
+    95,
+    110
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": "30 a 60 psi",
+   "fonte": "F35",
+   "pagina": "PDF p.43 (impressas 83–84)",
+   "metodoExtracao": "OCR (RapidOCR/ONNX, PP-OCRv4 — tesseract não disponível) da página renderizada a 600 e 400 dpi; números são vetores/imagem sem camada de texto; as duas passagens concordam em todas as vazões; conferido por L/ha (cada linha: ≥12 colunas L/ha impressas = vazão×600/(v×espaçamento), no máximo 1 célula isolada divergente, explicada por fusão de células no OCR ou erro tipográfico na coluna L/ha) e idêntico à leitura visual anterior de jacto.json",
+   "observacoes": "Bico de ponta de barra (leque descentralizado); identificação \"pela cor\", não ISO. Tabela é imagem. L/ha impressos para 1 bico com faixa tratada impressa a 45 lbf/pol²: XT 10 = 3,9 m, XT 20 = 4,8 m, XT 24 = 4,9 m (conferência L/ha usou essas faixas). Célula L/ha isolada divergente (lida 66 nas duas passagens; calc. ≈99): XT 10 a 60 psi/12 km/h e XT 20 a 45 psi/16 km/h — demais 13 células da linha batem.",
+   "tamanhos": [
+    {
+     "codigo": "XT 10",
+     "corIso": null,
+     "vazoes": {
+      "30": 3.4,
+      "45": 4.0,
+      "60": 4.5
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "XT 20",
+     "corIso": null,
+     "vazoes": {
+      "30": 6.4,
+      "45": 7.9,
+      "60": 9.1
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "XT 24",
+     "corIso": null,
+     "vazoes": {
+      "30": 7.9,
+      "45": 9.6,
+      "60": 11.0
+     },
+     "unidade": "L/min por lbf/pol²"
+    }
+   ]
+  },
+  {
+   "linha": "MVI",
+   "tipo": "indução de ar",
+   "angulos": [
+    130,
+    160
+   ],
+   "preOrificioOuInducao": true,
+   "faixaPressaoImpressa": "20 a 60 psi",
+   "fonte": "F35",
+   "pagina": "PDF p.44 (impressas 85–86)",
+   "metodoExtracao": "OCR (RapidOCR/ONNX, PP-OCRv4 — tesseract não disponível) da página renderizada a 600 e 400 dpi; números são vetores/imagem sem camada de texto; as duas passagens concordam em todas as vazões; conferido por L/ha (cada linha: ≥12 colunas L/ha impressas = vazão×600/(v×espaçamento), no máximo 1 célula isolada divergente, explicada por fusão de células no OCR ou erro tipográfico na coluna L/ha) e idêntico à leitura visual anterior de jacto.json",
+   "observacoes": "Leque plano uniforme defletor com indução de ar. Tabela é imagem. MVI 04 a 45 psi impresso \"1,6\" (uma casa decimal). As colunas L/ha impressas são consistentes com espaçamento de 1,0 m (inferido; o guia não imprime o espaçamento nesta tabela).",
+   "tamanhos": [
+    {
+     "codigo": "MVI 02",
+     "corIso": "amarelo",
+     "vazoes": {
+      "20": 0.55,
+      "30": 0.67,
+      "45": 0.81,
+      "60": 0.94
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "MVI 04",
+     "corIso": "vermelho",
+     "vazoes": {
+      "20": 1.15,
+      "30": 1.32,
+      "45": 1.6,
+      "60": 1.84
+     },
+     "unidade": "L/min por lbf/pol²"
+    }
+   ]
+  },
+  {
+   "linha": "KLC",
+   "tipo": "leque",
+   "angulos": [
+    130,
+    160
+   ],
+   "preOrificioOuInducao": false,
+   "faixaPressaoImpressa": null,
+   "fonte": "F35",
+   "pagina": "PDF p.45 (impressas 87–88)",
+   "metodoExtracao": "texto do PDF: códigos de glifo crus (fonte CID sem ToUnicode) lidos do content stream e decodificados por mapa glifo→caractere aprendido por alinhamento com OCR (RapidOCR/ONNX, PP-OCRv4) da página renderizada; mapa bijetivo sem conflitos; cada valor conferido 1:1 contra o OCR da mesma célula; conferido por L/ha (cada linha: ≥12 colunas L/ha impressas = vazão×600/(v×espaçamento), no máximo 1 célula isolada divergente) e idêntico à leitura visual anterior de jacto.json",
+   "observacoes": "Leque defletor extra amplo, latão; identificação pela numeração do bico. Faixa de aplicação impressa \"1 / 10 metros\" (não é faixa de pressão). Largura de faixa impressa por pressão (m): 1/4 KLC - 5: 15 psi→5,2, 30 psi→5,5, 45 psi→6,4; 1/4 KLC - 18: 15 psi→6,1, 30 psi→6,4, 45 psi→6,7; L/ha conferidos com essas larguras.",
+   "tamanhos": [
+    {
+     "codigo": "1/4 KLC - 5",
+     "corIso": null,
+     "vazoes": {
+      "15": 2.32,
+      "30": 3.28,
+      "45": 4.02
+     },
+     "unidade": "L/min por lbf/pol²"
+    },
+    {
+     "codigo": "1/4 KLC - 18",
+     "corIso": null,
+     "vazoes": {
+      "15": 8.34,
+      "30": 11.8,
+      "45": 14.44
+     },
+     "unidade": "L/min por lbf/pol²"
+    }
+   ]
+  }
+ ]
+}
