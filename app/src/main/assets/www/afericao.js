@@ -371,7 +371,7 @@ function atualizarResumoLista(k) {
     const tag = i.parentElement.querySelector('.af-lm-tag'), v = umNum(i.value);
     tag.textContent = ''; tag.className = 'af-lm-tag';
     if (k !== 'vazoes' || v === undefined || !(cat > 0)) return;
-    const d = (v * f - cat) / cat * 100;
+    const d = Math.round((v * f - cat) / cat * 100 * 1e6) / 1e6; // mesmo arredondamento do avaliador
     tag.textContent = `${d > 0 ? '+' : ''}${num(d, 1)}%`;
     // ok/fora só quando o critério validado se aplica (coleta na pressão da tabela); senão, só o desvio, neutro
     if (limitesBico && wz?.pressaoColetaIgualCatalogo === 'sim') tag.classList.add(d < limitesBico[0] || d > limitesBico[1] ? 'fora' : 'ok');
