@@ -407,3 +407,22 @@ test('revisão: limite comparado com o valor medido sem arredondar; conflitos e 
   const r3 = av(b3, 20);
   assert.equal(r3.status, STATUS.OK); assert.ok(r3.pendencias.some(p => p.includes('outra referência validada')));
 });
+
+test('bicos: exatamente ±10% da tabela fica dentro nos dois sentidos (sem resíduo de ponto flutuante)', () => {
+  const r = A.avaliarBicos({vazoes: [0.72, 0.8, 0.88], vazaoCatalogo: 0.8, pressaoColetaIgualCatalogo: true, mesmoTempoColeta: true, pontasMesmoModelo: true}, BANCO);
+  assert.equal(r.bicos[0].status, 'OK');
+  assert.equal(r.bicos[2].status, 'OK');
+  const f = A.avaliarBicos({vazoes: [0.719, 0.8, 0.881], vazaoCatalogo: 0.8, pressaoColetaIgualCatalogo: true, mesmoTempoColeta: true, pontasMesmoModelo: true}, BANCO);
+  assert.equal(f.bicos[0].status, 'FORA_DO_PADRAO');
+  assert.equal(f.bicos[2].status, 'FORA_DO_PADRAO');
+});
+
+test('bicos: bico entupido (0 L/min) é avaliado como fora; os demais seguem avaliados', () => {
+  const r = A.avaliarBicos({vazoes: [0.8, 0, 0.81], vazaoCatalogo: 0.8, pressaoColetaIgualCatalogo: true, mesmoTempoColeta: true, pontasMesmoModelo: true}, BANCO);
+  assert.equal(r.bicos[1].status, 'FORA_DO_PADRAO');
+  assert.equal(r.bicos[1].desvioCatalogo, -100);
+  assert.equal(r.bicos[0].status, 'OK');
+  assert.equal(r.status, 'FORA_DO_PADRAO');
+  assert.equal(A.avaliarBicos({vazoes: [0, 0], vazaoCatalogo: 0.8}, BANCO).status, 'DADOS_INSUFICIENTES');
+  assert.equal(A.avaliarBicos({vazoes: [0.8, -0.1], vazaoCatalogo: 0.8}, BANCO).status, 'DADOS_INSUFICIENTES');
+});

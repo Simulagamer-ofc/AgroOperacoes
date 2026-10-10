@@ -185,7 +185,8 @@
 
     // Cálculo do resultado com a regra aplicável
     const {regra, aplicadas} = validadas[0];
-    const v = leitura.valor, min = finito(regra.limiteMin) ? regra.limiteMin : null, max = finito(regra.limiteMax) ? regra.limiteMax : null;
+    // Compara com 6 casas: resíduo de ponto flutuante (ex.: −10,000000000000009%) não pode decidir o resultado no limite
+    const v = arred(leitura.valor, 6), min = finito(regra.limiteMin) ? regra.limiteMin : null, max = finito(regra.limiteMax) ? regra.limiteMax : null;
     Object.assign(res, {
       limiteMin: min, limiteMax: max, alvo: finito(regra.alvo) ? regra.alvo : null,
       regraId: regra.id, regraVersao: regra.versao, regraTitulo: regra.titulo,
@@ -233,7 +234,8 @@
    */
   function avaliarBicos(dados, banco, opcoes = {}) {
     const vazoes = dados.vazoes || [];
-    if (vazoes.length < 2 || !vazoes.every(v => finito(v) && v > 0)) {
+    // Bico entupido (0 L/min) é avaliado (−100% da tabela); negativos e listas sem nenhuma vazão não
+    if (vazoes.length < 2 || !vazoes.every(v => finito(v) && v >= 0) || !vazoes.some(v => v > 0)) {
       return {status: STATUS.DADOS_INSUFICIENTES, pendencias: ['Informe a vazão (L/min) de pelo menos 2 bicos.'], bicos: []};
     }
     const media = calculos.media(vazoes), cv = calculos.cv(vazoes);

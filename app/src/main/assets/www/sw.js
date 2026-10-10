@@ -1,4 +1,4 @@
-const CACHE = "agro-ops-v30";
+const CACHE = "agro-ops-v31";
 const ASSETS = ["./", "index.html", "styles.css", "app.js", "avaliador.js", "afericao.js", "secagem.js", "gastos.js", "estoque.js", "ubs.js", "combustivel.js", "financeiro.js", "producao.js", "lib/qrcode.js", "rastreio.js", "campo.js", "nfe.js", "sync.js", "mapa.js", "lcdpr.js", "graficos.js", "catalogo.js", "maqconfig.js", "pontas.js", "dados/pontas.json", "dados/regras-afericao.json", "dados/catalogo-modelos.json", "dados/finame.json", "dados/marcas.json", "manifest.webmanifest", "icon.svg", "img/centro-operacoes.jpg", "icon-192.png", "icon-512.png", "icon-maskable-512.png"];
 self.addEventListener("install", event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting())));
 self.addEventListener("activate", event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim())));
