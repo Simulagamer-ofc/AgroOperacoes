@@ -43,6 +43,8 @@ for m in indice['marcas']:
         if x.get('especificacoes'):
             item['e'] = [[e.get('secao') or '', e['campo'], e['valor']] for e in x['especificacoes']]
             item['o'] = x.get('origemEspecificacoes')
+        if x.get('familiaIdentificacao'):
+            item['fi'] = x['familiaIdentificacao']
         if x.get('documentos'):
             item['d'] = [[doc.get('titulo') or 'Documento', doc['url']] for doc in x['documentos']]
         modelos.append(item)
@@ -57,7 +59,19 @@ FAMILIA_IDENT = {
     'colhedora_forragem': 'colhedora_forragem', 'colheitadeira_graos': 'colhedora', 'plataforma_milho': 'plataforma_milho',
 }
 ident = json.load(open(os.path.join(REF, 'modelos', 'identificacao.json'), encoding='utf-8'))
+# Uma família que ganhou ficha técnica não aparece de novo como “identificação” (mesma marca e mesmo nome, ou ficha que aponta a família)
+def _norm(t):
+    import unicodedata, re as _re
+    return _re.sub(r'[^a-z0-9+]+', ' ', unicodedata.normalize('NFD', str(t or '')).encode('ascii', 'ignore').decode().lower()).strip()
+_com_ficha = set()
+for x in modelos:
+    mk = slug(marcas[x['m']]['marca'])
+    for nome in (x['n'], x.get('l'), x.get('fi')):
+        if nome:
+            _com_ficha.add((mk, _norm(nome)))
 for r in ident['equipamentos']:
+    if (slug(r['marca']), _norm(r['nome'])) in _com_ficha:
+        continue
     mi = next((i for i, m in enumerate(marcas) if slug(m['marca']) == slug(r['marca'])), None)
     if mi is None:
         marcas.append({'marca': r['marca'], 'fonte': None, 'dataConsulta': None})
