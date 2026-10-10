@@ -144,7 +144,7 @@ $('#menuBtn').onclick = openMenu; $('#moreBtn').onclick = openMenu; overlay.oncl
 $('#bellBtn').onclick = () => go('inicio', 'alertas');
 $$('[data-route]').forEach(b => b.addEventListener('click', () => { go(b.dataset.route); closeMenu(); }));
 $('#date').textContent = new Date().toLocaleDateString('pt-BR', {weekday: 'long', day: '2-digit', month: 'long'});
-$('#searchForm').onsubmit = e => { e.preventDefault(); const q = $('#searchInput').value.trim(); if (q) go('busca/' + encodeURIComponent(q)); };
+$('#searchForm').onsubmit = e => { e.preventDefault(); const q = $('#searchInput').value.trim(); if (q) { go('busca/' + encodeURIComponent(q)); $('#searchInput').blur(); } };
 function applySettings() {
   $('#farmName').textContent = db.settings.farm || 'Minha fazenda';
   const initials = (db.settings.owner || db.settings.farm || 'Nexus Agro').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
