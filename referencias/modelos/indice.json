@@ -1,5 +1,5 @@
 {
- "dataConsulta": "2026-10-04",
+ "dataConsulta": "2026-10-10",
  "marcas": [
   {
    "marca": "Stara",
@@ -77,16 +77,33 @@
    "arquivo": "modelos/tatu-marchesan.json",
    "totalModelos": 193,
    "comEspecificacoes": 0
+  },
+  {
+   "marca": "Vence Tudo",
+   "fabricanteId": "vence-tudo",
+   "arquivo": "modelos/vence-tudo.json",
+   "totalModelos": 53,
+   "comEspecificacoes": 0
+  },
+  {
+   "marca": "Fendt",
+   "fabricanteId": "fendt",
+   "arquivo": "modelos/fendt.json",
+   "totalModelos": 18,
+   "comEspecificacoes": 17
+  },
+  {
+   "marca": "Väderstad",
+   "fabricanteId": "vaderstad",
+   "arquivo": "modelos/vaderstad.json",
+   "totalModelos": 16,
+   "comEspecificacoes": 16
   }
  ],
  "pendentes": [
   {
    "marca": "New Holland",
    "motivo": "O robots.txt de www.newholland.com proíbe a coleta automática de /pt-br/southamerica."
-  },
-  {
-   "marca": "Fendt",
-   "motivo": "Site respondeu apenas com página da América do Norte; linha brasileira não verificada."
   },
   {
    "marca": "Semeato, Agrale, Menta, Kubota, Grazmec, Civemasa, Vicon, Nogueira",

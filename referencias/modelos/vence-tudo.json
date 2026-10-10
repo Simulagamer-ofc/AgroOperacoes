@@ -1,0 +1,918 @@
+{
+  "catalogo": "Nexus Agro — modelos de máquinas e implementos",
+  "marca": "Vence Tudo",
+  "fabricanteId": "vence-tudo",
+  "fonte": "https://vencetudo.ind.br/pt-br/produtos",
+  "dataConsulta": "2026-10-10",
+  "regras": [
+    "Especificações copiadas como texto literal do site oficial do fabricante, sem conversão nem interpretação.",
+    "Valores servem para identificação e consulta. Para preencher automaticamente um parâmetro de regulagem, o valor precisa ser confirmado no manual/folheto do modelo e ano.",
+    "O site pode não refletir variações por ano-modelo, mercado ou opcionais."
+  ],
+  "totalModelos": 53,
+  "comEspecificacoes": 0,
+  "modelos": [
+    {
+      "id": "vence-tudo-premium",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Premium",
+      "linha": "Premium",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/10/premium",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2232-2025041511065867fe68020d502.pdf"
+      ],
+      "familiaIdentificacao": "Premium"
+    },
+    {
+      "id": "vence-tudo-sa-h",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "SA-H",
+      "linha": "SA-H",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/11/sa-h",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2241-202504231049196808efdf9ae9b.pdf"
+      ],
+      "familiaIdentificacao": "SA-H"
+    },
+    {
+      "id": "vence-tudo-sa-a",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "SA-A",
+      "linha": "SA-A",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/13/sa-a",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2224-2025031315425067d3272ae1f1b.pdf"
+      ],
+      "familiaIdentificacao": "SA-A"
+    },
+    {
+      "id": "vence-tudo-pampeana-macanuda",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Pampeana Macanuda",
+      "linha": "Pampeana Macanuda",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/16/pampeana-macanuda",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2248-202504231126456808f8a5463c6.pdf"
+      ],
+      "familiaIdentificacao": "Pampeana Macanuda"
+    },
+    {
+      "id": "vence-tudo-pampeana-trigo-17000-a-34000",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Pampeana Trigo 17000 a 34000",
+      "linha": "Pampeana Trigo 17000 a 34000",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/17/pampeana-trigo-17000-a-34000",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2229-2025040810380967f526c1bcabb.pdf"
+      ],
+      "familiaIdentificacao": "Pampeana Trigo 17000 a 34000"
+    },
+    {
+      "id": "vence-tudo-pampeana-arrozeira",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Pampeana Arrozeira",
+      "linha": "Pampeana Arrozeira",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/18/pampeana-arrozeira",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-1790-2023101315305765298ce1444cb.pdf"
+      ],
+      "familiaIdentificacao": "Pampeana Arrozeira"
+    },
+    {
+      "id": "vence-tudo-sa-campo-nativo",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "SA Campo Nativo",
+      "linha": "SA Campo Nativo",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/19/sa-campo-nativo",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2240-202504231046406808ef407f276.pdf"
+      ],
+      "familiaIdentificacao": "SA Campo Nativo"
+    },
+    {
+      "id": "vence-tudo-ca-25-especial",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "CA 25 Especial",
+      "linha": "CA 25 Especial",
+      "familia": null,
+      "categoriaFabricante": "implementos",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/20/ca-25-especial",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-716-202204110233326253bdacae0f1.pdf"
+      ],
+      "familiaIdentificacao": "CA 25 Especial"
+    },
+    {
+      "id": "vence-tudo-c40-especial",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "C40 Especial",
+      "linha": "C40 Especial",
+      "familia": null,
+      "categoriaFabricante": "implementos",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/21/c40-especial",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-699-202204110233216253bda117afb.pdf"
+      ],
+      "familiaIdentificacao": "C40 Especial"
+    },
+    {
+      "id": "vence-tudo-granos-10500-a-16500-serie-diamante",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Granos 10500 a 16500 - Série Diamante",
+      "linha": "Granos 10500 a 16500 - Série Diamante",
+      "familia": "carreta_graneleira",
+      "categoriaFabricante": "implementos",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/22/granos-10500-a-16500-serie-diamante",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2335-202512190939256945477d01420.pdf"
+      ],
+      "familiaIdentificacao": "Granos 10500 a 16500 - Série Diamante"
+    },
+    {
+      "id": "vence-tudo-pvt-pantografica",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "PVT Pantográfica",
+      "linha": "PVT Pantográfica",
+      "familia": "plaina",
+      "categoriaFabricante": "implementos",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/28/pvt-pantografica",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2305-2025091010072668c1780eb6e85.pdf"
+      ],
+      "familiaIdentificacao": "PVT Pantográfica"
+    },
+    {
+      "id": "vence-tudo-multiplan",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Multiplan",
+      "linha": "Multiplan",
+      "familia": "plaina",
+      "categoriaFabricante": "implementos",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/30/multiplan",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2505-202606230738496a3a6239cc4a2.pdf"
+      ],
+      "familiaIdentificacao": "Multiplan"
+    },
+    {
+      "id": "vence-tudo-arrozeira-super",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Arrozeira Super",
+      "linha": "Arrozeira Super",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/37/arrozeira-super",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2539-202609010737056a96aad1d5a5a.pdf",
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2540-202609010743146a96ac422aee2.pdf"
+      ],
+      "familiaIdentificacao": "Arrozeira Super"
+    },
+    {
+      "id": "vence-tudo-pa-pantografica",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "PA Pantográfica",
+      "linha": "PA Pantográfica",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/45/pa-pantografica",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2329-20251202150506692f2a529d076.pdf"
+      ],
+      "familiaIdentificacao": "PA Pantográfica"
+    },
+    {
+      "id": "vence-tudo-pa-super-serie",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "PA Super Série",
+      "linha": "PA Super Série",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/46/pa-super-serie",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2239-20250422074959680774571a2ca.pdf"
+      ],
+      "familiaIdentificacao": "PA Super Série"
+    },
+    {
+      "id": "vence-tudo-ghar-2000",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "GHAR 2000",
+      "linha": "GHAR 2000",
+      "familia": null,
+      "categoriaFabricante": "implementos",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/47/ghar-2000",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2291-2025090909002468c016d86217a.pdf"
+      ],
+      "familiaIdentificacao": "GHAR 2000"
+    },
+    {
+      "id": "vence-tudo-bocuda-eagle",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Bocuda Eagle",
+      "linha": "Bocuda Eagle",
+      "familia": "plataforma_milho",
+      "categoriaFabricante": "colheita",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/48/bocuda-eagle",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2530-202609010728346a96a8d250975.pdf"
+      ],
+      "familiaIdentificacao": "Bocuda Eagle"
+    },
+    {
+      "id": "vence-tudo-bocuda-serie-08",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Bocuda Série 08",
+      "linha": "Bocuda Série 08",
+      "familia": "plataforma_milho",
+      "categoriaFabricante": "colheita",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/49/bocuda-serie-08",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2533-202609010730566a96a960ac32f.pdf"
+      ],
+      "familiaIdentificacao": "Bocuda Série 08"
+    },
+    {
+      "id": "vence-tudo-pampeana-super",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Pampeana Super",
+      "linha": "Pampeana Super",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/5/pampeana-super",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2346-202601131534336966903908d90.pdf"
+      ],
+      "familiaIdentificacao": "Pampeana Super"
+    },
+    {
+      "id": "vence-tudo-granos-27500-33000-e-42000-serie-diamante",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Granos 27500, 33000 e 42000 - Série Diamante",
+      "linha": "Granos 27500, 33000 e 42000 - Série Diamante",
+      "familia": "carreta_graneleira",
+      "categoriaFabricante": "implementos",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/50/granos-27500-33000-e-42000-serie-diamante",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2337-20251219101922694550da8960b.pdf",
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2293-2025090909192668c01b4edc113.pdf"
+      ],
+      "familiaIdentificacao": "Granos 27500, 33000 e 42000 - Série Diamante"
+    },
+    {
+      "id": "vence-tudo-bocuda-hibrida",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Bocuda Híbrida",
+      "linha": "Bocuda Híbrida",
+      "familia": "plataforma_milho",
+      "categoriaFabricante": "colheita",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/51/bocuda-hibrida",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2531-202609010729316a96a90be7c06.pdf"
+      ],
+      "familiaIdentificacao": "Bocuda Híbrida"
+    },
+    {
+      "id": "vence-tudo-arrozeira-hidraulica",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Arrozeira Hidráulica",
+      "linha": "Arrozeira Hidráulica",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/53/arrozeira-hidraulica",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2537-202609010735286a96aa703de6f.pdf",
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2538-202609010735586a96aa8e2efb5.pdf"
+      ],
+      "familiaIdentificacao": "Arrozeira Hidráulica"
+    },
+    {
+      "id": "vence-tudo-tiger-flex-dois-modulos",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Tiger Flex (Dois Módulos)",
+      "linha": "Tiger Flex (Dois Módulos)",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/54/tiger-flex-dois-modulos",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2535-202609010733596a96aa17a0bd6.pdf"
+      ],
+      "familiaIdentificacao": "Tiger Flex (Dois Módulos)"
+    },
+    {
+      "id": "vence-tudo-macanuda-top-serie-02",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Macanuda Top Série 02",
+      "linha": "Macanuda Top Série 02",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/55/macanuda-top-serie-02",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2247-202504231113196808f57f2c0eb.pdf"
+      ],
+      "familiaIdentificacao": "Macanuda Top Série 02"
+    },
+    {
+      "id": "vence-tudo-tiger-flex-tres-modulos",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Tiger Flex (Três módulos)",
+      "linha": "Tiger Flex (Três módulos)",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/56/tiger-flex-tres-modulos",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2235-2025041511194067fe6afcd7179.pdf"
+      ],
+      "familiaIdentificacao": "Tiger Flex (Três módulos)"
+    },
+    {
+      "id": "vence-tudo-macanuda-center-box",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Macanuda Center Box",
+      "linha": "Macanuda Center Box",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/57/macanuda-center-box",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-1525-20220828161713630bbf399abf1.pdf"
+      ],
+      "familiaIdentificacao": "Macanuda Center Box"
+    },
+    {
+      "id": "vence-tudo-flexxa",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Flexxa",
+      "linha": "Flexxa",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/58/flexxa",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-1796-202310201036426532826a0aa30.pdf"
+      ],
+      "familiaIdentificacao": "Flexxa"
+    },
+    {
+      "id": "vence-tudo-granos-multiuso-serie-diamante",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Granos Multiuso - Série Diamante",
+      "linha": "Granos Multiuso - Série Diamante",
+      "familia": "carreta_graneleira",
+      "categoriaFabricante": "implementos",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/59/granos-multiuso-serie-diamante",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2342-20251219102335694551d7309c3.pdf"
+      ],
+      "familiaIdentificacao": "Granos Multiuso - Série Diamante"
+    },
+    {
+      "id": "vence-tudo-fronteira-serie-02",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Fronteira - Série 02",
+      "linha": "Fronteira - Série 02",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/60/fronteira-serie-02",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2543-202609010745426a96acd679bd7.pdf",
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2544-202609010746056a96aced0d30f.pdf"
+      ],
+      "familiaIdentificacao": "Fronteira - Série 02"
+    },
+    {
+      "id": "vence-tudo-panther-sulcon",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Panther Sulcon",
+      "linha": "Panther Sulcon",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/61/panther-sulcon",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-1502-202208261153326308de6ce6a3b.pdf"
+      ],
+      "familiaIdentificacao": "Panther Sulcon"
+    },
+    {
+      "id": "vence-tudo-sulcon",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Sulcon",
+      "linha": "Sulcon",
+      "familia": null,
+      "categoriaFabricante": "implementos",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/62/sulcon",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-1764-2023073117083964c814c7a272d.pdf"
+      ],
+      "familiaIdentificacao": "Sulcon"
+    },
+    {
+      "id": "vence-tudo-macanuda-top-fertilizante-serie-02",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Macanuda Top Fertilizante Série 02",
+      "linha": "Macanuda Top Fertilizante Série 02",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/63/macanuda-top-fertilizante-serie-02",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2246-202504231111146808f502c591e.pdf"
+      ],
+      "familiaIdentificacao": "Macanuda Top Fertilizante Série 02"
+    },
+    {
+      "id": "vence-tudo-center-box",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Center Box",
+      "linha": "Center Box",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/64/center-box",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2501-202606180806516a33d14b28493.pdf"
+      ],
+      "familiaIdentificacao": "Center Box"
+    },
+    {
+      "id": "vence-tudo-bocuda-08x",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Bocuda 08x",
+      "linha": "Bocuda 08x",
+      "familia": "plataforma_milho",
+      "categoriaFabricante": "colheita",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/66/bocuda-08x",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2255-20250423152602680930ba6a3de.pdf"
+      ],
+      "familiaIdentificacao": "Bocuda 08x"
+    },
+    {
+      "id": "vence-tudo-flexxa-ccs",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Flexxa CCS",
+      "linha": "Flexxa CCS",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/67/flexxa-ccs",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-1795-20231020103440653281f088c60.pdf"
+      ],
+      "familiaIdentificacao": "Flexxa CCS"
+    },
+    {
+      "id": "vence-tudo-pa-arrasto-pantografica-serie-ouro-pneumatica",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "PA Arrasto Pantográfica Série Ouro Pneumática",
+      "linha": "PA Arrasto Pantográfica Série Ouro Pneumática",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/68/pa-arrasto-pantografica-serie-ouro-pneumatica",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "familiaIdentificacao": "PA Arrasto Pantográfica Série Ouro Pneumática"
+    },
+    {
+      "id": "vence-tudo-pa-hidraulica-pneumatica",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "PA Hidráulica Pneumática",
+      "linha": "PA Hidráulica Pneumática",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/69/pa-hidraulica-pneumatica",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2238-2025042207483468077402ce5ae.pdf"
+      ],
+      "familiaIdentificacao": "PA Hidráulica Pneumática"
+    },
+    {
+      "id": "vence-tudo-summer",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Summer",
+      "linha": "Summer",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/7/summer",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2490-202606151516426a30418a56eca.pdf"
+      ],
+      "familiaIdentificacao": "Summer"
+    },
+    {
+      "id": "vence-tudo-granos-frontline-serie-diamante",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Granos Frontline - Série Diamante",
+      "linha": "Granos Frontline - Série Diamante",
+      "familia": "carreta_graneleira",
+      "categoriaFabricante": "implementos",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/70/granos-frontline-serie-diamante",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2555-202609031514356a99b90b857c1.pdf",
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2339-202512191020316945511f9c665.pdf"
+      ],
+      "familiaIdentificacao": "Granos Frontline - Série Diamante"
+    },
+    {
+      "id": "vence-tudo-flexxa-seed",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Flexxa Seed",
+      "linha": "Flexxa Seed",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/71/flexxa-seed",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-1801-20231020104422653284366b578.pdf"
+      ],
+      "familiaIdentificacao": "Flexxa Seed"
+    },
+    {
+      "id": "vence-tudo-flexxa-serie-200",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Flexxa Série 200",
+      "linha": "Flexxa Série 200",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/72/flexxa-serie-200",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2516-202608190756416a858be94d3d4.pdf"
+      ],
+      "familiaIdentificacao": "Flexxa Série 200"
+    },
+    {
+      "id": "vence-tudo-pa-compact",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "PA Compact",
+      "linha": "PA Compact",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/73/pa-compact",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2237-2025041511534467fe72f84f8c6.pdf"
+      ],
+      "familiaIdentificacao": "PA Compact"
+    },
+    {
+      "id": "vence-tudo-summer-pneumatica",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Summer Pneumática",
+      "linha": "Summer Pneumática",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/74/summer-pneumatica",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2553-202609010758586a96aff2bb704.pdf"
+      ],
+      "familiaIdentificacao": "Summer Pneumática"
+    },
+    {
+      "id": "vence-tudo-macanuda-3-20",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Macanuda 3,20",
+      "linha": "Macanuda 3,20",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/76/macanuda-320",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2381-2026031113045069b192a25d220.pdf"
+      ],
+      "familiaIdentificacao": "Macanuda 3,20"
+    },
+    {
+      "id": "vence-tudo-braxxia",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Braxxia",
+      "linha": "Braxxia",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/78/braxxia",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2331-2025120311440169304cb1adbcf.pdf"
+      ],
+      "familiaIdentificacao": "Braxxia"
+    },
+    {
+      "id": "vence-tudo-sa-mix",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "SA MIX",
+      "linha": "SA MIX",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/80/sa-mix",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2275-20250625083514685bdef24507c.pdf"
+      ],
+      "familiaIdentificacao": "SA MIX"
+    },
+    {
+      "id": "vence-tudo-sat",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "SAT",
+      "linha": "SAT",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/81/sat",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2551-202609010757036a96af7fef09d.pdf"
+      ],
+      "familiaIdentificacao": "SAT"
+    },
+    {
+      "id": "vence-tudo-gps-vence-tudo-agro-guidance-pro",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "GPS Vence Tudo Agro Guidance Pro",
+      "linha": "GPS Vence Tudo Agro Guidance Pro",
+      "familia": "agricultura_precisao",
+      "categoriaFabricante": "tecnologia",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/82/gps-vence-tudo-agro-guidance-pro",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2373-2026031112364369b18c0b11815.pdf"
+      ]
+    },
+    {
+      "id": "vence-tudo-monitor-de-plantio",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Monitor de Plantio",
+      "linha": "Monitor de Plantio",
+      "familia": "agricultura_precisao",
+      "categoriaFabricante": "tecnologia",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/83/monitor-de-plantio",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2320-20251105085052690b3a1c02e9e.pdf"
+      ]
+    },
+    {
+      "id": "vence-tudo-fertil",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Fertil",
+      "linha": "Fertil",
+      "familia": "distribuidor",
+      "categoriaFabricante": "implementos",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/84/fertil",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2364-202602091033586989e2461d9ea.pdf"
+      ],
+      "familiaIdentificacao": "Fertil"
+    },
+    {
+      "id": "vence-tudo-panther-vtech",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Panther VTech",
+      "linha": "Panther VTech",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/85/panther-vtech",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2549-202609010754336a96aee9ef9b1.pdf"
+      ],
+      "familiaIdentificacao": "Panther VTech"
+    },
+    {
+      "id": "vence-tudo-macanuda-6-1",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Macanuda 6.1",
+      "linha": "Macanuda 6.1",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/86/macanuda-61",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2450-2026042714184969ef9a79e8901.pdf"
+      ],
+      "familiaIdentificacao": "Macanuda 6.1"
+    },
+    {
+      "id": "vence-tudo-panther-sm",
+      "marca": "Vence Tudo",
+      "fabricanteId": "vence-tudo",
+      "modelo": "Panther SM",
+      "linha": "Panther SM",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantio",
+      "url": "https://vencetudo.ind.br/pt-br/produtos/9/panther-sm",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://vencetudo.ind.br/storage/produtos/arquivo-2547-202609010750386a96adfe32633.pdf"
+      ],
+      "familiaIdentificacao": "Panther SM"
+    }
+  ],
+  "descartados": []
+}

@@ -1,0 +1,1170 @@
+{
+  "catalogo": "Nexus Agro — modelos de máquinas e implementos",
+  "marca": "Väderstad",
+  "fabricanteId": "vaderstad",
+  "fonte": "https://www.vaderstad.com/sitemap.xml (URLs /pt-br/)",
+  "dataConsulta": "2026-10-10",
+  "regras": [
+    "Especificações copiadas como texto literal do site oficial do fabricante, sem conversão nem interpretação.",
+    "Valores servem para identificação e consulta. Para preencher automaticamente um parâmetro de regulagem, o valor precisa ser confirmado no manual/folheto do modelo e ano.",
+    "O site pode não refletir variações por ano-modelo, mercado ou opcionais."
+  ],
+  "totalModelos": 16,
+  "comEspecificacoes": 16,
+  "modelos": [
+    {
+      "id": "vaderstad-tempo-l-8",
+      "marca": "Väderstad",
+      "fabricanteId": "vaderstad",
+      "modelo": "Tempo L 8",
+      "linha": "Tempo L 8-24",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantadeiras-tempo",
+      "url": "https://www.vaderstad.com/pt-br/plantio/plantadeiras-tempo/tempo-l-8-24",
+      "especificacoes": [
+        {
+          "campo": "Número de linhas",
+          "valor": "8"
+        },
+        {
+          "campo": "Espaçamento entre linhas (mm)",
+          "valor": "700/750/762/800"
+        },
+        {
+          "campo": "Largura (m)",
+          "valor": "6,1"
+        },
+        {
+          "campo": "Largura de trabalho (m)",
+          "valor": "5,6-6,4"
+        },
+        {
+          "campo": "Largura de transporte (m)",
+          "valor": "3,0"
+        },
+        {
+          "campo": "Altura de transporte (m)",
+          "valor": "4,0"
+        },
+        {
+          "campo": "Peso (kg) min-máx",
+          "valor": "5600-7500"
+        },
+        {
+          "campo": "Capacidade do tanque de semente na linha de plantio (L)",
+          "valor": "90"
+        },
+        {
+          "campo": "Capacidade do tanque de micro granulado/BDA 500 (L)",
+          "valor": "30"
+        },
+        {
+          "campo": "Capacidade do tanque de fertilizante (L)",
+          "valor": "3000"
+        },
+        {
+          "campo": "Requisitos hidráulicos (somente semente)",
+          "valor": "4 DA + 2 FR**"
+        },
+        {
+          "campo": "Requisitos hidráulicos (semente + fertilizante)",
+          "valor": "5 DA + 2 FR**"
+        },
+        {
+          "campo": "Requisito de fluxo de óleo (l/min)",
+          "valor": "110-130"
+        },
+        {
+          "campo": "Requisito de potência (hp)",
+          "valor": "150-200"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "familiaIdentificacao": "Tempo L 8-24"
+    },
+    {
+      "id": "vaderstad-tempo-l-10",
+      "marca": "Väderstad",
+      "fabricanteId": "vaderstad",
+      "modelo": "Tempo L 10",
+      "linha": "Tempo L 8-24",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantadeiras-tempo",
+      "url": "https://www.vaderstad.com/pt-br/plantio/plantadeiras-tempo/tempo-l-8-24",
+      "especificacoes": [
+        {
+          "campo": "Número de linhas",
+          "valor": "10"
+        },
+        {
+          "campo": "Espaçamento entre linhas (mm)",
+          "valor": "750"
+        },
+        {
+          "campo": "Largura (m)",
+          "valor": "7,2"
+        },
+        {
+          "campo": "Largura de trabalho (m)",
+          "valor": "7,5"
+        },
+        {
+          "campo": "Largura de transporte (m)",
+          "valor": "3,0-3,4***"
+        },
+        {
+          "campo": "Altura de transporte (m)",
+          "valor": "4,0"
+        },
+        {
+          "campo": "Peso (kg) min-máx",
+          "valor": "5900-7900"
+        },
+        {
+          "campo": "Capacidade do tanque de semente na linha de plantio (L)",
+          "valor": "90"
+        },
+        {
+          "campo": "Capacidade do tanque de micro granulado/BDA 500 (L)",
+          "valor": "30"
+        },
+        {
+          "campo": "Capacidade do tanque de fertilizante (L)",
+          "valor": "3000"
+        },
+        {
+          "campo": "Requisitos hidráulicos (somente semente)",
+          "valor": "4 DA + 2 FR**"
+        },
+        {
+          "campo": "Requisitos hidráulicos (semente + fertilizante)",
+          "valor": "5 DA + 2 FR**"
+        },
+        {
+          "campo": "Requisito de fluxo de óleo (l/min)",
+          "valor": "110-130"
+        },
+        {
+          "campo": "Requisito de potência (hp)",
+          "valor": "180-230"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "familiaIdentificacao": "Tempo L 8-24"
+    },
+    {
+      "id": "vaderstad-tempo-l-12",
+      "marca": "Väderstad",
+      "fabricanteId": "vaderstad",
+      "modelo": "Tempo L 12",
+      "linha": "Tempo L 8-24",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantadeiras-tempo",
+      "url": "https://www.vaderstad.com/pt-br/plantio/plantadeiras-tempo/tempo-l-8-24",
+      "especificacoes": [
+        {
+          "campo": "Número de linhas",
+          "valor": "12"
+        },
+        {
+          "campo": "Espaçamento entre linhas (mm)",
+          "valor": "450/457/500/508/559 /700/750/762/800"
+        },
+        {
+          "campo": "Largura (m)",
+          "valor": "6,1-9,6"
+        },
+        {
+          "campo": "Largura de trabalho (m)",
+          "valor": "8,4-9,6"
+        },
+        {
+          "campo": "Largura de transporte (m)",
+          "valor": "3,0"
+        },
+        {
+          "campo": "Altura de transporte (m)",
+          "valor": "4,0"
+        },
+        {
+          "campo": "Peso (kg) min-máx",
+          "valor": "6100-9200"
+        },
+        {
+          "campo": "Capacidade do tanque de semente na linha de plantio (L)",
+          "valor": "90"
+        },
+        {
+          "campo": "Capacidade do tanque de micro granulado/BDA 500 (L)",
+          "valor": "30"
+        },
+        {
+          "campo": "Capacidade do tanque de fertilizante (L)",
+          "valor": "3000/5000"
+        },
+        {
+          "campo": "Requisitos hidráulicos (somente semente)",
+          "valor": "4 DA + 2 FR**"
+        },
+        {
+          "campo": "Requisitos hidráulicos (semente + fertilizante)",
+          "valor": "5 DA + 2 FR**"
+        },
+        {
+          "campo": "Requisito de fluxo de óleo (l/min)",
+          "valor": "110-200"
+        },
+        {
+          "campo": "Requisito de potência (hp)",
+          "valor": "200-300"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "familiaIdentificacao": "Tempo L 8-24"
+    },
+    {
+      "id": "vaderstad-tempo-l-16",
+      "marca": "Väderstad",
+      "fabricanteId": "vaderstad",
+      "modelo": "Tempo L 16",
+      "linha": "Tempo L 8-24",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantadeiras-tempo",
+      "url": "https://www.vaderstad.com/pt-br/plantio/plantadeiras-tempo/tempo-l-8-24",
+      "especificacoes": [
+        {
+          "campo": "Número de linhas",
+          "valor": "16"
+        },
+        {
+          "campo": "Espaçamento entre linhas (mm)",
+          "valor": "700/750/762"
+        },
+        {
+          "campo": "Largura (m)",
+          "valor": "10,8-12,0"
+        },
+        {
+          "campo": "Largura de trabalho (m)",
+          "valor": "11,2-12,2"
+        },
+        {
+          "campo": "Largura de transporte (m)",
+          "valor": "3,0-3,4***"
+        },
+        {
+          "campo": "Altura de transporte (m)",
+          "valor": "4,0"
+        },
+        {
+          "campo": "Peso (kg) min-máx",
+          "valor": "8000-10100"
+        },
+        {
+          "campo": "Capacidade do tanque de semente na linha de plantio (L)",
+          "valor": "90"
+        },
+        {
+          "campo": "Capacidade do tanque de micro granulado/BDA 500 (L)",
+          "valor": "30"
+        },
+        {
+          "campo": "Capacidade do tanque de fertilizante (L)",
+          "valor": "5000"
+        },
+        {
+          "campo": "Requisitos hidráulicos (somente semente)",
+          "valor": "4 DA + 2 FR**"
+        },
+        {
+          "campo": "Requisitos hidráulicos (semente + fertilizante)",
+          "valor": "5 DA + 2 FR**"
+        },
+        {
+          "campo": "Requisito de fluxo de óleo (l/min)",
+          "valor": "140-200"
+        },
+        {
+          "campo": "Requisito de potência (hp)",
+          "valor": "300-350"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "familiaIdentificacao": "Tempo L 8-24"
+    },
+    {
+      "id": "vaderstad-tempo-l-18",
+      "marca": "Väderstad",
+      "fabricanteId": "vaderstad",
+      "modelo": "Tempo L 18",
+      "linha": "Tempo L 8-24",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantadeiras-tempo",
+      "url": "https://www.vaderstad.com/pt-br/plantio/plantadeiras-tempo/tempo-l-8-24",
+      "especificacoes": [
+        {
+          "campo": "Número de linhas",
+          "valor": "18"
+        },
+        {
+          "campo": "Espaçamento entre linhas (mm)",
+          "valor": "450/457/500/508"
+        },
+        {
+          "campo": "Largura (m)",
+          "valor": "8,3-9,8"
+        },
+        {
+          "campo": "Largura de trabalho (m)",
+          "valor": "9,0-9,1"
+        },
+        {
+          "campo": "Largura de transporte (m)",
+          "valor": "3,0-3,4***"
+        },
+        {
+          "campo": "Altura de transporte (m)",
+          "valor": "4,0"
+        },
+        {
+          "campo": "Peso (kg) min-máx",
+          "valor": "7200-10500"
+        },
+        {
+          "campo": "Capacidade do tanque de semente na linha de plantio (L)",
+          "valor": "90"
+        },
+        {
+          "campo": "Capacidade do tanque de micro granulado/BDA 500 (L)",
+          "valor": "30"
+        },
+        {
+          "campo": "Capacidade do tanque de fertilizante (L)",
+          "valor": "5000"
+        },
+        {
+          "campo": "Requisitos hidráulicos (somente semente)",
+          "valor": "4 DA + 2 FR**"
+        },
+        {
+          "campo": "Requisitos hidráulicos (semente + fertilizante)",
+          "valor": "5 DA + 2 FR**"
+        },
+        {
+          "campo": "Requisito de fluxo de óleo (l/min)",
+          "valor": "140-200"
+        },
+        {
+          "campo": "Requisito de potência (hp)",
+          "valor": "300-350"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "familiaIdentificacao": "Tempo L 8-24"
+    },
+    {
+      "id": "vaderstad-tempo-l-24",
+      "marca": "Väderstad",
+      "fabricanteId": "vaderstad",
+      "modelo": "Tempo L 24",
+      "linha": "Tempo L 8-24",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantadeiras-tempo",
+      "url": "https://www.vaderstad.com/pt-br/plantio/plantadeiras-tempo/tempo-l-8-24",
+      "especificacoes": [
+        {
+          "campo": "Número de linhas",
+          "valor": "24"
+        },
+        {
+          "campo": "Espaçamento entre linhas (mm)",
+          "valor": "450/457/500/508/559"
+        },
+        {
+          "campo": "Largura (m)",
+          "valor": "10,8-12,0"
+        },
+        {
+          "campo": "Largura de trabalho (m)",
+          "valor": "10,8-12,2"
+        },
+        {
+          "campo": "Largura de transporte (m)",
+          "valor": "3,0-3,4***"
+        },
+        {
+          "campo": "Altura de transporte (m)",
+          "valor": "4,0"
+        },
+        {
+          "campo": "Peso (kg) min-máx",
+          "valor": "8600-11800"
+        },
+        {
+          "campo": "Capacidade do tanque de semente na linha de plantio (L)",
+          "valor": "90"
+        },
+        {
+          "campo": "Capacidade do tanque de micro granulado/BDA 500 (L)",
+          "valor": "N/A"
+        },
+        {
+          "campo": "Capacidade do tanque de fertilizante (L)",
+          "valor": "5000"
+        },
+        {
+          "campo": "Requisitos hidráulicos (somente semente)",
+          "valor": "4 DA + 2 FR**"
+        },
+        {
+          "campo": "Requisitos hidráulicos (semente + fertilizante)",
+          "valor": "5 DA + 2 FR**"
+        },
+        {
+          "campo": "Requisito de fluxo de óleo (l/min)",
+          "valor": "140-200"
+        },
+        {
+          "campo": "Requisito de potência (hp)",
+          "valor": "300-350"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "familiaIdentificacao": "Tempo L 8-24"
+    },
+    {
+      "id": "vaderstad-topdown-300",
+      "marca": "Väderstad",
+      "fabricanteId": "vaderstad",
+      "modelo": "TopDown 300",
+      "linha": "TopDown 300-700",
+      "familia": "preparo_solo",
+      "categoriaFabricante": "cultivador",
+      "url": "https://www.vaderstad.com/pt-br/preparo-de-solo/cultivador/topdown-300-700",
+      "especificacoes": [
+        {
+          "campo": "Largura de trabalho (m)",
+          "valor": "2,65"
+        },
+        {
+          "campo": "Largura do rolo (m)",
+          "valor": "3,0"
+        },
+        {
+          "campo": "Largura de transporte (m)",
+          "valor": "3,0"
+        },
+        {
+          "campo": "Altura de transporte (m)",
+          "valor": "1,9"
+        },
+        {
+          "campo": "Peso com Single SteelRunner (kg)",
+          "valor": "4400"
+        },
+        {
+          "campo": "Peso com Double SoilRunner (kg)",
+          "valor": "4000"
+        },
+        {
+          "campo": "Peso com Double SteelRunner (kg)",
+          "valor": "4400"
+        },
+        {
+          "campo": "Número de discos*",
+          "valor": "22"
+        },
+        {
+          "campo": "Número de hastes",
+          "valor": "10"
+        },
+        {
+          "campo": "Espaçamento entre hastes (cm)",
+          "valor": "27"
+        },
+        {
+          "campo": "Dimensão das rodas",
+          "valor": "520/50-17"
+        },
+        {
+          "campo": "Requisitos hidráulicos padrão (DA)",
+          "valor": "3"
+        },
+        {
+          "campo": "Requisitos hidráulicos com E-Services",
+          "valor": "N/A"
+        },
+        {
+          "campo": "Potência requerida (hp)",
+          "valor": "150-200"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10"
+    },
+    {
+      "id": "vaderstad-topdown-400",
+      "marca": "Väderstad",
+      "fabricanteId": "vaderstad",
+      "modelo": "TopDown 400",
+      "linha": "TopDown 300-700",
+      "familia": "preparo_solo",
+      "categoriaFabricante": "cultivador",
+      "url": "https://www.vaderstad.com/pt-br/preparo-de-solo/cultivador/topdown-300-700",
+      "especificacoes": [
+        {
+          "campo": "Largura de trabalho (m)",
+          "valor": "3,75"
+        },
+        {
+          "campo": "Largura do rolo (m)",
+          "valor": "4,0"
+        },
+        {
+          "campo": "Largura de transporte (m)",
+          "valor": "3,0"
+        },
+        {
+          "campo": "Altura de transporte (m)",
+          "valor": "2,7"
+        },
+        {
+          "campo": "Peso com Single SteelRunner (kg)",
+          "valor": "6200"
+        },
+        {
+          "campo": "Peso com Double SoilRunner (kg)",
+          "valor": "5800"
+        },
+        {
+          "campo": "Peso com Double SteelRunner (kg)",
+          "valor": "6400"
+        },
+        {
+          "campo": "Número de discos*",
+          "valor": "30"
+        },
+        {
+          "campo": "Número de hastes",
+          "valor": "14"
+        },
+        {
+          "campo": "Espaçamento entre hastes (cm)",
+          "valor": "27"
+        },
+        {
+          "campo": "Dimensão das rodas",
+          "valor": "520/50-17"
+        },
+        {
+          "campo": "Requisitos hidráulicos padrão (DA)",
+          "valor": "3"
+        },
+        {
+          "campo": "Requisitos hidráulicos com E-Services",
+          "valor": "2 DA+P/FR/LS"
+        },
+        {
+          "campo": "Potência requerida (hp)",
+          "valor": "200-240"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10"
+    },
+    {
+      "id": "vaderstad-topdown-500",
+      "marca": "Väderstad",
+      "fabricanteId": "vaderstad",
+      "modelo": "TopDown 500",
+      "linha": "TopDown 300-700",
+      "familia": "preparo_solo",
+      "categoriaFabricante": "cultivador",
+      "url": "https://www.vaderstad.com/pt-br/preparo-de-solo/cultivador/topdown-300-700",
+      "especificacoes": [
+        {
+          "campo": "Largura de trabalho (m)",
+          "valor": "4,80"
+        },
+        {
+          "campo": "Largura do rolo (m)",
+          "valor": "5,0"
+        },
+        {
+          "campo": "Largura de transporte (m)",
+          "valor": "3,0"
+        },
+        {
+          "campo": "Altura de transporte (m)",
+          "valor": "3,2"
+        },
+        {
+          "campo": "Peso com Single SteelRunner (kg)",
+          "valor": "7000"
+        },
+        {
+          "campo": "Peso com Double SoilRunner (kg)",
+          "valor": "6500"
+        },
+        {
+          "campo": "Peso com Double SteelRunner (kg)",
+          "valor": "7100"
+        },
+        {
+          "campo": "Número de discos*",
+          "valor": "38"
+        },
+        {
+          "campo": "Número de hastes",
+          "valor": "18"
+        },
+        {
+          "campo": "Espaçamento entre hastes (cm)",
+          "valor": "27"
+        },
+        {
+          "campo": "Dimensão das rodas",
+          "valor": "520/50-17"
+        },
+        {
+          "campo": "Requisitos hidráulicos padrão (DA)",
+          "valor": "4"
+        },
+        {
+          "campo": "Requisitos hidráulicos com E-Services",
+          "valor": "2 DA+P/FR/LS"
+        },
+        {
+          "campo": "Potência requerida (hp)",
+          "valor": "250-300"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10"
+    },
+    {
+      "id": "vaderstad-topdown-600",
+      "marca": "Väderstad",
+      "fabricanteId": "vaderstad",
+      "modelo": "TopDown 600",
+      "linha": "TopDown 300-700",
+      "familia": "preparo_solo",
+      "categoriaFabricante": "cultivador",
+      "url": "https://www.vaderstad.com/pt-br/preparo-de-solo/cultivador/topdown-300-700",
+      "especificacoes": [
+        {
+          "campo": "Largura de trabalho (m)",
+          "valor": "5,75"
+        },
+        {
+          "campo": "Largura do rolo (m)",
+          "valor": "6,0"
+        },
+        {
+          "campo": "Largura de transporte (m)",
+          "valor": "3,0"
+        },
+        {
+          "campo": "Altura de transporte (m)",
+          "valor": "3,6"
+        },
+        {
+          "campo": "Peso com Single SteelRunner (kg)",
+          "valor": "9100"
+        },
+        {
+          "campo": "Peso com Double SoilRunner (kg)",
+          "valor": "8100"
+        },
+        {
+          "campo": "Peso com Double SteelRunner (kg)",
+          "valor": "8900"
+        },
+        {
+          "campo": "Número de discos*",
+          "valor": "46"
+        },
+        {
+          "campo": "Número de hastes",
+          "valor": "22"
+        },
+        {
+          "campo": "Espaçamento entre hastes (cm)",
+          "valor": "27"
+        },
+        {
+          "campo": "Dimensão das rodas",
+          "valor": "560/45-R22,5"
+        },
+        {
+          "campo": "Requisitos hidráulicos padrão (DA)",
+          "valor": "4"
+        },
+        {
+          "campo": "Requisitos hidráulicos com E-Services",
+          "valor": "2 DA+P/FR/LS"
+        },
+        {
+          "campo": "Potência requerida (hp)",
+          "valor": "300-360"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10"
+    },
+    {
+      "id": "vaderstad-topdown-700",
+      "marca": "Väderstad",
+      "fabricanteId": "vaderstad",
+      "modelo": "TopDown 700",
+      "linha": "TopDown 300-700",
+      "familia": "preparo_solo",
+      "categoriaFabricante": "cultivador",
+      "url": "https://www.vaderstad.com/pt-br/preparo-de-solo/cultivador/topdown-300-700",
+      "especificacoes": [
+        {
+          "campo": "Largura de trabalho (m)",
+          "valor": "6,75"
+        },
+        {
+          "campo": "Largura do rolo (m)",
+          "valor": "7,0"
+        },
+        {
+          "campo": "Largura de transporte (m)",
+          "valor": "3,0"
+        },
+        {
+          "campo": "Altura de transporte (m)",
+          "valor": "4,0"
+        },
+        {
+          "campo": "Peso com Single SteelRunner (kg)",
+          "valor": "9900"
+        },
+        {
+          "campo": "Peso com Double SoilRunner (kg)",
+          "valor": "8700"
+        },
+        {
+          "campo": "Peso com Double SteelRunner (kg)",
+          "valor": "9700"
+        },
+        {
+          "campo": "Número de discos*",
+          "valor": "54"
+        },
+        {
+          "campo": "Número de hastes",
+          "valor": "26"
+        },
+        {
+          "campo": "Espaçamento entre hastes (cm)",
+          "valor": "27"
+        },
+        {
+          "campo": "Dimensão das rodas",
+          "valor": "560/45-R22,5"
+        },
+        {
+          "campo": "Requisitos hidráulicos padrão (DA)",
+          "valor": "4"
+        },
+        {
+          "campo": "Requisitos hidráulicos com E-Services",
+          "valor": "2 DA+P/FR/LS"
+        },
+        {
+          "campo": "Potência requerida (hp)",
+          "valor": "350-420"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10"
+    },
+    {
+      "id": "vaderstad-carrier-xl-425",
+      "marca": "Väderstad",
+      "fabricanteId": "vaderstad",
+      "modelo": "Carrier XL 425",
+      "linha": "Carrier XL 425-725",
+      "familia": "grade",
+      "categoriaFabricante": "niveladora-carrier",
+      "url": "https://www.vaderstad.com/pt-br/preparo-de-solo/niveladora-carrier/carrier-xl-425-725",
+      "especificacoes": [
+        {
+          "campo": "Largura de trabalho efetiva (m)",
+          "valor": "4,1"
+        },
+        {
+          "campo": "Largura do rolo (m)",
+          "valor": "4,25"
+        },
+        {
+          "campo": "Largura de transporte (m)",
+          "valor": "2,85"
+        },
+        {
+          "campo": "Altura máxima de transporte (m)",
+          "valor": "3,06"
+        },
+        {
+          "campo": "Peso com SteelRunner individual (kg)",
+          "valor": "6200"
+        },
+        {
+          "campo": "Peso com SteelRunner duplo (kg)",
+          "valor": "6300"
+        },
+        {
+          "campo": "Peso com SoilRunner duplo (kg)",
+          "valor": "5700"
+        },
+        {
+          "campo": "Número de discos",
+          "valor": "32+1+2"
+        },
+        {
+          "campo": "Disc diameter (mm)",
+          "valor": "510/610"
+        },
+        {
+          "campo": "Espaçamento entre discos (cm)",
+          "valor": "12,5"
+        },
+        {
+          "campo": "Dimensão das rodas",
+          "valor": "400/60-15,5"
+        },
+        {
+          "campo": "Dimensão das rodas (opcional)",
+          "valor": "520/50-17"
+        },
+        {
+          "campo": "Requisitos hidráulicos",
+          "valor": "3-4 DA"
+        },
+        {
+          "campo": "Potência requerida (hp)",
+          "valor": "150-200"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10"
+    },
+    {
+      "id": "vaderstad-carrier-xl-525",
+      "marca": "Väderstad",
+      "fabricanteId": "vaderstad",
+      "modelo": "Carrier XL 525",
+      "linha": "Carrier XL 425-725",
+      "familia": "grade",
+      "categoriaFabricante": "niveladora-carrier",
+      "url": "https://www.vaderstad.com/pt-br/preparo-de-solo/niveladora-carrier/carrier-xl-425-725",
+      "especificacoes": [
+        {
+          "campo": "Largura de trabalho efetiva (m)",
+          "valor": "5,1"
+        },
+        {
+          "campo": "Largura do rolo (m)",
+          "valor": "5,25"
+        },
+        {
+          "campo": "Largura de transporte (m)",
+          "valor": "2,85"
+        },
+        {
+          "campo": "Altura máxima de transporte (m)",
+          "valor": "3,58"
+        },
+        {
+          "campo": "Peso com SteelRunner individual (kg)",
+          "valor": "7200"
+        },
+        {
+          "campo": "Peso com SteelRunner duplo (kg)",
+          "valor": "7400"
+        },
+        {
+          "campo": "Peso com SoilRunner duplo (kg)",
+          "valor": "6600"
+        },
+        {
+          "campo": "Número de discos",
+          "valor": "40+1+2"
+        },
+        {
+          "campo": "Disc diameter (mm)",
+          "valor": "510/610"
+        },
+        {
+          "campo": "Espaçamento entre discos (cm)",
+          "valor": "12,5"
+        },
+        {
+          "campo": "Dimensão das rodas",
+          "valor": "400/60-15,5"
+        },
+        {
+          "campo": "Dimensão das rodas (opcional)",
+          "valor": "520/50-17"
+        },
+        {
+          "campo": "Requisitos hidráulicos",
+          "valor": "3-4 DA"
+        },
+        {
+          "campo": "Potência requerida (hp)",
+          "valor": "190-240"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10"
+    },
+    {
+      "id": "vaderstad-carrier-xl-625",
+      "marca": "Väderstad",
+      "fabricanteId": "vaderstad",
+      "modelo": "Carrier XL 625",
+      "linha": "Carrier XL 425-725",
+      "familia": "grade",
+      "categoriaFabricante": "niveladora-carrier",
+      "url": "https://www.vaderstad.com/pt-br/preparo-de-solo/niveladora-carrier/carrier-xl-425-725",
+      "especificacoes": [
+        {
+          "campo": "Largura de trabalho efetiva (m)",
+          "valor": "6,1"
+        },
+        {
+          "campo": "Largura do rolo (m)",
+          "valor": "6,25"
+        },
+        {
+          "campo": "Largura de transporte (m)",
+          "valor": "2,85"
+        },
+        {
+          "campo": "Altura máxima de transporte (m)",
+          "valor": "4,0"
+        },
+        {
+          "campo": "Peso com SteelRunner individual (kg)",
+          "valor": "8200"
+        },
+        {
+          "campo": "Peso com SteelRunner duplo (kg)",
+          "valor": "8300"
+        },
+        {
+          "campo": "Peso com SoilRunner duplo (kg)",
+          "valor": "7400"
+        },
+        {
+          "campo": "Número de discos",
+          "valor": "48+1+2"
+        },
+        {
+          "campo": "Disc diameter (mm)",
+          "valor": "510/610"
+        },
+        {
+          "campo": "Espaçamento entre discos (cm)",
+          "valor": "12,5"
+        },
+        {
+          "campo": "Dimensão das rodas",
+          "valor": "520/50-17"
+        },
+        {
+          "campo": "Dimensão das rodas (opcional)",
+          "valor": "560/45-22.5"
+        },
+        {
+          "campo": "Requisitos hidráulicos",
+          "valor": "3-4 DA"
+        },
+        {
+          "campo": "Potência requerida (hp)",
+          "valor": "220-270"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10"
+    },
+    {
+      "id": "vaderstad-carrier-xl-725",
+      "marca": "Väderstad",
+      "fabricanteId": "vaderstad",
+      "modelo": "Carrier XL 725",
+      "linha": "Carrier XL 425-725",
+      "familia": "grade",
+      "categoriaFabricante": "niveladora-carrier",
+      "url": "https://www.vaderstad.com/pt-br/preparo-de-solo/niveladora-carrier/carrier-xl-425-725",
+      "especificacoes": [
+        {
+          "campo": "Largura de trabalho efetiva (m)",
+          "valor": "7,1"
+        },
+        {
+          "campo": "Largura do rolo (m)",
+          "valor": "7,25"
+        },
+        {
+          "campo": "Largura de transporte (m)",
+          "valor": "2,98"
+        },
+        {
+          "campo": "Altura máxima de transporte (m)",
+          "valor": "4,0"
+        },
+        {
+          "campo": "Peso com SteelRunner individual (kg)",
+          "valor": "9000"
+        },
+        {
+          "campo": "Peso com SteelRunner duplo (kg)",
+          "valor": "9200"
+        },
+        {
+          "campo": "Peso com SoilRunner duplo (kg)",
+          "valor": "8100"
+        },
+        {
+          "campo": "Número de discos",
+          "valor": "56+1+2"
+        },
+        {
+          "campo": "Disc diameter (mm)",
+          "valor": "510"
+        },
+        {
+          "campo": "Espaçamento entre discos (cm)",
+          "valor": "12,5"
+        },
+        {
+          "campo": "Dimensão das rodas",
+          "valor": "560/45-22,5"
+        },
+        {
+          "campo": "Dimensão das rodas (opcional)",
+          "valor": "N/A"
+        },
+        {
+          "campo": "Requisitos hidráulicos",
+          "valor": "3-4 DA"
+        },
+        {
+          "campo": "Potência requerida (hp)",
+          "valor": "260-310"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10"
+    },
+    {
+      "id": "vaderstad-tempo-l-26-com-caixa-central",
+      "marca": "Väderstad",
+      "fabricanteId": "vaderstad",
+      "modelo": "Tempo L 26 com Caixa Central",
+      "linha": "Tempo L 26 com Caixa Central",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantadeiras-tempo",
+      "url": "https://www.vaderstad.com/pt-br/plantio/plantadeiras-tempo/tempo-l-8-32-caixa-central",
+      "especificacoes": [
+        {
+          "campo": "Número de linhas",
+          "valor": "26"
+        },
+        {
+          "campo": "Espaçamento entre linhas, mm",
+          "valor": "500/762*"
+        },
+        {
+          "campo": "Largura do chassis, m",
+          "valor": "13"
+        },
+        {
+          "campo": "Largura de trabalho, m",
+          "valor": "13"
+        },
+        {
+          "campo": "Largura de transporte, m",
+          "valor": "3"
+        },
+        {
+          "campo": "Altura de transporte, m",
+          "valor": "4,3"
+        },
+        {
+          "campo": "Peso (kg) min-máx",
+          "valor": "10,300-13,860"
+        },
+        {
+          "campo": "Capacidade da caixa central de sementes, L",
+          "valor": "3,000/2,200"
+        },
+        {
+          "campo": "Capacidade do tanque de fertilizante, L",
+          "valor": "5,000"
+        },
+        {
+          "campo": "Capacidade do tanque de micro granulado BDA 500",
+          "valor": "500"
+        },
+        {
+          "campo": "Vazão hidráulica requerida, l/min",
+          "valor": "260"
+        },
+        {
+          "campo": "Potência requerida, HP",
+          "valor": "300-350"
+        },
+        {
+          "campo": "Quantidade de VCR",
+          "valor": "4-5 DA+FR+CD"
+        },
+        {
+          "campo": "Requisitos hidráulicos (Sementes e fertilizantes)",
+          "valor": "4-5 DA+FR+CD"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "familiaIdentificacao": "Tempo L 26 com Caixa Central"
+    }
+  ],
+  "descartados": [
+    {
+      "nome": "Kit para sementes pequenas",
+      "url": "https://www.vaderstad.com/pt-br/plantio/plantadeiras-tempo/kit-para-sementes-pequenas",
+      "motivo": "página de recurso/opcional da linha, não é máquina"
+    },
+    {
+      "nome": "PowerShoot",
+      "url": "https://www.vaderstad.com/pt-br/plantio/plantadeiras-tempo/powershoot",
+      "motivo": "página de recurso/opcional da linha, não é máquina"
+    },
+    {
+      "nome": "Pressão hidráulica ativa para plantadeiras",
+      "url": "https://www.vaderstad.com/pt-br/plantio/plantadeiras-tempo/pressao-hidraulica-ativa",
+      "motivo": "página de recurso/opcional da linha, não é máquina"
+    },
+    {
+      "nome": "Sistema de fertilização líquida para plantadeiras",
+      "url": "https://www.vaderstad.com/pt-br/plantio/plantadeiras-tempo/sistema-de-fertilizacao-liquida-para-plantadeiras",
+      "motivo": "página de recurso/opcional da linha, não é máquina"
+    },
+    {
+      "nome": "Discos cônicos",
+      "url": "https://www.vaderstad.com/pt-br/preparo-de-solo/niveladora-carrier/discos-conicos",
+      "motivo": "página de recurso/opcional da linha, não é máquina"
+    }
+  ]
+}

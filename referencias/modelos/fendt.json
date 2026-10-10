@@ -1,0 +1,1353 @@
+{
+  "catalogo": "Nexus Agro — modelos de máquinas e implementos",
+  "marca": "Fendt",
+  "fabricanteId": "fendt",
+  "fonte": "https://www.fendt.com/br/sitemap.xml",
+  "dataConsulta": "2026-10-10",
+  "regras": [
+    "Especificações copiadas como texto literal do site oficial do fabricante, sem conversão nem interpretação.",
+    "Valores servem para identificação e consulta. Para preencher automaticamente um parâmetro de regulagem, o valor precisa ser confirmado no manual/folheto do modelo e ano.",
+    "O site pode não refletir variações por ano-modelo, mercado ou opcionais."
+  ],
+  "totalModelos": 18,
+  "comEspecificacoes": 17,
+  "modelos": [
+    {
+      "id": "fendt-1167-vario-mt",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt 1167 Vario MT",
+      "linha": "Fendt 1100 Vario MT",
+      "familia": "trator",
+      "categoriaFabricante": "tratores",
+      "url": "https://www.fendt.com/br/maquinario-agricola/tratores/fendt-1100-vario-mt-29354",
+      "especificacoes": [
+        {
+          "campo": "Potência nomial (cv)",
+          "valor": "618"
+        },
+        {
+          "campo": "Potência máxima (cv)",
+          "valor": "673*"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:477b3b1b-bec6-4646-aeee-a14bc3539742/original/as/477b3b1b-bec6-4646-aeee-a14bc3539742.pdf"
+      ],
+      "familiaIdentificacao": "1100 Vario MT"
+    },
+    {
+      "id": "fendt-1044-vario",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt 1044 Vario",
+      "linha": "Fendt 1000 Vario Gen4",
+      "familia": "trator",
+      "categoriaFabricante": "tratores",
+      "url": "https://www.fendt.com/br/maquinario-agricola/tratores/fendt-1000-vario-gen4",
+      "especificacoes": [
+        {
+          "campo": "Potência nominal (kW/cv)",
+          "valor": "324/440"
+        },
+        {
+          "campo": "Potência máxima (kW/cv)",
+          "valor": "324/440"
+        },
+        {
+          "campo": "Potência máxima com DP ECE R 120 (kW/cv)",
+          "valor": "343/466"
+        },
+        {
+          "campo": "Máximo. Torque (Nm)",
+          "valor": "2280"
+        },
+        {
+          "campo": "Gamas de velocidades para a frente (km/h)",
+          "valor": "0,02 - 60"
+        },
+        {
+          "campo": "Opção de TF Traseira",
+          "valor": "1000/1000E"
+        },
+        {
+          "campo": "Bomba de fluxo variável (l/min)",
+          "valor": "220"
+        },
+        {
+          "campo": "Bomba de fluxo variável opção 1 (l/min)",
+          "valor": "220+210"
+        },
+        {
+          "campo": "Máximo. Capacidade de elevação do elevador traseiro (no ponto de acoplamento) (kg)",
+          "valor": "13180"
+        },
+        {
+          "campo": "Máximo. Capacidade de elevação do power lift dianteiro (no ponto de acoplamento) (kg)",
+          "valor": "5688"
+        },
+        {
+          "campo": "Peso sem carga (trator básico com cabine - tanques cheios sem motorista) (kg)",
+          "valor": "14000"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:7ead6ad5-0267-404a-9108-06dc3681eede/original/as/7ead6ad5-0267-404a-9108-06dc3681eede.pdf",
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:b0878eba-66ba-4cde-89e8-b9922064a233/original/as/b0878eba-66ba-4cde-89e8-b9922064a233.pdf"
+      ],
+      "familiaIdentificacao": "1000 Vario Gen4"
+    },
+    {
+      "id": "fendt-1048-vario",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt 1048 Vario",
+      "linha": "Fendt 1000 Vario Gen4",
+      "familia": "trator",
+      "categoriaFabricante": "tratores",
+      "url": "https://www.fendt.com/br/maquinario-agricola/tratores/fendt-1000-vario-gen4",
+      "especificacoes": [
+        {
+          "campo": "Potência nominal (kW/cv)",
+          "valor": "353/480"
+        },
+        {
+          "campo": "Potência máxima (kW/cv)",
+          "valor": "353/480"
+        },
+        {
+          "campo": "Potência máxima com DP ECE R 120 (kW/cv)",
+          "valor": "373/507"
+        },
+        {
+          "campo": "Máximo. Torque (Nm)",
+          "valor": "2470"
+        },
+        {
+          "campo": "Gamas de velocidades para a frente (km/h)",
+          "valor": "0,02 - 60"
+        },
+        {
+          "campo": "Opção de TF Traseira",
+          "valor": "1000/1000E"
+        },
+        {
+          "campo": "Bomba de fluxo variável (l/min)",
+          "valor": "220"
+        },
+        {
+          "campo": "Bomba de fluxo variável opção 1 (l/min)",
+          "valor": "220+210"
+        },
+        {
+          "campo": "Máximo. Capacidade de elevação do elevador traseiro (no ponto de acoplamento) (kg)",
+          "valor": "13180"
+        },
+        {
+          "campo": "Máximo. Capacidade de elevação do power lift dianteiro (no ponto de acoplamento) (kg)",
+          "valor": "5688"
+        },
+        {
+          "campo": "Peso sem carga (trator básico com cabine - tanques cheios sem motorista) (kg)",
+          "valor": "14000"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:7ead6ad5-0267-404a-9108-06dc3681eede/original/as/7ead6ad5-0267-404a-9108-06dc3681eede.pdf",
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:b0878eba-66ba-4cde-89e8-b9922064a233/original/as/b0878eba-66ba-4cde-89e8-b9922064a233.pdf"
+      ],
+      "familiaIdentificacao": "1000 Vario Gen4"
+    },
+    {
+      "id": "fendt-1052-vario",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt 1052 Vario",
+      "linha": "Fendt 1000 Vario Gen4",
+      "familia": "trator",
+      "categoriaFabricante": "tratores",
+      "url": "https://www.fendt.com/br/maquinario-agricola/tratores/fendt-1000-vario-gen4",
+      "especificacoes": [
+        {
+          "campo": "Potência nominal (kW/cv)",
+          "valor": "383/520"
+        },
+        {
+          "campo": "Potência máxima (kW/cv)",
+          "valor": "383/520"
+        },
+        {
+          "campo": "Potência máxima com DP ECE R 120 (kW/cv)",
+          "valor": "404/550"
+        },
+        {
+          "campo": "Máximo. Torque (Nm)",
+          "valor": "2650"
+        },
+        {
+          "campo": "Gamas de velocidades para a frente (km/h)",
+          "valor": "0,02 - 60"
+        },
+        {
+          "campo": "Opção de TF Traseira",
+          "valor": "1000/1000E"
+        },
+        {
+          "campo": "Bomba de fluxo variável (l/min)",
+          "valor": "220"
+        },
+        {
+          "campo": "Bomba de fluxo variável opção 1 (l/min)",
+          "valor": "220+210"
+        },
+        {
+          "campo": "Máximo. Capacidade de elevação do elevador traseiro (no ponto de acoplamento) (kg)",
+          "valor": "13180"
+        },
+        {
+          "campo": "Máximo. Capacidade de elevação do power lift dianteiro (no ponto de acoplamento) (kg)",
+          "valor": "5688"
+        },
+        {
+          "campo": "Peso sem carga (trator básico com cabine - tanques cheios sem motorista) (kg)",
+          "valor": "14000"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:7ead6ad5-0267-404a-9108-06dc3681eede/original/as/7ead6ad5-0267-404a-9108-06dc3681eede.pdf",
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:b0878eba-66ba-4cde-89e8-b9922064a233/original/as/b0878eba-66ba-4cde-89e8-b9922064a233.pdf"
+      ],
+      "familiaIdentificacao": "1000 Vario Gen4"
+    },
+    {
+      "id": "fendt-936-vario",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt 936 Vario",
+      "linha": "Fendt 900 Vario Gen7",
+      "familia": "trator",
+      "categoriaFabricante": "tratores",
+      "url": "https://www.fendt.com/br/maquinario-agricola/tratores/fendt-900-vario-gen7",
+      "especificacoes": [
+        {
+          "campo": "Potência nominal ECE R 120 (kW/cv)",
+          "valor": "261/355"
+        },
+        {
+          "campo": "Cilindrada (cm³)",
+          "valor": "9037"
+        },
+        {
+          "campo": "Máximo. Torque (Nm)",
+          "valor": "1750"
+        },
+        {
+          "campo": "Gamas de velocidades para a frente (km/h)",
+          "valor": "0,02 - 60"
+        },
+        {
+          "campo": "TDF traseira",
+          "valor": "540E/1000"
+        },
+        {
+          "campo": "TDF Dianteira opcional",
+          "valor": "1000"
+        },
+        {
+          "campo": "Bomba de fluxo variável (l/min)",
+          "valor": "165"
+        },
+        {
+          "campo": "Bomba de fluxo variável opção 1 (l/min)",
+          "valor": "220"
+        },
+        {
+          "campo": "Capacidade máxima de elevação no elevador dianteiro (daN)",
+          "valor": "5584"
+        },
+        {
+          "campo": "Largura total com pneus de série (mm)",
+          "valor": "2710"
+        },
+        {
+          "campo": "Altura livre ao solo (mm)",
+          "valor": "578"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:90f28809-f531-44cc-9d9c-386725b3f37f/original/as/90f28809-f531-44cc-9d9c-386725b3f37f.pdf",
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:8be25d38-5f2d-4176-a9b9-7098d166e197/original/as/8be25d38-5f2d-4176-a9b9-7098d166e197.pdf"
+      ],
+      "familiaIdentificacao": "900 Vario"
+    },
+    {
+      "id": "fendt-939-vario",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt 939 Vario",
+      "linha": "Fendt 900 Vario Gen7",
+      "familia": "trator",
+      "categoriaFabricante": "tratores",
+      "url": "https://www.fendt.com/br/maquinario-agricola/tratores/fendt-900-vario-gen7",
+      "especificacoes": [
+        {
+          "campo": "Potência nominal ECE R 120 (kW/cv)",
+          "valor": "283/385"
+        },
+        {
+          "campo": "Cilindrada (cm³)",
+          "valor": "9037"
+        },
+        {
+          "campo": "Máximo. Torque (Nm)",
+          "valor": "1850"
+        },
+        {
+          "campo": "Gamas de velocidades para a frente (km/h)",
+          "valor": "0,02 - 60"
+        },
+        {
+          "campo": "TDF traseira",
+          "valor": "540E/1000"
+        },
+        {
+          "campo": "TDF Dianteira opcional",
+          "valor": "1000"
+        },
+        {
+          "campo": "Bomba de fluxo variável (l/min)",
+          "valor": "165"
+        },
+        {
+          "campo": "Bomba de fluxo variável opção 1 (l/min)",
+          "valor": "220"
+        },
+        {
+          "campo": "Capacidade máxima de elevação no elevador dianteiro (daN)",
+          "valor": "5584"
+        },
+        {
+          "campo": "Largura total com pneus de série (mm)",
+          "valor": "2710"
+        },
+        {
+          "campo": "Altura livre ao solo (mm)",
+          "valor": "578"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:90f28809-f531-44cc-9d9c-386725b3f37f/original/as/90f28809-f531-44cc-9d9c-386725b3f37f.pdf",
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:8be25d38-5f2d-4176-a9b9-7098d166e197/original/as/8be25d38-5f2d-4176-a9b9-7098d166e197.pdf"
+      ],
+      "familiaIdentificacao": "900 Vario"
+    },
+    {
+      "id": "fendt-942-vario",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt 942 Vario",
+      "linha": "Fendt 900 Vario Gen7",
+      "familia": "trator",
+      "categoriaFabricante": "tratores",
+      "url": "https://www.fendt.com/br/maquinario-agricola/tratores/fendt-900-vario-gen7",
+      "especificacoes": [
+        {
+          "campo": "Potência nominal ECE R 120 (kW/cv)",
+          "valor": "305/415"
+        },
+        {
+          "campo": "Cilindrada (cm³)",
+          "valor": "9037"
+        },
+        {
+          "campo": "Máximo. Torque (Nm)",
+          "valor": "1970"
+        },
+        {
+          "campo": "Gamas de velocidades para a frente (km/h)",
+          "valor": "0,02 - 60"
+        },
+        {
+          "campo": "TDF traseira",
+          "valor": "540E/1000"
+        },
+        {
+          "campo": "TDF Dianteira opcional",
+          "valor": "1000"
+        },
+        {
+          "campo": "Bomba de fluxo variável (l/min)",
+          "valor": "165"
+        },
+        {
+          "campo": "Bomba de fluxo variável opção 1 (l/min)",
+          "valor": "220"
+        },
+        {
+          "campo": "Capacidade máxima de elevação no elevador dianteiro (daN)",
+          "valor": "5584"
+        },
+        {
+          "campo": "Largura total com pneus de série (mm)",
+          "valor": "2750"
+        },
+        {
+          "campo": "Altura livre ao solo (mm)",
+          "valor": "603"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:90f28809-f531-44cc-9d9c-386725b3f37f/original/as/90f28809-f531-44cc-9d9c-386725b3f37f.pdf",
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:8be25d38-5f2d-4176-a9b9-7098d166e197/original/as/8be25d38-5f2d-4176-a9b9-7098d166e197.pdf"
+      ],
+      "familiaIdentificacao": "900 Vario"
+    },
+    {
+      "id": "fendt-829-vario",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt 829 Vario",
+      "linha": "Fendt 800 Vario",
+      "familia": "trator",
+      "categoriaFabricante": "tratores",
+      "url": "https://www.fendt.com/br/maquinario-agricola/tratores/fendt-800-vario-gen5",
+      "especificacoes": [
+        {
+          "campo": "Potência nominal (kW/cv)",
+          "valor": "213/290"
+        },
+        {
+          "campo": "Potência máxima com DP ECE R 120 (kW/cv)",
+          "valor": "230/313"
+        },
+        {
+          "campo": "Máximo. Torque (Nm)",
+          "valor": "1550"
+        },
+        {
+          "campo": "Gamas de velocidades para a frente (km/h)",
+          "valor": "0,02 - 50 km/h"
+        },
+        {
+          "campo": "TDF traseira",
+          "valor": "540/540E/1000/1000E"
+        },
+        {
+          "campo": "Bomba de fluxo variável (l/min)",
+          "valor": "165"
+        },
+        {
+          "campo": "Bomba de fluxo variável opção 1 (l/min)",
+          "valor": "220"
+        },
+        {
+          "campo": "Máximo. Capacidade de elevação do elevador traseiro (no ponto de acoplamento) (kg)",
+          "valor": "11600"
+        },
+        {
+          "campo": "Máximo. Capacidade de elevação do power lift dianteiro (no ponto de acoplamento) (kg)",
+          "valor": "5300"
+        },
+        {
+          "campo": "Peso operacional (incl. acessórios usuais - +/- %) (kg)",
+          "valor": "9900"
+        },
+        {
+          "campo": "Peso total máximo permitido até 50 km/h (kg)",
+          "valor": "17500"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:78a34341-f0e2-4930-a00a-f62988bdb235/original/as/78a34341-f0e2-4930-a00a-f62988bdb235.pdf",
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:cf3c5ca1-4fff-47b6-954a-e0aadea73bab/original/as/cf3c5ca1-4fff-47b6-954a-e0aadea73bab.pdf"
+      ],
+      "familiaIdentificacao": "800 Vario Gen5"
+    },
+    {
+      "id": "fendt-832-vario",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt 832 Vario",
+      "linha": "Fendt 800 Vario",
+      "familia": "trator",
+      "categoriaFabricante": "tratores",
+      "url": "https://www.fendt.com/br/maquinario-agricola/tratores/fendt-800-vario-gen5",
+      "especificacoes": [
+        {
+          "campo": "Potência nominal (kW/cv)",
+          "valor": "235/320"
+        },
+        {
+          "campo": "Potência máxima com DP ECE R 120 (kW/cv)",
+          "valor": "252/343"
+        },
+        {
+          "campo": "Máximo. Torque (Nm)",
+          "valor": "1680"
+        },
+        {
+          "campo": "Gamas de velocidades para a frente (km/h)",
+          "valor": "0,02 - 50 km/h"
+        },
+        {
+          "campo": "TDF traseira",
+          "valor": "540/540E/1000/1000E"
+        },
+        {
+          "campo": "Bomba de fluxo variável (l/min)",
+          "valor": "165"
+        },
+        {
+          "campo": "Bomba de fluxo variável opção 1 (l/min)",
+          "valor": "220"
+        },
+        {
+          "campo": "Máximo. Capacidade de elevação do elevador traseiro (no ponto de acoplamento) (kg)",
+          "valor": "11600"
+        },
+        {
+          "campo": "Máximo. Capacidade de elevação do power lift dianteiro (no ponto de acoplamento) (kg)",
+          "valor": "5300"
+        },
+        {
+          "campo": "Peso operacional (incl. acessórios usuais - +/- %) (kg)",
+          "valor": "9900"
+        },
+        {
+          "campo": "Peso total máximo permitido até 50 km/h (kg)",
+          "valor": "17500"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:78a34341-f0e2-4930-a00a-f62988bdb235/original/as/78a34341-f0e2-4930-a00a-f62988bdb235.pdf",
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:cf3c5ca1-4fff-47b6-954a-e0aadea73bab/original/as/cf3c5ca1-4fff-47b6-954a-e0aadea73bab.pdf"
+      ],
+      "familiaIdentificacao": "800 Vario Gen5"
+    },
+    {
+      "id": "fendt-726-vario",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt 726 Vario",
+      "linha": "Fendt 700 Vario Gen7",
+      "familia": "trator",
+      "categoriaFabricante": "tratores",
+      "url": "https://www.fendt.com/br/maquinario-agricola/tratores/fendt-700-vario-gen7",
+      "especificacoes": [
+        {
+          "campo": "Potência nominal (kW/cv)",
+          "valor": "193/262"
+        },
+        {
+          "campo": "Potência nominal com ECE R de DD de 120 (kW/cv)",
+          "valor": "208/283"
+        },
+        {
+          "campo": "Potência máxima (kW/cv)",
+          "valor": "193/262"
+        },
+        {
+          "campo": "Potência máxima com DP ECE R 120 (kW/cv)",
+          "valor": "208/283"
+        },
+        {
+          "campo": "Cilindrada (cm³)",
+          "valor": "7527"
+        },
+        {
+          "campo": "Velocidade nominal (rpm)",
+          "valor": "1700"
+        },
+        {
+          "campo": "Máximo. Torque (Nm)",
+          "valor": "1384"
+        },
+        {
+          "campo": "Nível de combustível (litros)",
+          "valor": "450.0"
+        },
+        {
+          "campo": "Capacidade do depósito de combustível opcional (litros)",
+          "valor": "484.0"
+        },
+        {
+          "campo": "Nível de Arla (litros)",
+          "valor": "48.0"
+        },
+        {
+          "campo": "Pós-tratamento dos gases de escape",
+          "valor": "DOC/DPF/SCR"
+        },
+        {
+          "campo": "Tipo de transmissão",
+          "valor": "TA 190"
+        },
+        {
+          "campo": "Gamas de velocidades para a frente (km/h)",
+          "valor": "0,02 - 60"
+        },
+        {
+          "campo": "Gamas de velocidades para trás (km/h)",
+          "valor": "0,02 - 33"
+        },
+        {
+          "campo": "Velocidade máxima (km/h)",
+          "valor": "60"
+        },
+        {
+          "campo": "TDF traseira",
+          "valor": "540/540E/1000/1000E"
+        },
+        {
+          "campo": "TDF Dianteira opcional",
+          "valor": "1000"
+        },
+        {
+          "campo": "Bomba de fluxo variável (l/min)",
+          "valor": "165"
+        },
+        {
+          "campo": "Bomba de fluxo variável opção 1 (l/min)",
+          "valor": "220"
+        },
+        {
+          "campo": "Válvulas máximas (frente/centro/trás) Power (Número)",
+          "valor": "1/3/4"
+        },
+        {
+          "campo": "Válvulas máximas (frente/centro/trás) Power + (Número)",
+          "valor": "1/3/5"
+        },
+        {
+          "campo": "Válvulas máximas (frente/centro/trás) Profi Plus (Número)",
+          "valor": "2/3/5"
+        },
+        {
+          "campo": "Volume máximo de óleo hidráulico disponível (litros)",
+          "valor": "80"
+        },
+        {
+          "campo": "Válvulas de controle de volume de entrega (1ª frente) (l/min)",
+          "valor": "120 (UDK)"
+        },
+        {
+          "campo": "Válvulas de controle de volume de entrega (2ª frente) (l/min)",
+          "valor": "120 (UDK)"
+        },
+        {
+          "campo": "Capacidade máxima de elevação no elevador traseiro (daN)",
+          "valor": "10840"
+        },
+        {
+          "campo": "Máximo. Capacidade de elevação do elevador traseiro (no ponto de acoplamento) (kg)",
+          "valor": "11050"
+        },
+        {
+          "campo": "Capacidade de elevação contínua do elevador traseiro de acordo com a OECD (610 mm atrás do ponto de acoplamento) (kg)",
+          "valor": "7166"
+        },
+        {
+          "campo": "Capacidade máxima de elevação no elevador dianteiro (daN)",
+          "valor": "5300"
+        },
+        {
+          "campo": "Potência da bateria (Ah/V)",
+          "valor": "180/12"
+        },
+        {
+          "campo": "Alternador (V/A)",
+          "valor": "14/240"
+        },
+        {
+          "campo": "Pneus dianteiros (de série)",
+          "valor": "540/65R34"
+        },
+        {
+          "campo": "Pneus traseiros de série",
+          "valor": "650/85R38"
+        },
+        {
+          "campo": "1. Pneus dianteiros opcionais",
+          "valor": "600/70R30"
+        },
+        {
+          "campo": "1. Pneus traseiros opcionais",
+          "valor": "710/70R42"
+        },
+        {
+          "campo": "2. Pneus dianteiros opcionais",
+          "valor": "540/65R30"
+        },
+        {
+          "campo": "2. Pneus traseiros opcionais",
+          "valor": "650/65R42"
+        },
+        {
+          "campo": "3. Pneus frontais opcionais",
+          "valor": "420/85R34"
+        },
+        {
+          "campo": "3. Pneus traseiros opcionais",
+          "valor": "480/50R50"
+        },
+        {
+          "campo": "Bitola dianteira (pneus standard) (mm)",
+          "valor": "2000"
+        },
+        {
+          "campo": "Bitola traseira (pneus standard) (mm)",
+          "valor": "2000"
+        },
+        {
+          "campo": "Largura total com pneus de série (mm)",
+          "valor": "2650"
+        },
+        {
+          "campo": "Diâmetro máximo do pneu traseiro (mm)",
+          "valor": "2050"
+        },
+        {
+          "campo": "Comprimento total (mm)",
+          "valor": "4985 - 5160"
+        },
+        {
+          "campo": "Altura total da cabine do condutor com pneus standard sem Fendt Guide (mm)",
+          "valor": "3280"
+        },
+        {
+          "campo": "Altura total da cabine do condutor com pneus standard com Fendt Guide (mm)",
+          "valor": "3332"
+        },
+        {
+          "campo": "Altura livre ao solo (mm)",
+          "valor": "570"
+        },
+        {
+          "campo": "Distância entre eixos (mm)",
+          "valor": "2900"
+        },
+        {
+          "campo": "Peso operacional (incl. acessórios usuais - +/- %) (kg)",
+          "valor": "9200 - 9650"
+        },
+        {
+          "campo": "Peso total máximo permitido (kg)",
+          "valor": "15000"
+        },
+        {
+          "campo": "Peso total máximo permitido até 40 km/h (kg)",
+          "valor": "15000"
+        },
+        {
+          "campo": "Peso total máximo admissível até 60 km/h (kg)",
+          "valor": "14000"
+        },
+        {
+          "campo": "Máximo. Acoplamento do cabeçote esférico de carga da barra de tração (no trilho deslizante) (kg)",
+          "valor": "3000"
+        },
+        {
+          "campo": "Máximo. Carga da barra de tração acoplamento de esfera (curto) (no engate inferior) (kg)",
+          "valor": "4000"
+        },
+        {
+          "campo": "Máximo. Carga da barra de tração acoplamento de esfera (longo) (no engate inferior) (kg)",
+          "valor": "3500"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:16a9e6d3-5576-4ddf-8cde-e68655e3e7f4/original/as/16a9e6d3-5576-4ddf-8cde-e68655e3e7f4.pdf",
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:4b5ce7d5-a02c-4c4f-9798-26111d7d0448/original/as/4b5ce7d5-a02c-4c4f-9798-26111d7d0448.pdf"
+      ],
+      "familiaIdentificacao": "700 Vario Gen7.1"
+    },
+    {
+      "id": "fendt-728-vario",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt 728 Vario",
+      "linha": "Fendt 700 Vario Gen7",
+      "familia": "trator",
+      "categoriaFabricante": "tratores",
+      "url": "https://www.fendt.com/br/maquinario-agricola/tratores/fendt-700-vario-gen7",
+      "especificacoes": [
+        {
+          "campo": "Potência nominal (kW/cv)",
+          "valor": "206 / 283"
+        },
+        {
+          "campo": "Potência nominal com ECE R de DD de 120 (kW/cv)",
+          "valor": "223/303"
+        },
+        {
+          "campo": "Potência máxima (kW/cv)",
+          "valor": "206 / 283"
+        },
+        {
+          "campo": "Potência máxima com DP ECE R 120 (kW/cv)",
+          "valor": "223/303"
+        },
+        {
+          "campo": "Cilindrada (cm³)",
+          "valor": "7527"
+        },
+        {
+          "campo": "Velocidade nominal (rpm)",
+          "valor": "1700"
+        },
+        {
+          "campo": "Máximo. Torque (Nm)",
+          "valor": "1450"
+        },
+        {
+          "campo": "Nível de combustível (litros)",
+          "valor": "450.0"
+        },
+        {
+          "campo": "Capacidade do depósito de combustível opcional (litros)",
+          "valor": "484.0"
+        },
+        {
+          "campo": "Nível de Arla (litros)",
+          "valor": "48.0"
+        },
+        {
+          "campo": "Pós-tratamento dos gases de escape",
+          "valor": "DOC/DPF/SCR"
+        },
+        {
+          "campo": "Tipo de transmissão",
+          "valor": "TA 190"
+        },
+        {
+          "campo": "Gamas de velocidades para a frente (km/h)",
+          "valor": "0,02 - 60"
+        },
+        {
+          "campo": "Gamas de velocidades para trás (km/h)",
+          "valor": "0,02 - 33"
+        },
+        {
+          "campo": "Velocidade máxima (km/h)",
+          "valor": "60"
+        },
+        {
+          "campo": "TDF traseira",
+          "valor": "540/540E/1000/1000E"
+        },
+        {
+          "campo": "TDF Dianteira opcional",
+          "valor": "1000"
+        },
+        {
+          "campo": "Bomba de fluxo variável (l/min)",
+          "valor": "165"
+        },
+        {
+          "campo": "Bomba de fluxo variável opção 1 (l/min)",
+          "valor": "220"
+        },
+        {
+          "campo": "Válvulas máximas (frente/centro/trás) Power (Número)",
+          "valor": "1/3/4"
+        },
+        {
+          "campo": "Válvulas máximas (frente/centro/trás) Power + (Número)",
+          "valor": "1/3/5"
+        },
+        {
+          "campo": "Válvulas máximas (frente/centro/trás) Profi Plus (Número)",
+          "valor": "2/3/5"
+        },
+        {
+          "campo": "Volume máximo de óleo hidráulico disponível (litros)",
+          "valor": "80"
+        },
+        {
+          "campo": "Válvulas de controle de volume de entrega (1ª frente) (l/min)",
+          "valor": "120 (UDK)"
+        },
+        {
+          "campo": "Válvulas de controle de volume de entrega (2ª frente) (l/min)",
+          "valor": "120 (UDK)"
+        },
+        {
+          "campo": "Capacidade máxima de elevação no elevador traseiro (daN)",
+          "valor": "10840"
+        },
+        {
+          "campo": "Máximo. Capacidade de elevação do elevador traseiro (no ponto de acoplamento) (kg)",
+          "valor": "11050"
+        },
+        {
+          "campo": "Capacidade de elevação contínua do elevador traseiro de acordo com a OECD (610 mm atrás do ponto de acoplamento) (kg)",
+          "valor": "7166"
+        },
+        {
+          "campo": "Capacidade máxima de elevação no elevador dianteiro (daN)",
+          "valor": "5300"
+        },
+        {
+          "campo": "Potência da bateria (Ah/V)",
+          "valor": "180/12"
+        },
+        {
+          "campo": "Alternador (V/A)",
+          "valor": "14/240"
+        },
+        {
+          "campo": "Pneus dianteiros (de série)",
+          "valor": "540/65R34"
+        },
+        {
+          "campo": "Pneus traseiros de série",
+          "valor": "650/85R38"
+        },
+        {
+          "campo": "1. Pneus dianteiros opcionais",
+          "valor": "600/70R30"
+        },
+        {
+          "campo": "1. Pneus traseiros opcionais",
+          "valor": "710/70R42"
+        },
+        {
+          "campo": "2. Pneus dianteiros opcionais",
+          "valor": "540/65R30"
+        },
+        {
+          "campo": "2. Pneus traseiros opcionais",
+          "valor": "650/65R42"
+        },
+        {
+          "campo": "3. Pneus frontais opcionais",
+          "valor": "420/85R34"
+        },
+        {
+          "campo": "3. Pneus traseiros opcionais",
+          "valor": "480/80R50"
+        },
+        {
+          "campo": "Bitola dianteira (pneus standard) (mm)",
+          "valor": "2000"
+        },
+        {
+          "campo": "Bitola traseira (pneus standard) (mm)",
+          "valor": "2000"
+        },
+        {
+          "campo": "Largura total com pneus de série (mm)",
+          "valor": "2650"
+        },
+        {
+          "campo": "Diâmetro máximo do pneu traseiro (mm)",
+          "valor": "2050"
+        },
+        {
+          "campo": "Comprimento total (mm)",
+          "valor": "4985 - 5160"
+        },
+        {
+          "campo": "Altura total da cabine do condutor com pneus standard sem Fendt Guide (mm)",
+          "valor": "3280"
+        },
+        {
+          "campo": "Altura total da cabine do condutor com pneus standard com Fendt Guide (mm)",
+          "valor": "3332"
+        },
+        {
+          "campo": "Altura livre ao solo (mm)",
+          "valor": "570"
+        },
+        {
+          "campo": "Distância entre eixos (mm)",
+          "valor": "2900"
+        },
+        {
+          "campo": "Peso operacional (incl. acessórios usuais - +/- %) (kg)",
+          "valor": "9200 - 9650"
+        },
+        {
+          "campo": "Peso total máximo permitido (kg)",
+          "valor": "15000"
+        },
+        {
+          "campo": "Peso total máximo permitido até 40 km/h (kg)",
+          "valor": "15000"
+        },
+        {
+          "campo": "Peso total máximo admissível até 60 km/h (kg)",
+          "valor": "14000"
+        },
+        {
+          "campo": "Máximo. Acoplamento do cabeçote esférico de carga da barra de tração (no trilho deslizante) (kg)",
+          "valor": "3000"
+        },
+        {
+          "campo": "Máximo. Carga da barra de tração acoplamento de esfera (curto) (no engate inferior) (kg)",
+          "valor": "4000"
+        },
+        {
+          "campo": "Máximo. Carga da barra de tração acoplamento de esfera (longo) (no engate inferior) (kg)",
+          "valor": "3500"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:16a9e6d3-5576-4ddf-8cde-e68655e3e7f4/original/as/16a9e6d3-5576-4ddf-8cde-e68655e3e7f4.pdf",
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:4b5ce7d5-a02c-4c4f-9798-26111d7d0448/original/as/4b5ce7d5-a02c-4c4f-9798-26111d7d0448.pdf"
+      ],
+      "familiaIdentificacao": "700 Vario Gen7.1"
+    },
+    {
+      "id": "fendt-rogator-934h",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt Rogator 934H",
+      "linha": "Fendt Rogator 900",
+      "familia": "pulverizador_autopropelido",
+      "categoriaFabricante": "pulverizadores",
+      "url": "https://www.fendt.com/br/maquinario-agricola/fendt-rogator-900",
+      "especificacoes": [
+        {
+          "campo": "Líquido",
+          "valor": "3500 litros/4200 litros"
+        },
+        {
+          "campo": "Vão-livre padrão",
+          "valor": "1,53m"
+        },
+        {
+          "campo": "Vão-livre elevado",
+          "valor": "1.93m"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:874672fa-f204-4485-a6f8-460d6c73ad2d/original/as/874672fa-f204-4485-a6f8-460d6c73ad2d.pdf"
+      ]
+    },
+    {
+      "id": "fendt-ideal-7",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt IDEAL 7",
+      "linha": "Fendt IDEAL",
+      "familia": "colhedora_graos",
+      "categoriaFabricante": "colheitadeiras",
+      "url": "https://www.fendt.com/br/maquinario-agricola/colheitadeiras/fendt-ideal",
+      "especificacoes": [
+        {
+          "campo": "Rotores (Número)",
+          "valor": "1"
+        },
+        {
+          "campo": "Área de trilha (m²)",
+          "valor": "0.83"
+        },
+        {
+          "campo": "Área de separação (m²)",
+          "valor": "1.44"
+        },
+        {
+          "campo": "Superfície da peneira superior (peneira superior + extensão) (m²)",
+          "valor": "3.19"
+        },
+        {
+          "campo": "Área de peneira inferior (m²)",
+          "valor": "2.6"
+        },
+        {
+          "campo": "Área total ventilada (tela superior + tela inferior + pré-tela) (m²)",
+          "valor": "6.79"
+        },
+        {
+          "campo": "Capacidade do tanque graneleiro (litros)",
+          "valor": "12500"
+        },
+        {
+          "campo": "Potência máxima a 1.800 rpm (ECE R 120) (kW/cv)",
+          "valor": "355/481"
+        },
+        {
+          "campo": "Capacidade do depósito de combustível (litros)",
+          "valor": "1000"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:2583ee11-7ca2-4dc6-ae18-add4f9dcd261/original/as/2583ee11-7ca2-4dc6-ae18-add4f9dcd261.pdf"
+      ]
+    },
+    {
+      "id": "fendt-ideal-8",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt IDEAL 8",
+      "linha": "Fendt IDEAL",
+      "familia": "colhedora_graos",
+      "categoriaFabricante": "colheitadeiras",
+      "url": "https://www.fendt.com/br/maquinario-agricola/colheitadeiras/fendt-ideal",
+      "especificacoes": [
+        {
+          "campo": "Rotores (Número)",
+          "valor": "2"
+        },
+        {
+          "campo": "Área de trilha (m²)",
+          "valor": "1.66"
+        },
+        {
+          "campo": "Área de separação (m²)",
+          "valor": "2.88"
+        },
+        {
+          "campo": "Superfície da peneira superior (peneira superior + extensão) (m²)",
+          "valor": "3.19"
+        },
+        {
+          "campo": "Área de peneira inferior (m²)",
+          "valor": "2.6"
+        },
+        {
+          "campo": "Área total ventilada (tela superior + tela inferior + pré-tela) (m²)",
+          "valor": "6.79"
+        },
+        {
+          "campo": "Capacidade do tanque graneleiro (litros)",
+          "valor": "17100"
+        },
+        {
+          "campo": "Potência máxima a 1.850 rpm (ECE R 120) (kW/cv)",
+          "valor": "404/549"
+        },
+        {
+          "campo": "Capacidade do depósito de combustível (litros)",
+          "valor": "1250"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:2583ee11-7ca2-4dc6-ae18-add4f9dcd261/original/as/2583ee11-7ca2-4dc6-ae18-add4f9dcd261.pdf"
+      ]
+    },
+    {
+      "id": "fendt-ideal-8t",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt IDEAL 8T",
+      "linha": "Fendt IDEAL",
+      "familia": "colhedora_graos",
+      "categoriaFabricante": "colheitadeiras",
+      "url": "https://www.fendt.com/br/maquinario-agricola/colheitadeiras/fendt-ideal",
+      "especificacoes": [
+        {
+          "campo": "Rotores (Número)",
+          "valor": "2"
+        },
+        {
+          "campo": "Área de trilha (m²)",
+          "valor": "1.66"
+        },
+        {
+          "campo": "Área de separação (m²)",
+          "valor": "2.88"
+        },
+        {
+          "campo": "Superfície da peneira superior (peneira superior + extensão) (m²)",
+          "valor": "3.19"
+        },
+        {
+          "campo": "Área de peneira inferior (m²)",
+          "valor": "2.6"
+        },
+        {
+          "campo": "Área total ventilada (tela superior + tela inferior + pré-tela) (m²)",
+          "valor": "6.79"
+        },
+        {
+          "campo": "Capacidade do tanque graneleiro (litros)",
+          "valor": "17100"
+        },
+        {
+          "campo": "Potência máxima a 1.850 rpm (ECE R 120) (kW/cv)",
+          "valor": "404/549"
+        },
+        {
+          "campo": "Capacidade do depósito de combustível (litros)",
+          "valor": "1250"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:2583ee11-7ca2-4dc6-ae18-add4f9dcd261/original/as/2583ee11-7ca2-4dc6-ae18-add4f9dcd261.pdf"
+      ]
+    },
+    {
+      "id": "fendt-ideal-9",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt IDEAL 9",
+      "linha": "Fendt IDEAL",
+      "familia": "colhedora_graos",
+      "categoriaFabricante": "colheitadeiras",
+      "url": "https://www.fendt.com/br/maquinario-agricola/colheitadeiras/fendt-ideal",
+      "especificacoes": [
+        {
+          "campo": "Rotores (Número)",
+          "valor": "2"
+        },
+        {
+          "campo": "Área de trilha (m²)",
+          "valor": "1.66"
+        },
+        {
+          "campo": "Área de separação (m²)",
+          "valor": "2.88"
+        },
+        {
+          "campo": "Superfície da peneira superior (peneira superior + extensão) (m²)",
+          "valor": "3.19"
+        },
+        {
+          "campo": "Área de peneira inferior (m²)",
+          "valor": "2.6"
+        },
+        {
+          "campo": "Área total ventilada (tela superior + tela inferior + pré-tela) (m²)",
+          "valor": "6.79"
+        },
+        {
+          "campo": "Capacidade do tanque graneleiro (litros)",
+          "valor": "17100"
+        },
+        {
+          "campo": "Potência máxima a 1.800 rpm (ECE R 120) (kW/cv)",
+          "valor": "485/660"
+        },
+        {
+          "campo": "Capacidade do depósito de combustível (litros)",
+          "valor": "1500"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:2583ee11-7ca2-4dc6-ae18-add4f9dcd261/original/as/2583ee11-7ca2-4dc6-ae18-add4f9dcd261.pdf"
+      ]
+    },
+    {
+      "id": "fendt-ideal-9t",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt IDEAL 9T",
+      "linha": "Fendt IDEAL",
+      "familia": "colhedora_graos",
+      "categoriaFabricante": "colheitadeiras",
+      "url": "https://www.fendt.com/br/maquinario-agricola/colheitadeiras/fendt-ideal",
+      "especificacoes": [
+        {
+          "campo": "Rotores (Número)",
+          "valor": "2"
+        },
+        {
+          "campo": "Área de trilha (m²)",
+          "valor": "1.66"
+        },
+        {
+          "campo": "Área de separação (m²)",
+          "valor": "2.88"
+        },
+        {
+          "campo": "Superfície da peneira superior (peneira superior + extensão) (m²)",
+          "valor": "3.19"
+        },
+        {
+          "campo": "Área de peneira inferior (m²)",
+          "valor": "2.6"
+        },
+        {
+          "campo": "Área total ventilada (tela superior + tela inferior + pré-tela) (m²)",
+          "valor": "6.79"
+        },
+        {
+          "campo": "Capacidade do tanque graneleiro (litros)",
+          "valor": "17100"
+        },
+        {
+          "campo": "Potência máxima a 1.800 rpm (ECE R 120) (kW/cv)",
+          "valor": "485/660"
+        },
+        {
+          "campo": "Capacidade do depósito de combustível (litros)",
+          "valor": "1500"
+        }
+      ],
+      "origemEspecificacoes": "tabela de especificações da página do produto (texto literal)",
+      "dataConsulta": "2026-10-10",
+      "prospectos": [
+        "https://assets.agcocorp.com/adobe/assets/urn:aaid:aem:2583ee11-7ca2-4dc6-ae18-add4f9dcd261/original/as/2583ee11-7ca2-4dc6-ae18-add4f9dcd261.pdf"
+      ]
+    },
+    {
+      "id": "fendt-momentum",
+      "marca": "Fendt",
+      "fabricanteId": "fendt",
+      "modelo": "Fendt MOMENTUM",
+      "linha": "Fendt MOMENTUM",
+      "familia": "semeadora",
+      "categoriaFabricante": "plantadeiras",
+      "url": "https://www.fendt.com/br/maquinario-agricola/plantadeiras/fendt-momentum",
+      "especificacoes": [],
+      "origemEspecificacoes": null,
+      "dataConsulta": "2026-10-10"
+    }
+  ],
+  "descartados": [
+    {
+      "nome": "Fendt Rogator 900 (fendt-900-rogator-new)",
+      "url": "https://www.fendt.com/br/maquinario-agricola/fendt-900-rogator-new",
+      "motivo": "página fora do menu (só no sitemap): cabeçalho do Rogator 900 com conteúdo e tabela do Fendt 1000 Vario; produtos já cobertos pelas páginas oficiais do menu"
+    },
+    {
+      "nome": "Highlights Custom Brazilian Portuguese",
+      "url": "https://www.fendt.com/br/maquinario-agricola/tratores/highlights-custom-brazilian-portuguese",
+      "motivo": "página auxiliar de destaques do Fendt 1167 Vario MT, sem tabela; modelo já coberto pela página Fendt 1100 Vario MT"
+    },
+    {
+      "nome": "Fendt 700 Vario Gen7 (link antigo)",
+      "url": "https://www.fendt.com/br/maquinario-agricola/tratores/fendt-700-vario-gen7-43827.html",
+      "motivo": "link da página de tratores retorna 404"
+    },
+    {
+      "nome": "Fendt 900 Vario (link antigo)",
+      "url": "https://www.fendt.com/br/maquinario-agricola/tratores/fendt-900-vario",
+      "motivo": "link da página de tratores retorna 404"
+    }
+  ]
+}

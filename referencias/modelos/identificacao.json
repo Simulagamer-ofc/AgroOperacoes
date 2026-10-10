@@ -2935,10 +2935,13 @@
     {
      "url": "https://www.fendt.com/br/maquinario-agricola/tratores",
      "consultadoEm": "2026-10-07"
+    },
+    {
+     "url": "https://www.fendt.com/br/maquinario-agricola/tratores/fendt-800-vario-gen5",
+     "consultadoEm": "2026-10-10"
     }
    ],
-   "status": "a_confirmar",
-   "motivoConfirmar": "A página citada mostra “Fendt 800 Vario”, sem “Gen5”."
+   "status": "confirmado_em_fonte_oficial"
   },
   {
    "id": "fendt-trator-700-vario-gen7-1-8aed2462",
@@ -2951,10 +2954,13 @@
     {
      "url": "https://www.fendt.com/br/maquinario-agricola/tratores",
      "consultadoEm": "2026-10-07"
+    },
+    {
+     "url": "https://www.fendt.com/br/maquinario-agricola/tratores/fendt-700-vario-gen7",
+     "consultadoEm": "2026-10-10"
     }
    ],
-   "status": "a_confirmar",
-   "motivoConfirmar": "A página citada mostra “Fendt 700 Vario”, sem “Gen7.1”."
+   "status": "confirmado_em_fonte_oficial"
   },
   {
    "id": "vaderstad-plantadeira-tempo-1799b002",
