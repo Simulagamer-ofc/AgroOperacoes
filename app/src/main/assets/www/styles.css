@@ -270,3 +270,86 @@ body{background:var(--bg)}
 .pc-aviso{color:var(--orange);font-size:.85rem;font-weight:600}
 .pc-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:14px}.pc-card{display:flex;flex-direction:column;gap:4px;text-align:left;cursor:pointer;padding:14px;font:inherit;color:inherit}.pc-card small{color:var(--muted)}
 .pc-tab td,.pc-tab th{white-space:nowrap}.pc-fontes{margin:0;padding-left:18px}
+
+/* =================== Usabilidade no celular (revisão UX) =================== */
+/* Números e unidades nunca quebram linha ("R$" / valor, "18,0" / "mm") */
+.kpi .value,.tbl-wrap .tbl td.num,.es-kpis .kpi .value,.es-saldo b,.ubs-num b,.ctn-num b,.item-card .big,.nx-tile strong,.pc-sug b,.ubs-rend b,.nx-total strong{white-space:nowrap}
+.kpi .value{overflow:hidden;text-overflow:ellipsis}
+/* Ícone colorido do cartão (KPI) não cobre o rótulo */
+.kpi .badge~.label{padding-right:48px}
+/* Tabelas: rolagem lateral com sombra indicando que há mais colunas à direita */
+.tbl-wrap{--tbl-sombra:rgba(9,30,50,.2);-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;background:linear-gradient(to left,var(--panel) 40%,transparent) right center/36px 100% no-repeat local,linear-gradient(to left,var(--tbl-sombra),transparent) right center/18px 100% no-repeat scroll}
+:root:not([data-theme="light"]) .tbl-wrap{--tbl-sombra:rgba(0,0,0,.42)}
+/* Botões pequenos soltos em células de tabela (ex.: “Excluir” em Chuvas e Combustível) com o mesmo visual dos demais */
+.tbl td>button[data-act]{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:8px;padding:6px 10px;font-size:.8rem;white-space:nowrap}
+.tbl td>button[data-act].del{color:var(--red)}.tbl td>button[data-act].ok{border-color:var(--green);color:var(--green)}
+:root:not([data-theme="light"]) .row-actions button.del,:root:not([data-theme="light"]) .tbl td>button[data-act].del{color:#ff8f8f}
+.tbl td>button[data-act]:hover,.row-actions button:hover{border-color:var(--blue)}
+/* Alvos de toque: mínimo 40px (44px em telas de toque) */
+.row-actions button,.tbl td>button[data-act],.filters button,.section-title button,.maq-acoes>button,.es-acoes button,.nx-acoes button,.cfg-op,button.link,.menu-lista button,.af-sn-btns button{min-height:40px}
+.menu-mais summary{min-height:40px;min-width:40px;display:grid;place-items:center}
+.viz-tab summary,details.tecnico summary,details.af-colar summary,details.af-extra summary{line-height:20px;padding:10px 0}
+@media(pointer:coarse){
+  .row-actions button,.tbl td>button[data-act],.filters button,.section-title button,.maq-acoes>button,.es-acoes button,.nx-acoes button,.cfg-op,button.link,.menu-lista button,.af-sn-btns button,.menu-mais summary{min-height:44px}
+  .menu-mais summary{min-width:44px}
+  .viz-tab summary,details.tecnico summary,details.af-colar summary,details.af-extra summary{padding:12px 0}
+  .lc-tab select,.lc-tab input,.nfe-tab select,.nfe-tab input,.tbl.inv input{min-height:44px}
+}
+/* Catálogo: nome da marca em até 2 linhas, sem cortar “Tatu March…” */
+.marca-txt strong{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.2;overflow-wrap:anywhere}
+/* Versão discreta no menu lateral */
+.brand.nexus .versao{font-size:.72rem;color:#7f9fae;margin-top:6px;letter-spacing:.03em}
+/* Rodapé de ações fixo nos formulários (Salvar/Cancelar sempre visíveis) */
+.dialog .actions{position:sticky;bottom:-22px;z-index:2;background:var(--panel);margin:18px -22px -22px;padding:12px 22px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);border-radius:0 0 16px 16px}
+
+/* Tema escuro: textos de link, alerta e botões com contraste ≥ 4,5:1 */
+:root:not([data-theme="light"]) .section-title button:not(.active),:root:not([data-theme="light"]) button.link,:root:not([data-theme="light"]) .viz-tab summary,:root:not([data-theme="light"]) details.tecnico summary,:root:not([data-theme="light"]) details.af-colar summary,:root:not([data-theme="light"]) details.af-extra summary,:root:not([data-theme="light"]) details.cat-tipo summary span,:root:not([data-theme="light"]) .nota a{color:#6cb8f0}
+:root:not([data-theme="light"]) .menu-lista button.del,:root:not([data-theme="light"]) .danger,:root:not([data-theme="light"]) .viz-alerta{color:#ff8f8f}:root:not([data-theme="light"]) .danger{border-color:#ff8f8f}
+:root:not([data-theme="light"]) .maq-rev.rev-alerta small{color:#f5b843}
+:root:not([data-theme="light"]) .primary{background:#1673b8}
+.badge.orange,.alert-icon.orange{color:#2a1c00}
+/* Tema claro: chips e textos de ação legíveis (≥ 4,5:1) */
+:root[data-theme="light"] .chip.green{color:#0f7a4d}:root[data-theme="light"] .chip.blue{color:#1d5fbf}:root[data-theme="light"] .chip.orange{color:#8a5a00}:root[data-theme="light"] .chip.red{color:#b83232}:root[data-theme="light"] .chip.purple{color:#5a3fc0}
+:root[data-theme="light"] .row-actions button.del,:root[data-theme="light"] .tbl td>button[data-act].del,:root[data-theme="light"] .menu-lista button.del,:root[data-theme="light"] .danger{color:#c23434}
+:root[data-theme="light"] .nav-grupo{color:#8fa9bd}
+@media(max-width:760px){
+  /* Tabelas mais compactas, primeira coluna fixa e sombra à direita */
+  table.tbl{font-size:.8rem}.tbl th{font-size:.68rem;letter-spacing:.02em}.tbl th,.tbl td{padding:8px 6px}
+  .tbl-wrap{margin:0 -6px;padding:0 6px 0 0}
+  .tbl-wrap .tbl th:first-child,.tbl-wrap .tbl td:first-child{position:sticky;left:0;z-index:1;background:var(--panel);box-shadow:1px 0 0 var(--line)}
+  .tbl-wrap .tbl th:first-child,.tbl-wrap .tbl td:first-child{padding-left:6px;max-width:42vw}.tbl-wrap .tbl td:first-child>strong{white-space:nowrap}
+  .tbl-wrap .af-linha-fora td:first-child{background:linear-gradient(rgba(224,82,82,.06),rgba(224,82,82,.06)),var(--panel)}
+  .tbl .row-actions{justify-content:flex-start;flex-wrap:nowrap}
+  .lc-tab select,.lc-tab input{min-height:40px}
+  .tbl td .chip{white-space:nowrap}
+  /* KPIs em 2 colunas: valor encolhe para caber em uma linha */
+  :not(.nexus)>.kpi{padding:12px}:not(.nexus)>.kpi .value{font-size:clamp(.95rem,4.3vw,1.45rem);letter-spacing:-.01em}
+  .kpi .label{font-size:.82rem}
+  /* Busca no topo: ícone que se expande ao tocar (sem JS) */
+  .topbar .search{display:block;margin-left:auto;min-width:0;width:44px;height:44px;flex:none}
+  .topbar .search input{height:44px;padding:0 0 0 40px;color:transparent;cursor:pointer;-webkit-appearance:none;appearance:none}
+  .topbar .search input::placeholder{color:transparent}
+  .topbar{gap:8px}.topbar h1{font-size:1.08rem}
+  .topbar .search span{left:0;top:0;width:44px;height:44px;display:grid;place-items:center;pointer-events:none;font-size:1.45rem;line-height:1}
+  .topbar .search:focus-within{position:absolute;left:12px;right:12px;top:50%;transform:translateY(-50%);width:auto;z-index:6}
+  .topbar .search:focus-within input{color:var(--text);cursor:text;padding-right:12px;box-shadow:var(--shadow)}
+  .topbar .search:focus-within input::placeholder{color:var(--muted)}
+  .topbar .bell{width:44px;height:44px;flex:none;font-size:1.05rem}
+  .topbar>div:has(#viewTitle){min-width:0;flex:1}.topbar h1{display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.2;overflow-wrap:anywhere}
+  /* Faixa “Centro de operações” mais baixa no celular */
+  .hero{height:176px;padding-top:20px;margin-bottom:14px}.hero-txt h2{font-size:1.35rem;margin-bottom:8px}.hero-txt p{font-size:.9rem}
+  .hero .primary.hero-cta{right:14px;bottom:14px;min-width:0;height:46px;font-size:1rem;padding:0 16px}
+  /* Primeiro uso: cartão “Carregar dados de exemplo” logo abaixo da faixa */
+  #view:has([data-act=seed]){display:flex;flex-direction:column}
+  #view:has([data-act=seed])>*{order:2}#view:has([data-act=seed])>.hero{order:0}
+  #view:has([data-act=seed])>section:has([data-act=seed]){order:1;margin:0 0 14px!important}
+  #view:has([data-act=seed])>.kpis.nexus{margin-bottom:0}
+  #view:has([data-act=seed]) .empty{padding:20px 16px}
+  /* Formulários longos: espaçamento menor */
+  .modal{padding:8px;align-items:end}
+  .dialog{padding:16px 16px 0;max-height:calc(100dvh - 16px);border-radius:16px}
+  .dialog h3{margin-bottom:10px;font-size:1.05rem}.dialog .sub{margin:-4px 0 10px}
+  .dialog .form{gap:10px}.dialog .field{gap:4px}.dialog .field input,.dialog .field select,.dialog .field textarea{padding:9px 10px}
+  .dialog .actions{bottom:0;margin:14px -16px 0;padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+  .dialog .actions button{flex:1;min-height:44px}
+}

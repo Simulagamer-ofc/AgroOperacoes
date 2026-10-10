@@ -15,7 +15,7 @@ const VARIAVEL = {temperatura: 'Temperatura', umidade_graos: 'Umidade dos grãos
 // Versão 0.5.0 gravava estes defeitos como leituras simples (registros antigos continuam exibidos)
 const CLASSIF = [['impureza', 'impurezas_materias_estranhas'], ['avariados', 'graos_avariados'], ['quebrados', 'graos_quebrados_amassados']];
 // Tabelas oficiais de classificação (IN 11/2007 soja, IN 60/2011 milho), carregadas do banco antes da etapa 3
-let TABS_CLASS = null;
+let TABS_CLASS = null, REGRAS_SEC = []; // REGRAS_SEC: regras do banco, para os textos de referência não ficarem fixos no código
 const tabelasDoProduto = s => (TABS_CLASS || []).filter(t => t.produto === s.produto && t.statusValidacao !== 'suspensa'
   && (t.destino === '*' || [].concat(t.destino).includes(s.destino)) && (t.etapa === '*' || [].concat(t.etapa).includes(s.etapa)));
 const camposClass = s => Object.keys(s).filter(k => k.startsWith('cl_'));
@@ -190,7 +190,7 @@ function resultadoSecagem(r, s) {
     ${cl ? blocoClassificacao(cl) : ''}
     ${r.descontos ? blocoDescontos(r.descontos) : ''}
     ${r.leituras.length ? `<h3 style="margin-top:16px">Leituras</h3><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Leitura</th><th>Ponto</th><th class="num">Valor</th><th>Referência</th><th>Resultado</th></tr></thead><tbody>
-    ${r.leituras.map(l => `<tr><td>${esc(VARIAVEL[l.variavel])}</td><td>${esc(l.ponto === 'amostra' ? 'Amostra do produto' : rotulo(PONTOS, l.ponto))}${l.posicao ? ' — ' + esc(l.posicao) : ''}</td><td class="num">${num(l.valor, 1)} ${l.variavel === 'temperatura' ? '°C' : '%'}</td><td>${lim(l.avaliacao)}${l.avaliacao.regraId ? `<br><small style="color:var(--muted)">${esc(l.avaliacao.regraId)} v${esc(l.avaliacao.regraVersao)}</small>` : ''}</td><td>${statusChip(l.avaliacao.status)}</td></tr>`).join('')}
+    ${r.leituras.map(l => `<tr><td>${esc(VARIAVEL[l.variavel])}</td><td>${esc(l.ponto === 'amostra' ? 'Amostra do produto' : rotulo(PONTOS, l.ponto))}${l.posicao ? ' — ' + esc(l.posicao) : ''}</td><td class="num">${numLimite(l.valor, 1, l.avaliacao)} ${l.variavel === 'temperatura' ? '°C' : '%'}</td><td>${lim(l.avaliacao)}${l.avaliacao.regraId ? `<br><small style="color:var(--muted)">${esc(l.avaliacao.regraId)} v${esc(l.avaliacao.regraVersao)}</small>` : ''}</td><td>${statusChip(l.avaliacao.status)}</td></tr>`).join('')}
     </tbody></table></div>` : ''}
     ${calc.length ? `<h3 style="margin-top:16px">Valores calculados</h3><table class="tbl"><tbody>${calc.map(([a, b]) => `<tr><td>${esc(a)}</td><td class="num">${esc(b)}</td></tr>`).join('')}</tbody></table>` : ''}
     ${r.leituras.filter(l => l.avaliacao.regraId).map(l => { const f = (l.avaliacao.fontes || []).find(x => x.conferido !== false) || {}; return `<p class="nota"><strong>${esc(l.avaliacao.regraId)}</strong> — ${esc([f.organizacao, f.titulo].filter(Boolean).join(' — '))}${f.pagina ? ', ' + esc(f.pagina) : ''}${f.trechoLiteral ? `: <em>“${esc(f.trechoLiteral.slice(0, 300))}${f.trechoLiteral.length > 300 ? '…' : ''}”</em>` : ''}</p>`; }).join('')}
@@ -211,7 +211,9 @@ function camposClassificacao(s) {
 // Descontos da carga: conferência do romaneio. Nenhum padrão é preenchido pelo app.
 const CAMPOS_DESC = ['pesoCarga', 'umidadePadrao', 'impurezaPadrao', 'descUmidTabela', 'descImpTabela', 'outrosDesc', 'pesoRomaneio'];
 function camposDescontos(s) {
-  const ref = ['soja', 'milho'].includes(s.produto) ? 'A referência validada de umidade para recebimento é até 14% (IN 11/2007 · IN 60/2011), mas o padrão de desconto é o do contrato.' : 'Use o padrão do contrato ou da tabela do comprador.';
+  const has = (v, x) => v === '*' || [].concat(v).includes(x);
+  const ru = REGRAS_SEC.find(r => r.statusValidacao === 'validada' && r.variavel === 'umidade_graos' && r.limiteMax != null && has(r.produto, s.produto) && has(r.destino, s.destino) && has(r.etapa, 'recebimento'));
+  const ref = ru ? `A referência validada de umidade para recebimento é ${ru.limiteMaxExclusivo ? 'abaixo de' : 'até'} ${num(ru.limiteMax, 1)}% (${ru.id}${ru.fontes?.[0]?.organizacao ? ' — ' + ru.fontes[0].organizacao : ''}), mas o padrão de desconto é o do contrato.` : 'Use o padrão do contrato ou da tabela do comprador.';
   const aberto = CAMPOS_DESC.some(k => s[k]);
   return `<details class="field full sc-desc" ${aberto ? 'open' : ''}><summary><strong>Descontos da carga</strong> — opcional, para conferir o romaneio</summary>
     <p class="nota">Informe o peso e o <strong>padrão do contrato</strong> (ou o percentual da tabela do comprador). O app não preenche nenhum padrão: a IN 11/2007 e a IN 60/2011 não fixam descontos.</p>
@@ -269,7 +271,7 @@ Object.assign(ACTIONS, {
     const e = validarSecagem(); if (e) { showToast(e); return; }
     const passo = sc.passo; sc._ocupado = true;
     try {
-      if (!TABS_CLASS) { try { TABS_CLASS = (await dados('regras')).tabelasClassificacao || []; } catch { TABS_CLASS = []; } }
+      if (!TABS_CLASS) { try { const b = await dados('regras'); TABS_CLASS = b.tabelasClassificacao || []; REGRAS_SEC = b.regras || []; } catch { TABS_CLASS = []; } }
       if (passo === 3) { try { sc.resultado = await calcularSecagem(); } catch (x) { showToast('Não foi possível calcular: ' + x.message); return; } }
     } finally { if (sc) delete sc._ocupado; }
     if (!sc || sc.passo !== passo) return;

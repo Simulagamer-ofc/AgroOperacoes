@@ -145,9 +145,9 @@ function registrarEtapaUbs(ordemId) {
   openForm({title: `${e.nome} — lote ${l.code}`, sub, values: {data: today(), ...(e.tipo === 'ensaque' && db.settings.kgPorSaca ? {kgPorSaca: db.settings.kgPorSaca} : {})}, fields, onSubmit});
   // Percentual do descarte enquanto digita
   const d = $('#f_descarteKg', dialog), h = d?.parentElement.querySelector('.hint');
-  if (d && h) d.addEventListener('input', () => { const x = Number(d.value.replace(',', '.')); h.textContent = x > 0 ? `${pctDe(x, c.restante)} do que entrou na etapa (${kgFmt(c.restante)})` : ''; });
+  if (d && h) d.addEventListener('input', () => { const x = numeroBR(d.value); h.textContent = x > 0 ? `${pctDe(x, c.restante)} do que entrou na etapa (${kgFmt(c.restante)})` : ''; });
   const sa = $('#f_sacas', dialog), kp = $('#f_kgPorSaca', dialog), hk = kp?.parentElement.querySelector('.hint');
-  if (sa && kp && hk) { const base = hk.textContent; const at = () => { const n = Number(sa.value), k = Number(kp.value.replace(',', '.')); hk.textContent = n > 0 && k > 0 ? `${kgFmt(n * k)} ensacados • rendimento ${pctDe(n * k, c.entrada)}` : base; }; sa.oninput = at; kp.oninput = at; }
+  if (sa && kp && hk) { const base = hk.textContent; const at = () => { const n = Number(sa.value), k = numeroBR(kp.value); hk.textContent = n > 0 && k > 0 ? `${kgFmt(n * k)} ensacados • rendimento ${pctDe(n * k, c.entrada)}` : base; }; sa.oninput = at; kp.oninput = at; }
 }
 
 function configurarEtapasUbs() {
@@ -205,7 +205,7 @@ function detalheOrdemUbs(id) {
   const fluxo = c.entrada ? [['Entrada', c.entrada], ...c.passos.map(p => ['Após ' + p.nome.toLowerCase(), p.aposKg]), ...(c.concluida ? [['Ensacado', c.pesoFinal]] : [])] : [];
   const maior = c.passos.filter(p => !p.secagem).sort((a, b) => b.perdaKg - a.perdaKg)[0];
   const ultimo = [...o.etapas].reverse().find(eid => reg[eid] || (o.pulos || []).includes(eid));
-  const acoes = c.concluida ? '' : [prox ? btn(`+ Registrar ${etapaUbs(prox).nome.toLowerCase()}`, 'ubs-etapa', o.id) : '',
+  const acoes = c.concluida ? `<button class="danger" data-act="ubs-excluir" data-id="${esc(o.id)}">Excluir ordem</button>` : [prox ? btn(`+ Registrar ${etapaUbs(prox).nome.toLowerCase()}`, 'ubs-etapa', o.id) : '',
     prox && !etapaUbs(prox).fixa ? btn('Pular etapa', 'ubs-pular', o.id, 'secondary') : '',
     ultimo ? btn('Desfazer última', 'ubs-desfazer', o.id, 'secondary') : '',
     `<button class="danger" data-act="ubs-excluir" data-id="${esc(o.id)}">Excluir ordem</button>`].join('');
@@ -244,11 +244,18 @@ Object.assign(ACTIONS, {
       save();
     }, 'Desfazer');
   },
-  'ubs-excluir': id => confirmDialog('Excluir esta ordem de beneficiamento? Produtos de tratamento que saíram por ela voltam ao estoque.', () => {
-    const o = find('ubs', id); if (!o || o.status === 'Concluída') return;
-    db.movements.filter(m => m.ubsId === id && m.kind === 'Saída').forEach(m => { const s = find('stock', m.itemId); if (s) s.qty = Number(s.qty || 0) + Number(m.qty); });
-    db.movements = db.movements.filter(m => m.ubsId !== id);
-    remove('ubs', id); go('ubs');
-  })
+  'ubs-excluir': id => {
+    const o = find('ubs', id); if (!o) return;
+    // Ordem concluída: a semente ensacada entrou no estoque; só exclui se as sacas ainda estiverem lá
+    const entradas = db.movements.filter(m => m.ubsId === id && m.kind === 'Entrada');
+    const falta = entradas.find(m => { const s = find('stock', m.itemId); return s && Number(s.qty || 0) < Number(m.qty) - 1e-9; });
+    if (falta) { const s = find('stock', falta.itemId); showToast(`Não dá para excluir: ${s.name} tem ${num(s.qty)} ${s.unit} em estoque e a ordem deu entrada de ${num(falta.qty)}. Acerte o estoque primeiro.`); return; }
+    confirmDialog(o.status === 'Concluída' ? 'Excluir esta ordem concluída? As sacas ensacadas saem do estoque e os produtos e embalagens usados voltam ao saldo.' : 'Excluir esta ordem de beneficiamento? Produtos de tratamento que saíram por ela voltam ao estoque.', () => {
+      db.movements.filter(m => m.ubsId === id && m.kind === 'Saída').forEach(m => { const s = find('stock', m.itemId); if (s) s.qty = Number(s.qty || 0) + Number(m.qty); });
+      entradas.forEach(m => { const s = find('stock', m.itemId); if (s) s.qty = Math.max(0, Number(s.qty || 0) - Number(m.qty)); });
+      db.movements = db.movements.filter(m => m.ubsId !== id);
+      remove('ubs', id); showToast('Excluído'); go('ubs');
+    });
+  }
 });
 TITLES.ubs = 'Beneficiamento (UBS)';

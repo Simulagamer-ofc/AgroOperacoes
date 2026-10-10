@@ -8,7 +8,7 @@ let periodoGraf = Number(safeStorage.get('agro-periodo-graf')) || 30;
 const COR_SITUACAO = {'Programada': 1, 'Em andamento': 2, 'Concluída': 3, 'Cancelada': 4};
 
 const fmtDia = iso => { const [, m, d] = iso.split('-'); return `${d}/${m}`; };
-const addDias = (iso, n) => { const d = new Date(iso + 'T12:00:00'); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); };
+const addDias = (iso, n) => { const d = new Date(iso + 'T12:00:00'); d.setDate(d.getDate() + n); return isoDate(d); }; // data local (toISOString seria UTC)
 // Teto "redondo" para o eixo: 1, 2, 2,5, 5 × 10ⁿ
 function tetoEixo(max) {
   if (!(max > 0)) return 1;
@@ -64,7 +64,7 @@ function graficoHoras(ini, fim) {
 function graficoSituacao(ini, fim) {
   const ops = db.operations.filter(o => o.date >= ini && o.date <= fim);
   const cont = OP_STATUS.map(s => [s, ops.filter(o => o.status === s).length]);
-  const sub = `${ops.length} operações com data no período`;
+  const sub = `${ops.length} ${ops.length === 1 ? 'operação' : 'operações'} com data no período`;
   if (!ops.length) return cartao('Operações por situação', sub, semDados('Nenhuma operação com data no período.'));
   const pct = n => n / ops.length * 100;
   const corpo = `<div class="viz-pilha" role="img" aria-label="Operações por situação">${cont.filter(([, n]) => n).map(([s, n]) =>
@@ -115,7 +115,7 @@ function semanaOperacoes() {
     tabela(['Dia', 'Operações'], cont.map(([d, n]) => [`${dia(d)} ${fmtDia(d)}`, n]));
 }
 // Custos dos últimos 6 meses em pizza, por categoria (3 maiores + “Outras”).
-// Soma os gastos lançados e o custo das manutenções (data de conclusão, ou de abertura) — ver gastos.js.
+// Soma os gastos lançados e o custo das manutenções concluídas (data de conclusão) — ver gastos.js.
 // Pizza com até 3 categorias + “Demais” (só há 3 cores categóricas validadas). Cor segue a categoria
 // (ordem alfabética entre as mostradas), nunca a posição no ranking; “Demais” em cinza.
 function pizza(entrada, total, fmt) {
@@ -151,7 +151,7 @@ function custosMes() {
   const porMes = meses.map(d => [`${MESES[d.getMonth()]}/${String(d.getFullYear()).slice(2)}`, somaValor(lanc.filter(x => x.date.startsWith(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`)))]);
   return cartaoNx('Custos', `<p class="nx-total"><strong>R$ ${num(total, 2)}</strong> nos últimos 6 meses</p>
     ${pz.html('Custos por categoria')}
-    <p class="nx-nota">Gastos e manutenções lançados neste aparelho, por categoria.</p>` +
+    <p class="nx-nota">Gastos lançados e manutenções concluídas desde ${fmtDate(desde)}, por categoria.${custoManutPrevisto() ? ` Fora do total: R$ ${num(custoManutPrevisto(), 2)} em manutenções abertas (previsão).` : ''}</p>` +
     tabela(['Categoria', 'Custo (R$)', '%'], pz.fatias.map(([n, v]) => [n, num(v, 2), Math.round(pct(v)) + '%'])) +
     (porMaq.length ? tabela(['Máquina', 'Custo (R$)'], porMaq.map(([n, v]) => [n, num(v, 2)])).replace('Ver tabela', 'Ver por máquina') : '') +
     tabela(['Mês', 'Custo (R$)'], porMes.map(([m, v]) => [m, num(v, 2)])).replace('Ver tabela', 'Ver por mês'));
@@ -175,7 +175,7 @@ const cartaoNx = (titulo, corpo) => `<article class="card nx-card"><h3>${esc(tit
 function painelNexus() {
   const mes = somaValor(lancamentosCusto(today().slice(0, 8) + '01', today()));
   return `<section class="viz-root nx-grid3">${roscaSituacao()}${custosMes()}${estoqueInsumos()}</section>
-    <section class="card nx-gastos"><div><h3>Controle de gastos</h3><p>Gastos deste mês (despesas e manutenções): <strong>R$ ${num(mes, 2)}</strong></p></div><div class="nx-gastos-btns"><button data-act="gs-new">+ Lançar gasto</button><button data-act="nav" data-id="gastos">Ver gastos</button></div></section>`;
+    <section class="card nx-gastos"><div><h3>Controle de gastos</h3><p>Gastos deste mês, desde ${fmtDate(today().slice(0, 8) + '01')} (despesas e manutenções concluídas): <strong>R$ ${num(mes, 2)}</strong></p></div><div class="nx-gastos-btns"><button data-act="gs-new">+ Lançar gasto</button><button data-act="nav" data-id="gastos">Ver gastos</button></div></section>`;
 }
 
 function painelGraficos() {

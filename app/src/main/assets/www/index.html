@@ -13,7 +13,7 @@
 <body>
 <div class="app">
   <aside class="sidebar" id="sidebar">
-    <div class="brand nexus"><strong class="marca">NEXUS<span>AGRO</span></strong><small class="versao">Versão de teste 0.16.1</small><small id="farmName">Minha fazenda</small></div>
+    <div class="brand nexus"><strong class="marca">NEXUS<span>AGRO</span></strong><small class="versao" title="Versão de teste 0.17.0">v0.17.0</small><small id="farmName">Minha fazenda</small></div>
     <nav class="nav" aria-label="Menu principal">
       <button data-route="inicio"><span class="icon">▦</span>Visão geral</button>
       <small class="nav-grupo">Campo</small>
@@ -47,11 +47,11 @@
   </aside>
   <div class="overlay" id="overlay"></div>
   <main>
-    <header class="topbar"><button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button><div><h1 id="viewTitle">Visão Geral</h1><div class="date" id="date"></div></div><form class="search" id="searchForm"><span>⌕</span><input id="searchInput" type="search" aria-label="Pesquisar" placeholder="Pesquisar operações, máquinas, lotes..."></form><div class="offline"><span class="dot"></span><span id="netStatus">Disponível offline</span></div><button class="install-btn" id="installBtn">⬇ Instalar aplicativo</button><button class="bell" id="bellBtn" aria-label="Pendências">♢</button><div class="avatar" id="avatar">AO</div></header>
+    <header class="topbar"><button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button><div><h1 id="viewTitle">Visão Geral</h1><div class="date" id="date"></div></div><form class="search" id="searchForm"><span>⌕</span><input id="searchInput" type="search" aria-label="Pesquisar" placeholder="Pesquisar…"></form><div class="offline"><span class="dot"></span><span id="netStatus">Disponível offline</span></div><button class="install-btn" id="installBtn">⬇ Instalar aplicativo</button><button class="bell" id="bellBtn" aria-label="Alertas e pendências">🔔</button><div class="avatar" id="avatar">AO</div></header>
     <div class="content" id="view"></div>
   </main>
 </div>
-<nav class="mobile-nav"><button data-route="inicio"><span>⌂</span>Início</button><button data-route="operacoes"><span>◷</span>Operações</button><button data-route="maquinas"><span>⚙</span>Máquinas</button><button data-route="afericao"><span>◎</span>Aferição</button><button id="moreBtn"><span>•••</span>Mais</button></nav>
+<nav class="mobile-nav" aria-label="Atalhos"><button data-route="inicio"><span>⌂</span>Início</button><button data-route="operacoes"><span>◷</span>Operações</button><button data-route="talhoes"><span>▤</span>Talhões</button><button data-route="estoque"><span>□</span>Estoque</button><button id="moreBtn" aria-label="Mais opções do menu"><span>•••</span>Mais</button></nav>
 <div class="modal" id="modal"><div class="dialog" id="dialog"></div></div>
 <div class="toast" id="toast"></div>
 <script src="avaliador.js"></script>
