@@ -353,3 +353,9 @@ body{background:var(--bg)}
   .dialog .actions{bottom:0;margin:14px -16px 0;padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
   .dialog .actions button{flex:1;min-height:44px}
 }
+
+/* Abas das telas agrupadas (Financeiro; Sementes e lotes) */
+.abas{display:flex;gap:6px;margin:-6px 0 18px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line)}.abas::-webkit-scrollbar{display:none}
+.abas button{flex:0 0 auto;min-height:40px;padding:8px 14px;border:0;border-bottom:3px solid transparent;background:none;color:var(--muted);font:inherit;font-weight:600;cursor:pointer;white-space:nowrap}
+.abas button.active{color:var(--text);border-bottom-color:var(--green)}
+@media(pointer:coarse){.abas button{min-height:44px}}
