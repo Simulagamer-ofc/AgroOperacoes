@@ -1,5 +1,5 @@
 """Monta dados/pontas.json com vários fabricantes.
-Uso (na raiz): python3 referencias/ferramentas/montar_pontas.py app/src/main/assets/www/dados/pontas.json referencias/pontas/{jacto,jacto_extra,teejet,hypro,hypro_eu,lechler,albuz,magnojet}.json
+Uso (na raiz): python3 referencias/ferramentas/montar_pontas.py app/src/main/assets/www/dados/pontas.json referencias/pontas/{jacto,jacto_extra,teejet,hypro,hypro_eu,hypro_br,lechler,albuz,magnojet}.json
 Os arquivos de referencias/pontas/ são as extrações dos catálogos oficiais (fonte, página e método em cada linha).
 Regras: só linhas extraídas como texto (pdftotext/OCR conferido); unidade como impressa;
 células que contradizem a própria tabela (vazão menor que numa pressão menor, ou fora de ±8% da classe ISO
