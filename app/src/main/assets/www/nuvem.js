@@ -216,9 +216,14 @@ async function nvConferirFazenda() {
   if (!rows.length) { const nome = nv.fazenda.name; nvEsquecerFazenda(); nvSalvar(); nvPortaoErro(`Você não participa mais de “${nome}”. Fale com o ADM ou escolha outra fazenda.`); setTimeout(nvPortao, 0); throw new NvErro(`Você não participa mais de “${nome}”.`); }
   const f = rows[0];
   if (f.name !== nv.fazenda.name || f.join_code !== nv.fazenda.join_code) { nv.fazenda = {id: f.id, name: f.name, join_code: f.join_code}; applySettings(); }
-  const eu = await nvHttp(`/rest/v1/farm_members?select=role&farm_id=eq.${encodeURIComponent(f.id)}&user_id=eq.${encodeURIComponent(nv.sessao.usuario)}`);
+  const filtro = `farm_id=eq.${encodeURIComponent(f.id)}&user_id=eq.${encodeURIComponent(nv.sessao.usuario)}`;
+  const eu = await nvHttp(`/rest/v1/farm_members?select=role,funcao,modulos&${filtro}`).catch(err => { if (err.status === 400) return nvHttp(`/rest/v1/farm_members?select=role&${filtro}`); throw err; });
   const papel = eu?.[0]?.role === 'owner' ? 'admin' : eu?.[0]?.role || (nv.sysadm ? 'admin' : 'member');
-  if (papel !== nv.papel) { nv.papel = papel; nvSalvar(); nvAplicarPapel(); applySettings(); if (typeof view !== 'undefined') nvAtualizarTela(); }
+  const funcao = eu?.[0]?.funcao || null, modulos = Array.isArray(eu?.[0]?.modulos) ? eu[0].modulos : null;
+  if (papel !== nv.papel || funcao !== nv.funcao || JSON.stringify(modulos) !== JSON.stringify(nv.modulos ?? null)) {
+    nv.papel = papel; nv.funcao = funcao; nv.modulos = modulos; nvSalvar(); nvAplicarPapel(); applySettings();
+    if (typeof view !== 'undefined') { if (!nvPodeRota(parseRoute().name)) go('inicio'); else nvAtualizarTela(); }
+  }
   nvSalvar();
 }
 
@@ -274,14 +279,66 @@ addEventListener('online', () => nvAgendar(500));
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') nvAgendar(500); });
 addEventListener('DOMContentLoaded', () => nvAgendar(1500));
 
+// ---------- Funções: cada pessoa vê as telas da sua função ----------
+// Telas que podem ser liberadas (Visão geral e Cadastros e backup ficam sempre disponíveis)
+const NV_TELAS = [
+  ['operacoes', 'Operações do dia'], ['talhoes', 'Talhões'], ['chuva', 'Chuvas'], ['pragas', 'Pragas e doenças (MIP)'],
+  ['aplicacoes', 'Aplicações e carência'], ['maodeobra', 'Mão de obra'], ['maquinas', 'Máquinas e manutenção'], ['combustivel', 'Combustível'],
+  ['afericao', 'Aferição e calibragem'], ['catalogo', 'Catálogo de máquinas'], ['pontas', 'Catálogo de pontas'], ['secagem', 'Secador e moega'],
+  ['sementes', 'Sementes, lotes e beneficiamento'], ['estoque', 'Estoque e insumos'], ['financeiro', 'Financeiro (gastos, contas, LCDPR)'],
+  ['producao', 'Produção e margem'], ['relatorios', 'Relatórios']];
+const NV_TODAS_TELAS = NV_TELAS.map(([k]) => k);
+// Funções de uma fazenda de grãos e sementes: telas e nível sugerido (o ADM pode acrescentar telas)
+const NV_FUNCOES = [
+  ['diretor', 'Diretor / Proprietário', 'Gestão', 'admin', null],
+  ['gerente', 'Gerente de fazenda', 'Gestão', 'supervisor', null],
+  ['administrativo', 'Administrativo / Financeiro', 'Gestão', 'member', ['financeiro', 'producao', 'estoque', 'relatorios']],
+  ['agronomo', 'Agrônomo / Técnico agrícola', 'Gestão', 'supervisor', ['talhoes', 'operacoes', 'pragas', 'aplicacoes', 'chuva', 'sementes', 'relatorios']],
+  ['encarregado', 'Encarregado / Líder de campo', 'Campo', 'supervisor', ['operacoes', 'talhoes', 'chuva', 'maodeobra', 'aplicacoes']],
+  ['operador', 'Operador de máquinas / Tratorista', 'Campo', 'member', ['operacoes', 'maquinas', 'combustivel']],
+  ['monitor', 'Monitor de pragas', 'Campo', 'member', ['pragas', 'chuva']],
+  ['aplicador', 'Aplicador', 'Campo', 'member', ['aplicacoes', 'operacoes']],
+  ['oficina', 'Chefe de oficina / Manutenção', 'Máquinas', 'supervisor', ['maquinas', 'combustivel', 'afericao', 'catalogo', 'pontas', 'estoque']],
+  ['mecanico', 'Mecânico', 'Máquinas', 'member', ['maquinas', 'afericao']],
+  ['abastecedor', 'Abastecedor / Frentista', 'Máquinas', 'member', ['combustivel']],
+  ['ubs', 'Responsável UBS / Beneficiamento', 'Grãos e sementes', 'supervisor', ['secagem', 'sementes']],
+  ['secador', 'Operador de secador / Armazém', 'Grãos e sementes', 'member', ['secagem']],
+  ['classificador', 'Classificador / Laboratório', 'Grãos e sementes', 'member', ['sementes']],
+  ['almoxarife', 'Almoxarife', 'Suprimentos', 'member', ['estoque']],
+  ['personalizado', 'Personalizado', 'Outra', 'member', []]];
+const nvFuncao = id => NV_FUNCOES.find(f => f[0] === id);
+const nvNomeFuncao = id => nvFuncao(id)?.[1] || '';
+// Rota → tela da lista acima (rotas fora daqui ficam sempre liberadas)
+const NV_ROTA_TELA = {operacoes: 'operacoes', talhoes: 'talhoes', talhao: 'talhoes', chuva: 'chuva', pragas: 'pragas', aplicacoes: 'aplicacoes', maodeobra: 'maodeobra',
+  maquinas: 'maquinas', combustivel: 'combustivel', afericao: 'afericao', catalogo: 'catalogo', pontas: 'pontas', secagem: 'secagem',
+  sementes: 'sementes', lotes: 'sementes', lote: 'sementes', ubs: 'sementes', etiqueta: 'sementes', estoque: 'estoque',
+  financeiro: 'financeiro', gastos: 'financeiro', lcdpr: 'financeiro', producao: 'producao', relatorios: 'relatorios'};
+// Telas liberadas para esta pessoa: null = todas (ADM, Admin do sistema, ou sem função definida)
+const nvTelasLiberadas = () => !nvVinculado() || nv.sysadm || nvPapel() === 'admin' || !Array.isArray(nv.modulos) ? null : nv.modulos;
+const nvTemTela = tela => { const l = nvTelasLiberadas(); return !l || l.includes(tela); };
+const nvPodeRota = rota => !NV_ROTA_TELA[rota] || nvTemTela(NV_ROTA_TELA[rota]);
+// Financeiro: supervisor e ADM sempre; usuário comum só com a tela de Financeiro ou Produção liberada
+const nvVeFinanceiro = () => !nvComum() || (Array.isArray(nv.modulos) && (nv.modulos.includes('financeiro') || nv.modulos.includes('producao')));
+// Mostra no menu só as telas liberadas (e esconde o título de grupo que ficou vazio)
+function nvAplicarMenu() {
+  document.querySelectorAll('[data-route]').forEach(b => { b.hidden = !nvPodeRota(b.dataset.route); });
+  document.querySelectorAll('.sidebar .nav-grupo').forEach(g => {
+    let el = g.nextElementSibling, algum = false;
+    while (el && !el.classList.contains('nav-grupo')) { if (el.matches('[data-route]') && !el.hidden) algum = true; el = el.nextElementSibling; }
+    g.hidden = !algum;
+  });
+  document.documentElement.toggleAttribute('data-fin', nvVeFinanceiro());
+}
+
 // ---------- Níveis de acesso no aparelho ----------
 // Telas do financeiro (o usuário comum não recebe esses dados)
 const NV_TELAS_FIN = ['financeiro', 'gastos', 'lcdpr', 'producao'];
 // Botões de editar → coleção do registro (o comum edita só o que ele lançou)
 const NV_EDITAR = {'op-edit': 'operations', 'mc-edit': 'machines', 'mt-edit': 'maintenances', 'fd-edit': 'fields', 'lot-edit': 'lots', 'st-edit': 'stock',
   'mip-edit': 'monitoramentos', 'mo-edit': 'equipe', 'pd-colheita-edit': 'colheitas'};
-const nvAcaoProibida = act => /-(del|excluir)$/.test(act) || /^(fin-|gs-|pd-venda)/.test(act) || ['wipe', 'restore', 'seed', 'sync-receber', 'sync-desfazer'].includes(act);
-function nvAplicarPapel() { document.documentElement.dataset.nivel = nvPapel() || ''; }
+const nvAcaoProibida = act => /-(del|excluir)$/.test(act) || (/^(fin-|gs-)/.test(act) && !nvTemTelaComum('financeiro')) || (/^pd-venda/.test(act) && !nvTemTelaComum('producao')) || ['wipe', 'restore', 'seed', 'sync-receber', 'sync-desfazer'].includes(act);
+const nvTemTelaComum = tela => Array.isArray(nv.modulos) && nv.modulos.includes(tela);
+function nvAplicarPapel() { document.documentElement.dataset.nivel = nvPapel() || ''; nvAplicarMenu(); }
 function nvProteger() {
   for (const [act, fn] of Object.entries(ACTIONS)) {
     if (fn.nvProtegida) continue;
@@ -296,21 +353,26 @@ function nvProteger() {
     protegida.nvProtegida = true;
     ACTIONS[act] = protegida;
   }
-  for (const tela of NV_TELAS_FIN) {
-    const original = VIEWS[tela];
+  for (const rota of Object.keys(NV_ROTA_TELA)) {
+    const original = VIEWS[rota];
     if (!original || original.nvProtegida) continue;
-    const protegida = arg => nvComum() ? head('Acesso restrito', 'O financeiro fica disponível para o supervisor e o ADM.') + `<section class="card">${empty('Sem acesso ao financeiro', 'Seu nível de acesso é Usuário comum.', {act: 'nav', id: 'inicio', label: 'Voltar ao início'})}</section>` : original(arg);
-    protegida.after = arg => { if (!nvComum()) original.after?.(arg); };
+    const bloqueio = () => !nvPodeRota(rota) ? ['Tela fora da sua função', `Sua função${nv.funcao ? ` (${nvNomeFuncao(nv.funcao)})` : ''} não inclui esta tela. Peça ao ADM para liberar, se precisar.`]
+      : NV_TELAS_FIN.includes(rota) && !nvVeFinanceiro() ? ['Sem acesso ao financeiro', 'Seu nível de acesso é Usuário comum.'] : null;
+    const protegida = arg => { const b = bloqueio(); return b ? head('Acesso restrito', 'Cada pessoa vê as telas da sua função.') + `<section class="card">${empty(b[0], b[1], {act: 'nav', id: 'inicio', label: 'Voltar ao início'})}</section>` : original(arg); };
+    protegida.after = arg => { if (!bloqueio()) original.after?.(arg); };
     protegida.nvProtegida = true;
-    VIEWS[tela] = protegida;
+    VIEWS[rota] = protegida;
   }
 }
 // Esconde do menu as telas e botões que o nível não pode usar
 document.head.insertAdjacentHTML('beforeend', `<style>
-  :root[data-nivel="member"] [data-route="financeiro"], :root[data-nivel="member"] [data-route="producao"],
   :root[data-nivel="member"] [data-act$="-del"], :root[data-nivel="member"] [data-act$="-excluir"], :root[data-nivel="member"] [data-act="wipe"],
   :root[data-nivel="member"] [data-act="seed"], :root[data-nivel="member"] [data-act="restore"], :root[data-nivel="member"] [data-act="sync-receber"],
-  :root[data-nivel="member"] [data-act="sync-desfazer"], :root[data-nivel="member"] [data-act^="fin-"], :root[data-nivel="member"] [data-act^="gs-"] { display: none !important; }
+  :root[data-nivel="member"] [data-act="sync-desfazer"], :root[data-nivel="member"]:not([data-fin]) [data-act^="fin-"], :root[data-nivel="member"]:not([data-fin]) [data-act^="gs-"] { display: none !important; }
+  [data-route][hidden], .nav-grupo[hidden] { display: none !important }
+  .nv-telas { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 6px 14px; margin: 6px 0 4px }
+  .nv-telas label { display: flex; gap: 8px; align-items: center; font-size: .9rem; color: var(--text) }
+  .nv-telas input { width: 18px; height: 18px; accent-color: var(--green) }
   .nv-usuarios td { vertical-align: middle } .nv-usuarios select { min-width: 9em }
 </style>`);
 nvAplicarPapel();
@@ -329,7 +391,7 @@ function nvValidar({login, senha}, soEmail = false) {
   if (senha.length < 6) throw new NvErro('A senha precisa ter pelo menos 6 caracteres.');
 }
 // Desliga da fazenda (os dados do aparelho continuam marcados como sendo dela: nv.dadosDe)
-function nvEsquecerFazenda() { nv.fazenda = null; nv.papel = null; nvFazendas = null; nvUsuarios = null; nvStatus = 'parado'; nvErro = ''; nvAplicarPapel(); }
+function nvEsquecerFazenda() { nv.fazenda = null; nv.papel = null; nv.funcao = null; nv.modulos = null; nvFazendas = null; nvUsuarios = null; nvStatus = 'parado'; nvErro = ''; nvAplicarPapel(); }
 // Apaga os dados deste aparelho (usado ao entrar numa fazenda diferente da que estava aqui)
 function nvLimparAparelho() {
   const settings = db.settings; db = emptyDb(); db.settings = settings; db._removidos = [];
@@ -360,7 +422,7 @@ const nvCriarConta = () => nvComOcupado(async () => {
 const nvSair = () => confirmDialog('Sair da conta neste aparelho? Para usar o sistema de novo será preciso entrar com usuário e senha.', async () => {
   if (nvVinculado() && navigator.onLine !== false) await nvSincronizar(); // envia o que falta antes de sair
   try { if (nv.sessao) await nvHttp('/auth/v1/logout', {method: 'POST', tentar: false}); } catch { /* sai mesmo sem internet */ }
-  nv.sessao = null; nv.papel = null; nv.sysadm = false; nvTodas = null; nvFazendas = null; nvUsuarios = null; nvAplicarPapel(); nvSalvar(); nvPortao(); showToast('Você saiu da conta');
+  nv.sessao = null; nv.papel = null; nv.funcao = null; nv.modulos = null; nv.sysadm = false; nvTodas = null; nvFazendas = null; nvUsuarios = null; nvAplicarPapel(); nvSalvar(); nvPortao(); showToast('Você saiu da conta');
 }, 'Sair');
 
 async function nvCarregarFazendas() {
@@ -398,7 +460,7 @@ function nvNomeExibido() {
 }
 function nvQuemTexto() {
   if (!nv.sessao) return '';
-  const nivel = nv.sysadm ? (nvVinculado() ? 'Admin do sistema' : '') : nvVinculado() ? NV_NIVEIS[nvPapel()] || '' : '';
+  const nivel = nv.sysadm ? (nvVinculado() ? 'Admin do sistema' : '') : nvVinculado() ? (nvNomeFuncao(nv.funcao) || NV_NIVEIS[nvPapel()] || '') : '';
   return [nvMostrarLogin(nv.sessao.email), nivel].filter(Boolean).join(' · ');
 }
 const applySettingsSemNuvem = applySettings;
@@ -467,7 +529,8 @@ addEventListener('DOMContentLoaded', () => { nvPortao(); if (nv.sessao && naviga
 // ---------- Usuários da fazenda (ADM) ----------
 const nvFuncaoUsuarios = corpo => nvHttp('/functions/v1/usuarios', {method: 'POST', body: {farm_id: nv.fazenda.id, ...corpo}});
 async function nvCarregarUsuarios() {
-  try { nvUsuarios = await nvHttp(`/rest/v1/farm_members?select=user_id,role,nome,login,joined_at&farm_id=eq.${encodeURIComponent(nv.fazenda.id)}&order=joined_at.asc`); }
+  const q = campos => nvHttp(`/rest/v1/farm_members?select=${campos}&farm_id=eq.${encodeURIComponent(nv.fazenda.id)}&order=joined_at.asc`);
+  try { nvUsuarios = await q('user_id,role,nome,login,joined_at,funcao,modulos').catch(err => { if (err.status === 400) return q('user_id,role,nome,login,joined_at'); throw err; }); }
   catch (err) { nvUsuarios = []; showToast(err.message, true); }
   const el = $('#nvUsuarios'); if (el) el.innerHTML = nvListaUsuarios();
 }
@@ -479,8 +542,9 @@ function nvListaUsuarios() {
   return `<div class="tbl-wrap"><table class="tbl nv-usuarios"><tbody>${nvUsuarios.map(u => {
     const nivel = nvNivelDe(u), meu = u.user_id === eu;
     const sel = meu ? `<b>${NV_NIVEIS[nivel] || nivel}</b>` : `<select data-nv-nivel="${esc(u.user_id)}" aria-label="Nível de ${esc(u.nome || u.login)}">${Object.entries(NV_NIVEIS).map(([v, t]) => `<option value="${v}" ${v === nivel ? 'selected' : ''}>${t}</option>`).join('')}</select>`;
-    return `<tr><td><strong>${esc(u.nome || nvMostrarLogin(u.login) || 'Sem nome')}</strong>${meu ? ' <small>(você)</small>' : ''}<br><small style="color:var(--muted)">${esc(nvMostrarLogin(u.login) || '')}</small></td><td>${sel}</td>
-      <td class="num">${meu ? '' : `<div class="row-actions">${btn('Nova senha', 'nv-u-senha', u.user_id, 'secondary')}${btn('Remover', 'nv-u-remover', u.user_id, 'secondary')}</div>`}</td></tr>`;
+    const funcao = nvNomeFuncao(u.funcao), telas = Array.isArray(u.modulos) ? `${u.modulos.length} ${u.modulos.length === 1 ? 'tela' : 'telas'}` : 'todas as telas';
+    return `<tr><td><strong>${esc(u.nome || nvMostrarLogin(u.login) || 'Sem nome')}</strong>${meu ? ' <small>(você)</small>' : ''}<br><small style="color:var(--muted)">${esc([nvMostrarLogin(u.login), funcao, nivel === 'admin' ? '' : telas].filter(Boolean).join(' · '))}</small></td><td>${sel}</td>
+      <td class="num">${meu ? '' : `<div class="row-actions">${btn('Função e telas', 'nv-u-acesso', u.user_id, 'secondary')}${btn('Nova senha', 'nv-u-senha', u.user_id, 'secondary')}${btn('Remover', 'nv-u-remover', u.user_id, 'secondary')}</div>`}</td></tr>`;
   }).join('')}</tbody></table></div>`;
 }
 function nvNovoUsuario() {
@@ -490,20 +554,52 @@ function nvNovoUsuario() {
       {k: 'nome', label: 'Nome', required: true, full: true, placeholder: 'Ex.: João da Silva'},
       {k: 'login', label: 'Usuário para entrar', required: true, placeholder: 'Ex.: joao.silva', hint: 'Letras minúsculas, números, ponto ou hífen'},
       {k: 'senha', label: 'Senha', required: true, placeholder: 'Pelo menos 6 caracteres'},
-      {k: 'papel', label: 'Nível', type: 'select', required: true, options: Object.entries(NV_NIVEIS).map(([value, label]) => ({value, label}))}
+      {k: 'funcao', label: 'Função', type: 'select', required: true, full: true, options: NV_FUNCOES.map(([value, nome, grupo]) => ({value, label: `${nome} (${grupo})`})), hint: 'Define as telas que a pessoa vê. Depois dá para acrescentar telas em “Função e telas”.'},
+      {k: 'papel', label: 'Nível', type: 'select', required: true, options: Object.entries(NV_NIVEIS).map(([value, label]) => ({value, label})), hint: 'O que pode fazer nas telas: Comum lança; Supervisor também edita e exclui.'}
     ],
-    values: {papel: 'member'},
+    values: {papel: 'member', funcao: 'operador'},
     onSubmit: d => {
       const login = d.login.toLowerCase();
       if (!/^[a-z0-9][a-z0-9._-]{2,29}$/.test(login)) return 'Usuário: de 3 a 30 letras minúsculas, números, ponto, hífen ou sublinhado (sem espaço e sem acento).';
       if (d.senha.length < 6) return 'A senha precisa ter pelo menos 6 caracteres.';
       nvComOcupado(async () => {
-        await nvFuncaoUsuarios({acao: 'criar', nome: d.nome, login, senha: d.senha, papel: d.papel});
-        showToast(`Usuário “${login}” criado como ${NV_NIVEIS[d.papel]}. Passe o usuário e a senha para a pessoa.`);
+        const f = nvFuncao(d.funcao);
+        await nvFuncaoUsuarios({acao: 'criar', nome: d.nome, login, senha: d.senha, papel: d.papel, funcao: d.funcao, modulos: f?.[4] ?? null});
+        showToast(`Usuário “${login}” criado: ${f?.[1] || ''} · ${NV_NIVEIS[d.papel]}. Passe o usuário e a senha para a pessoa.`);
         await nvCarregarUsuarios();
       });
     }
   });
+  // Ao escolher a função, sugere o nível dela
+  const sf = $('#f_funcao', dialog), sp = $('#f_papel', dialog);
+  if (sf && sp) sf.onchange = () => { const f = nvFuncao(sf.value); if (f) sp.value = f[3]; };
+}
+// Função e telas de uma pessoa (a função marca as telas; o ADM pode acrescentar ou tirar)
+function nvAcessoUsuario(id) {
+  const u = (nvUsuarios || []).find(x => x.user_id === id); if (!u) return;
+  const marcadas = new Set(Array.isArray(u.modulos) ? u.modulos : NV_TODAS_TELAS);
+  dialog.innerHTML = `<h3>Função e telas</h3><p class="sub">${esc(u.nome || nvMostrarLogin(u.login))} vê no menu só as telas marcadas. Visão geral e Cadastros e backup ficam sempre disponíveis.</p>
+    <form novalidate><div class="form"><div class="field full"><label for="nva_funcao">Função</label><select id="nva_funcao">${NV_FUNCOES.map(([v, n, g]) => `<option value="${v}" ${v === (u.funcao || '') ? 'selected' : ''}>${esc(n)} (${esc(g)})</option>`).join('')}${u.funcao ? '' : '<option value="" selected>Sem função definida (todas as telas)</option>'}</select></div></div>
+    <p class="nota" id="nva_todas" hidden>Esta função vê todas as telas.</p>
+    <div class="nv-telas" id="nva_telas">${NV_TELAS.map(([k, n]) => `<label><input type="checkbox" value="${k}" ${marcadas.has(k) ? 'checked' : ''}> ${esc(n)}</label>`).join('')}</div>
+    <div class="actions"><button type="button" class="secondary" data-close>Cancelar</button><button class="primary" type="submit">Salvar</button></div></form>`;
+  const sel = $('#nva_funcao', dialog), caixas = $$('#nva_telas input', dialog);
+  const todas = () => { const f = nvFuncao(sel.value); return !sel.value || (f && f[4] === null); };
+  const ajustar = marcar => {
+    const f = nvFuncao(sel.value), tudo = todas();
+    caixas.forEach(c => { if (marcar && f && f[4]) c.checked = f[4].includes(c.value); if (tudo) c.checked = true; c.disabled = tudo; });
+    $('#nva_todas', dialog).hidden = !tudo;
+  };
+  sel.onchange = () => ajustar(true); ajustar(false);
+  $('[data-close]', dialog).onclick = closeModal;
+  $('form', dialog).onsubmit = e => {
+    e.preventDefault();
+    const funcao = sel.value || null, modulos = todas() ? null : caixas.filter(c => c.checked).map(c => c.value);
+    if (modulos && !modulos.length) { showToast('Marque pelo menos uma tela.'); return; }
+    closeModal();
+    nvComOcupado(async () => { await nvFuncaoUsuarios({acao: 'acesso', user_id: id, funcao, modulos}); showToast('Função e telas salvas. A pessoa vê a mudança na próxima sincronização.'); await nvCarregarUsuarios(); });
+  };
+  modal.classList.add('open');
 }
 function nvNovaSenha(id) {
   const u = (nvUsuarios || []).find(x => x.user_id === id); if (!u) return;
@@ -548,7 +644,7 @@ function cartaoNuvem() {
     <div class="btn-row" style="margin-top:10px">${btn('⟳ Sincronizar agora', 'nv-sync')}${papel === 'member' ? '' : btn('Trocar de fazenda', 'nv-trocar', '', 'secondary')}${btn('Sair da conta', 'nv-sair', '', 'secondary')}</div>
     ${papel === 'member' ? '<p class="nota">Como Usuário comum, você lança os registros do dia a dia e edita só o que você lançou. Exclusões e o financeiro ficam com o supervisor e o ADM.</p>' : '<p class="nota">Quando o mesmo registro é alterado em dois aparelhos sem internet, vale a alteração mais recente; lançamentos de estoque dos dois lados são somados ao saldo.</p>'}</article>
     ${papel === 'admin' ? `<article class="card panel"><h3>Usuários da fazenda</h3>
-      <p>Crie o login de cada pessoa e escolha o nível. <b>Supervisor</b>: lança, edita e exclui tudo e vê o financeiro. <b>Usuário comum</b>: lança no dia a dia, edita só o que lançou, não exclui e não vê o financeiro. <b>ADM</b>: tudo, inclusive os usuários.</p>
+      <p>Crie o login de cada pessoa com a <b>função</b> (decide as telas que ela vê) e o <b>nível</b> (decide o que ela faz nelas). <b>Supervisor</b>: lança, edita e exclui e vê o financeiro. <b>Usuário comum</b>: lança, edita só o que lançou e não exclui. <b>ADM</b>: tudo, inclusive os usuários.</p>
       <div id="nvUsuarios">${nvListaUsuarios()}</div>
       <div class="btn-row" style="margin-top:10px">${btn('+ Novo usuário', 'nv-u-novo')}</div></article>` : ''}${nv.sysadm ? cartaoSistema() : ''}`;
 }
@@ -597,6 +693,6 @@ Object.assign(ACTIONS, {
   'nv-sync': () => nvSincronizar(true),
   'nv-trocar': () => confirmDialog('Trocar de fazenda? Você vai escolher outra fazenda desta conta; os dados deste aparelho continuam guardados na nuvem da fazenda atual.', () => { nvEsquecerFazenda(); nvTodas = null; nvSalvar(); nvPortao(); if (nv.sysadm) go('cadastros'); }, 'Trocar'),
   'nv-sys-fechar': () => confirmDialog(`Fechar “${nv.fazenda?.name}” neste aparelho? Você continua conectado como Admin do sistema e pode entrar em outra fazenda.`, () => { nvEsquecerFazenda(); nvTodas = null; nvSalvar(); nvPortao(); }, 'Fechar'),
-  'nv-u-novo': nvNovoUsuario, 'nv-u-senha': nvNovaSenha, 'nv-u-remover': nvRemoverUsuario
+  'nv-u-novo': nvNovoUsuario, 'nv-u-acesso': nvAcessoUsuario, 'nv-u-senha': nvNovaSenha, 'nv-u-remover': nvRemoverUsuario
 });
 nvProteger();

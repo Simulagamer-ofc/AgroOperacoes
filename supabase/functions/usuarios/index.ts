@@ -5,6 +5,15 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 
 const DOMINIO = "usuarios.nexusagro.app"; // e-mail interno de quem entra só com nome de usuário
 const NIVEIS = ["admin", "supervisor", "member"];
+// Telas que podem ser liberadas por função (as mesmas do app)
+const TELAS = ["operacoes", "talhoes", "chuva", "pragas", "aplicacoes", "maodeobra", "maquinas", "combustivel", "afericao", "catalogo", "pontas", "secagem", "sementes", "estoque", "financeiro", "producao", "relatorios"];
+// null = todas as telas; lista = só as telas válidas, sem repetir
+function lerModulos(v: unknown): string[] | null | undefined {
+  if (v === null || v === undefined) return null;
+  if (!Array.isArray(v)) return undefined;
+  const l = [...new Set(v.map(String).filter((t) => TELAS.includes(t)))];
+  return l.length ? l : undefined;
+}
 const cors = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-client-info",
@@ -59,12 +68,17 @@ Deno.serve(async (req) => {
         if (!loginValido(login)) return erro(400, "Usuário: de 3 a 30 letras minúsculas, números, ponto, hífen ou sublinhado (ex.: joao.silva).");
         if (senha.length < 6) return erro(400, "A senha precisa ter pelo menos 6 caracteres.");
         if (!NIVEIS.includes(papel)) return erro(400, "Nível inválido.");
+        const funcao = b.funcao ? String(b.funcao).slice(0, 40) : null;
+        const modulos = lerModulos(b.modulos);
+        if (modulos === undefined) return erro(400, "Marque pelo menos uma tela válida.");
         const { data: novo, error } = await adm.auth.admin.createUser({ email: emailDoLogin(login), password: senha, email_confirm: true, user_metadata: { nome, login } });
         if (error || !novo.user) {
           if (/already|exists|registered/i.test(error?.message || "")) return erro(409, `O usuário “${login}” já existe. Escolha outro (ex.: ${login}.${Math.floor(Math.random() * 90 + 10)}).`);
           return erro(400, error?.message || "Não foi possível criar o usuário.");
         }
-        const { error: e2 } = await adm.from("farm_members").insert({ farm_id: fazenda, user_id: novo.user.id, role: papel, nome, login });
+        let { error: e2 } = await adm.from("farm_members").insert({ farm_id: fazenda, user_id: novo.user.id, role: papel, nome, login, funcao, modulos });
+        // Banco ainda sem as colunas de função: cria sem elas
+        if (e2 && /funcao|modulos/.test(e2.message)) ({ error: e2 } = await adm.from("farm_members").insert({ farm_id: fazenda, user_id: novo.user.id, role: papel, nome, login }));
         if (e2) { await adm.auth.admin.deleteUser(novo.user.id); return erro(400, e2.message); }
         return resposta(200, { user_id: novo.user.id, login, nome, role: papel });
       }
@@ -75,6 +89,15 @@ Deno.serve(async (req) => {
         if (!(await membroAlvo())) return erro(404, "Usuário não encontrado nesta fazenda.");
         const { error } = await adm.from("farm_members").update({ role: papel }).eq("farm_id", fazenda).eq("user_id", alvo);
         if (error) return erro(400, error.message);
+        return resposta(200, { ok: true });
+      }
+      case "acesso": {
+        const funcao = b.funcao ? String(b.funcao).slice(0, 40) : null;
+        const modulos = lerModulos(b.modulos);
+        if (modulos === undefined) return erro(400, "Marque pelo menos uma tela válida.");
+        if (!(await membroAlvo())) return erro(404, "Usuário não encontrado nesta fazenda.");
+        const { error } = await adm.from("farm_members").update({ funcao, modulos }).eq("farm_id", fazenda).eq("user_id", alvo);
+        if (error) return erro(400, /funcao|modulos/.test(error.message) ? "O banco ainda não tem as funções. Rode a atualização do banco (funções) no Supabase." : error.message);
         return resposta(200, { ok: true });
       }
       case "senha": {
