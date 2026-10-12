@@ -22,6 +22,7 @@ const nvLer = (k, padrao) => { try { const v = JSON.parse(safeStorage.get(k) || 
 // Estado da conta neste aparelho (fica fora do banco: não vai para backups nem arquivos de sincronização)
 let nv = {sessao: null, fazenda: null, papel: null, cursor: 0, ultima: null, rejeitados: {}, ...nvLer(NV_ESTADO, {})};
 nv.rejeitados ||= {};
+if (nv.fazenda && !nv.dadosDe) nv.dadosDe = nv.fazenda.id; // aparelhos da versão 0.21: os dados já são desta fazenda
 // Última versão de cada registro conhecida pelo servidor: 'coleção|id' → [impressão, saldo do estoque]
 let nvBase = nvLer(NV_BASE, {});
 let nvStatus = 'parado', nvErro = '', nvRodando = null, nvRepetir = false, nvAgenda = null, nvOcupado = false, nvFazendas = null, nvUsuarios = null;
@@ -109,7 +110,7 @@ function nvRenovar() {
     } catch (err) {
       if (err.rede) throw err;
       // Sessão vencida de vez: pede login de novo, mas mantém a fazenda e o que falta enviar
-      nv.sessao = null; nvSalvar();
+      nv.sessao = null; nvSalvar(); setTimeout(nvPortao, 0);
       throw new NvErro('Sua sessão expirou. Entre de novo na conta para continuar sincronizando.', {sessao: true});
     } finally { nvRenovando = null; }
   })();
@@ -204,7 +205,7 @@ async function nvEnviar() {
 
 async function nvConferirFazenda() {
   const rows = await nvHttp(`/rest/v1/farms?select=id,name,join_code&id=eq.${encodeURIComponent(nv.fazenda.id)}`);
-  if (!rows.length) throw new NvErro('Você não participa mais desta fazenda. Fale com o ADM ou escolha outra fazenda.');
+  if (!rows.length) { const nome = nv.fazenda.name; nvEsquecerFazenda(); nvSalvar(); nvPortaoErro(`Você não participa mais de “${nome}”. Fale com o ADM ou escolha outra fazenda.`); setTimeout(nvPortao, 0); throw new NvErro(`Você não participa mais de “${nome}”.`); }
   const f = rows[0];
   if (f.name !== nv.fazenda.name || f.join_code !== nv.fazenda.join_code) nv.fazenda = {id: f.id, name: f.name, join_code: f.join_code};
   const eu = await nvHttp(`/rest/v1/farm_members?select=role&farm_id=eq.${encodeURIComponent(f.id)}&user_id=eq.${encodeURIComponent(nv.sessao.usuario)}`);
@@ -311,59 +312,124 @@ addEventListener('DOMContentLoaded', nvProteger); // ações das telas carregada
 // ---------- Conta e fazenda ----------
 async function nvComOcupado(fn) {
   if (nvOcupado) return; nvOcupado = true; nvMostrar();
-  try { await fn(); } catch (err) { showToast(err.message || 'Não foi possível concluir.', true); } finally { nvOcupado = false; render(); }
+  try { await fn(); } catch (err) { nvPortaoErro(err.message || 'Não foi possível concluir.'); showToast(err.message || 'Não foi possível concluir.', true); } finally { nvOcupado = false; nvPortao(); render(); }
 }
-const nvCampos = () => ({login: ($('#nv_email')?.value || '').trim().toLowerCase(), senha: $('#nv_senha')?.value || ''});
+const nvCampos = () => ({login: ($('#nvp_login')?.value || '').trim().toLowerCase(), senha: $('#nvp_senha')?.value || ''});
 function nvValidar({login, senha}, soEmail = false) {
   if (login.includes('@') || soEmail) { if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(login)) throw new NvErro('Digite um e-mail válido.'); }
   else if (!/^[a-z0-9][a-z0-9._-]{2,29}$/.test(login)) throw new NvErro('Digite o seu usuário (ex.: joao.silva) ou e-mail.');
   if (senha.length < 6) throw new NvErro('A senha precisa ter pelo menos 6 caracteres.');
 }
-function nvEsquecerFazenda() { nv.fazenda = null; nv.papel = null; nv.cursor = 0; nv.ultima = null; nv.rejeitados = {}; nvBase = {}; nvFazendas = null; nvUsuarios = null; nvStatus = 'parado'; nvErro = ''; nvAplicarPapel(); }
+// Desliga da fazenda (os dados do aparelho continuam marcados como sendo dela: nv.dadosDe)
+function nvEsquecerFazenda() { nv.fazenda = null; nv.papel = null; nvFazendas = null; nvUsuarios = null; nvStatus = 'parado'; nvErro = ''; nvAplicarPapel(); }
+// Apaga os dados deste aparelho (usado ao entrar numa fazenda diferente da que estava aqui)
+function nvLimparAparelho() {
+  const settings = db.settings; db = emptyDb(); db.settings = settings; db._removidos = [];
+  impressoes = null; salvarSemNuvem();
+  nvBase = {}; nv.cursor = 0; nv.ultima = null; nv.rejeitados = {}; nv.dadosDe = null;
+}
 
 const nvEntrar = () => nvComOcupado(async () => {
   const d = nvCampos(); nvValidar(d);
+  if (navigator.onLine === false) throw new NvErro('Sem internet. Para entrar pela primeira vez neste aparelho é preciso estar conectado.');
   const s = await nvHttp('/auth/v1/token?grant_type=password', {method: 'POST', body: {email: nvLoginParaEmail(d.login), password: d.senha}, auth: false});
-  if (nv.sessao?.usuario && nv.sessao.usuario !== s.user?.id) nvEsquecerFazenda();
-  nvGuardarSessao(s); nvSalvar();
-  showToast('Conta conectada');
-  if (nvVinculado()) nvSincronizar();
-  else {
-    // Quem participa de uma fazenda só (caso comum de quem recebeu o login do ADM) já entra nela
-    nvFazendas = await nvHttp('/rest/v1/farms?select=id,name,join_code&order=created_at.asc').catch(() => null);
-    if (nvFazendas?.length === 1) nvVincular(nvFazendas[0]);
-  }
+  nvGuardarSessao(s); nv.ultimoLogin = d.login; nvSalvar();
+  const fazendas = await nvHttp('/rest/v1/farms?select=id,name,join_code&order=created_at.asc').catch(() => null);
+  // Continua na mesma fazenda se esta conta participa dela; senão escolhe outra
+  if (nv.fazenda && fazendas && !fazendas.some(f => f.id === nv.fazenda.id)) nvEsquecerFazenda();
+  nvFazendas = fazendas;
+  if (nv.fazenda) { nv.papel = null; nvSalvar(); showToast('Bem-vindo de volta'); nvSincronizar(true); return; }
+  if (nvFazendas?.length === 1) nvVincular(nvFazendas[0]);
 });
 const nvCriarConta = () => nvComOcupado(async () => {
   const d = nvCampos(); nvValidar(d, true);
   const s = await nvHttp('/auth/v1/signup', {method: 'POST', body: {email: d.login, password: d.senha}, auth: false});
-  if (s?.access_token) { nvGuardarSessao(s); nvSalvar(); showToast('Conta criada'); }
-  else showToast('Conta criada. Abra o e-mail de confirmação que enviamos e depois toque em “Entrar”.', true);
+  if (s?.access_token) { nvGuardarSessao(s); nv.ultimoLogin = d.login; nvSalvar(); showToast('Conta de ADM criada. Agora crie a fazenda.'); }
+  else nvPortaoErro('Conta criada. Abra o e-mail de confirmação que enviamos e depois toque em “Entrar”.');
 });
-const nvSair = () => confirmDialog('Sair da conta neste aparelho? Os dados continuam aqui, mas deixam de sincronizar com a fazenda até você entrar de novo.', async () => {
+const nvSair = () => confirmDialog('Sair da conta neste aparelho? Para usar o sistema de novo será preciso entrar com usuário e senha.', async () => {
+  if (nvVinculado() && navigator.onLine !== false) await nvSincronizar(); // envia o que falta antes de sair
   try { if (nv.sessao) await nvHttp('/auth/v1/logout', {method: 'POST', tentar: false}); } catch { /* sai mesmo sem internet */ }
-  nv.sessao = null; nvEsquecerFazenda(); nvSalvar(); showToast('Você saiu da conta'); render();
+  nv.sessao = null; nv.papel = null; nvFazendas = null; nvUsuarios = null; nvAplicarPapel(); nvSalvar(); nvPortao(); showToast('Você saiu da conta');
 }, 'Sair');
 
 async function nvCarregarFazendas() {
-  try { nvFazendas = await nvHttp('/rest/v1/farms?select=id,name,join_code&order=created_at.asc'); } catch (err) { nvFazendas = []; showToast(err.message, true); }
-  const el = $('#nvFazendas'); if (el) el.innerHTML = nvListaFazendas();
+  try { nvFazendas = await nvHttp('/rest/v1/farms?select=id,name,join_code&order=created_at.asc'); } catch (err) { nvFazendas = []; nvPortaoErro(err.message); }
+  nvPortao();
 }
 const nvListaFazendas = () => nvFazendas === null ? '<p class="nota">Carregando suas fazendas…</p>'
-  : nvFazendas.length ? `<p>Suas fazendas:</p><div class="btn-row">${nvFazendas.map(f => btn(f.name, 'nv-usar', f.id, 'secondary')).join('')}</div>` : '<p class="nota">Você ainda não participa de nenhuma fazenda. Se você é o ADM, crie a fazenda abaixo; se não, peça ao ADM para criar o seu usuário.</p>';
+  : nvFazendas.length ? `<p>Escolha a fazenda:</p><div class="btn-row">${nvFazendas.map(f => btn(f.name, 'nv-usar', f.id, 'secondary')).join('')}</div>` : '<p class="nota">Esta conta ainda não participa de nenhuma fazenda. Se você é o ADM, crie a fazenda abaixo; se não, peça ao ADM para criar o seu usuário.</p>';
 
 function nvVincular(f) {
   const n = COLLECTIONS.reduce((s, c) => s + db[c].length, 0);
-  const ligar = () => { nvEsquecerFazenda(); nv.fazenda = {id: f.id, name: f.name, join_code: f.join_code}; nvSalvar(); showToast(`Sincronizando com “${f.name}”…`); nvSincronizar(true); };
-  if (n) confirmDialog(`Este aparelho tem ${n} registros. Eles serão enviados para “${f.name}” e juntados com os dados que a equipe já tem lá. Se forem só dados de exemplo, apague-os antes em “Dados de exemplo e limpeza”. Continuar?`, ligar, 'Enviar e juntar');
-  else { ligar(); render(); }
+  const ligar = () => {
+    if (nv.dadosDe !== f.id) { nvBase = {}; nv.cursor = 0; nv.ultima = null; nv.rejeitados = {}; }
+    nv.fazenda = {id: f.id, name: f.name, join_code: f.join_code}; nv.dadosDe = f.id; nv.papel = null;
+    nvSalvar(); nvPortao(); showToast(`Entrando em “${f.name}”…`); nvSincronizar(true);
+  };
+  if (!n || nv.dadosDe === f.id) return ligar();
+  if (nv.dadosDe) return confirmDialog(`Os dados guardados neste aparelho são de outra fazenda. Para entrar em “${f.name}”, eles serão apagados deste aparelho (continuam na nuvem da outra fazenda) e os dados de “${f.name}” serão baixados. Continuar?`, () => { nvLimparAparelho(); ligar(); }, 'Apagar e entrar');
+  confirmDialog(`Este aparelho tem ${n} registros que ainda não estão em nenhuma fazenda. Eles serão enviados para “${f.name}” e juntados com os dados da equipe. Se forem só dados de exemplo, toque em “Cancelar”, apague-os em Cadastros e backup e entre de novo. Continuar?`, ligar, 'Enviar e juntar');
 }
 const nvCriarFazenda = () => nvComOcupado(async () => {
-  const nome = ($('#nv_nome')?.value || '').trim();
+  const nome = ($('#nvp_fazenda')?.value || '').trim();
   if (!nome) throw new NvErro('Dê um nome para a fazenda.');
   const f = await nvHttp('/rest/v1/rpc/create_farm', {method: 'POST', body: {p_name: nome}});
+  if (!db.settings.farm) { db.settings.farm = f.name; salvarSemNuvem(); if (typeof applySettings === 'function') applySettings(); }
   nvFazendas = null; nvVincular(f);
 });
+
+// ---------- Tela de entrada: o sistema só abre com usuário e senha ----------
+let nvMsgPortao = '';
+const nvPortaoErro = m => { nvMsgPortao = m; const e = $('#nvpErro'); if (e) { e.textContent = m; e.hidden = !m; } };
+function nvPortao() {
+  let el = document.getElementById('nvPortao');
+  if (!el) { el = Object.assign(document.createElement('div'), {id: 'nvPortao', className: 'nv-portao'}); el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); document.body.append(el); }
+  const aberto = !nvVinculado();
+  document.documentElement.classList.toggle('nv-bloqueado', aberto);
+  el.hidden = !aberto;
+  if (!aberto) { el.innerHTML = ''; nvMsgPortao = ''; return; }
+  const marca = '<p class="nv-portao-marca">NEXUS <span>AGRO</span></p>';
+  const erro = `<p class="nv-portao-erro" id="nvpErro" ${nvMsgPortao ? '' : 'hidden'}>${esc(nvMsgPortao)}</p>`;
+  if (!nv.sessao) {
+    if ($('#nvp_login')) return; // já está na tela de login (não apaga o que a pessoa digitou)
+    el.innerHTML = `<form class="nv-portao-card" id="nvpForm" novalidate>${marca}<h2>Entrar</h2>
+      ${nv.fazenda ? `<p class="nota">Fazenda <b>${esc(nv.fazenda.name)}</b>. Entre de novo para continuar.</p>` : '<p class="nota">Use o usuário e a senha que o ADM da fazenda criou para você.</p>'}
+      <div class="field"><label for="nvp_login">Usuário ou e-mail</label><input id="nvp_login" autocapitalize="none" autocomplete="username" spellcheck="false" value="${esc(nv.ultimoLogin || '')}" placeholder="Ex.: joao.silva"></div>
+      <div class="field"><label for="nvp_senha">Senha</label><input id="nvp_senha" type="password" autocomplete="current-password" placeholder="Sua senha"></div>
+      ${erro}
+      <button class="primary" type="submit" data-nv-portao>Entrar</button>
+      <details class="nv-portao-adm"><summary>Primeiro acesso do ADM</summary>
+        <p class="nota">Digite acima o seu e-mail e uma senha (mínimo 6 caracteres) e toque em “Criar conta de ADM”. Depois você cria a fazenda e os usuários da equipe.</p>
+        <button class="secondary" type="button" data-act="nv-criar">Criar conta de ADM</button></details></form>`;
+    $('#nvpForm', el).onsubmit = e => { e.preventDefault(); nvPortaoErro(''); nvEntrar(); };
+    setTimeout(() => (nv.ultimoLogin ? $('#nvp_senha') : $('#nvp_login'))?.focus(), 50);
+    return;
+  }
+  el.innerHTML = `<div class="nv-portao-card">${marca}<h2>Escolha a fazenda</h2>
+    <p class="nota">Conectado como <b>${esc(nvMostrarLogin(nv.sessao.email))}</b>.</p>
+    <div id="nvFazendas">${nvListaFazendas()}</div>
+    <div class="field"><label for="nvp_fazenda">Criar uma fazenda (você será o ADM)</label><input id="nvp_fazenda" value="${esc(db.settings.farm || '')}" placeholder="Ex.: Fazenda Boa Vista"></div>
+    ${erro}
+    <div class="btn-row">${btn('Criar fazenda', 'nv-nova')}${btn('Sair da conta', 'nv-sair', '', 'secondary')}</div></div>`;
+  if (nvFazendas === null) nvCarregarFazendas();
+}
+document.head.insertAdjacentHTML('beforeend', `<style>
+  :root.nv-bloqueado .app, :root.nv-bloqueado .mobile-nav { visibility: hidden }
+  .nv-portao { position: fixed; inset: 0; z-index: 15; display: grid; place-items: center; padding: 20px; overflow-y: auto; background: radial-gradient(circle at 50% 20%, #0f3550, #061625 70%); }
+  .nv-portao[hidden] { display: none }
+  .nv-portao-card { width: min(420px, 100%); background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 18px; padding: 26px 24px; box-shadow: 0 30px 80px rgba(0,0,0,.4); display: grid; gap: 14px }
+  .nv-portao-card h2 { margin: 0; font-size: 1.35rem }
+  .nv-portao-card .nota { margin: 0 }
+  .nv-portao-card .field input { width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 12px; background: var(--bg); color: var(--text); font-size: 1rem }
+  .nv-portao-card .primary { width: 100%; font-size: 1.02rem; padding: 13px }
+  .nv-portao-marca { margin: 0; font-size: 1.7rem; font-weight: 800; letter-spacing: .03em; color: var(--text) }
+  .nv-portao-marca span { color: var(--destaque, #34d399) }
+  .nv-portao-erro { margin: 0; color: var(--red); font-size: .9rem }
+  .nv-portao-adm summary { cursor: pointer; color: var(--muted); font-size: .88rem; padding: 6px 0 }
+  .nv-portao-adm .secondary { margin-top: 8px }
+</style>`);
+addEventListener('DOMContentLoaded', () => nvPortao());
 
 // ---------- Usuários da fazenda (ADM) ----------
 const nvFuncaoUsuarios = corpo => nvHttp('/functions/v1/usuarios', {method: 'POST', body: {farm_id: nv.fazenda.id, ...corpo}});
@@ -441,20 +507,7 @@ function nvMostrar() {
 
 function cartaoNuvem() {
   const titulo = '<h3>Nuvem da equipe</h3>';
-  if (!nv.sessao) return `<article class="card panel">${titulo}
-    <p>Entre com o usuário e a senha que o ADM da fazenda criou para você. O app continua funcionando sem internet; quando o sinal volta, ele envia e recebe as alterações sozinho.</p>
-    ${nv.fazenda ? `<p class="nota">Este aparelho estava ligado à fazenda “${esc(nv.fazenda.name)}”. Entre de novo para continuar sincronizando.</p>` : ''}
-    <div class="form"><div class="field full"><label for="nv_email">Usuário ou e-mail</label><input id="nv_email" autocapitalize="none" autocomplete="username" spellcheck="false" placeholder="Ex.: joao.silva"></div>
-    <div class="field full"><label for="nv_senha">Senha</label><input id="nv_senha" type="password" autocomplete="current-password" placeholder="Pelo menos 6 caracteres"></div></div>
-    <div class="btn-row">${btn('Entrar', 'nv-entrar')}</div>
-    <details class="tecnico" style="margin-top:10px"><summary>Sou o ADM e quero criar a fazenda</summary>
-      <p class="nota">Crie a sua conta com e-mail e senha nos campos acima. Depois você cria a fazenda e os usuários da equipe.</p>
-      <div class="btn-row">${btn('Criar conta de ADM', 'nv-criar', '', 'secondary')}</div></details></article>`;
-  if (!nv.fazenda) return `<article class="card panel">${titulo}
-    <p>Conectado como <b>${esc(nvMostrarLogin(nv.sessao.email))}</b>. Escolha a fazenda que este aparelho vai sincronizar.</p>
-    <div id="nvFazendas">${nvListaFazendas()}</div>
-    <div class="form"><div class="field full"><label for="nv_nome">Criar uma fazenda (você será o ADM)</label><input id="nv_nome" value="${esc(db.settings.farm || '')}" placeholder="Ex.: Fazenda Boa Vista"></div></div>
-    <div class="btn-row">${btn('Criar fazenda', 'nv-nova')}${btn('Sair da conta', 'nv-sair', '', 'secondary')}</div></article>`;
+  if (!nvVinculado()) return '';
   const papel = nvPapel();
   return `<article class="card panel">${titulo}
     <p>Fazenda <b>${esc(nv.fazenda.name)}</b> • ${esc(nvMostrarLogin(nv.sessao.email))} • nível <b>${NV_NIVEIS[papel] || papel}</b></p>
@@ -473,17 +526,15 @@ cartaoSincronizacao = () => cartaoNuvem() + (nvComum() ? '' : cartaoSincronizaca
 const cadastrosAfterSemNuvem = VIEWS.cadastros.after;
 VIEWS.cadastros.after = arg => {
   cadastrosAfterSemNuvem?.(arg);
-  if (nv.sessao && !nv.fazenda && nvFazendas === null) nvCarregarFazendas();
   if (nvPapel() === 'admin' && nvUsuarios === null) nvCarregarUsuarios();
   $$('[data-nv-nivel]').forEach(s => { s.onchange = () => nvMudarNivel(s.dataset.nvNivel, s.value); });
-  const senha = $('#nv_senha'); if (senha) senha.onkeydown = e => { if (e.key === 'Enter') nvEntrar(); };
   nvMostrar();
 };
 Object.assign(ACTIONS, {
   'nv-entrar': nvEntrar, 'nv-criar': nvCriarConta, 'nv-sair': nvSair, 'nv-nova': nvCriarFazenda,
   'nv-usar': id => { const f = (nvFazendas || []).find(x => x.id === id); if (f) nvVincular(f); },
   'nv-sync': () => nvSincronizar(true),
-  'nv-trocar': () => confirmDialog('Desligar este aparelho da fazenda atual? Os dados continuam aqui; ao escolher outra fazenda, eles serão enviados para ela.', () => { nvEsquecerFazenda(); nvSalvar(); }, 'Trocar'),
+  'nv-trocar': () => confirmDialog('Trocar de fazenda? Você vai escolher outra fazenda desta conta; os dados deste aparelho continuam guardados na nuvem da fazenda atual.', () => { nvEsquecerFazenda(); nvSalvar(); nvPortao(); }, 'Trocar'),
   'nv-u-novo': nvNovoUsuario, 'nv-u-senha': nvNovaSenha, 'nv-u-remover': nvRemoverUsuario
 });
 nvProteger();

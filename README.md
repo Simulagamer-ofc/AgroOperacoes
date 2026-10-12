@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.22.0-beta1` — o sistema só abre com **usuário e senha** (tela de entrada no APK e no navegador); depois de entrar uma vez, continua funcionando sem internet. Ao sair, pede o login de novo. Se outra pessoa de outra fazenda entrar no mesmo aparelho, os dados da fazenda anterior saem do aparelho. Menu lateral mais largo, com os nomes em uma linha.
+
 `0.21.0-beta1` — **níveis de acesso**: o ADM cria o login e a senha de cada pessoa (sem precisar de e-mail) e escolhe o nível. **ADM**: tudo, inclusive usuários. **Supervisor**: lança, edita e exclui tudo e vê o financeiro. **Usuário comum**: lança no dia a dia, edita só o que ele lançou, não exclui e não vê o financeiro (gastos, contas, vendas, produção e margem). As regras valem no aparelho e no servidor (`supabase/migrations` e a função `supabase/functions/usuarios`).
 
 `0.20.0-beta1` — **nuvem da equipe (Supabase)**: em Cadastros e backup, cada pessoa cria a própria conta, cria uma fazenda ou entra numa com o código de convite, e o app sincroniza sozinho entre celulares, tablets e computadores. Continua funcionando sem internet: as alterações ficam guardadas no aparelho e sobem quando o sinal volta. Conflitos: vale a alteração mais recente; no estoque, os lançamentos dos dois aparelhos somam no saldo. A sincronização por arquivo continua disponível para quem não tem internet.
