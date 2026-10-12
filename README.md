@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.23.1-beta1` — ícones do menu no estilo da tela de abertura: hexágonos com brilho verde (campo, grãos e gestão) e azul (máquinas e sistema), também na barra inferior do celular. Com o menu recolhido, ficam só os ícones, e cada um continua abrindo a sua tela.
+
 `0.23.0-beta1` — **ADM do sistema**: entra sem precisar de fazenda e, em Cadastros e backup, tem o painel **Administração do sistema** com todas as fazendas: cria fazendas, entra em qualquer uma como ADM e gerencia os usuários de todas. Sem fazenda aberta, o que ele lança fica só no aparelho. A conta é marcada na tabela `system_admins` (migração `supabase/migrations/20261012170000_adm_do_sistema.sql`).
 
 `0.22.1-beta1` — menu lateral recolhível: o botão « no topo do menu recolhe para uma faixa estreita com ☰ (a escolha fica guardada no aparelho), deixando a tela inteira para o conteúdo. No tablet em pé o menu fica recolhido e abre por cima do conteúdo.
