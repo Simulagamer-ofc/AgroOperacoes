@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.20.0-beta1` — **nuvem da equipe (Supabase)**: em Cadastros e backup, cada pessoa cria a própria conta, cria uma fazenda ou entra numa com o código de convite, e o app sincroniza sozinho entre celulares, tablets e computadores. Continua funcionando sem internet: as alterações ficam guardadas no aparelho e sobem quando o sinal volta. Conflitos: vale a alteração mais recente; no estoque, os lançamentos dos dois aparelhos somam no saldo. A sincronização por arquivo continua disponível para quem não tem internet.
+
 `0.19.2-beta1` — abertura com o globo Nexus por 5 segundos, disponível offline no navegador/PWA e APK, sem repetir ao trocar de menu; tipografia unificada entre telas. Painel com o visual aprovado: custos por categoria em barras horizontais, evolução mensal em colunas, rosca de operações e insumos em atenção. O filtro de 7/30/90 dias aplica-se aos custos por categoria, às operações e aos indicadores adicionais. A evolução mensal mostra seis meses (com o mês atual identificado como parcial); estoque mostra o saldo atual. Os quadros usam somente registros reais e mostram estados vazios quando não há dados. Ações rápidas, operações, alertas e indicadores adicionais continuam disponíveis na seção expansível abaixo do painel.
 
 ### Funcionalidades
