@@ -438,8 +438,8 @@ body{background:var(--bg)}
 @media(max-width:760px){.nx-dashboard-head h2{font-size:1.08rem;line-height:1.2}}
 
 /* Menu lateral mais largo: nomes do menu em uma linha só (0.22.0) */
-.app,.app.nx-home{grid-template-columns:268px minmax(0,1fr)}
-@media(max-width:1100px){.app,.app.nx-home{grid-template-columns:248px minmax(0,1fr)}}
+.app,.app.nx-home{grid-template-columns:284px minmax(0,1fr)}
+@media(max-width:1100px){.app,.app.nx-home{grid-template-columns:264px minmax(0,1fr)}}
 .sidebar .nav button,.app.nx-home .nav button{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.97rem;padding:10px 12px;min-height:42px}
 .sidebar .nav-grupo,.app.nx-home .nav-grupo{white-space:nowrap;margin:12px 12px 4px;padding:0}
 .sidebar-foot{gap:8px}.sidebar-foot .theme-btn{white-space:nowrap}
@@ -466,3 +466,34 @@ body{background:var(--bg)}
   .app main,.app.nx-home main{grid-column:2;min-width:0}
   .app .menu-btn,.app.nx-home .menu-btn{display:none}
 }
+
+/* Ícones do menu no estilo da abertura: hexágonos com brilho verde (campo/gestão) e azul (máquinas/sistema) (0.23.1) */
+.hex-icone{flex:none;overflow:visible}
+.hex-icone .hex{fill:rgba(101,230,168,.08);stroke:#43d68a;stroke-width:1.6;stroke-linejoin:round}
+.hex-icone.azul .hex{fill:rgba(74,163,255,.08);stroke:#4aa3ff}
+.hex-icone .glifo{fill:none;stroke:#eaf6ff;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.hex-icone.verde{filter:drop-shadow(0 0 3px rgba(67,214,138,.45))}
+.hex-icone.azul{filter:drop-shadow(0 0 3px rgba(74,163,255,.45))}
+.sidebar .nav button,.app.nx-home .nav button{display:flex;align-items:center;gap:11px;padding:7px 10px;min-height:44px}
+.sidebar .nav .nav-txt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sidebar .nav button.active .hex-icone .hex{stroke-width:2.2}
+.sidebar .nav button.active .hex-icone.verde .hex{fill:rgba(101,230,168,.22)}
+.sidebar .nav button.active .hex-icone.azul .hex{fill:rgba(74,163,255,.22)}
+.mobile-nav .hex-icone .glifo{stroke:var(--text)}
+.mobile-nav button.active .hex-icone .hex{stroke-width:2.2}
+/* Menu recolhido: fica só a coluna de ícones */
+@media(min-width:901px){
+  :root.menu-recolhido .sidebar{overflow-y:auto;scrollbar-width:none}
+  :root.menu-recolhido .sidebar>.nav{display:grid}
+  :root.menu-recolhido .sidebar .nav-grupo,:root.menu-recolhido .sidebar .nav-txt{display:none}
+  :root.menu-recolhido .sidebar .nav button{justify-content:center;padding:6px 0;box-shadow:none}
+  :root.menu-recolhido .menu-trilho{margin:0 auto 10px}
+}
+@media(min-width:761px) and (max-width:900px){
+  .sidebar:not(.open){overflow-y:auto;scrollbar-width:none}
+  .sidebar:not(.open)>.nav{display:grid}
+  .sidebar:not(.open) .nav-grupo,.sidebar:not(.open) .nav-txt{display:none}
+  .sidebar:not(.open) .nav button{justify-content:center;padding:6px 0;box-shadow:none}
+  .sidebar:not(.open) .menu-trilho{margin:0 auto 10px}
+}
+.sidebar .nav button,.app.nx-home .nav button{gap:10px;font-size:.95rem}
