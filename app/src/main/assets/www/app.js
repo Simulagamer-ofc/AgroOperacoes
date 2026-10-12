@@ -138,8 +138,27 @@ function showToast(message, erro = false) {
 save(); // grava migrações do banco (agora o aviso de armazenamento cheio já pode ser exibido)
 const savedTheme = safeStorage.get('agro-theme'); if (savedTheme) root.dataset.theme = savedTheme;
 $('#themeBtn').onclick = () => { const next = (root.dataset.theme || 'dark') === 'dark' ? 'light' : 'dark'; root.dataset.theme = next; safeStorage.set('agro-theme', next); };
-const closeMenu = () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); };
-const openMenu = () => { sidebar.classList.add('open'); overlay.classList.add('show'); };
+const closeMenu = () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); marcarTrilho(); };
+const openMenu = () => { sidebar.classList.add('open'); overlay.classList.add('show'); marcarTrilho(); };
+// Menu lateral recolhível: no computador e tablet deitado vira uma faixa estreita (escolha guardada);
+// no tablet em pé fica sempre estreito e abre por cima do conteúdo
+const trilho = Object.assign(document.createElement('button'), {className: 'menu-trilho', type: 'button'});
+sidebar.prepend(trilho);
+const telaMedia = () => matchMedia('(min-width: 761px) and (max-width: 900px)').matches;
+function marcarTrilho() {
+  const fechado = telaMedia() ? !sidebar.classList.contains('open') : root.classList.contains('menu-recolhido');
+  trilho.textContent = fechado ? '☰' : '«';
+  trilho.setAttribute('aria-label', fechado ? 'Mostrar o menu' : 'Recolher o menu'); trilho.title = trilho.getAttribute('aria-label');
+}
+trilho.onclick = () => {
+  if (telaMedia()) { if (sidebar.classList.contains('open')) closeMenu(); else openMenu(); return; }
+  root.classList.toggle('menu-recolhido');
+  safeStorage.set('agro-menu', root.classList.contains('menu-recolhido') ? 'recolhido' : '');
+  marcarTrilho();
+};
+if (safeStorage.get('agro-menu') === 'recolhido') root.classList.add('menu-recolhido');
+matchMedia('(min-width: 761px) and (max-width: 900px)').addEventListener?.('change', () => { closeMenu(); });
+marcarTrilho();
 $('#menuBtn').onclick = openMenu; $('#moreBtn').onclick = openMenu; overlay.onclick = closeMenu;
 $('#bellBtn').onclick = () => go('inicio', 'alertas');
 $$('[data-route]').forEach(b => b.addEventListener('click', () => { go(b.dataset.route); closeMenu(); }));
