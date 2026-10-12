@@ -483,7 +483,7 @@ function nvPortao() {
   document.documentElement.classList.toggle('nv-bloqueado', aberto);
   el.hidden = !aberto;
   if (!aberto) { el.innerHTML = ''; nvMsgPortao = ''; return; }
-  const marca = '<p class="nv-portao-marca">NEXUS <span>AGRO</span></p>';
+  const marca = '<div class="nv-portao-topo"><img class="nv-portao-logo" src="img/logo-nexus.png" alt="" width="64" height="64"><p class="nv-portao-marca">NEXUS <span>AGRO</span></p></div>';
   const erro = `<p class="nv-portao-erro" id="nvpErro" ${nvMsgPortao ? '' : 'hidden'}>${esc(nvMsgPortao)}</p>`;
   if (!nv.sessao) {
     if ($('#nvp_login')) return; // já está na tela de login (não apaga o que a pessoa digitou)
@@ -517,6 +517,8 @@ document.head.insertAdjacentHTML('beforeend', `<style>
   .nv-portao-card .nota { margin: 0 }
   .nv-portao-card .field input { width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 12px; background: var(--bg); color: var(--text); font-size: 1rem }
   .nv-portao-card .primary { width: 100%; font-size: 1.02rem; padding: 13px }
+  .nv-portao-topo { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center }
+  .nv-portao-logo { width: 130px; height: 130px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.35)) }
   .nv-portao-marca { margin: 0; font-size: 1.7rem; font-weight: 800; letter-spacing: .03em; color: var(--text) }
   .nv-portao-marca span { color: var(--destaque, #34d399) }
   .nv-portao-erro { margin: 0; color: var(--red); font-size: .9rem }

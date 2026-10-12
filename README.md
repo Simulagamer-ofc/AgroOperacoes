@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.25.1-beta1` — nova logo e ícone do app: globo em 3D com os ícones em hexágono (azul e verde) em volta, sem fundo (APK, navegador/PWA e tela de entrada).
+
 `0.25.0-beta1` — **funções**: cada usuário é cadastrado com a sua função (Diretor, Gerente, Administrativo/Financeiro, Agrônomo, Encarregado de campo, Operador de máquinas/Tratorista, Monitor de pragas, Aplicador, Chefe de oficina, Mecânico, Abastecedor, Responsável UBS, Operador de secador, Classificador, Almoxarife ou Personalizado) e vê no menu só as telas dela. O ADM pode acrescentar ou tirar telas de cada pessoa em **Função e telas**. A função decide as telas; o nível decide o que a pessoa faz nelas. Um usuário comum com Financeiro ou Produção na função recebe e vê o financeiro (migração `supabase/migrations/20261012190000_funcoes.sql`).
 
 `0.24.1-beta1` — o topo do menu mostra quem está usando: o nome da fazenda aberta (vindo da nuvem) e o usuário com o nível; o ADM do sistema passa a se chamar **Admin do sistema** e, sem fazenda aberta, aparece como "Admin do sistema" no lugar de "Minha fazenda".
