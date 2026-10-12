@@ -1,25 +1,36 @@
 'use strict';
-/* Nexus Agro na nuvem (Supabase): conta, fazenda compartilhada pela equipe e sincronização automática.
+/* Nexus Agro na nuvem (Supabase): contas, fazenda compartilhada pela equipe e sincronização automática.
    Os dados continuam no aparelho e o app funciona sem internet. Com internet, cada registro alterado sobe para a
    fazenda e as alterações dos outros aparelhos descem em ordem de chegada (seq).
    Conflito (mesmo registro alterado em dois aparelhos antes de sincronizar): vale a alteração mais recente (_mod);
    no estoque, o saldo soma o que cada aparelho lançou. Exclusões viajam como registros marcados "deleted".
+   Níveis de acesso: ADM (tudo + usuários), Supervisor (tudo, sem usuários) e Usuário comum (lança no dia a dia,
+   edita só o que lançou, não exclui, não vê o financeiro). O servidor confere as mesmas regras.
    Sem bibliotecas: login e dados pela API REST do Supabase. A chave publicável é pública por natureza;
    quem protege os dados são as regras do banco (cada conta só enxerga as fazendas de que participa). */
 
 const NUVEM = {url: 'https://gfvtudfdhooavcchdpnm.supabase.co', chave: 'sb_publishable_BxbOeMIvyAlyTkCMy3sUWg__PpRKnYK'};
 const NV_ESTADO = 'agro-nuvem', NV_BASE = 'agro-nuvem-base';
 const NV_LOTE_ENVIO = 200, NV_LOTE_RECEBE = 500, NV_INTERVALO = 60000;
+// Quem entra só com nome de usuário (criado pelo ADM) tem um e-mail interno neste domínio
+const NV_DOMINIO = 'usuarios.nexusagro.app';
+const NV_NIVEIS = {admin: 'ADM', supervisor: 'Supervisor', member: 'Usuário comum'};
+// Lançamentos financeiros: o usuário comum não vê (o servidor também não os envia para ele)
+const NV_FINANCEIRO = ['expenses', 'contas', 'vendas'];
 
 const nvLer = (k, padrao) => { try { const v = JSON.parse(safeStorage.get(k) || 'null'); return v && typeof v === 'object' ? v : padrao; } catch { return padrao; } };
 // Estado da conta neste aparelho (fica fora do banco: não vai para backups nem arquivos de sincronização)
-let nv = {sessao: null, fazenda: null, cursor: 0, ultima: null, ...nvLer(NV_ESTADO, {})};
+let nv = {sessao: null, fazenda: null, papel: null, cursor: 0, ultima: null, rejeitados: {}, ...nvLer(NV_ESTADO, {})};
+nv.rejeitados ||= {};
 // Última versão de cada registro conhecida pelo servidor: 'coleção|id' → [impressão, saldo do estoque]
 let nvBase = nvLer(NV_BASE, {});
-let nvStatus = 'parado', nvErro = '', nvRodando = null, nvRepetir = false, nvAgenda = null, nvOcupado = false, nvFazendas = null;
+let nvStatus = 'parado', nvErro = '', nvRodando = null, nvRepetir = false, nvAgenda = null, nvOcupado = false, nvFazendas = null, nvUsuarios = null;
 
 const nvSalvar = () => { safeStorage.set(NV_ESTADO, JSON.stringify(nv)); safeStorage.set(NV_BASE, JSON.stringify(nvBase)); };
 const nvVinculado = () => !!(nv.sessao && nv.fazenda);
+// Nível neste aparelho; sem conta ligada a uma fazenda o app é de uso individual (sem restrições)
+const nvPapel = () => nvVinculado() ? nv.papel || 'member' : null;
+const nvComum = () => nvPapel() === 'member';
 
 // ---------- Impressão de um registro (igual no aparelho e no servidor, que reordena as chaves) ----------
 const nvCanon = v => Array.isArray(v) ? '[' + v.map(nvCanon).join(',') + ']'
@@ -53,22 +64,23 @@ function nvPendentes() {
 // ---------- Comunicação com o servidor ----------
 class NvErro extends Error { constructor(msg, {rede = false, sessao = false} = {}) { super(msg); this.rede = rede; this.sessao = sessao; } }
 const NV_MENSAGENS = [
-  [/invalid login credentials|invalid_credentials/i, 'E-mail ou senha incorretos.'],
+  [/invalid login credentials|invalid_credentials/i, 'Usuário (ou e-mail) ou senha incorretos.'],
   [/email not confirmed|email_not_confirmed/i, 'Confirme seu e-mail pelo link que enviamos antes de entrar.'],
   [/already registered|already exists|user_already_exists/i, 'Já existe uma conta com esse e-mail. Use “Entrar”.'],
   [/password should be at least|weak_password/i, 'A senha precisa ter pelo menos 6 caracteres.'],
   [/unable to validate email|invalid format|email_address_invalid/i, 'Esse e-mail não é válido.'],
   [/signups not allowed|signup_disabled/i, 'Novas contas estão desativadas no servidor.'],
   [/rate limit|too many|over_email_send_rate_limit/i, 'Muitas tentativas seguidas. Espere alguns minutos e tente de novo.'],
-  [/row-level security|permission denied/i, 'Sem permissão nesta fazenda. Entre de novo na conta ou confira o código da fazenda.'],
-  [/invalid api key|no api key/i, 'A chave do servidor está errada (atualize o aplicativo).'],
-  [/Código de fazenda não encontrado|Entre na sua conta/i, null]
+  [/row-level security|permission denied/i, 'Sem permissão para isso no seu nível de acesso.'],
+  [/invalid api key|no api key/i, 'A chave do servidor está errada (atualize o aplicativo).']
 ];
 function nvMensagem(data, status) {
   const bruto = typeof data === 'string' ? data : data?.msg || data?.message || data?.error_description || data?.error || '';
   const cod = typeof data === 'object' ? data?.error_code || data?.code || '' : '';
-  for (const [re, txt] of NV_MENSAGENS) if (re.test(bruto) || re.test(cod)) return txt || bruto;
-  return bruto ? `Erro do servidor (${status}): ${bruto}` : `Erro do servidor (${status}).`;
+  for (const [re, txt] of NV_MENSAGENS) if (re.test(bruto) || re.test(cod)) return txt;
+  // Mensagens já escritas em português pelo próprio servidor (funções do Nexus Agro)
+  if (/[ãçéêíóôõú]|^Sem |^Só |^Você |^Dê |^Entre /i.test(bruto)) return bruto;
+  return bruto ? `Erro do servidor (${status}${cod ? ' ' + cod : ''}): ${bruto}` : `Erro do servidor (${status}).`;
 }
 
 async function nvHttp(caminho, {method = 'GET', body, auth = true, headers = {}, tentar = true} = {}) {
@@ -80,7 +92,7 @@ async function nvHttp(caminho, {method = 'GET', body, auth = true, headers = {},
   if (res.status === 401 && auth && tentar && nv.sessao?.refresh_token) { await nvRenovar(); return nvHttp(caminho, {method, body, auth, headers, tentar: false}); }
   const texto = await res.text();
   let data = null; try { data = texto ? JSON.parse(texto) : null; } catch { data = texto; }
-  if (!res.ok) throw new NvErro(nvMensagem(data, res.status), {sessao: res.status === 401});
+  if (!res.ok) { const e = new NvErro(nvMensagem(data, res.status), {sessao: res.status === 401}); e.status = res.status; e.codigo = data?.code || ''; throw e; }
   return data;
 }
 
@@ -103,12 +115,17 @@ function nvRenovar() {
   })();
   return nvRenovando;
 }
+// Nome de usuário (criado pelo ADM) ou e-mail
+const nvLoginParaEmail = l => l.includes('@') ? l : `${l}@${NV_DOMINIO}`;
+const nvMostrarLogin = email => String(email || '').endsWith('@' + NV_DOMINIO) ? email.slice(0, -(NV_DOMINIO.length + 1)) : email || '';
 
 // ---------- Sincronização ----------
 // Aplica um registro vindo do servidor. Retorna 1 se mudou algo neste aparelho.
 function nvAplicar(row, exclusoes) {
   const c = row.store, k = nvChave(c, row.id), lista = db[c], i = lista.findIndex(x => x?.id === row.id), local = i >= 0 ? lista[i] : null;
-  const base = nvBase[k], hLocal = local ? nvHash(local) : null, localAlterado = !!local && base?.[0] !== hLocal;
+  // Alteração recusada pelo servidor (nível de acesso): a versão do servidor volta a valer
+  const recusado = !!nv.rejeitados[k]; delete nv.rejeitados[k];
+  const base = nvBase[k], hLocal = local ? nvHash(local) : null, localAlterado = !recusado && !!local && base?.[0] !== hLocal;
   if (row.deleted) {
     const at = Number(row.data?._mod) || 0;
     delete nvBase[k];
@@ -120,7 +137,7 @@ function nvAplicar(row, exclusoes) {
   if (!local) {
     const ex = exclusoes.get(k);
     nvBase[k] = nvBaseDe(c, remoto);
-    if (ex && ex.at >= (remoto._mod || 0)) return 0; // excluído aqui depois da última alteração: a exclusão sobe
+    if (ex && !recusado && ex.at >= (remoto._mod || 0)) return 0; // excluído aqui depois da última alteração: a exclusão sobe
     lista.push(remoto); return 1;
   }
   if (hLocal === hRemoto) { nvBase[k] = nvBaseDe(c, remoto); return 0; }
@@ -149,26 +166,51 @@ async function nvReceber() {
     mudou += nesteLote;
     if (rows.length < NV_LOTE_RECEBE) break;
   }
+  nv.rejeitados = {}; nvSalvar(); // recusados que o servidor não tem: ficam só neste aparelho
   return mudou;
 }
 
+let nvSemFuncaoEnvio = false; // servidor sem push_records (versão anterior do banco): grava direto na tabela
 async function nvEnviar() {
   const itens = nvPendentes();
+  let recusados = 0;
   for (let i = 0; i < itens.length; i += NV_LOTE_ENVIO) {
-    const lote = itens.slice(i, i + NV_LOTE_ENVIO);
-    await nvHttp('/rest/v1/records?on_conflict=farm_id,store,id', {method: 'POST', headers: {Prefer: 'resolution=merge-duplicates,return=minimal'},
-      body: lote.map(it => ({farm_id: nv.fazenda.id, store: it.c, id: it.id, data: it.data, deleted: it.deleted}))});
-    for (const it of lote) { const k = nvChave(it.c, it.id); if (it.deleted) delete nvBase[k]; else nvBase[k] = it.base; }
+    const lote = itens.slice(i, i + NV_LOTE_ENVIO), linhas = lote.map(it => ({store: it.c, id: it.id, data: it.data, deleted: it.deleted}));
+    let rej = [];
+    if (!nvSemFuncaoEnvio) {
+      try { rej = await nvHttp('/rest/v1/rpc/push_records', {method: 'POST', body: {p_farm: nv.fazenda.id, p_rows: linhas}}) || []; }
+      catch (err) { if (err.status === 404 || err.codigo === 'PGRST202') nvSemFuncaoEnvio = true; else throw err; }
+    }
+    if (nvSemFuncaoEnvio) await nvHttp('/rest/v1/records?on_conflict=farm_id,store,id', {method: 'POST', headers: {Prefer: 'resolution=merge-duplicates,return=minimal'},
+      body: linhas.map(l => ({farm_id: nv.fazenda.id, ...l}))});
+    const recusa = new Set((Array.isArray(rej) ? rej : []).map(r => nvChave(r.store, r.id)));
+    for (const it of lote) {
+      const k = nvChave(it.c, it.id);
+      if (recusa.has(k)) {
+        // Sem permissão (ex.: usuário comum excluindo): desfaz aqui, baixando de novo a versão do servidor
+        nv.rejeitados[k] = 1; nvBase[k] = it.base || nvBase[k];
+        if (it.deleted && db._removidos) db._removidos = db._removidos.filter(e => nvChave(e.c, e.id) !== k);
+        recusados++;
+      } else if (it.deleted) delete nvBase[k]; else nvBase[k] = it.base;
+    }
     nvSalvar();
   }
-  return itens.length;
+  if (recusados) {
+    nv.cursor = 0; impressoes = null; salvarSemNuvem(); nvSalvar(); nvRepetir = true;
+    showToast(`${recusados} ${recusados === 1 ? 'alteração não foi aceita pelo seu nível de acesso e foi desfeita' : 'alterações não foram aceitas pelo seu nível de acesso e foram desfeitas'}.`, true);
+  }
+  return itens.length - recusados;
 }
 
 async function nvConferirFazenda() {
   const rows = await nvHttp(`/rest/v1/farms?select=id,name,join_code&id=eq.${encodeURIComponent(nv.fazenda.id)}`);
-  if (!rows.length) throw new NvErro('Você não participa mais desta fazenda. Escolha outra ou entre com um código de convite.');
+  if (!rows.length) throw new NvErro('Você não participa mais desta fazenda. Fale com o ADM ou escolha outra fazenda.');
   const f = rows[0];
-  if (f.name !== nv.fazenda.name || f.join_code !== nv.fazenda.join_code) { nv.fazenda = {id: f.id, name: f.name, join_code: f.join_code}; nvSalvar(); }
+  if (f.name !== nv.fazenda.name || f.join_code !== nv.fazenda.join_code) nv.fazenda = {id: f.id, name: f.name, join_code: f.join_code};
+  const eu = await nvHttp(`/rest/v1/farm_members?select=role&farm_id=eq.${encodeURIComponent(f.id)}&user_id=eq.${encodeURIComponent(nv.sessao.usuario)}`);
+  const papel = eu?.[0]?.role === 'owner' ? 'admin' : eu?.[0]?.role || 'member';
+  if (papel !== nv.papel) { nv.papel = papel; nvSalvar(); nvAplicarPapel(); if (typeof view !== 'undefined') nvAtualizarTela(); }
+  nvSalvar();
 }
 
 function nvSincronizar(manual = false) {
@@ -209,38 +251,92 @@ function nvAgendar(ms = 3000) {
   nvAgenda = setTimeout(() => { if (navigator.onLine !== false) nvSincronizar(); }, ms);
 }
 
-// Toda gravação local agenda um envio (com intervalo, para juntar várias alterações seguidas)
+// Toda gravação local marca quem criou cada registro novo e agenda um envio
+// (com intervalo, para juntar várias alterações seguidas)
 const salvarSemNuvem = save;
-save = function () { const ok = salvarSemNuvem(); nvAgendar(); return ok; };
+save = function () {
+  const eu = nv.sessao?.usuario;
+  if (eu && impressoes) for (const c of COLLECTIONS) { const antes = impressoes[c] || {}; for (const r of db[c]) if (r?.id && !(r.id in antes) && !r._por) r._por = eu; }
+  const ok = salvarSemNuvem(); nvAgendar(); return ok;
+};
 
 setInterval(() => { if (document.visibilityState === 'visible' && navigator.onLine !== false) nvSincronizar(); }, NV_INTERVALO);
 addEventListener('online', () => nvAgendar(500));
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') nvAgendar(500); });
 addEventListener('DOMContentLoaded', () => nvAgendar(1500));
 
+// ---------- Níveis de acesso no aparelho ----------
+// Telas do financeiro (o usuário comum não recebe esses dados)
+const NV_TELAS_FIN = ['financeiro', 'gastos', 'lcdpr', 'producao'];
+// Botões de editar → coleção do registro (o comum edita só o que ele lançou)
+const NV_EDITAR = {'op-edit': 'operations', 'mc-edit': 'machines', 'mt-edit': 'maintenances', 'fd-edit': 'fields', 'lot-edit': 'lots', 'st-edit': 'stock',
+  'mip-edit': 'monitoramentos', 'mo-edit': 'equipe', 'pd-colheita-edit': 'colheitas'};
+const nvAcaoProibida = act => /-(del|excluir)$/.test(act) || /^(fin-|gs-|pd-venda)/.test(act) || ['wipe', 'restore', 'seed', 'sync-receber', 'sync-desfazer'].includes(act);
+function nvAplicarPapel() { document.documentElement.dataset.nivel = nvPapel() || ''; }
+function nvProteger() {
+  for (const [act, fn] of Object.entries(ACTIONS)) {
+    if (fn.nvProtegida) continue;
+    const protegida = id => {
+      if (nvComum()) {
+        if (nvAcaoProibida(act)) { showToast('Seu nível de acesso (Usuário comum) não permite esta ação. Fale com o supervisor ou o ADM.', true); return; }
+        const col = NV_EDITAR[act];
+        if (col && id) { const r = find(col, id); if (r && r._por !== nv.sessao.usuario) { showToast('Usuário comum só pode editar o que ele mesmo lançou.', true); return; } }
+      }
+      return fn(id);
+    };
+    protegida.nvProtegida = true;
+    ACTIONS[act] = protegida;
+  }
+  for (const tela of NV_TELAS_FIN) {
+    const original = VIEWS[tela];
+    if (!original || original.nvProtegida) continue;
+    const protegida = arg => nvComum() ? head('Acesso restrito', 'O financeiro fica disponível para o supervisor e o ADM.') + `<section class="card">${empty('Sem acesso ao financeiro', 'Seu nível de acesso é Usuário comum.', {act: 'nav', id: 'inicio', label: 'Voltar ao início'})}</section>` : original(arg);
+    protegida.after = arg => { if (!nvComum()) original.after?.(arg); };
+    protegida.nvProtegida = true;
+    VIEWS[tela] = protegida;
+  }
+}
+// Esconde do menu as telas e botões que o nível não pode usar
+document.head.insertAdjacentHTML('beforeend', `<style>
+  :root[data-nivel="member"] [data-route="financeiro"], :root[data-nivel="member"] [data-route="producao"],
+  :root[data-nivel="member"] [data-act$="-del"], :root[data-nivel="member"] [data-act$="-excluir"], :root[data-nivel="member"] [data-act="wipe"],
+  :root[data-nivel="member"] [data-act="seed"], :root[data-nivel="member"] [data-act="restore"], :root[data-nivel="member"] [data-act="sync-receber"],
+  :root[data-nivel="member"] [data-act="sync-desfazer"], :root[data-nivel="member"] [data-act^="fin-"], :root[data-nivel="member"] [data-act^="gs-"] { display: none !important; }
+  .nv-usuarios td { vertical-align: middle } .nv-usuarios select { min-width: 9em }
+</style>`);
+nvAplicarPapel();
+nvProteger();
+addEventListener('DOMContentLoaded', nvProteger); // ações das telas carregadas depois deste arquivo
+
 // ---------- Conta e fazenda ----------
 async function nvComOcupado(fn) {
   if (nvOcupado) return; nvOcupado = true; nvMostrar();
   try { await fn(); } catch (err) { showToast(err.message || 'Não foi possível concluir.', true); } finally { nvOcupado = false; render(); }
 }
-const nvCampos = () => ({email: ($('#nv_email')?.value || '').trim().toLowerCase(), senha: $('#nv_senha')?.value || ''});
-function nvValidar({email, senha}) {
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) throw new NvErro('Digite um e-mail válido.');
+const nvCampos = () => ({login: ($('#nv_email')?.value || '').trim().toLowerCase(), senha: $('#nv_senha')?.value || ''});
+function nvValidar({login, senha}, soEmail = false) {
+  if (login.includes('@') || soEmail) { if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(login)) throw new NvErro('Digite um e-mail válido.'); }
+  else if (!/^[a-z0-9][a-z0-9._-]{2,29}$/.test(login)) throw new NvErro('Digite o seu usuário (ex.: joao.silva) ou e-mail.');
   if (senha.length < 6) throw new NvErro('A senha precisa ter pelo menos 6 caracteres.');
 }
-function nvEsquecerFazenda() { nv.fazenda = null; nv.cursor = 0; nv.ultima = null; nvBase = {}; nvFazendas = null; nvStatus = 'parado'; nvErro = ''; }
+function nvEsquecerFazenda() { nv.fazenda = null; nv.papel = null; nv.cursor = 0; nv.ultima = null; nv.rejeitados = {}; nvBase = {}; nvFazendas = null; nvUsuarios = null; nvStatus = 'parado'; nvErro = ''; nvAplicarPapel(); }
 
 const nvEntrar = () => nvComOcupado(async () => {
   const d = nvCampos(); nvValidar(d);
-  const s = await nvHttp('/auth/v1/token?grant_type=password', {method: 'POST', body: {email: d.email, password: d.senha}, auth: false});
+  const s = await nvHttp('/auth/v1/token?grant_type=password', {method: 'POST', body: {email: nvLoginParaEmail(d.login), password: d.senha}, auth: false});
   if (nv.sessao?.usuario && nv.sessao.usuario !== s.user?.id) nvEsquecerFazenda();
   nvGuardarSessao(s); nvSalvar();
   showToast('Conta conectada');
   if (nvVinculado()) nvSincronizar();
+  else {
+    // Quem participa de uma fazenda só (caso comum de quem recebeu o login do ADM) já entra nela
+    nvFazendas = await nvHttp('/rest/v1/farms?select=id,name,join_code&order=created_at.asc').catch(() => null);
+    if (nvFazendas?.length === 1) nvVincular(nvFazendas[0]);
+  }
 });
 const nvCriarConta = () => nvComOcupado(async () => {
-  const d = nvCampos(); nvValidar(d);
-  const s = await nvHttp('/auth/v1/signup', {method: 'POST', body: {email: d.email, password: d.senha}, auth: false});
+  const d = nvCampos(); nvValidar(d, true);
+  const s = await nvHttp('/auth/v1/signup', {method: 'POST', body: {email: d.login, password: d.senha}, auth: false});
   if (s?.access_token) { nvGuardarSessao(s); nvSalvar(); showToast('Conta criada'); }
   else showToast('Conta criada. Abra o e-mail de confirmação que enviamos e depois toque em “Entrar”.', true);
 });
@@ -254,7 +350,7 @@ async function nvCarregarFazendas() {
   const el = $('#nvFazendas'); if (el) el.innerHTML = nvListaFazendas();
 }
 const nvListaFazendas = () => nvFazendas === null ? '<p class="nota">Carregando suas fazendas…</p>'
-  : nvFazendas.length ? `<p>Suas fazendas:</p><div class="btn-row">${nvFazendas.map(f => btn(f.name, 'nv-usar', f.id, 'secondary')).join('')}</div>` : '<p class="nota">Você ainda não participa de nenhuma fazenda. Crie uma ou entre com o código que alguém da equipe passou.</p>';
+  : nvFazendas.length ? `<p>Suas fazendas:</p><div class="btn-row">${nvFazendas.map(f => btn(f.name, 'nv-usar', f.id, 'secondary')).join('')}</div>` : '<p class="nota">Você ainda não participa de nenhuma fazenda. Se você é o ADM, crie a fazenda abaixo; se não, peça ao ADM para criar o seu usuário.</p>';
 
 function nvVincular(f) {
   const n = COLLECTIONS.reduce((s, c) => s + db[c].length, 0);
@@ -268,11 +364,66 @@ const nvCriarFazenda = () => nvComOcupado(async () => {
   const f = await nvHttp('/rest/v1/rpc/create_farm', {method: 'POST', body: {p_name: nome}});
   nvFazendas = null; nvVincular(f);
 });
-const nvEntrarCodigo = () => nvComOcupado(async () => {
-  const cod = ($('#nv_codigo')?.value || '').trim().toUpperCase();
-  if (!cod) throw new NvErro('Digite o código da fazenda.');
-  const f = await nvHttp('/rest/v1/rpc/join_farm', {method: 'POST', body: {p_code: cod}});
-  nvFazendas = null; nvVincular(f);
+
+// ---------- Usuários da fazenda (ADM) ----------
+const nvFuncaoUsuarios = corpo => nvHttp('/functions/v1/usuarios', {method: 'POST', body: {farm_id: nv.fazenda.id, ...corpo}});
+async function nvCarregarUsuarios() {
+  try { nvUsuarios = await nvHttp(`/rest/v1/farm_members?select=user_id,role,nome,login,joined_at&farm_id=eq.${encodeURIComponent(nv.fazenda.id)}&order=joined_at.asc`); }
+  catch (err) { nvUsuarios = []; showToast(err.message, true); }
+  const el = $('#nvUsuarios'); if (el) el.innerHTML = nvListaUsuarios();
+}
+const nvNivelDe = u => u.role === 'owner' ? 'admin' : u.role;
+function nvListaUsuarios() {
+  if (nvUsuarios === null) return '<p class="nota">Carregando usuários…</p>';
+  if (!nvUsuarios.length) return '<p class="nota">Nenhum usuário encontrado.</p>';
+  const eu = nv.sessao.usuario;
+  return `<div class="tbl-wrap"><table class="tbl nv-usuarios"><tbody>${nvUsuarios.map(u => {
+    const nivel = nvNivelDe(u), meu = u.user_id === eu;
+    const sel = meu ? `<b>${NV_NIVEIS[nivel] || nivel}</b>` : `<select data-nv-nivel="${esc(u.user_id)}" aria-label="Nível de ${esc(u.nome || u.login)}">${Object.entries(NV_NIVEIS).map(([v, t]) => `<option value="${v}" ${v === nivel ? 'selected' : ''}>${t}</option>`).join('')}</select>`;
+    return `<tr><td><strong>${esc(u.nome || nvMostrarLogin(u.login) || 'Sem nome')}</strong>${meu ? ' <small>(você)</small>' : ''}<br><small style="color:var(--muted)">${esc(nvMostrarLogin(u.login) || '')}</small></td><td>${sel}</td>
+      <td class="num">${meu ? '' : `<div class="row-actions">${btn('Nova senha', 'nv-u-senha', u.user_id, 'secondary')}${btn('Remover', 'nv-u-remover', u.user_id, 'secondary')}</div>`}</td></tr>`;
+  }).join('')}</tbody></table></div>`;
+}
+function nvNovoUsuario() {
+  openForm({
+    title: 'Novo usuário', sub: `A pessoa entra no app com este usuário e senha, já ligada a “${nv.fazenda.name}”.`, submit: 'Criar usuário',
+    fields: [
+      {k: 'nome', label: 'Nome', required: true, full: true, placeholder: 'Ex.: João da Silva'},
+      {k: 'login', label: 'Usuário para entrar', required: true, placeholder: 'Ex.: joao.silva', hint: 'Letras minúsculas, números, ponto ou hífen'},
+      {k: 'senha', label: 'Senha', required: true, placeholder: 'Pelo menos 6 caracteres'},
+      {k: 'papel', label: 'Nível', type: 'select', required: true, options: Object.entries(NV_NIVEIS).map(([value, label]) => ({value, label}))}
+    ],
+    values: {papel: 'member'},
+    onSubmit: d => {
+      const login = d.login.toLowerCase();
+      if (!/^[a-z0-9][a-z0-9._-]{2,29}$/.test(login)) return 'Usuário: de 3 a 30 letras minúsculas, números, ponto, hífen ou sublinhado (sem espaço e sem acento).';
+      if (d.senha.length < 6) return 'A senha precisa ter pelo menos 6 caracteres.';
+      nvComOcupado(async () => {
+        await nvFuncaoUsuarios({acao: 'criar', nome: d.nome, login, senha: d.senha, papel: d.papel});
+        showToast(`Usuário “${login}” criado como ${NV_NIVEIS[d.papel]}. Passe o usuário e a senha para a pessoa.`);
+        await nvCarregarUsuarios();
+      });
+    }
+  });
+}
+function nvNovaSenha(id) {
+  const u = (nvUsuarios || []).find(x => x.user_id === id); if (!u) return;
+  openForm({
+    title: 'Nova senha', sub: `Para ${u.nome || nvMostrarLogin(u.login)}. Passe a nova senha para a pessoa.`, submit: 'Trocar senha',
+    fields: [{k: 'senha', label: 'Nova senha', required: true, full: true, placeholder: 'Pelo menos 6 caracteres'}],
+    onSubmit: d => {
+      if (d.senha.length < 6) return 'A senha precisa ter pelo menos 6 caracteres.';
+      nvComOcupado(async () => { await nvFuncaoUsuarios({acao: 'senha', user_id: id, senha: d.senha}); showToast('Senha trocada'); });
+    }
+  });
+}
+const nvRemoverUsuario = id => {
+  const u = (nvUsuarios || []).find(x => x.user_id === id); if (!u) return;
+  confirmDialog(`Remover ${u.nome || nvMostrarLogin(u.login)} da fazenda? A pessoa deixa de sincronizar. Os registros que ela lançou continuam.`, () =>
+    nvComOcupado(async () => { await nvFuncaoUsuarios({acao: 'remover', user_id: id}); showToast('Usuário removido'); await nvCarregarUsuarios(); }), 'Remover');
+};
+const nvMudarNivel = (id, papel) => nvComOcupado(async () => {
+  await nvFuncaoUsuarios({acao: 'nivel', user_id: id, papel}); showToast(`Nível alterado para ${NV_NIVEIS[papel]}`); await nvCarregarUsuarios();
 });
 
 // ---------- Tela (Cadastros e backup) ----------
@@ -285,46 +436,54 @@ function nvTextoStatus() {
 }
 function nvMostrar() {
   const s = $('#nvStatus'); if (s) s.textContent = nvTextoStatus();
-  $$('[data-act^="nv-"]').forEach(b => { b.disabled = nvOcupado; });
+  $$('[data-act^="nv-"], [data-nv-nivel]').forEach(b => { b.disabled = nvOcupado; });
 }
 
 function cartaoNuvem() {
   const titulo = '<h3>Nuvem da equipe</h3>';
   if (!nv.sessao) return `<article class="card panel">${titulo}
-    <p>Crie uma conta para guardar os dados na internet e usar o Nexus Agro em vários celulares e computadores ao mesmo tempo. Tudo continua funcionando sem sinal; quando a internet volta, o app envia e recebe as alterações sozinho.</p>
+    <p>Entre com o usuário e a senha que o ADM da fazenda criou para você. O app continua funcionando sem internet; quando o sinal volta, ele envia e recebe as alterações sozinho.</p>
     ${nv.fazenda ? `<p class="nota">Este aparelho estava ligado à fazenda “${esc(nv.fazenda.name)}”. Entre de novo para continuar sincronizando.</p>` : ''}
-    <div class="form"><div class="field full"><label for="nv_email">E-mail</label><input id="nv_email" type="email" autocomplete="username" inputmode="email" value="${esc(nv.sessao?.email || '')}"></div>
+    <div class="form"><div class="field full"><label for="nv_email">Usuário ou e-mail</label><input id="nv_email" autocapitalize="none" autocomplete="username" spellcheck="false" placeholder="Ex.: joao.silva"></div>
     <div class="field full"><label for="nv_senha">Senha</label><input id="nv_senha" type="password" autocomplete="current-password" placeholder="Pelo menos 6 caracteres"></div></div>
-    <div class="btn-row">${btn('Entrar', 'nv-entrar')}${btn('Criar conta', 'nv-criar', '', 'secondary')}</div></article>`;
+    <div class="btn-row">${btn('Entrar', 'nv-entrar')}</div>
+    <details class="tecnico" style="margin-top:10px"><summary>Sou o ADM e quero criar a fazenda</summary>
+      <p class="nota">Crie a sua conta com e-mail e senha nos campos acima. Depois você cria a fazenda e os usuários da equipe.</p>
+      <div class="btn-row">${btn('Criar conta de ADM', 'nv-criar', '', 'secondary')}</div></details></article>`;
   if (!nv.fazenda) return `<article class="card panel">${titulo}
-    <p>Conectado como <b>${esc(nv.sessao.email)}</b>. Escolha a fazenda que este aparelho vai sincronizar.</p>
+    <p>Conectado como <b>${esc(nvMostrarLogin(nv.sessao.email))}</b>. Escolha a fazenda que este aparelho vai sincronizar.</p>
     <div id="nvFazendas">${nvListaFazendas()}</div>
-    <div class="form"><div class="field full"><label for="nv_nome">Criar uma fazenda</label><input id="nv_nome" value="${esc(db.settings.farm || '')}" placeholder="Ex.: Fazenda Boa Vista"></div></div>
-    <div class="btn-row">${btn('Criar fazenda', 'nv-nova')}</div>
-    <div class="form"><div class="field full"><label for="nv_codigo">Entrar numa fazenda da equipe</label><input id="nv_codigo" autocapitalize="characters" placeholder="Código de 8 letras e números"></div></div>
-    <div class="btn-row">${btn('Entrar com o código', 'nv-codigo', '', 'secondary')}${btn('Sair da conta', 'nv-sair', '', 'secondary')}</div></article>`;
+    <div class="form"><div class="field full"><label for="nv_nome">Criar uma fazenda (você será o ADM)</label><input id="nv_nome" value="${esc(db.settings.farm || '')}" placeholder="Ex.: Fazenda Boa Vista"></div></div>
+    <div class="btn-row">${btn('Criar fazenda', 'nv-nova')}${btn('Sair da conta', 'nv-sair', '', 'secondary')}</div></article>`;
+  const papel = nvPapel();
   return `<article class="card panel">${titulo}
-    <p>Fazenda <b>${esc(nv.fazenda.name)}</b> • conta ${esc(nv.sessao.email)}</p>
-    <p>Código para a equipe entrar: <b style="font-size:1.15rem;letter-spacing:.12em">${esc(nv.fazenda.join_code)}</b></p>
+    <p>Fazenda <b>${esc(nv.fazenda.name)}</b> • ${esc(nvMostrarLogin(nv.sessao.email))} • nível <b>${NV_NIVEIS[papel] || papel}</b></p>
     <p class="nota" id="nvStatus">${esc(nvTextoStatus())}</p>
-    <div class="btn-row" style="margin-top:10px">${btn('⟳ Sincronizar agora', 'nv-sync')}${btn('Trocar de fazenda', 'nv-trocar', '', 'secondary')}${btn('Sair da conta', 'nv-sair', '', 'secondary')}</div>
-    <p class="nota">Cada pessoa cria a própria conta e entra com o código acima. Quando o mesmo registro é alterado em dois aparelhos sem internet, vale a alteração mais recente; lançamentos de estoque dos dois lados são somados ao saldo.</p></article>`;
+    <div class="btn-row" style="margin-top:10px">${btn('⟳ Sincronizar agora', 'nv-sync')}${papel === 'member' ? '' : btn('Trocar de fazenda', 'nv-trocar', '', 'secondary')}${btn('Sair da conta', 'nv-sair', '', 'secondary')}</div>
+    ${papel === 'member' ? '<p class="nota">Como Usuário comum, você lança os registros do dia a dia e edita só o que você lançou. Exclusões e o financeiro ficam com o supervisor e o ADM.</p>' : '<p class="nota">Quando o mesmo registro é alterado em dois aparelhos sem internet, vale a alteração mais recente; lançamentos de estoque dos dois lados são somados ao saldo.</p>'}</article>
+    ${papel === 'admin' ? `<article class="card panel"><h3>Usuários da fazenda</h3>
+      <p>Crie o login de cada pessoa e escolha o nível. <b>Supervisor</b>: lança, edita e exclui tudo e vê o financeiro. <b>Usuário comum</b>: lança no dia a dia, edita só o que lançou, não exclui e não vê o financeiro. <b>ADM</b>: tudo, inclusive os usuários.</p>
+      <div id="nvUsuarios">${nvListaUsuarios()}</div>
+      <div class="btn-row" style="margin-top:10px">${btn('+ Novo usuário', 'nv-u-novo')}</div></article>` : ''}`;
 }
 
 // Cartão da nuvem antes do cartão de sincronização por arquivo (que continua valendo para quem não tem internet)
 const cartaoSincronizacaoArquivo = cartaoSincronizacao;
-cartaoSincronizacao = () => cartaoNuvem() + cartaoSincronizacaoArquivo();
+cartaoSincronizacao = () => cartaoNuvem() + (nvComum() ? '' : cartaoSincronizacaoArquivo());
 const cadastrosAfterSemNuvem = VIEWS.cadastros.after;
 VIEWS.cadastros.after = arg => {
   cadastrosAfterSemNuvem?.(arg);
   if (nv.sessao && !nv.fazenda && nvFazendas === null) nvCarregarFazendas();
+  if (nvPapel() === 'admin' && nvUsuarios === null) nvCarregarUsuarios();
+  $$('[data-nv-nivel]').forEach(s => { s.onchange = () => nvMudarNivel(s.dataset.nvNivel, s.value); });
   const senha = $('#nv_senha'); if (senha) senha.onkeydown = e => { if (e.key === 'Enter') nvEntrar(); };
   nvMostrar();
 };
 Object.assign(ACTIONS, {
-  'nv-entrar': nvEntrar, 'nv-criar': nvCriarConta, 'nv-sair': nvSair,
-  'nv-nova': nvCriarFazenda, 'nv-codigo': nvEntrarCodigo,
+  'nv-entrar': nvEntrar, 'nv-criar': nvCriarConta, 'nv-sair': nvSair, 'nv-nova': nvCriarFazenda,
   'nv-usar': id => { const f = (nvFazendas || []).find(x => x.id === id); if (f) nvVincular(f); },
   'nv-sync': () => nvSincronizar(true),
-  'nv-trocar': () => confirmDialog('Desligar este aparelho da fazenda atual? Os dados continuam aqui; ao escolher outra fazenda, eles serão enviados para ela.', () => { nvEsquecerFazenda(); nvSalvar(); }, 'Trocar')
+  'nv-trocar': () => confirmDialog('Desligar este aparelho da fazenda atual? Os dados continuam aqui; ao escolher outra fazenda, eles serão enviados para ela.', () => { nvEsquecerFazenda(); nvSalvar(); }, 'Trocar'),
+  'nv-u-novo': nvNovoUsuario, 'nv-u-senha': nvNovaSenha, 'nv-u-remover': nvRemoverUsuario
 });
+nvProteger();
