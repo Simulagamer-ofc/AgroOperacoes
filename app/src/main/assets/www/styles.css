@@ -436,3 +436,10 @@ body{background:var(--bg)}
 
 /* O título do painel segue a mesma escala do cabeçalho das demais telas. */
 @media(max-width:760px){.nx-dashboard-head h2{font-size:1.08rem;line-height:1.2}}
+
+/* Menu lateral mais largo: nomes do menu em uma linha só (0.22.0) */
+.app,.app.nx-home{grid-template-columns:268px minmax(0,1fr)}
+@media(max-width:1100px){.app,.app.nx-home{grid-template-columns:248px minmax(0,1fr)}}
+.sidebar .nav button,.app.nx-home .nav button{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.97rem;padding:10px 12px;min-height:42px}
+.sidebar .nav-grupo,.app.nx-home .nav-grupo{white-space:nowrap;margin:12px 12px 4px;padding:0}
+.sidebar-foot{gap:8px}.sidebar-foot .theme-btn{white-space:nowrap}
