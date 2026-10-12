@@ -443,3 +443,26 @@ body{background:var(--bg)}
 .sidebar .nav button,.app.nx-home .nav button{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.97rem;padding:10px 12px;min-height:42px}
 .sidebar .nav-grupo,.app.nx-home .nav-grupo{white-space:nowrap;margin:12px 12px 4px;padding:0}
 .sidebar-foot{gap:8px}.sidebar-foot .theme-btn{white-space:nowrap}
+
+/* Menu recolhível (0.22.1): faixa estreita com ☰ no computador/tablet; tablet em pé abre o menu por cima */
+.menu-trilho{display:none}
+@media(min-width:761px){
+  .menu-trilho{display:grid;place-items:center;flex:none;width:40px;height:40px;margin:0 2px 8px auto;border:1px solid #29465f;background:#122a42;color:#e8f5fb;border-radius:10px;font-size:1.15rem;line-height:1;cursor:pointer}
+  .menu-trilho:hover{background:#173653}
+}
+@media(min-width:901px){
+  :root.menu-recolhido .app{grid-template-columns:64px minmax(0,1fr)}
+  :root.menu-recolhido .sidebar{padding:16px 12px;overflow:hidden}
+  :root.menu-recolhido .sidebar>*:not(.menu-trilho){display:none}
+  :root.menu-recolhido .menu-trilho{margin:0}
+}
+@media(min-width:761px) and (max-width:900px){
+  .app,.app.nx-home{display:grid;grid-template-columns:64px minmax(0,1fr)}
+  .sidebar,.app.nx-home .sidebar{position:sticky;left:auto;top:0;width:auto;height:100vh;padding:16px 12px;overflow:hidden}
+  .sidebar:not(.open)>*:not(.menu-trilho){display:none}
+  .sidebar:not(.open) .menu-trilho{margin:0}
+  .sidebar.open,.app.nx-home .sidebar.open{position:fixed;left:0;top:0;bottom:0;width:280px;height:100dvh;z-index:12;overflow-y:auto;padding:16px 14px}
+  .overlay.show{display:block;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:11}
+  .app main,.app.nx-home main{grid-column:2;min-width:0}
+  .app .menu-btn,.app.nx-home .menu-btn{display:none}
+}

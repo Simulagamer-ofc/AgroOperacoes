@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.22.1-beta1` — menu lateral recolhível: o botão « no topo do menu recolhe para uma faixa estreita com ☰ (a escolha fica guardada no aparelho), deixando a tela inteira para o conteúdo. No tablet em pé o menu fica recolhido e abre por cima do conteúdo.
+
 `0.22.0-beta1` — o sistema só abre com **usuário e senha** (tela de entrada no APK e no navegador); depois de entrar uma vez, continua funcionando sem internet. Ao sair, pede o login de novo. Se outra pessoa de outra fazenda entrar no mesmo aparelho, os dados da fazenda anterior saem do aparelho. Menu lateral mais largo, com os nomes em uma linha.
 
 `0.21.0-beta1` — **níveis de acesso**: o ADM cria o login e a senha de cada pessoa (sem precisar de e-mail) e escolhe o nível. **ADM**: tudo, inclusive usuários. **Supervisor**: lança, edita e exclui tudo e vê o financeiro. **Usuário comum**: lança no dia a dia, edita só o que ele lançou, não exclui e não vê o financeiro (gastos, contas, vendas, produção e margem). As regras valem no aparelho e no servidor (`supabase/migrations` e a função `supabase/functions/usuarios`).
