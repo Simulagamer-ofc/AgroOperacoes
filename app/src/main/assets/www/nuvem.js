@@ -517,8 +517,8 @@ document.head.insertAdjacentHTML('beforeend', `<style>
   .nv-portao-card .nota { margin: 0 }
   .nv-portao-card .field input { width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 12px; background: var(--bg); color: var(--text); font-size: 1rem }
   .nv-portao-card .primary { width: 100%; font-size: 1.02rem; padding: 13px }
-  .nv-portao-topo { display: flex; align-items: center; gap: 14px }
-  .nv-portao-logo { width: 64px; height: 64px; border-radius: 15px; box-shadow: 0 0 22px rgba(67,214,138,.25) }
+  .nv-portao-topo { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center }
+  .nv-portao-logo { width: 130px; height: 130px; filter: drop-shadow(0 4px 10px rgba(0,0,0,.35)) }
   .nv-portao-marca { margin: 0; font-size: 1.7rem; font-weight: 800; letter-spacing: .03em; color: var(--text) }
   .nv-portao-marca span { color: var(--destaque, #34d399) }
   .nv-portao-erro { margin: 0; color: var(--red); font-size: .9rem }
