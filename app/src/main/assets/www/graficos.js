@@ -160,7 +160,7 @@ function estoqueInsumos() {
 function painelNexus() {
   const {ini, fim} = periodoPainel(), custo = somaValor(lancamentosCusto(ini, fim));
   const concluidas = operacoesPainel(ini, fim).filter(o => o.status === 'Concluída').length, atencao = insumosAtencao().length;
-  return `<section class="nx-dashboard viz-root"><header class="nx-dashboard-head"><div><h2>Centro de operações</h2><p class="nx-caption">${esc(db.settings.farm || 'Minha fazenda')}</p></div>
+  return `<section class="nx-dashboard viz-root"><header class="nx-dashboard-head"><div><h2>Centro de operações</h2><p class="nx-caption">${esc(typeof nvNomeExibido === 'function' ? nvNomeExibido() : db.settings.farm || 'Minha fazenda')}</p></div>
       <div class="nx-periods" role="group" aria-label="Período do painel">${PERIODOS.map(([d, label]) => `<button type="button" class="${d === periodoGraf ? 'active' : ''}" data-act="graf-periodo" data-id="${d}" aria-pressed="${d === periodoGraf}">${label}</button>`).join('')}<button type="button" class="nx-periodo-datas ${periodoGraf === 0 ? 'active' : ''}" data-act="graf-periodo-datas" aria-pressed="${periodoGraf === 0}" title="Escolher as datas">${periodoGraf === 0 && periodoPers ? esc(descPeriodo()) : '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg> Datas'}</button></div></header>
     <section class="nx-dashboard-kpis" aria-label="Resumo do painel">
       <article class="nx-panel nx-stat"><p class="nx-caption">Custos no período</p><div class="nx-metric">${dinheiroPainel(custo)}</div><p class="nx-caption">${esc(descPeriodo())}</p></article>
