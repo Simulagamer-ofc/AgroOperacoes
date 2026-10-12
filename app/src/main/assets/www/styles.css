@@ -497,3 +497,23 @@ body{background:var(--bg)}
   .sidebar:not(.open) .menu-trilho{margin:0 auto 10px}
 }
 .sidebar .nav button,.app.nx-home .nav button{gap:10px;font-size:.95rem}
+
+/* Rodapé do menu só com ícones: tema (sol/lua) e sair do sistema (0.24.0) */
+.sidebar-foot{justify-content:flex-start;gap:10px;padding:12px 8px}
+.foot-btn{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;border:1px solid #29465f;background:#122a42;color:#e8f5fb;cursor:pointer}
+.foot-btn:hover{background:#173653}
+.foot-btn svg{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.foot-btn.sair{margin-left:auto;color:#ff8a8a;border-color:#5a2a35;background:#2a1520}
+.foot-btn.sair:hover{background:#3a1a28}
+@media(min-width:901px){
+  :root.menu-recolhido .sidebar>.sidebar-foot{display:flex;flex-direction:column;padding:10px 0;gap:8px}
+  :root.menu-recolhido .foot-btn.sair{margin:0}
+}
+@media(min-width:761px) and (max-width:900px){
+  .sidebar:not(.open)>.sidebar-foot{display:flex;flex-direction:column;padding:10px 0;gap:8px}
+  .sidebar:not(.open) .foot-btn.sair{margin:0}
+}
+/* Períodos do painel: Hoje, 7, 30, 90 dias, 12 meses e datas escolhidas */
+.nx-periods{flex-wrap:wrap;justify-content:flex-end}
+.nx-periods .nx-periodo-datas{display:inline-flex;align-items:center;gap:6px}
+.nx-periods .nx-periodo-datas svg{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}

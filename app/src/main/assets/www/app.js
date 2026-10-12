@@ -137,7 +137,16 @@ function showToast(message, erro = false) {
 }
 save(); // grava migrações do banco (agora o aviso de armazenamento cheio já pode ser exibido)
 const savedTheme = safeStorage.get('agro-theme'); if (savedTheme) root.dataset.theme = savedTheme;
-$('#themeBtn').onclick = () => { const next = (root.dataset.theme || 'dark') === 'dark' ? 'light' : 'dark'; root.dataset.theme = next; safeStorage.set('agro-theme', next); };
+// Botão de tema só com o ícone: lua passa para o noturno, sol passa para o claro
+const ICONE_SOL = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M5.3 18.7l1.5-1.5M17.2 6.8l1.5-1.5"/></svg>';
+const ICONE_LUA = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>';
+function iconeTema() {
+  const escuro = (root.dataset.theme || 'dark') === 'dark', b = $('#themeBtn');
+  b.innerHTML = escuro ? ICONE_SOL : ICONE_LUA;
+  b.title = escuro ? 'Mudar para o tema claro' : 'Mudar para o tema noturno'; b.setAttribute('aria-label', b.title);
+}
+$('#themeBtn').onclick = () => { const next = (root.dataset.theme || 'dark') === 'dark' ? 'light' : 'dark'; root.dataset.theme = next; safeStorage.set('agro-theme', next); iconeTema(); };
+iconeTema();
 const closeMenu = () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); marcarTrilho(); };
 const openMenu = () => { sidebar.classList.add('open'); overlay.classList.add('show'); marcarTrilho(); };
 // Menu lateral recolhível: no computador e tablet deitado vira uma faixa estreita (escolha guardada);
