@@ -66,7 +66,7 @@ Deno.serve(async (req) => {
         const senha = String(b.senha || "");
         const papel = String(b.papel || "member");
         if (!loginValido(login)) return erro(400, "Usuário: de 3 a 30 letras minúsculas, números, ponto, hífen ou sublinhado (ex.: joao.silva).");
-        if (senha.length < 6) return erro(400, "A senha precisa ter pelo menos 6 caracteres.");
+        if (senha.length < 8) return erro(400, "A senha precisa ter pelo menos 8 caracteres.");
         if (!NIVEIS.includes(papel)) return erro(400, "Nível inválido.");
         const funcao = b.funcao ? String(b.funcao).slice(0, 40) : null;
         const modulos = lerModulos(b.modulos);
@@ -74,6 +74,7 @@ Deno.serve(async (req) => {
         const { data: novo, error } = await adm.auth.admin.createUser({ email: emailDoLogin(login), password: senha, email_confirm: true, user_metadata: { nome, login } });
         if (error || !novo.user) {
           if (/already|exists|registered/i.test(error?.message || "")) return erro(409, `O usuário “${login}” já existe. Escolha outro (ex.: ${login}.${Math.floor(Math.random() * 90 + 10)}).`);
+          if (/pwned|leaked|compromised/i.test(error?.message || "")) return erro(400, "Esta senha já apareceu em vazamentos na internet. Escolha outra.");
           return erro(400, error?.message || "Não foi possível criar o usuário.");
         }
         let { error: e2 } = await adm.from("farm_members").insert({ farm_id: fazenda, user_id: novo.user.id, role: papel, nome, login, funcao, modulos });
@@ -102,12 +103,12 @@ Deno.serve(async (req) => {
       }
       case "senha": {
         const senha = String(b.senha || "");
-        if (senha.length < 6) return erro(400, "A senha precisa ter pelo menos 6 caracteres.");
+        if (senha.length < 8) return erro(400, "A senha precisa ter pelo menos 8 caracteres.");
         if (!(await membroAlvo())) return erro(404, "Usuário não encontrado nesta fazenda.");
         const { data: u } = await adm.auth.admin.getUserById(alvo);
         if (!criadoPeloApp(u?.user?.email) && alvo !== eu.id) return erro(400, "Este usuário entra com o próprio e-mail; a senha só pode ser trocada por ele.");
         const { error } = await adm.auth.admin.updateUserById(alvo, { password: senha });
-        if (error) return erro(400, error.message);
+        if (error) return erro(400, /pwned|leaked|compromised/i.test(error.message) ? "Esta senha já apareceu em vazamentos na internet. Escolha outra." : error.message);
         return resposta(200, { ok: true });
       }
       case "remover": {
