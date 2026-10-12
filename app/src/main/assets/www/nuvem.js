@@ -58,6 +58,9 @@ function nvExclusoes() {
 }
 const nvPresentes = () => Object.fromEntries(COLLECTIONS.map(c => [c, new Set(db[c].map(r => r?.id))]));
 
+// Quantas alterações deste aparelho ainda não subiram (vale também depois de sair da conta)
+const nvFaltamEnviar = () => nv.dadosDe ? nvPendentes().length : 0;
+const nvNomeDados = () => nv.dadosNome || nv.fazenda?.name || 'a fazenda anterior';
 // Alterações deste aparelho que o servidor ainda não tem
 function nvPendentes() {
   const itens = [], presentes = nvPresentes();
@@ -277,7 +280,8 @@ save = function () {
 
 setInterval(() => { if (document.visibilityState === 'visible' && navigator.onLine !== false) nvSincronizar(); }, NV_INTERVALO);
 addEventListener('online', () => nvAgendar(500));
-document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') nvAgendar(500); });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') nvAgendar(500); else if (nvVinculado() && navigator.onLine !== false && nvFaltamEnviar()) nvSincronizar(); });
+addEventListener('pagehide', () => { if (nvVinculado() && navigator.onLine !== false && nvFaltamEnviar()) nvSincronizar(); });
 addEventListener('DOMContentLoaded', () => nvAgendar(1500));
 
 // ---------- Funções: cada pessoa vê as telas da sua função ----------
@@ -344,6 +348,8 @@ function nvProteger() {
   for (const [act, fn] of Object.entries(ACTIONS)) {
     if (fn.nvProtegida) continue;
     const protegida = id => {
+      // Apagar ou restaurar dados no aparelho só depois que tudo foi enviado (senão o que não subiu se perderia)
+      if ((act === 'wipe' || act === 'restore') && nvFaltamEnviar()) { showToast('Ainda há dados deste aparelho que não foram enviados para a nuvem. Conecte à internet e aguarde o envio automático.', true); if (nvVinculado() && navigator.onLine !== false) nvSincronizar(); return; }
       if (nvComum()) {
         if (nvAcaoProibida(act)) { showToast('Seu nível de acesso (Usuário comum) não permite esta ação. Fale com o supervisor ou o ADM.', true); return; }
         const col = NV_EDITAR[act];
@@ -414,9 +420,9 @@ const nvEntrar = () => nvComOcupado(async () => {
   if (nv.sysadm) { showToast('Entrou como Admin do sistema. As fazendas ficam em Cadastros e backup.'); go('cadastros'); return; }
   if (nvFazendas?.length === 1) nvVincular(nvFazendas[0]);
 });
-// Sair: envia o que falta; opcionalmente apaga os dados guardados neste aparelho (aparelho emprestado ou perdido)
+// Sair: os dados sobem automaticamente antes de sair; o que não subir (sem internet) fica guardado e sobe no próximo login
 function nvSair() {
-  dialog.innerHTML = `<h3>Sair do sistema</h3><p>Para usar de novo será preciso entrar com usuário e senha.</p>
+  dialog.innerHTML = `<h3>Sair do sistema</h3><p>Antes de sair, o app envia para a nuvem tudo o que foi lançado. Para usar de novo será preciso entrar com usuário e senha.</p>
     <p class="nota">Em aparelho compartilhado ou que vai trocar de mão, use <b>Sair e apagar os dados</b>: os dados continuam guardados na nuvem da fazenda.</p>
     <div class="actions" style="flex-wrap:wrap"><button class="secondary" data-close>Cancelar</button><button class="danger" data-sair-apagar>Sair e apagar os dados</button><button class="primary" data-sair>Sair</button></div>`;
   $('[data-close]', dialog).onclick = closeModal;
@@ -425,10 +431,18 @@ function nvSair() {
   modal.classList.add('open');
 }
 async function nvSairDe(apagar) {
-  if (nvVinculado() && navigator.onLine !== false) await nvSincronizar(); // envia o que falta antes de sair
-  const faltam = nvVinculado() ? nvPendentes().length : 0;
-  if (apagar && faltam) {
-    return confirmDialog(`Há ${faltam} ${faltam === 1 ? 'alteração que ainda não foi enviada' : 'alterações que ainda não foram enviadas'} para a nuvem (sem internet?). Se apagar agora, ${faltam === 1 ? 'ela será perdida' : 'elas serão perdidas'}. Apagar mesmo assim?`, () => nvFinalizarSaida(true), 'Apagar e sair');
+  if (nvVinculado() && navigator.onLine !== false) { showToast('Enviando os dados para a nuvem…'); await nvSincronizar(); }
+  const faltam = nvFaltamEnviar();
+  if (faltam) {
+    const qtd = `${faltam} ${faltam === 1 ? 'alteração ainda não foi enviada' : 'alterações ainda não foram enviadas'}`;
+    dialog.innerHTML = `<h3>Dados ainda não enviados</h3><p>${qtd} para a nuvem (sem internet ou servidor fora do ar).</p>
+      <p class="nota">${apagar ? 'Os dados só podem ser apagados deste aparelho depois de enviados. Conecte à internet e tente de novo.' : 'Se sair agora, elas ficam guardadas neste aparelho e são enviadas automaticamente no próximo login com internet.'}</p>
+      <div class="actions" style="flex-wrap:wrap"><button class="secondary" data-close>Cancelar</button>${apagar ? '' : '<button class="secondary" data-sair>Sair mesmo assim</button>'}<button class="primary" data-tentar>Tentar enviar de novo</button></div>`;
+    $('[data-close]', dialog).onclick = closeModal;
+    $('[data-tentar]', dialog).onclick = () => { closeModal(); nvSairDe(apagar); };
+    const s = $('[data-sair]', dialog); if (s) s.onclick = () => { closeModal(); nvFinalizarSaida(false); };
+    modal.classList.add('open');
+    return;
   }
   return nvFinalizarSaida(apagar);
 }
@@ -456,10 +470,16 @@ function nvVincular(f) {
   const n = COLLECTIONS.reduce((s, c) => s + db[c].length, 0);
   const ligar = () => {
     if (nv.dadosDe !== f.id) { nvBase = {}; nv.cursor = 0; nv.ultima = null; nv.rejeitados = {}; }
-    nv.fazenda = {id: f.id, name: f.name, join_code: f.join_code}; nv.dadosDe = f.id; nv.papel = null;
+    nv.fazenda = {id: f.id, name: f.name, join_code: f.join_code}; nv.dadosDe = f.id; nv.dadosNome = f.name; nv.papel = null;
     nvSalvar(); nvPortao(); showToast(`Entrando em “${f.name}”…`); nvSincronizar(true);
   };
   if (!n || nv.dadosDe === f.id) return ligar();
+  const faltam = nvFaltamEnviar();
+  if (nv.dadosDe && faltam) {
+    nvPortaoErro(`Este aparelho tem ${faltam} ${faltam === 1 ? 'alteração' : 'alterações'} de “${nvNomeDados()}” que ainda não ${faltam === 1 ? 'foi enviada' : 'foram enviadas'}. Entre com uma conta dessa fazenda, com internet, para enviar antes de usar outra fazenda neste aparelho.`);
+    showToast('Há dados de outra fazenda ainda não enviados neste aparelho.', true);
+    return;
+  }
   if (nv.dadosDe) return confirmDialog(`Os dados guardados neste aparelho são de outra fazenda. Para entrar em “${f.name}”, eles serão apagados deste aparelho (continuam na nuvem da outra fazenda) e os dados de “${f.name}” serão baixados. Continuar?`, () => { nvLimparAparelho(); ligar(); }, 'Apagar e entrar');
   confirmDialog(`Este aparelho tem ${n} registros que ainda não estão em nenhuma fazenda. Eles serão enviados para “${f.name}” e juntados com os dados da equipe. Se forem só dados de exemplo, toque em “Cancelar”, apague-os em Cadastros e backup e entre de novo. Continuar?`, ligar, 'Enviar e juntar');
 }
@@ -645,7 +665,7 @@ function nvTextoStatus() {
   if (nvStatus === 'sincronizando') return 'Sincronizando…';
   if (nvStatus === 'erro') return '⚠ ' + nvErro + aguardando;
   if (nvStatus === 'offline' || navigator.onLine === false) return 'Sem internet: as alterações ficam guardadas e sobem sozinhas quando o sinal voltar' + aguardando;
-  return (nv.ultima ? `Sincronizado em ${new Date(nv.ultima).toLocaleString('pt-BR')}` : 'Ainda não sincronizado') + aguardando;
+  return 'Envio automático ligado • ' + (nv.ultima ? `última sincronização em ${new Date(nv.ultima).toLocaleString('pt-BR')}` : 'ainda não sincronizado') + aguardando;
 }
 function nvMostrar() {
   const s = $('#nvStatus'); if (s) s.textContent = nvTextoStatus();
@@ -659,7 +679,7 @@ function cartaoNuvem() {
   return `<article class="card panel">${titulo}
     <p>Fazenda <b>${esc(nv.fazenda.name)}</b> • ${esc(nvMostrarLogin(nv.sessao.email))} • nível <b>${NV_NIVEIS[papel] || papel}</b></p>
     <p class="nota" id="nvStatus">${esc(nvTextoStatus())}</p>
-    <div class="btn-row" style="margin-top:10px">${btn('⟳ Sincronizar agora', 'nv-sync')}${papel === 'member' ? '' : btn('Trocar de fazenda', 'nv-trocar', '', 'secondary')}${btn('Sair da conta', 'nv-sair', '', 'secondary')}</div>
+    <div class="btn-row" style="margin-top:10px">${papel === 'member' ? '' : btn('Trocar de fazenda', 'nv-trocar', '', 'secondary')}${btn('Sair da conta', 'nv-sair', '', 'secondary')}</div>
     ${papel === 'member' ? '<p class="nota">Como Usuário comum, você lança os registros do dia a dia e edita só o que você lançou. Exclusões e o financeiro ficam com o supervisor e o ADM.</p>' : '<p class="nota">Quando o mesmo registro é alterado em dois aparelhos sem internet, vale a alteração mais recente; lançamentos de estoque dos dois lados são somados ao saldo.</p>'}</article>
     ${papel === 'admin' ? `<article class="card panel"><h3>Usuários da fazenda</h3>
       <p>Crie o login de cada pessoa com a <b>função</b> (decide as telas que ela vê) e o <b>nível</b> (decide o que ela faz nelas). <b>Supervisor</b>: lança, edita e exclui e vê o financeiro. <b>Usuário comum</b>: lança, edita só o que lançou e não exclui. <b>ADM</b>: tudo, inclusive os usuários.</p>
@@ -696,7 +716,8 @@ function cartaoSistema() {
 
 // Cartão da nuvem antes do cartão de sincronização por arquivo (que continua valendo para quem não tem internet)
 const cartaoSincronizacaoArquivo = cartaoSincronizacao;
-cartaoSincronizacao = () => cartaoNuvem() + (nvComum() ? '' : cartaoSincronizacaoArquivo());
+// Com a nuvem ligada, os dados só circulam pelo envio automático (a troca por arquivo fica para quem usa sem conta)
+cartaoSincronizacao = () => cartaoNuvem() + (nv.sessao ? '' : cartaoSincronizacaoArquivo());
 const cadastrosAfterSemNuvem = VIEWS.cadastros.after;
 VIEWS.cadastros.after = arg => {
   cadastrosAfterSemNuvem?.(arg);
@@ -705,12 +726,18 @@ VIEWS.cadastros.after = arg => {
   $$('[data-nv-nivel]').forEach(s => { s.onchange = () => nvMudarNivel(s.dataset.nvNivel, s.value); });
   nvMostrar();
 };
+function nvAntesDeTrocar() {
+  const faltam = nvFaltamEnviar();
+  if (!faltam) return true;
+  showToast(`Aguarde: ${faltam} ${faltam === 1 ? 'alteração ainda não foi enviada' : 'alterações ainda não foram enviadas'} para a nuvem. Conecte à internet; o envio é automático.`, true);
+  if (navigator.onLine !== false) nvSincronizar();
+  return false;
+}
 Object.assign(ACTIONS, {
   'nv-entrar': nvEntrar, 'nv-sair': nvSair, 'nv-nova': nvCriarFazenda,
   'nv-usar': id => { const f = (nvFazendas || []).find(x => x.id === id); if (f) nvVincular(f); },
-  'nv-sync': () => nvSincronizar(true),
-  'nv-trocar': () => confirmDialog('Trocar de fazenda? Você vai escolher outra fazenda desta conta; os dados deste aparelho continuam guardados na nuvem da fazenda atual.', () => { nvEsquecerFazenda(); nvTodas = null; nvSalvar(); nvPortao(); if (nv.sysadm) go('cadastros'); }, 'Trocar'),
-  'nv-sys-fechar': () => confirmDialog(`Fechar “${nv.fazenda?.name}” neste aparelho? Você continua conectado como Admin do sistema e pode entrar em outra fazenda.`, () => { nvEsquecerFazenda(); nvTodas = null; nvSalvar(); nvPortao(); }, 'Fechar'),
+  'nv-trocar': () => nvAntesDeTrocar() && confirmDialog('Trocar de fazenda? Você vai escolher outra fazenda desta conta; os dados deste aparelho continuam guardados na nuvem da fazenda atual.', () => { nvEsquecerFazenda(); nvTodas = null; nvSalvar(); nvPortao(); if (nv.sysadm) go('cadastros'); }, 'Trocar'),
+  'nv-sys-fechar': () => nvAntesDeTrocar() && confirmDialog(`Fechar “${nv.fazenda?.name}” neste aparelho? Você continua conectado como Admin do sistema e pode entrar em outra fazenda.`, () => { nvEsquecerFazenda(); nvTodas = null; nvSalvar(); nvPortao(); }, 'Fechar'),
   'nv-u-novo': nvNovoUsuario, 'nv-u-acesso': nvAcessoUsuario, 'nv-u-senha': nvNovaSenha, 'nv-u-remover': nvRemoverUsuario
 });
 nvProteger();
