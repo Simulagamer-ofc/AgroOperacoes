@@ -29,6 +29,14 @@ let nvStatus = 'parado', nvErro = '', nvRodando = null, nvRepetir = false, nvAge
 
 const nvSalvar = () => { safeStorage.set(NV_ESTADO, JSON.stringify(nv)); safeStorage.set(NV_BASE, JSON.stringify(nvBase)); };
 const nvVinculado = () => !!(nv.sessao && nv.fazenda);
+// ADM do sistema: entra sem fazenda (os dados ficam só no aparelho até entrar numa fazenda)
+const nvLiberado = () => nvVinculado() || !!(nv.sessao && nv.sysadm);
+let nvTodas = null; // todas as fazendas (painel do ADM do sistema)
+async function nvVerSysadm() {
+  try { const r = await nvHttp(`/rest/v1/system_admins?select=user_id&user_id=eq.${encodeURIComponent(nv.sessao.usuario)}`); nv.sysadm = Array.isArray(r) && r.length > 0; }
+  catch (err) { if (err.rede) return; nv.sysadm = false; }
+  nvSalvar();
+}
 // Nível neste aparelho; sem conta ligada a uma fazenda o app é de uso individual (sem restrições)
 const nvPapel = () => nvVinculado() ? nv.papel || 'member' : null;
 const nvComum = () => nvPapel() === 'member';
@@ -209,7 +217,7 @@ async function nvConferirFazenda() {
   const f = rows[0];
   if (f.name !== nv.fazenda.name || f.join_code !== nv.fazenda.join_code) nv.fazenda = {id: f.id, name: f.name, join_code: f.join_code};
   const eu = await nvHttp(`/rest/v1/farm_members?select=role&farm_id=eq.${encodeURIComponent(f.id)}&user_id=eq.${encodeURIComponent(nv.sessao.usuario)}`);
-  const papel = eu?.[0]?.role === 'owner' ? 'admin' : eu?.[0]?.role || 'member';
+  const papel = eu?.[0]?.role === 'owner' ? 'admin' : eu?.[0]?.role || (nv.sysadm ? 'admin' : 'member');
   if (papel !== nv.papel) { nv.papel = papel; nvSalvar(); nvAplicarPapel(); if (typeof view !== 'undefined') nvAtualizarTela(); }
   nvSalvar();
 }
@@ -334,11 +342,13 @@ const nvEntrar = () => nvComOcupado(async () => {
   if (navigator.onLine === false) throw new NvErro('Sem internet. Para entrar pela primeira vez neste aparelho é preciso estar conectado.');
   const s = await nvHttp('/auth/v1/token?grant_type=password', {method: 'POST', body: {email: nvLoginParaEmail(d.login), password: d.senha}, auth: false});
   nvGuardarSessao(s); nv.ultimoLogin = d.login; nvSalvar();
+  await nvVerSysadm(); nvTodas = null;
   const fazendas = await nvHttp('/rest/v1/farms?select=id,name,join_code&order=created_at.asc').catch(() => null);
   // Continua na mesma fazenda se esta conta participa dela; senão escolhe outra
   if (nv.fazenda && fazendas && !fazendas.some(f => f.id === nv.fazenda.id)) nvEsquecerFazenda();
   nvFazendas = fazendas;
   if (nv.fazenda) { nv.papel = null; nvSalvar(); showToast('Bem-vindo de volta'); nvSincronizar(true); return; }
+  if (nv.sysadm) { showToast('Entrou como ADM do sistema. As fazendas ficam em Cadastros e backup.'); go('cadastros'); return; }
   if (nvFazendas?.length === 1) nvVincular(nvFazendas[0]);
 });
 const nvCriarConta = () => nvComOcupado(async () => {
@@ -350,7 +360,7 @@ const nvCriarConta = () => nvComOcupado(async () => {
 const nvSair = () => confirmDialog('Sair da conta neste aparelho? Para usar o sistema de novo será preciso entrar com usuário e senha.', async () => {
   if (nvVinculado() && navigator.onLine !== false) await nvSincronizar(); // envia o que falta antes de sair
   try { if (nv.sessao) await nvHttp('/auth/v1/logout', {method: 'POST', tentar: false}); } catch { /* sai mesmo sem internet */ }
-  nv.sessao = null; nv.papel = null; nvFazendas = null; nvUsuarios = null; nvAplicarPapel(); nvSalvar(); nvPortao(); showToast('Você saiu da conta');
+  nv.sessao = null; nv.papel = null; nv.sysadm = false; nvTodas = null; nvFazendas = null; nvUsuarios = null; nvAplicarPapel(); nvSalvar(); nvPortao(); showToast('Você saiu da conta');
 }, 'Sair');
 
 async function nvCarregarFazendas() {
@@ -372,11 +382,11 @@ function nvVincular(f) {
   confirmDialog(`Este aparelho tem ${n} registros que ainda não estão em nenhuma fazenda. Eles serão enviados para “${f.name}” e juntados com os dados da equipe. Se forem só dados de exemplo, toque em “Cancelar”, apague-os em Cadastros e backup e entre de novo. Continuar?`, ligar, 'Enviar e juntar');
 }
 const nvCriarFazenda = () => nvComOcupado(async () => {
-  const nome = ($('#nvp_fazenda')?.value || '').trim();
+  const nome = ($('#nvp_fazenda')?.value || $('#nvs_fazenda')?.value || '').trim();
   if (!nome) throw new NvErro('Dê um nome para a fazenda.');
   const f = await nvHttp('/rest/v1/rpc/create_farm', {method: 'POST', body: {p_name: nome}});
   if (!db.settings.farm) { db.settings.farm = f.name; salvarSemNuvem(); if (typeof applySettings === 'function') applySettings(); }
-  nvFazendas = null; nvVincular(f);
+  nvFazendas = null; nvTodas = null; nvVincular(f);
 });
 
 // ---------- Tela de entrada: o sistema só abre com usuário e senha ----------
@@ -385,7 +395,7 @@ const nvPortaoErro = m => { nvMsgPortao = m; const e = $('#nvpErro'); if (e) { e
 function nvPortao() {
   let el = document.getElementById('nvPortao');
   if (!el) { el = Object.assign(document.createElement('div'), {id: 'nvPortao', className: 'nv-portao'}); el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); document.body.append(el); }
-  const aberto = !nvVinculado();
+  const aberto = !nvLiberado();
   document.documentElement.classList.toggle('nv-bloqueado', aberto);
   el.hidden = !aberto;
   if (!aberto) { el.innerHTML = ''; nvMsgPortao = ''; return; }
@@ -429,7 +439,7 @@ document.head.insertAdjacentHTML('beforeend', `<style>
   .nv-portao-adm summary { cursor: pointer; color: var(--muted); font-size: .88rem; padding: 6px 0 }
   .nv-portao-adm .secondary { margin-top: 8px }
 </style>`);
-addEventListener('DOMContentLoaded', () => nvPortao());
+addEventListener('DOMContentLoaded', () => { nvPortao(); if (nv.sessao && navigator.onLine !== false) nvVerSysadm().then(() => { nvPortao(); if (!nvVinculado()) render(); }); });
 
 // ---------- Usuários da fazenda (ADM) ----------
 const nvFuncaoUsuarios = corpo => nvHttp('/functions/v1/usuarios', {method: 'POST', body: {farm_id: nv.fazenda.id, ...corpo}});
@@ -507,7 +517,7 @@ function nvMostrar() {
 
 function cartaoNuvem() {
   const titulo = '<h3>Nuvem da equipe</h3>';
-  if (!nvVinculado()) return '';
+  if (!nvVinculado()) return nv.sysadm && nv.sessao ? cartaoSistema() : '';
   const papel = nvPapel();
   return `<article class="card panel">${titulo}
     <p>Fazenda <b>${esc(nv.fazenda.name)}</b> • ${esc(nvMostrarLogin(nv.sessao.email))} • nível <b>${NV_NIVEIS[papel] || papel}</b></p>
@@ -517,7 +527,34 @@ function cartaoNuvem() {
     ${papel === 'admin' ? `<article class="card panel"><h3>Usuários da fazenda</h3>
       <p>Crie o login de cada pessoa e escolha o nível. <b>Supervisor</b>: lança, edita e exclui tudo e vê o financeiro. <b>Usuário comum</b>: lança no dia a dia, edita só o que lançou, não exclui e não vê o financeiro. <b>ADM</b>: tudo, inclusive os usuários.</p>
       <div id="nvUsuarios">${nvListaUsuarios()}</div>
-      <div class="btn-row" style="margin-top:10px">${btn('+ Novo usuário', 'nv-u-novo')}</div></article>` : ''}`;
+      <div class="btn-row" style="margin-top:10px">${btn('+ Novo usuário', 'nv-u-novo')}</div></article>` : ''}${nv.sysadm ? cartaoSistema() : ''}`;
+}
+
+// ---------- Painel do ADM do sistema ----------
+async function nvCarregarTodas() {
+  try {
+    const [fazendas, membros] = await Promise.all([nvHttp('/rest/v1/farms?select=id,name,join_code,created_at&order=name.asc'), nvHttp('/rest/v1/farm_members?select=farm_id')]);
+    const n = {}; for (const m of membros || []) n[m.farm_id] = (n[m.farm_id] || 0) + 1;
+    nvTodas = (fazendas || []).map(f => ({...f, usuarios: n[f.id] || 0}));
+  } catch (err) { nvTodas = []; showToast(err.message, true); }
+  nvFazendas = nvTodas;
+  const el = $('#nvTodas'); if (el) el.innerHTML = nvListaTodas();
+}
+function nvListaTodas() {
+  if (nvTodas === null) return '<p class="nota">Carregando as fazendas…</p>';
+  if (!nvTodas.length) return '<p class="nota">Nenhuma fazenda cadastrada ainda.</p>';
+  return `<div class="tbl-wrap"><table class="tbl"><tbody>${nvTodas.map(f => {
+    const atual = nv.fazenda?.id === f.id;
+    return `<tr><td><strong>${esc(f.name)}</strong>${atual ? ' <small>(aberta neste aparelho)</small>' : ''}<br><small style="color:var(--muted)">${f.usuarios} ${f.usuarios === 1 ? 'usuário' : 'usuários'}</small></td>
+      <td class="num">${atual ? '' : btn('Entrar', 'nv-usar', f.id, 'secondary')}</td></tr>`;
+  }).join('')}</tbody></table></div>`;
+}
+function cartaoSistema() {
+  return `<article class="card panel"><h3>Administração do sistema</h3>
+    <p>Você é o <b>ADM do sistema</b>: vê todas as fazendas, entra em qualquer uma como ADM e gerencia os usuários de todas.${nvVinculado() ? '' : ' Sem fazenda aberta, o que você lançar fica só neste aparelho.'}</p>
+    <div id="nvTodas">${nvListaTodas()}</div>
+    <div class="form" style="margin-top:12px"><div class="field full"><label for="nvs_fazenda">Nova fazenda</label><input id="nvs_fazenda" placeholder="Ex.: Fazenda Boa Vista"></div></div>
+    <div class="btn-row">${btn('Criar fazenda', 'nv-nova')}${nvVinculado() ? btn('Fechar a fazenda aberta', 'nv-sys-fechar', '', 'secondary') : btn('Sair da conta', 'nv-sair', '', 'secondary')}</div></article>`;
 }
 
 // Cartão da nuvem antes do cartão de sincronização por arquivo (que continua valendo para quem não tem internet)
@@ -527,6 +564,7 @@ const cadastrosAfterSemNuvem = VIEWS.cadastros.after;
 VIEWS.cadastros.after = arg => {
   cadastrosAfterSemNuvem?.(arg);
   if (nvPapel() === 'admin' && nvUsuarios === null) nvCarregarUsuarios();
+  if (nv.sysadm && nv.sessao && nvTodas === null) nvCarregarTodas();
   $$('[data-nv-nivel]').forEach(s => { s.onchange = () => nvMudarNivel(s.dataset.nvNivel, s.value); });
   nvMostrar();
 };
@@ -534,7 +572,8 @@ Object.assign(ACTIONS, {
   'nv-entrar': nvEntrar, 'nv-criar': nvCriarConta, 'nv-sair': nvSair, 'nv-nova': nvCriarFazenda,
   'nv-usar': id => { const f = (nvFazendas || []).find(x => x.id === id); if (f) nvVincular(f); },
   'nv-sync': () => nvSincronizar(true),
-  'nv-trocar': () => confirmDialog('Trocar de fazenda? Você vai escolher outra fazenda desta conta; os dados deste aparelho continuam guardados na nuvem da fazenda atual.', () => { nvEsquecerFazenda(); nvSalvar(); nvPortao(); }, 'Trocar'),
+  'nv-trocar': () => confirmDialog('Trocar de fazenda? Você vai escolher outra fazenda desta conta; os dados deste aparelho continuam guardados na nuvem da fazenda atual.', () => { nvEsquecerFazenda(); nvTodas = null; nvSalvar(); nvPortao(); if (nv.sysadm) go('cadastros'); }, 'Trocar'),
+  'nv-sys-fechar': () => confirmDialog(`Fechar “${nv.fazenda?.name}” neste aparelho? Você continua conectado como ADM do sistema e pode entrar em outra fazenda.`, () => { nvEsquecerFazenda(); nvTodas = null; nvSalvar(); nvPortao(); }, 'Fechar'),
   'nv-u-novo': nvNovoUsuario, 'nv-u-senha': nvNovaSenha, 'nv-u-remover': nvRemoverUsuario
 });
 nvProteger();

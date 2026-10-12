@@ -38,7 +38,11 @@ Deno.serve(async (req) => {
     const b = await req.json().catch(() => ({}));
     const fazenda = String(b.farm_id || "");
     const { data: meu } = await adm.from("farm_members").select("role").eq("farm_id", fazenda).eq("user_id", eu.id).maybeSingle();
-    if (meu?.role !== "admin") return erro(403, "Só o ADM da fazenda pode gerenciar usuários.");
+    // ADM do sistema gerencia os usuários de qualquer fazenda
+    const { data: sistema } = await adm.from("system_admins").select("user_id").eq("user_id", eu.id).maybeSingle();
+    const { data: existe } = await adm.from("farms").select("id").eq("id", fazenda).maybeSingle();
+    if (!existe) return erro(404, "Fazenda não encontrada.");
+    if (meu?.role !== "admin" && !sistema) return erro(403, "Só o ADM da fazenda pode gerenciar usuários.");
 
     const alvo = String(b.user_id || "");
     const membroAlvo = async () => {
