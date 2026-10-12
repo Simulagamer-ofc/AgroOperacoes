@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.26.0-beta1` — login profissional com **acesso por solicitação**: a pessoa toca em *Solicitar acesso*, escolhe o próprio usuário e senha e digita o código da fazenda; fica *aguardando autorização* (sem ver dados) até o ADM **Autorizar** (escolhendo função e nível) ou **Recusar**. O ADM vê os pedidos com número no menu, o **código da fazenda** (com *Gerar novo código*), o **último acesso** de cada um, **desativa/reativa** e gera **senha provisória** (a pessoa é obrigada a criar a dela no próximo login). *Minha conta* para trocar a própria senha; *Esqueci minha senha* (usuário → senha provisória com o ADM; e-mail → link de recuperação); olho para mostrar a senha e botão *Entrando…*. Corrige também uma regra antiga do banco que barrava os níveis ADM e Supervisor. Migração `supabase/migrations/20261012210000_solicitacao_acesso.sql` (já aplicada).
+
 `0.25.3-beta1` — envio automático sem controle do usuário: os dados sobem sozinhos com internet (ao salvar, a cada minuto, ao voltar o sinal, ao sair do app e ao sair da conta); não há mais botão de sincronizar nem troca por arquivo com a nuvem ligada; dados ainda não enviados não podem ser apagados, restaurados por backup nem trocados por outra fazenda — se sair sem internet, sobem no próximo login.
 
 `0.25.2-beta1` — segurança: só o Admin do sistema cria fazendas e não há mais cadastro aberto na tela de entrada; senhas novas com pelo menos 8 caracteres (e aviso de senha vazada); **Sair e apagar os dados** deste aparelho; visitantes sem login sem nenhuma permissão nas tabelas (migração `supabase/migrations/20261012200000_seguranca.sql`, já aplicada).

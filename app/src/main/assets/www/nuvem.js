@@ -26,11 +26,14 @@ if (nv.fazenda && !nv.dadosDe) nv.dadosDe = nv.fazenda.id; // aparelhos da vers�
 // Última versão de cada registro conhecida pelo servidor: 'coleção|id' → [impressão, saldo do estoque]
 let nvBase = nvLer(NV_BASE, {});
 let nvStatus = 'parado', nvErro = '', nvRodando = null, nvRepetir = false, nvAgenda = null, nvOcupado = false, nvFazendas = null, nvUsuarios = null;
+// Situação desta conta nas fazendas (pedido aguardando, desativado) e link de recuperação de senha aberto
+let nvAcessos = null, nvRecuperacao = null, nvAguardando = null;
 
 const nvSalvar = () => { safeStorage.set(NV_ESTADO, JSON.stringify(nv)); safeStorage.set(NV_BASE, JSON.stringify(nvBase)); };
 const nvVinculado = () => !!(nv.sessao && nv.fazenda);
 // ADM do sistema: entra sem fazenda (os dados ficam só no aparelho até entrar numa fazenda)
-const nvLiberado = () => nvVinculado() || !!(nv.sessao && nv.sysadm);
+// Senha provisória ou link de recuperação: só libera depois de criar a senha nova
+const nvLiberado = () => !nvRecuperacao && !(nv.sessao && nv.trocarSenha) && (nvVinculado() || !!(nv.sessao && nv.sysadm));
 let nvTodas = null; // todas as fazendas (painel do ADM do sistema)
 async function nvVerSysadm() {
   try { const r = await nvHttp(`/rest/v1/system_admins?select=user_id&user_id=eq.${encodeURIComponent(nv.sessao.usuario)}`); nv.sysadm = Array.isArray(r) && r.length > 0; }
@@ -92,7 +95,7 @@ function nvMensagem(data, status) {
   const cod = typeof data === 'object' ? data?.error_code || data?.code || '' : '';
   for (const [re, txt] of NV_MENSAGENS) if (re.test(bruto) || re.test(cod)) return txt;
   // Mensagens já escritas em português pelo próprio servidor (funções do Nexus Agro)
-  if (/[ãçéêíóôõú]|^Sem |^Só |^Você |^Dê |^Entre /i.test(bruto)) return bruto;
+  if (/[ãçéêíóôõú]|^Sem |^Só |^Você |^Dê |^Entre |^Digite |^Para /i.test(bruto)) return bruto;
   return bruto ? `Erro do servidor (${status}${cod ? ' ' + cod : ''}): ${bruto}` : `Erro do servidor (${status}).`;
 }
 
@@ -217,7 +220,12 @@ async function nvEnviar() {
 
 async function nvConferirFazenda() {
   const rows = await nvHttp(`/rest/v1/farms?select=id,name,join_code&id=eq.${encodeURIComponent(nv.fazenda.id)}`);
-  if (!rows.length) { const nome = nv.fazenda.name; nvEsquecerFazenda(); nvSalvar(); nvPortaoErro(`Você não participa mais de “${nome}”. Fale com o ADM ou escolha outra fazenda.`); setTimeout(nvPortao, 0); throw new NvErro(`Você não participa mais de “${nome}”.`); }
+  if (!rows.length) {
+    // Desativado ou removido pelo ADM: o que não subiu continua guardado neste aparelho
+    const nome = nv.fazenda.name; nvEsquecerFazenda(); nvAcessos = null; nvSalvar();
+    nvPortaoErro(`Você não participa mais de “${nome}” (acesso desativado ou removido pelo ADM). Fale com o ADM da fazenda.`); setTimeout(nvPortao, 0);
+    throw new NvErro(`Você não participa mais de “${nome}”.`);
+  }
   const f = rows[0];
   if (f.name !== nv.fazenda.name || f.join_code !== nv.fazenda.join_code) { nv.fazenda = {id: f.id, name: f.name, join_code: f.join_code}; applySettings(); }
   const filtro = `farm_id=eq.${encodeURIComponent(f.id)}&user_id=eq.${encodeURIComponent(nv.sessao.usuario)}`;
@@ -228,7 +236,27 @@ async function nvConferirFazenda() {
     nv.papel = papel; nv.funcao = funcao; nv.modulos = modulos; nvSalvar(); nvAplicarPapel(); applySettings();
     if (typeof view !== 'undefined') { if (!nvPodeRota(parseRoute().name)) go('inicio'); else nvAtualizarTela(); }
   }
+  // Último acesso (para o ADM), no máximo a cada 10 minutos
+  if (!nv.acessoEm || Date.now() - nv.acessoEm > 600000) { nv.acessoEm = Date.now(); nvHttp('/rest/v1/rpc/registrar_acesso', {method: 'POST', body: {p_farm: f.id}}).catch(() => {}); }
+  // ADM: pedidos de acesso aguardando autorização
+  if (papel === 'admin') {
+    const pend = await nvHttp(`/rest/v1/farm_members?select=user_id&farm_id=eq.${encodeURIComponent(f.id)}&status=eq.pendente`).catch(() => null);
+    if (Array.isArray(pend)) {
+      if (pend.length > (nv.pedidos || 0)) { showToast(`${pend.length} ${pend.length === 1 ? 'pedido de acesso aguardando' : 'pedidos de acesso aguardando'} sua autorização (Cadastros e backup)`); nvUsuarios = null; if (parseRoute().name === 'cadastros') nvAtualizarTela(); }
+      nv.pedidos = pend.length;
+    }
+  } else nv.pedidos = 0;
+  nvMarcarPedidos();
   nvSalvar();
+}
+// Número de pedidos de acesso no botão de Cadastros (só para o ADM)
+function nvMarcarPedidos() {
+  const n = nvPapel() === 'admin' ? nv.pedidos || 0 : 0;
+  document.querySelectorAll('[data-route="cadastros"]').forEach(b => {
+    let s = b.querySelector('.nv-badge');
+    if (!s && n) { s = Object.assign(document.createElement('span'), {className: 'nv-badge'}); b.append(s); }
+    if (s) { s.textContent = n; s.hidden = !n; s.title = `${n} ${n === 1 ? 'pedido de acesso' : 'pedidos de acesso'}`; }
+  });
 }
 
 function nvSincronizar(manual = false) {
@@ -381,6 +409,7 @@ document.head.insertAdjacentHTML('beforeend', `<style>
   .nv-telas label { display: flex; gap: 8px; align-items: center; font-size: .9rem; color: var(--text) }
   .nv-telas input { width: 18px; height: 18px; accent-color: var(--green) }
   .nv-usuarios td { vertical-align: middle } .nv-usuarios select { min-width: 9em }
+  .nv-sec { margin: 16px 0 6px; font-size: .95rem; display: flex; align-items: center; gap: 8px } .nv-sec .nv-badge { margin-left: 0 }
 </style>`);
 nvAplicarPapel();
 nvProteger();
@@ -398,7 +427,7 @@ function nvValidar({login, senha}, soEmail = false) {
   if (!senha) throw new NvErro('Digite a senha.');
 }
 // Desliga da fazenda (os dados do aparelho continuam marcados como sendo dela: nv.dadosDe)
-function nvEsquecerFazenda() { nv.fazenda = null; nv.papel = null; nv.funcao = null; nv.modulos = null; nvFazendas = null; nvUsuarios = null; nvStatus = 'parado'; nvErro = ''; nvAplicarPapel(); }
+function nvEsquecerFazenda() { nv.pedidos = 0; nv.fazenda = null; nv.papel = null; nv.funcao = null; nv.modulos = null; nvFazendas = null; nvUsuarios = null; nvStatus = 'parado'; nvErro = ''; nvAplicarPapel(); }
 // Apaga os dados deste aparelho (usado ao entrar numa fazenda diferente da que estava aqui)
 function nvLimparAparelho() {
   const settings = db.settings; db = emptyDb(); db.settings = settings; db._removidos = [];
@@ -410,8 +439,17 @@ const nvEntrar = () => nvComOcupado(async () => {
   const d = nvCampos(); nvValidar(d);
   if (navigator.onLine === false) throw new NvErro('Sem internet. Para entrar pela primeira vez neste aparelho é preciso estar conectado.');
   const s = await nvHttp('/auth/v1/token?grant_type=password', {method: 'POST', body: {email: nvLoginParaEmail(d.login), password: d.senha}, auth: false});
-  nvGuardarSessao(s); nv.ultimoLogin = d.login; nvSalvar();
+  await nvAposLogin(s, d.login);
+});
+// Depois de entrar: senha provisória pede uma nova; depois escolhe a fazenda
+async function nvAposLogin(s, login) {
+  nvGuardarSessao(s); if (login) nv.ultimoLogin = login;
+  nv.trocarSenha = !!s.user?.app_metadata?.trocar_senha; nvAcessos = null; nvSalvar();
   await nvVerSysadm(); nvTodas = null;
+  if (nv.trocarSenha) return; // a tela de entrada pede a senha nova
+  await nvEscolherFazenda();
+}
+async function nvEscolherFazenda() {
   const fazendas = await nvHttp('/rest/v1/farms?select=id,name,join_code&order=created_at.asc').catch(() => null);
   // Continua na mesma fazenda se esta conta participa dela; senão escolhe outra
   if (nv.fazenda && fazendas && !fazendas.some(f => f.id === nv.fazenda.id)) nvEsquecerFazenda();
@@ -419,7 +457,92 @@ const nvEntrar = () => nvComOcupado(async () => {
   if (nv.fazenda) { nv.papel = null; nvSalvar(); showToast('Bem-vindo de volta'); nvSincronizar(true); return; }
   if (nv.sysadm) { showToast('Entrou como Admin do sistema. As fazendas ficam em Cadastros e backup.'); go('cadastros'); return; }
   if (nvFazendas?.length === 1) nvVincular(nvFazendas[0]);
+}
+
+// ---------- Pedido de acesso, senha esquecida e senha nova ----------
+const NV_SITE = 'https://simulagamer-ofc.github.io/AgroOperacoes/';
+// Endereço para onde o link de recuperação leva (no aplicativo Android, a versão web)
+const nvEnderecoApp = () => location.protocol === 'https:' && /\./.test(location.hostname) && !/androidplatform|localhost/.test(location.hostname) ? location.origin + location.pathname : NV_SITE;
+const nvValor = id => ($('#' + id)?.value || '');
+// Senha nova digitada duas vezes
+function nvLerSenhaNova() {
+  const nova = nvValor('nvp_nova'), conf = nvValor('nvp_conf');
+  if (nova.length < 8) throw new NvErro('A senha precisa ter pelo menos 8 caracteres.');
+  if (!/[a-zA-Z]/.test(nova) || !/[0-9]/.test(nova)) throw new NvErro('Use letras e números na senha.');
+  if (nova !== conf) throw new NvErro('As duas senhas não são iguais.');
+  return nova;
+}
+const nvMinhaSenha = nova => nvHttp('/functions/v1/usuarios', {method: 'POST', body: {acao: 'minha_senha', nova}});
+const nvSolicitar = () => nvComOcupado(async () => {
+  const nome = nvValor('nvp_nome').trim(), login = nvValor('nvp_login').trim().toLowerCase(), codigo = nvValor('nvp_codigo').trim().toUpperCase().replace(/\s+/g, '');
+  if (!nome) throw new NvErro('Digite o seu nome.');
+  if (!/^[a-z0-9][a-z0-9._-]{2,29}$/.test(login)) throw new NvErro('Usuário: de 3 a 30 letras minúsculas, números, ponto, hífen ou sublinhado (sem espaço e sem acento). Ex.: joao.silva');
+  const senha = nvLerSenhaNova();
+  if (!codigo) throw new NvErro('Digite o código da fazenda (peça ao ADM).');
+  if (navigator.onLine === false) throw new NvErro('Sem internet. Conecte para enviar o pedido.');
+  const r = await nvHttp('/functions/v1/usuarios', {method: 'POST', auth: false, body: {acao: 'solicitar', nome, login, senha, codigo}});
+  nvModo = 'entrar';
+  showToast(`Pedido enviado para “${r?.fazenda || 'a fazenda'}”. Aguarde a autorização do ADM.`);
+  // Já entra: a tela mostra "aguardando autorização" até o ADM liberar
+  const s = await nvHttp('/auth/v1/token?grant_type=password', {method: 'POST', body: {email: nvLoginParaEmail(login), password: senha}, auth: false});
+  await nvAposLogin(s, login);
 });
+const nvEsqueci = () => nvComOcupado(async () => {
+  const login = nvValor('nvp_login').trim().toLowerCase();
+  if (!login) throw new NvErro('Digite o seu usuário ou e-mail.');
+  if (!login.includes('@')) { nvInfo = 'Quem entra com nome de usuário recebe uma senha provisória do ADM da fazenda. Fale com ele; no próximo login você cria a sua senha nova.'; return; }
+  nvValidar({login, senha: '-'}, true);
+  if (navigator.onLine === false) throw new NvErro('Sem internet. Conecte para pedir o link.');
+  await nvHttp('/auth/v1/recover?redirect_to=' + encodeURIComponent(nvEnderecoApp()), {method: 'POST', auth: false, body: {email: login}});
+  nvInfo = `Se ${login} tiver conta, enviamos um link para criar uma senha nova. Abra o e-mail neste aparelho (veja também a caixa de spam).`;
+});
+// Link de recuperação aberto: cria a senha nova e já entra
+const nvSalvarRecuperacao = () => nvComOcupado(async () => {
+  const nova = nvLerSenhaNova(), r = nvRecuperacao;
+  let user;
+  try { user = await nvHttp('/auth/v1/user', {auth: false, headers: {Authorization: 'Bearer ' + r.access_token}}); }
+  catch (err) { if (err.rede) throw err; nvRecuperacao = null; nvModo = 'esqueci'; throw new NvErro('O link de recuperação venceu ou já foi usado. Peça outro.'); }
+  nvGuardarSessao({...r, user}); nvSalvar();
+  await nvMinhaSenha(nova);
+  nvRecuperacao = null; showToast('Senha nova salva');
+  await nvAposLogin({...r, user: {...user, app_metadata: {}}}, nvMostrarLogin(user.email));
+});
+// Senha provisória (dada pelo ADM): obrigatório criar a sua
+const nvTrocarObrigatoria = () => nvComOcupado(async () => {
+  const nova = nvLerSenhaNova();
+  await nvMinhaSenha(nova);
+  nv.trocarSenha = false; nvSalvar(); showToast('Senha criada. Use esta senha nos próximos logins.');
+  await nvEscolherFazenda();
+});
+// Minha conta: troca a própria senha (confere a atual antes)
+function nvTrocarMinhaSenha() {
+  dialog.innerHTML = `<h3>Trocar minha senha</h3><p class="sub">${esc(nvMostrarLogin(nv.sessao.email))}</p><form novalidate class="nv-form-senha">
+    <div class="field"><label for="nvp_atual">Senha atual</label>${nvCampoSenha('nvp_atual', 'current-password')}</div>
+    <div class="field"><label for="nvp_nova">Senha nova</label>${nvCampoSenha('nvp_nova', 'new-password', 'Pelo menos 8, com letras e números')}</div>
+    <div class="field"><label for="nvp_conf">Repita a senha nova</label>${nvCampoSenha('nvp_conf', 'new-password')}</div>
+    <p class="nv-portao-erro" id="nvmErro" hidden></p>
+    <div class="actions"><button type="button" class="secondary" data-close>Cancelar</button><button class="primary" type="submit">Salvar senha</button></div></form>`;
+  $('[data-close]', dialog).onclick = closeModal;
+  const erro = m => { const e = $('#nvmErro', dialog); e.textContent = m; e.hidden = !m; };
+  $('form', dialog).onsubmit = async e => {
+    e.preventDefault(); erro('');
+    const b = $('button[type=submit]', dialog);
+    try {
+      const atual = nvValor('nvp_atual'), nova = nvLerSenhaNova();
+      if (!atual) throw new NvErro('Digite a senha atual.');
+      if (atual === nova) throw new NvErro('A senha nova precisa ser diferente da atual.');
+      b.disabled = true; b.textContent = 'Salvando…';
+      let s;
+      try { s = await nvHttp('/auth/v1/token?grant_type=password', {method: 'POST', body: {email: nv.sessao.email, password: atual}, auth: false}); }
+      catch (err) { throw err.rede ? err : new NvErro('A senha atual está errada.'); }
+      nvGuardarSessao(s); nvSalvar();
+      await nvMinhaSenha(nova);
+      closeModal(); showToast('Senha trocada. Use a nova no próximo login.');
+    } catch (err) { erro(err.message || 'Não foi possível trocar a senha.'); b.disabled = false; b.textContent = 'Salvar senha'; }
+  };
+  modal.classList.add('open');
+  setTimeout(() => $('#nvp_atual')?.focus(), 50);
+}
 // Sair: os dados sobem automaticamente antes de sair; o que não subir (sem internet) fica guardado e sobe no próximo login
 function nvSair() {
   dialog.innerHTML = `<h3>Sair do sistema</h3><p>Antes de sair, o app envia para a nuvem tudo o que foi lançado. Para usar de novo será preciso entrar com usuário e senha.</p>
@@ -448,7 +571,7 @@ async function nvSairDe(apagar) {
 }
 async function nvFinalizarSaida(apagar) {
   try { if (nv.sessao) await nvHttp('/auth/v1/logout', {method: 'POST', tentar: false}); } catch { /* sai mesmo sem internet */ }
-  nv.sessao = null; nv.papel = null; nv.funcao = null; nv.modulos = null; nv.sysadm = false; nvTodas = null; nvFazendas = null; nvUsuarios = null;
+  nv.sessao = null; nv.trocarSenha = false; nv.papel = null; nv.funcao = null; nv.modulos = null; nv.sysadm = false; nvTodas = null; nvFazendas = null; nvUsuarios = null; nvAcessos = null; nvModo = 'entrar';
   if (apagar) {
     nvLimparAparelho(); nv.fazenda = null; nv.ultimoLogin = '';
     db.settings = {...emptyDb().settings}; salvarSemNuvem();
@@ -463,8 +586,25 @@ async function nvCarregarFazendas() {
   try { nvFazendas = await nvHttp('/rest/v1/farms?select=id,name,join_code&order=created_at.asc'); } catch (err) { nvFazendas = []; nvPortaoErro(err.message); }
   nvPortao();
 }
-const nvListaFazendas = () => nvFazendas === null ? '<p class="nota">Carregando suas fazendas…</p>'
-  : nvFazendas.length ? `<p>Escolha a fazenda:</p><div class="btn-row">${nvFazendas.map(f => btn(f.name, 'nv-usar', f.id, 'secondary')).join('')}</div>` : '<p class="nota">Esta conta ainda não participa de nenhuma fazenda. Peça ao ADM da sua fazenda para criar o seu usuário.</p>';
+// Conta sem fazenda liberada: mostra se o pedido está aguardando o ADM ou se o acesso foi desativado
+async function nvCarregarAcessos() {
+  try { const r = await nvHttp('/rest/v1/rpc/meu_acesso', {method: 'POST', body: {}}); nvAcessos = Array.isArray(r) ? r : []; } catch { nvAcessos = []; }
+  nvPortao();
+}
+function nvListaFazendas() {
+  if (nvFazendas === null) return '<p class="nota">Carregando suas fazendas…</p>';
+  if (nvFazendas.length) return `<p>Escolha a fazenda:</p><div class="btn-row">${nvFazendas.map(f => btn(f.name, 'nv-usar', f.id, 'secondary')).join('')}</div>`;
+  if (nvAcessos === null) { nvCarregarAcessos(); return '<p class="nota">Conferindo o seu acesso…</p>'; }
+  const pend = nvAcessos.filter(a => a.status === 'pendente'), inat = nvAcessos.filter(a => a.status === 'inativo');
+  // Aguardando: confere sozinho a cada 30 segundos enquanto esta tela estiver aberta
+  clearTimeout(nvAguardando);
+  if (pend.length) nvAguardando = setTimeout(() => { if (nv.sessao && !nvLiberado() && nvFazendas?.length === 0 && navigator.onLine !== false) ACTIONS['nv-verificar'](true); }, 30000);
+  const lista = l => l.map(a => `“${esc(a.fazenda)}”`).join(', ');
+  return (pend.length ? `<div class="nv-aviso"><b>Aguardando autorização</b><p>Seu pedido de acesso a ${lista(pend)} foi enviado. Assim que o ADM da fazenda autorizar, toque em <b>Verificar de novo</b>.</p></div>` : '')
+    + (inat.length ? `<div class="nv-aviso nv-aviso-off"><b>Acesso desativado</b><p>O ADM desativou o seu acesso a ${lista(inat)}. Fale com ele se precisar voltar.</p></div>` : '')
+    + (!pend.length && !inat.length ? '<p class="nota">Esta conta ainda não participa de nenhuma fazenda. Peça o código da fazenda ao ADM, saia e toque em “Solicitar acesso”.</p>' : '')
+    + `<div class="btn-row">${btn('Verificar de novo', 'nv-verificar', '', 'secondary')}</div>`;
+}
 
 function nvVincular(f) {
   const n = COLLECTIONS.reduce((s, c) => s + db[c].length, 0);
@@ -513,8 +653,28 @@ applySettings = function () {
 };
 
 // ---------- Tela de entrada: o sistema só abre com usuário e senha ----------
-let nvMsgPortao = '';
+// Modos sem conta: entrar, solicitar (pedido de acesso), esqueci (senha)
+let nvMsgPortao = '', nvModo = 'entrar', nvInfo = '';
 const nvPortaoErro = m => { nvMsgPortao = m; const e = $('#nvpErro'); if (e) { e.textContent = m; e.hidden = !m; } };
+// Link de recuperação de senha (e-mail): o Supabase volta para o app com o acesso no endereço
+(() => {
+  const h = location.hash;
+  if (!/(^#|&)(access_token|error_code|error)=/.test(h)) return;
+  const q = new URLSearchParams(h.slice(1));
+  if (q.get('access_token') && q.get('type') === 'recovery') nvRecuperacao = {access_token: q.get('access_token'), refresh_token: q.get('refresh_token') || '', expires_in: Number(q.get('expires_in')) || 3600};
+  else if (q.get('error') || q.get('error_code')) { nvModo = 'esqueci'; nvMsgPortao = /expired/i.test(q.get('error_code') || q.get('error_description') || '') ? 'O link de recuperação venceu. Peça outro abaixo.' : 'O link de recuperação não é válido. Peça outro abaixo.'; }
+  try { history.replaceState(null, '', location.pathname + location.search + '#/inicio'); } catch { /* ignora */ }
+})();
+const NV_OLHO = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
+const NV_OLHO_FECHADO = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18M10.6 5.1A10.7 10.7 0 0 1 12 5c6.4 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.2M6.6 6.6C3.8 8.4 2 12 2 12s3.6 7 10 7c1.9 0 3.5-.6 4.9-1.4M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+// Campo de senha com o olho para mostrar/esconder
+const nvCampoSenha = (id, auto, ph = 'Sua senha') => `<div class="nv-senha"><input id="${id}" type="password" autocomplete="${auto}" placeholder="${esc(ph)}"><button type="button" class="nv-olho" data-olho="${id}" aria-label="Mostrar senha" title="Mostrar senha">${NV_OLHO}</button></div>`;
+document.addEventListener('click', e => {
+  const b = e.target.closest?.('[data-olho]'); if (!b) return;
+  const i = document.getElementById(b.dataset.olho); if (!i) return;
+  const ver = i.type === 'password'; i.type = ver ? 'text' : 'password';
+  b.innerHTML = ver ? NV_OLHO_FECHADO : NV_OLHO; b.setAttribute('aria-label', ver ? 'Esconder senha' : 'Mostrar senha'); b.title = b.getAttribute('aria-label');
+});
 function nvPortao() {
   let el = document.getElementById('nvPortao');
   if (!el) { el = Object.assign(document.createElement('div'), {id: 'nvPortao', className: 'nv-portao'}); el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); document.body.append(el); }
@@ -522,22 +682,60 @@ function nvPortao() {
   applySettings();
   document.documentElement.classList.toggle('nv-bloqueado', aberto);
   el.hidden = !aberto;
-  if (!aberto) { el.innerHTML = ''; nvMsgPortao = ''; return; }
-  const marca = '<div class="nv-portao-topo"><img class="nv-portao-logo" src="img/logo-nexus.png" alt="" width="64" height="64"><p class="nv-portao-marca">NEXUS <span>AGRO</span></p></div>';
-  const erro = `<p class="nv-portao-erro" id="nvpErro" ${nvMsgPortao ? '' : 'hidden'}>${esc(nvMsgPortao)}</p>`;
-  if (!nv.sessao) {
-    if ($('#nvp_login')) return; // já está na tela de login (não apaga o que a pessoa digitou)
-    el.innerHTML = `<form class="nv-portao-card" id="nvpForm" novalidate>${marca}<h2>Entrar</h2>
-      ${nv.fazenda ? `<p class="nota">Fazenda <b>${esc(nv.fazenda.name)}</b>. Entre de novo para continuar.</p>` : '<p class="nota">Use o usuário e a senha que o ADM da fazenda criou para você.</p>'}
-      <div class="field"><label for="nvp_login">Usuário ou e-mail</label><input id="nvp_login" autocapitalize="none" autocomplete="username" spellcheck="false" value="${esc(nv.ultimoLogin || '')}" placeholder="Ex.: joao.silva"></div>
-      <div class="field"><label for="nvp_senha">Senha</label><input id="nvp_senha" type="password" autocomplete="current-password" placeholder="Sua senha"></div>
-      ${erro}
-      <button class="primary" type="submit" data-nv-portao>Entrar</button></form>`;
-    $('#nvpForm', el).onsubmit = e => { e.preventDefault(); nvPortaoErro(''); nvEntrar(); };
-    setTimeout(() => (nv.ultimoLogin ? $('#nvp_senha') : $('#nvp_login'))?.focus(), 50);
+  if (!aberto) { el.innerHTML = ''; el.dataset.modo = ''; nvMsgPortao = ''; nvInfo = ''; return; }
+  const modo = nvRecuperacao ? 'recuperar' : !nv.sessao ? nvModo : nv.trocarSenha ? 'nova-senha' : 'fazenda';
+  // Formulário já aberto: não apaga o que a pessoa digitou (só atualiza mensagens e o botão)
+  if (modo !== 'fazenda' && el.dataset.modo === modo && $('form', el)) {
+    nvPortaoErro(nvMsgPortao);
+    const info = $('#nvpInfo', el); if (info) { info.textContent = nvInfo; info.hidden = !nvInfo; }
+    $$('[data-nv-portao]', el).forEach(b => { b.disabled = nvOcupado; if (!nvOcupado) b.textContent = b.dataset.txt; });
     return;
   }
-  el.innerHTML = `<div class="nv-portao-card">${marca}<h2>Escolha a fazenda</h2>
+  el.dataset.modo = modo;
+  const marca = '<div class="nv-portao-topo"><img class="nv-portao-logo" src="img/logo-nexus.png" alt="" width="64" height="64"><p class="nv-portao-marca">NEXUS <span>AGRO</span></p></div>';
+  const erro = `<p class="nv-portao-erro" id="nvpErro" role="alert" ${nvMsgPortao ? '' : 'hidden'}>${esc(nvMsgPortao)}</p><p class="nv-portao-info" id="nvpInfo" ${nvInfo ? '' : 'hidden'}>${esc(nvInfo)}</p>`;
+  const enviar = (txt, ocupado) => `<button class="primary" type="submit" data-nv-portao data-txt="${esc(txt)}" data-ocupado="${esc(ocupado)}">${esc(txt)}</button>`;
+  const link = (txt, m) => `<button type="button" class="nv-link" data-nv-modo="${m}">${esc(txt)}</button>`;
+  const senhaNova = `<div class="field"><label for="nvp_nova">Senha nova</label>${nvCampoSenha('nvp_nova', 'new-password', 'Pelo menos 8, com letras e números')}</div>
+      <div class="field"><label for="nvp_conf">Repita a senha</label>${nvCampoSenha('nvp_conf', 'new-password', 'Digite de novo')}</div>`;
+  const formulario = (corpo, acao) => {
+    el.innerHTML = `<form class="nv-portao-card" id="nvpForm" novalidate>${marca}${corpo}</form>`;
+    $('#nvpForm', el).onsubmit = e => {
+      e.preventDefault(); nvPortaoErro(''); nvInfo = ''; const i = $('#nvpInfo', el); if (i) i.hidden = true;
+      const b = $('[data-nv-portao]', el); if (b) { b.disabled = true; b.textContent = b.dataset.ocupado; }
+      acao();
+    };
+    $$('[data-nv-modo]', el).forEach(b => { b.onclick = () => { nvModo = b.dataset.nvModo; nvMsgPortao = ''; nvInfo = ''; const login = nvValor('nvp_login'); if (login) nv.ultimoLogin = login; nvPortao(); }; });
+    setTimeout(() => $('input:not([value]), input[value=""]', el)?.focus(), 50);
+  };
+  if (modo === 'entrar') return formulario(`<h2>Entrar</h2>
+      ${nv.fazenda ? `<p class="nota">Fazenda <b>${esc(nv.fazenda.name)}</b>. Entre de novo para continuar.</p>` : ''}
+      <div class="field"><label for="nvp_login">Usuário ou e-mail</label><input id="nvp_login" autocapitalize="none" autocomplete="username" spellcheck="false" value="${esc(nv.ultimoLogin || '')}" placeholder="Ex.: joao.silva"></div>
+      <div class="field"><label for="nvp_senha">Senha</label>${nvCampoSenha('nvp_senha', 'current-password')}</div>
+      ${erro}${enviar('Entrar', 'Entrando…')}
+      <div class="nv-links">${link('Esqueci minha senha', 'esqueci')}${link('Solicitar acesso', 'solicitar')}</div>`, nvEntrar);
+  if (modo === 'solicitar') return formulario(`<h2>Solicitar acesso</h2>
+      <p class="nota">Preencha os seus dados e o <b>código da fazenda</b> (peça ao ADM). O ADM recebe o pedido e libera o seu acesso com a sua função.</p>
+      <div class="field"><label for="nvp_nome">Seu nome</label><input id="nvp_nome" autocomplete="name" placeholder="Ex.: João da Silva"></div>
+      <div class="field"><label for="nvp_login">Usuário para entrar</label><input id="nvp_login" autocapitalize="none" autocomplete="username" spellcheck="false" placeholder="Ex.: joao.silva"><span class="hint">Letras minúsculas, números, ponto ou hífen</span></div>
+      ${senhaNova}
+      <div class="field"><label for="nvp_codigo">Código da fazenda</label><input id="nvp_codigo" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="7F3A9C21" style="text-transform:uppercase;letter-spacing:.08em"></div>
+      ${erro}${enviar('Enviar pedido', 'Enviando…')}
+      <div class="nv-links">${link('Já tenho acesso: entrar', 'entrar')}</div>`, nvSolicitar);
+  if (modo === 'esqueci') return formulario(`<h2>Esqueci minha senha</h2>
+      <p class="nota">Entra com <b>e-mail</b>? Enviamos um link para criar uma senha nova. Entra com <b>nome de usuário</b>? O ADM da fazenda gera uma senha provisória e você cria a sua no próximo login.</p>
+      <div class="field"><label for="nvp_login">Usuário ou e-mail</label><input id="nvp_login" autocapitalize="none" autocomplete="username" spellcheck="false" value="${esc(nv.ultimoLogin || '')}" placeholder="Ex.: joao.silva ou nome@email.com"></div>
+      ${erro}${enviar('Continuar', 'Enviando…')}
+      <div class="nv-links">${link('Voltar para entrar', 'entrar')}</div>`, nvEsqueci);
+  if (modo === 'recuperar') return formulario(`<h2>Criar senha nova</h2>
+      <p class="nota">Escolha a sua senha nova. Depois você já entra no sistema.</p>${senhaNova}${erro}${enviar('Salvar e entrar', 'Salvando…')}`, nvSalvarRecuperacao);
+  if (modo === 'nova-senha') {
+    formulario(`<h2>Crie a sua senha</h2>
+      <p class="nota">Você entrou com uma <b>senha provisória</b> dada pelo ADM. Para continuar, crie uma senha só sua.</p>
+      ${senhaNova}${erro}${enviar('Salvar senha', 'Salvando…')}<div class="nv-links"><button type="button" class="nv-link" data-act="nv-sair">Sair</button></div>`, nvTrocarObrigatoria);
+    return;
+  }
+  el.innerHTML = `<div class="nv-portao-card">${marca}<h2>${nvFazendas?.length === 0 ? 'Seu acesso' : 'Escolha a fazenda'}</h2>
     <p class="nota">Conectado como <b>${esc(nvMostrarLogin(nv.sessao.email))}</b>.</p>
     <div id="nvFazendas">${nvListaFazendas()}</div>
     ${erro}
@@ -558,6 +756,20 @@ document.head.insertAdjacentHTML('beforeend', `<style>
   .nv-portao-marca { margin: 0; font-size: 1.7rem; font-weight: 800; letter-spacing: .03em; color: var(--text) }
   .nv-portao-marca span { color: var(--destaque, #34d399) }
   .nv-portao-erro { margin: 0; color: var(--red); font-size: .9rem }
+  .nv-portao-info { margin: 0; color: var(--text); background: color-mix(in srgb, var(--green) 14%, transparent); border-radius: 10px; padding: 10px 12px; font-size: .9rem }
+  .nv-portao-card .hint { font-size: .8rem; color: var(--muted) }
+  .nv-senha { position: relative } .nv-senha input { padding-right: 48px !important }
+  .nv-olho { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); width: 42px; height: 40px; display: grid; place-items: center; background: none; border: 0; color: var(--muted); cursor: pointer; border-radius: 8px; padding: 0 }
+  .nv-olho:hover { color: var(--text) }
+  .nv-links { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px }
+  .nv-link { background: none; border: 0; padding: 6px 0; color: var(--destaque, #34d399); font-weight: 600; cursor: pointer; font-size: .92rem }
+  .nv-link:hover { text-decoration: underline }
+  .nv-portao-card button[data-nv-portao]:disabled { opacity: .75; cursor: progress }
+  .nv-aviso { border: 1px solid var(--line); border-left: 4px solid #f5b544; border-radius: 10px; padding: 10px 12px; margin-bottom: 10px }
+  .nv-aviso p { margin: 4px 0 0; font-size: .9rem } .nv-aviso-off { border-left-color: var(--red) }
+  .nv-badge { margin-left: auto; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: #f5b544; color: #1b1300; font-size: .74rem; font-weight: 800; display: inline-grid; place-items: center }
+  .nv-badge[hidden] { display: none }
+  .nv-codigo { font-family: ui-monospace, monospace; font-size: 1.25rem; letter-spacing: .12em; background: var(--bg); border: 1px dashed var(--line); border-radius: 8px; padding: 4px 10px }
   .nv-portao-adm summary { cursor: pointer; color: var(--muted); font-size: .88rem; padding: 6px 0 }
   .nv-portao-adm .secondary { margin-top: 8px }
   .brand.nexus .nv-quem { color: #8fb0bf; font-size: .76rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
@@ -568,93 +780,122 @@ addEventListener('DOMContentLoaded', () => { nvPortao(); if (nv.sessao && naviga
 const nvFuncaoUsuarios = corpo => nvHttp('/functions/v1/usuarios', {method: 'POST', body: {farm_id: nv.fazenda.id, ...corpo}});
 async function nvCarregarUsuarios() {
   const q = campos => nvHttp(`/rest/v1/farm_members?select=${campos}&farm_id=eq.${encodeURIComponent(nv.fazenda.id)}&order=joined_at.asc`);
-  try { nvUsuarios = await q('user_id,role,nome,login,joined_at,funcao,modulos').catch(err => { if (err.status === 400) return q('user_id,role,nome,login,joined_at'); throw err; }); }
+  try { nvUsuarios = await q('user_id,role,nome,login,joined_at,funcao,modulos,status,ultimo_acesso,pedido_em').catch(err => { if (err.status === 400) return q('user_id,role,nome,login,joined_at,funcao,modulos'); throw err; }); }
   catch (err) { nvUsuarios = []; showToast(err.message, true); }
+  nv.pedidos = nvUsuarios.filter(u => u.status === 'pendente').length; nvMarcarPedidos();
   const el = $('#nvUsuarios'); if (el) el.innerHTML = nvListaUsuarios();
+  $$('[data-nv-nivel]').forEach(s => { s.onchange = () => nvMudarNivel(s.dataset.nvNivel, s.value); });
+  nvMostrar();
 }
 const nvNivelDe = u => u.role === 'owner' ? 'admin' : u.role;
+const nvStatusDe = u => u.status || 'ativo';
+const nvNomeDe = u => u.nome || nvMostrarLogin(u.login) || 'Sem nome';
+// "há 5 min", "ontem às 14:20", "12/10/2026"
+function nvQuando(iso) {
+  if (!iso) return 'nunca';
+  const d = new Date(iso), seg = (Date.now() - d) / 1000, hora = d.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
+  if (seg < 90) return 'agora';
+  if (seg < 3600) return `há ${Math.round(seg / 60)} min`;
+  const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+  if (d >= hoje) return `hoje às ${hora}`;
+  if (d >= hoje - 864e5) return `ontem às ${hora}`;
+  return d.toLocaleDateString('pt-BR');
+}
 function nvListaUsuarios() {
   if (nvUsuarios === null) return '<p class="nota">Carregando usuários…</p>';
   if (!nvUsuarios.length) return '<p class="nota">Nenhum usuário encontrado.</p>';
-  const eu = nv.sessao.usuario;
-  return `<div class="tbl-wrap"><table class="tbl nv-usuarios"><tbody>${nvUsuarios.map(u => {
+  const eu = nv.sessao.usuario, de = st => nvUsuarios.filter(u => nvStatusDe(u) === st);
+  const pend = de('pendente'), ativos = de('ativo'), inativos = de('inativo');
+  const sub = t => `<br><small style="color:var(--muted)">${esc(t)}</small>`;
+  const tabela = linhas => `<div class="tbl-wrap"><table class="tbl nv-usuarios"><tbody>${linhas}</tbody></table></div>`;
+  let html = '';
+  if (pend.length) html += `<h4 class="nv-sec">Solicitações pendentes <span class="nv-badge">${pend.length}</span></h4>` + tabela(pend.map(u =>
+    `<tr><td><strong>${esc(nvNomeDe(u))}</strong>${sub(`${nvMostrarLogin(u.login)} · pediu ${nvQuando(u.pedido_em || u.joined_at)}`)}</td>
+      <td class="num"><div class="row-actions">${btn('Autorizar', 'nv-u-autorizar', u.user_id)}${btn('Recusar', 'nv-u-recusar', u.user_id, 'secondary')}</div></td></tr>`).join(''));
+  html += `<h4 class="nv-sec">Ativos (${ativos.length})</h4>` + tabela(ativos.map(u => {
     const nivel = nvNivelDe(u), meu = u.user_id === eu;
-    const sel = meu ? `<b>${NV_NIVEIS[nivel] || nivel}</b>` : `<select data-nv-nivel="${esc(u.user_id)}" aria-label="Nível de ${esc(u.nome || u.login)}">${Object.entries(NV_NIVEIS).map(([v, t]) => `<option value="${v}" ${v === nivel ? 'selected' : ''}>${t}</option>`).join('')}</select>`;
+    const sel = meu ? `<b>${NV_NIVEIS[nivel] || nivel}</b>` : `<select data-nv-nivel="${esc(u.user_id)}" aria-label="Nível de ${esc(nvNomeDe(u))}">${Object.entries(NV_NIVEIS).map(([v, t]) => `<option value="${v}" ${v === nivel ? 'selected' : ''}>${t}</option>`).join('')}</select>`;
     const funcao = nvNomeFuncao(u.funcao), telas = Array.isArray(u.modulos) ? `${u.modulos.length} ${u.modulos.length === 1 ? 'tela' : 'telas'}` : 'todas as telas';
-    return `<tr><td><strong>${esc(u.nome || nvMostrarLogin(u.login) || 'Sem nome')}</strong>${meu ? ' <small>(você)</small>' : ''}<br><small style="color:var(--muted)">${esc([nvMostrarLogin(u.login), funcao, nivel === 'admin' ? '' : telas].filter(Boolean).join(' · '))}</small></td><td>${sel}</td>
-      <td class="num">${meu ? '' : `<div class="row-actions">${btn('Função e telas', 'nv-u-acesso', u.user_id, 'secondary')}${btn('Nova senha', 'nv-u-senha', u.user_id, 'secondary')}${btn('Remover', 'nv-u-remover', u.user_id, 'secondary')}</div>`}</td></tr>`;
-  }).join('')}</tbody></table></div>`;
-}
-function nvNovoUsuario() {
-  openForm({
-    title: 'Novo usuário', sub: `A pessoa entra no app com este usuário e senha, já ligada a “${nv.fazenda.name}”.`, submit: 'Criar usuário',
-    fields: [
-      {k: 'nome', label: 'Nome', required: true, full: true, placeholder: 'Ex.: João da Silva'},
-      {k: 'login', label: 'Usuário para entrar', required: true, placeholder: 'Ex.: joao.silva', hint: 'Letras minúsculas, números, ponto ou hífen'},
-      {k: 'senha', label: 'Senha', required: true, placeholder: 'Pelo menos 8 caracteres'},
-      {k: 'funcao', label: 'Função', type: 'select', required: true, full: true, options: NV_FUNCOES.map(([value, nome, grupo]) => ({value, label: `${nome} (${grupo})`})), hint: 'Define as telas que a pessoa vê. Depois dá para acrescentar telas em “Função e telas”.'},
-      {k: 'papel', label: 'Nível', type: 'select', required: true, options: Object.entries(NV_NIVEIS).map(([value, label]) => ({value, label})), hint: 'O que pode fazer nas telas: Comum lança; Supervisor também edita e exclui.'}
-    ],
-    values: {papel: 'member', funcao: 'operador'},
-    onSubmit: d => {
-      const login = d.login.toLowerCase();
-      if (!/^[a-z0-9][a-z0-9._-]{2,29}$/.test(login)) return 'Usuário: de 3 a 30 letras minúsculas, números, ponto, hífen ou sublinhado (sem espaço e sem acento).';
-      if (d.senha.length < 8) return 'A senha precisa ter pelo menos 8 caracteres.';
-      nvComOcupado(async () => {
-        const f = nvFuncao(d.funcao);
-        await nvFuncaoUsuarios({acao: 'criar', nome: d.nome, login, senha: d.senha, papel: d.papel, funcao: d.funcao, modulos: f?.[4] ?? null});
-        showToast(`Usuário “${login}” criado: ${f?.[1] || ''} · ${NV_NIVEIS[d.papel]}. Passe o usuário e a senha para a pessoa.`);
-        await nvCarregarUsuarios();
-      });
-    }
-  });
-  // Ao escolher a função, sugere o nível dela
-  const sf = $('#f_funcao', dialog), sp = $('#f_papel', dialog);
-  if (sf && sp) sf.onchange = () => { const f = nvFuncao(sf.value); if (f) sp.value = f[3]; };
+    const comUsuario = String(u.login || '').endsWith('@' + NV_DOMINIO) || !String(u.login || '').includes('@');
+    return `<tr><td><strong>${esc(nvNomeDe(u))}</strong>${meu ? ' <small>(você)</small>' : ''}${sub([nvMostrarLogin(u.login), funcao, nivel === 'admin' ? '' : telas].filter(Boolean).join(' · '))}${'ultimo_acesso' in u ? sub('Último acesso: ' + nvQuando(u.ultimo_acesso)) : ''}</td><td>${sel}</td>
+      <td class="num">${meu ? '' : `<div class="row-actions">${btn('Função e telas', 'nv-u-acesso', u.user_id, 'secondary')}${comUsuario ? btn('Senha provisória', 'nv-u-senha', u.user_id, 'secondary') : ''}${btn('Desativar', 'nv-u-desativar', u.user_id, 'secondary')}${btn('Remover', 'nv-u-remover', u.user_id, 'secondary')}</div>`}</td></tr>`;
+  }).join(''));
+  if (inativos.length) html += `<h4 class="nv-sec">Desativados (${inativos.length})</h4>` + tabela(inativos.map(u =>
+    `<tr><td><strong>${esc(nvNomeDe(u))}</strong>${sub([nvMostrarLogin(u.login), nvNomeFuncao(u.funcao), 'Último acesso: ' + nvQuando(u.ultimo_acesso)].filter(Boolean).join(' · '))}</td>
+      <td class="num"><div class="row-actions">${btn('Reativar', 'nv-u-reativar', u.user_id, 'secondary')}${btn('Remover', 'nv-u-remover', u.user_id, 'secondary')}</div></td></tr>`).join(''));
+  return html;
 }
 // Função e telas de uma pessoa (a função marca as telas; o ADM pode acrescentar ou tirar)
-function nvAcessoUsuario(id) {
+function nvAcessoUsuario(id, autorizar = false) {
   const u = (nvUsuarios || []).find(x => x.user_id === id); if (!u) return;
+  // Autorizar: começa com a função de operador (o ADM escolhe a certa)
+  if (autorizar && !u.funcao) u.funcao = 'operador', u.modulos = nvFuncao('operador')[4];
   const marcadas = new Set(Array.isArray(u.modulos) ? u.modulos : NV_TODAS_TELAS);
-  dialog.innerHTML = `<h3>Função e telas</h3><p class="sub">${esc(u.nome || nvMostrarLogin(u.login))} vê no menu só as telas marcadas. Visão geral e Cadastros e backup ficam sempre disponíveis.</p>
-    <form novalidate><div class="form"><div class="field full"><label for="nva_funcao">Função</label><select id="nva_funcao">${NV_FUNCOES.map(([v, n, g]) => `<option value="${v}" ${v === (u.funcao || '') ? 'selected' : ''}>${esc(n)} (${esc(g)})</option>`).join('')}${u.funcao ? '' : '<option value="" selected>Sem função definida (todas as telas)</option>'}</select></div></div>
+  dialog.innerHTML = `<h3>${autorizar ? 'Autorizar acesso' : 'Função e telas'}</h3><p class="sub">${autorizar ? `${esc(nvNomeDe(u))} (${esc(nvMostrarLogin(u.login))}) pediu acesso a “${esc(nv.fazenda.name)}”. Escolha a função e o nível. ` : ''}${esc(nvNomeDe(u))} vê no menu só as telas marcadas. Visão geral e Cadastros e backup ficam sempre disponíveis.</p>
+    <form novalidate><div class="form"><div class="field full"><label for="nva_funcao">Função</label><select id="nva_funcao">${NV_FUNCOES.map(([v, n, g]) => `<option value="${v}" ${v === (u.funcao || '') ? 'selected' : ''}>${esc(n)} (${esc(g)})</option>`).join('')}${u.funcao ? '' : '<option value="" selected>Sem função definida (todas as telas)</option>'}</select></div>
+    ${autorizar ? `<div class="field full"><label for="nva_papel">Nível</label><select id="nva_papel">${Object.entries(NV_NIVEIS).map(([v, t]) => `<option value="${v}">${t}</option>`).join('')}</select><span class="hint">Comum lança; Supervisor também edita, exclui e vê o financeiro; ADM faz tudo.</span></div>` : ''}</div>
     <p class="nota" id="nva_todas" hidden>Esta função vê todas as telas.</p>
     <div class="nv-telas" id="nva_telas">${NV_TELAS.map(([k, n]) => `<label><input type="checkbox" value="${k}" ${marcadas.has(k) ? 'checked' : ''}> ${esc(n)}</label>`).join('')}</div>
-    <div class="actions"><button type="button" class="secondary" data-close>Cancelar</button><button class="primary" type="submit">Salvar</button></div></form>`;
-  const sel = $('#nva_funcao', dialog), caixas = $$('#nva_telas input', dialog);
+    <div class="actions"><button type="button" class="secondary" data-close>Cancelar</button><button class="primary" type="submit">${autorizar ? 'Autorizar' : 'Salvar'}</button></div></form>`;
+  const sel = $('#nva_funcao', dialog), caixas = $$('#nva_telas input', dialog), selPapel = $('#nva_papel', dialog);
+  const sugerir = () => { const f = nvFuncao(sel.value); if (selPapel && f) selPapel.value = f[3]; };
   const todas = () => { const f = nvFuncao(sel.value); return !sel.value || (f && f[4] === null); };
   const ajustar = marcar => {
     const f = nvFuncao(sel.value), tudo = todas();
     caixas.forEach(c => { if (marcar && f && f[4]) c.checked = f[4].includes(c.value); if (tudo) c.checked = true; c.disabled = tudo; });
     $('#nva_todas', dialog).hidden = !tudo;
   };
-  sel.onchange = () => ajustar(true); ajustar(false);
+  sel.onchange = () => { ajustar(true); sugerir(); }; ajustar(false); sugerir();
   $('[data-close]', dialog).onclick = closeModal;
   $('form', dialog).onsubmit = e => {
     e.preventDefault();
     const funcao = sel.value || null, modulos = todas() ? null : caixas.filter(c => c.checked).map(c => c.value);
     if (modulos && !modulos.length) { showToast('Marque pelo menos uma tela.'); return; }
     closeModal();
+    if (autorizar) return nvComOcupado(async () => {
+      await nvFuncaoUsuarios({acao: 'autorizar', user_id: id, funcao, modulos, papel: selPapel.value});
+      showToast(`${nvNomeDe(u)} autorizado: ${nvNomeFuncao(funcao) || 'todas as telas'} · ${NV_NIVEIS[selPapel.value]}. Já pode entrar.`); await nvCarregarUsuarios();
+    });
     nvComOcupado(async () => { await nvFuncaoUsuarios({acao: 'acesso', user_id: id, funcao, modulos}); showToast('Função e telas salvas. A pessoa vê a mudança na próxima sincronização.'); await nvCarregarUsuarios(); });
   };
   modal.classList.add('open');
 }
+// Senha provisória: a pessoa entra com ela e é obrigada a criar a dela
 function nvNovaSenha(id) {
   const u = (nvUsuarios || []).find(x => x.user_id === id); if (!u) return;
+  const sugestao = 'nexus' + String(Math.floor(1000 + Math.random() * 9000));
   openForm({
-    title: 'Nova senha', sub: `Para ${u.nome || nvMostrarLogin(u.login)}. Passe a nova senha para a pessoa.`, submit: 'Trocar senha',
-    fields: [{k: 'senha', label: 'Nova senha', required: true, full: true, placeholder: 'Pelo menos 8 caracteres'}],
+    title: 'Senha provisória', sub: `Para ${nvNomeDe(u)} (${nvMostrarLogin(u.login)}), que esqueceu a senha. Passe esta senha para a pessoa: no próximo login ela cria uma senha só dela. Os aparelhos dela pedem login de novo.`, submit: 'Gerar senha provisória',
+    fields: [{k: 'senha', label: 'Senha provisória', required: true, full: true, placeholder: 'Pelo menos 8 caracteres'}],
+    values: {senha: sugestao},
     onSubmit: d => {
       if (d.senha.length < 8) return 'A senha precisa ter pelo menos 8 caracteres.';
-      nvComOcupado(async () => { await nvFuncaoUsuarios({acao: 'senha', user_id: id, senha: d.senha}); showToast('Senha trocada'); });
+      nvComOcupado(async () => { await nvFuncaoUsuarios({acao: 'senha', user_id: id, senha: d.senha}); showToast(`Senha provisória de ${nvNomeDe(u)}: ${d.senha}`); });
     }
   });
 }
 const nvRemoverUsuario = id => {
   const u = (nvUsuarios || []).find(x => x.user_id === id); if (!u) return;
-  confirmDialog(`Remover ${u.nome || nvMostrarLogin(u.login)} da fazenda? A pessoa deixa de sincronizar. Os registros que ela lançou continuam.`, () =>
+  confirmDialog(`Remover ${nvNomeDe(u)} da fazenda? A pessoa deixa de sincronizar e, para voltar, terá de pedir acesso de novo. Os registros que ela lançou continuam. (Para só bloquear por um tempo, use Desativar.)`, () =>
     nvComOcupado(async () => { await nvFuncaoUsuarios({acao: 'remover', user_id: id}); showToast('Usuário removido'); await nvCarregarUsuarios(); }), 'Remover');
 };
+const nvRecusar = id => {
+  const u = (nvUsuarios || []).find(x => x.user_id === id); if (!u) return;
+  confirmDialog(`Recusar o pedido de ${nvNomeDe(u)} (${nvMostrarLogin(u.login)})? O pedido é apagado.`, () =>
+    nvComOcupado(async () => { await nvFuncaoUsuarios({acao: 'recusar', user_id: id}); showToast('Pedido recusado'); await nvCarregarUsuarios(); }), 'Recusar');
+};
+const nvMudarStatus = (id, status) => {
+  const u = (nvUsuarios || []).find(x => x.user_id === id); if (!u) return;
+  const fazer = () => nvComOcupado(async () => { await nvFuncaoUsuarios({acao: 'status', user_id: id, status}); showToast(status === 'ativo' ? `${nvNomeDe(u)} reativado` : `${nvNomeDe(u)} desativado`); await nvCarregarUsuarios(); });
+  if (status === 'ativo') return fazer();
+  confirmDialog(`Desativar ${nvNomeDe(u)}? A pessoa não entra mais e os aparelhos dela param de sincronizar (o que ela ainda não enviou fica guardado no aparelho). Você pode reativar quando quiser.`, fazer, 'Desativar');
+};
+const nvNovoCodigo = () => confirmDialog('Gerar um novo código da fazenda? O código atual deixa de valer para novos pedidos (quem já tem acesso continua normalmente).', () =>
+  nvComOcupado(async () => {
+    const c = await nvHttp('/rest/v1/rpc/novo_codigo', {method: 'POST', body: {p_farm: nv.fazenda.id}});
+    if (typeof c === 'string') { nv.fazenda = {...nv.fazenda, join_code: c}; nvSalvar(); }
+    showToast('Novo código gerado');
+  }), 'Gerar novo código');
 const nvMudarNivel = (id, papel) => nvComOcupado(async () => {
   await nvFuncaoUsuarios({acao: 'nivel', user_id: id, papel}); showToast(`Nível alterado para ${NV_NIVEIS[papel]}`); await nvCarregarUsuarios();
 });
@@ -674,17 +915,18 @@ function nvMostrar() {
 
 function cartaoNuvem() {
   const titulo = '<h3>Nuvem da equipe</h3>';
-  if (!nvVinculado()) return nv.sysadm && nv.sessao ? cartaoSistema() : '';
+  if (!nvVinculado()) return nv.sysadm && nv.sessao ? cartaoConta() + cartaoSistema() : '';
   const papel = nvPapel();
   return `<article class="card panel">${titulo}
     <p>Fazenda <b>${esc(nv.fazenda.name)}</b> • ${esc(nvMostrarLogin(nv.sessao.email))} • nível <b>${NV_NIVEIS[papel] || papel}</b></p>
     <p class="nota" id="nvStatus">${esc(nvTextoStatus())}</p>
     <div class="btn-row" style="margin-top:10px">${papel === 'member' ? '' : btn('Trocar de fazenda', 'nv-trocar', '', 'secondary')}${btn('Sair da conta', 'nv-sair', '', 'secondary')}</div>
     ${papel === 'member' ? '<p class="nota">Como Usuário comum, você lança os registros do dia a dia e edita só o que você lançou. Exclusões e o financeiro ficam com o supervisor e o ADM.</p>' : '<p class="nota">Quando o mesmo registro é alterado em dois aparelhos sem internet, vale a alteração mais recente; lançamentos de estoque dos dois lados são somados ao saldo.</p>'}</article>
-    ${papel === 'admin' ? `<article class="card panel"><h3>Usuários da fazenda</h3>
-      <p>Crie o login de cada pessoa com a <b>função</b> (decide as telas que ela vê) e o <b>nível</b> (decide o que ela faz nelas). <b>Supervisor</b>: lança, edita e exclui e vê o financeiro. <b>Usuário comum</b>: lança, edita só o que lançou e não exclui. <b>ADM</b>: tudo, inclusive os usuários.</p>
-      <div id="nvUsuarios">${nvListaUsuarios()}</div>
-      <div class="btn-row" style="margin-top:10px">${btn('+ Novo usuário', 'nv-u-novo')}</div></article>` : ''}${nv.sysadm ? cartaoSistema() : ''}`;
+    ${cartaoConta()}
+    ${papel === 'admin' ? `<article class="card panel" style="grid-column:1/-1"><h3>Usuários da fazenda</h3>
+      <p>Cada pessoa <b>pede o acesso</b> na tela de entrada (“Solicitar acesso”), com a senha que ela mesma escolhe e o código abaixo. Você autoriza escolhendo a <b>função</b> (as telas que ela vê) e o <b>nível</b>: <b>Usuário comum</b> lança e edita só o que lançou; <b>Supervisor</b> também edita, exclui e vê o financeiro; <b>ADM</b> faz tudo, inclusive os usuários.</p>
+      <p style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">Código da fazenda: <b class="nv-codigo">${esc(nv.fazenda.join_code || '—')}</b>${btn('Gerar novo código', 'nv-codigo', '', 'secondary')}</p>
+      <div id="nvUsuarios">${nvListaUsuarios()}</div></article>` : ''}${nv.sysadm ? cartaoSistema() : ''}`;
 }
 
 // ---------- Painel do ADM do sistema ----------
@@ -706,6 +948,10 @@ function nvListaTodas() {
       <td class="num">${atual ? '' : btn('Entrar', 'nv-usar', f.id, 'secondary')}</td></tr>`;
   }).join('')}</tbody></table></div>`;
 }
+// Minha conta: cada pessoa troca a própria senha
+const cartaoConta = () => `<article class="card panel"><h3>Minha conta</h3>
+  <p>Entra como <b>${esc(nvMostrarLogin(nv.sessao.email))}</b>${nv.sysadm ? ' · Admin do sistema' : ''}. A senha é só sua: nem o ADM sabe qual é.</p>
+  <div class="btn-row">${btn('Trocar minha senha', 'nv-minha-senha', '', 'secondary')}</div></article>`;
 function cartaoSistema() {
   return `<article class="card panel"><h3>Administração do sistema</h3>
     <p>Você é o <b>Admin do sistema</b>: vê todas as fazendas, entra em qualquer uma como ADM e gerencia os usuários de todas.${nvVinculado() ? '' : ' Sem fazenda aberta, o que você lançar fica só neste aparelho.'}</p>
@@ -724,6 +970,7 @@ VIEWS.cadastros.after = arg => {
   if (nvPapel() === 'admin' && nvUsuarios === null) nvCarregarUsuarios();
   if (nv.sysadm && nv.sessao && nvTodas === null) nvCarregarTodas();
   $$('[data-nv-nivel]').forEach(s => { s.onchange = () => nvMudarNivel(s.dataset.nvNivel, s.value); });
+  nvMarcarPedidos();
   nvMostrar();
 };
 function nvAntesDeTrocar() {
@@ -738,6 +985,15 @@ Object.assign(ACTIONS, {
   'nv-usar': id => { const f = (nvFazendas || []).find(x => x.id === id); if (f) nvVincular(f); },
   'nv-trocar': () => nvAntesDeTrocar() && confirmDialog('Trocar de fazenda? Você vai escolher outra fazenda desta conta; os dados deste aparelho continuam guardados na nuvem da fazenda atual.', () => { nvEsquecerFazenda(); nvTodas = null; nvSalvar(); nvPortao(); if (nv.sysadm) go('cadastros'); }, 'Trocar'),
   'nv-sys-fechar': () => nvAntesDeTrocar() && confirmDialog(`Fechar “${nv.fazenda?.name}” neste aparelho? Você continua conectado como Admin do sistema e pode entrar em outra fazenda.`, () => { nvEsquecerFazenda(); nvTodas = null; nvSalvar(); nvPortao(); }, 'Fechar'),
-  'nv-u-novo': nvNovoUsuario, 'nv-u-acesso': nvAcessoUsuario, 'nv-u-senha': nvNovaSenha, 'nv-u-remover': nvRemoverUsuario
+  'nv-u-acesso': id => nvAcessoUsuario(id), 'nv-u-autorizar': id => nvAcessoUsuario(id, true), 'nv-u-recusar': nvRecusar,
+  'nv-u-senha': nvNovaSenha, 'nv-u-remover': nvRemoverUsuario,
+  'nv-u-desativar': id => nvMudarStatus(id, 'inativo'), 'nv-u-reativar': id => nvMudarStatus(id, 'ativo'),
+  'nv-codigo': nvNovoCodigo, 'nv-minha-senha': nvTrocarMinhaSenha,
+  'nv-verificar': async silencioso => {
+    nvFazendas = null; nvAcessos = null; nvPortao();
+    await nvCarregarFazendas();
+    if (!nv.fazenda && !nv.sysadm && nvFazendas?.length === 1) { showToast('Acesso autorizado!'); nvVincular(nvFazendas[0]); }
+    else if (!nvFazendas?.length && silencioso !== true) showToast('Ainda aguardando o ADM');
+  }
 });
 nvProteger();
