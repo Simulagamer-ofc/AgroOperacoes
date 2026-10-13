@@ -528,3 +528,35 @@ body{background:var(--bg)}
 .af-intel li.ok .af-intel-ic{background:var(--green)} .af-intel li.atencao .af-intel-ic{background:var(--orange)} .af-intel li.alerta .af-intel-ic{background:var(--red)}
 .af-intel>small{display:block;margin-top:8px;color:var(--muted);font-size:.78rem}
 @media print{.af-intel{background:none}.af-intel li{background:none}}
+/* Aferição: impacto estimado, confirmação única, cronômetro e GPS */
+.af-impacto{margin-top:14px;border:1px solid var(--line);border-left:5px solid var(--blue,#3b82f6);border-radius:14px;padding:12px 14px}
+.af-impacto.alerta{border-left-color:var(--red)} .af-impacto.atencao{border-left-color:var(--orange)}
+.af-impacto h3{margin:0 0 4px;font-size:1rem} .af-imp-resumo{margin:0 0 8px;font-size:1.02rem;font-weight:700}
+.af-impacto .tbl td small{color:var(--muted)} .af-impacto>small{display:block;margin-top:8px;color:var(--muted);font-size:.78rem}
+.af-imp-campo{display:grid;gap:4px;margin-top:10px;font-size:.86rem;color:var(--muted)} .af-imp-campo input{max-width:220px}
+.af-confirma{border:1px solid var(--line);border-radius:12px;padding:10px 12px} .af-confirma.ok{border-color:var(--green)}
+.af-confirma ul{margin:6px 0 10px;padding-left:20px;font-size:.92rem} .af-confirma li{margin:2px 0}
+.af-crono-campo{display:flex;gap:8px;align-items:stretch} .af-crono-campo input{flex:1;min-width:0}
+.af-crono{white-space:nowrap} .af-crono.rodando{border-color:var(--red);color:var(--red);font-variant-numeric:tabular-nums}
+.af-gps{display:flex;align-items:baseline;justify-content:center;gap:8px;margin:14px 0 6px} .af-gps strong{font-size:3rem;font-variant-numeric:tabular-nums} .af-gps span{color:var(--muted)}
+/* Inspeção periódica (ISO 16122) */
+.insp-cartao{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:12px;flex-wrap:wrap}
+.insp-cartao small{display:block;color:var(--muted);margin-top:2px}
+.insp-progresso{position:relative;margin:12px 0;height:28px;border-radius:14px;background:var(--panel);border:1px solid var(--line);overflow:hidden}
+.insp-progresso span{position:relative;z-index:1;display:block;text-align:center;line-height:26px;font-size:.85rem;font-weight:700}
+.insp-progresso b{position:absolute;inset:0 auto 0 0;background:color-mix(in srgb,var(--green) 35%,transparent)}
+.insp-lista{display:grid;gap:10px}
+.insp-grupo{border:1px solid var(--line);border-left:5px solid var(--orange);border-radius:14px;padding:12px 14px;background:var(--panel)}
+.insp-grupo.ok{border-left-color:var(--green)} .insp-grupo.nao{border-left-color:var(--red)} .insp-grupo.na{border-left-color:var(--muted)}
+.insp-grupo header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.insp-grupo header small{display:block;color:var(--muted);font-size:.78rem}
+.insp-itens{margin:8px 0;padding-left:18px;font-size:.9rem;color:var(--muted)} .insp-itens li{margin:3px 0} .insp-itens label{display:flex;gap:8px;align-items:flex-start;color:var(--text)}
+.insp-itens input{width:18px;height:18px;flex:none;margin-top:2px;accent-color:var(--red)}
+.insp-grupo textarea{width:100%;margin:6px 0;border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--bg);color:var(--text)}
+.insp-bts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.insp-bts button{border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:10px;padding:10px 6px;font-weight:600;cursor:pointer}
+.insp-bts button.on.ok{background:var(--green);border-color:var(--green);color:#fff} .insp-bts button.on.nao{background:var(--red);border-color:var(--red);color:#fff} .insp-bts button.on.na{background:var(--muted);color:#fff}
+.insp-auto{color:var(--orange)!important;margin:6px 0 0}
+.insp-mano input{width:100%;min-width:70px} .insp-num{margin-top:8px}
+.insp-assinatura{margin:30px 0 10px;display:grid;justify-items:center;gap:2px} .insp-assinatura small{color:var(--muted)}
+.insp-itens li:has(label){list-style:none;margin-left:-18px}
