@@ -563,3 +563,17 @@ body{background:var(--bg)}
 /* Aviso de nova versão */
 .nova-versao{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:30;display:flex;gap:12px;align-items:center;background:#0f3550;color:#fff;border:1px solid #2b6c8f;border-radius:14px;padding:10px 12px 10px 16px;box-shadow:0 12px 30px rgba(0,0,0,.35);font-size:.92rem;max-width:calc(100% - 24px)}
 .nova-versao button{background:var(--green);color:#fff;border:0;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer;white-space:nowrap}
+/* Visão geral: Hoje (o que fazer) e clima */
+.hoje{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:14px;margin-bottom:16px}
+@media(max-width:900px){.hoje{grid-template-columns:1fr}}
+.hoje h3 small{font-weight:500;color:var(--muted);font-size:.85rem;margin-left:6px;text-transform:none}
+.hoje-item{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:9px 4px;border-bottom:1px solid var(--line)}
+.hoje-item:last-of-type{border-bottom:0} .hoje-item strong{display:block;font-size:.93rem} .hoje-item small{display:block;color:var(--muted);font-size:.82rem;margin-top:1px}
+.hoje-item.clickable{cursor:pointer} .hoje-ir{color:var(--muted);font-size:1.4rem}
+.hoje-dias{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:4px 0 10px}
+.hoje-dia{border:1px solid var(--line);border-radius:12px;padding:8px 6px;text-align:center;display:grid;gap:2px}
+.hoje-dia strong{font-size:1.15rem} .hoje-dia strong span{color:var(--muted);font-weight:500;font-size:.9rem} .hoje-dia small{color:var(--muted);font-size:.74rem}
+.hoje-jan{margin:6px 0;padding:8px 10px;border-radius:10px;font-size:.9rem;border-left:4px solid var(--green);background:color-mix(in srgb,var(--green) 10%,transparent)}
+.hoje-jan.nao{border-left-color:var(--orange);background:color-mix(in srgb,var(--orange) 10%,transparent)}
+.hoje-clima small.nota{display:block;margin-top:8px;font-size:.74rem}
+.safra-periodo{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:12px}.safra-periodo label{display:flex;gap:6px;align-items:center;color:var(--muted)}

@@ -865,6 +865,18 @@ function situacaoReaferir(m) {
   const faltam = Math.round((new Date(proxima + 'T12:00:00') - new Date(today() + 'T12:00:00')) / 864e5);
   return {ultima, proxima, dias: faltam, vencida: faltam < 0, motivo};
 }
+// Situação do pulverizador antes de aplicar: aferição de bicos fora, inspeção reprovada/vencida ou aferição atrasada ('' = tudo certo)
+function avisoPulverizador(machineId) {
+  const m = find('machines', machineId); if (!m) return '';
+  const doMaq = db.afericoes.filter(a => a.maquina?.id === m.id).sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora));
+  const bicos = doMaq.find(a => a.tipo === 'bicos'), insp = doMaq.find(a => a.tipo === 'inspecao'), p = [];
+  if (bicos?.resultado?.status === 'FORA_DO_PADRAO') p.push(`a última aferição de bicos (${fmtDate(bicos.data)}) deu fora da referência`);
+  if (insp?.resultado?.status === 'FORA_DO_PADRAO') p.push(`a inspeção periódica (${fmtDate(insp.data)}) foi reprovada`);
+  else if (insp?.resultado?.validade && insp.resultado.validade < today()) p.push(`a inspeção periódica venceu em ${fmtDate(insp.resultado.validade)}`);
+  const r = situacaoReaferir(m);
+  if (r.vencida && r.dias !== null && !p.length) p.push(`a aferição está atrasada há ${-r.dias} dias`);
+  return p.join('; ');
+}
 const temCalendario = m => !isInactive(m) && situacaoReaferir(m).proxima !== undefined;
 const textoReaferir = m => { const r = situacaoReaferir(m); if (r.proxima === undefined) return ''; return r.vencida ? (r.dias === null ? `! Reaferição: nunca aferida (a cada ${num(m.reaferirDias)} dias)` : `! Reaferição atrasada há ${-r.dias} dias (${r.motivo})`) : `Próxima aferição: ${fmtDate(r.proxima)}${r.dias <= 7 ? ` (em ${r.dias} d)` : ''} — ${r.motivo}`; };
 ACTIONS['af-maq'] = id => { afMaqFiltro = id || ''; go('afericao'); };

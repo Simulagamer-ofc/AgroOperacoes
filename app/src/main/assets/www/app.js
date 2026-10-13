@@ -114,10 +114,11 @@ const stockLow = s => Number(s.min) > 0 && Number(s.qty) <= Number(s.min);
 function alerts() {
   const list = [];
   db.stock.filter(stockLow).forEach(s => list.push({color: 'red', icon: '!', title: `Estoque baixo: ${s.name}`, text: `Saldo ${num(s.qty)} ${s.unit} (mínimo ${num(s.min)} ${s.unit}).`, route: 'estoque'}));
-  db.machines.filter(m => !isInactive(m) && Number(m.nextService) > 0 && hoursToService(m) <= SERVICE_WARN_HOURS).forEach(m => {
-    const left = hoursToService(m);
+  const prevRev = m => typeof previsaoRevisao === 'function' ? previsaoRevisao(m) : null;
+  db.machines.filter(m => !isInactive(m) && Number(m.nextService) > 0 && (hoursToService(m) <= SERVICE_WARN_HOURS || prevRev(m)?.dias <= 7)).forEach(m => {
+    const left = hoursToService(m), pr = prevRev(m);
     const pct = Math.max(0, Math.min(100, 100 - (left / (Number(m.interval) || 250)) * 100));
-    list.push({color: 'orange', icon: '⚙', title: left <= 0 ? `Revisão vencida: ${m.name}` : `Revisão em ${num(left)} h: ${m.name}`, text: `Horímetro em ${num(m.hours)} h; revisão programada para ${num(m.nextService)} h.`, progress: pct, route: 'maquinas'});
+    list.push({color: 'orange', icon: '⚙', title: left <= 0 ? `Revisão vencida: ${m.name}` : `Revisão em ${num(left)} h: ${m.name}`, text: `Horímetro em ${num(m.hours)} h; revisão programada para ${num(m.nextService)} h.${pr?.data && left > 0 ? ` Pelo ritmo de uso (~${um1(pr.ritmo)} h/dia), por volta de ${fmtDate(pr.data)}.` : ''}`, progress: pct, route: 'maquinas'});
   });
   openMaintenances().forEach(mt => list.push({color: 'orange', icon: '⚙', title: `Manutenção aberta: ${machineName(mt.machineId) || 'máquina'}`, text: `${mt.kind} — ${mt.description || 'sem descrição'} (desde ${fmtDate(mt.date)}).`, route: 'maquinas'}));
   db.lots.filter(l => l.status === 'Aguardando análise').forEach(l => list.push({color: 'purple', icon: '⌁', title: `Lote aguardando análise: ${l.code}`, text: 'Registre o resultado de germinação/vigor.', route: 'lotes/' + l.id}));
@@ -537,7 +538,9 @@ const mini = (label, act, id, cls = '') => `<button class="${cls}" data-act="${a
 
 function operationRow(o, actions = true) {
   const color = STATUS_COLOR[o.status] || 'blue';
-  const parts = [fmtDate(o.date) + (o.time ? ' ' + o.time : ''), machineName(o.machineId), o.area ? `${num(o.area)} ha` : '', o.operator, o.notes].filter(Boolean);
+  const horas = Number(o.horas) > 0 ? `${um1(o.horas)} h${Number(o.area) > 0 ? ` (${um1(o.area / o.horas)} ha/h)` : ''}` : '';
+  const por = typeof quemLancou === 'function' ? quemLancou(o) : '';
+  const parts = [fmtDate(o.date) + (o.time ? ' ' + o.time : ''), machineName(o.machineId), o.area ? `${num(o.area)} ha` : '', horas, o.operator, o.notes, por ? 'lançado por ' + por : ''].filter(Boolean);
   const acts = !actions ? chip(o.status, color) : `<div class="row-actions">${chip(o.status, color)}${o.status === 'Programada' ? mini('▶ Iniciar', 'op-start', o.id) : ''}${o.status === 'Em andamento' ? mini('✓ Concluir', 'op-done', o.id, 'ok') : ''}${mini('Editar', 'op-edit', o.id)}${mini('Excluir', 'op-del', o.id, 'del')}</div>`;
   return `<div class="row"><span class="status ${color === 'gray' ? 'green' : color}"></span><div><strong>${esc(o.type)} — ${esc(opPlace(o))}</strong><small>${esc(parts.join(' • '))}</small></div>${acts}</div>`;
 }
@@ -595,7 +598,8 @@ VIEWS.maquinas = () => {
       // Barra até a próxima revisão: horas desde a última revisão ÷ intervalo
       const intervalo = Number(m.interval) || 250, pct = temRev ? Math.max(0, Math.min(100, 100 - left / intervalo * 100)) : 0;
       const corRev = !temRev ? '' : left <= 0 ? 'rev-vencida' : left <= SERVICE_WARN_HOURS ? 'rev-alerta' : 'rev-ok';
-      const textoRev = !temRev ? 'Sem revisão programada' : left <= 0 ? `! Revisão vencida há ${num(-left)} h` : `Revisão em ${num(left)} h (${num(m.nextService)} h)`;
+      const pr = temRev && left > 0 && typeof previsaoRevisao === 'function' ? previsaoRevisao(m) : null;
+      const textoRev = !temRev ? 'Sem revisão programada' : left <= 0 ? `! Revisão vencida há ${num(-left)} h` : `Revisão em ${num(left)} h (${num(m.nextService)} h)${pr?.data ? ` — por volta de ${fmtDate(pr.data)}` : ''}`;
       const af = db.afericoes.filter(a => a.maquina?.id === m.id).sort((a, b) => String((b.data || '') + (b.hora || '')).localeCompare((a.data || '') + (a.hora || '')))[0];
       const cfgN = m.config ? Object.keys(m.config).length : 0;
       const extras = [cfgN ? `Configuração para aferição: ${cfgN} ${cfgN === 1 ? 'parâmetro' : 'parâmetros'}` : '', m.catalogo ? `Catálogo: ${esc(m.catalogo.marca)} ${esc(m.catalogo.nome)}` : '', af ? `Última aferição: ${fmtDate(af.data)} — ${esc({OK: 'dentro da referência', ATENCAO: 'atenção', FORA_DO_PADRAO: 'fora da referência', SEM_REFERENCIA: 'não avaliada', DADOS_INSUFICIENTES: 'dados insuficientes'}[af.resultado.status] || '')}` : '', typeof textoReaferir === 'function' ? textoReaferir(m) : ''].filter(Boolean);
@@ -633,7 +637,7 @@ VIEWS.talhao = id => {
   const ops = db.operations.filter(o => o.fieldId === id).sort(byDateDesc);
   const movs = db.movements.filter(m => m.fieldId === id && m.kind === 'Saída').sort(byDateDesc);
   const gastos = db.expenses.filter(g => g.fieldId === id && Number(g.value) > 0).sort(byDateDesc), totG = gastos.reduce((s, g) => s + Number(g.value), 0);
-  return head(f.name, `${num(f.area)} ha • ${[f.crop, f.cultivar, f.season].filter(Boolean).join(' • ')}`, btn('← Talhões', 'nav', 'talhoes', 'secondary') + btn('⌖ Contorno (GPS)', 'nav', 'contorno/' + id, 'secondary') + btn('+ Colheita', 'pd-colheita', id, 'secondary') + btn('+ Operação', 'op-field', id)) +
+  return head(f.name, `${num(f.area)} ha • ${[f.crop, f.cultivar, f.season].filter(Boolean).join(' • ')}`, btn('← Talhões', 'nav', 'talhoes', 'secondary') + btn('⌖ Contorno (GPS)', 'nav', 'contorno/' + id, 'secondary') + btn('Relatório da safra', 'nav', 'safra/' + id, 'secondary') + btn('+ Colheita', 'pd-colheita', id, 'secondary') + btn('+ Operação', 'op-field', id)) +
     (f.contorno && typeof svgContorno === 'function' ? `<section class="card panel ctn-resumo">${svgContorno(f.contorno.pontos, {tam: 120, classe: 'ctn-mini', rotulo: 'Contorno de ' + f.name})}<div><strong>Contorno medido por GPS</strong><small>${um1(f.contorno.areaHa)} ha • perímetro ${num(f.contorno.perimetroM)} m • ${fmtDate(f.contorno.data)}${Math.abs(f.contorno.areaHa - Number(f.area || 0)) > 0.05 ? ` • cadastro: ${num(f.area)} ha` : ''}</small></div></section>` : '') +
     `<div class="section-title"><h3>Operações (${ops.length})</h3></div><section class="card list">${ops.length ? ops.map(o => operationRow(o)).join('') : empty('Nenhuma operação neste talhão', '')}</section>` +
     `<div class="section-title"><h3>Insumos aplicados</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Data</th><th>Item</th><th class="num">Quantidade</th><th class="num">Por ha</th><th class="num">Custo</th></tr></thead><tbody>${movs.map(m => { const s = find('stock', m.itemId); return `<tr><td>${fmtDate(m.date)}</td><td>${esc(s?.name || 'Item removido')}</td><td class="num">${num(m.qty)} ${esc(s?.unit || '')}</td><td class="num">${Number(f.area) ? num(m.qty / f.area) : '—'}</td><td class="num">${Number(m.value) > 0 ? `R$ ${num(m.value, 2)}${Number(f.area) ? `<br><small>R$ ${num(m.value / f.area, 2)}/ha</small>` : ''}` : '—'}</td></tr>`; }).join('') || '<tr><td colspan="5">Nenhuma saída de estoque vinculada a este talhão.</td></tr>'}</tbody></table></div></section>` +

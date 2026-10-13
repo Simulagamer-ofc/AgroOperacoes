@@ -70,18 +70,24 @@ VIEWS.pragas = () => {
 };
 
 // ---------------- Aplicações e carência ----------------
+let avisoPulvConfirmado = '';
 function aplicacaoForm() {
   if (!db.fields.length) { showToast('Cadastre o talhão primeiro'); return fieldForm(); }
+  avisoPulvConfirmado = '';
+  const pulvs = db.machines.filter(m => !isInactive(m)).sort((a, b) => (b.type === 'Pulverizador') - (a.type === 'Pulverizador') || a.name.localeCompare(b.name)).map(m => ({value: m.id, label: m.name}));
   openForm({title: 'Registrar aplicação de defensivo', sub: 'Carência e reentrada conforme a bula/receituário. A quantidade total pode sair do estoque.', values: {date: today(), baixar: 'Sim'},
     fields: [{k: 'fieldId', label: 'Talhão', type: 'select', options: fieldOptions, required: true, full: true}, {k: 'date', label: 'Data da aplicação', type: 'date', required: true},
       {k: 'itemId', label: 'Produto do estoque', type: 'select', full: true, options: () => db.stock.map(s => ({value: s.id, label: `${s.name} — ${num(s.qty)} ${s.unit}`}))},
       {k: 'produto', label: 'ou nome do produto', placeholder: 'Se não estiver no estoque'}, {k: 'dose', label: 'Dose aplicada', placeholder: 'Ex.: 1,5 L/ha'},
       {k: 'qtd', label: 'Quantidade total usada', type: 'number', min: 0, hint: 'Na unidade do item do estoque.'}, {k: 'baixar', label: 'Tirar a quantidade do estoque', type: 'select', options: ['Sim', 'Não'], required: true},
       {k: 'carencia', label: 'Carência (dias, da bula)', type: 'number', min: 0, required: true}, {k: 'reentrada', label: 'Reentrada (horas, da bula)', type: 'number', min: 0},
+      {k: 'machineId', label: 'Pulverizador', type: 'select', options: pulvs, hint: 'O app avisa se a aferição ou a inspeção dele estiver vencida ou reprovada.'},
       {k: 'receituario', label: 'Nº do receituário agronômico'}, {k: 'responsavel', label: 'Responsável técnico'}, {k: 'notes', label: 'Observações', type: 'textarea'}],
     onSubmit: v => {
       const s = v.itemId ? find('stock', v.itemId) : null;
       if (!s && !v.produto) return 'Escolha o produto do estoque ou informe o nome';
+      const aviso = v.machineId && typeof avisoPulverizador === 'function' ? avisoPulverizador(v.machineId) : '';
+      if (aviso && avisoPulvConfirmado !== v.machineId) { avisoPulvConfirmado = v.machineId; return `Atenção: ${machineName(v.machineId)} — ${aviso}. Toque em salvar de novo para registrar mesmo assim.`; }
       if (s && v.baixar === 'Sim' && v.qtd > 0) {
         if (v.qtd > Number(s.qty || 0)) return `Saldo insuficiente de ${s.name} (${num(s.qty)} ${s.unit})`;
         const mov = aplicarMovimento(s, 'Saída', v.qtd, 0);
@@ -104,7 +110,7 @@ VIEWS.aplicacoes = () => {
       <article class="card kpi"><div class="label">Aplicações no mês</div><div class="value">${lista.filter(a => a.date >= t.slice(0, 8) + '01').length}</div><div class="hint">${lista.length} no total</div></article>
       <article class="card kpi"><div class="label">Sem receituário</div><div class="value">${lista.filter(a => !a.receituario).length}</div><div class="hint">aplicações sem nº de receituário</div></article>
     </section>
-    <div class="section-title"><h3>Aplicações</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Data</th><th>Talhão</th><th>Produto</th><th>Carência</th><th>Colheita liberada</th><th></th></tr></thead><tbody>${lista.map(a => { const lib = addDias(a.date, Number(a.carencia) || 0); return `<tr><td>${fmtDate(a.date)}</td><td>${esc(fieldName(a.fieldId))}</td><td><strong>${esc(a.produto)}</strong>${a.dose ? `<br><small style="color:var(--muted)">${esc(a.dose)}</small>` : ''}${a.receituario ? `<br><small style="color:var(--muted)">Receituário ${esc(a.receituario)}</small>` : ''}</td><td>${num(a.carencia)} dias${a.reentrada ? `<br><small style="color:var(--muted)">reentrada ${num(a.reentrada)} h</small>` : ''}</td><td>${lib > t ? chip('a partir de ' + fmtDate(lib), 'orange') : chip('liberada', 'green')}</td><td>${mini('Excluir', 'ap-del', a.id, 'del')}</td></tr>`; }).join('')}</tbody></table></div></section>`
+    <div class="section-title"><h3>Aplicações</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Data</th><th>Talhão</th><th>Produto</th><th>Carência</th><th>Colheita liberada</th><th></th></tr></thead><tbody>${lista.map(a => { const lib = addDias(a.date, Number(a.carencia) || 0); return `<tr><td>${fmtDate(a.date)}</td><td>${esc(fieldName(a.fieldId))}</td><td><strong>${esc(a.produto)}</strong>${a.dose ? `<br><small style="color:var(--muted)">${esc(a.dose)}</small>` : ''}${a.receituario ? `<br><small style="color:var(--muted)">Receituário ${esc(a.receituario)}</small>` : ''}${a.machineId ? `<br><small style="color:var(--muted)">${esc(machineName(a.machineId))}</small>` : ''}${typeof quemLancou === 'function' && quemLancou(a) ? `<br><small style="color:var(--muted)">lançado por ${esc(quemLancou(a))}</small>` : ''}</td><td>${num(a.carencia)} dias${a.reentrada ? `<br><small style="color:var(--muted)">reentrada ${num(a.reentrada)} h</small>` : ''}</td><td>${lib > t ? chip('a partir de ' + fmtDate(lib), 'orange') : chip('liberada', 'green')}</td><td>${mini('Excluir', 'ap-del', a.id, 'del')}</td></tr>`; }).join('')}</tbody></table></div></section>`
     : `<section class="card">${empty('Nenhuma aplicação registrada', 'Registre os defensivos aplicados com a carência da bula para saber quando cada talhão pode ser colhido.', {act: 'ap-new', label: '+ Aplicação'})}</section>`);
 };
 
