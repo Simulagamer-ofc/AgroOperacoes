@@ -517,3 +517,14 @@ body{background:var(--bg)}
 .nx-periods{flex-wrap:wrap;justify-content:flex-end}
 .nx-periods .nx-periodo-datas{display:inline-flex;align-items:center;gap:6px}
 .nx-periods .nx-periodo-datas svg{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
+/* Aferição: diagnóstico e ajustes calculados (orientação, não muda o resultado) */
+.af-intel{margin-top:14px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:color-mix(in srgb,var(--green) 5%,transparent)}
+.af-intel h3{margin:0 0 8px;font-size:1rem}
+.af-intel ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.af-intel li{display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:start;padding:8px 10px;border-radius:10px;background:var(--panel);border-left:4px solid var(--blue,#3b82f6)}
+.af-intel li.ok{border-left-color:var(--green)} .af-intel li.atencao{border-left-color:var(--orange)} .af-intel li.alerta{border-left-color:var(--red)}
+.af-intel li strong{display:block;font-size:.93rem} .af-intel li span{display:block;font-size:.86rem;color:var(--muted);margin-top:2px;line-height:1.4}
+.af-intel-ic{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;font-weight:800;color:#fff;background:var(--blue,#3b82f6)}
+.af-intel li.ok .af-intel-ic{background:var(--green)} .af-intel li.atencao .af-intel-ic{background:var(--orange)} .af-intel li.alerta .af-intel-ic{background:var(--red)}
+.af-intel>small{display:block;margin-top:8px;color:var(--muted);font-size:.78rem}
+@media print{.af-intel{background:none}.af-intel li{background:none}}
