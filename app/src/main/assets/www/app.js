@@ -950,4 +950,20 @@ addEventListener('beforeinstallprompt', event => { event.preventDefault(); insta
 installBtn.onclick = async () => { if (!installPrompt) { showToast('Abra o menu do navegador e escolha “Instalar aplicativo”'); return; } installPrompt.prompt(); await installPrompt.userChoice; installPrompt = null; installBtn.classList.remove('show'); };
 addEventListener('appinstalled', () => showToast('Aplicativo instalado com sucesso'));
 // No app Android os arquivos já vêm do APK; o service worker serve apenas à versão web (PWA).
-if ('serviceWorker' in navigator && !window.AndroidBridge) addEventListener('load', () => navigator.serviceWorker.register('sw.js', {updateViaCache: 'none'}).catch(() => {}));
+if ('serviceWorker' in navigator && !window.AndroidBridge) addEventListener('load', () => {
+  const jaControlado = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.register('sw.js', {updateViaCache: 'none'}).then(reg => {
+    // Procura versão nova ao voltar para o app (e a cada hora com ele aberto)
+    const conferir = () => reg.update().catch(() => {});
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') conferir(); });
+    setInterval(conferir, 3600000);
+  }).catch(() => {});
+  // A versão nova assumiu: oferece recarregar (só quando já havia uma versão antes, não na primeira instalação)
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!jaControlado || document.getElementById('novaVersao')) return;
+    const bar = Object.assign(document.createElement('div'), {id: 'novaVersao', className: 'nova-versao', role: 'status'});
+    bar.innerHTML = '<span>Nova versão do Nexus Agro disponível.</span><button type="button">Atualizar agora</button>';
+    bar.querySelector('button').onclick = () => location.reload();
+    document.body.append(bar);
+  });
+});

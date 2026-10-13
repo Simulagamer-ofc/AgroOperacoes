@@ -413,7 +413,10 @@ document.head.insertAdjacentHTML('beforeend', `<style>
 </style>`);
 nvAplicarPapel();
 nvProteger();
-addEventListener('DOMContentLoaded', nvProteger); // ações das telas carregadas depois deste arquivo
+addEventListener('DOMContentLoaded', nvProteger);
+// Avisos (sininho e Visão geral): só os das telas liberadas para a função de quem está usando
+const alertasSemFuncao = alerts;
+alerts = function () { return alertasSemFuncao().filter(a => !a.route || nvPodeRota(String(a.route).split('/')[0])); }; // ações das telas carregadas depois deste arquivo
 
 // ---------- Conta e fazenda ----------
 async function nvComOcupado(fn) {
