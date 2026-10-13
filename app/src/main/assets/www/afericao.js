@@ -219,11 +219,11 @@ VIEWS.afericao = arg => {
   if (arg === 'nova') { if (!wz) wz = criarWizard(); return passoWizard(); }
   if (arg) return relatorio(arg);
   const lista = db.afericoes.filter(a => !afMaqFiltro || a.maquina?.id === afMaqFiltro).sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora));
-  const comIntervalo = db.machines.filter(m => !isInactive(m) && Number(m.reaferirDias) > 0);
+  const comIntervalo = db.machines.filter(temCalendario);
   const maqsComAf = [...new Set(db.afericoes.map(a => a.maquina?.id).filter(Boolean))].map(id => find('machines', id)).filter(Boolean);
   return head('Aferição e calibragem', 'Escolha o que vai aferir. O resultado só é concluído com referência técnica validada. Funciona sem internet.') +
     `<section class="af-tipos">${Object.keys(TIPOS).map(k => cartaoTipo(k, false, 'af-nova-tipo')).join('')}</section>` +
-    (comIntervalo.length ? `<div class="section-title"><h3>Calendário de aferição</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Máquina</th><th>Última aferição</th><th>Próxima</th><th></th></tr></thead><tbody>${comIntervalo.map(m => { const r = situacaoReaferir(m); return `<tr><td><strong>${esc(m.name)}</strong><br><small style="color:var(--muted)">a cada ${num(m.reaferirDias)} dias</small></td><td>${r.ultima ? fmtDate(r.ultima.data) + ' ' + statusChip(r.ultima.resultado.status) : 'nunca aferida'}</td><td>${r.vencida ? chip(r.dias === null ? 'Aferir agora' : `Atrasada ${-r.dias} d`, 'red') : r.dias <= 7 ? chip(`Em ${r.dias} d`, 'orange') : fmtDate(r.proxima)}</td><td>${mini('◎ Aferir', 'af-nova', m.id)}</td></tr>`; }).join('')}</tbody></table></div></section>` : '') +
+    (comIntervalo.length ? `<div class="section-title"><h3>Calendário de aferição</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Máquina</th><th>Última aferição</th><th>Próxima</th><th></th></tr></thead><tbody>${comIntervalo.map(m => { const r = situacaoReaferir(m); return `<tr><td><strong>${esc(m.name)}</strong><br><small style="color:var(--muted)">${esc(r.motivo || '')}</small></td><td>${r.ultima ? fmtDate(r.ultima.data) + ' ' + statusChip(r.ultima.resultado.status) : 'nunca aferida'}</td><td>${r.vencida ? chip(r.dias === null ? 'Aferir agora' : `Atrasada ${-r.dias} d`, 'red') : r.dias <= 7 ? chip(`Em ${r.dias} d`, 'orange') : fmtDate(r.proxima)}</td><td>${mini('◎ Aferir', 'af-nova', m.id)}</td></tr>`; }).join('')}</tbody></table></div></section>` : '') +
     `<div class="section-title"><h3>Registros (${lista.length})</h3></div>${maqsComAf.length > 1 || afMaqFiltro ? `<div class="filters"><button class="${!afMaqFiltro ? 'active' : ''}" data-act="af-maq" data-id="">Todas as máquinas</button>${maqsComAf.map(m => `<button class="${afMaqFiltro === m.id ? 'active' : ''}" data-act="af-maq" data-id="${esc(m.id)}">${esc(m.name)}</button>`).join('')}</div>` : ''}<section class="card list">${lista.length ? lista.map(a => {
       const p = principal(a.resultado);
       return `<div class="row clickable" data-act="nav" data-id="afericao/${esc(a.id)}" style="cursor:pointer"><span class="status ${STATUS_INFO[a.resultado.status]?.cor === 'gray' ? 'blue' : STATUS_INFO[a.resultado.status]?.cor}"></span><div><strong>${esc(TIPOS[a.tipo]?.titulo || a.tipo)} — ${esc(a.maquina?.name || 'equipamento não cadastrado')}</strong><small>${esc([fmtDate(a.data) + ' ' + a.hora, a.responsavel, p?.regraId ? 'regra ' + p.regraId + ' v' + p.regraVersao : ''].filter(Boolean).join(' • '))}</small></div>${statusChip(a.resultado.status)}</div>`;
@@ -256,7 +256,7 @@ const nav = (voltar, avancar = 'Próximo →') => `<div class="actions">${voltar
 
 function passoWizard() {
   const w = wz;
-  const topo = head(w.tipo ? `Aferição: ${TIPO_UI[w.tipo].curto.toLowerCase()}` : 'Nova aferição', w.passo === 1 ? 'Escolha o que vai aferir e em qual máquina.' : TIPOS[w.tipo]?.desc || '') + passos(w.passo);
+  const topo = head(w.tipo ? `Aferição: ${TIPO_UI[w.tipo].curto.toLowerCase()}` : 'Nova aferição', w.passo === 1 ? 'Escolha o que vai aferir e em qual máquina.' : w.tipo === 'bicos' && w.refVazao === 'ponta_nova' ? 'Compara a vazão de cada ponta com a de uma ponta nova do mesmo modelo (critério prático de campo).' : TIPOS[w.tipo]?.desc || '') + passos(w.passo);
   if (w.passo === 1) {
     const fams = w.tipo ? TIPOS[w.tipo].familias : [];
     const comp = TIPO_MAQ_FAMILIA[w.familia] || fams.flatMap(f => TIPO_MAQ_FAMILIA[f] || []);
@@ -281,18 +281,21 @@ function passoWizard() {
   }
   if (w.passo === 2) {
     const S = {
-      bicos: () => [
-        pergunta('pressaoColetaIgualCatalogo', 'A coleta foi feita na mesma pressão da tabela do fabricante?') +
+      bicos: () => { const nova = w.refVazao === 'ponta_nova'; return [
+        (nova ? '' : pergunta('pressaoColetaIgualCatalogo', 'A coleta foi feita na mesma pressão da tabela do fabricante?')) +
         pergunta('mesmoTempoColeta', 'Todos os bicos foram coletados no mesmo tempo e pressão?') +
         pergunta('pontasMesmoModelo', 'As pontas são todas do mesmo modelo?'),
+        `<div class="field full"><label>Comparar cada bico com</label><div class="filters af-fam">${[['tabela', 'Tabela do fabricante'], ['ponta_nova', 'Uma ponta nova medida']].map(([k, t]) => `<button type="button" class="${(w.refVazao || 'tabela') === k ? 'active' : ''}" data-act="af-refvazao" data-id="${k}">${t}</button>`).join('')}</div><span class="hint">${nova ? 'Meça uma ponta NOVA do mesmo modelo, na mesma pressão e no mesmo tempo dos outros bicos. Critério prático: troca-se a ponta que passa 10% da ponta nova.' : 'Sem a tabela? Escolha “Uma ponta nova medida”.'}</span></div>` +
         campo('modeloPonta', 'Modelo da ponta', inp('modeloPonta', w.modeloPonta, 'placeholder="Ex.: XR 110 02"')) +
         campo('pressao', 'Pressão na coleta', num_('pressao', w.pressao)) +
         campo('unidadePressao', 'Unidade da pressão', sel('unidadePressao', [['bar', 'bar'], ['psi', 'psi (lbf/pol²)']], w.unidadePressao || 'bar', 'bar'), 'A do manômetro usado na coleta.') +
         campo('corIso', 'Cor da ponta (ISO 10625)', `<select data-wz="corIso" id="wz_corIso"><option value="">—</option></select>`, 'Só identifica a classe de vazão.') +
+        (nova ? pergunta('pontaNovaMesmaCondicao', 'A ponta nova foi medida na mesma pressão e no mesmo tempo de coleta dos outros bicos?') +
+          campo('vazaoPontaNova', `Vazão medida na ponta nova (${w.unidadeVazao || 'L/min'})`, num_('vazaoPontaNova', w.vazaoPontaNova), 'Mesma unidade das vazões medidas abaixo.', true) :
         '<div class="field full" id="pontaCat"></div>' +
-        campo('vazaoCatalogo', 'Vazão da tabela do fabricante (L/min)', num_('vazaoCatalogo', w.vazaoCatalogo), w._avisoVazao ? w._avisoVazao : w.fonteVazao ? `Da tabela ${w.fonteVazao.ponta} a ${String(w.fonteVazao.pressao).replace('.', ',')} ${w.fonteVazao.unidadePressao} — ${w.fonteVazao.fonte}${w.fonteVazao.pagina ? ', p. ' + w.fonteVazao.pagina : ''}.` : 'Do catálogo do modelo exato, na pressão da coleta. Só entra se você digitar ou confirmar no catálogo de pontas acima.'),
+        campo('vazaoCatalogo', 'Vazão da tabela do fabricante (L/min)', num_('vazaoCatalogo', w.vazaoCatalogo), w._avisoVazao ? w._avisoVazao : w.fonteVazao ? `Da tabela ${w.fonteVazao.ponta} a ${String(w.fonteVazao.pressao).replace('.', ',')} ${w.fonteVazao.unidadePressao} — ${w.fonteVazao.fonte}${w.fonteVazao.pagina ? ', p. ' + w.fonteVazao.pagina : ''}.` : 'Do catálogo do modelo exato, na pressão da coleta. Só entra se você digitar ou confirmar no catálogo de pontas acima.')) +
         campo('unidadeVazao', 'Unidade das vazões medidas', sel('unidadeVazao', [['L/min', 'L/min'], ['mL/min', 'mL/min']], w.unidadeVazao || 'L/min', 'L/min'), '', true) +
-        listaMedidas('vazoes', 'Vazão medida em cada bico', w.unidadeVazao || 'L/min')],
+        listaMedidas('vazoes', 'Vazão medida em cada bico', w.unidadeVazao || 'L/min')]; },
       perdas: () => [
         pergunta('incluiGraosEmVagens', 'Foram recolhidos os grãos soltos e os de dentro das vagens?'),
         campo('areaM2', 'Área de cada ponto (m²)', num_('areaM2', w.areaM2), 'Armação Embrapa: 4,0 m × 0,5 m = 2,0 m².' + (() => { const L = configDaMaquina(w.machineId).larguraPlataformaM; return L ? ` Com a plataforma de ${num(L, 2)} m (configuração da máquina), uma armação na largura toda precisa de ${num(2 / L, 2)} m de profundidade para dar 2 m².` : ''; })(), true),
@@ -309,13 +312,16 @@ function passoWizard() {
         pergunta('comparadoComInstrumentoReferencia', 'A leitura foi comparada com um instrumento de referência (trena + cronômetro, coleta volumétrica…)?'),
         campo('ponto', 'O que foi verificado', sel('ponto', [['sensor_velocidade', 'Sensor de velocidade'], ['fluxometro', 'Fluxômetro']], w.ponto, 'Selecione'), '', true),
         campo('leituraControlador', 'Leitura do controlador', num_('leituraControlador', w.leituraControlador)) +
-        campo('referencia', 'Valor do instrumento de referência', num_('referencia', w.referencia), 'Mesma unidade da leitura.')],
+        campo('referencia', 'Valor do instrumento de referência', num_('referencia', w.referencia), 'Mesma unidade da leitura.') +
+        campo('fatorAtual', 'Fator de calibração atual do controlador (opcional)', num_('fatorAtual', w.fatorAtual), 'Para o app calcular o novo fator.') +
+        campo('tipoFator', 'Tipo do fator', sel('tipoFator', [['pulsos_por', 'Pulsos por unidade (pulsos/L, pulsos/100 m…)'], ['por_pulso', 'Unidade por pulso (cm/pulso, mL/pulso…)']], w.tipoFator, 'Selecione'), 'Veja no manual do controlador.')],
       taxa: () => ['',
         campo('espacamentoBicosM', 'Espaçamento entre bicos (m)', num_('espacamentoBicosM', w.espacamentoBicosM)) +
         campo('taxaPlanejada', 'Taxa planejada (L/ha)', num_('taxaPlanejada', w.taxaPlanejada)),
         campo('vazaoMediaBico', 'Vazão média por bico (L/min)', num_('vazaoMediaBico', w.vazaoMediaBico), '', true) +
         campo('velocidadeKmH', 'Velocidade (km/h)', num_('velocidadeKmH', w.velocidadeKmH), 'Ou cronometre abaixo: distância e tempo.', true) +
-        campo('distVel', 'Distância cronometrada (m)', num_('distVel', w.distVel)) + campo('tempoVel', 'Tempo (s)', num_('tempoVel', w.tempoVel))],
+        campo('distVel', 'Distância cronometrada (m)', num_('distVel', w.distVel)) + campo('tempoVel', 'Tempo (s)', num_('tempoVel', w.tempoVel)) +
+        campo('pressaoTrabalho', 'Pressão de trabalho (bar, opcional)', num_('pressaoTrabalho', w.pressaoTrabalho), 'Com a pressão, o app calcula quanto ajustar para acertar a taxa.', true)],
       dose: () => ['',
         campo('dosePlanejada', 'Dose planejada (kg/ha)', num_('dosePlanejada', w.dosePlanejada), '', true),
         campo('distanciaM', 'Distância percorrida na coleta (m)', num_('distanciaM', w.distanciaM)) +
@@ -366,7 +372,8 @@ function atualizarResumoLista(k) {
   const media = vals.length ? vals.reduce((s, v) => s + v, 0) / vals.length : null;
   const cfg = LISTAS[k];
   $(`#res_${k}`).textContent = vals.length ? `${vals.length} ${vals.length === 1 ? 'valor' : 'valores'}${cfg.minimo && vals.length < cfg.minimo ? ` (recomendado: ${cfg.minimo})` : ''} • média ${num(media, 3)}` : '';
-  const cat = umNum($('#wz_vazaoCatalogo')?.value), f = $('#wz_unidadeVazao')?.value === 'mL/min' ? 1 / 1000 : 1;
+  const nova = wz?.refVazao === 'ponta_nova';
+  const cat = nova ? umNum($('#wz_vazaoPontaNova')?.value) : umNum($('#wz_vazaoCatalogo')?.value), f = nova ? 1 : $('#wz_unidadeVazao')?.value === 'mL/min' ? 1 / 1000 : 1;
   ins.forEach(i => {
     const tag = i.parentElement.querySelector('.af-lm-tag'), v = umNum(i.value);
     tag.textContent = ''; tag.className = 'af-lm-tag';
@@ -374,11 +381,12 @@ function atualizarResumoLista(k) {
     const d = Math.round((v * f - cat) / cat * 100 * 1e6) / 1e6; // mesmo arredondamento do avaliador
     tag.textContent = `${d > 0 ? '+' : ''}${num(d, 1)}%`;
     // ok/fora só quando o critério validado se aplica (coleta na pressão da tabela); senão, só o desvio, neutro
+    if (nova) { if (wz.pontaNovaMesmaCondicao === 'sim') tag.classList.add(d < -10 || d > 10 ? 'fora' : 'ok'); return; }
     if (limitesBico && wz?.pressaoColetaIgualCatalogo === 'sim') tag.classList.add(d < limitesBico[0] || d > limitesBico[1] ? 'fora' : 'ok');
   });
 }
 document.addEventListener('input', e => {
-  const k = e.target.dataset?.lm || (e.target.id === 'wz_vazaoCatalogo' || e.target.id === 'wz_unidadeVazao' ? 'vazoes' : null);
+  const k = e.target.dataset?.lm || (['wz_vazaoCatalogo', 'wz_unidadeVazao', 'wz_vazaoPontaNova'].includes(e.target.id) ? 'vazoes' : null);
   if (k) atualizarResumoLista(k);
 });
 document.addEventListener('change', e => {
@@ -466,10 +474,12 @@ function validarPasso() {
 
 async function calcular() {
   const w = wz, A = AV(), banco = await dados('regras');
+  guardarIso(banco);
   const v = k => umNum(w[k]), lista = k => numeros(w[k]).vals;
   switch (w.tipo) {
     case 'bicos': {
       const f = w.unidadeVazao === 'mL/min' ? 1 / 1000 : 1;
+      if (w.refVazao === 'ponta_nova') return IA().bicosPontaNova({vazoes: lista('vazoes').map(x => x * f), vazaoPontaNova: v('vazaoPontaNova') !== undefined ? v('vazaoPontaNova') * f : undefined, mesmaCondicao: triEstado(w.pontaNovaMesmaCondicao)});
       return A.avaliarBicos({vazoes: lista('vazoes').map(x => x * f), vazaoCatalogo: v('vazaoCatalogo'), pressaoColetaIgualCatalogo: triEstado(w.pressaoColetaIgualCatalogo),
         mesmoTempoColeta: triEstado(w.mesmoTempoColeta), pontasMesmoModelo: triEstado(w.pontasMesmoModelo)}, banco);
     }
@@ -500,8 +510,9 @@ const ACAO_SEM_REF = 'Obter uma referência aplicável antes de concluir a avali
 
 function blocoResultado(r, w) {
   const p = principal(r) || {};
-  const info = STATUS_INFO[r.status] || {rotulo: r.status, cor: 'gray'};
-  const acao = r.status === 'SEM_REFERENCIA' ? (p.acaoRecomendada || ACAO_SEM_REF) : r.status === 'DADOS_INSUFICIENTES' ? 'Completar os dados indicados nas pendências e avaliar novamente.' : (p.acaoRecomendada || '');
+  const nova = r.referencia === 'ponta_nova';
+  const info = nova && STATUS_INFO[r.status] ? {...STATUS_INFO[r.status], rotulo: {OK: 'Dentro do critério da ponta nova', FORA_DO_PADRAO: 'Fora do critério da ponta nova'}[r.status] || STATUS_INFO[r.status].rotulo} : STATUS_INFO[r.status] || {rotulo: r.status, cor: 'gray'};
+  const acao = nova ? (r.status === 'FORA_DO_PADRAO' ? 'Trocar as pontas que passaram de 10% da ponta nova (veja a lista) e limpar as que estão abaixo.' : r.status === 'OK' ? 'Nenhuma ponta passou de 10% da ponta nova.' : 'Completar os dados indicados nas pendências e avaliar novamente.') : r.status === 'SEM_REFERENCIA' ? (p.acaoRecomendada || ACAO_SEM_REF) : r.status === 'DADOS_INSUFICIENTES' ? 'Completar os dados indicados nas pendências e avaliar novamente.' : (p.acaoRecomendada || '');
   const calc = [];
   if (r.media != null) calc.push(['Vazão média', `${num(r.media, 3)} L/min`], ['CV entre bicos', `${num(r.cv, 2)}%`]);
   if (r.pttKgHa != null) calc.push(['Perda total (média)', `${numLimite(p.valorMedido ?? r.pttKgHa, 1, p)} kg/ha (${num(r.pttSc60Ha, 2)} sc/ha)`]);
@@ -514,24 +525,26 @@ function blocoResultado(r, w) {
   if (r.desvio != null) calc.push(['Desvio do planejado', `${num(r.desvio, 1)}%`]);
   if (w?.tipo === 'sensor' && p.valorMedido != null) calc.push(['Erro relativo', `${num(p.valorMedido, 2)}%`]);
   const curto = s => ({OK: ['✓ ok', 'green'], ATENCAO: ['! atenção', 'orange'], FORA_DO_PADRAO: ['✗ fora', 'red']}[s] || ['— sem ref.', 'gray']);
-  const tabBicos = r.bicos ? `<div class="tbl-wrap"><table class="tbl af-tab-bicos"><thead><tr><th>Bico</th><th class="num">Vazão (L/min)</th><th class="num">× tabela</th><th>Resultado</th></tr></thead><tbody>${r.bicos.map(b => `<tr class="${b.status === 'FORA_DO_PADRAO' ? 'af-linha-fora' : ''}"><td>${b.bico}</td><td class="num">${num(b.vazao, 3)}</td><td class="num">${b.desvioCatalogo != null ? (b.desvioCatalogo > 0 ? '+' : '') + num(b.desvioCatalogo, 1) + '%' : '—'}</td><td>${chip(...curto(b.status))}</td></tr>`).join('')}</tbody></table></div>
-    <details class="tecnico"><summary>Comparação com a média da barra (informativa)</summary><p class="nota">Sem referência primária validada; o resultado de cada bico segue a tabela do fabricante.</p><table class="tbl"><tbody>${r.bicos.map(b => `<tr><td>Bico ${b.bico}</td><td class="num">${b.desvioMedia > 0 ? '+' : ''}${num(b.desvioMedia, 1)}%</td></tr>`).join('')}</tbody></table></details>` : '';
+  const tabBicos = r.bicos ? `<div class="tbl-wrap"><table class="tbl af-tab-bicos"><thead><tr><th>Bico</th><th class="num">Vazão (L/min)</th><th class="num">${nova ? '× ponta nova' : '× tabela'}</th><th>Resultado</th></tr></thead><tbody>${r.bicos.map(b => `<tr class="${b.status === 'FORA_DO_PADRAO' ? 'af-linha-fora' : ''}"><td>${b.bico}</td><td class="num">${num(b.vazao, 3)}</td><td class="num">${b.desvioCatalogo != null ? (b.desvioCatalogo > 0 ? '+' : '') + num(b.desvioCatalogo, 1) + '%' : '—'}</td><td>${chip(...curto(b.status))}</td></tr>`).join('')}</tbody></table></div>
+    <details class="tecnico"><summary>Comparação com a média da barra (informativa)</summary><p class="nota">Sem referência primária validada; o resultado de cada bico segue a ${nova ? 'ponta nova medida' : 'tabela do fabricante'}.</p><table class="tbl"><tbody>${r.bicos.map(b => `<tr><td>Bico ${b.bico}</td><td class="num">${b.desvioMedia > 0 ? '+' : ''}${num(b.desvioMedia, 1)}%</td></tr>`).join('')}</tbody></table></details>` : '';
   // Para bicos: dizer exatamente quais pontas trocar
   const foraBicos = (r.bicos || []).filter(b => b.status === 'FORA_DO_PADRAO');
-  const listaAcao = foraBicos.length ? `<ul class="af-acao">${foraBicos.map(b => `<li><strong>Bico ${b.bico}</strong>: ${num(b.vazao, 3)} L/min (${b.desvioCatalogo > 0 ? '+' : ''}${num(b.desvioCatalogo, 1)}% da tabela)</li>`).join('')}</ul>` : '';
+  const listaAcao = foraBicos.length ? `<ul class="af-acao">${foraBicos.map(b => `<li><strong>Bico ${b.bico}</strong>: ${num(b.vazao, 3)} L/min (${b.desvioCatalogo > 0 ? '+' : ''}${num(b.desvioCatalogo, 1)}% da ${nova ? 'ponta nova' : 'tabela'})</li>`).join('')}</ul>` : '';
   const relatorioSalvo = !!w?.criadoEm;
   const conferidas = (p.fontes || []).filter(f => f.conferido !== false);
   const fonte = conferidas[0];
   const fonteTxt = conferidas.length ? conferidas.map(f => [f.organizacao, f.titulo].filter(Boolean).join(' — ')).join('; ') : p.fonte;
   const pend = [...new Set(r.pendencias || [])].filter(x => !(r.bicos && x.includes('PULV-BICO-MED-01')));
   const faixa = p.limiteMin != null && p.limiteMax != null ? (p.limiteMin === -p.limiteMax ? `±${num(p.limiteMax, 1)}%` : `${num(p.limiteMin, 1)}% a +${num(p.limiteMax, 1)}%`) : '';
-  const okBicos = r.bicos && r.status === 'OK' && faixa ? `<span>Todos os ${r.bicos.length} bicos dentro de ${faixa} da tabela do fabricante.</span>` : '';
+  const okBicos = nova && r.status === 'OK' ? `<span>Todos os ${r.bicos.length} bicos dentro de ±${num(r.limite, 0)}% da ponta nova.</span>` : r.bicos && r.status === 'OK' && faixa ? `<span>Todos os ${r.bicos.length} bicos dentro de ${faixa} da tabela do fabricante.</span>` : '';
   const avisos = w?.criadoEm ? [] : (w?.avisos || []); // no relatório salvo os avisos ficam na seção 6
   const blocoAvisos = avisos.length ? `<div class="af-avisos"><strong>⚠ Avisos da configuração da máquina</strong><ul>${avisos.map(x => `<li>${esc(x)}</li>`).join('')}</ul><small>Não mudam o resultado; confira a operação.</small></div>` : '';
   return blocoAvisos + `<div class="resultado ${info.cor}"><small>RESULTADO</small><strong>${esc(info.rotulo)}</strong>${okBicos}<small>AÇÃO RECOMENDADA</small><span>${esc(acao)}</span>${listaAcao}</div>
+    ${blocoOrientacao(r, w)}
     ${calc.length ? `<h3 style="margin-top:16px">Valores calculados</h3><table class="tbl"><tbody>${calc.map(([a, b]) => `<tr><td>${esc(a)}</td><td class="num">${esc(String(b))}</td></tr>`).join('')}</tbody></table>` : ''}
     ${tabBicos}
     ${p.regraId ? `<details class="tecnico af-ref" ${relatorioSalvo ? 'open' : ''}><summary>Referência técnica usada: ${esc(p.regraId)} v${esc(p.regraVersao)} (fonte e trecho)</summary><table class="tbl"><tbody><tr><td>Regra</td><td>${esc(p.regraId)} — versão ${esc(p.regraVersao)}</td></tr><tr><td>Limites</td><td>${p.limiteMin != null ? 'mín. ' + num(p.limiteMin, 2) : ''} ${p.limiteMax != null ? 'máx. ' + num(p.limiteMax, 2) : ''} ${esc(p.unidade || '')}</td></tr><tr><td>Fonte</td><td>${esc(fonteTxt)}${fonte?.pagina ? ' — ' + esc(fonte.pagina) : ''}</td></tr>${fonte?.trechoLiteral ? `<tr><td>Trecho</td><td><em>“${esc(fonte.trechoLiteral.slice(0, 400))}${fonte.trechoLiteral.length > 400 ? '…' : ''}”</em></td></tr>` : ''}<tr><td>Condições atendidas</td><td>${esc((p.condicoesAplicadas || []).join(' • ') || '—')}</td></tr></tbody></table></details>` : ''}
+    ${nova ? `<details class="tecnico af-ref" ${relatorioSalvo ? 'open' : ''}><summary>Referência usada: ponta nova medida</summary><table class="tbl"><tbody><tr><td>Vazão da ponta nova</td><td>${num(r.vazaoReferencia, 3)} L/min</td></tr><tr><td>Critério</td><td>${esc(r.criterio || '')}</td></tr><tr><td>Observação</td><td>Critério prático de campo, sem regra validada do banco de referências. Para o resultado pela tabela validada do fabricante, refaça escolhendo “Tabela do fabricante”.</td></tr></tbody></table></details>` : ''}
     ${pend.length ? `<h3 style="margin-top:16px">Pendências</h3><ul class="pend">${pend.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
     ${(p.referenciasCandidatas || []).length && !r.bicos ? `<p class="nota">Referências encontradas, mas não usadas para concluir: ${esc(p.referenciasCandidatas.map(c => `${c.regraId} (${c.motivo})`).join('; '))}</p>` : ''}`;
 }
@@ -541,6 +554,7 @@ Object.assign(ACTIONS, {
   'af-nova-tipo': tipo => novoWizard('', tipo),
   'af-tipo': tipo => { coletarWizard(); escolherTipo(wz, tipo); render(); },
   'af-tipo-trocar': () => { coletarWizard(); wz.tipo = ''; render(); },
+  'af-refvazao': k => { coletarWizard(); wz.refVazao = k; render(); },
   'af-familia': f => { coletarWizard(); wz.familia = f; render(); },
   'af-sn': arg => { coletarWizard(); const [k, v] = arg.split('|'); wz[k] = wz[k] === v ? '' : v; render(); },
   'af-lm-add': k => adicionarMedida(k).focus(),
@@ -583,12 +597,12 @@ function relatorio(id) {
   const linha = (k, v) => v ? `<tr><td>${esc(k)}</td><td>${esc(String(v))}</td></tr>` : '';
   const tri = v => v === 'sim' ? 'Sim' : v === 'nao' ? 'Não' : 'Não informado';
   const condicoes = {
-    bicos: [['Mesma pressão da tabela do fabricante', tri(e.pressaoColetaIgualCatalogo)], ['Coleta no mesmo tempo e pressão', tri(e.mesmoTempoColeta)], ['Pontas do mesmo modelo', tri(e.pontasMesmoModelo)], ['Modelo da ponta', e.modeloPonta], ['Pressão (' + (e.unidadePressao || 'bar') + ')', e.pressao], ['Vazão de catálogo (L/min)', e.vazaoCatalogo], ['Origem da vazão de catálogo', e.fonteVazao ? `${e.fonteVazao.ponta} a ${String(e.fonteVazao.pressao).replace('.', ',')} ${e.fonteVazao.unidadePressao} — ${e.fonteVazao.fonte}${e.fonteVazao.ano ? ' (' + e.fonteVazao.ano + ')' : ''}${e.fonteVazao.pagina ? ', p. ' + e.fonteVazao.pagina : ''} (confirmada pelo usuário)` : (e.vazaoCatalogo ? 'Digitada pelo usuário' : '')], ['Vazões medidas (' + (e.unidadeVazao || 'L/min') + ')', e.vazoes]],
+    bicos: e.refVazao === 'ponta_nova' ? [['Referência', 'Ponta nova do mesmo modelo, medida junto (critério prático: ±10%)'], ['Ponta nova medida na mesma pressão e tempo', tri(e.pontaNovaMesmaCondicao)], ['Coleta no mesmo tempo e pressão', tri(e.mesmoTempoColeta)], ['Pontas do mesmo modelo', tri(e.pontasMesmoModelo)], ['Modelo da ponta', e.modeloPonta], ['Pressão (' + (e.unidadePressao || 'bar') + ')', e.pressao], ['Vazão da ponta nova (' + (e.unidadeVazao || 'L/min') + ')', e.vazaoPontaNova], ['Vazões medidas (' + (e.unidadeVazao || 'L/min') + ')', e.vazoes]] : [['Mesma pressão da tabela do fabricante', tri(e.pressaoColetaIgualCatalogo)], ['Coleta no mesmo tempo e pressão', tri(e.mesmoTempoColeta)], ['Pontas do mesmo modelo', tri(e.pontasMesmoModelo)], ['Modelo da ponta', e.modeloPonta], ['Pressão (' + (e.unidadePressao || 'bar') + ')', e.pressao], ['Vazão de catálogo (L/min)', e.vazaoCatalogo], ['Origem da vazão de catálogo', e.fonteVazao ? `${e.fonteVazao.ponta} a ${String(e.fonteVazao.pressao).replace('.', ',')} ${e.fonteVazao.unidadePressao} — ${e.fonteVazao.fonte}${e.fonteVazao.ano ? ' (' + e.fonteVazao.ano + ')' : ''}${e.fonteVazao.pagina ? ', p. ' + e.fonteVazao.pagina : ''} (confirmada pelo usuário)` : (e.vazaoCatalogo ? 'Digitada pelo usuário' : '')], ['Vazões medidas (' + (e.unidadeVazao || 'L/min') + ')', e.vazoes]],
     perdas: [['Área amostral (m²)', e.areaM2], ['Grãos em vagens incluídos', tri(e.incluiGraosEmVagens)], ['Massas por ponto (g)', e.massasG], ['Massas na plataforma (g)', e.massasPlataformaG]],
     longitudinal: [['Sementes por metro planejadas', e.sementesPorMetro], ['Espaçamentos (cm)', e.espacamentos]],
     transversal: [['Fertilizante nitrogenado', tri(e.fertilizanteNitrogenado)], ['CV com sobreposição', tri(e.cvComSobreposicao)], ['Bandejas', e.valoresSobrepostos]],
-    sensor: [['Ponto verificado', e.ponto], ['Comparado com instrumento de referência', tri(e.comparadoComInstrumentoReferencia)], ['Leitura do controlador', e.leituraControlador], ['Referência', e.referencia]],
-    taxa: [['Vazão média por bico (L/min)', e.vazaoMediaBico], ['Velocidade (km/h)', e.velocidadeKmH], ['Distância/tempo', e.distVel && e.tempoVel && !e.velocidadeKmH ? `${e.distVel} m em ${e.tempoVel} s` : ''], ['Espaçamento entre bicos (m)', e.espacamentoBicosM], ['Taxa planejada (L/ha)', e.taxaPlanejada]],
+    sensor: [['Ponto verificado', e.ponto], ['Comparado com instrumento de referência', tri(e.comparadoComInstrumentoReferencia)], ['Leitura do controlador', e.leituraControlador], ['Referência', e.referencia], ['Fator de calibração atual', e.fatorAtual ? `${e.fatorAtual} (${e.tipoFator === 'por_pulso' ? 'unidade por pulso' : e.tipoFator === 'pulsos_por' ? 'pulsos por unidade' : 'tipo não informado'})` : '']],
+    taxa: [['Vazão média por bico (L/min)', e.vazaoMediaBico], ['Velocidade (km/h)', e.velocidadeKmH], ['Distância/tempo', e.distVel && e.tempoVel && !e.velocidadeKmH ? `${e.distVel} m em ${e.tempoVel} s` : ''], ['Espaçamento entre bicos (m)', e.espacamentoBicosM], ['Taxa planejada (L/ha)', e.taxaPlanejada], ['Pressão de trabalho (bar)', e.pressaoTrabalho]],
     dose: [['Massa coletada (kg)', e.massaKg], ['Distância (m)', e.distanciaM], ['Largura (m)', e.larguraM], ['Dose planejada (kg/ha)', e.dosePlanejada]]
   }[a.tipo] || [];
   // Só o que vale para o tipo e o equipamento escolhidos (campos de outra escolha podem ter ficado gravados nas entradas)
@@ -619,28 +633,104 @@ function relatorio(id) {
   </article>`;
 }
 
+// ---------- Inteligência: diagnóstico, ajustes e previsão (inteligencia.js) ----------
+const IA = () => window.NexusInteligencia;
+let isoClasses = null; // classes de vazão ISO 10625 (L/min a 3 bar), para sugerir ponta
+const guardarIso = b => { const t = (b?.tabelasReferencia || []).find(x => x.id === 'ISO10625-CORES'); if (t) isoClasses = t.linhas.map(l => ({tamanho: l.tamanho, cor: corIsoTxt(l.cor), vazao: l.vazao})); };
+// Desvio médio da barra em relação à referência (tabela ou ponta nova) de um resultado de bicos
+// (bicos entupidos, 20% ou mais abaixo, ficam fora: entupimento não é desgaste)
+const desvioMedioBicos = r => { const ds = (r?.bicos || []).map(b => b.desvioCatalogo ?? b.desvioRef).filter(d => Number.isFinite(d) && d > -20); return ds.length ? ds.reduce((s, v) => s + v, 0) / ds.length : null; };
+// Histórico de bicos de uma máquina até um momento (para a tendência de desgaste)
+function historicoBicos(machineId, ate = '9999', extra = null) {
+  const h = db.afericoes.filter(a => a.tipo === 'bicos' && a.maquina?.id === machineId && (a.data + ' ' + a.hora) <= ate)
+    .map(a => ({data: a.data, horas: Number(a.maquina?.hours) || undefined, desvioMedio: desvioMedioBicos(a.resultado), modelo: a.entradas?.modeloPonta || ''}));
+  if (extra) h.push(extra);
+  return h.filter(p => p.desvioMedio != null);
+}
+const limiteBicos = r => r?.referencia === 'ponta_nova' ? [-r.limite, r.limite] : (() => { const p = principal(r) || {}; return [Number.isFinite(p.limiteMin) ? p.limiteMin : -10, Number.isFinite(p.limiteMax) ? p.limiteMax : 10]; })();
+const faixaCfg = f => f && (f.min != null || f.max != null) ? [f.min ?? 0, f.max ?? Infinity] : null;
+function orientacaoAfericao(r, w) {
+  const I = IA(); if (!I || !r || !w) return [];
+  const e = w.entradas || w, v = k => umNum(e[k]), lista = k => numeros(e[k]).vals;
+  const machineId = w.maquina?.id ?? w.machineId;
+  switch (w.tipo) {
+    case 'bicos': {
+      if (!(r.bicos || []).length) return [];
+      const lim = limiteBicos(r), nova = r.referencia === 'ponta_nova';
+      const out = I.diagnosticoBicos({bicos: r.bicos.map(b => ({bico: b.bico, vazao: b.vazao, desvio: nova ? b.desvioRef : b.desvioCatalogo})), cv: r.cv, limiteMin: lim[0], limiteMax: lim[1], referencia: nova ? 'ponta_nova' : 'tabela'});
+      if (machineId && desvioMedioBicos(r) != null) {
+        // Registro salvo: histórico até ele; na tela de medição: histórico + a medição atual
+        const salvo = !!w.criadoEm, mq = find('machines', machineId);
+        const hist = salvo ? historicoBicos(machineId, w.data + ' ' + w.hora) : historicoBicos(machineId, '9999', {data: w.data || today(), horas: Number(mq?.hours) || undefined, desvioMedio: desvioMedioBicos(r), modelo: e.modeloPonta || ''});
+        const t = I.textoTendencia(I.tendenciaBicos(hist, lim[1])); if (t) out.push(t);
+      }
+      return out;
+    }
+    case 'taxa': {
+      let vel = v('velocidadeKmH'); if (vel === undefined && v('distVel') > 0 && v('tempoVel') > 0) vel = AV().calculos.velocidade(v('distVel'), v('tempoVel'));
+      const cfg = configDaMaquina(machineId);
+      return I.ajusteTaxa({taxaLHa: r.taxaLHa, taxaPlanejada: v('taxaPlanejada'), vazaoMediaBico: v('vazaoMediaBico'), velocidadeKmH: vel, espacamentoBicosM: v('espacamentoBicosM'), pressaoBar: v('pressaoTrabalho'),
+        faixaPressao: faixaCfg(cfg.faixaPressaoBar), faixaVelocidade: faixaCfg(cfg.faixaVelocidadeKmH), isoClasses});
+    }
+    case 'sensor': return I.ajusteSensor({leitura: v('leituraControlador'), referencia: v('referencia'), fatorAtual: v('fatorAtual'), tipoFator: e.tipoFator, ponto: e.ponto});
+    case 'dose': return I.ajusteDose({doseKgHa: r.doseKgHa, dosePlanejada: v('dosePlanejada')});
+    case 'longitudinal': return I.diagnosticoLongitudinal({...r, espacamentos: lista('espacamentos'), sementesPorMetro: v('sementesPorMetro')});
+    case 'transversal': return I.diagnosticoTransversal({valores: lista('valoresSobrepostos'), cv: r.cv});
+    case 'perdas': return I.diagnosticoPerdas({...r, foraDoLimite: r.status === 'FORA_DO_PADRAO'});
+  }
+  return [];
+}
+function blocoOrientacao(r, w) {
+  let itens = [];
+  try { itens = orientacaoAfericao(r, w); } catch (err) { console.error('orientação', err); }
+  if (!itens.length) return '';
+  const ic = {ok: '✓', info: 'i', atencao: '!', alerta: '!'};
+  return `<section class="af-intel"><h3>Diagnóstico e ajustes</h3><ul>${itens.map(i => `<li class="${i.nivel}"><b class="af-intel-ic" aria-hidden="true">${ic[i.nivel] || 'i'}</b><div><strong>${esc(i.titulo)}</strong><span>${esc(i.texto)}</span></div></li>`).join('')}</ul>
+    <small>Orientação calculada pelo app a partir das medições. Não muda o resultado acima; depois de ajustar ou trocar, meça de novo.</small></section>`;
+}
+
 // ---------- Integração com o restante do app ----------
 TITLES.afericao = 'Aferição e calibragem';
 TITLES.catalogo = 'Catálogo de máquinas';
 // Reaferição: intervalo em dias definido pelo usuário na máquina (procedimento próprio, não é referência técnica)
 let afMaqFiltro = '';
+// Próxima aferição: o intervalo da máquina, antecipado quando o último resultado deu fora (confirmar o ajuste em 3 dias)
+// ou quando a tendência prevê que as pontas vão passar do limite antes disso (uma semana antes da data prevista).
 function situacaoReaferir(m) {
-  const ultima = db.afericoes.filter(a => a.maquina?.id === m.id).sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora))[0];
+  const doMaq = db.afericoes.filter(a => a.maquina?.id === m.id).sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora));
+  const ultima = doMaq[0];
   const dias = Number(m.reaferirDias);
-  if (!(dias > 0)) return {ultima};
-  if (!ultima) return {ultima, vencida: true, dias: null, proxima: null};
-  const proxima = addDias(ultima.data, dias), faltam = Math.round((new Date(proxima + 'T12:00:00') - new Date(today() + 'T12:00:00')) / 864e5);
-  return {ultima, proxima, dias: faltam, vencida: faltam < 0};
+  let proxima = null, motivo = '';
+  if (dias > 0) {
+    if (!ultima) return {ultima, vencida: true, dias: null, proxima: null, motivo: 'nunca aferida'};
+    proxima = addDias(ultima.data, dias); motivo = `a cada ${num(dias)} dias`;
+  }
+  const antecipar = (data, porque) => { if (!proxima || data < proxima) { proxima = data; motivo = porque; } };
+  // Último resultado de cada tipo fora da referência: medir de novo depois do ajuste
+  for (const tipo of new Set(doMaq.map(a => a.tipo))) {
+    const u = doMaq.find(a => a.tipo === tipo);
+    if (['FORA_DO_PADRAO', 'ATENCAO'].includes(u.resultado?.status)) antecipar(addDias(u.data, 3), `confirmar o ajuste (${(TIPO_UI[tipo]?.curto || tipo).toLowerCase()} deu fora)`);
+  }
+  // Previsão de desgaste das pontas
+  const ub = doMaq.find(a => a.tipo === 'bicos');
+  if (ub && IA()) {
+    const t = IA().tendenciaBicos(historicoBicos(m.id), limiteBicos(ub.resultado)[1]);
+    if (t?.situacao === 'desgastando' && t.dataPrevista) antecipar(addDias(t.dataPrevista, -7) < ub.data ? ub.data : addDias(t.dataPrevista, -7), 'previsão de desgaste das pontas');
+  }
+  if (!proxima) return {ultima};
+  const faltam = Math.round((new Date(proxima + 'T12:00:00') - new Date(today() + 'T12:00:00')) / 864e5);
+  return {ultima, proxima, dias: faltam, vencida: faltam < 0, motivo};
 }
-const textoReaferir = m => { const r = situacaoReaferir(m); if (r.proxima === undefined) return ''; return r.vencida ? (r.dias === null ? `! Reaferição: nunca aferida (a cada ${num(m.reaferirDias)} dias)` : `! Reaferição atrasada há ${-r.dias} dias`) : `Próxima aferição: ${fmtDate(r.proxima)}${r.dias <= 7 ? ` (em ${r.dias} d)` : ''}`; };
+const temCalendario = m => !isInactive(m) && situacaoReaferir(m).proxima !== undefined;
+const textoReaferir = m => { const r = situacaoReaferir(m); if (r.proxima === undefined) return ''; return r.vencida ? (r.dias === null ? `! Reaferição: nunca aferida (a cada ${num(m.reaferirDias)} dias)` : `! Reaferição atrasada há ${-r.dias} dias (${r.motivo})`) : `Próxima aferição: ${fmtDate(r.proxima)}${r.dias <= 7 ? ` (em ${r.dias} d)` : ''} — ${r.motivo}`; };
 ACTIONS['af-maq'] = id => { afMaqFiltro = id || ''; go('afericao'); };
 const alertasBase = alerts;
 alerts = function () {
   const lista = alertasBase();
   const limite = daysAgo(30);
-  db.machines.filter(m => !isInactive(m) && Number(m.reaferirDias) > 0).forEach(m => { const r = situacaoReaferir(m); if (r.vencida || r.dias <= 7) lista.push({color: r.vencida ? 'red' : 'orange', icon: '◎', title: `${r.vencida ? 'Aferição atrasada' : 'Aferição próxima'}: ${m.name}`, text: textoReaferir(m).replace(/^! /, ''), route: 'afericao'}); });
+  db.machines.filter(temCalendario).forEach(m => { const r = situacaoReaferir(m); if (r.vencida || r.dias <= 7) lista.push({color: r.vencida ? 'red' : 'orange', icon: '◎', title: `${r.vencida ? 'Aferição atrasada' : 'Aferição próxima'}: ${m.name}`, text: textoReaferir(m).replace(/^! /, ''), route: 'afericao'}); });
   db.afericoes.filter(a => a.data >= limite && a.resultado?.status === 'FORA_DO_PADRAO').forEach(a => lista.push({color: 'red', icon: '◎', title: `Aferição fora da referência: ${a.maquina?.name || TIPOS[a.tipo]?.titulo}`, text: `${TIPOS[a.tipo]?.titulo} em ${fmtDate(a.data)}.`, route: 'afericao/' + a.id}));
   return lista;
 };
 // Pré-carrega os dados em segundo plano (ficam no cache do navegador/APK)
-setTimeout(() => { dados('regras').catch(() => {}); }, 1500);
+setTimeout(() => { dados('regras').then(guardarIso).catch(() => {}); }, 1500);
