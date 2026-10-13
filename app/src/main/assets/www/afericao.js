@@ -177,6 +177,7 @@ function criarWizard(machineId, tipo) {
   const w = {passo: 1, machineId: machineId || '', familia: FAMILIA_DO_CATALOGO[mq?.catalogo?.familia] || '', tipo: '', produto: '', destino: '',
     data: today(), hora: nowTime(), responsavel: db.settings.owner || '', fieldId: '', instrumento: '', observacoes: ''};
   if (tipo && TIPOS[tipo]) escolherTipo(w, tipo);
+  w.unidadeVazao = 'mL'; // o jeito mais comum no campo: coletar por um tempo e medir o volume
   return w;
 }
 function novoWizard(machineId, tipo) { wz = criarWizard(machineId, tipo); go('afericao/nova'); }
@@ -222,15 +223,17 @@ VIEWS.afericao = arg => {
   const comIntervalo = db.machines.filter(temCalendario);
   const maqsComAf = [...new Set(db.afericoes.map(a => a.maquina?.id).filter(Boolean))].map(id => find('machines', id)).filter(Boolean);
   return head('Aferição e calibragem', 'Escolha o que vai aferir. O resultado só é concluído com referência técnica validada. Funciona sem internet.') +
-    `<section class="af-tipos">${Object.keys(TIPOS).map(k => cartaoTipo(k, false, 'af-nova-tipo')).join('')}</section>` +
+    `<section class="af-tipos">${Object.keys(TIPOS).map(k => cartaoTipo(k, false, 'af-nova-tipo')).join('')}</section>` + (typeof cartaoInspecao === 'function' ? cartaoInspecao() : '') +
     (comIntervalo.length ? `<div class="section-title"><h3>Calendário de aferição</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Máquina</th><th>Última aferição</th><th>Próxima</th><th></th></tr></thead><tbody>${comIntervalo.map(m => { const r = situacaoReaferir(m); return `<tr><td><strong>${esc(m.name)}</strong><br><small style="color:var(--muted)">${esc(r.motivo || '')}</small></td><td>${r.ultima ? fmtDate(r.ultima.data) + ' ' + statusChip(r.ultima.resultado.status) : 'nunca aferida'}</td><td>${r.vencida ? chip(r.dias === null ? 'Aferir agora' : `Atrasada ${-r.dias} d`, 'red') : r.dias <= 7 ? chip(`Em ${r.dias} d`, 'orange') : fmtDate(r.proxima)}</td><td>${mini('◎ Aferir', 'af-nova', m.id)}</td></tr>`; }).join('')}</tbody></table></div></section>` : '') +
     `<div class="section-title"><h3>Registros (${lista.length})</h3></div>${maqsComAf.length > 1 || afMaqFiltro ? `<div class="filters"><button class="${!afMaqFiltro ? 'active' : ''}" data-act="af-maq" data-id="">Todas as máquinas</button>${maqsComAf.map(m => `<button class="${afMaqFiltro === m.id ? 'active' : ''}" data-act="af-maq" data-id="${esc(m.id)}">${esc(m.name)}</button>`).join('')}</div>` : ''}<section class="card list">${lista.length ? lista.map(a => {
       const p = principal(a.resultado);
-      return `<div class="row clickable" data-act="nav" data-id="afericao/${esc(a.id)}" style="cursor:pointer"><span class="status ${STATUS_INFO[a.resultado.status]?.cor === 'gray' ? 'blue' : STATUS_INFO[a.resultado.status]?.cor}"></span><div><strong>${esc(TIPOS[a.tipo]?.titulo || a.tipo)} — ${esc(a.maquina?.name || 'equipamento não cadastrado')}</strong><small>${esc([fmtDate(a.data) + ' ' + a.hora, a.responsavel, p?.regraId ? 'regra ' + p.regraId + ' v' + p.regraVersao : ''].filter(Boolean).join(' • '))}</small></div>${statusChip(a.resultado.status)}</div>`;
+      return `<div class="row clickable" data-act="nav" data-id="afericao/${esc(a.id)}" style="cursor:pointer"><span class="status ${STATUS_INFO[a.resultado.status]?.cor === 'gray' ? 'blue' : STATUS_INFO[a.resultado.status]?.cor}"></span><div><strong>${esc(tituloAfericao(a))} — ${esc(a.maquina?.name || 'equipamento não cadastrado')}</strong><small>${esc([fmtDate(a.data) + ' ' + a.hora, a.responsavel, p?.regraId ? 'regra ' + p.regraId + ' v' + p.regraVersao : a.tipo === 'inspecao' ? 'válida até ' + fmtDate(a.resultado.validade) : ''].filter(Boolean).join(' • '))}</small></div>${chipAfericao(a)}</div>`;
     }).join('') : empty('Nenhuma aferição registrada', 'Toque no que você vai aferir, acima, para começar.')}</section>`;
 };
 
 const PASSOS = ['O que aferir', 'Medição', 'Resultado'];
+const tituloAfericao = a => a.tipo === 'inspecao' ? 'Inspeção periódica (ISO 16122)' : TIPOS[a.tipo]?.titulo || a.tipo;
+const chipAfericao = a => a.tipo === 'inspecao' ? chip(a.resultado?.status === 'OK' ? 'Aprovado' : 'Reprovado', a.resultado?.status === 'OK' ? 'green' : 'red') : statusChip(a.resultado?.status);
 const passos = n => `<div class="steps">${PASSOS.map((t, i) => `<span class="${i + 1 === n ? 'on' : i + 1 < n ? 'done' : ''}">${i + 1}. ${t}</span>`).join('')}</div>`;
 const sel = (k, opts, v, vazio = '—') => `<select data-wz="${k}" id="wz_${k}"><option value="">${vazio}</option>${opts.map(([val, lab]) => `<option value="${esc(val)}" ${String(val) === String(v ?? '') ? 'selected' : ''}>${esc(lab)}</option>`).join('')}</select>`;
 const inp = (k, v, attrs = '') => `<input data-wz="${k}" id="wz_${k}" value="${esc(v ?? '')}" ${attrs}>`;
@@ -253,6 +256,88 @@ function listaMedidas(k, label, unidade, hint = '') {
 const linhaMedida = (k, i, v = '') => `<label class="af-lm-item"><span>${esc(LISTAS[k].item)} ${i + 1}</span><input data-lm="${k}" value="${esc(v)}" inputmode="decimal" enterkeyhint="next" autocomplete="off"><b class="af-lm-tag"></b></label>`;
 const secao = (titulo, corpo) => corpo ? `<h3 class="af-sec">${esc(titulo)}</h3><div class="form">${corpo}</div>` : '';
 const nav = (voltar, avancar = 'Próximo →') => `<div class="actions">${voltar ? '<button class="secondary" data-act="af-voltar">← Voltar</button>' : '<button class="secondary" data-act="af-cancelar">Cancelar</button>'}<button class="primary" data-act="af-avancar">${avancar}</button></div>`;
+
+// ---------- Condições da medição: uma confirmação só (detalhe só se alguma não for verdade) ----------
+const COND_TXT = {
+  pressaoColetaIgualCatalogo: ['A coleta foi feita na mesma pressão da tabela do fabricante?', 'a coleta foi na mesma pressão da tabela do fabricante'],
+  mesmoTempoColeta: ['Todos os bicos foram coletados no mesmo tempo e pressão?', 'todos os bicos foram coletados no mesmo tempo e pressão'],
+  pontasMesmoModelo: ['As pontas são todas do mesmo modelo?', 'as pontas são todas do mesmo modelo'],
+  pontaNovaMesmaCondicao: ['A ponta nova foi medida na mesma pressão e no mesmo tempo de coleta dos outros bicos?', 'a ponta nova foi medida na mesma pressão e no mesmo tempo dos outros bicos']
+};
+const condBicos = w => w.refVazao === 'ponta_nova' ? ['mesmoTempoColeta', 'pontasMesmoModelo', 'pontaNovaMesmaCondicao'] : ['pressaoColetaIgualCatalogo', 'mesmoTempoColeta', 'pontasMesmoModelo'];
+function confirmacaoCondicoes(keys) {
+  const todas = keys.every(k => wz[k] === 'sim'), algumaNao = keys.some(k => wz[k] === 'nao');
+  if (wz._condDetalhe || algumaNao) return keys.map(k => pergunta(k, COND_TXT[k][0])).join('') + (algumaNao ? '' : '<button type="button" class="link" data-act="af-cond-todas">Confirmar todas de uma vez</button>');
+  return `<div class="field full af-confirma ${todas ? 'ok' : ''}"><span class="af-sn-txt">Confirme que:</span><ul>${keys.map(k => `<li>${esc(COND_TXT[k][1])}</li>`).join('')}</ul>
+    <div class="af-sn-btns"><button type="button" class="${todas ? 'on sim' : ''}" data-act="af-cond-todas" aria-pressed="${todas}">${todas ? '✓ Confirmado' : 'Confirmo'}</button><button type="button" data-act="af-cond-detalhe">Alguma não é verdade</button></div></div>`;
+}
+
+// ---------- Coleta: volume ou peso num tempo → L/min; cronômetro do app ----------
+const UN_COLETA = {mL: {rotulo: 'Volume coletado', curto: 'mL coletados'}, g: {rotulo: 'Peso coletado', curto: 'g coletados'}};
+// Fator que converte o valor digitado em L/min (NaN se faltar o tempo de coleta). Peso: 1 g ≈ 1 mL (água limpa)
+function fatorVazao(u, tempo) {
+  if (u === 'mL/min') return 1 / 1000;
+  if (UN_COLETA[u]) { const t = umNum(tempo); return t > 0 ? 60 / (t * 1000) : NaN; }
+  return 1;
+}
+const botaoCrono = k => `<button type="button" class="secondary af-crono" data-act="af-crono" data-id="${k}">⏱ Cronômetro</button>`;
+let crono = null; // {k, ini, timer, botao}
+function alternarCrono(k) {
+  const b = document.querySelector(`[data-act="af-crono"][data-id="${k}"]`), el = $('#wz_' + k);
+  if (crono && crono.k === k) {
+    const s = Math.round((performance.now() - crono.ini) / 100) / 10;
+    clearInterval(crono.timer); crono = null;
+    if (el) { el.value = String(s).replace('.', ','); el.dispatchEvent(new Event('input', {bubbles: true})); }
+    wz.cronometro = {...(wz.cronometro || {}), [k]: el ? el.value : String(s)};
+    if (b) { b.textContent = '⏱ Cronômetro'; b.classList.remove('rodando'); }
+    showToast(`${String(s).replace('.', ',')} s marcados`);
+    return;
+  }
+  if (crono) clearInterval(crono.timer);
+  crono = {k, ini: performance.now()};
+  if (b) b.classList.add('rodando');
+  crono.timer = setInterval(() => { const bb = document.querySelector(`[data-act="af-crono"][data-id="${k}"]`); if (!bb) { clearInterval(crono.timer); crono = null; return; } bb.textContent = `■ Parar — ${num((performance.now() - crono.ini) / 1000, 1)} s`; }, 100);
+}
+
+// ---------- Velocidade pelo GPS do celular ----------
+let gpsWatchAf = null;
+const gpsDistM = (a, b) => { const R = 6371000, r = x => x * Math.PI / 180, dLa = r(b.lat - a.lat), dLo = r(b.lon - a.lon); const h = Math.sin(dLa / 2) ** 2 + Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(dLo / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(h)); };
+function pararGpsAf() { if (gpsWatchAf != null && navigator.geolocation) navigator.geolocation.clearWatch(gpsWatchAf); gpsWatchAf = null; }
+function medirGps() {
+  if (!navigator.geolocation) { showToast('Este aparelho não oferece GPS ao app.', true); return; }
+  coletarWizard();
+  const amostras = []; let ini = null, ultimo = null;
+  dialog.innerHTML = `<h3>Velocidade pelo GPS</h3><p class="sub">Ande com a máquina na velocidade de trabalho, em linha reta e em área aberta, por pelo menos 20 segundos.</p>
+    <div class="af-gps"><strong id="gpsVel">—</strong><span>km/h</span></div><p class="nota" id="gpsInfo">Procurando o sinal do GPS…</p>
+    <div class="actions"><button class="secondary" data-gps-cancelar>Cancelar</button><button class="primary" data-gps-usar disabled>Usar a média</button></div>`;
+  modal.classList.add('open');
+  const info = t => { const e = $('#gpsInfo'); if (e) e.textContent = t; };
+  $('[data-gps-cancelar]', dialog).onclick = () => { pararGpsAf(); closeModal(); };
+  $('[data-gps-usar]', dialog).onclick = () => {
+    pararGpsAf();
+    const media = amostras.reduce((s, a) => s + a.v, 0) / amostras.length, acc = Math.max(...amostras.map(a => a.acc)), dur = Math.round((amostras[amostras.length - 1].t - ini) / 1000);
+    wz.velocidadeKmH = String(Math.round(media * 10) / 10).replace('.', ',');
+    wz.velGps = {valor: wz.velocidadeKmH, texto: `GPS do celular: média de ${amostras.length} leituras em ${dur} s (precisão de até ±${Math.round(acc)} m)`};
+    closeModal(); render(); showToast(`Velocidade: ${wz.velocidadeKmH} km/h (GPS)`);
+  };
+  pararGpsAf();
+  gpsWatchAf = navigator.geolocation.watchPosition(p => {
+    if (!modal.classList.contains('open') || !$('#gpsVel')) { pararGpsAf(); return; }
+    const c = p.coords, t = p.timestamp || Date.now();
+    if (c.accuracy > 25) { info(`Sinal fraco (±${Math.round(c.accuracy)} m). Vá para uma área aberta e aguarde.`); return; }
+    const pos = {lat: c.latitude, lon: c.longitude, t};
+    let v = Number.isFinite(c.speed) && c.speed >= 0 ? c.speed * 3.6 : null;
+    if (v == null && ultimo && t > ultimo.t) v = gpsDistM(ultimo, pos) / ((t - ultimo.t) / 1000) * 3.6;
+    ultimo = pos;
+    if (v == null) return;
+    if (ini == null) ini = t;
+    amostras.push({v, acc: c.accuracy, t});
+    $('#gpsVel').textContent = num(v, 1);
+    const dur = (t - ini) / 1000, pronto = dur >= 15 && amostras.length >= 5;
+    info(`${amostras.length} leituras em ${num(dur, 0)} s • precisão ±${Math.round(c.accuracy)} m${pronto ? ` • média ${num(amostras.reduce((s, a) => s + a.v, 0) / amostras.length, 1)} km/h` : ' • continue andando'}`);
+    $('[data-gps-usar]', dialog).disabled = !pronto;
+  }, err => info(err.code === 1 ? 'Permissão de localização negada. Libere a localização para o app nas configurações do celular.' : 'Não foi possível ler o GPS. Tente em área aberta.'), {enableHighAccuracy: true, maximumAge: 0, timeout: 30000});
+}
 
 function passoWizard() {
   const w = wz;
@@ -281,21 +366,19 @@ function passoWizard() {
   }
   if (w.passo === 2) {
     const S = {
-      bicos: () => { const nova = w.refVazao === 'ponta_nova'; return [
-        (nova ? '' : pergunta('pressaoColetaIgualCatalogo', 'A coleta foi feita na mesma pressão da tabela do fabricante?')) +
-        pergunta('mesmoTempoColeta', 'Todos os bicos foram coletados no mesmo tempo e pressão?') +
-        pergunta('pontasMesmoModelo', 'As pontas são todas do mesmo modelo?'),
+      bicos: () => { const nova = w.refVazao === 'ponta_nova', u = w.unidadeVazao || 'L/min', coleta = UN_COLETA[u]; return [
+        confirmacaoCondicoes(condBicos(w)),
         `<div class="field full"><label>Comparar cada bico com</label><div class="filters af-fam">${[['tabela', 'Tabela do fabricante'], ['ponta_nova', 'Uma ponta nova medida']].map(([k, t]) => `<button type="button" class="${(w.refVazao || 'tabela') === k ? 'active' : ''}" data-act="af-refvazao" data-id="${k}">${t}</button>`).join('')}</div><span class="hint">${nova ? 'Meça uma ponta NOVA do mesmo modelo, na mesma pressão e no mesmo tempo dos outros bicos. Critério prático: troca-se a ponta que passa 10% da ponta nova.' : 'Sem a tabela? Escolha “Uma ponta nova medida”.'}</span></div>` +
         campo('modeloPonta', 'Modelo da ponta', inp('modeloPonta', w.modeloPonta, 'placeholder="Ex.: XR 110 02"')) +
         campo('pressao', 'Pressão na coleta', num_('pressao', w.pressao)) +
         campo('unidadePressao', 'Unidade da pressão', sel('unidadePressao', [['bar', 'bar'], ['psi', 'psi (lbf/pol²)']], w.unidadePressao || 'bar', 'bar'), 'A do manômetro usado na coleta.') +
         campo('corIso', 'Cor da ponta (ISO 10625)', `<select data-wz="corIso" id="wz_corIso"><option value="">—</option></select>`, 'Só identifica a classe de vazão.') +
-        (nova ? pergunta('pontaNovaMesmaCondicao', 'A ponta nova foi medida na mesma pressão e no mesmo tempo de coleta dos outros bicos?') +
-          campo('vazaoPontaNova', `Vazão medida na ponta nova (${w.unidadeVazao || 'L/min'})`, num_('vazaoPontaNova', w.vazaoPontaNova), 'Mesma unidade das vazões medidas abaixo.', true) :
+        (nova ? campo('vazaoPontaNova', `Ponta nova (${coleta ? coleta.curto : u})`, num_('vazaoPontaNova', w.vazaoPontaNova), coleta ? 'Coletada no mesmo tempo dos outros bicos.' : 'Mesma unidade das vazões medidas abaixo.', true) :
         '<div class="field full" id="pontaCat"></div>' +
-        campo('vazaoCatalogo', 'Vazão da tabela do fabricante (L/min)', num_('vazaoCatalogo', w.vazaoCatalogo), w._avisoVazao ? w._avisoVazao : w.fonteVazao ? `Da tabela ${w.fonteVazao.ponta} a ${String(w.fonteVazao.pressao).replace('.', ',')} ${w.fonteVazao.unidadePressao} — ${w.fonteVazao.fonte}${w.fonteVazao.pagina ? ', p. ' + w.fonteVazao.pagina : ''}.` : 'Do catálogo do modelo exato, na pressão da coleta. Só entra se você digitar ou confirmar no catálogo de pontas acima.')) +
-        campo('unidadeVazao', 'Unidade das vazões medidas', sel('unidadeVazao', [['L/min', 'L/min'], ['mL/min', 'mL/min']], w.unidadeVazao || 'L/min', 'L/min'), '', true) +
-        listaMedidas('vazoes', 'Vazão medida em cada bico', w.unidadeVazao || 'L/min')]; },
+        campo('vazaoCatalogo', 'Vazão da tabela do fabricante (L/min)', num_('vazaoCatalogo', w.vazaoCatalogo), w._avisoVazao ? w._avisoVazao : w.fonteVazao ? `Da tabela ${w.fonteVazao.ponta} a ${String(w.fonteVazao.pressao).replace('.', ',')} ${w.fonteVazao.unidadePressao} — ${w.fonteVazao.fonte}${w.fonteVazao.pagina ? ', p. ' + w.fonteVazao.pagina : ''}.` : 'Do catálogo do modelo exato, na pressão da coleta. Só entra se você digitar ou confirmar no catálogo de pontas acima.')),
+        campo('unidadeVazao', 'Como você mediu', sel('unidadeVazao', [['mL', 'Coletei por um tempo e medi o volume (mL)'], ['g', 'Coletei por um tempo e pesei (g)'], ['L/min', 'Já tenho a vazão em L/min'], ['mL/min', 'Já tenho a vazão em mL/min']], u, 'L/min'), coleta ? 'O app converte para L/min pelo tempo de coleta.' : '', true) +
+        (coleta ? campo('tempoColeta', 'Tempo de coleta de cada bico (s)', `<div class="af-crono-campo">${num_('tempoColeta', w.tempoColeta, 'placeholder="Ex.: 30"')}${botaoCrono('tempoColeta')}</div>`, 'O mesmo tempo para todos os bicos. Use o cronômetro ou digite.', true) : '') +
+        listaMedidas('vazoes', coleta ? `${coleta.rotulo} em cada bico` : 'Vazão medida em cada bico', coleta ? coleta.curto : u)]; },
       perdas: () => [
         pergunta('incluiGraosEmVagens', 'Foram recolhidos os grãos soltos e os de dentro das vagens?'),
         campo('areaM2', 'Área de cada ponto (m²)', num_('areaM2', w.areaM2), 'Armação Embrapa: 4,0 m × 0,5 m = 2,0 m².' + (() => { const L = configDaMaquina(w.machineId).larguraPlataformaM; return L ? ` Com a plataforma de ${num(L, 2)} m (configuração da máquina), uma armação na largura toda precisa de ${num(2 / L, 2)} m de profundidade para dar 2 m².` : ''; })(), true),
@@ -319,8 +402,8 @@ function passoWizard() {
         campo('espacamentoBicosM', 'Espaçamento entre bicos (m)', num_('espacamentoBicosM', w.espacamentoBicosM)) +
         campo('taxaPlanejada', 'Taxa planejada (L/ha)', num_('taxaPlanejada', w.taxaPlanejada)),
         campo('vazaoMediaBico', 'Vazão média por bico (L/min)', num_('vazaoMediaBico', w.vazaoMediaBico), '', true) +
-        campo('velocidadeKmH', 'Velocidade (km/h)', num_('velocidadeKmH', w.velocidadeKmH), 'Ou cronometre abaixo: distância e tempo.', true) +
-        campo('distVel', 'Distância cronometrada (m)', num_('distVel', w.distVel)) + campo('tempoVel', 'Tempo (s)', num_('tempoVel', w.tempoVel)) +
+        campo('velocidadeKmH', 'Velocidade (km/h)', `<div class="af-crono-campo">${num_('velocidadeKmH', w.velocidadeKmH)}<button type="button" class="secondary af-crono" data-act="af-gps">📍 Medir pelo GPS</button></div>`, w.velGps && w.velGps.valor === w.velocidadeKmH ? w.velGps.texto : 'Pelo GPS do celular, ou cronometre abaixo: distância e tempo.', true) +
+        campo('distVel', 'Distância cronometrada (m)', num_('distVel', w.distVel)) + campo('tempoVel', 'Tempo (s)', `<div class="af-crono-campo">${num_('tempoVel', w.tempoVel)}${botaoCrono('tempoVel')}</div>`) +
         campo('pressaoTrabalho', 'Pressão de trabalho (bar, opcional)', num_('pressaoTrabalho', w.pressaoTrabalho), 'Com a pressão, o app calcula quanto ajustar para acertar a taxa.', true)],
       dose: () => ['',
         campo('dosePlanejada', 'Dose planejada (kg/ha)', num_('dosePlanejada', w.dosePlanejada), '', true),
@@ -373,11 +456,11 @@ function atualizarResumoLista(k) {
   const cfg = LISTAS[k];
   $(`#res_${k}`).textContent = vals.length ? `${vals.length} ${vals.length === 1 ? 'valor' : 'valores'}${cfg.minimo && vals.length < cfg.minimo ? ` (recomendado: ${cfg.minimo})` : ''} • média ${num(media, 3)}` : '';
   const nova = wz?.refVazao === 'ponta_nova';
-  const cat = nova ? umNum($('#wz_vazaoPontaNova')?.value) : umNum($('#wz_vazaoCatalogo')?.value), f = nova ? 1 : $('#wz_unidadeVazao')?.value === 'mL/min' ? 1 / 1000 : 1;
+  const cat = nova ? umNum($('#wz_vazaoPontaNova')?.value) : umNum($('#wz_vazaoCatalogo')?.value), f = nova ? 1 : fatorVazao($('#wz_unidadeVazao')?.value, $('#wz_tempoColeta')?.value);
   ins.forEach(i => {
     const tag = i.parentElement.querySelector('.af-lm-tag'), v = umNum(i.value);
     tag.textContent = ''; tag.className = 'af-lm-tag';
-    if (k !== 'vazoes' || v === undefined || !(cat > 0)) return;
+    if (k !== 'vazoes' || v === undefined || !(cat > 0) || !Number.isFinite(f)) return;
     const d = Math.round((v * f - cat) / cat * 100 * 1e6) / 1e6; // mesmo arredondamento do avaliador
     tag.textContent = `${d > 0 ? '+' : ''}${num(d, 1)}%`;
     // ok/fora só quando o critério validado se aplica (coleta na pressão da tabela); senão, só o desvio, neutro
@@ -386,11 +469,11 @@ function atualizarResumoLista(k) {
   });
 }
 document.addEventListener('input', e => {
-  const k = e.target.dataset?.lm || (['wz_vazaoCatalogo', 'wz_unidadeVazao', 'wz_vazaoPontaNova'].includes(e.target.id) ? 'vazoes' : null);
+  const k = e.target.dataset?.lm || (['wz_vazaoCatalogo', 'wz_unidadeVazao', 'wz_vazaoPontaNova', 'wz_tempoColeta'].includes(e.target.id) ? 'vazoes' : null);
   if (k) atualizarResumoLista(k);
 });
 document.addEventListener('change', e => {
-  if (e.target.id === 'wz_unidadeVazao') atualizarResumoLista('vazoes');
+  if (e.target.id === 'wz_unidadeVazao') { coletarWizard(); render(); } // mostra/esconde o tempo de coleta
   if (e.target.id === 'wz_unidadePressao') conferirFonteVazao();
   if (e.target.dataset?.lmColar) distribuirColado(e.target, false); // sem aviso: o toque seguinte (ex.: Avaliar) não pode cair sobre o toast
 });
@@ -463,6 +546,7 @@ function validarPasso() {
     const conferir = txt => { const n = numeros(txt), amb = n.erros.find(t => MILHAR.test(t)); if (amb) return `Valor ambíguo: ${msgInvalido(amb)}`; if (n.erros.length) return `Valores não numéricos: ${n.erros.slice(0, 3).join(', ')}`; const neg = String(txt || '').trim().split(/[\s;]+/).filter(t => umNum(t) < 0); if (neg.length) return `Valores negativos não são aceitos: ${neg.slice(0, 3).join(', ')}`; return ''; };
     if (lista) { const e = conferir(w[lista]); if (e) return e; if (!numeros(w[lista]).vals.length) return 'Informe as medições'; }
     if (w.tipo === 'perdas') { const e = conferir(w.massasPlataformaG); if (e) return e; }
+    if (w.tipo === 'bicos' && UN_COLETA[w.unidadeVazao] && !(umNum(w.tempoColeta) > 0)) return 'Informe o tempo de coleta (s) — use o cronômetro ou digite';
     // Campos numéricos únicos: valor digitado que não é número não pode virar “não informado” em silêncio
     const invalido = $$('input[data-wz][inputmode="decimal"]').find(el => el.value.trim() !== '' && umNum(el.value) === undefined);
     if (invalido) return MILHAR.test(invalido.value.trim()) ? `Valor ambíguo: ${msgInvalido(invalido.value.trim())}` : `Valor inválido: “${invalido.value.trim()}” — use só números, com vírgula para decimais e sem ponto de milhar`;
@@ -478,7 +562,7 @@ async function calcular() {
   const v = k => umNum(w[k]), lista = k => numeros(w[k]).vals;
   switch (w.tipo) {
     case 'bicos': {
-      const f = w.unidadeVazao === 'mL/min' ? 1 / 1000 : 1;
+      const f = fatorVazao(w.unidadeVazao, w.tempoColeta);
       if (w.refVazao === 'ponta_nova') return IA().bicosPontaNova({vazoes: lista('vazoes').map(x => x * f), vazaoPontaNova: v('vazaoPontaNova') !== undefined ? v('vazaoPontaNova') * f : undefined, mesmaCondicao: triEstado(w.pontaNovaMesmaCondicao)});
       return A.avaliarBicos({vazoes: lista('vazoes').map(x => x * f), vazaoCatalogo: v('vazaoCatalogo'), pressaoColetaIgualCatalogo: triEstado(w.pressaoColetaIgualCatalogo),
         mesmoTempoColeta: triEstado(w.mesmoTempoColeta), pontasMesmoModelo: triEstado(w.pontasMesmoModelo)}, banco);
@@ -540,7 +624,7 @@ function blocoResultado(r, w) {
   const avisos = w?.criadoEm ? [] : (w?.avisos || []); // no relatório salvo os avisos ficam na seção 6
   const blocoAvisos = avisos.length ? `<div class="af-avisos"><strong>⚠ Avisos da configuração da máquina</strong><ul>${avisos.map(x => `<li>${esc(x)}</li>`).join('')}</ul><small>Não mudam o resultado; confira a operação.</small></div>` : '';
   return blocoAvisos + `<div class="resultado ${info.cor}"><small>RESULTADO</small><strong>${esc(info.rotulo)}</strong>${okBicos}<small>AÇÃO RECOMENDADA</small><span>${esc(acao)}</span>${listaAcao}</div>
-    ${blocoOrientacao(r, w)}
+    ${blocoOrientacao(r, w)}${blocoImpacto(r, w)}
     ${calc.length ? `<h3 style="margin-top:16px">Valores calculados</h3><table class="tbl"><tbody>${calc.map(([a, b]) => `<tr><td>${esc(a)}</td><td class="num">${esc(String(b))}</td></tr>`).join('')}</tbody></table>` : ''}
     ${tabBicos}
     ${p.regraId ? `<details class="tecnico af-ref" ${relatorioSalvo ? 'open' : ''}><summary>Referência técnica usada: ${esc(p.regraId)} v${esc(p.regraVersao)} (fonte e trecho)</summary><table class="tbl"><tbody><tr><td>Regra</td><td>${esc(p.regraId)} — versão ${esc(p.regraVersao)}</td></tr><tr><td>Limites</td><td>${p.limiteMin != null ? 'mín. ' + num(p.limiteMin, 2) : ''} ${p.limiteMax != null ? 'máx. ' + num(p.limiteMax, 2) : ''} ${esc(p.unidade || '')}</td></tr><tr><td>Fonte</td><td>${esc(fonteTxt)}${fonte?.pagina ? ' — ' + esc(fonte.pagina) : ''}</td></tr>${fonte?.trechoLiteral ? `<tr><td>Trecho</td><td><em>“${esc(fonte.trechoLiteral.slice(0, 400))}${fonte.trechoLiteral.length > 400 ? '…' : ''}”</em></td></tr>` : ''}<tr><td>Condições atendidas</td><td>${esc((p.condicoesAplicadas || []).join(' • ') || '—')}</td></tr></tbody></table></details>` : ''}
@@ -555,8 +639,12 @@ Object.assign(ACTIONS, {
   'af-tipo': tipo => { coletarWizard(); escolherTipo(wz, tipo); render(); },
   'af-tipo-trocar': () => { coletarWizard(); wz.tipo = ''; render(); },
   'af-refvazao': k => { coletarWizard(); wz.refVazao = k; render(); },
+  'af-cond-todas': () => { coletarWizard(); condBicos(wz).forEach(k => { wz[k] = 'sim'; }); wz.condLote = true; wz._condDetalhe = false; render(); },
+  'af-cond-detalhe': () => { coletarWizard(); wz._condDetalhe = true; wz.condLote = false; render(); },
+  'af-crono': k => alternarCrono(k),
+  'af-gps': () => medirGps(),
   'af-familia': f => { coletarWizard(); wz.familia = f; render(); },
-  'af-sn': arg => { coletarWizard(); const [k, v] = arg.split('|'); wz[k] = wz[k] === v ? '' : v; render(); },
+  'af-sn': arg => { coletarWizard(); const [k, v] = arg.split('|'); wz[k] = wz[k] === v ? '' : v; if (COND_TXT[k]) wz.condLote = false; render(); },
   'af-lm-add': k => adicionarMedida(k).focus(),
   'af-cancelar': () => { wz = null; go('afericao'); },
   'af-voltar': () => { coletarWizard(); wz.passo = Math.max(1, wz.passo - 1); render(); },
@@ -589,6 +677,10 @@ Object.assign(ACTIONS, {
   'af-imprimir': () => { if (window.AndroidBridge?.printPage) window.AndroidBridge.printPage(); else window.print(); }
 });
 
+// Como cada valor foi medido (rastreabilidade do relatório)
+const unVaz = e => UN_COLETA[e.unidadeVazao]?.curto || e.unidadeVazao || 'L/min';
+const metodoVazao = e => UN_COLETA[e.unidadeVazao] ? `${e.unidadeVazao === 'g' ? 'Pesagem da calda coletada (1 g ≈ 1 mL)' : 'Coleta volumétrica'} por ${e.tempoColeta} s em cada bico${e.cronometro?.tempoColeta === e.tempoColeta ? ' (tempo medido com o cronômetro do app)' : ''}, convertida para L/min` : 'Vazão informada diretamente';
+const metodoVelocidade = e => e.velGps?.valor && e.velGps.valor === e.velocidadeKmH ? e.velGps.texto : e.velocidadeKmH ? 'Informada pelo usuário' : e.distVel && e.tempoVel ? `Cronometrada: ${e.distVel} m em ${e.tempoVel} s${e.cronometro?.tempoVel === e.tempoVel ? ' (cronômetro do app)' : ''}` : '';
 const ROTULO_CFG = {espacamentoBicosM: 'Espaçamento entre bicos (m)', modeloPonta: 'Modelo da ponta', espLinhasM: 'Espaçamento entre linhas (m)'};
 function relatorio(id) {
   const a = find('afericoes', id);
@@ -597,12 +689,12 @@ function relatorio(id) {
   const linha = (k, v) => v ? `<tr><td>${esc(k)}</td><td>${esc(String(v))}</td></tr>` : '';
   const tri = v => v === 'sim' ? 'Sim' : v === 'nao' ? 'Não' : 'Não informado';
   const condicoes = {
-    bicos: e.refVazao === 'ponta_nova' ? [['Referência', 'Ponta nova do mesmo modelo, medida junto (critério prático: ±10%)'], ['Ponta nova medida na mesma pressão e tempo', tri(e.pontaNovaMesmaCondicao)], ['Coleta no mesmo tempo e pressão', tri(e.mesmoTempoColeta)], ['Pontas do mesmo modelo', tri(e.pontasMesmoModelo)], ['Modelo da ponta', e.modeloPonta], ['Pressão (' + (e.unidadePressao || 'bar') + ')', e.pressao], ['Vazão da ponta nova (' + (e.unidadeVazao || 'L/min') + ')', e.vazaoPontaNova], ['Vazões medidas (' + (e.unidadeVazao || 'L/min') + ')', e.vazoes]] : [['Mesma pressão da tabela do fabricante', tri(e.pressaoColetaIgualCatalogo)], ['Coleta no mesmo tempo e pressão', tri(e.mesmoTempoColeta)], ['Pontas do mesmo modelo', tri(e.pontasMesmoModelo)], ['Modelo da ponta', e.modeloPonta], ['Pressão (' + (e.unidadePressao || 'bar') + ')', e.pressao], ['Vazão de catálogo (L/min)', e.vazaoCatalogo], ['Origem da vazão de catálogo', e.fonteVazao ? `${e.fonteVazao.ponta} a ${String(e.fonteVazao.pressao).replace('.', ',')} ${e.fonteVazao.unidadePressao} — ${e.fonteVazao.fonte}${e.fonteVazao.ano ? ' (' + e.fonteVazao.ano + ')' : ''}${e.fonteVazao.pagina ? ', p. ' + e.fonteVazao.pagina : ''} (confirmada pelo usuário)` : (e.vazaoCatalogo ? 'Digitada pelo usuário' : '')], ['Vazões medidas (' + (e.unidadeVazao || 'L/min') + ')', e.vazoes]],
+    bicos: e.refVazao === 'ponta_nova' ? [['Referência', 'Ponta nova do mesmo modelo, medida junto (critério prático: ±10%)'], ['Ponta nova medida na mesma pressão e tempo', tri(e.pontaNovaMesmaCondicao)], ['Coleta no mesmo tempo e pressão', tri(e.mesmoTempoColeta)], ['Pontas do mesmo modelo', tri(e.pontasMesmoModelo)], ['Modelo da ponta', e.modeloPonta], ['Pressão (' + (e.unidadePressao || 'bar') + ')', e.pressao], ['Ponta nova (' + unVaz(e) + ')', e.vazaoPontaNova], ['Vazões medidas (' + unVaz(e) + ')', e.vazoes], ['Método de medição da vazão', metodoVazao(e)], ['Confirmação das condições', e.condLote ? 'Confirmadas em conjunto pelo responsável' : 'Respondidas uma a uma']] : [['Mesma pressão da tabela do fabricante', tri(e.pressaoColetaIgualCatalogo)], ['Coleta no mesmo tempo e pressão', tri(e.mesmoTempoColeta)], ['Pontas do mesmo modelo', tri(e.pontasMesmoModelo)], ['Modelo da ponta', e.modeloPonta], ['Pressão (' + (e.unidadePressao || 'bar') + ')', e.pressao], ['Vazão de catálogo (L/min)', e.vazaoCatalogo], ['Origem da vazão de catálogo', e.fonteVazao ? `${e.fonteVazao.ponta} a ${String(e.fonteVazao.pressao).replace('.', ',')} ${e.fonteVazao.unidadePressao} — ${e.fonteVazao.fonte}${e.fonteVazao.ano ? ' (' + e.fonteVazao.ano + ')' : ''}${e.fonteVazao.pagina ? ', p. ' + e.fonteVazao.pagina : ''} (confirmada pelo usuário)` : (e.vazaoCatalogo ? 'Digitada pelo usuário' : '')], ['Vazões medidas (' + unVaz(e) + ')', e.vazoes], ['Método de medição da vazão', metodoVazao(e)], ['Confirmação das condições', e.condLote ? 'Confirmadas em conjunto pelo responsável' : 'Respondidas uma a uma']],
     perdas: [['Área amostral (m²)', e.areaM2], ['Grãos em vagens incluídos', tri(e.incluiGraosEmVagens)], ['Massas por ponto (g)', e.massasG], ['Massas na plataforma (g)', e.massasPlataformaG]],
     longitudinal: [['Sementes por metro planejadas', e.sementesPorMetro], ['Espaçamentos (cm)', e.espacamentos]],
     transversal: [['Fertilizante nitrogenado', tri(e.fertilizanteNitrogenado)], ['CV com sobreposição', tri(e.cvComSobreposicao)], ['Bandejas', e.valoresSobrepostos]],
     sensor: [['Ponto verificado', e.ponto], ['Comparado com instrumento de referência', tri(e.comparadoComInstrumentoReferencia)], ['Leitura do controlador', e.leituraControlador], ['Referência', e.referencia], ['Fator de calibração atual', e.fatorAtual ? `${e.fatorAtual} (${e.tipoFator === 'por_pulso' ? 'unidade por pulso' : e.tipoFator === 'pulsos_por' ? 'pulsos por unidade' : 'tipo não informado'})` : '']],
-    taxa: [['Vazão média por bico (L/min)', e.vazaoMediaBico], ['Velocidade (km/h)', e.velocidadeKmH], ['Distância/tempo', e.distVel && e.tempoVel && !e.velocidadeKmH ? `${e.distVel} m em ${e.tempoVel} s` : ''], ['Espaçamento entre bicos (m)', e.espacamentoBicosM], ['Taxa planejada (L/ha)', e.taxaPlanejada], ['Pressão de trabalho (bar)', e.pressaoTrabalho]],
+    taxa: [['Vazão média por bico (L/min)', e.vazaoMediaBico], ['Velocidade (km/h)', e.velocidadeKmH], ['Distância/tempo', e.distVel && e.tempoVel && !e.velocidadeKmH ? `${e.distVel} m em ${e.tempoVel} s` : ''], ['Espaçamento entre bicos (m)', e.espacamentoBicosM], ['Taxa planejada (L/ha)', e.taxaPlanejada], ['Pressão de trabalho (bar)', e.pressaoTrabalho], ['Método da velocidade', metodoVelocidade(e)]],
     dose: [['Massa coletada (kg)', e.massaKg], ['Distância (m)', e.distanciaM], ['Largura (m)', e.larguraM], ['Dose planejada (kg/ha)', e.dosePlanejada]]
   }[a.tipo] || [];
   // Só o que vale para o tipo e o equipamento escolhidos (campos de outra escolha podem ter ficado gravados nas entradas)
@@ -689,6 +781,57 @@ function blocoOrientacao(r, w) {
     <small>Orientação calculada pelo app a partir das medições. Não muda o resultado acima; depois de ajustar ou trocar, meça de novo.</small></section>`;
 }
 
+// ---------- Impacto estimado em sacas, litros e reais (conta aberta, com a origem de cada número) ----------
+function areaDaAfericao(e) {
+  const f = e.fieldId ? find('fields', e.fieldId) : null;
+  if (f && Number(f.area) > 0) return {ha: Number(f.area), origem: `talhão ${f.name}`};
+  const ts = db.fields.filter(x => Number(x.area) > 0);
+  return ts.length ? {ha: ts.reduce((s, x) => s + Number(x.area), 0), origem: `soma dos ${ts.length} ${ts.length === 1 ? 'talhão cadastrado' : 'talhões cadastrados'}`} : null;
+}
+const nomeCultura = k => (PRODUTOS.find(p => p[0] === k) || [])[1] || '';
+// Preço da saca: média ponderada das vendas da cultura nos últimos 12 meses; senão, o informado pelo usuário
+function precoDaSaca(produto) {
+  const nome = semAcento(nomeCultura(produto)), desde = addDias(today(), -365);
+  const vs = nome ? db.vendas.filter(v => semAcento(v.cultura || '').includes(nome) && (v.date || '') >= desde && Number(v.sacas) > 0 && Number(v.preco) > 0) : [];
+  if (vs.length) { const sc = vs.reduce((s, v) => s + Number(v.sacas), 0); return {valor: vs.reduce((s, v) => s + Number(v.sacas) * Number(v.preco), 0) / sc, origem: vs.length === 1 ? `única venda de ${nomeCultura(produto).toLowerCase()} nos últimos 12 meses` : `média das ${vs.length} vendas de ${nomeCultura(produto).toLowerCase()} nos últimos 12 meses`, vendas: true}; }
+  const p = Number(db.settings.precoSaca?.[produto]);
+  return p > 0 ? {valor: p, origem: 'informado pelo usuário'} : null;
+}
+const custoDefensivo = () => Number(db.settings.custoDefensivoHa) > 0 ? {valor: Number(db.settings.custoDefensivoHa), origem: 'informado pelo usuário'} : null;
+function impactoAfericao(r, w) {
+  const I = IA(); if (!I || !r || !w) return {};
+  const e = w.entradas || w, area = areaDaAfericao(e), v = k => umNum(e[k]);
+  switch (w.tipo) {
+    case 'bicos': {
+      const ds = (r.bicos || []).map(b => b.desvioCatalogo ?? b.desvioRef).filter(Number.isFinite);
+      return {imp: ds.length ? I.impactoVolume({desvioPct: ds.reduce((s, x) => s + x, 0) / ds.length, area, custoHa: custoDefensivo()}) : null, pede: 'custo'};
+    }
+    case 'taxa': return {imp: I.impactoVolume({desvioPct: r.desvio, area, custoHa: custoDefensivo(), rotulo: 'Taxa aplicada'}), pede: 'custo'};
+    case 'perdas': { const preco = precoDaSaca(w.produto); return {imp: I.impactoPerdas({pttKgHa: r.pttKgHa, limiteKgHa: principal(r)?.limiteMax, area, preco, cultura: nomeCultura(w.produto).toLowerCase() || 'grãos'}), pede: preco?.vendas ? '' : 'preco'}; }
+    case 'longitudinal': return {imp: I.impactoPlantio({sementesPorMetro: v('sementesPorMetro'), espacamentos: numeros(e.espacamentos).vals, espLinhasM: configDaMaquina(w.maquina?.id ?? w.machineId).espacamentoLinhasM, area})};
+    case 'dose': return {imp: I.impactoDose({doseKgHa: r.doseKgHa, dosePlanejada: v('dosePlanejada'), area})};
+  }
+  return {};
+}
+function blocoImpacto(r, w) {
+  let x = {};
+  try { x = impactoAfericao(r, w); } catch (err) { console.error('impacto', err); }
+  if (!x.imp) return '';
+  const {imp} = x;
+  const campoCusto = x.pede === 'custo' ? `<label class="af-imp-campo">Custo médio dos produtos por hectare, por aplicação (R$/ha) <input data-imp="custoDefensivoHa" inputmode="decimal" value="${esc(db.settings.custoDefensivoHa ? String(db.settings.custoDefensivoHa).replace('.', ',') : '')}" placeholder="Ex.: 180"></label>` : '';
+  const campoPreco = x.pede === 'preco' ? `<label class="af-imp-campo">Preço da saca de ${esc(nomeCultura(w.produto).toLowerCase() || 'grãos')} (R$) <input data-imp="precoSaca|${esc(w.produto || '')}" inputmode="decimal" value="${esc(db.settings.precoSaca?.[w.produto] ? String(db.settings.precoSaca[w.produto]).replace('.', ',') : '')}" placeholder="Sem vendas registradas: informe"></label>` : '';
+  return `<section class="af-impacto ${imp.nivel}"><h3>Impacto estimado</h3><p class="af-imp-resumo">${esc(imp.resumo)}</p>
+    <details class="tecnico" ${w.criadoEm ? 'open' : ''}><summary>Como foi calculado</summary><table class="tbl"><tbody>${imp.linhas.map(([a, b, c]) => `<tr><td>${esc(a)}</td><td class="num"><strong>${esc(b)}</strong></td><td><small>${esc(c)}</small></td></tr>`).join('')}</tbody></table></details>
+    ${campoCusto}${campoPreco}<small>Estimativa com os dados de hoje; muda se a área, os custos ou os preços mudarem.</small></section>`;
+}
+document.addEventListener('change', e => {
+  const k = e.target.dataset?.imp; if (!k) return;
+  const v = umNum(e.target.value);
+  if (k.startsWith('precoSaca|')) { const c = k.split('|')[1]; db.settings.precoSaca = {...(db.settings.precoSaca || {}), [c]: v > 0 ? v : undefined}; }
+  else db.settings[k] = v > 0 ? v : undefined;
+  save(); render();
+});
+
 // ---------- Integração com o restante do app ----------
 TITLES.afericao = 'Aferição e calibragem';
 TITLES.catalogo = 'Catálogo de máquinas';
@@ -709,7 +852,8 @@ function situacaoReaferir(m) {
   // Último resultado de cada tipo fora da referência: medir de novo depois do ajuste
   for (const tipo of new Set(doMaq.map(a => a.tipo))) {
     const u = doMaq.find(a => a.tipo === tipo);
-    if (['FORA_DO_PADRAO', 'ATENCAO'].includes(u.resultado?.status)) antecipar(addDias(u.data, 3), `confirmar o ajuste (${(TIPO_UI[tipo]?.curto || tipo).toLowerCase()} deu fora)`);
+    if (['FORA_DO_PADRAO', 'ATENCAO'].includes(u.resultado?.status)) antecipar(addDias(u.data, 3), tipo === 'inspecao' ? 'corrigir e refazer a inspeção (reprovada)' : `confirmar o ajuste (${(TIPO_UI[tipo]?.curto || tipo).toLowerCase()} deu fora)`);
+    else if (tipo === 'inspecao' && u.resultado?.validade) antecipar(u.resultado.validade, 'inspeção periódica vence');
   }
   // Previsão de desgaste das pontas
   const ub = doMaq.find(a => a.tipo === 'bicos');
@@ -729,7 +873,7 @@ alerts = function () {
   const lista = alertasBase();
   const limite = daysAgo(30);
   db.machines.filter(temCalendario).forEach(m => { const r = situacaoReaferir(m); if (r.vencida || r.dias <= 7) lista.push({color: r.vencida ? 'red' : 'orange', icon: '◎', title: `${r.vencida ? 'Aferição atrasada' : 'Aferição próxima'}: ${m.name}`, text: textoReaferir(m).replace(/^! /, ''), route: 'afericao'}); });
-  db.afericoes.filter(a => a.data >= limite && a.resultado?.status === 'FORA_DO_PADRAO').forEach(a => lista.push({color: 'red', icon: '◎', title: `Aferição fora da referência: ${a.maquina?.name || TIPOS[a.tipo]?.titulo}`, text: `${TIPOS[a.tipo]?.titulo} em ${fmtDate(a.data)}.`, route: 'afericao/' + a.id}));
+  db.afericoes.filter(a => a.data >= limite && a.resultado?.status === 'FORA_DO_PADRAO').forEach(a => lista.push({color: 'red', icon: '◎', title: `${a.tipo === 'inspecao' ? 'Inspeção reprovada' : 'Aferição fora da referência'}: ${a.maquina?.name || tituloAfericao(a)}`, text: `${tituloAfericao(a)} em ${fmtDate(a.data)}.`, route: 'afericao/' + a.id}));
   return lista;
 };
 // Pré-carrega os dados em segundo plano (ficam no cache do navegador/APK)

@@ -115,3 +115,26 @@ test('tendência: por dias, troca de pontas reinicia e estável', () => {
   assert.equal(I.tendenciaBicos([{data: '2026-06-01', desvioMedio: 3}]).situacao, 'poucos');
   assert.equal(I.tendenciaBicos([{data: '2026-06-01', desvioMedio: 12}]).situacao, 'passou');
 });
+
+test('impacto: volume a mais em reais, com a conta aberta', () => {
+  const r = I.impactoVolume({desvioPct: 12, area: {ha: 100, origem: 'talhões'}, custoHa: {valor: 150, origem: 'usuário'}});
+  assert.match(r.resumo, /R\$ 1\.800,00 a mais em produto a cada aplicação em 100 ha/);
+  assert.equal(r.nivel, 'alerta');
+  assert.ok(r.linhas.some(l => /sem controlador/.test(l[1])));
+  assert.match(I.impactoVolume({desvioPct: 12}).resumo, /12% a mais/);
+  assert.match(I.impactoVolume({desvioPct: -8}).resumo, /subdose/);
+  assert.equal(I.impactoVolume({desvioPct: 0.5}), null);
+});
+
+test('impacto: perdas em sacas e reais, separando o evitável', () => {
+  const r = I.impactoPerdas({pttKgHa: 90, limiteKgHa: 60, area: {ha: 200, origem: 't'}, preco: {valor: 120, origem: 'vendas'}, cultura: 'soja'});
+  assert.match(r.resumo, /R\$ 36\.000,00 perdidos em 200 ha — R\$ 12\.000,00 evitáveis/);
+  assert.match(I.impactoPerdas({pttKgHa: 90, limiteKgHa: 60}).resumo, /1,5 sacas por hectare, 0,5 delas acima/);
+});
+
+test('impacto: plantio e dose', () => {
+  const p = I.impactoPlantio({sementesPorMetro: 10, espacamentos: [12.5, 12.5], espLinhasM: 0.5, area: {ha: 10, origem: 't'}});
+  assert.match(p.resumo, /40\.000 sementes por hectare a menos/);
+  const d = I.impactoDose({doseKgHa: 330, dosePlanejada: 300, area: {ha: 100, origem: 't'}});
+  assert.match(d.resumo, /3 toneladas a mais em 100 ha/);
+});

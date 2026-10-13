@@ -17,7 +17,7 @@
   const listaBicos = ns => {
     // 1, 2, 3, 7 → "1 a 3 e 7"
     const s = [...ns].sort((a, b) => a - b), partes = [];
-    for (let i = 0; i < s.length; i++) { let j = i; while (j + 1 < s.length && s[j + 1] === s[j] + 1) j++; partes.push(j - i >= 2 ? `${s[i]} a ${s[j]}` : j > i ? `${s[i]}, ${s[j]}` : `${s[i]}`); i = j; }
+    for (let i = 0; i < s.length; i++) { let j = i; while (j + 1 < s.length && s[j + 1] === s[j] + 1) j++; if (j - i >= 2) { partes.push(`${s[i]} a ${s[j]}`); i = j; } else partes.push(`${s[i]}`); }
     return partes.length > 1 ? partes.slice(0, -1).join(', ') + ' e ' + partes[partes.length - 1] : partes[0] || '';
   };
   const item = (nivel, titulo, texto) => ({nivel, titulo, texto}); // nivel: ok | info | atencao | alerta
@@ -238,5 +238,78 @@
       `As pontas estão desgastando ${ritmo}${desde}; a média está em ${sinal(t.atual)} e o limite é ${sinal(t.limite, 0)}. Calculado pelas ${t.pontos} últimas aferições.`);
   }
 
-  return {bicosPontaNova, diagnosticoBicos, ajusteTaxa, ajusteSensor, ajusteDose, diagnosticoLongitudinal, diagnosticoTransversal, diagnosticoPerdas, tendenciaBicos, textoTendencia, listaBicos};
+  // ---------- Impacto estimado (sacas, litros, reais), sempre com a conta aberta ----------
+  // area: {ha, origem}; custo/preço: {valor, origem}. Cada linha: [o quê, valor, de onde veio]. Sem um dado, a linha diz o que falta.
+  const brl = v => 'R$ ' + (Math.round(v * 100) / 100).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  const temArea = a => a && finito(a.ha) && a.ha > 0;
+  const temValor = c => c && finito(c.valor) && c.valor > 0;
+
+  /** Bicos/taxa: calda (e produto) a mais ou a menos. desvioPct: desvio médio do volume aplicado (%). */
+  function impactoVolume({desvioPct, area, custoHa, rotulo = 'Volume aplicado pela barra'}) {
+    if (!finito(desvioPct) || Math.abs(desvioPct) < 1) return null;
+    const linhas = [[rotulo, `${sinal(desvioPct)} do certo`, 'média das medições desta aferição']];
+    if (desvioPct < 0) {
+      linhas.push(['Consequência', 'subdose do produto', 'menos produto que o recomendado na bula/receituário']);
+      return {nivel: 'alerta', resumo: `Aplicando ${fmt(-desvioPct)}% a menos: risco de falha no controle (subdose), que pode custar mais que o produto.`, linhas};
+    }
+    let resumo = `Aplicando ${fmt(desvioPct)}% a mais de calda e de produto.`;
+    if (temValor(custoHa)) {
+      const porHa = custoHa.valor * desvioPct / 100;
+      linhas.push(['Custo dos produtos por hectare (por aplicação)', brl(custoHa.valor), custoHa.origem], ['Gasto a mais por hectare', brl(porHa), `${fmt(desvioPct)}% × ${brl(custoHa.valor)}`]);
+      if (temArea(area)) { const tot = porHa * area.ha; linhas.push(['Área', `${fmt(area.ha)} ha`, area.origem], ['Gasto a mais em cada aplicação na área', brl(tot), `${brl(porHa)} × ${fmt(area.ha)} ha`]); resumo = `Cerca de ${brl(tot)} a mais em produto a cada aplicação em ${fmt(area.ha)} ha (${brl(porHa)}/ha).`; }
+      else resumo = `Cerca de ${brl(porHa)} a mais em produto por hectare, a cada aplicação.`;
+    }
+    linhas.push(['Premissa', 'sem controlador automático de vazão', 'com controlador, o volume total é corrigido, mas a distribuição na barra continua desigual']);
+    return {nivel: desvioPct > 10 ? 'alerta' : 'atencao', resumo, linhas};
+  }
+
+  /** Perdas na colheita: sacas e reais. */
+  function impactoPerdas({pttKgHa, limiteKgHa, area, preco, cultura = 'grãos'}) {
+    if (!finito(pttKgHa) || pttKgHa <= 0) return null;
+    const sc = pttKgHa / 60, linhas = [['Perda medida', `${fmt(pttKgHa)} kg/ha = ${fmt(sc, 2)} sc/ha`, 'média dos pontos coletados (saca de 60 kg)']];
+    const evitavel = finito(limiteKgHa) ? Math.max(0, pttKgHa - limiteKgHa) / 60 : null;
+    if (finito(limiteKgHa)) linhas.push(['Acima do aceitável', `${fmt(evitavel, 2)} sc/ha`, `referência de ${fmt(limiteKgHa)} kg/ha`]);
+    let resumo = `Perdendo ${fmt(sc, 2)} sacas por hectare${evitavel ? `, ${fmt(evitavel, 2)} delas acima do aceitável` : ''}.`;
+    if (temArea(area)) {
+      linhas.push(['Área', `${fmt(area.ha)} ha`, area.origem], ['Perda na área', `${fmt(sc * area.ha, 0)} sacas`, `${fmt(sc, 2)} sc/ha × ${fmt(area.ha)} ha`]);
+      resumo = `Cerca de ${fmt(sc * area.ha, 0)} sacas perdidas em ${fmt(area.ha)} ha${evitavel ? ` (${fmt(evitavel * area.ha, 0)} evitáveis)` : ''}.`;
+      if (temValor(preco)) {
+        const rs = sc * area.ha * preco.valor, rsEv = evitavel ? evitavel * area.ha * preco.valor : null;
+        linhas.push([`Preço da saca de ${cultura}`, brl(preco.valor), preco.origem], ['Valor perdido na área', brl(rs), `${fmt(sc * area.ha, 0)} sc × ${brl(preco.valor)}`]);
+        if (rsEv) linhas.push(['Valor evitável com regulagem', brl(rsEv), 'só a parte acima do aceitável']);
+        resumo = `Cerca de ${brl(rs)} perdidos em ${fmt(area.ha)} ha${rsEv ? ` — ${brl(rsEv)} evitáveis com a regulagem` : ''}.`;
+      }
+    }
+    return {nivel: evitavel ? 'alerta' : 'info', resumo, linhas};
+  }
+
+  /** Plantio: plantas por hectare a mais ou a menos. */
+  function impactoPlantio({sementesPorMetro, espacamentos, espLinhasM, area}) {
+    if (!Array.isArray(espacamentos) || !espacamentos.length || !finito(sementesPorMetro) || sementesPorMetro <= 0) return null;
+    const real = 100 / media(espacamentos), d = desvio(real, sementesPorMetro);
+    if (Math.abs(d) < 2) return null;
+    const linhas = [['Sementes por metro', `${fmt(real, 1)} reais × ${fmt(sementesPorMetro, 1)} planejadas`, 'média dos espaçamentos medidos']];
+    let resumo = `${fmt(Math.abs(d))}% ${d < 0 ? 'a menos' : 'a mais'} de sementes que o planejado.`;
+    if (finito(espLinhasM) && espLinhasM > 0) {
+      const ph = (real - sementesPorMetro) / espLinhasM * 10000;
+      linhas.push(['Espaçamento entre linhas', `${fmt(espLinhasM * 100, 0)} cm`, 'configuração da máquina'], ['Diferença por hectare', `${ph > 0 ? '+' : ''}${fmt(ph, 0)} sementes/ha`, '(reais − planejadas) ÷ espaçamento × 10.000']);
+      resumo = `${fmt(Math.abs(ph), 0)} sementes por hectare ${ph < 0 ? 'a menos' : 'a mais'} que o planejado.`;
+      if (temArea(area)) { linhas.push(['Área', `${fmt(area.ha)} ha`, area.origem], ['Diferença na área', `${ph > 0 ? '+' : ''}${fmt(ph * area.ha, 0)} sementes`, `${fmt(ph, 0)} × ${fmt(area.ha)} ha`]); resumo += ` Na área: ${fmt(Math.abs(ph * area.ha), 0)} sementes.`; }
+    }
+    return {nivel: d < 0 ? 'alerta' : 'atencao', resumo, linhas};
+  }
+
+  /** Dose de adubo/semente: kg a mais ou a menos. */
+  function impactoDose({doseKgHa, dosePlanejada, area}) {
+    if (!finito(doseKgHa) || !finito(dosePlanejada) || dosePlanejada <= 0) return null;
+    const dif = doseKgHa - dosePlanejada;
+    if (Math.abs(dif / dosePlanejada) < 0.02) return null;
+    const linhas = [['Diferença por hectare', `${dif > 0 ? '+' : ''}${fmt(dif)} kg/ha`, `${fmt(doseKgHa)} medidos − ${fmt(dosePlanejada)} planejados`]];
+    let resumo = `${fmt(Math.abs(dif))} kg por hectare ${dif > 0 ? 'a mais' : 'a menos'}.`;
+    if (temArea(area)) { linhas.push(['Área', `${fmt(area.ha)} ha`, area.origem], ['Diferença na área', `${dif > 0 ? '+' : ''}${fmt(dif * area.ha / 1000, 2)} t`, `${fmt(dif)} kg/ha × ${fmt(area.ha)} ha`]); resumo = `${fmt(Math.abs(dif * area.ha / 1000), 2)} toneladas ${dif > 0 ? 'a mais' : 'a menos'} em ${fmt(area.ha)} ha.`; }
+    return {nivel: Math.abs(dif / dosePlanejada) > 0.1 ? 'alerta' : 'atencao', resumo, linhas};
+  }
+
+  return {bicosPontaNova, diagnosticoBicos, ajusteTaxa, ajusteSensor, ajusteDose, diagnosticoLongitudinal, diagnosticoTransversal, diagnosticoPerdas, tendenciaBicos, textoTendencia, listaBicos,
+    impactoVolume, impactoPerdas, impactoPlantio, impactoDose};
 }));
