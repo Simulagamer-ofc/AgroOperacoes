@@ -164,8 +164,11 @@ Object.assign(ACTIONS, {
 // Alertas: alvo no nível de ação e talhão em carência com colheita programada
 const alertasSemCampo = alerts;
 alerts = function () {
-  const lista = alertasSemCampo(), t = today();
-  Object.values(db.monitoramentos.slice().sort(byDateDesc).reduce((acc, x) => { acc[x.fieldId + '|' + x.alvo.toLowerCase()] ||= x; return acc; }, {})).filter(atingiuNivel)
+  const lista = alertasSemCampo(), desde = daysAgo(30);
+  // Último monitoramento de cada alvo no talhão; some depois de 30 dias ou quando há aplicação no talhão depois dele
+  const aplicadoDepois = x => db.aplicacoes.some(a => a.fieldId === x.fieldId && (a.date || '') >= x.date);
+  Object.values(db.monitoramentos.slice().sort(byDateDesc).reduce((acc, x) => { acc[x.fieldId + '|' + String(x.alvo || '').toLowerCase()] ||= x; return acc; }, {}))
+    .filter(x => atingiuNivel(x) && x.date >= desde && !aplicadoDepois(x))
     .forEach(x => lista.push({color: 'red', icon: '✱', title: `Nível de ação: ${x.alvo} — ${fieldName(x.fieldId)}`, text: `${num(x.valor, 2)} ${x.unidade} em ${fmtDate(x.date)} (nível informado ${num(x.nivelAcao, 2)}).`, route: 'pragas'}));
   db.operations.filter(o => o.type === 'Colheita' && o.status !== 'Concluída' && o.status !== 'Cancelada' && o.fieldId).forEach(o => {
     const l = liberacaoColheita(o.fieldId);
