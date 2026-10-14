@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.33.0-beta1` — **comparativo de safras e talhões** (botão em Produção e margem): conclusões escritas pelo app (melhor e pior talhão, variação da produtividade e do custo por saca contra a safra anterior com a chuva de cada uma, talhão abaixo da média em várias safras); tabela safra a safra; ranking dos talhões em barras; cada talhão ao longo das safras. Custos e margem só para quem vê o financeiro.
+
 `0.32.0-beta1` — talhão inteligente: **data de plantio automática** ao concluir o plantio; nos talhões, **dias após o plantio**, **chuva desde o plantio** e **colheita prevista** (com o ciclo da cultivar, campo novo opcional); avisos de **monitorar pragas** (mais de 7 dias sem monitoramento, com botão “Monitorar” já no talhão) e de **colheita prevista em até 10 dias** (com alerta de carência). Tela inicial mais leve: gráficos do painel recolhidos em “Ver gráficos” e o painel de custos só para quem vê o financeiro.
 
 `0.31.0-beta1` — **ações direto nos avisos** (revisão → “Abrir revisão” já preenchida; estoque acabando → “Lista de compras”); **lista de compras** automática (itens abaixo do mínimo ou que acabam em 30 dias, com a quantidade para ~30 dias de consumo) e **resumo da semana** (operações, área, horas, colheita, aplicações, chuva, diesel, gastos, próximos 7 dias e pendências) para compartilhar no WhatsApp ou e-mail; **conferências** que pedem confirmação em horímetro com salto de mais de 24 h por dia e em lançamento repetido (abastecimento, aplicação, chuva).
