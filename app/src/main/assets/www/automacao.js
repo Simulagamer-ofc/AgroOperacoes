@@ -355,10 +355,22 @@ function painelHoje() {
     : x.acao ? `<div class="hoje-item"><span class="alert-icon ${x.color}">${x.icon}</span><div><strong>${esc(x.title)}</strong><small>${esc(x.text)}</small></div>${mini(x.acao.label, x.acao.act, x.acao.id || '')}</div>`
     : `<div class="hoje-item clickable" data-act="nav" data-id="${esc(x.route)}"><span class="alert-icon ${x.color}">${x.icon}</span><div><strong>${esc(x.title)}</strong><small>${esc(x.text)}</small></div><span class="hoje-ir" aria-hidden="true">›</span></div>`;
   const data = new Date().toLocaleDateString('pt-BR', {weekday: 'long', day: 'numeric', month: 'long'});
-  return `<section class="hoje">${cartaoClima()}<article class="card panel hoje-fazer"><div class="section-title" style="margin:0 0 6px"><h3>Hoje <small>${esc(data)}</small></h3><div class="btn-row" style="margin:0">${btn('Resumo da semana', 'resumo-semana', '', 'secondary')}${btn('+ Operação', 'op-new', '', 'secondary')}</div></div>
-      ${itens.length ? itens.slice(0, 4).map(linha).join('') + (itens.length > 4 ? `<button class="link hoje-vermais" data-act="hoje-mais">Ver mais ${itens.length - 4} ${itens.length - 4 === 1 ? 'item' : 'itens'}</button>` : '') : empty('Tudo em dia', 'Nenhuma pendência para hoje.')}</article>
+  // Recolhido (padrão): uma linha com quantas pendências há e a mais urgente; o botão expande a lista com as ações
+  const aberto = hojeAberto(), atrasadas = ops.filter(o => o.status === 'Programada' && o.date < t).length, andamento = ops.filter(o => o.status === 'Em andamento').length;
+  const avisos = itens.length - ops.length, urgente = itens[0], nomeUrg = urgente ? (urgente.chuva ? `Choveu ~${num(urgente.chuva.mm)} mm ontem` : urgente.op ? `${urgente.op.type} — ${opPlace(urgente.op)}` : urgente.title) : '';
+  const partes = [atrasadas ? `${atrasadas} ${atrasadas === 1 ? 'atrasada' : 'atrasadas'}` : '', andamento ? `${andamento} em andamento` : '', avisos > 0 ? `${avisos} ${avisos === 1 ? 'aviso' : 'avisos'}` : ''].filter(Boolean);
+  const temUrgente = atrasadas > 0 || al.some(a => a.color === 'red');
+  return `<section class="hoje">${cartaoClima()}<article class="card panel hoje-fazer ${aberto ? 'aberto' : ''}" id="hojeFazer">
+    <button type="button" class="clima-linha" data-act="hoje-expandir" aria-expanded="${aberto}" aria-controls="hojeCorpo">
+      <span class="clima-ic" aria-hidden="true">${itens.length ? (temUrgente ? '⚠️' : '📋') : '✅'}</span>
+      <span class="clima-txt"><strong>Hoje <small class="hoje-data">${esc(data)}</small></strong><small class="${temUrgente ? 'nao' : 'ok'}">${itens.length ? `${itens.length} ${itens.length === 1 ? 'pendência' : 'pendências'}${partes.length ? ' • ' + esc(partes.join(' • ')) : ''}${!aberto && nomeUrg ? ` — ${esc(nomeUrg)}` : ''}` : 'Tudo em dia'}</small></span>
+      <span class="clima-seta" aria-hidden="true">${aberto ? '▴' : '▾'}</span><span class="sr-only">${aberto ? 'Recolher' : 'Ver'} as pendências de hoje</span></button>
+    ${aberto ? `<div id="hojeCorpo"><div class="btn-row hoje-botoes">${btn('Resumo da semana', 'resumo-semana', '', 'secondary')}${btn('+ Operação', 'op-new', '', 'secondary')}</div>
+      ${itens.length ? itens.slice(0, 6).map(linha).join('') + (itens.length > 6 ? `<button class="link hoje-vermais" data-act="hoje-mais">Ver mais ${itens.length - 6} ${itens.length - 6 === 1 ? 'item' : 'itens'}</button>` : '') : empty('Tudo em dia', 'Nenhuma pendência para hoje.')}</div>` : ''}</article>
     </section>`;
 }
+const hojeAberto = () => safeStorage.get('agro-hoje-aberto') === '1';
+ACTIONS['hoje-expandir'] = () => { safeStorage.set('agro-hoje-aberto', hojeAberto() ? '0' : '1'); render(); };
 const painelNexusCompleto = typeof painelNexus === 'function' ? painelNexus : null;
 if (painelNexusCompleto) painelNexus = () => typeof nvVeFinanceiro === 'function' && !nvVeFinanceiro() ? '' : painelNexusCompleto();
 const inicioSemHoje = VIEWS.inicio;
