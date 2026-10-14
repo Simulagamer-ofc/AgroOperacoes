@@ -186,12 +186,12 @@ const lerClima = () => { try { return JSON.parse(safeStorage.get(CLIMA_KEY) || '
 // Previsão combinada de 4 modelos globais (a mesma ideia dos apps de clima grandes, como o Clima & Radar):
 // a média erra menos que um modelo sozinho, e a concordância entre eles diz o quanto confiar na previsão.
 const CLIMA_MODELOS = [['ecmwf_ifs025', 'ECMWF'], ['gfs_seamless', 'GFS'], ['icon_seamless', 'ICON'], ['gem_seamless', 'GEM']];
-const CLIMA_HORA = ['temperature_2m', 'relative_humidity_2m', 'wind_speed_10m', 'wind_gusts_10m', 'precipitation_probability', 'precipitation'];
-const CLIMA_DIA = ['temperature_2m_max', 'temperature_2m_min', 'precipitation_sum', 'precipitation_probability_max', 'wind_speed_10m_max'];
+const CLIMA_HORA = ['temperature_2m', 'relative_humidity_2m', 'wind_speed_10m', 'wind_gusts_10m', 'precipitation_probability', 'precipitation', 'cloud_cover'];
+const CLIMA_DIA = ['temperature_2m_max', 'temperature_2m_min', 'precipitation_sum', 'precipitation_probability_max', 'wind_speed_10m_max', 'sunshine_duration'];
 const mediaDe = xs => xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null;
 function combinarModelos(bruto) {
   const modelos = CLIMA_MODELOS.filter(([m]) => bruto.hourly?.[`temperature_2m_${m}`]?.some(v => v != null));
-  if (!modelos.length) { if (!bruto.daily?.temperature_2m_max) throw new Error('formato inesperado'); return bruto; } // resposta de um modelo só
+  if (!modelos.length) { if (!bruto.daily?.temperature_2m_max) throw new Error('formato inesperado'); if (bruto.hourly?.weather_code) bruto.hourly.trovoada = bruto.hourly.weather_code.map(c => c >= 95 ? 1 : 0); return bruto; } // resposta de um modelo só
   const valores = (sec, v, i) => modelos.map(([m]) => sec[`${v}_${m}`]?.[i]).filter(x => x != null && Number.isFinite(x));
   const h = {time: bruto.hourly.time}, d = {time: bruto.daily.time};
   CLIMA_HORA.forEach(v => { h[v] = h.time.map((_, i) => mediaDe(valores(bruto.hourly, v, i))); });
@@ -201,6 +201,8 @@ function combinarModelos(bruto) {
     const acordo = mm.length ? mm.filter(x => x >= 0.1).length / mm.length * 100 : null;
     return Math.round(prob != null && acordo != null ? (prob + acordo) / 2 : prob ?? acordo ?? 0);
   });
+  // Trovoada: parcela dos modelos com código de tempo de trovoada (95–99) na hora
+  h.trovoada = h.time.map((_, i) => { const cs = valores(bruto.hourly, 'weather_code', i); return cs.length ? cs.filter(c => c >= 95).length / cs.length : 0; });
   CLIMA_DIA.forEach(v => { d[v] = d.time.map((_, i) => mediaDe(valores(bruto.daily, v, i))); });
   d.precipitation_probability_max = d.time.map(t => Math.max(0, ...h.time.map((x, i) => x.startsWith(t) ? h.precipitation_probability[i] : 0)));
   // Confiança do dia: os modelos concordam sobre chover (≥ 2 mm) e a máxima não varia mais de 4 °C entre eles
@@ -218,7 +220,7 @@ async function buscarClima(forcar = false) {
   if (!forcar && atual && Date.now() - atual.em < 3600000 && Math.abs(atual.lat - loc.lat) < 0.01 && Math.abs(atual.lon - loc.lon) < 0.01) return;
   climaBuscando = true;
   try {
-    const base = {latitude: loc.lat.toFixed(4), longitude: loc.lon.toFixed(4), timezone: 'auto', forecast_days: '4', past_days: '1', hourly: CLIMA_HORA.join(','), daily: CLIMA_DIA.join(',')};
+    const base = {latitude: loc.lat.toFixed(4), longitude: loc.lon.toFixed(4), timezone: 'auto', forecast_days: '7', past_days: '1', hourly: [...CLIMA_HORA, 'weather_code'].join(','), daily: CLIMA_DIA.join(',')};
     const pedir = extra => fetch('https://api.open-meteo.com/v1/forecast?' + new URLSearchParams({...base, ...extra})).then(r => r.ok ? r.json() : Promise.reject(new Error('clima ' + r.status)));
     // 4 modelos; se o serviço recusar, usa o modelo automático (como antes)
     const dados = await pedir({models: CLIMA_MODELOS.map(([m]) => m).join(',')}).then(combinarModelos).catch(() => pedir({}));
@@ -251,8 +253,42 @@ function janelasDoDia(dados, data) {
   const principal = Object.entries(cont).sort((a, b) => b[1] - a[1])[0]?.[0] || '';
   return {janelas, principal};
 }
+// ---------- Exibição no estilo dos apps de clima: períodos do dia (madrugada, manhã, tarde, noite) e dias com ícone ----------
+const PERIODOS_DIA = [['madrugada', 0, 6], ['manhã', 6, 12], ['tarde', 12, 18], ['noite', 18, 24]];
+// Ícone pelo céu, chance de chuva e trovoada (de noite e madrugada, lua no lugar do sol)
+function iconeTempo({prob = 0, mm = 0, nuvens = 50, trov = 0, noite = false}) {
+  if (trov >= 0.4 && prob >= 40) return '⛈️';
+  if (prob >= 60 || mm >= 2) return '🌧️';
+  if (prob >= 35) return noite ? '☁️' : '🌦️';
+  if (nuvens >= 75) return '☁️';
+  if (nuvens >= 40) return noite ? '☁️' : '⛅';
+  if (nuvens >= 15) return noite ? '🌙' : '🌤️';
+  return noite ? '🌙' : '☀️';
+}
+const maxDe = xs => xs.length ? Math.max(...xs) : null, minDe = xs => xs.length ? Math.min(...xs) : null;
+// Próximos 4 períodos a partir de agora
+function periodosClima(dados) {
+  const h = dados.hourly, agora = new Date(), hora = agora.getHours(), lista = [];
+  for (let k = 0; k < 3 && lista.length < 4; k++) {
+    const dia = new Date(agora); dia.setDate(dia.getDate() + k); const data = k ? isoLocal(dia) : today();
+    PERIODOS_DIA.forEach(([nome, ini, fim]) => {
+      if (lista.length >= 4 || (k === 0 && fim <= hora)) return;
+      const idx = h.time.map((t, i) => [t, i]).filter(([t]) => t.startsWith(data) && Number(t.slice(11, 13)) >= ini && Number(t.slice(11, 13)) < fim).map(([, i]) => i);
+      const temps = idx.map(i => h.temperature_2m[i]).filter(x => x != null); if (!temps.length) return;
+      const temp = nome === 'tarde' ? maxDe(temps) : nome === 'madrugada' ? minDe(temps) : mediaDe(temps);
+      const prob = maxDe(idx.map(i => h.precipitation_probability?.[i] ?? 0)), mm = idx.reduce((t, i) => t + (h.precipitation?.[i] || 0), 0);
+      lista.push({nome, temp, prob, icone: iconeTempo({prob, mm, nuvens: mediaDe(idx.map(i => h.cloud_cover?.[i]).filter(x => x != null)) ?? 50, trov: maxDe(idx.map(i => h.trovoada?.[i] || 0)), noite: nome === 'noite' || nome === 'madrugada'})});
+    });
+  }
+  return lista;
+}
+const isoLocal = dt => `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+function iconeDia(dados, i) {
+  const h = dados.hourly, d = dados.daily, t = d.time[i], idx = h.time.map((x, k) => [x, k]).filter(([x]) => x.startsWith(t) && Number(x.slice(11, 13)) >= 6 && Number(x.slice(11, 13)) < 19).map(([, k]) => k);
+  return iconeTempo({prob: d.precipitation_probability_max[i] ?? 0, mm: d.precipitation_sum[i] || 0, nuvens: mediaDe(idx.map(k => h.cloud_cover?.[k]).filter(x => x != null)) ?? 50, trov: maxDe(idx.map(k => h.trovoada?.[k] || 0)) || 0});
+}
 const hh = n => String(n).padStart(2, '0') + 'h';
-const DIA_SEMANA = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+const DIA_SEMANA = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'], DIA_SEMANA_LONGO = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
 const climaAberto = () => safeStorage.get('agro-clima-aberto') === '1';
 function cartaoClima() {
   const loc = localDaFazenda(), c = lerClima();
@@ -271,11 +307,12 @@ function cartaoClima() {
   const resumo = jan.janelas.length ? `Pulverizar: ${jan.janelas.map(([a, b]) => `${hh(a)}–${hh(b)}`).join(', ')}` : 'Sem janela boa para pulverizar hoje';
   return `<article class="card panel hoje-clima ${aberto ? 'aberto' : ''}" id="hojeClima">
     <button type="button" class="clima-linha" data-act="clima-expandir" aria-expanded="${aberto}" aria-controls="climaCorpo">
-      <span class="clima-ic" aria-hidden="true">${d.precipitation_probability_max[i0] >= 60 ? '🌧' : '⛅'}</span>
+      <span class="clima-ic" aria-hidden="true">${iconeDia(c.dados, i0)}</span>
       <span class="clima-txt"><strong>Hoje ${hj}</strong><small class="${jan.janelas.length ? 'ok' : 'nao'}">${esc(resumo)}${chuvaProx ? ` • chuva ${chuvaProx.t === hoje ? 'hoje' : fmtDate(chuvaProx.t).slice(0, 5)}` : ''}${incertaHoje ? ' • previsão incerta' : ''}</small></span>
       <span class="clima-seta" aria-hidden="true">${aberto ? '▴' : '▾'}</span><span class="sr-only">${aberto ? 'Recolher' : 'Ver'} a previsão</span></button>
     ${aberto ? `<div id="climaCorpo">
-    <div class="hoje-dias">${d.time.slice(i0, i0 + 4).map((t, k) => { const i = i0 + k; return `<div class="hoje-dia"><small>${k === 0 ? 'Hoje' : DIA_SEMANA[new Date(t + 'T12:00:00').getDay()]}</small><strong>${Math.round(d.temperature_2m_max[i])}° <span>${Math.round(d.temperature_2m_min[i])}°</span></strong><small>💧 ${num(d.precipitation_sum[i], 0)} mm · ${d.precipitation_probability_max[i] ?? 0}%</small><small>💨 ${Math.round(d.wind_speed_10m_max[i])} km/h</small>${conf[i] ? `<small class="clima-conf ${conf[i].firme ? 'firme' : 'incerta'}" title="${esc(txtConf(i) || 'Os modelos concordam')}">${conf[i].firme ? '✓ firme' : '⚠ incerta'}</small>` : ''}</div>`; }).join('')}</div>
+    <div class="clima-periodos">${periodosClima(c.dados).map(p => `<div class="clima-per"><small>${p.nome}</small><b class="clima-t">${Math.round(p.temp)}°</b><span class="clima-icone" aria-hidden="true">${p.icone}</span><small>💧 ${Math.round(p.prob)}%</small></div>`).join('')}</div>
+    <div class="clima-dias">${d.time.slice(i0, i0 + 7).map((t, k) => { const i = i0 + k, dt = new Date(t + 'T12:00:00'), sol = d.sunshine_duration?.[i]; return `<div class="clima-dia ${k === 0 ? 'hoje' : ''}"><small><b>${k === 0 ? 'hoje' : k === 1 ? 'amanhã' : DIA_SEMANA_LONGO[dt.getDay()]}</b><br>${fmtDate(t).slice(0, 5)}</small><b class="clima-max">${Math.round(d.temperature_2m_max[i])}°</b><b class="clima-min">${Math.round(d.temperature_2m_min[i])}°</b><span class="clima-icone" aria-hidden="true">${iconeDia(c.dados, i)}</span>${sol != null ? `<small>☀ ${Math.round(sol / 3600)} h</small>` : ''}<small>💧 ${Math.round(d.precipitation_probability_max[i] ?? 0)}%</small>${d.precipitation_sum[i] >= 1 ? `<small>${num(d.precipitation_sum[i], 0)} mm</small>` : ''}<small>💨 ${Math.round(d.wind_speed_10m_max[i])} km/h</small>${conf[i] ? `<small class="clima-conf ${conf[i].firme ? 'firme' : 'incerta'}" title="${esc(txtConf(i) || 'Os modelos concordam')}">${conf[i].firme ? '✓ firme' : '⚠ incerta'}</small>` : ''}</div>`; }).join('')}</div>
     <p class="hoje-jan ${jan.janelas.length ? 'ok' : 'nao'}">${txtJan(jan, 'hoje')}</p>${amanha ? `<p class="hoje-jan ${amanha.janelas.length ? 'ok' : 'nao'}">${txtJan(amanha, 'amanhã')}</p>` : ''}
     ${incertaHoje ? `<p class="nota clima-aviso">⚠ Previsão de hoje incerta (${esc(txtConf(i0))}): confira de novo mais tarde antes de pulverizar ou plantar.</p>` : ''}
     ${chuvaProx ? `<p class="nota">🌧 Chuva de ${num(chuvaProx.mm, 0)} mm prevista para ${chuvaProx.t === hoje ? 'hoje' : fmtDate(chuvaProx.t)}: programe aplicações e colheita.</p>` : ''}

@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.34.3-beta1` — **clima no estilo dos apps de previsão**: próximos 4 períodos (madrugada, manhã, tarde, noite) com temperatura, ícone do tempo (sol, nuvens, chuva, trovoada) e chance de chuva; 7 dias com máxima e mínima, ícone, horas de sol, chance e milímetros de chuva, vento e confiança (rolagem lateral no celular).
+
 `0.34.2-beta1` — **previsão do tempo combinada de 4 modelos** (ECMWF, GFS, ICON e GEM, via Open-Meteo), a mesma ideia dos apps de clima grandes: a média erra menos que um modelo só. Cada dia mostra **✓ firme** ou **⚠ incerta** conforme os modelos concordam sobre chuva e temperatura; com o dia de hoje incerto, o app avisa para conferir de novo antes de pulverizar ou plantar. Se o serviço recusar os modelos, volta sozinho ao modelo automático.
 
 `0.34.1-beta1` — **fotos mais leves, mesma nitidez**: WebP com qualidade automática (~150–250 KB por foto, antes ~300–450 KB; no iPhone, que não gera WebP, o app usa o codificador oficial libwebp embutido em `lib/webp` — Apache-2.0, ~320 KB, carregado só quando precisa), miniatura de ~15–25 KB para listas e relatórios (a foto inteira só é baixada ao tocar), limpeza automática no celular (foto já enviada e sem uso há 60 dias fica só a miniatura; fotos de registros excluídos saem) e na nuvem (excluir o registro ou a foto apaga os arquivos; sem internet, fica na fila).
