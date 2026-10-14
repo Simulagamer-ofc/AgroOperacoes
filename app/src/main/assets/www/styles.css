@@ -590,3 +590,6 @@ body{background:var(--bg)}
 :root[data-theme="light"] .clima-seta{background:var(--panel);color:var(--text);border-color:var(--line)}
 .hoje-clima.aberto #climaCorpo{margin-top:12px}
 .hoje-vermais{margin-top:6px}
+/* Texto para compartilhar (lista de compras, resumo da semana) */
+.texto-compartilhar{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--bg);color:var(--text);font:inherit;font-size:.9rem;line-height:1.45;resize:vertical}
+.btn-whats{display:inline-flex;align-items:center;padding:10px 14px;border-radius:10px;background:#25d366;color:#06301a;font-weight:700;text-decoration:none}

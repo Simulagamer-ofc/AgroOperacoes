@@ -61,6 +61,8 @@ function abastecimentoForm(machineId) {
       if (!(v.liters > 0)) return 'Informe os litros abastecidos';
       const anterior = db.fuel.filter(f => f.machineId === m.id && Number(f.hours) > 0).sort((a, b) => Number(b.hours) - Number(a.hours))[0];
       if (anterior && Number(v.hours) < Number(anterior.hours)) return `Horímetro menor que o do último abastecimento (${num(anterior.hours)} h)`;
+      const salto = typeof conferirSalto === 'function' ? conferirSalto(m, v.hours, v.date) : ''; if (salto) return salto;
+      const dup = typeof conferirRepetido === 'function' ? conferirRepetido('fuel', f => f.machineId === m.id && f.date === v.date && Number(f.liters) === Number(v.liters), `já existe um abastecimento de ${num(v.liters)} L de ${m.name} em ${fmtDate(v.date)}`) : ''; if (dup) return dup;
       const reg = {id: uid(), machineId: m.id, date: v.date, liters: v.liters, hours: v.hours, cheio: v.cheio, origem: v.origem, operator: v.operator, notes: v.notes};
       if (v.origem === 'estoque') {
         const s = find('stock', v.itemId);

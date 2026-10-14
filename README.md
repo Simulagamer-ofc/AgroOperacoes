@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.31.0-beta1` — **ações direto nos avisos** (revisão → “Abrir revisão” já preenchida; estoque acabando → “Lista de compras”); **lista de compras** automática (itens abaixo do mínimo ou que acabam em 30 dias, com a quantidade para ~30 dias de consumo) e **resumo da semana** (operações, área, horas, colheita, aplicações, chuva, diesel, gastos, próximos 7 dias e pendências) para compartilhar no WhatsApp ou e-mail; **conferências** que pedem confirmação em horímetro com salto de mais de 24 h por dia e em lançamento repetido (abastecimento, aplicação, chuva).
+
 `0.30.1-beta1` — tela inicial mais limpa: o clima vira uma linha (temperatura de hoje e as horas boas para pulverizar) com um botão para expandir os 4 dias, as janelas, a chuva e o critério, como o botão do menu; a escolha fica lembrada. O “Hoje” mostra os 4 itens mais urgentes e “Ver mais”.
 
 `0.30.0-beta1` — mais automação: **custo por hora de cada máquina** (combustível + manutenção dos últimos 12 meses) e **custo de máquina de cada operação** (horas × custo/h; também no relatório da safra), só para quem vê o financeiro; **duração prevista** das operações programadas pelo rendimento das anteriores da mesma máquina e tipo; **chuva de ontem sugerida** pela previsão do tempo quando ninguém registrou (um toque abre o registro para conferir no pluviômetro); **aviso ao programar colheita dentro da carência**; avisos dos formulários ficam mais tempo na tela.
