@@ -247,8 +247,15 @@ async function nvConferirFazenda() {
     }
   } else nv.pedidos = 0;
   nvMarcarPedidos();
+  // Nomes da equipe (para mostrar quem lançou cada registro), no máximo a cada 10 minutos
+  if (!nv.nomesEm || Date.now() - nv.nomesEm > 600000) {
+    const ms = await nvHttp(`/rest/v1/farm_members?select=user_id,nome,login&farm_id=eq.${encodeURIComponent(f.id)}`).catch(() => null);
+    if (Array.isArray(ms)) { nv.nomes = Object.fromEntries(ms.map(m => [m.user_id, m.nome || nvMostrarLogin(m.login) || ''])); nv.nomesEm = Date.now(); }
+  }
   nvSalvar();
 }
+// Quem lançou o registro (nome da equipe), quando não foi a própria pessoa
+const quemLancou = r => r?._por && r._por !== nv.sessao?.usuario ? nv.nomes?.[r._por] || '' : '';
 // Número de pedidos de acesso no botão de Cadastros (só para o ADM)
 function nvMarcarPedidos() {
   const n = nvPapel() === 'admin' ? nv.pedidos || 0 : 0;
@@ -430,7 +437,7 @@ function nvValidar({login, senha}, soEmail = false) {
   if (!senha) throw new NvErro('Digite a senha.');
 }
 // Desliga da fazenda (os dados do aparelho continuam marcados como sendo dela: nv.dadosDe)
-function nvEsquecerFazenda() { nv.pedidos = 0; nv.fazenda = null; nv.papel = null; nv.funcao = null; nv.modulos = null; nvFazendas = null; nvUsuarios = null; nvStatus = 'parado'; nvErro = ''; nvAplicarPapel(); }
+function nvEsquecerFazenda() { nv.pedidos = 0; nv.nomes = null; nv.nomesEm = 0; nv.fazenda = null; nv.papel = null; nv.funcao = null; nv.modulos = null; nvFazendas = null; nvUsuarios = null; nvStatus = 'parado'; nvErro = ''; nvAplicarPapel(); }
 // Apaga os dados deste aparelho (usado ao entrar numa fazenda diferente da que estava aqui)
 function nvLimparAparelho() {
   const settings = db.settings; db = emptyDb(); db.settings = settings; db._removidos = [];
