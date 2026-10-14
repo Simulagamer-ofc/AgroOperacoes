@@ -70,10 +70,11 @@ function concluirOperacao(id) {
   const m = o.machineId ? find('machines', o.machineId) : null, f = o.fieldId ? find('fields', o.fieldId) : null;
   const fields = [];
   if (m) fields.push({k: 'horimetro', label: `Horímetro final — ${m.name} (h)`, type: 'number', min: 0, full: true, hint: `Atual: ${num(m.hours)} h${o.horimetroIni ? ` • no início: ${num(o.horimetroIni)} h` : ''}. Atualiza a máquina, as revisões e o consumo.`});
-  fields.push({k: 'area', label: 'Área trabalhada (ha)', type: 'number', min: 0, hint: f && Number(f.area) > 0 ? `Talhão ${f.name}: ${num(f.area)} ha` : ''},
-    {k: 'notes', label: 'Observações', type: 'textarea'});
+  if (opTemArea(o)) fields.push({k: 'area', label: 'Área trabalhada (ha)', type: 'number', min: 0, hint: f && Number(f.area) > 0 ? `Talhão ${f.name}: ${num(f.area)} ha` : ''});
+  if (OP_COM_KG.includes(o.type)) fields.push({k: 'kg', label: 'Quantidade de sementes (kg)', type: 'number', min: 0, hint: 'Para calcular o rendimento em kg/h.'});
+  fields.push({k: 'notes', label: 'Observações', type: 'textarea'});
   openForm({title: `Concluir: ${o.type}`, sub: [opPlace(o), m?.name].filter(Boolean).join(' • '), submit: 'Concluir operação',
-    values: {horimetro: m ? m.hours : '', area: o.area || (f ? f.area : ''), notes: o.notes || ''}, fields,
+    values: {horimetro: m ? m.hours : '', area: o.area || (f ? f.area : ''), kg: o.kg || '', notes: o.notes || ''}, fields,
     onSubmit: v => {
       if (m && v.horimetro !== '' && Number(v.horimetro) < Number(o.horimetroIni || 0)) return `O horímetro final não pode ser menor que o do início (${num(o.horimetroIni)} h)`;
       if (m && v.horimetro !== '' && Number(v.horimetro) > Number(m.hours || 0)) {
@@ -81,10 +82,11 @@ function concluirOperacao(id) {
         m.hours = Number(v.horimetro);
       }
       if (m && v.horimetro !== '') { o.horimetroFim = Number(v.horimetro); if (o.horimetroIni) o.horas = Math.round((o.horimetroFim - o.horimetroIni) * 10) / 10; }
-      if (v.area !== '') o.area = Number(v.area);
+      if (opTemArea(o) && v.area !== '' && v.area != null) o.area = Number(v.area);
+      if (OP_COM_KG.includes(o.type) && v.kg !== '' && v.kg != null) o.kg = Number(v.kg);
       o.notes = v.notes; o.status = 'Concluída'; o.finishedAt = new Date().toISOString();
       save();
-      showToast(`Operação concluída${o.horas > 0 ? ` — ${um1(o.horas)} h` : ''}${o.horas > 0 && o.area > 0 ? `, ${um1(o.area / o.horas)} ha/h` : ''}`);
+      showToast(`Operação concluída${o.horas > 0 ? ` — ${um1(o.horas)} h` : ''}${o.horas > 0 && o.area > 0 && opTemArea(o) ? `, ${um1(o.area / o.horas)} ha/h` : o.horas > 0 && o.kg > 0 ? `, ${num(o.kg / o.horas)} kg/h` : ''}`);
     }});
 }
 Object.assign(ACTIONS, {'op-start': iniciarOperacao, 'op-done': concluirOperacao});
@@ -220,7 +222,7 @@ VIEWS.safra = id => {
   <article class="card panel relatorio">
     <header class="rel-head"><div><strong>${esc(db.settings.farm || 'Nexus Agro')}</strong><br><small>Relatório da safra — ${esc(f.name)}</small></div><small>${fmtDate(p.ini)} a ${fmtDate(p.fim)}</small></header>
     <h3>1. Talhão</h3><table class="tbl"><tbody>${linha('Talhão', f.name)}${linha('Área', area ? num(area) + ' ha' : '')}${linha('Cultura', f.crop)}${linha('Cultivar', f.cultivar)}${linha('Safra', f.season)}${linha('Chuva acumulada no período', chuva ? num(chuva, 0) + ' mm' : '')}${linha('Colheita liberada (carência)', lib ? (lib.libera > today() ? 'a partir de ' + fmtDate(lib.libera) : 'liberada') : '')}</tbody></table>
-    <h3>2. Operações (${ops.length})</h3>${tabela(['Data', 'Operação', 'Máquina', 'Área', 'Horas', 'Situação'], ops.map(o => `<tr><td>${fmtDate(o.date)}</td><td>${esc(o.type)}</td><td>${esc(machineName(o.machineId) || '—')}</td><td>${o.area ? num(o.area) + ' ha' : '—'}</td><td>${o.horas ? um1(o.horas) + ' h' : '—'}</td><td>${esc(o.status)}</td></tr>`))}
+    <h3>2. Operações (${ops.length})</h3>${tabela(['Data', 'Operação', 'Máquina', 'Área / quantidade', 'Horas', 'Situação'], ops.map(o => `<tr><td>${fmtDate(o.date)}</td><td>${esc(o.type)}</td><td>${esc(machineName(o.machineId) || '—')}</td><td>${o.area && opTemArea(o) ? num(o.area) + ' ha' : o.kg ? num(o.kg) + ' kg' : '—'}</td><td>${o.horas ? um1(o.horas) + ' h' : '—'}</td><td>${esc(o.status)}</td></tr>`))}
     <h3>3. Aplicações de defensivos (${aps.length})</h3>${tabela(['Data', 'Produto e dose', 'Receituário', 'Resp. técnico', 'Carência'], aps.map(a => `<tr><td>${fmtDate(a.date)}</td><td><strong>${esc(a.produto)}</strong>${a.dose ? '<br><small>' + esc(a.dose) + '</small>' : ''}</td><td>${esc(a.receituario || '—')}</td><td>${esc(a.responsavel || '—')}</td><td>${num(a.carencia)} d (até ${fmtDate(addDias(a.date, Number(a.carencia) || 0))})</td></tr>`))}
     <h3>4. Monitoramento de pragas e doenças (${mon.length})</h3>${tabela(['Data', 'Alvo', 'Média', 'Nível de ação'], mon.map(m => `<tr><td>${fmtDate(m.date)}</td><td>${esc(m.alvo)}</td><td>${num(m.valor, 2)} ${esc(m.unidade || '')}</td><td>${m.nivelAcao !== '' && m.nivelAcao != null ? num(m.nivelAcao, 2) : '—'}</td></tr>`))}
     <h3>5. Colheita</h3><table class="tbl"><tbody>${col.length ? linha('Produção', `${sacas >= 100 ? num(sacas) : um1(sacas)} sacas de 60 kg`) + linha('Produtividade', area ? `${um1(sacas / area)} sc/ha` : '') : '<tr><td>Sem colheita registrada no período.</td></tr>'}</tbody></table>

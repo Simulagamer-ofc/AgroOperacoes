@@ -93,6 +93,10 @@ const upsert = (col, item) => {
 const remove = (col, id) => { db[col] = db[col].filter(x => x.id !== id); return save(); };
 
 // ---------- Regras de negócio ----------
+// Operações fora do talhão: não têm área trabalhada (beneficiamento e tratamento de sementes medem a quantidade em kg)
+const OP_SEM_AREA = ['Beneficiamento de sementes', 'Tratamento de sementes', 'Transporte', 'Manutenção'];
+const OP_COM_KG = ['Beneficiamento de sementes', 'Tratamento de sementes'];
+const opTemArea = o => !OP_SEM_AREA.includes(o?.type);
 const OP_TYPES = ['Plantio', 'Aplicação', 'Adubação', 'Colheita', 'Preparo de solo', 'Transporte', 'Beneficiamento de sementes', 'Tratamento de sementes', 'Manutenção', 'Outra'];
 const OP_STATUS = ['Programada', 'Em andamento', 'Concluída', 'Cancelada'];
 const STATUS_COLOR = {'Programada': 'blue', 'Em andamento': 'green', 'Concluída': 'gray', 'Cancelada': 'red'};
@@ -288,15 +292,20 @@ function operationForm(op = {}) {
       {k: 'machineId', label: 'Máquina', type: 'select', options: machineOptions, labelAusente: maquinaAusente},
       {k: 'status', label: 'Situação', type: 'select', options: OP_STATUS, required: true},
       {k: 'area', label: 'Área trabalhada (ha)', type: 'number', min: 0},
+      {k: 'kg', label: 'Quantidade de sementes (kg)', type: 'number', min: 0},
       {k: 'operator', label: 'Operador / equipe'},
       {k: 'notes', label: 'Observações', type: 'textarea', placeholder: 'Insumos, dose, condições do tempo...'}
     ],
     onSubmit: v => {
       if (!v.fieldId && !v.place) return 'Informe o talhão ou o local da operação';
+      if (!opTemArea(v)) v.area = ''; if (!OP_COM_KG.includes(v.type)) v.kg = '';
       upsert('operations', {...op, ...v, id: op.id || uid(), createdAt: op.createdAt || new Date().toISOString()});
       showToast('Operação salva no dispositivo');
     }
   });
+  // Mostra só o que vale para o tipo: área (no talhão) ou quantidade de sementes (beneficiamento e tratamento)
+  const tipo = $('#f_type', dialog), mostrar = () => { const t = tipo.value; $('#f_area', dialog).closest('.field').hidden = !opTemArea({type: t}); $('#f_kg', dialog).closest('.field').hidden = !OP_COM_KG.includes(t); };
+  if (tipo) { tipo.addEventListener('change', mostrar); mostrar(); }
 }
 
 function machineForm(m = {}) {
@@ -538,9 +547,9 @@ const mini = (label, act, id, cls = '') => `<button class="${cls}" data-act="${a
 
 function operationRow(o, actions = true) {
   const color = STATUS_COLOR[o.status] || 'blue';
-  const horas = Number(o.horas) > 0 ? `${um1(o.horas)} h${Number(o.area) > 0 ? ` (${um1(o.area / o.horas)} ha/h)` : ''}` : '';
+  const horas = Number(o.horas) > 0 ? `${um1(o.horas)} h${Number(o.area) > 0 && opTemArea(o) ? ` (${um1(o.area / o.horas)} ha/h)` : Number(o.kg) > 0 ? ` (${num(o.kg / o.horas)} kg/h)` : ''}` : '';
   const por = typeof quemLancou === 'function' ? quemLancou(o) : '';
-  const parts = [fmtDate(o.date) + (o.time ? ' ' + o.time : ''), machineName(o.machineId), o.area ? `${num(o.area)} ha` : '', horas, o.operator, o.notes, por ? 'lançado por ' + por : ''].filter(Boolean);
+  const parts = [fmtDate(o.date) + (o.time ? ' ' + o.time : ''), machineName(o.machineId), o.area && opTemArea(o) ? `${num(o.area)} ha` : '', Number(o.kg) > 0 ? `${num(o.kg)} kg` : '', horas, o.operator, o.notes, por ? 'lançado por ' + por : ''].filter(Boolean);
   const acts = !actions ? chip(o.status, color) : `<div class="row-actions">${chip(o.status, color)}${o.status === 'Programada' ? mini('▶ Iniciar', 'op-start', o.id) : ''}${o.status === 'Em andamento' ? mini('✓ Concluir', 'op-done', o.id, 'ok') : ''}${mini('Editar', 'op-edit', o.id)}${mini('Excluir', 'op-del', o.id, 'del')}</div>`;
   return `<div class="row"><span class="status ${color === 'gray' ? 'green' : color}"></span><div><strong>${esc(o.type)} — ${esc(opPlace(o))}</strong><small>${esc(parts.join(' • '))}</small></div>${acts}</div>`;
 }
@@ -701,7 +710,7 @@ VIEWS.relatorios = () => {
   // Mesmo critério de datas do Controle de gastos (manutenção pela data de conclusão, ou de abertura)
   const custos = lancamentosCusto(from, today()), custosManut = custos.filter(x => x.origem === 'manutencao');
   const maintCost = somaValor(custosManut), outrosGastos = somaValor(custos.filter(x => x.origem === 'gasto'));
-  const area = ops.filter(o => o.status === 'Concluída').reduce((s, o) => s + Number(o.area || 0), 0);
+  const area = ops.filter(o => o.status === 'Concluída' && opTemArea(o)).reduce((s, o) => s + Number(o.area || 0), 0);
   return head('Relatórios', `Resumo dos últimos ${reportDays} dias (desde ${fmtDate(from)})`, btn('Exportar operações (CSV)', 'csv', 'operations', 'secondary') + btn('Exportar estoque (CSV)', 'csv', 'stock', 'secondary')) +
     `<div class="filters">${[7, 30, 90, 365].map(d => `<button class="${d === reportDays ? 'active' : ''}" data-act="rep-days" data-id="${d}">${d === 365 ? '12 meses' : d + ' dias'}</button>`).join('')}</div>
     <section class="kpis">
@@ -794,7 +803,7 @@ function restoreBackup(text) {
 }
 
 const CSV_DEFS = {
-  operations: ['operacoes', [['Data', o => fmtDate(o.date)], ['Hora', o => o.time], ['Tipo', o => o.type], ['Local', opPlace], ['Máquina', o => machineName(o.machineId)], ['Área (ha)', o => o.area], ['Operador', o => o.operator], ['Situação', o => o.status], ['Observações', o => o.notes]], db => db.operations.slice().sort(byDateDesc)],
+  operations: ['operacoes', [['Data', o => fmtDate(o.date)], ['Hora', o => o.time], ['Tipo', o => o.type], ['Local', opPlace], ['Máquina', o => machineName(o.machineId)], ['Área (ha)', o => opTemArea(o) ? o.area : ''], ['Sementes (kg)', o => o.kg], ['Operador', o => o.operator], ['Situação', o => o.status], ['Observações', o => o.notes]], db => db.operations.slice().sort(byDateDesc)],
   stock: ['estoque', [['Item', s => s.name], ['Categoria', s => s.category], ['Saldo', s => s.qty], ['Unidade', s => s.unit], ['Mínimo', s => s.min], ['Local', s => s.location], ['Custo médio (R$/un)', s => custoMedio(s) ?? ''], ['Valor em estoque (R$)', s => custoMedio(s) != null ? Math.round(custoMedio(s) * Number(s.qty || 0) * 100) / 100 : '']], db => db.stock]
 };
 function exportCsv(kind) {

@@ -25,7 +25,7 @@ const semDados = txt => `<p class="viz-vazio">${esc(txt)}</p>`;
 
 // 1) Área trabalhada: colunas por dia (7 dias) ou por semana (30/90 dias)
 function graficoArea(ini, fim) {
-  const ops = db.operations.filter(o => o.status === 'Concluída' && Number(o.area) > 0 && o.date >= ini && o.date <= fim);
+  const ops = db.operations.filter(o => o.status === 'Concluída' && Number(o.area) > 0 && (typeof opTemArea !== 'function' || opTemArea(o)) && o.date >= ini && o.date <= fim);
   const dias = diasPeriodo(), passo = dias <= 14 ? 1 : dias <= 120 ? 7 : 30;
   const grupos = [];
   for (let d = ini; d <= fim; d = addDias(d, passo)) grupos.push({de: d, ate: addDias(d, passo - 1) > fim ? fim : addDias(d, passo - 1), ha: 0});
