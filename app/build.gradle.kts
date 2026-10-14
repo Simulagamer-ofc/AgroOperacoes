@@ -11,8 +11,8 @@ android {
         applicationId = "com.simulagamer.agrooperacoes"
         minSdk = 26
         targetSdk = 35
-        versionCode = 49
-        versionName = "0.34.1-beta1"
+        versionCode = 50
+        versionName = "0.34.2-beta1"
     }
 
     compileOptions {

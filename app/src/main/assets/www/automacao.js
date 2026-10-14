@@ -183,18 +183,45 @@ function localDaFazenda() {
   return null;
 }
 const lerClima = () => { try { return JSON.parse(safeStorage.get(CLIMA_KEY) || 'null'); } catch { return null; } };
+// Previsão combinada de 4 modelos globais (a mesma ideia dos apps de clima grandes, como o Clima & Radar):
+// a média erra menos que um modelo sozinho, e a concordância entre eles diz o quanto confiar na previsão.
+const CLIMA_MODELOS = [['ecmwf_ifs025', 'ECMWF'], ['gfs_seamless', 'GFS'], ['icon_seamless', 'ICON'], ['gem_seamless', 'GEM']];
+const CLIMA_HORA = ['temperature_2m', 'relative_humidity_2m', 'wind_speed_10m', 'wind_gusts_10m', 'precipitation_probability', 'precipitation'];
+const CLIMA_DIA = ['temperature_2m_max', 'temperature_2m_min', 'precipitation_sum', 'precipitation_probability_max', 'wind_speed_10m_max'];
+const mediaDe = xs => xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : null;
+function combinarModelos(bruto) {
+  const modelos = CLIMA_MODELOS.filter(([m]) => bruto.hourly?.[`temperature_2m_${m}`]?.some(v => v != null));
+  if (!modelos.length) { if (!bruto.daily?.temperature_2m_max) throw new Error('formato inesperado'); return bruto; } // resposta de um modelo só
+  const valores = (sec, v, i) => modelos.map(([m]) => sec[`${v}_${m}`]?.[i]).filter(x => x != null && Number.isFinite(x));
+  const h = {time: bruto.hourly.time}, d = {time: bruto.daily.time};
+  CLIMA_HORA.forEach(v => { h[v] = h.time.map((_, i) => mediaDe(valores(bruto.hourly, v, i))); });
+  // Chance de chuva: média entre a probabilidade dos modelos que a informam e a parcela de modelos que preveem chuva na hora
+  h.precipitation_probability = h.time.map((_, i) => {
+    const prob = mediaDe(valores(bruto.hourly, 'precipitation_probability', i)), mm = valores(bruto.hourly, 'precipitation', i);
+    const acordo = mm.length ? mm.filter(x => x >= 0.1).length / mm.length * 100 : null;
+    return Math.round(prob != null && acordo != null ? (prob + acordo) / 2 : prob ?? acordo ?? 0);
+  });
+  CLIMA_DIA.forEach(v => { d[v] = d.time.map((_, i) => mediaDe(valores(bruto.daily, v, i))); });
+  d.precipitation_probability_max = d.time.map(t => Math.max(0, ...h.time.map((x, i) => x.startsWith(t) ? h.precipitation_probability[i] : 0)));
+  // Confiança do dia: os modelos concordam sobre chover (≥ 2 mm) e a máxima não varia mais de 4 °C entre eles
+  d.confianca = d.time.map((_, i) => {
+    const mm = valores(bruto.daily, 'precipitation_sum', i), tx = valores(bruto.daily, 'temperature_2m_max', i);
+    const comChuva = mm.filter(x => x >= 2).length, difT = tx.length > 1 ? Math.max(...tx) - Math.min(...tx) : 0;
+    const chuvaIncerta = mm.length > 1 && comChuva > 0 && comChuva < mm.length;
+    return {n: mm.length, comChuva, chuvaIncerta, difT: Math.round(difT), firme: !chuvaIncerta && difT <= 4};
+  });
+  return {...bruto, hourly: h, daily: d, modelos: modelos.map(([, nome]) => nome)};
+}
 async function buscarClima(forcar = false) {
   const loc = localDaFazenda(); if (!loc || climaBuscando || navigator.onLine === false) return;
   const atual = lerClima();
   if (!forcar && atual && Date.now() - atual.em < 3600000 && Math.abs(atual.lat - loc.lat) < 0.01 && Math.abs(atual.lon - loc.lon) < 0.01) return;
   climaBuscando = true;
   try {
-    const q = new URLSearchParams({latitude: loc.lat.toFixed(4), longitude: loc.lon.toFixed(4), timezone: 'auto', forecast_days: '4', past_days: '1',
-      hourly: 'temperature_2m,relative_humidity_2m,wind_speed_10m,wind_gusts_10m,precipitation_probability,precipitation',
-      daily: 'temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max'});
-    const r = await fetch('https://api.open-meteo.com/v1/forecast?' + q);
-    if (!r.ok) throw new Error('clima ' + r.status);
-    const dados = await r.json();
+    const base = {latitude: loc.lat.toFixed(4), longitude: loc.lon.toFixed(4), timezone: 'auto', forecast_days: '4', past_days: '1', hourly: CLIMA_HORA.join(','), daily: CLIMA_DIA.join(',')};
+    const pedir = extra => fetch('https://api.open-meteo.com/v1/forecast?' + new URLSearchParams({...base, ...extra})).then(r => r.ok ? r.json() : Promise.reject(new Error('clima ' + r.status)));
+    // 4 modelos; se o serviço recusar, usa o modelo automático (como antes)
+    const dados = await pedir({models: CLIMA_MODELOS.map(([m]) => m).join(',')}).then(combinarModelos).catch(() => pedir({}));
     safeStorage.set(CLIMA_KEY, JSON.stringify({em: Date.now(), lat: loc.lat, lon: loc.lon, dados}));
     if (parseRoute().name === 'inicio') nvAtualizarOuRender();
   } catch { /* sem internet ou serviço fora: mantém a última previsão guardada */ } finally { climaBuscando = false; }
@@ -235,25 +262,29 @@ function cartaoClima() {
   const jan = janelasDoDia(c.dados, d.time[i0]), amanha = d.time[i0 + 1] ? janelasDoDia(c.dados, d.time[i0 + 1]) : null;
   const txtJan = (j, quando) => j.janelas.length ? `<strong>Boas horas para pulverizar ${quando}:</strong> ${j.janelas.map(([a, b]) => `${hh(a)}–${hh(b)}`).join(', ')}` : `<strong>Sem janela boa para pulverizar ${quando}</strong>${j.principal ? ` (principalmente ${j.principal})` : ''}`;
   const chuvaProx = d.time.map((t, i) => ({t, mm: d.precipitation_sum[i]})).find((x, i) => i >= i0 && x.mm >= 5);
-  const idade = Math.round((Date.now() - c.em) / 60000);
+  const idade = Math.round((Date.now() - c.em) / 60000), conf = d.confianca || [], fonte = c.dados.modelos?.length > 1 ? `média de ${c.dados.modelos.length} modelos (${c.dados.modelos.join(', ')})` : 'Open-Meteo';
+  // Previsão incerta (modelos discordam): avisa para conferir de novo mais tarde
+  const txtConf = k => { const x = conf[k]; if (!x || x.firme) return ''; return x.chuvaIncerta ? `${x.comChuva} de ${x.n} modelos preveem chuva` : `modelos variam ${x.difT} °C na máxima`; };
+  const incertaHoje = conf[i0] && !conf[i0].firme;
   // Recolhido (padrão): uma linha com o resumo de hoje; o botão expande os 4 dias, as janelas, a chuva e o critério
   const aberto = climaAberto(), hj = Math.round(d.temperature_2m_max[i0]) + '° / ' + Math.round(d.temperature_2m_min[i0]) + '°';
   const resumo = jan.janelas.length ? `Pulverizar: ${jan.janelas.map(([a, b]) => `${hh(a)}–${hh(b)}`).join(', ')}` : 'Sem janela boa para pulverizar hoje';
   return `<article class="card panel hoje-clima ${aberto ? 'aberto' : ''}" id="hojeClima">
     <button type="button" class="clima-linha" data-act="clima-expandir" aria-expanded="${aberto}" aria-controls="climaCorpo">
       <span class="clima-ic" aria-hidden="true">${d.precipitation_probability_max[i0] >= 60 ? '🌧' : '⛅'}</span>
-      <span class="clima-txt"><strong>Hoje ${hj}</strong><small class="${jan.janelas.length ? 'ok' : 'nao'}">${esc(resumo)}${chuvaProx ? ` • chuva ${chuvaProx.t === hoje ? 'hoje' : fmtDate(chuvaProx.t).slice(0, 5)}` : ''}</small></span>
+      <span class="clima-txt"><strong>Hoje ${hj}</strong><small class="${jan.janelas.length ? 'ok' : 'nao'}">${esc(resumo)}${chuvaProx ? ` • chuva ${chuvaProx.t === hoje ? 'hoje' : fmtDate(chuvaProx.t).slice(0, 5)}` : ''}${incertaHoje ? ' • previsão incerta' : ''}</small></span>
       <span class="clima-seta" aria-hidden="true">${aberto ? '▴' : '▾'}</span><span class="sr-only">${aberto ? 'Recolher' : 'Ver'} a previsão</span></button>
     ${aberto ? `<div id="climaCorpo">
-    <div class="hoje-dias">${d.time.slice(i0, i0 + 4).map((t, k) => { const i = i0 + k; return `<div class="hoje-dia"><small>${k === 0 ? 'Hoje' : DIA_SEMANA[new Date(t + 'T12:00:00').getDay()]}</small><strong>${Math.round(d.temperature_2m_max[i])}° <span>${Math.round(d.temperature_2m_min[i])}°</span></strong><small>💧 ${num(d.precipitation_sum[i], 0)} mm · ${d.precipitation_probability_max[i] ?? 0}%</small><small>💨 ${Math.round(d.wind_speed_10m_max[i])} km/h</small></div>`; }).join('')}</div>
+    <div class="hoje-dias">${d.time.slice(i0, i0 + 4).map((t, k) => { const i = i0 + k; return `<div class="hoje-dia"><small>${k === 0 ? 'Hoje' : DIA_SEMANA[new Date(t + 'T12:00:00').getDay()]}</small><strong>${Math.round(d.temperature_2m_max[i])}° <span>${Math.round(d.temperature_2m_min[i])}°</span></strong><small>💧 ${num(d.precipitation_sum[i], 0)} mm · ${d.precipitation_probability_max[i] ?? 0}%</small><small>💨 ${Math.round(d.wind_speed_10m_max[i])} km/h</small>${conf[i] ? `<small class="clima-conf ${conf[i].firme ? 'firme' : 'incerta'}" title="${esc(txtConf(i) || 'Os modelos concordam')}">${conf[i].firme ? '✓ firme' : '⚠ incerta'}</small>` : ''}</div>`; }).join('')}</div>
     <p class="hoje-jan ${jan.janelas.length ? 'ok' : 'nao'}">${txtJan(jan, 'hoje')}</p>${amanha ? `<p class="hoje-jan ${amanha.janelas.length ? 'ok' : 'nao'}">${txtJan(amanha, 'amanhã')}</p>` : ''}
+    ${incertaHoje ? `<p class="nota clima-aviso">⚠ Previsão de hoje incerta (${esc(txtConf(i0))}): confira de novo mais tarde antes de pulverizar ou plantar.</p>` : ''}
     ${chuvaProx ? `<p class="nota">🌧 Chuva de ${num(chuvaProx.mm, 0)} mm prevista para ${chuvaProx.t === hoje ? 'hoje' : fmtDate(chuvaProx.t)}: programe aplicações e colheita.</p>` : ''}
-    <small class="nota">Critério: vento 3–10 km/h, Delta T 2–8 °C, até 30 °C, umidade ≥ 50% e sem chuva. Orientação — confirme as condições no campo. Previsão Open-Meteo para ${esc(loc.origem)}, atualizada há ${idade < 60 ? idade + ' min' : Math.round(idade / 60) + ' h'}. <button class="link" data-act="clima-atualizar">Atualizar agora</button></small></div>` : ''}</article>`;
+    <small class="nota">Critério: vento 3–10 km/h, Delta T 2–8 °C, até 30 °C, umidade ≥ 50% e sem chuva. Orientação — confirme as condições no campo. Previsão: ${esc(fonte)}, via Open-Meteo, para ${esc(loc.origem)}, atualizada há ${idade < 60 ? idade + ' min' : Math.round(idade / 60) + ' h'}. <button class="link" data-act="clima-atualizar">Atualizar agora</button></small></div>` : ''}</article>`;
 }
 Object.assign(ACTIONS, {
   'hoje-mais': () => go('inicio', 'alertas'),
   'clima-expandir': () => { safeStorage.set('agro-clima-aberto', climaAberto() ? '0' : '1'); const el = document.getElementById('hojeClima'); if (el) el.outerHTML = cartaoClima(); },
-  'chuva-ontem': mm => chuvaForm({date: daysAgo(1), mm, notes: 'Estimativa da previsão do tempo (Open-Meteo) — conferir no pluviômetro'}),
+  'chuva-ontem': mm => chuvaForm({date: daysAgo(1), mm, notes: 'Estimativa da previsão do tempo (média dos modelos) — conferir no pluviômetro'}),
   'clima-atualizar': () => { if (navigator.onLine === false) return showToast('Sem internet agora'); buscarClima(true); showToast('Atualizando a previsão…'); },
   'clima-local': () => {
     if (!navigator.geolocation) return showToast('Este aparelho não oferece a localização ao app.', true);
