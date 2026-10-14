@@ -375,7 +375,7 @@ body{background:var(--bg)}
 .app.nx-home main{display:flex;flex-direction:column}
 .app.nx-home .content{margin:0 auto;padding:22px;width:100%;max-width:1700px}
 /* Pesquisa, alertas e instalação permanecem disponíveis depois do painel. */
-.app.nx-home .topbar{order:1;position:static;min-height:64px;padding:10px 22px;flex-wrap:wrap}
+.app.nx-home .topbar{order:0;position:static;min-height:64px;padding:10px 22px;flex-wrap:wrap}
 .app.nx-home .topbar h1{display:none}
 .app.nx-home .topbar .search{margin-left:0}
 .nx-dashboard{--s1:#3d9be9;--s2:#f5b843;--s3:#65e6a8;--s4:#5f7a88;--nx-track:#1b4055;--nx-selected:#06251b;--nx-column:#65e6a8}
@@ -634,3 +634,7 @@ td.cmp-bom{color:var(--green);font-weight:700} td.cmp-ruim{color:var(--orange);f
 .clima-max{font-size:1.35rem;font-weight:500;color:var(--orange)}
 .clima-min{font-size:1.05rem;font-weight:500;color:var(--green)}
 .hoje-clima,#climaCorpo{min-width:0;max-width:100%}.clima-dias{max-width:100%;min-width:0}
+.hoje-fazer .hoje-data{font-weight:400;color:var(--muted);font-size:.85rem;margin-left:6px}
+.hoje-botoes{margin:10px 0 4px;justify-content:flex-end}
+.nx-graf-tit{margin-top:18px}
+.app.nx-home .topbar{flex-wrap:nowrap}.app.nx-home .topbar .search{flex:1;min-width:0;max-width:460px}

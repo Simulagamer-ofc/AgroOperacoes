@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.34.4-beta1` — **tela inicial organizada**: barra de pesquisa e avisos de volta ao topo; o quadro **Hoje** fica recolhido numa linha (quantas pendências, atrasadas, em andamento, avisos e a mais urgente) com botão para expandir, como o clima; os **gráficos voltam à mostra** logo abaixo dos indicadores.
+
 `0.34.3-beta1` — **clima no estilo dos apps de previsão**: próximos 4 períodos (madrugada, manhã, tarde, noite) com temperatura, ícone do tempo (sol, nuvens, chuva, trovoada) e chance de chuva; 7 dias com máxima e mínima, ícone, horas de sol, chance e milímetros de chuva, vento e confiança (rolagem lateral no celular).
 
 `0.34.2-beta1` — **previsão do tempo combinada de 4 modelos** (ECMWF, GFS, ICON e GEM, via Open-Meteo), a mesma ideia dos apps de clima grandes: a média erra menos que um modelo só. Cada dia mostra **✓ firme** ou **⚠ incerta** conforme os modelos concordam sobre chuva e temperatura; com o dia de hoje incerto, o app avisa para conferir de novo antes de pulverizar ou plantar. Se o serviço recusar os modelos, volta sozinho ao modelo automático.
