@@ -43,6 +43,7 @@ VIEWS.chuva = () => {
 // ---------------- Monitoramento de pragas (MIP) ----------------
 function monitoramentoForm(m = {}) {
   if (!db.fields.length) { showToast('Cadastre o talhão primeiro'); return fieldForm(); }
+  const idMon = m.id || uid(); // id já na abertura: as fotos tiradas antes de salvar ficam ligadas a ele
   openForm({title: m.id ? 'Editar monitoramento' : 'Registrar monitoramento', sub: 'Média dos pontos amostrados. O nível de ação vem da recomendação técnica (opcional).',
     values: {date: today(), tipo: 'Praga', ...m},
     fields: [{k: 'fieldId', label: 'Talhão', type: 'select', options: fieldOptions, required: true, full: true}, {k: 'date', label: 'Data', type: 'date', required: true},
@@ -51,7 +52,8 @@ function monitoramentoForm(m = {}) {
       {k: 'valor', label: 'Média encontrada', type: 'number', min: 0, required: true}, {k: 'unidade', label: 'Unidade', required: true, placeholder: 'Ex.: percevejos/pano, % desfolha'},
       {k: 'pontos', label: 'Pontos amostrados', type: 'number', min: 0}, {k: 'nivelAcao', label: 'Nível de ação (da recomendação)', type: 'number', min: 0, hint: 'Opcional. O app só compara com o valor que você informar.'},
       {k: 'responsavel', label: 'Responsável'}, {k: 'notes', label: 'Observações', type: 'textarea'}],
-    onSubmit: v => { upsert('monitoramentos', {...m, ...v, id: m.id || uid()}); showToast('Monitoramento salvo'); }});
+    onSubmit: v => { upsert('monitoramentos', {...m, ...v, id: idMon}); if (typeof fotosAoSalvar === 'function') fotosAoSalvar('monitoramentos', idMon); showToast('Monitoramento salvo'); }});
+  if (typeof anexarCampoFotos === 'function') anexarCampoFotos('monitoramentos', idMon, m.fotos || []);
 }
 const atingiuNivel = x => x.nivelAcao !== '' && x.nivelAcao != null && Number(x.valor) >= Number(x.nivelAcao);
 VIEWS.pragas = () => {
@@ -67,7 +69,7 @@ VIEWS.pragas = () => {
     </section>
     <div class="section-title"><h3>Situação atual por talhão</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Talhão</th><th>Alvo</th><th class="num">Última média</th><th class="num">Nível de ação</th><th>Situação</th></tr></thead><tbody>${ultimos.sort((a, b) => atingiuNivel(b) - atingiuNivel(a)).map(x => `<tr><td>${esc(fieldName(x.fieldId))}<br><small style="color:var(--muted)">${fmtDate(x.date)}${x.estadio ? ' • ' + esc(x.estadio) : ''}</small></td><td><strong>${esc(x.alvo)}</strong><br><small style="color:var(--muted)">${esc(x.tipo)}</small></td><td class="num">${num(x.valor, 2)} ${esc(x.unidade)}</td><td class="num">${x.nivelAcao !== '' && x.nivelAcao != null ? num(x.nivelAcao, 2) : '—'}</td><td>${x.nivelAcao === '' || x.nivelAcao == null ? chip('Sem nível informado', 'gray') : atingiuNivel(x) ? chip('Atingiu o nível de ação', 'red') : chip('Abaixo do nível', 'green')}</td></tr>`).join('')}</tbody></table></div>
       <p class="nota">O app não sugere nível de controle: a comparação usa o nível que você informou da recomendação técnica.</p></section>
-    <div class="section-title"><h3>Histórico</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><tbody>${lista.slice(0, 50).map(x => `<tr><td>${fmtDate(x.date)}</td><td>${esc(fieldName(x.fieldId))}</td><td>${esc(x.alvo)}</td><td class="num">${num(x.valor, 2)} ${esc(x.unidade)}</td><td><div class="row-actions">${mini('Editar', 'mip-edit', x.id)}${mini('Excluir', 'mip-del', x.id, 'del')}</div></td></tr>`).join('')}</tbody></table></div></section>`
+    <div class="section-title"><h3>Histórico</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><tbody>${lista.slice(0, 50).map(x => `<tr><td>${fmtDate(x.date)}</td><td>${esc(fieldName(x.fieldId))}</td><td>${esc(x.alvo)}${x.fotos?.length ? ` <small style="color:var(--muted)">📷 ${x.fotos.length}</small>` : ''}${typeof galeriaFotos === 'function' ? galeriaFotos('monitoramentos', x) : ''}</td><td class="num">${num(x.valor, 2)} ${esc(x.unidade)}</td><td><div class="row-actions">${mini('Editar', 'mip-edit', x.id)}${mini('Excluir', 'mip-del', x.id, 'del')}</div></td></tr>`).join('')}</tbody></table></div></section>`
     : `<section class="card">${empty('Nenhum monitoramento', 'Registre a média encontrada nos pontos de amostragem de cada talhão.', {act: 'mip-new', label: '+ Monitoramento'})}</section>`);
 };
 

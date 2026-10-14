@@ -75,7 +75,7 @@ let insp = null;
 function novaInspecao(machineId) {
   if (insp && (!machineId || insp.machineId === machineId)) { go('afericao/inspecao'); return; } // continua a que estava aberta
   const m = machineId ? find('machines', machineId) : null;
-  insp = {machineId: m?.id || '', data: today(), hora: nowTime(), responsavel: db.settings.owner || '', registro: '', padrao: '', validadeMeses: '12', grupos: {}, manometro: [{}, {}, {}, {}], bomba: {}, observacoes: ''};
+  insp = {id: uid(), machineId: m?.id || '', data: today(), hora: nowTime(), responsavel: db.settings.owner || '', registro: '', padrao: '', validadeMeses: '12', grupos: {}, manometro: [{}, {}, {}, {}], bomba: {}, observacoes: ''};
   go('afericao/inspecao');
 }
 function coletarInspecao() {
@@ -119,6 +119,7 @@ function viewInspecao() {
     <div class="insp-progresso"><span>${feitos} de ${INSP_GRUPOS.length} grupos verificados</span><b style="width:${Math.round(feitos / INSP_GRUPOS.length * 100)}%"></b></div>
     <section class="insp-lista">${INSP_GRUPOS.map(cartao).join('')}</section>
     <section class="card panel"><div class="field full"><label for="in_obs">Observações gerais</label><textarea id="in_obs" data-insp="observacoes" rows="2">${esc(ins.observacoes || '')}</textarea></div>
+      ${typeof campoFotos === 'function' ? `<div class="form">${campoFotos('afericoes', ins.id || (ins.id = uid()))}</div>` : ''}
       ${blocoResultadoInspecao(res, ins)}
       <div class="actions"><button class="secondary" data-act="insp-cancelar">Cancelar</button><button class="primary" data-act="insp-salvar" ${res.status === 'INCOMPLETA' || !ins.machineId ? 'disabled' : ''}>Salvar inspeção</button></div></section>`;
 }
@@ -159,6 +160,7 @@ function relatorioInspecao(a) {
     <h3>4. Aferição do manômetro</h3>${m.linhas.length ? `<table class="tbl"><thead><tr><th>Padrão (bar)</th><th>Pulverizador (bar)</th><th>Erro</th><th>Tolerância</th><th></th></tr></thead><tbody>${m.linhas.map(l => `<tr><td>${num(l.padrao, 2)}</td><td>${num(l.leitura, 2)}</td><td>${l.erro > 0 ? '+' : ''}${num(l.erro, 2)} bar</td><td>±${num(l.tol, 2)} bar</td><td>${chip(l.ok ? 'ok' : 'fora', l.ok ? 'green' : 'red')}</td></tr>`).join('')}</tbody></table>` : '<p>Não aferido (grupo marcado como não se aplica).</p>'}
     ${e.bomba?.medida ? `<h3>5. Bomba</h3><table class="tbl"><tbody>${linha('Vazão nominal (L/min)', e.bomba.nominal)}${linha('Vazão medida (L/min)', e.bomba.medida)}${linha('Relação', umNum(e.bomba.nominal) > 0 ? num(umNum(e.bomba.medida) / umNum(e.bomba.nominal) * 100, 0) + '% (mínimo 90%)' : '')}</tbody></table>` : ''}
     <h3>${e.bomba?.medida ? 6 : 5}. Responsável e instrumentos</h3><table class="tbl"><tbody>${linha('Responsável técnico', e.responsavel)}${linha('Registro profissional', e.registro)}${linha('Manômetro padrão', e.padrao)}${linha('Aferição de bicos usada', r.aferBicos ? `${fmtDate(r.aferBicos.data)} — registro ${r.aferBicos.id}` : '')}${linha('Observações', e.observacoes)}</tbody></table>
+    ${typeof galeriaFotos === 'function' && a.fotos?.length ? `<h3>Fotos</h3>${galeriaFotos('afericoes', a)}` : ''}
     <div class="insp-assinatura"><span>_______________________________________</span><small>${esc(e.responsavel || 'Responsável técnico')}${e.registro ? ' — ' + esc(e.registro) : ''}</small></div>
     <p class="nota">Inspeção baseada nos critérios da ${esc(INSP_FONTE)}. Registra a verificação feita na propriedade; <strong>não substitui inspeção por organismo acreditado</strong> quando exigida.</p>
   </article>`;
@@ -200,12 +202,12 @@ Object.assign(ACTIONS, {
     if (res.status === 'INCOMPLETA') { showToast('Falta verificar: ' + res.faltam.join(', ')); return; }
     const mq = find('machines', ins.machineId); if (!mq) { showToast('Escolha o pulverizador'); return; }
     const ab = aferBicosParaInspecao(ins.machineId, ins.data);
-    const reg = {id: uid(), tipo: 'inspecao', familia: 'pulverizador_barra', data: ins.data, hora: ins.hora, responsavel: ins.responsavel,
+    const reg = {id: ins.id || uid(), tipo: 'inspecao', familia: 'pulverizador_barra', data: ins.data, hora: ins.hora, responsavel: ins.responsavel,
       maquina: {id: mq.id, name: mq.name, model: mq.model, hours: mq.hours}, propriedade: db.settings.farm || '',
       entradas: JSON.parse(JSON.stringify(ins)),
       resultado: {status: res.status, grupos: res.grupos, naoConformes: res.naoConformes, validade: validadeInspecao(ins.data, ins.validadeMeses), fonte: INSP_FONTE, aferBicos: ab ? {id: ab.id, data: ab.data, status: ab.resultado.status} : null},
       criadoEm: new Date().toISOString()};
-    db.afericoes.push(reg); save(); insp = null;
+    db.afericoes.push(reg); save(); if (typeof fotosAoSalvar === 'function') fotosAoSalvar('afericoes', reg.id); insp = null;
     showToast(res.status === 'OK' ? 'Inspeção registrada: aprovado' : 'Inspeção registrada: reprovado'); go('afericao/' + reg.id);
   }
 });
