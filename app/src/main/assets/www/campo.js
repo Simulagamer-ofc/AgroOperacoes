@@ -10,7 +10,9 @@ function chuvaForm(valores = {}) {
   openForm({title: 'Registrar chuva', sub: 'Leitura do pluviômetro (mm). Sem talhão = pluviômetro da sede.', values: {date: today(), ...valores},
     fields: [{k: 'date', label: 'Data', type: 'date', required: true}, {k: 'mm', label: 'Chuva (mm)', type: 'number', min: 0, required: true},
       {k: 'fieldId', label: 'Talhão / pluviômetro', type: 'select', options: fieldOptions}, {k: 'notes', label: 'Observações', type: 'textarea'}],
-    onSubmit: v => { if (!(v.mm >= 0)) return 'Informe os milímetros'; db.chuvas.push({id: uid(), ...v}); save(); showToast(`${um1(v.mm)} mm registrados`); }});
+    onSubmit: v => { if (!(v.mm >= 0)) return 'Informe os milímetros';
+      const dup = typeof conferirRepetido === 'function' ? conferirRepetido('chuvas', c => c.date === v.date && (c.fieldId || '') === (v.fieldId || ''), `já existe chuva registrada em ${fmtDate(v.date)} neste local`) : ''; if (dup) return dup;
+      db.chuvas.push({id: uid(), ...v}); save(); showToast(`${um1(v.mm)} mm registrados`); }});
 }
 VIEWS.chuva = () => {
   const t = today(), ini30 = daysAgo(29), anoIni = t.slice(0, 4) + '-01-01';
@@ -86,6 +88,7 @@ function aplicacaoForm() {
     onSubmit: v => {
       const s = v.itemId ? find('stock', v.itemId) : null;
       if (!s && !v.produto) return 'Escolha o produto do estoque ou informe o nome';
+      const dup = typeof conferirRepetido === 'function' ? conferirRepetido('aplicacoes', a => a.fieldId === v.fieldId && a.date === v.date && (a.itemId ? a.itemId === v.itemId : a.produto === (s ? s.name : v.produto)), `já existe esta aplicação (${s ? s.name : v.produto}) em ${fieldName(v.fieldId)} no dia ${fmtDate(v.date)}`) : ''; if (dup) return dup;
       const aviso = v.machineId && typeof avisoPulverizador === 'function' ? avisoPulverizador(v.machineId) : '';
       if (aviso && avisoPulvConfirmado !== v.machineId) { avisoPulvConfirmado = v.machineId; return `Atenção: ${machineName(v.machineId)} — ${aviso}. Toque em salvar de novo para registrar mesmo assim.`; }
       if (s && v.baixar === 'Sim' && v.qtd > 0) {

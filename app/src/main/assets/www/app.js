@@ -122,7 +122,8 @@ function alerts() {
   db.machines.filter(m => !isInactive(m) && Number(m.nextService) > 0 && (hoursToService(m) <= SERVICE_WARN_HOURS || prevRev(m)?.dias <= 7)).forEach(m => {
     const left = hoursToService(m), pr = prevRev(m);
     const pct = Math.max(0, Math.min(100, 100 - (left / (Number(m.interval) || 250)) * 100));
-    list.push({color: 'orange', icon: '⚙', title: left <= 0 ? `Revisão vencida: ${m.name}` : `Revisão em ${num(left)} h: ${m.name}`, text: `Horímetro em ${num(m.hours)} h; revisão programada para ${num(m.nextService)} h.${pr?.data && left > 0 ? ` Pelo ritmo de uso (~${um1(pr.ritmo)} h/dia), por volta de ${fmtDate(pr.data)}.` : ''}`, progress: pct, route: 'maquinas'});
+    list.push({color: 'orange', icon: '⚙', title: left <= 0 ? `Revisão vencida: ${m.name}` : `Revisão em ${num(left)} h: ${m.name}`, text: `Horímetro em ${num(m.hours)} h; revisão programada para ${num(m.nextService)} h.${pr?.data && left > 0 ? ` Pelo ritmo de uso (~${um1(pr.ritmo)} h/dia), por volta de ${fmtDate(pr.data)}.` : ''}`, progress: pct, route: 'maquinas',
+      acao: openMaintenances(m.id).length ? null : {act: 'rev-abrir', id: m.id, label: 'Abrir revisão'}});
   });
   openMaintenances().forEach(mt => list.push({color: 'orange', icon: '⚙', title: `Manutenção aberta: ${machineName(mt.machineId) || 'máquina'}`, text: `${mt.kind} — ${mt.description || 'sem descrição'} (desde ${fmtDate(mt.date)}).`, route: 'maquinas'}));
   db.lots.filter(l => l.status === 'Aguardando análise').forEach(l => list.push({color: 'purple', icon: '⌁', title: `Lote aguardando análise: ${l.code}`, text: 'Registre o resultado de germinação/vigor.', route: 'lotes/' + l.id}));
@@ -351,6 +352,7 @@ function hourForm(machineId) {
       const m = find('machines', v.machineId);
       if (!m) return 'Selecione a máquina';
       if (Number(v.hours) < Number(m.hours || 0)) return `Leitura menor que o horímetro atual (${num(m.hours)} h)`;
+      const salto = typeof conferirSalto === 'function' ? conferirSalto(m, v.hours, v.date) : ''; if (salto) return salto;
       db.hourLogs.push({id: uid(), machineId: m.id, date: v.date, hours: v.hours, previous: Number(m.hours || 0), notes: v.notes});
       m.hours = v.hours; save();
       showToast(`Horímetro de ${m.name}: ${num(v.hours)} h (+${num(v.hours - (db.hourLogs.at(-1).previous))} h)`);

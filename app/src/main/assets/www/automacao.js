@@ -71,6 +71,20 @@ function previsaoEstoque(s) {
   return {dias, porDia, acaba: addDias(today(), dias), compraAte: addDias(today(), Math.max(0, dias - 7))};
 }
 
+// ---------- Conferências que evitam erro de digitação e lançamento repetido (o segundo toque confirma) ----------
+let confirmado = '';
+const pedirConfirmacao = (chave, msg) => { if (confirmado === chave) { confirmado = ''; return ''; } confirmado = chave; return `${msg}. Se estiver certo, toque em salvar de novo.`; };
+// Horímetro que sobe mais de 24 h por dia desde a última leitura: provável erro de digitação (ex.: 1250 em vez de 125,0)
+function conferirSalto(m, novo, data = today()) {
+  const atual = Number(m.hours) || 0, sobe = Number(novo) - atual; if (!(sobe > 0) || !(atual > 0)) return '';
+  const ult = db.hourLogs.filter(h => h.machineId === m.id).sort((a, b) => (b.date || '').localeCompare(a.date || ''))[0];
+  const dias = Math.max(1, ult?.date ? diasEntreAuto(ult.date, data) : 1);
+  return sobe > 24 * dias ? pedirConfirmacao(`salto|${m.id}|${novo}`, `Atenção: o horímetro de ${m.name} subiria ${num(sobe)} h em ${dias} ${dias === 1 ? 'dia' : 'dias'} (mais de 24 h por dia). Confira se não houve erro de digitação`) : '';
+}
+function conferirRepetido(colecao, igual, descricao) {
+  return db[colecao].some(igual) ? pedirConfirmacao(`dup|${colecao}|${descricao}`, `Atenção: ${descricao}`) : '';
+}
+
 // ---------- Avisos novos ----------
 const alertasSemAutomacao = alerts;
 alerts = function () {
@@ -78,7 +92,7 @@ alerts = function () {
   db.stock.filter(s => !stockLow(s)).forEach(s => {
     const p = previsaoEstoque(s);
     if (p && p.dias <= 21) lista.push({color: p.dias <= 7 ? 'red' : 'orange', icon: '□', title: `${s.name} acaba em cerca de ${p.dias} ${p.dias === 1 ? 'dia' : 'dias'}`,
-      text: `Saldo ${num(s.qty)} ${s.unit}; consumo médio de ${num(p.porDia, p.porDia >= 10 ? 0 : 1)} ${s.unit}/dia nas últimas semanas. Compre até ${fmtDate(p.compraAte)}.`, route: 'estoque/' + s.id});
+      text: `Saldo ${num(s.qty)} ${s.unit}; consumo médio de ${num(p.porDia, p.porDia >= 10 ? 0 : 1)} ${s.unit}/dia nas últimas semanas. Compre até ${fmtDate(p.compraAte)}.`, route: 'estoque/' + s.id, acao: {act: 'compras', label: 'Lista de compras'}});
   });
   // Só as telas liberadas para a função de quem usa (mesma regra dos outros avisos)
   return typeof nvPodeRota === 'function' ? lista.filter(a => !a.route || nvPodeRota(String(a.route).split('/')[0])) : lista;
@@ -110,6 +124,7 @@ function concluirOperacao(id) {
     values: {horimetro: m ? m.hours : '', area: o.area || (f ? f.area : ''), kg: o.kg || '', notes: o.notes || ''}, fields,
     onSubmit: v => {
       if (m && v.horimetro !== '' && Number(v.horimetro) < Number(o.horimetroIni || 0)) return `O horímetro final não pode ser menor que o do início (${num(o.horimetroIni)} h)`;
+      if (m && v.horimetro !== '') { const salto = conferirSalto(m, v.horimetro); if (salto) return salto; }
       if (m && v.horimetro !== '' && Number(v.horimetro) > Number(m.hours || 0)) {
         db.hourLogs.push({id: uid(), machineId: m.id, date: today(), hours: Number(v.horimetro), previous: Number(m.hours || 0), notes: `Operação: ${o.type}`, opId: o.id});
         m.hours = Number(v.horimetro);
@@ -236,9 +251,10 @@ function painelHoje() {
     ? `<div class="hoje-item"><span class="alert-icon blue">🌧</span><div><strong>Choveu cerca de ${num(x.chuva.mm)} mm ontem</strong><small>Estimativa da previsão do tempo. Confira o pluviômetro e registre.</small></div>${mini('Registrar', 'chuva-ontem', x.chuva.mm)}</div>`
     : x.op
     ? `<div class="hoje-item"><span class="alert-icon ${x.op.status === 'Em andamento' ? 'green' : x.op.date < t ? 'red' : 'blue'}">◷</span><div><strong>${esc(x.op.type)} — ${esc(opPlace(x.op))}</strong><small>${x.op.status === 'Em andamento' ? 'Em andamento' : x.op.date < t ? `Atrasada (era para ${fmtDate(x.op.date)})` : 'Programada para hoje'}${x.op.machineId ? ' • ' + esc(machineName(x.op.machineId)) : ''}${(() => { const p = duracaoPrevista(x.op); return p ? ` • previsto ~${um1(p.horas)} h` : ''; })()}</small></div>${x.op.status === 'Em andamento' ? mini('✓ Concluir', 'op-done', x.op.id, 'ok') : mini('▶ Iniciar', 'op-start', x.op.id)}</div>`
+    : x.acao ? `<div class="hoje-item"><span class="alert-icon ${x.color}">${x.icon}</span><div><strong>${esc(x.title)}</strong><small>${esc(x.text)}</small></div>${mini(x.acao.label, x.acao.act, x.acao.id || '')}</div>`
     : `<div class="hoje-item clickable" data-act="nav" data-id="${esc(x.route)}"><span class="alert-icon ${x.color}">${x.icon}</span><div><strong>${esc(x.title)}</strong><small>${esc(x.text)}</small></div><span class="hoje-ir" aria-hidden="true">›</span></div>`;
   const data = new Date().toLocaleDateString('pt-BR', {weekday: 'long', day: 'numeric', month: 'long'});
-  return `<section class="hoje">${cartaoClima()}<article class="card panel hoje-fazer"><div class="section-title" style="margin:0 0 6px"><h3>Hoje <small>${esc(data)}</small></h3>${btn('+ Operação', 'op-new', '', 'secondary')}</div>
+  return `<section class="hoje">${cartaoClima()}<article class="card panel hoje-fazer"><div class="section-title" style="margin:0 0 6px"><h3>Hoje <small>${esc(data)}</small></h3><div class="btn-row" style="margin:0">${btn('Resumo da semana', 'resumo-semana', '', 'secondary')}${btn('+ Operação', 'op-new', '', 'secondary')}</div></div>
       ${itens.length ? itens.slice(0, 4).map(linha).join('') + (itens.length > 4 ? `<button class="link hoje-vermais" data-act="hoje-mais">Ver mais ${itens.length - 4} ${itens.length - 4 === 1 ? 'item' : 'itens'}</button>` : '') : empty('Tudo em dia', 'Nenhuma pendência para hoje.')}</article>
     </section>`;
 }
@@ -288,6 +304,71 @@ VIEWS.safra = id => {
   </article>`;
 };
 TITLES.safra = 'Relatório da safra';
+
+// ---------- Compartilhar (WhatsApp, e-mail…) ----------
+async function compartilharTexto(titulo, texto) {
+  try { if (navigator.share) { await navigator.share({title: titulo, text: texto}); return; } } catch (e) { if (e?.name === 'AbortError') return; }
+  try { await navigator.clipboard.writeText(texto); showToast('Texto copiado: cole no WhatsApp ou no e-mail'); }
+  catch { const ta = $('#textoCompartilhar'); if (ta) { ta.select(); showToast('Selecione e copie o texto'); } }
+}
+function dialogoTexto(titulo, sub, texto) {
+  dialog.innerHTML = `<h3>${esc(titulo)}</h3><p class="sub">${esc(sub)}</p><textarea id="textoCompartilhar" class="texto-compartilhar" rows="14" readonly>${esc(texto)}</textarea>
+    <div class="actions"><button class="secondary" data-close>Fechar</button><a class="btn-whats" href="https://wa.me/?text=${encodeURIComponent(texto)}" target="_blank" rel="noopener">WhatsApp</a><button class="primary" data-compartilhar>Compartilhar</button></div>`;
+  $('[data-close]', dialog).onclick = closeModal;
+  $('[data-compartilhar]', dialog).onclick = () => compartilharTexto(titulo, texto);
+  modal.classList.add('open');
+}
+
+// ---------- Lista de compras (estoque baixo e itens que acabam em até 30 dias) ----------
+function listaCompras() {
+  return db.stock.map(s => {
+    const p = previsaoEstoque(s), min = Number(s.min) || 0, qtd = Number(s.qty) || 0;
+    const baixo = stockLow(s), acaba = p && p.dias <= 30;
+    if (!baixo && !acaba) return null;
+    // Quanto comprar: o que falta para 30 dias de consumo (se houver ritmo) e nunca menos que o mínimo
+    const precisa = Math.max(min - qtd, p ? p.porDia * 30 - qtd : 0, baixo ? min * 2 - qtd : 0);
+    return {s, qtd: Math.ceil(Math.max(precisa, 0)), motivo: baixo ? `abaixo do mínimo (${num(min)} ${s.unit})` : `acaba em ~${p.dias} dias`};
+  }).filter(x => x && x.qtd > 0).sort((a, b) => a.s.name.localeCompare(b.s.name, 'pt-BR'));
+}
+function abrirListaCompras() {
+  const l = listaCompras();
+  if (!l.length) { showToast('Nada a comprar: nenhum item abaixo do mínimo ou acabando em 30 dias'); return; }
+  const texto = `🛒 Lista de compras — ${db.settings.farm || 'Fazenda'} (${fmtDate(today())})\n\n` + l.map(x => `• ${x.s.name}: ${num(x.qtd)} ${x.s.unit}  (${x.motivo}; saldo ${num(x.s.qty)} ${x.s.unit})`).join('\n') +
+    `\n\nQuantidades para cerca de 30 dias de consumo, pelo uso das últimas semanas. Gerado pelo Nexus Agro.`;
+  dialogoTexto('Lista de compras', `${l.length} ${l.length === 1 ? 'item' : 'itens'} — confira e compartilhe com quem compra.`, texto);
+}
+
+// ---------- Resumo da semana (para o dono ou o grupo da fazenda) ----------
+function resumoSemana() {
+  const ini = daysAgo(6), fim = today(), no = r => (r.date || '') >= ini && (r.date || '') <= fim;
+  const fin = typeof nvVeFinanceiro !== 'function' || nvVeFinanceiro();
+  const ops = db.operations.filter(o => o.status === 'Concluída' && no(o));
+  const ha = ops.filter(opTemArea).reduce((t, o) => t + (Number(o.area) || 0), 0), horas = ops.reduce((t, o) => t + (Number(o.horas) || 0), 0);
+  const porTipo = Object.entries(ops.reduce((acc, o) => { acc[o.type] = (acc[o.type] || 0) + 1; return acc; }, {})).map(([t, n]) => `${t} (${n})`).join(', ');
+  const chuvas = db.chuvas.filter(no), mm = chuvas.length ? Math.max(...Object.values(chuvas.reduce((acc, c) => { const k = c.fieldId || ''; acc[k] = (acc[k] || 0) + Number(c.mm || 0); return acc; }, {}))) : 0;
+  const litros = db.fuel.filter(no).reduce((t, f) => t + (Number(f.liters) || 0), 0);
+  const aps = db.aplicacoes.filter(no), colh = db.colheitas.filter(no).reduce((t, c) => t + Number(c.kg || 0) / 60, 0);
+  const gastos = fin ? db.expenses.filter(no).reduce((t, g) => t + (Number(g.value) || 0), 0) : 0;
+  const prox = db.operations.filter(o => o.status === 'Programada' && o.date > fim && o.date <= addDias(fim, 7));
+  const al = alerts(), urg = al.filter(a => a.color === 'red');
+  const linhas = [`📋 Resumo da semana — ${db.settings.farm || 'Fazenda'}`, `${fmtDate(ini)} a ${fmtDate(fim)}`, '',
+    `✅ Operações concluídas: ${ops.length}${porTipo ? ` — ${porTipo}` : ''}`,
+    ha ? `🌱 Área trabalhada: ${num(ha)} ha${horas ? ` em ${um1(horas)} h de máquina` : ''}` : '',
+    colh ? `🌾 Colheita: ${num(colh)} sacas` : '',
+    aps.length ? `🧪 Aplicações: ${aps.length} (${[...new Set(aps.map(a => a.produto))].slice(0, 4).join(', ')})` : '',
+    `🌧 Chuva: ${mm ? num(mm, 0) + ' mm' : 'sem registro'}`,
+    litros ? `⛽ Diesel: ${num(litros)} L` : '',
+    fin && gastos ? `💰 Gastos lançados: R$ ${num(gastos, 2)}` : '',
+    '', `📅 Próximos 7 dias: ${prox.length ? prox.slice(0, 6).map(o => `${o.type} (${fmtDate(o.date).slice(0, 5)})`).join(', ') : 'nenhuma operação programada'}`,
+    urg.length ? `⚠ Pendências urgentes: ${urg.slice(0, 5).map(a => a.title).join('; ')}` : '✔ Sem pendências urgentes',
+    '', 'Gerado pelo Nexus Agro.'];
+  return linhas.filter((l, i, a) => l !== '' || (a[i - 1] !== '' && i > 0)).join('\n');
+}
+Object.assign(ACTIONS, {
+  'compras': () => abrirListaCompras(),
+  'resumo-semana': () => dialogoTexto('Resumo da semana', 'Confira e compartilhe com o dono ou o grupo da fazenda.', resumoSemana()),
+  'rev-abrir': id => { const m = find('machines', id); if (!m) return; maintenanceForm({machineId: id, kind: 'Preventiva', description: `Revisão de ${num(m.nextService)} h`}); }
+});
 document.addEventListener('change', e => {
   const id = e.target.dataset?.safraIni || e.target.dataset?.safraFim; if (!id) return;
   const ini = $(`[data-safra-ini="${id}"]`)?.value, fim = $(`[data-safra-fim="${id}"]`)?.value;
