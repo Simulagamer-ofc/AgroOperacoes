@@ -60,6 +60,24 @@ function duracaoPrevista(o) {
   return qtd > 0 ? {horas: qtd / r.porHora, rendimento: r} : null;
 }
 
+// ---------- Talhão: dias após o plantio, chuva desde o plantio e colheita prevista ----------
+// Talhão em ciclo: plantado há até 200 dias e sem colheita concluída depois do plantio
+function emCiclo(f) {
+  if (!f.plantingDate) return false;
+  const dap = diasEntreAuto(f.plantingDate, today());
+  return dap >= 0 && dap <= 200 && !db.operations.some(o => o.fieldId === f.id && o.type === 'Colheita' && o.status === 'Concluída' && (o.date || '') >= f.plantingDate);
+}
+function cicloTalhao(f) {
+  if (!emCiclo(f)) return null;
+  const dap = diasEntreAuto(f.plantingDate, today());
+  const chuva = db.chuvas.filter(c => (c.fieldId === f.id || !c.fieldId) && (c.date || '') >= f.plantingDate);
+  // Pluviômetro do talhão quando há; senão, o da sede
+  const doTalhao = chuva.filter(c => c.fieldId === f.id), mm = (doTalhao.length ? doTalhao : chuva).reduce((t, c) => t + (Number(c.mm) || 0), 0);
+  const ciclo = Number(f.ciclo) > 0 ? Number(f.ciclo) : null;
+  return {dap, mm, colheita: ciclo ? addDias(f.plantingDate, ciclo) : null, faltam: ciclo ? ciclo - dap : null};
+}
+const infoCiclo = f => { const c = cicloTalhao(f); if (!c) return ''; return ` (${c.dap} ${c.dap === 1 ? 'dia' : 'dias'} após o plantio) • chuva desde o plantio: ${num(c.mm)} mm${c.colheita ? ` • colheita prevista ~${fmtDate(c.colheita)}` : ''}`; };
+
 // ---------- Estoque: quando acaba e até quando comprar ----------
 function previsaoEstoque(s) {
   const desde = daysAgo(60), saidas = db.movements.filter(m => m.itemId === s.id && m.kind === 'Saída' && (m.date || '') >= desde && Number(m.qty) > 0);
@@ -89,6 +107,18 @@ function conferirRepetido(colecao, igual, descricao) {
 const alertasSemAutomacao = alerts;
 alerts = function () {
   const lista = alertasSemAutomacao();
+  // Talhão plantado sem monitoramento de pragas há mais de 7 dias; colheita prevista em até 10 dias
+  db.fields.filter(emCiclo).forEach(f => {
+    const c = cicloTalhao(f);
+    const ult = db.monitoramentos.filter(m => m.fieldId === f.id && (m.date || '') >= f.plantingDate).sort((a, b) => b.date.localeCompare(a.date))[0];
+    const desde = diasEntreAuto(ult?.date || f.plantingDate, today());
+    if (c.dap >= 7 && desde > 7) lista.push({color: 'orange', icon: '✱', title: `Monitorar pragas: ${f.name}`, text: `${ult ? `Último monitoramento há ${desde} dias` : 'Nenhum monitoramento desde o plantio'} (${c.dap} dias após o plantio).`, route: 'pragas', acao: {act: 'mip-talhao', id: f.id, label: 'Monitorar'}});
+    if (c.faltam != null && c.faltam <= 10) {
+      const lib = typeof liberacaoColheita === 'function' ? liberacaoColheita(f.id) : null;
+      lista.push({color: 'blue', icon: '🌾', title: c.faltam < 0 ? `Colheita prevista já passou: ${f.name}` : `Colheita prevista em ${c.faltam} ${c.faltam === 1 ? 'dia' : 'dias'}: ${f.name}`,
+        text: `Pelo ciclo de ${num(f.ciclo)} dias, por volta de ${fmtDate(c.colheita)}.${lib && lib.libera > today() ? ` Atenção: carência de ${lib.a.produto} até ${fmtDate(addDias(lib.libera, -1))}.` : ''}`, route: 'talhao/' + f.id});
+    }
+  });
   db.stock.filter(s => !stockLow(s)).forEach(s => {
     const p = previsaoEstoque(s);
     if (p && p.dias <= 21) lista.push({color: p.dias <= 7 ? 'red' : 'orange', icon: '□', title: `${s.name} acaba em cerca de ${p.dias} ${p.dias === 1 ? 'dia' : 'dias'}`,
@@ -133,6 +163,9 @@ function concluirOperacao(id) {
       if (opTemArea(o) && v.area !== '' && v.area != null) o.area = Number(v.area);
       if (OP_COM_KG.includes(o.type) && v.kg !== '' && v.kg != null) o.kg = Number(v.kg);
       o.notes = v.notes; o.status = 'Concluída'; o.finishedAt = new Date().toISOString();
+      // Plantio concluído: a data de plantio do talhão é preenchida sozinha (nova safra quando a anterior tem mais de 150 dias)
+      const ft = o.type === 'Plantio' && o.fieldId ? find('fields', o.fieldId) : null;
+      if (ft && (!ft.plantingDate || diasEntreAuto(ft.plantingDate, o.date || today()) > 150)) { ft.plantingDate = o.date || today(); setTimeout(() => showToast(`Plantio de ${ft.name} registrado em ${fmtDate(ft.plantingDate)}`), 2900); }
       save();
       showToast(`Operação concluída${o.horas > 0 ? ` — ${um1(o.horas)} h` : ''}${o.horas > 0 && o.area > 0 && opTemArea(o) ? `, ${um1(o.area / o.horas)} ha/h` : o.horas > 0 && o.kg > 0 ? `, ${num(o.kg / o.horas)} kg/h` : ''}`);
     }});
@@ -258,6 +291,8 @@ function painelHoje() {
       ${itens.length ? itens.slice(0, 4).map(linha).join('') + (itens.length > 4 ? `<button class="link hoje-vermais" data-act="hoje-mais">Ver mais ${itens.length - 4} ${itens.length - 4 === 1 ? 'item' : 'itens'}</button>` : '') : empty('Tudo em dia', 'Nenhuma pendência para hoje.')}</article>
     </section>`;
 }
+const painelNexusCompleto = typeof painelNexus === 'function' ? painelNexus : null;
+if (painelNexusCompleto) painelNexus = () => typeof nvVeFinanceiro === 'function' && !nvVeFinanceiro() ? '' : painelNexusCompleto();
 const inicioSemHoje = VIEWS.inicio;
 VIEWS.inicio = anchor => painelHoje() + inicioSemHoje(anchor);
 VIEWS.inicio.after = anchor => { inicioSemHoje.after?.(anchor); buscarClima(); };
@@ -366,6 +401,7 @@ function resumoSemana() {
 }
 Object.assign(ACTIONS, {
   'compras': () => abrirListaCompras(),
+  'mip-talhao': id => monitoramentoForm({fieldId: id}),
   'resumo-semana': () => dialogoTexto('Resumo da semana', 'Confira e compartilhe com o dono ou o grupo da fazenda.', resumoSemana()),
   'rev-abrir': id => { const m = find('machines', id); if (!m) return; maintenanceForm({machineId: id, kind: 'Preventiva', description: `Revisão de ${num(m.nextService)} h`}); }
 });
