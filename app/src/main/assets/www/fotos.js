@@ -1,6 +1,6 @@
 'use strict';
 /* Nexus Agro — fotos nos registros (pragas, manutenção, inspeção).
-   A foto é reduzida no aparelho (lado maior 1600 px, WebP com qualidade automática, ~150–250 KB, mais uma miniatura de ~15 KB), guardada no próprio celular (IndexedDB) e enviada
+   A foto é reduzida no aparelho (lado maior 1600 px, WebP com qualidade automática em todos os aparelhos, ~150–250 KB, mais uma miniatura de ~15 KB), guardada no próprio celular (IndexedDB) e enviada
    sozinha para a nuvem da fazenda quando houver internet (bucket privado “fotos”, só quem é da fazenda vê).
    O registro guarda só a lista de fotos (id e data); os outros aparelhos baixam a imagem quando alguém abre. */
 
@@ -26,12 +26,29 @@ const todasFotosLocais = () => fotoTx('readonly', s => s.getAll()).catch(() => [
 
 // ---------- Redução da foto ----------
 const blobDoCanvas = (c, tipo, q) => new Promise(ok => c.toBlob(b => ok(b), tipo, q));
-// WebP (cerca de 30% menor que JPEG com a mesma nitidez); se o aparelho não gera WebP (iPhone), usa JPEG
+// WebP (cerca de 30% menor que JPEG com a mesma nitidez). Android/Chrome geram WebP nativo; no iPhone (Safari não gera)
+// o app usa o codificador WebP oficial (libwebp, Google) embutido em lib/webp, carregado só quando precisa.
+// Só se nenhum dos dois funcionar a foto sai em JPEG.
+let webpNativo = null, webpWasm = null;
+async function blobWebp(c, q) {
+  if (webpNativo !== false) {
+    const b = await blobDoCanvas(c, 'image/webp', q);
+    if (b?.type === 'image/webp') { webpNativo = true; return b; }
+    webpNativo = false;
+  }
+  webpWasm ??= import(new URL('lib/webp/webp_enc.js', document.baseURI).href).then(m => m.default({noInitialRun: true})).catch(e => { webpWasm = null; throw e; });
+  const mod = await webpWasm, d = c.getContext('2d').getImageData(0, 0, c.width, c.height);
+  const r = mod.encode(d.data, c.width, c.height, {...WEBP_OPCOES, quality: Math.round(q * 100)});
+  if (!r) throw new Error('WebP falhou');
+  return new Blob([r], {type: 'image/webp'});
+}
+// Mesmos ajustes do libwebp padrão (os que o Chrome usa)
+const WEBP_OPCOES = {quality: 80, target_size: 0, target_PSNR: 0, method: 4, sns_strength: 50, filter_strength: 60, filter_sharpness: 0, filter_type: 1, partitions: 0, segments: 4, pass: 1, show_compressed: 0, preprocessing: 0, autofilter: 0, partition_limit: 0, alpha_compression: 1, alpha_filtering: 1, alpha_quality: 100, lossless: 0, exact: 0, image_hint: 0, emulate_jpeg_size: 0, thread_level: 0, low_memory: 0, near_lossless: 100, use_delta_palette: 0, use_sharp_yuv: 0};
 async function codificarFoto(c, qualidades, alvo) {
-  let tipo = 'image/webp', b = await blobDoCanvas(c, tipo, qualidades[0]);
-  if (!b || b.type !== tipo) { tipo = 'image/jpeg'; b = await blobDoCanvas(c, tipo, qualidades[0]); }
+  let tipo = 'image/webp', cod = q => blobWebp(c, q), b = await cod(qualidades[0]).catch(() => null);
+  if (!b) { tipo = 'image/jpeg'; cod = q => blobDoCanvas(c, tipo, q); b = await cod(qualidades[0]); }
   if (!b) throw new Error('Não foi possível converter a foto');
-  for (const q of qualidades.slice(1)) { if (!alvo || b.size <= alvo) break; b = await blobDoCanvas(c, tipo, q) || b; }
+  for (const q of qualidades.slice(1)) { if (!alvo || b.size <= alvo) break; b = await cod(q).catch(() => null) || b; }
   return {blob: b, tipo, ext: tipo === 'image/webp' ? 'webp' : 'jpg'};
 }
 function canvasReduzido(img, lado) {

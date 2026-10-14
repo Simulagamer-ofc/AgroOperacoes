@@ -4,7 +4,7 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.34.1-beta1` — **fotos mais leves, mesma nitidez**: WebP com qualidade automática (~150–250 KB por foto, antes ~300–450 KB; no iPhone continua JPEG), miniatura de ~15–25 KB para listas e relatórios (a foto inteira só é baixada ao tocar), limpeza automática no celular (foto já enviada e sem uso há 60 dias fica só a miniatura; fotos de registros excluídos saem) e na nuvem (excluir o registro ou a foto apaga os arquivos; sem internet, fica na fila).
+`0.34.1-beta1` — **fotos mais leves, mesma nitidez**: WebP com qualidade automática (~150–250 KB por foto, antes ~300–450 KB; no iPhone, que não gera WebP, o app usa o codificador oficial libwebp embutido em `lib/webp` — Apache-2.0, ~320 KB, carregado só quando precisa), miniatura de ~15–25 KB para listas e relatórios (a foto inteira só é baixada ao tocar), limpeza automática no celular (foto já enviada e sem uso há 60 dias fica só a miniatura; fotos de registros excluídos saem) e na nuvem (excluir o registro ou a foto apaga os arquivos; sem internet, fica na fila).
 
 `0.34.0-beta1` — **fotos nos registros** de pragas e doenças, manutenção e inspeção periódica: tirar pela câmera (no APK, a câmera aparece junto com a galeria) ou escolher da galeria; a foto é reduzida no celular (~200 KB), guardada no aparelho e enviada sozinha para a nuvem da fazenda quando há internet (bucket privado, só quem é da fazenda vê); os outros aparelhos baixam ao abrir. Até 6 fotos por registro; quem tirou, o supervisor ou o ADM podem remover. Migração `supabase/migrations/20261014000000_fotos.sql` (rodar no SQL Editor).
 
