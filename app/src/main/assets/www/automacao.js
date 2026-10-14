@@ -178,6 +178,7 @@ function janelasDoDia(dados, data) {
 }
 const hh = n => String(n).padStart(2, '0') + 'h';
 const DIA_SEMANA = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+const climaAberto = () => safeStorage.get('agro-clima-aberto') === '1';
 function cartaoClima() {
   const loc = localDaFazenda(), c = lerClima();
   if (!loc) return `<article class="card panel hoje-clima" id="hojeClima"><h3>Clima e pulverização</h3><p class="nota">Para ver a previsão do tempo e as melhores horas para pulverizar, informe onde fica a fazenda.</p><div class="btn-row">${btn('📍 Usar a localização atual', 'clima-local', '', 'secondary')}</div><small class="nota">Ou meça o contorno de um talhão pelo GPS: o app usa o centro dele.</small></article>`;
@@ -187,14 +188,23 @@ function cartaoClima() {
   const txtJan = (j, quando) => j.janelas.length ? `<strong>Boas horas para pulverizar ${quando}:</strong> ${j.janelas.map(([a, b]) => `${hh(a)}–${hh(b)}`).join(', ')}` : `<strong>Sem janela boa para pulverizar ${quando}</strong>${j.principal ? ` (principalmente ${j.principal})` : ''}`;
   const chuvaProx = d.time.map((t, i) => ({t, mm: d.precipitation_sum[i]})).find((x, i) => i >= i0 && x.mm >= 5);
   const idade = Math.round((Date.now() - c.em) / 60000);
-  return `<article class="card panel hoje-clima" id="hojeClima"><div class="section-title" style="margin:0 0 6px"><h3>Clima e pulverização</h3><button data-act="clima-atualizar" title="Atualizar">↻</button></div>
+  // Recolhido (padrão): uma linha com o resumo de hoje; o botão expande os 4 dias, as janelas, a chuva e o critério
+  const aberto = climaAberto(), hj = Math.round(d.temperature_2m_max[i0]) + '° / ' + Math.round(d.temperature_2m_min[i0]) + '°';
+  const resumo = jan.janelas.length ? `Pulverizar: ${jan.janelas.map(([a, b]) => `${hh(a)}–${hh(b)}`).join(', ')}` : 'Sem janela boa para pulverizar hoje';
+  return `<article class="card panel hoje-clima ${aberto ? 'aberto' : ''}" id="hojeClima">
+    <button type="button" class="clima-linha" data-act="clima-expandir" aria-expanded="${aberto}" aria-controls="climaCorpo">
+      <span class="clima-ic" aria-hidden="true">${d.precipitation_probability_max[i0] >= 60 ? '🌧' : '⛅'}</span>
+      <span class="clima-txt"><strong>Hoje ${hj}</strong><small class="${jan.janelas.length ? 'ok' : 'nao'}">${esc(resumo)}${chuvaProx ? ` • chuva ${chuvaProx.t === hoje ? 'hoje' : fmtDate(chuvaProx.t).slice(0, 5)}` : ''}</small></span>
+      <span class="clima-seta" aria-hidden="true">${aberto ? '▴' : '▾'}</span><span class="sr-only">${aberto ? 'Recolher' : 'Ver'} a previsão</span></button>
+    ${aberto ? `<div id="climaCorpo">
     <div class="hoje-dias">${d.time.slice(i0, i0 + 4).map((t, k) => { const i = i0 + k; return `<div class="hoje-dia"><small>${k === 0 ? 'Hoje' : DIA_SEMANA[new Date(t + 'T12:00:00').getDay()]}</small><strong>${Math.round(d.temperature_2m_max[i])}° <span>${Math.round(d.temperature_2m_min[i])}°</span></strong><small>💧 ${num(d.precipitation_sum[i], 0)} mm · ${d.precipitation_probability_max[i] ?? 0}%</small><small>💨 ${Math.round(d.wind_speed_10m_max[i])} km/h</small></div>`; }).join('')}</div>
     <p class="hoje-jan ${jan.janelas.length ? 'ok' : 'nao'}">${txtJan(jan, 'hoje')}</p>${amanha ? `<p class="hoje-jan ${amanha.janelas.length ? 'ok' : 'nao'}">${txtJan(amanha, 'amanhã')}</p>` : ''}
     ${chuvaProx ? `<p class="nota">🌧 Chuva de ${num(chuvaProx.mm, 0)} mm prevista para ${chuvaProx.t === hoje ? 'hoje' : fmtDate(chuvaProx.t)}: programe aplicações e colheita.</p>` : ''}
-    <small class="nota">Critério: vento 3–10 km/h, Delta T 2–8 °C, até 30 °C, umidade ≥ 50% e sem chuva. Orientação — confirme as condições no campo. Previsão Open-Meteo para ${esc(loc.origem)}, atualizada há ${idade < 60 ? idade + ' min' : Math.round(idade / 60) + ' h'}.</small></article>`;
+    <small class="nota">Critério: vento 3–10 km/h, Delta T 2–8 °C, até 30 °C, umidade ≥ 50% e sem chuva. Orientação — confirme as condições no campo. Previsão Open-Meteo para ${esc(loc.origem)}, atualizada há ${idade < 60 ? idade + ' min' : Math.round(idade / 60) + ' h'}. <button class="link" data-act="clima-atualizar">Atualizar agora</button></small></div>` : ''}</article>`;
 }
 Object.assign(ACTIONS, {
   'hoje-mais': () => go('inicio', 'alertas'),
+  'clima-expandir': () => { safeStorage.set('agro-clima-aberto', climaAberto() ? '0' : '1'); const el = document.getElementById('hojeClima'); if (el) el.outerHTML = cartaoClima(); },
   'chuva-ontem': mm => chuvaForm({date: daysAgo(1), mm, notes: 'Estimativa da previsão do tempo (Open-Meteo) — conferir no pluviômetro'}),
   'clima-atualizar': () => { if (navigator.onLine === false) return showToast('Sem internet agora'); buscarClima(true); showToast('Atualizando a previsão…'); },
   'clima-local': () => {
@@ -228,9 +238,9 @@ function painelHoje() {
     ? `<div class="hoje-item"><span class="alert-icon ${x.op.status === 'Em andamento' ? 'green' : x.op.date < t ? 'red' : 'blue'}">◷</span><div><strong>${esc(x.op.type)} — ${esc(opPlace(x.op))}</strong><small>${x.op.status === 'Em andamento' ? 'Em andamento' : x.op.date < t ? `Atrasada (era para ${fmtDate(x.op.date)})` : 'Programada para hoje'}${x.op.machineId ? ' • ' + esc(machineName(x.op.machineId)) : ''}${(() => { const p = duracaoPrevista(x.op); return p ? ` • previsto ~${um1(p.horas)} h` : ''; })()}</small></div>${x.op.status === 'Em andamento' ? mini('✓ Concluir', 'op-done', x.op.id, 'ok') : mini('▶ Iniciar', 'op-start', x.op.id)}</div>`
     : `<div class="hoje-item clickable" data-act="nav" data-id="${esc(x.route)}"><span class="alert-icon ${x.color}">${x.icon}</span><div><strong>${esc(x.title)}</strong><small>${esc(x.text)}</small></div><span class="hoje-ir" aria-hidden="true">›</span></div>`;
   const data = new Date().toLocaleDateString('pt-BR', {weekday: 'long', day: 'numeric', month: 'long'});
-  return `<section class="hoje"><article class="card panel hoje-fazer"><div class="section-title" style="margin:0 0 6px"><h3>Hoje <small>${esc(data)}</small></h3>${btn('+ Operação', 'op-new', '', 'secondary')}</div>
-      ${itens.length ? itens.slice(0, 7).map(linha).join('') + (itens.length > 7 ? `<button class="link" data-act="hoje-mais">Mais ${itens.length - 7} ${itens.length - 7 === 1 ? 'item' : 'itens'} em “Atenção”</button>` : '') : empty('Tudo em dia', 'Nenhuma pendência para hoje.')}</article>
-    ${cartaoClima()}</section>`;
+  return `<section class="hoje">${cartaoClima()}<article class="card panel hoje-fazer"><div class="section-title" style="margin:0 0 6px"><h3>Hoje <small>${esc(data)}</small></h3>${btn('+ Operação', 'op-new', '', 'secondary')}</div>
+      ${itens.length ? itens.slice(0, 4).map(linha).join('') + (itens.length > 4 ? `<button class="link hoje-vermais" data-act="hoje-mais">Ver mais ${itens.length - 4} ${itens.length - 4 === 1 ? 'item' : 'itens'}</button>` : '') : empty('Tudo em dia', 'Nenhuma pendência para hoje.')}</article>
+    </section>`;
 }
 const inicioSemHoje = VIEWS.inicio;
 VIEWS.inicio = anchor => painelHoje() + inicioSemHoje(anchor);

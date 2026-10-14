@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.30.1-beta1` — tela inicial mais limpa: o clima vira uma linha (temperatura de hoje e as horas boas para pulverizar) com um botão para expandir os 4 dias, as janelas, a chuva e o critério, como o botão do menu; a escolha fica lembrada. O “Hoje” mostra os 4 itens mais urgentes e “Ver mais”.
+
 `0.30.0-beta1` — mais automação: **custo por hora de cada máquina** (combustível + manutenção dos últimos 12 meses) e **custo de máquina de cada operação** (horas × custo/h; também no relatório da safra), só para quem vê o financeiro; **duração prevista** das operações programadas pelo rendimento das anteriores da mesma máquina e tipo; **chuva de ontem sugerida** pela previsão do tempo quando ninguém registrou (um toque abre o registro para conferir no pluviômetro); **aviso ao programar colheita dentro da carência**; avisos dos formulários ficam mais tempo na tela.
 
 `0.29.1-beta1` — operações fora do talhão (beneficiamento e tratamento de sementes, transporte, manutenção) não pedem mais área trabalhada; beneficiamento e tratamento registram a quantidade de sementes (kg) e o rendimento em kg/h. A área desses tipos não entra mais nos totais de hectares.
