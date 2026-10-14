@@ -596,3 +596,15 @@ body{background:var(--bg)}
 /* Gráficos do painel recolhidos */
 .nx-graf{margin-top:12px} .nx-graf>summary{cursor:pointer;color:var(--destaque,#34d399);font-weight:700;padding:8px 0;list-style:none}
 .nx-graf>summary::before{content:'▸ '} .nx-graf[open]>summary::before{content:'▾ '}
+/* Comparativo de safras e talhões */
+.cmp-insights ul{margin:6px 0 0;padding-left:18px;display:grid;gap:6px} .cmp-insights li{line-height:1.45}
+.cmp-var{font-size:.78rem;font-weight:700;margin-left:4px} .cmp-var.sobe{color:var(--green)} .cmp-var.desce{color:var(--orange)}
+tr.cmp-atual td{background:color-mix(in srgb,var(--green) 8%,transparent)}
+.cmp-linha{display:grid;grid-template-columns:minmax(110px,1fr) 2fr auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.cmp-nome strong{display:block} .cmp-nome small,.cmp-extra small{color:var(--muted);font-size:.8rem;display:block}
+.cmp-barra{position:relative;height:26px;border-radius:8px;background:color-mix(in srgb,var(--line) 60%,transparent);overflow:hidden}
+.cmp-barra span{position:absolute;inset:0 auto 0 0;border-radius:8px} .cmp-barra span.acima{background:color-mix(in srgb,var(--green) 55%,transparent)} .cmp-barra span.abaixo{background:color-mix(in srgb,var(--orange) 55%,transparent)}
+.cmp-barra b{position:relative;z-index:1;line-height:26px;padding-left:8px;font-size:.86rem}
+.cmp-extra{text-align:right;min-width:70px}
+td.cmp-bom{color:var(--green);font-weight:700} td.cmp-ruim{color:var(--orange);font-weight:700}
+@media(max-width:560px){.cmp-linha{grid-template-columns:1fr auto}.cmp-barra{grid-column:1/-1;grid-row:2}}

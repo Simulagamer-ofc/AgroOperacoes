@@ -105,7 +105,7 @@ VIEWS.producao = () => {
   const tot = a ? colhidas.reduce((t, l) => ({sacas: t.sacas + l.sacas, area: t.area + l.area, custo: t.custo + l.custo, receita: l.receita != null ? t.receita + l.receita : t.receita, margem: l.margem != null ? t.margem + l.margem : t.margem, areaMargem: t.areaMargem + (l.margem != null ? l.area : 0)}), {sacas: 0, area: 0, custo: 0, receita: 0, margem: 0, areaMargem: 0}) : null;
   const custoSemColheita = semColheita.reduce((t, l) => t + l.custo, 0);
   const notaSemColheita = custoSemColheita ? ` • fora: ${brl(custoSemColheita)} de ${semColheita.length === 1 ? 'talhão' : 'talhões'} sem colheita` : '';
-  return head('Produção e margem', 'Colheita por talhão, vendas e resultado por safra', btn('+ Venda', 'pd-venda', '', 'secondary') + btn('+ Colheita', 'pd-colheita')) +
+  return head('Produção e margem', 'Colheita por talhão, vendas e resultado por safra', btn('Comparar safras', 'nav', 'comparativo', 'secondary') + btn('+ Venda', 'pd-venda', '', 'secondary') + btn('+ Colheita', 'pd-colheita')) +
     (safras.length ? `<div class="filters">${safras.map(s => `<button class="${s === prodSafra ? 'active' : ''}" data-act="pd-safra" data-id="${esc(s)}">Safra ${esc(s)}</button>`).join('')}</div>` : '') +
     (!a || (!a.linhas.length && !a.vend.length) ? `<section class="card">${empty('Nada registrado nesta safra', 'Registre a colheita dos talhões e as vendas para ver produtividade, custo por saca e margem.', {act: 'pd-colheita', label: '+ Colheita'})}</section>` :
     `<section class="es-kpis">
