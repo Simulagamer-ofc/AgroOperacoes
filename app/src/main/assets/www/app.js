@@ -90,7 +90,7 @@ const upsert = (col, item) => {
   if (i >= 0) db[col][i] = item; else db[col].push(item);
   return save();
 };
-const remove = (col, id) => { db[col] = db[col].filter(x => x.id !== id); return save(); };
+const remove = (col, id) => { const r = db[col].find(x => x.id === id); if (r?.fotos?.length && typeof fotosAoExcluir === 'function') fotosAoExcluir(col, r); db[col] = db[col].filter(x => x.id !== id); return save(); };
 
 // ---------- Regras de negócio ----------
 // Operações fora do talhão: não têm área trabalhada (beneficiamento e tratamento de sementes medem a quantidade em kg)
@@ -882,7 +882,9 @@ const ACTIONS = {
     const abertas = openMaintenances(id).length;
     confirmDialog(`Excluir esta máquina? Os registros de horímetro${abertas ? ` e ${abertas} ${abertas === 1 ? 'ordem de manutenção em aberto' : 'ordens de manutenção em aberto'}` : ''} dela também serão removidos. Manutenções concluídas e seus custos ficam no histórico. Se a máquina só saiu de uso, prefira marcá-la como Inativa em Editar.`, () => {
       remove('machines', id); db.hourLogs = db.hourLogs.filter(h => h.machineId !== id);
-      db.maintenances = db.maintenances.filter(m => m.machineId !== id || m.status === 'Concluída'); save();
+      const sai = db.maintenances.filter(m => m.machineId === id && m.status !== 'Concluída');
+      if (typeof fotosAoExcluir === 'function') fotosAoExcluir('maintenances', sai);
+      db.maintenances = db.maintenances.filter(m => !sai.includes(m)); save();
     });
   },
   'hour-new': id => hourForm(id),
