@@ -619,3 +619,4 @@ td.cmp-bom{color:var(--green);font-weight:700} td.cmp-ruim{color:var(--orange);f
 .foto-tela-bts{display:flex;gap:10px;justify-content:center}
 @media print{.foto-mini{width:120px;height:120px}}
 .foto-tela.carregando::before{content:'Carregando foto…';position:absolute;top:16px;left:50%;transform:translateX(-50%);color:#fff;font-size:.85rem;opacity:.8}
+.clima-conf{font-weight:600}.clima-conf.firme{color:var(--green,#2e9e5b)}.clima-conf.incerta{color:var(--orange,#e08a1e)}.clima-aviso{color:var(--orange,#e08a1e)}
