@@ -620,3 +620,17 @@ td.cmp-bom{color:var(--green);font-weight:700} td.cmp-ruim{color:var(--orange);f
 @media print{.foto-mini{width:120px;height:120px}}
 .foto-tela.carregando::before{content:'Carregando foto…';position:absolute;top:16px;left:50%;transform:translateX(-50%);color:#fff;font-size:.85rem;opacity:.8}
 .clima-conf{font-weight:600}.clima-conf.firme{color:var(--green,#2e9e5b)}.clima-conf.incerta{color:var(--orange,#e08a1e)}.clima-aviso{color:var(--orange,#e08a1e)}
+/* Clima no estilo dos apps de previsão */
+.clima-periodos{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:6px 0 8px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.clima-per{display:grid;justify-items:center;gap:2px;text-align:center}
+.clima-per small{color:var(--muted);font-size:.78rem}
+.clima-t{font-size:1.5rem;font-weight:500;color:var(--orange)}
+.clima-icone{font-size:1.9rem;line-height:1.2}
+.clima-dias{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(92px,1fr);gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px;scroll-snap-type:x proximity}
+.clima-dia{border:1px solid var(--line);border-radius:12px;padding:8px 6px;text-align:center;display:grid;justify-items:center;gap:2px;scroll-snap-align:start}
+.clima-dia.hoje{background:rgba(23,135,212,.12);border-color:var(--blue)}
+.clima-dia small{color:var(--muted);font-size:.74rem;line-height:1.3}
+.clima-dia small b{color:var(--text);font-size:.8rem;font-weight:600}
+.clima-max{font-size:1.35rem;font-weight:500;color:var(--orange)}
+.clima-min{font-size:1.05rem;font-weight:500;color:var(--green)}
+.hoje-clima,#climaCorpo{min-width:0;max-width:100%}.clima-dias{max-width:100%;min-width:0}
