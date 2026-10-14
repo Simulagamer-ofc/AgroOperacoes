@@ -362,6 +362,7 @@ function hourForm(machineId) {
 
 function maintenanceForm(mt = {}) {
   if (!db.machines.length) { showToast('Cadastre uma máquina primeiro'); return machineForm(); }
+  const idMt = mt.id || uid(); // id já na abertura, para as fotos
   openForm({
     title: mt.id ? 'Editar manutenção' : 'Abrir manutenção',
     values: {date: today(), kind: 'Preventiva', status: 'Aberta', ...mt},
@@ -375,12 +376,14 @@ function maintenanceForm(mt = {}) {
       {k: 'notes', label: 'Peças e observações', type: 'textarea'}
     ],
     onSubmit: v => {
-      const item = {...mt, ...v, id: mt.id || uid()};
+      const item = {...mt, ...v, id: idMt};
       if (v.status === 'Concluída' && mt.status !== 'Concluída') finishMaintenance(item, false);
       upsert('maintenances', item);
+      if (typeof fotosAoSalvar === 'function') fotosAoSalvar('maintenances', idMt);
       showToast('Manutenção salva');
     }
   });
+  if (typeof anexarCampoFotos === 'function') anexarCampoFotos('maintenances', idMt, mt.fotos || []);
 }
 
 function finishMaintenance(mt, persist = true) {
@@ -632,7 +635,7 @@ VIEWS.maquinas = () => {
     }).join('')}</section>` : `<section class="card">${empty('Nenhuma máquina cadastrada', 'Cadastre tratores, colheitadeiras e implementos para controlar horímetro e revisões.', {act: 'mc-new', label: '+ Nova máquina'})}</section>`) +
     `<div class="section-title"><h3>Ordens de manutenção</h3></div><section class="card list">${mts.length ? mts.map(mt => {
       const color = mt.status === 'Concluída' ? 'gray' : mt.status === 'Em execução' ? 'blue' : 'orange';
-      return `<div class="row"><span class="status ${color === 'gray' ? 'green' : color}"></span><div><strong>${esc(mt.kind)} — ${esc(machineName(mt.machineId) || 'Máquina removida')}</strong><small>${esc([mt.description, 'aberta ' + fmtDate(mt.date), mt.doneDate ? 'concluída ' + fmtDate(mt.doneDate) : '', mt.cost ? 'R$ ' + num(mt.cost, 2) : ''].filter(Boolean).join(' • '))}</small></div><div class="row-actions">${chip(mt.status, color)}${mt.status !== 'Concluída' ? mini('✓ Concluir', 'mt-done', mt.id, 'ok') : ''}${mini('Editar', 'mt-edit', mt.id)}${mini('Excluir', 'mt-del', mt.id, 'del')}</div></div>`;
+      return `<div class="row"><span class="status ${color === 'gray' ? 'green' : color}"></span><div><strong>${esc(mt.kind)} — ${esc(machineName(mt.machineId) || 'Máquina removida')}</strong><small>${esc([mt.description, 'aberta ' + fmtDate(mt.date), mt.doneDate ? 'concluída ' + fmtDate(mt.doneDate) : '', mt.cost ? 'R$ ' + num(mt.cost, 2) : '', mt.fotos?.length ? '📷 ' + mt.fotos.length : ''].filter(Boolean).join(' • '))}</small></div><div class="row-actions">${chip(mt.status, color)}${mt.status !== 'Concluída' ? mini('✓ Concluir', 'mt-done', mt.id, 'ok') : ''}${mini('Editar', 'mt-edit', mt.id)}${mini('Excluir', 'mt-del', mt.id, 'del')}</div></div>`;
     }).join('') : empty('Nenhuma manutenção registrada', '')}</section>`;
 };
 

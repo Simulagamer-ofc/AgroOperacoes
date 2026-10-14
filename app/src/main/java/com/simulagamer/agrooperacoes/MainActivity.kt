@@ -22,6 +22,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import android.provider.MediaStore
+import java.io.File
 import androidx.webkit.WebViewAssetLoader
 
 class MainActivity : AppCompatActivity() {
@@ -47,9 +50,32 @@ class MainActivity : AppCompatActivity() {
         webView.evaluateJavascript("window.onNativeFileSaved && window.onNativeFileSaved($ok)", null)
     }
 
+    // Foto da câmera aguardando (o app de câmera grava neste arquivo e não devolve dados)
+    private var cameraUri: Uri? = null
+    private var cameraFile: File? = null
+
     private val pickFile = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        fileChooserCallback?.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(result.resultCode, result.data))
+        val escolhido = WebChromeClient.FileChooserParams.parseResult(result.resultCode, result.data)
+        val daCamera = cameraUri?.takeIf { result.resultCode == Activity.RESULT_OK && escolhido == null && (cameraFile?.length() ?: 0L) > 0L }
+        fileChooserCallback?.onReceiveValue(escolhido ?: daCamera?.let { arrayOf(it) })
         fileChooserCallback = null
+        cameraUri = null
+        cameraFile = null
+    }
+
+    // Fotos dos registros: oferece a câmera junto com a galeria
+    private fun intentComCamera(galeria: Intent): Intent {
+        val pasta = File(cacheDir, "fotos").apply { mkdirs() }
+        pasta.listFiles()?.filter { System.currentTimeMillis() - it.lastModified() > 86_400_000L }?.forEach { it.delete() }
+        val arquivo = File(pasta, "foto_${System.currentTimeMillis()}.jpg")
+        val uri = FileProvider.getUriForFile(this, "$packageName.fotos", arquivo)
+        cameraFile = arquivo
+        cameraUri = uri
+        val camera = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+            putExtra(MediaStore.EXTRA_OUTPUT, uri)
+            addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+        return Intent.createChooser(galeria, "Foto do registro").putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(camera))
     }
 
     // Localização (contorno do talhão por GPS): pede a permissão do Android só quando a página solicita
@@ -134,8 +160,9 @@ class MainActivity : AppCompatActivity() {
                     fileChooserCallback = filePathCallback
                     // Backup/sincronização (.json): mostra todos os arquivos — o Android costuma não reconhecer o tipo JSON
                     // (arquivos do WhatsApp chegam como application/octet-stream). O conteúdo é validado no JavaScript.
-                    val intent = fileChooserParams.createIntent()
+                    var intent = fileChooserParams.createIntent()
                     if (fileChooserParams.acceptTypes.all { it.isBlank() || it.contains("json") }) intent.type = "*/*"
+                    else if (fileChooserParams.acceptTypes.any { it.startsWith("image") }) intent = runCatching { intentComCamera(intent) }.getOrDefault(intent)
                     return runCatching { pickFile.launch(intent) }
                         .onFailure {
                             fileChooserCallback = null
