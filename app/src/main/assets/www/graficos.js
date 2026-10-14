@@ -166,7 +166,7 @@ function painelNexus() {
       <article class="nx-panel nx-stat"><p class="nx-caption">Custos no período</p><div class="nx-metric">${dinheiroPainel(custo)}</div><p class="nx-caption">${esc(descPeriodo())}</p></article>
       <article class="nx-panel nx-stat"><p class="nx-caption">Operações concluídas</p><div class="nx-metric">${concluidas}</div><p class="nx-caption">No período selecionado</p></article>
       <article class="nx-panel nx-stat"><p class="nx-caption">Estoque em atenção</p><div class="nx-metric">${atencao} ${atencao === 1 ? 'item' : 'itens'}</div><p class="nx-caption">Saldo atual</p></article>
-    </section><section class="nx-dashboard-grid">${custosCategorias(ini, fim)}${custosMes()}${roscaSituacao(ini, fim)}${estoqueInsumos()}</section></section>`;
+    </section><details class="nx-graf"><summary>Ver gráficos</summary><section class="nx-dashboard-grid">${custosCategorias(ini, fim)}${custosMes()}${roscaSituacao(ini, fim)}${estoqueInsumos()}</section></details></section>`;
 }
 
 function painelGraficos() {

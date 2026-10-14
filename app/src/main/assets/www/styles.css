@@ -593,3 +593,6 @@ body{background:var(--bg)}
 /* Texto para compartilhar (lista de compras, resumo da semana) */
 .texto-compartilhar{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--bg);color:var(--text);font:inherit;font-size:.9rem;line-height:1.45;resize:vertical}
 .btn-whats{display:inline-flex;align-items:center;padding:10px 14px;border-radius:10px;background:#25d366;color:#06301a;font-weight:700;text-decoration:none}
+/* Gráficos do painel recolhidos */
+.nx-graf{margin-top:12px} .nx-graf>summary{cursor:pointer;color:var(--destaque,#34d399);font-weight:700;padding:8px 0;list-style:none}
+.nx-graf>summary::before{content:'▸ '} .nx-graf[open]>summary::before{content:'▾ '}

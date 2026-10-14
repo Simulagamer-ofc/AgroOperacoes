@@ -403,7 +403,8 @@ function fieldForm(f = {}) {
       {k: 'crop', label: 'Cultura atual', placeholder: 'Ex.: Soja'},
       {k: 'cultivar', label: 'Cultivar'},
       {k: 'season', label: 'Safra', placeholder: 'Ex.: 2026/27'},
-      {k: 'plantingDate', label: 'Data de plantio', type: 'date'},
+      {k: 'plantingDate', label: 'Data de plantio', type: 'date', hint: 'Preenchida sozinha ao concluir uma operação de plantio.'},
+      {k: 'ciclo', label: 'Ciclo da cultivar (dias)', type: 'number', min: 0, hint: 'Opcional: do plantio à colheita. Gera a previsão de colheita.'},
       {k: 'notes', label: 'Observações', type: 'textarea'}
     ],
     onSubmit: v => { upsert('fields', {...f, ...v, id: f.id || uid()}); showToast('Talhão salvo'); }
@@ -643,7 +644,7 @@ VIEWS.talhoes = () => {
       const ops = db.operations.filter(o => o.fieldId === f.id).sort(byDateDesc);
       const lots = db.lots.filter(l => l.fieldId === f.id);
       return `<article class="card item-card"><header><div><h4>${esc(f.name)}</h4><div class="meta">${esc([f.crop, f.cultivar, f.season].filter(Boolean).join(' • ') || 'Sem cultura informada')}</div></div>${chip(num(f.area) + ' ha', 'green')}</header>
-        <div class="meta"><span>Plantio: ${fmtDate(f.plantingDate)}</span><span>Operações: ${ops.length}${ops[0] ? ` • última: ${esc(ops[0].type)} em ${fmtDate(ops[0].date)}` : ''}</span><span>Lotes de semente: ${esc(lots.map(l => l.code).join(', ') || '—')}</span></div>
+        <div class="meta"><span>Plantio: ${fmtDate(f.plantingDate)}${typeof infoCiclo === 'function' ? infoCiclo(f) : ''}</span><span>Operações: ${ops.length}${ops[0] ? ` • última: ${esc(ops[0].type)} em ${fmtDate(ops[0].date)}` : ''}</span><span>Lotes de semente: ${esc(lots.map(l => l.code).join(', ') || '—')}</span></div>
         <div class="row-actions" style="justify-content:flex-start">${mini('+ Operação', 'op-field', f.id)}${mini('Histórico', 'fd-hist', f.id)}${mini('Editar', 'fd-edit', f.id)}${mini('Excluir', 'fd-del', f.id, 'del')}</div></article>`;
     }).join('')}</section>` : `<section class="card">${empty('Nenhum talhão cadastrado', 'Cadastre os talhões para vincular operações, consumo de insumos e lotes de sementes.', {act: 'fd-new', label: '+ Novo talhão'})}</section>`);
 };
