@@ -6,8 +6,8 @@ const talhaoOuGeral = id => id ? (fieldName(id) || 'Talhão removido') : 'Sede /
 const diasEntre = (a, b) => Math.round((new Date(b + 'T12:00:00') - new Date(a + 'T12:00:00')) / 864e5);
 
 // ---------------- Chuvas ----------------
-function chuvaForm() {
-  openForm({title: 'Registrar chuva', sub: 'Leitura do pluviômetro (mm). Sem talhão = pluviômetro da sede.', values: {date: today()},
+function chuvaForm(valores = {}) {
+  openForm({title: 'Registrar chuva', sub: 'Leitura do pluviômetro (mm). Sem talhão = pluviômetro da sede.', values: {date: today(), ...valores},
     fields: [{k: 'date', label: 'Data', type: 'date', required: true}, {k: 'mm', label: 'Chuva (mm)', type: 'number', min: 0, required: true},
       {k: 'fieldId', label: 'Talhão / pluviômetro', type: 'select', options: fieldOptions}, {k: 'notes', label: 'Observações', type: 'textarea'}],
     onSubmit: v => { if (!(v.mm >= 0)) return 'Informe os milímetros'; db.chuvas.push({id: uid(), ...v}); save(); showToast(`${um1(v.mm)} mm registrados`); }});

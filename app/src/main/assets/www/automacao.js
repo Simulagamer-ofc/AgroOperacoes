@@ -27,6 +27,39 @@ function previsaoRevisao(m) {
   return {dias, data: addDias(today(), dias), ritmo};
 }
 
+// ---------- Custo por hora de cada máquina (combustível + manutenção nos últimos 12 meses) ----------
+function custoHoraMaquina(machineId) {
+  const desde = daysAgo(365);
+  const comb = db.fuel.filter(f => f.machineId === machineId && (f.date || '') >= desde).reduce((t, f) => t + (typeof custoAbast === 'function' ? custoAbast(f).v || 0 : Number(f.value) || 0), 0);
+  const man = db.maintenances.filter(m => m.machineId === machineId && (m.doneDate || m.date || '') >= desde).reduce((t, m) => t + (Number(m.cost) || 0), 0);
+  const logs = db.hourLogs.filter(h => h.machineId === machineId && (h.date || '') >= desde && Number(h.hours) > 0).sort((a, b) => a.date.localeCompare(b.date) || a.hours - b.hours);
+  if (logs.length < 2) return null;
+  const horas = Number(logs[logs.length - 1].hours) - Math.min(Number(logs[0].previous) || Number(logs[0].hours), Number(logs[0].hours));
+  if (!(horas >= 10) || !(comb + man > 0)) return null;
+  return {porHora: (comb + man) / horas, comb, man, horas};
+}
+// Custo de máquina de uma operação concluída (horas × custo por hora), só para quem vê o financeiro
+function custoOperacao(o) {
+  if (!(Number(o.horas) > 0) || !o.machineId || (typeof nvVeFinanceiro === 'function' && !nvVeFinanceiro())) return null;
+  const c = custoHoraMaquina(o.machineId);
+  return c ? o.horas * c.porHora : null;
+}
+// ---------- Duração prevista das operações, pelo rendimento das anteriores da mesma máquina e tipo ----------
+function rendimentoMaquina(machineId, tipo) {
+  const porArea = opTemArea({type: tipo});
+  const ops = db.operations.filter(o => o.machineId === machineId && o.type === tipo && o.status === 'Concluída' && Number(o.horas) > 0 && (porArea ? Number(o.area) > 0 : Number(o.kg) > 0))
+    .sort((a, b) => (a.date || '').localeCompare(b.date || '')).slice(-10);
+  if (!ops.length) return null;
+  const qtd = ops.reduce((t, o) => t + Number(porArea ? o.area : o.kg), 0), h = ops.reduce((t, o) => t + Number(o.horas), 0);
+  return {porHora: qtd / h, unidade: porArea ? 'ha' : 'kg', n: ops.length};
+}
+function duracaoPrevista(o) {
+  if (!o.machineId || !['Programada', 'Em andamento'].includes(o.status)) return null;
+  const r = rendimentoMaquina(o.machineId, o.type); if (!r) return null;
+  const qtd = r.unidade === 'ha' ? Number(o.area) || Number(find('fields', o.fieldId)?.area) || 0 : Number(o.kg) || 0;
+  return qtd > 0 ? {horas: qtd / r.porHora, rendimento: r} : null;
+}
+
 // ---------- Estoque: quando acaba e até quando comprar ----------
 function previsaoEstoque(s) {
   const desde = daysAgo(60), saidas = db.movements.filter(m => m.itemId === s.id && m.kind === 'Saída' && (m.date || '') >= desde && Number(m.qty) > 0);
@@ -108,14 +141,14 @@ async function buscarClima(forcar = false) {
   if (!forcar && atual && Date.now() - atual.em < 3600000 && Math.abs(atual.lat - loc.lat) < 0.01 && Math.abs(atual.lon - loc.lon) < 0.01) return;
   climaBuscando = true;
   try {
-    const q = new URLSearchParams({latitude: loc.lat.toFixed(4), longitude: loc.lon.toFixed(4), timezone: 'auto', forecast_days: '4',
+    const q = new URLSearchParams({latitude: loc.lat.toFixed(4), longitude: loc.lon.toFixed(4), timezone: 'auto', forecast_days: '4', past_days: '1',
       hourly: 'temperature_2m,relative_humidity_2m,wind_speed_10m,wind_gusts_10m,precipitation_probability,precipitation',
       daily: 'temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max'});
     const r = await fetch('https://api.open-meteo.com/v1/forecast?' + q);
     if (!r.ok) throw new Error('clima ' + r.status);
     const dados = await r.json();
     safeStorage.set(CLIMA_KEY, JSON.stringify({em: Date.now(), lat: loc.lat, lon: loc.lon, dados}));
-    const el = document.getElementById('hojeClima'); if (el) el.outerHTML = cartaoClima();
+    if (parseRoute().name === 'inicio') nvAtualizarOuRender();
   } catch { /* sem internet ou serviço fora: mantém a última previsão guardada */ } finally { climaBuscando = false; }
 }
 // Delta T = temperatura do ar − temperatura de bulbo úmido (Stull, 2011). Boa faixa para pulverizar: 2 a 8 °C
@@ -162,6 +195,7 @@ function cartaoClima() {
 }
 Object.assign(ACTIONS, {
   'hoje-mais': () => go('inicio', 'alertas'),
+  'chuva-ontem': mm => chuvaForm({date: daysAgo(1), mm, notes: 'Estimativa da previsão do tempo (Open-Meteo) — conferir no pluviômetro'}),
   'clima-atualizar': () => { if (navigator.onLine === false) return showToast('Sem internet agora'); buscarClima(true); showToast('Atualizando a previsão…'); },
   'clima-local': () => {
     if (!navigator.geolocation) return showToast('Este aparelho não oferece a localização ao app.', true);
@@ -171,14 +205,27 @@ Object.assign(ACTIONS, {
   }
 });
 
+const nvAtualizarOuRender = () => typeof nvAtualizarTela === 'function' ? nvAtualizarTela() : render();
+// Choveu ontem pela previsão e ninguém registrou: sugere registrar (o produtor confere no pluviômetro)
+function chuvaDeOntem() {
+  const c = lerClima(), ontem = daysAgo(1);
+  if (!c?.dados?.daily || (typeof nvPodeRota === 'function' && !nvPodeRota('chuva'))) return null;
+  const i = c.dados.daily.time.indexOf(ontem), mm = i >= 0 ? c.dados.daily.precipitation_sum[i] : null;
+  if (!(mm >= 1) || db.chuvas.some(x => x.date === ontem)) return null;
+  return {mm: Math.round(mm), data: ontem};
+}
+
 // ---------- Hoje: o que fazer, em ordem de prioridade ----------
 function painelHoje() {
   const t = today(), al = alerts();
   const ops = db.operations.filter(o => o.status === 'Em andamento' || (o.status === 'Programada' && o.date && o.date <= t)).sort((a, b) => (a.status === 'Em andamento' ? 0 : 1) - (b.status === 'Em andamento' ? 0 : 1) || (a.date || '').localeCompare(b.date || ''));
   const PESO = {red: 0, orange: 1, purple: 2, blue: 3};
-  const itens = [...al.filter(a => a.color === 'red'), ...ops.map(o => ({op: o})), ...al.filter(a => a.color !== 'red').sort((a, b) => (PESO[a.color] ?? 9) - (PESO[b.color] ?? 9))];
-  const linha = x => x.op
-    ? `<div class="hoje-item"><span class="alert-icon ${x.op.status === 'Em andamento' ? 'green' : x.op.date < t ? 'red' : 'blue'}">◷</span><div><strong>${esc(x.op.type)} — ${esc(opPlace(x.op))}</strong><small>${x.op.status === 'Em andamento' ? 'Em andamento' : x.op.date < t ? `Atrasada (era para ${fmtDate(x.op.date)})` : 'Programada para hoje'}${x.op.machineId ? ' • ' + esc(machineName(x.op.machineId)) : ''}</small></div>${x.op.status === 'Em andamento' ? mini('✓ Concluir', 'op-done', x.op.id, 'ok') : mini('▶ Iniciar', 'op-start', x.op.id)}</div>`
+  const ch = chuvaDeOntem();
+  const itens = [...al.filter(a => a.color === 'red'), ...ops.map(o => ({op: o})), ...(ch ? [{chuva: ch}] : []), ...al.filter(a => a.color !== 'red').sort((a, b) => (PESO[a.color] ?? 9) - (PESO[b.color] ?? 9))];
+  const linha = x => x.chuva
+    ? `<div class="hoje-item"><span class="alert-icon blue">🌧</span><div><strong>Choveu cerca de ${num(x.chuva.mm)} mm ontem</strong><small>Estimativa da previsão do tempo. Confira o pluviômetro e registre.</small></div>${mini('Registrar', 'chuva-ontem', x.chuva.mm)}</div>`
+    : x.op
+    ? `<div class="hoje-item"><span class="alert-icon ${x.op.status === 'Em andamento' ? 'green' : x.op.date < t ? 'red' : 'blue'}">◷</span><div><strong>${esc(x.op.type)} — ${esc(opPlace(x.op))}</strong><small>${x.op.status === 'Em andamento' ? 'Em andamento' : x.op.date < t ? `Atrasada (era para ${fmtDate(x.op.date)})` : 'Programada para hoje'}${x.op.machineId ? ' • ' + esc(machineName(x.op.machineId)) : ''}${(() => { const p = duracaoPrevista(x.op); return p ? ` • previsto ~${um1(p.horas)} h` : ''; })()}</small></div>${x.op.status === 'Em andamento' ? mini('✓ Concluir', 'op-done', x.op.id, 'ok') : mini('▶ Iniciar', 'op-start', x.op.id)}</div>`
     : `<div class="hoje-item clickable" data-act="nav" data-id="${esc(x.route)}"><span class="alert-icon ${x.color}">${x.icon}</span><div><strong>${esc(x.title)}</strong><small>${esc(x.text)}</small></div><span class="hoje-ir" aria-hidden="true">›</span></div>`;
   const data = new Date().toLocaleDateString('pt-BR', {weekday: 'long', day: 'numeric', month: 'long'});
   return `<section class="hoje"><article class="card panel hoje-fazer"><div class="section-title" style="margin:0 0 6px"><h3>Hoje <small>${esc(data)}</small></h3>${btn('+ Operação', 'op-new', '', 'secondary')}</div>
@@ -226,7 +273,7 @@ VIEWS.safra = id => {
     <h3>3. Aplicações de defensivos (${aps.length})</h3>${tabela(['Data', 'Produto e dose', 'Receituário', 'Resp. técnico', 'Carência'], aps.map(a => `<tr><td>${fmtDate(a.date)}</td><td><strong>${esc(a.produto)}</strong>${a.dose ? '<br><small>' + esc(a.dose) + '</small>' : ''}</td><td>${esc(a.receituario || '—')}</td><td>${esc(a.responsavel || '—')}</td><td>${num(a.carencia)} d (até ${fmtDate(addDias(a.date, Number(a.carencia) || 0))})</td></tr>`))}
     <h3>4. Monitoramento de pragas e doenças (${mon.length})</h3>${tabela(['Data', 'Alvo', 'Média', 'Nível de ação'], mon.map(m => `<tr><td>${fmtDate(m.date)}</td><td>${esc(m.alvo)}</td><td>${num(m.valor, 2)} ${esc(m.unidade || '')}</td><td>${m.nivelAcao !== '' && m.nivelAcao != null ? num(m.nivelAcao, 2) : '—'}</td></tr>`))}
     <h3>5. Colheita</h3><table class="tbl"><tbody>${col.length ? linha('Produção', `${sacas >= 100 ? num(sacas) : um1(sacas)} sacas de 60 kg`) + linha('Produtividade', area ? `${um1(sacas / area)} sc/ha` : '') : '<tr><td>Sem colheita registrada no período.</td></tr>'}</tbody></table>
-    ${fin && ana ? `<h3>6. Custos e resultado</h3><table class="tbl"><tbody>${linha('Custo total', brlR(ana.custo))}${linha('Custo por hectare', ana.custoHa != null ? brlR(ana.custoHa) : '')}${linha('Custo por saca', ana.custoSc != null ? brlR(ana.custoSc) : '')}${linha('Receita (preço médio de venda)', ana.receita != null ? brlR(ana.receita) : '')}${linha('Margem', ana.margem != null ? brlR(ana.margem) : '')}${linha('Ponto de equilíbrio', ana.equilibrio != null ? num(ana.equilibrio, 1) + ' sc/ha' : '')}</tbody></table>` : ''}
+    ${fin && ana ? `<h3>6. Custos e resultado</h3><table class="tbl"><tbody>${linha('Custo total', brlR(ana.custo))}${linha('Custo por hectare', ana.custoHa != null ? brlR(ana.custoHa) : '')}${linha('Custo por saca', ana.custoSc != null ? brlR(ana.custoSc) : '')}${linha('Receita (preço médio de venda)', ana.receita != null ? brlR(ana.receita) : '')}${linha('Margem', ana.margem != null ? brlR(ana.margem) : '')}${linha('Ponto de equilíbrio', ana.equilibrio != null ? num(ana.equilibrio, 1) + ' sc/ha' : '')}${(() => { const cm = ops.reduce((t, o) => t + (custoOperacao(o) || 0), 0); return cm > 0 ? linha('Custo estimado das máquinas nas operações (horas × custo/h; não somado acima)', brlR(cm)) : ''; })()}</tbody></table>` : ''}
     <p class="nota">Gerado pelo Nexus Agro a partir dos registros da fazenda em ${fmtDate(today())}.</p>
   </article>`;
 };
