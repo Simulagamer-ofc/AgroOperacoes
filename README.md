@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.29.1-beta1` — operações fora do talhão (beneficiamento e tratamento de sementes, transporte, manutenção) não pedem mais área trabalhada; beneficiamento e tratamento registram a quantidade de sementes (kg) e o rendimento em kg/h. A área desses tipos não entra mais nos totais de hectares.
+
 `0.29.0-beta1` — automação do dia a dia: **Hoje** na Visão geral (o que fazer em ordem de prioridade, com Iniciar/Concluir direto); **clima e janelas de pulverização** (previsão Open-Meteo de 4 dias para a sede ou o contorno de um talhão; boas horas por vento, Delta T, temperatura, umidade e chuva; guardada para ver sem sinal); **concluir operação** já registra o horímetro final (atualiza máquina, revisões e consumo), as horas trabalhadas, a área e o rendimento em ha/h; **revisão prevista por data** pelo ritmo de uso; **estoque que avisa antes de acabar** (“compre até”); **aviso de pulverizador** com aferição/inspeção vencida ou reprovada ao iniciar pulverização ou lançar aplicação; **relatório da safra por talhão** (operações, aplicações com receituário e carência, monitoramento, chuva, colheita, custos e margem) para imprimir/PDF; **“lançado por”** com o nome de quem registrou.
 
 `0.28.1-beta1` — revisão geral (todas as telas e botões testados sem erro, análise estática sem referências quebradas) e correções: aviso de praga no nível de ação agora some após 30 dias ou quando há aplicação no talhão depois do monitoramento; os avisos (sininho e Visão geral) mostram só as telas liberadas para a função da pessoa; no navegador, aviso de **nova versão** com botão “Atualizar agora” (não precisa mais fechar e abrir o site).
