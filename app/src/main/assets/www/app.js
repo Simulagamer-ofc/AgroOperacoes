@@ -257,7 +257,7 @@ function openForm({title, sub, fields, values = {}, submit = 'Salvar no disposit
     });
     if (!form.checkValidity()) { const inv = form.querySelector(':invalid'); form.reportValidity(); if (inv?.validity.customError) showToast(inv.validationMessage); return; }
     const err = onSubmit(out);
-    if (err) { showToast(err); return; }
+    if (err) { showToast(err, true); return; }
     closeModal(); render();
   };
   modal.classList.add('open');
@@ -279,7 +279,9 @@ const machineOptions = () => db.machines.filter(m => !isInactive(m)).map(m => ({
 const maquinaAusente = id => { const m = find('machines', id); return m ? `${m.name} (inativa)` : '(máquina removida)'; };
 const stockOptions = () => db.stock.map(s => ({value: s.id, label: `${s.name} — ${num(s.qty)} ${s.unit}`}));
 
+let avisoColheitaOk = '';
 function operationForm(op = {}) {
+  avisoColheitaOk = '';
   openForm({
     title: op.id ? 'Editar operação' : 'Nova operação',
     values: {date: today(), time: nowTime(), status: 'Programada', ...op},
@@ -299,6 +301,8 @@ function operationForm(op = {}) {
     onSubmit: v => {
       if (!v.fieldId && !v.place) return 'Informe o talhão ou o local da operação';
       if (!opTemArea(v)) v.area = ''; if (!OP_COM_KG.includes(v.type)) v.kg = '';
+      const lib = v.type === 'Colheita' && v.fieldId && typeof liberacaoColheita === 'function' ? liberacaoColheita(v.fieldId) : null;
+      if (lib && v.date < lib.libera && avisoColheitaOk !== v.fieldId + v.date) { avisoColheitaOk = v.fieldId + v.date; return `Atenção: ${fieldName(v.fieldId)} está na carência de ${lib.a.produto} (aplicado em ${fmtDate(lib.a.date)}); a colheita só está liberada a partir de ${fmtDate(lib.libera)}. Toque em salvar de novo para registrar mesmo assim.`; }
       upsert('operations', {...op, ...v, id: op.id || uid(), createdAt: op.createdAt || new Date().toISOString()});
       showToast('Operação salva no dispositivo');
     }
@@ -549,7 +553,8 @@ function operationRow(o, actions = true) {
   const color = STATUS_COLOR[o.status] || 'blue';
   const horas = Number(o.horas) > 0 ? `${um1(o.horas)} h${Number(o.area) > 0 && opTemArea(o) ? ` (${um1(o.area / o.horas)} ha/h)` : Number(o.kg) > 0 ? ` (${num(o.kg / o.horas)} kg/h)` : ''}` : '';
   const por = typeof quemLancou === 'function' ? quemLancou(o) : '';
-  const parts = [fmtDate(o.date) + (o.time ? ' ' + o.time : ''), machineName(o.machineId), o.area && opTemArea(o) ? `${num(o.area)} ha` : '', Number(o.kg) > 0 ? `${num(o.kg)} kg` : '', horas, o.operator, o.notes, por ? 'lançado por ' + por : ''].filter(Boolean);
+  const prev = typeof duracaoPrevista === 'function' ? duracaoPrevista(o) : null, custo = typeof custoOperacao === 'function' ? custoOperacao(o) : null;
+  const parts = [fmtDate(o.date) + (o.time ? ' ' + o.time : ''), machineName(o.machineId), o.area && opTemArea(o) ? `${num(o.area)} ha` : '', Number(o.kg) > 0 ? `${num(o.kg)} kg` : '', horas, prev ? `previsto ~${um1(prev.horas)} h` : '', custo ? `máquina ≈ R$ ${num(custo, 0)}` : '', o.operator, o.notes, por ? 'lançado por ' + por : ''].filter(Boolean);
   const acts = !actions ? chip(o.status, color) : `<div class="row-actions">${chip(o.status, color)}${o.status === 'Programada' ? mini('▶ Iniciar', 'op-start', o.id) : ''}${o.status === 'Em andamento' ? mini('✓ Concluir', 'op-done', o.id, 'ok') : ''}${mini('Editar', 'op-edit', o.id)}${mini('Excluir', 'op-del', o.id, 'del')}</div>`;
   return `<div class="row"><span class="status ${color === 'gray' ? 'green' : color}"></span><div><strong>${esc(o.type)} — ${esc(opPlace(o))}</strong><small>${esc(parts.join(' • '))}</small></div>${acts}</div>`;
 }
@@ -611,7 +616,8 @@ VIEWS.maquinas = () => {
       const textoRev = !temRev ? 'Sem revisão programada' : left <= 0 ? `! Revisão vencida há ${num(-left)} h` : `Revisão em ${num(left)} h (${num(m.nextService)} h)${pr?.data ? ` — por volta de ${fmtDate(pr.data)}` : ''}`;
       const af = db.afericoes.filter(a => a.maquina?.id === m.id).sort((a, b) => String((b.data || '') + (b.hora || '')).localeCompare((a.data || '') + (a.hora || '')))[0];
       const cfgN = m.config ? Object.keys(m.config).length : 0;
-      const extras = [cfgN ? `Configuração para aferição: ${cfgN} ${cfgN === 1 ? 'parâmetro' : 'parâmetros'}` : '', m.catalogo ? `Catálogo: ${esc(m.catalogo.marca)} ${esc(m.catalogo.nome)}` : '', af ? `Última aferição: ${fmtDate(af.data)} — ${esc({OK: 'dentro da referência', ATENCAO: 'atenção', FORA_DO_PADRAO: 'fora da referência', SEM_REFERENCIA: 'não avaliada', DADOS_INSUFICIENTES: 'dados insuficientes'}[af.resultado.status] || '')}` : '', typeof textoReaferir === 'function' ? textoReaferir(m) : ''].filter(Boolean);
+      const ch = typeof custoHoraMaquina === 'function' && (typeof nvVeFinanceiro !== 'function' || nvVeFinanceiro()) ? custoHoraMaquina(m.id) : null;
+      const extras = [ch ? `Custo: R$ ${num(ch.porHora, 2)}/h (combustível + manutenção, ${num(ch.horas)} h em 12 meses)` : '', cfgN ? `Configuração para aferição: ${cfgN} ${cfgN === 1 ? 'parâmetro' : 'parâmetros'}` : '', m.catalogo ? `Catálogo: ${esc(m.catalogo.marca)} ${esc(m.catalogo.nome)}` : '', af ? `Última aferição: ${fmtDate(af.data)} — ${esc({OK: 'dentro da referência', ATENCAO: 'atenção', FORA_DO_PADRAO: 'fora da referência', SEM_REFERENCIA: 'não avaliada', DADOS_INSUFICIENTES: 'dados insuficientes'}[af.resultado.status] || '')}` : '', typeof textoReaferir === 'function' ? textoReaferir(m) : ''].filter(Boolean);
       return `<article class="card item-card maq-card"><header><div><h4>${esc(m.name)}</h4><div class="meta">${esc([m.type, m.model].filter(Boolean).join(' • '))}</div></div>${chip(st, color)}</header>
         <div class="maq-horas"><span class="big">${num(m.hours)} h</span><small>último registro ${fmtDate(db.hourLogs.filter(h => h.machineId === m.id).sort(byDateDesc)[0]?.date)}</small></div>
         <div class="maq-rev ${corRev}"><small>${textoRev}</small>${temRev ? `<div class="progress"><span style="width:${pct}%"></span></div>` : ''}</div>
