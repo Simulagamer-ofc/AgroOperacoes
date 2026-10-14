@@ -577,3 +577,16 @@ body{background:var(--bg)}
 .hoje-jan.nao{border-left-color:var(--orange);background:color-mix(in srgb,var(--orange) 10%,transparent)}
 .hoje-clima small.nota{display:block;margin-top:8px;font-size:.74rem}
 .safra-periodo{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:12px}.safra-periodo label{display:flex;gap:6px;align-items:center;color:var(--muted)}
+/* Clima recolhido numa linha (expande como o menu) e Hoje mais enxuto */
+.hoje{grid-template-columns:1fr!important}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.hoje-clima{padding:10px 12px}
+.clima-linha{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;color:var(--text);text-align:left;cursor:pointer;padding:2px 0;font:inherit}
+.clima-ic{font-size:1.6rem;line-height:1}
+.clima-txt{flex:1;min-width:0;display:grid;gap:2px} .clima-txt strong{font-size:1rem}
+.clima-txt small{font-size:.86rem;color:var(--muted)} .clima-txt small.ok{color:var(--green)} .clima-txt small.nao{color:var(--orange)}
+.clima-seta{display:grid;place-items:center;flex:none;width:40px;height:40px;border:1px solid #29465f;background:#122a42;color:#e8f5fb;border-radius:10px;font-size:1.05rem}
+.clima-linha:hover .clima-seta{background:#173653}
+:root[data-theme="light"] .clima-seta{background:var(--panel);color:var(--text);border-color:var(--line)}
+.hoje-clima.aberto #climaCorpo{margin-top:12px}
+.hoje-vermais{margin-top:6px}
