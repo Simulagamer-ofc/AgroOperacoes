@@ -362,7 +362,7 @@ function painelHoje() {
   const temUrgente = atrasadas > 0 || al.some(a => a.color === 'red');
   return `<section class="hoje">${cartaoClima()}<article class="card panel hoje-fazer ${aberto ? 'aberto' : ''}" id="hojeFazer">
     <button type="button" class="clima-linha" data-act="hoje-expandir" aria-expanded="${aberto}" aria-controls="hojeCorpo">
-      <span class="clima-ic" aria-hidden="true">${itens.length ? (temUrgente ? '⚠️' : '📋') : '✅'}</span>
+      <span class="alert-icon ${itens.length ? (temUrgente ? 'red' : 'blue') : 'green'} hoje-ic" aria-hidden="true">${typeof iconeLinha === 'function' ? iconeLinha(itens.length ? (temUrgente ? 'alerta' : 'lista') : 'check', 20) : ''}</span>
       <span class="clima-txt"><strong>Hoje <small class="hoje-data">${esc(data)}</small></strong><small class="${temUrgente ? 'nao' : 'ok'}">${itens.length ? `${itens.length} ${itens.length === 1 ? 'pendência' : 'pendências'}${partes.length ? ' • ' + esc(partes.join(' • ')) : ''}${!aberto && nomeUrg ? ` — ${esc(nomeUrg)}` : ''}` : 'Tudo em dia'}</small></span>
       <span class="clima-seta" aria-hidden="true">${aberto ? '▴' : '▾'}</span><span class="sr-only">${aberto ? 'Recolher' : 'Ver'} as pendências de hoje</span></button>
     ${aberto ? `<div id="hojeCorpo"><div class="btn-row hoje-botoes">${btn('Resumo da semana', 'resumo-semana', '', 'secondary')}${btn('+ Operação', 'op-new', '', 'secondary')}</div>

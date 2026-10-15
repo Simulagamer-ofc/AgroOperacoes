@@ -638,3 +638,46 @@ td.cmp-bom{color:var(--green);font-weight:700} td.cmp-ruim{color:var(--orange);f
 .hoje-botoes{margin:10px 0 4px;justify-content:flex-end}
 .nx-graf-tit{margin-top:18px}
 .app.nx-home .topbar{flex-wrap:nowrap}.app.nx-home .topbar .search{flex:1;min-width:0;max-width:460px}
+/* ===== Padrão visual (0.35) ===== */
+/* Ícones de linha */
+.ic-linha{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.alert-icon{color:#fff}.alert-icon .ic-linha{width:18px;height:18px}
+.nx-acoes button{display:inline-flex;align-items:center;gap:8px}
+/* Três tipos de botão: principal (verde cheio), secundário (borda), texto (link). Botões de ação nas listas = secundário compacto */
+.content button.primary,.dialog button.primary{min-height:40px;border-radius:10px;font-weight:700}
+.content button.secondary,.dialog button.secondary{min-height:40px;border-radius:10px;font-weight:600;background:transparent;border:1px solid var(--line);color:var(--text)}
+.content button.secondary:hover{border-color:var(--blue)}
+.hoje-item>button,.row-actions button,.content .btn-row>button:not([class]),.alert>button:not([class]){min-height:36px;border:1px solid var(--line);background:transparent;color:var(--text);border-radius:9px;padding:6px 12px;font-size:.84rem;font-weight:600;cursor:pointer;white-space:nowrap}
+.hoje-item>button:hover,.row-actions button:hover{border-color:var(--blue)}
+.hoje-item>button.ok,.row-actions button.ok{border-color:var(--green);color:var(--green)}
+.hoje-item>button.del,.row-actions button.del{color:var(--red)}
+button.link{font-weight:600}
+/* Cores com significado: seleção (filtro, período) em cor neutra; verde fica para “ok / liberado” */
+.nx-periods button[aria-pressed="true"]{color:#fff;background:var(--navy2);border-color:var(--navy2)}
+:root[data-theme="light"] .nx-periods button[aria-pressed="true"]{color:#fff;background:#102b49;border-color:#102b49}
+/* Títulos em escala: página 1.5rem · seção 1.05rem · cartão .95rem */
+.nx-dashboard-head h2{font-size:1.5rem;font-weight:750}
+.section-title h3,.nx-graf-tit h3{font-size:1.05rem}
+@media(max-width:760px){.nx-dashboard-head h2{font-size:1.2rem}}
+/* Números: dígitos de mesma largura, alinhados */
+.kpi .value,.nx-kpi b,.tbl td.num,.tbl th.num,.num,.clima-max,.clima-min,.clima-t{font-variant-numeric:tabular-nums}
+/* Menu lateral: grupos que abrem e fecham, nomes inteiros (sem “…”) */
+.sidebar .nav .nav-grupo:not(.nav-fav-tit){cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-radius:6px;user-select:none}
+.sidebar .nav .nav-grupo:not(.nav-fav-tit)::after{content:'▾';font-size:.8rem;opacity:.7;transition:transform .15s}
+.sidebar .nav .nav-grupo.fechado::after{transform:rotate(-90deg)}
+.sidebar .nav .nav-grupo:not(.nav-fav-tit):hover{color:var(--text)}
+.sidebar .nav button.nav-oculto{display:none!important}
+.sidebar .nav .nav-txt{white-space:normal!important;line-height:1.2;text-overflow:clip!important}
+.sidebar .nav-fav-tit{color:var(--destaque,#65e6a8)!important}
+/* Toque: alvos de pelo menos 44–48 px em telas de toque */
+@media(pointer:coarse){
+  .content button,.dialog button,.mobile-nav button{min-height:44px}
+  .hoje-item>button,.row-actions button{min-height:44px;padding:8px 14px}
+  .field input,.field select{min-height:46px;font-size:16px}
+  .sidebar .nav button{min-height:48px}
+}
+/* Telas vazias com próxima ação em destaque */
+.empty{display:grid;gap:6px;justify-items:center;text-align:center;padding:28px 16px;color:var(--muted)}
+.empty strong{color:var(--text);font-size:1rem}
+.empty>div{margin-top:8px}
+.hoje-ic{width:40px;height:40px;border-radius:11px}.hoje-ic .ic-linha{width:20px;height:20px}
