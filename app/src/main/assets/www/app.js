@@ -142,17 +142,25 @@ function showToast(message, erro = false) {
   toastEl.textContent = message; toastEl.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('show'), erro ? 4500 : 2800);
 }
 save(); // grava migrações do banco (agora o aviso de armazenamento cheio já pode ser exibido)
-const savedTheme = safeStorage.get('agro-theme'); if (savedTheme) root.dataset.theme = savedTheme;
-// Botão de tema só com o ícone: lua passa para o noturno, sol passa para o claro
+// Temas: Noturno, Claro, Campo (claro de alto contraste, para ler no sol) e Automático (Campo de dia, Noturno à noite)
+const TEMAS = [['dark', 'Noturno'], ['light', 'Claro'], ['campo', 'Campo — alto contraste para sol forte'], ['auto', 'Automático — Campo de dia, Noturno à noite']];
+let temaEscolhido = TEMAS.some(([t]) => t === safeStorage.get('agro-theme')) ? safeStorage.get('agro-theme') : 'dark';
+const temaAtual = () => temaEscolhido === 'auto' ? (new Date().getHours() >= 6 && new Date().getHours() < 18 ? 'campo' : 'dark') : temaEscolhido;
 const ICONE_SOL = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M5.3 18.7l1.5-1.5M17.2 6.8l1.5-1.5"/></svg>';
 const ICONE_LUA = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>';
+const ICONE_CAMPO = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="5.2" style="fill:currentColor"/><path d="M12 1.8v3M12 19.2v3M1.8 12h3M19.2 12h3M4.8 4.8l2.1 2.1M17.1 17.1l2.1 2.1M4.8 19.2l2.1-2.1M17.1 6.9l2.1-2.1" style="stroke-width:2.4"/></svg>';
+const ICONE_AUTO = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18z" style="fill:currentColor"/><circle cx="12" cy="12" r="9"/></svg>';
 function iconeTema() {
-  const escuro = (root.dataset.theme || 'dark') === 'dark', b = $('#themeBtn');
-  b.innerHTML = escuro ? ICONE_SOL : ICONE_LUA;
-  b.title = escuro ? 'Mudar para o tema claro' : 'Mudar para o tema noturno'; b.setAttribute('aria-label', b.title);
+  const b = $('#themeBtn'), nome = TEMAS.find(([t]) => t === temaEscolhido)[1];
+  b.innerHTML = {dark: ICONE_LUA, light: ICONE_SOL, campo: ICONE_CAMPO, auto: ICONE_AUTO}[temaEscolhido];
+  b.title = `Tema: ${nome}. Toque para trocar.`; b.setAttribute('aria-label', b.title);
 }
-$('#themeBtn').onclick = () => { const next = (root.dataset.theme || 'dark') === 'dark' ? 'light' : 'dark'; root.dataset.theme = next; safeStorage.set('agro-theme', next); iconeTema(); };
-iconeTema();
+function aplicarTema() { const t = temaAtual(); root.dataset.theme = t === 'campo' ? 'light' : t; root.classList.toggle('modo-campo', t === 'campo'); iconeTema(); }
+$('#themeBtn').onclick = () => {
+  const i = TEMAS.findIndex(([t]) => t === temaEscolhido); temaEscolhido = TEMAS[(i + 1) % TEMAS.length][0];
+  safeStorage.set('agro-theme', temaEscolhido); aplicarTema(); showToast('Tema: ' + TEMAS.find(([t]) => t === temaEscolhido)[1]);
+};
+aplicarTema(); setInterval(() => { if (temaEscolhido === 'auto') aplicarTema(); }, 600000);
 const closeMenu = () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); marcarTrilho(); };
 const openMenu = () => { sidebar.classList.add('open'); overlay.classList.add('show'); marcarTrilho(); };
 // Menu lateral recolhível: no computador e tablet deitado vira uma faixa estreita (escolha guardada);

@@ -681,3 +681,40 @@ button.link{font-weight:600}
 .empty strong{color:var(--text);font-size:1rem}
 .empty>div{margin-top:8px}
 .hoje-ic{width:40px;height:40px;border-radius:11px}.hoje-ic .ic-linha{width:20px;height:20px}
+/* Modo campo: claro de alto contraste, letras maiores, para ler sob sol forte */
+:root.modo-campo{--bg:#ffffff;--panel:#ffffff;--text:#000000;--muted:#2b3440;--line:#7d8794;--green:#0a7a3e;--blue:#0b57b0;--orange:#a85400;--red:#b3261e;--destaque:#0a7a3e;--marca:#0a7a3e;--shadow:none}
+:root.modo-campo body{background:#fff;color:#000;font-size:17px}
+:root.modo-campo .card,:root.modo-campo .kpi,:root.modo-campo .hoje-item,:root.modo-campo .clima-dia{border-width:2px;border-color:#7d8794}
+:root.modo-campo .sidebar{background:#f1f4f7;color:#000}
+:root.modo-campo .sidebar .nav button{color:#000}
+:root.modo-campo .sidebar .nav button.active{background:#dfe8f1;color:#000;box-shadow:inset 4px 0 #0a7a3e}
+:root.modo-campo .nav-grupo{color:#2b3440!important}
+:root.modo-campo .topbar,:root.modo-campo .mobile-nav{background:#fff;border-color:#7d8794}
+:root.modo-campo small,:root.modo-campo .muted,:root.modo-campo .nota{color:#2b3440}
+:root.modo-campo .clima-t,:root.modo-campo .clima-max{color:#a85400}
+:root.modo-campo .clima-seta{background:#fff;color:#000;border:2px solid #7d8794}
+:root.modo-campo button.primary{background:#0a7a3e;color:#fff}
+/* Botão + flutuante (só celular) */
+.fab{display:none}
+@media(max-width:760px){
+  .fab{display:grid;place-items:center;position:fixed;right:16px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:9;width:58px;height:58px;border-radius:50%;border:0;background:var(--green);color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+  .fab[aria-expanded="true"] .ic-linha{transform:rotate(45deg)} .fab .ic-linha{transition:transform .15s;stroke-width:2.4}
+  .modal.open~.fab,body:has(.modal.open) .fab{display:none}
+}
+.fab-camada{position:fixed;inset:0;z-index:15;background:rgba(2,10,20,.55);display:flex;align-items:flex-end}
+.fab-folha{width:100%;background:var(--panel);border-radius:18px 18px 0 0;padding:16px 16px calc(84px + env(safe-area-inset-bottom));box-shadow:0 -10px 30px rgba(0,0,0,.3)}
+.fab-tit{font-weight:700;margin:0 4px 12px;color:var(--muted);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
+.fab-grade{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.fab-op{display:grid;justify-items:center;gap:6px;background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:14px;padding:12px 4px;min-height:84px;font-size:.78rem;font-weight:600;text-align:center}
+.fab-op .ic-linha{color:var(--green)}
+/* Sincronização no topo: verde ok, laranja na fila/sem internet, vermelho erro */
+.offline.sync-ok{color:var(--green)} .offline.sync-aviso{color:var(--orange)} .offline.sync-erro{color:var(--red)} .offline.sync-sync{color:var(--blue)}
+.offline.sync-sync .dot{animation:pulsar 1s infinite alternate} @keyframes pulsar{from{opacity:.3}to{opacity:1}}
+@media(max-width:760px){
+  .topbar .offline{display:flex!important;font-size:.74rem;white-space:nowrap}
+  .topbar .offline #netStatus{font-size:0} .topbar .offline #netStatus::after{content:attr(data-curto);font-size:.74rem}
+}
+@media(max-width:760px){
+  .topbar .offline{flex:none;gap:5px}
+  .topbar .install-btn.show{font-size:0;padding:8px 10px;white-space:nowrap} .topbar .install-btn.show::after{content:'⬇ Instalar';font-size:.8rem}
+}

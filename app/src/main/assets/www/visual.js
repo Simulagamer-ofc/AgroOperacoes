@@ -85,7 +85,52 @@ render = function (...a) {
   const r = renderSemVisual.apply(this, a);
   const rota = typeof parseRoute === 'function' ? parseRoute().name : '';
   if (rota !== rotaAnterior) { registrarUso(rota); rotaAnterior = rota; }
-  trocarGlifos(document); atualizarMenu();
+  trocarGlifos(document); atualizarMenu(); mostrarSync();
   return r;
 };
 addEventListener('DOMContentLoaded', () => { trocarGlifos(document); atualizarMenu(); });
+
+// ---------- Botão “+” flutuante (celular): registrar em dois toques ----------
+const ATALHOS_REGISTRO = [
+  ['op-new', 'operacoes', 'Operação', 'operacoes'], ['ch-new', 'chuva', 'Chuva', 'chuva'], ['cb-new', 'combustivel', 'Abastecimento', 'combustivel'],
+  ['mip-new', 'pragas', 'Monitorar praga', 'pragas'], ['ap-new', 'aplicacoes', 'Aplicação', 'aplicacoes'], ['hour-new', 'horimetro', 'Horímetro', 'maquinas'],
+  ['mt-new', 'engrenagem', 'Manutenção', 'maquinas'], ['mov-new', 'estoque', 'Movimentar estoque', 'estoque']];
+function abrirAtalhos() {
+  fecharAtalhos();
+  const pode = r => typeof nvPodeRota !== 'function' || nvPodeRota(r);
+  const itens = ATALHOS_REGISTRO.filter(([act, , , r]) => ACTIONS[act] && pode(r));
+  const camada = Object.assign(document.createElement('div'), {className: 'fab-camada', id: 'fabCamada'});
+  camada.innerHTML = `<div class="fab-folha" role="dialog" aria-label="Registrar"><div class="fab-tit">Registrar</div><div class="fab-grade">${itens.map(([act, ic, nome]) => `<button type="button" data-act="${act}" class="fab-op">${iconeLinha(ic, 24)}<span>${esc(nome)}</span></button>`).join('')}</div></div>`;
+  camada.addEventListener('click', e => { if (e.target === camada || e.target.closest('[data-act]')) setTimeout(fecharAtalhos, 0); });
+  document.body.append(camada); document.getElementById('fabBtn')?.setAttribute('aria-expanded', 'true');
+}
+function fecharAtalhos() { document.getElementById('fabCamada')?.remove(); document.getElementById('fabBtn')?.setAttribute('aria-expanded', 'false'); }
+addEventListener('DOMContentLoaded', () => {
+  const b = Object.assign(document.createElement('button'), {id: 'fabBtn', className: 'fab', type: 'button', title: 'Registrar', innerHTML: iconeLinha('mais', 28)});
+  b.setAttribute('aria-label', 'Registrar'); b.setAttribute('aria-expanded', 'false');
+  b.addEventListener('click', () => document.getElementById('fabCamada') ? fecharAtalhos() : abrirAtalhos());
+  document.body.append(b);
+});
+addEventListener('keydown', e => { if (e.key === 'Escape') fecharAtalhos(); });
+
+// ---------- Situação da sincronização sempre à vista no topo ----------
+function textoSync() {
+  const ligado = typeof nvVinculado === 'function' && nvVinculado();
+  if (!ligado) return {cls: navigator.onLine === false ? 'aviso' : 'ok', curto: navigator.onLine === false ? 'Offline' : '', longo: navigator.onLine === false ? 'Modo offline ativo' : 'Disponível offline'};
+  const pend = typeof nvPendentes === 'function' ? nvPendentes().length : 0, pendTxt = pend ? `${pend} aguardando envio` : '';
+  if (typeof nvStatus !== 'undefined' && nvStatus === 'sincronizando') return {cls: 'sync', curto: 'Enviando…', longo: 'Sincronizando…'};
+  if (navigator.onLine === false || nvStatus === 'offline') return {cls: 'aviso', curto: pend ? `${pend} na fila` : 'Sem internet', longo: `Sem internet${pend ? ' • ' + pendTxt : ' • tudo enviado'}`};
+  if (nvStatus === 'erro') return {cls: 'erro', curto: 'Erro', longo: 'Erro ao sincronizar' + (pendTxt ? ' • ' + pendTxt : '')};
+  if (pend) return {cls: 'aviso', curto: `${pend} na fila`, longo: pendTxt};
+  const min = nv.ultima ? Math.max(0, Math.round((Date.now() - new Date(nv.ultima)) / 60000)) : null;
+  const quando = min == null ? 'ainda não sincronizado' : min < 1 ? 'agora' : min < 60 ? `há ${min} min` : min < 1440 ? `há ${Math.round(min / 60)} h` : `há ${Math.round(min / 1440)} d`;
+  return {cls: 'ok', curto: min == null ? '—' : quando, longo: `Sincronizado ${quando}`};
+}
+function mostrarSync() {
+  const el = document.getElementById('netStatus'), box = el?.closest('.offline'); if (!el) return;
+  const t = textoSync(); el.textContent = t.longo; el.dataset.curto = t.curto;
+  box.className = 'offline sync-' + t.cls; box.title = t.longo;
+}
+if (typeof nvMostrar === 'function') { const nvMostrarBase = nvMostrar; nvMostrar = function (...a) { const r = nvMostrarBase.apply(this, a); mostrarSync(); return r; }; }
+if (typeof setNetwork === 'function') addEventListener('online', () => setTimeout(mostrarSync, 50)), addEventListener('offline', () => setTimeout(mostrarSync, 50));
+setInterval(mostrarSync, 20000); addEventListener('DOMContentLoaded', () => setTimeout(mostrarSync, 300));
