@@ -654,7 +654,7 @@ VIEWS.talhoes = () => {
     (fs.length ? `<section class="cards">${fs.map(f => {
       const ops = db.operations.filter(o => o.fieldId === f.id).sort(byDateDesc);
       const lots = db.lots.filter(l => l.fieldId === f.id);
-      return `<article class="card item-card"><header><div><h4>${esc(f.name)}</h4><div class="meta">${esc([f.crop, f.cultivar, f.season].filter(Boolean).join(' • ') || 'Sem cultura informada')}</div></div>${chip(num(f.area) + ' ha', 'green')}</header>
+      return `<article class="card item-card"><header><div><h4>${esc(f.name)}</h4><div class="meta">${esc([f.crop, f.cultivar, f.season].filter(Boolean).join(' • ') || 'Sem cultura informada')}</div></div><div class="row-actions">${typeof chipSituacao === 'function' ? chipSituacao(f) : ''}${chip(num(f.area) + ' ha', 'gray')}</div></header>
         <div class="meta"><span>Plantio: ${fmtDate(f.plantingDate)}${typeof infoCiclo === 'function' ? infoCiclo(f) : ''}</span><span>Operações: ${ops.length}${ops[0] ? ` • última: ${esc(ops[0].type)} em ${fmtDate(ops[0].date)}` : ''}</span><span>Lotes de semente: ${esc(lots.map(l => l.code).join(', ') || '—')}</span></div>
         <div class="row-actions" style="justify-content:flex-start">${mini('+ Operação', 'op-field', f.id)}${mini('Histórico', 'fd-hist', f.id)}${mini('Editar', 'fd-edit', f.id)}${mini('Excluir', 'fd-del', f.id, 'del')}</div></article>`;
     }).join('')}</section>` : `<section class="card">${empty('Nenhum talhão cadastrado', 'Cadastre os talhões para vincular operações, consumo de insumos e lotes de sementes.', {act: 'fd-new', label: '+ Novo talhão'})}</section>`);
@@ -753,7 +753,7 @@ VIEWS.cadastros = () => {
   return head('Cadastros e backup', 'Dados da propriedade e cópia de segurança dos registros deste dispositivo.') +
     `<section class="settings">
       <article class="card panel"><h3>Propriedade</h3><p>Nome exibido no aplicativo e nos arquivos exportados.</p>
-        <form id="settingsForm"><div class="form"><div class="field full"><label for="s_farm">Fazenda / unidade</label><input id="s_farm" value="${esc(db.settings.farm)}" placeholder="Ex.: Fazenda Boa Vista"></div><div class="field full"><label for="s_owner">Responsável</label><input id="s_owner" value="${esc(db.settings.owner)}" placeholder="Nome do responsável"></div></div><div class="actions"><button class="primary" type="submit">Salvar</button></div></form>
+        <form id="settingsForm"><div class="form"><div class="field full"><label for="s_farm">Fazenda / unidade</label><input id="s_farm" value="${esc(db.settings.farm)}" placeholder="Ex.: Fazenda Boa Vista"></div><div class="field full"><label for="s_owner">Responsável</label><input id="s_owner" value="${esc(db.settings.owner)}" placeholder="Nome do responsável"></div><div class="field"><label for="s_rt">Responsável técnico (agrônomo)</label><input id="s_rt" value="${esc(db.settings.respTecnico || '')}" placeholder="Sai nos relatórios impressos"></div><div class="field"><label for="s_rtreg">CREA / CFTA</label><input id="s_rtreg" value="${esc(db.settings.respRegistro || '')}" placeholder="Ex.: CREA-MG 123456/D"></div></div><div class="actions"><button class="primary" type="submit">Salvar</button></div></form>
       </article>
       <article class="card panel"><h3>Registros no dispositivo</h3><table class="tbl"><tbody>${counts.map(([l, c]) => `<tr><td>${l}</td><td class="num">${db[c].length}</td></tr>`).join('')}</tbody></table></article>
       <article class="card panel"><h3>Backup</h3><p>Os dados ficam somente neste aparelho. Exporte um backup regularmente e guarde em local seguro (Drive, e-mail, computador).</p>
@@ -764,7 +764,7 @@ VIEWS.cadastros = () => {
     </section>`;
 };
 VIEWS.cadastros.after = () => {
-  $('#settingsForm').onsubmit = e => { e.preventDefault(); db.settings.farm = $('#s_farm').value.trim(); db.settings.owner = $('#s_owner').value.trim(); save(); applySettings(); showToast('Dados da propriedade salvos'); };
+  $('#settingsForm').onsubmit = e => { e.preventDefault(); db.settings.farm = $('#s_farm').value.trim(); db.settings.owner = $('#s_owner').value.trim(); db.settings.respTecnico = $('#s_rt').value.trim(); db.settings.respRegistro = $('#s_rtreg').value.trim(); save(); applySettings(); showToast('Dados da propriedade salvos'); };
   $('#restoreInput').onchange = e => { const file = e.target.files[0]; if (file) file.text().then(restoreBackup).catch(() => showToast('Não foi possível ler o arquivo')); e.target.value = ''; };
 };
 
