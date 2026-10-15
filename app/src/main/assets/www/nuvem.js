@@ -324,7 +324,7 @@ addEventListener('DOMContentLoaded', () => nvAgendar(1500));
 const NV_TELAS = [
   ['operacoes', 'Operações do dia'], ['talhoes', 'Talhões'], ['chuva', 'Chuvas'], ['pragas', 'Pragas e doenças (MIP)'],
   ['aplicacoes', 'Aplicações e carência'], ['maodeobra', 'Mão de obra'], ['maquinas', 'Máquinas e manutenção'], ['combustivel', 'Combustível'],
-  ['afericao', 'Aferição e calibragem'], ['catalogo', 'Catálogo de máquinas'], ['pontas', 'Catálogo de pontas'], ['secagem', 'Secador e moega'],
+  ['afericao', 'Aferição e calibragem'], ['catalogo', 'Catálogo de máquinas'], ['pontas', 'Catálogo de pontas'], ['secagem', 'Moega, secador e silos'],
   ['sementes', 'Sementes, lotes e beneficiamento'], ['estoque', 'Estoque e insumos'], ['financeiro', 'Financeiro (gastos, contas, LCDPR)'],
   ['producao', 'Produção e margem'], ['relatorios', 'Relatórios']];
 const NV_TODAS_TELAS = NV_TELAS.map(([k]) => k);

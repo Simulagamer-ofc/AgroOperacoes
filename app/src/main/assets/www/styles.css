@@ -764,3 +764,16 @@ button.link{font-weight:600}
 }
 .tl-rot{font-size:16px!important} .tl-faixa{font-size:17px!important}
 .topbar .offline,.topbar .install-btn{white-space:nowrap}
+/* ===== Grãos: moega, secador e silos ===== */
+.graos-abas{margin:4px 0 14px}
+.graos-kpis{margin-bottom:6px}
+.lote-card{margin-bottom:12px;cursor:pointer} .lote-card:hover{border-color:var(--blue)}
+.lote-topo{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.lote-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.lote-nums span{display:grid;gap:2px} .lote-nums small{color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700} .lote-nums b{font-size:1rem;font-variant-numeric:tabular-nums}
+.silos-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.silo-barra{height:12px;border-radius:8px;background:var(--bg);border:1px solid var(--line);overflow:hidden;margin:2px 0 10px} .silo-barra span{display:block;height:100%;background:var(--green)} .silo-barra span.cheio{background:var(--orange)}
+.massa-svg{width:100%;height:auto} .massa-linha{fill:none;stroke:var(--blue);stroke-width:2.5} .massa-pt{fill:var(--blue)} .massa-fora{fill:var(--red)}
+.massa-lim{stroke:var(--red);stroke-dasharray:6 5;stroke-width:1.5} .massa-rot{fill:var(--muted);font-size:12px}
+tr.clickable{cursor:pointer} tr.clickable:hover td{background:rgba(23,135,212,.06)}
+.tbl-moega td{white-space:nowrap} .tbl-moega td:nth-child(2){white-space:normal;min-width:150px}
