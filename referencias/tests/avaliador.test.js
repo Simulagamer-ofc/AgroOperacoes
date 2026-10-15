@@ -243,8 +243,10 @@ test('limite da massa de grãos nunca é aplicado ao ar de entrada', () => {
   assert.equal(massa.status, STATUS.FORA_DO_PADRAO); assert.equal(massa.leituras[0].avaliacao.regraId, 'SEC-SOJA-SEM-MASSA-01');
   assert.equal(sec({equipamentoFamilia: 'secador', produto: 'soja', destino: 'semente', etapa: 'secagem', leituras: [L('massa_graos', 'temperatura', 40)]}).status, STATUS.OK);
   assert.equal(sec({equipamentoFamilia: 'secador', produto: 'soja', destino: 'semente', etapa: 'secagem', leituras: [L('ar_entrada', 'temperatura', 41)]}).status, STATUS.SEM_REFERENCIA);
-  // agroindústria tem outro limite (48 °C)
-  assert.equal(sec({equipamentoFamilia: 'secador', produto: 'soja', destino: 'agroindustria', etapa: 'secagem', leituras: [L('massa_graos', 'temperatura', 45)]}).status, STATUS.OK);
+  // grão (todos os destinos de grão): massa até 40 °C — Embrapa Soja, Circ. Téc. 224 (2026); a regra antiga de 48 °C (2005) foi suspensa
+  const g = (destino, t) => sec({equipamentoFamilia: 'secador', produto: 'soja', destino, etapa: 'secagem', leituras: [L('massa_graos', 'temperatura', t)]});
+  assert.equal(g('agroindustria', 45).status, STATUS.FORA_DO_PADRAO); assert.equal(g('agroindustria', 45).leituras[0].avaliacao.regraId, 'SEC-SOJA-GRAO-MASSA-01');
+  assert.equal(g('comercializacao', 40).status, STATUS.OK); assert.equal(g('armazenamento_graos', 40.5).status, STATUS.FORA_DO_PADRAO);
 });
 
 test('regra substituída (38 °C, 2005) não gera conflito nem conclusão', () => {
@@ -261,12 +263,16 @@ test('milho: limite do ar de secagem depende do destino', () => {
 
 test('umidade: limite exclusivo "abaixo de 14%" e destino/etapa obrigatórios', () => {
   const u = (o) => sec({equipamentoFamilia: 'secador', produto: 'soja', etapa: 'pos_secagem', ...o, leituras: [L('amostra', 'umidade_graos', o.v)]});
-  assert.equal(u({destino: 'agroindustria', v: 14}).status, STATUS.FORA_DO_PADRAO);
-  assert.equal(u({destino: 'agroindustria', v: 13.9}).status, STATUS.OK);
-  assert.equal(u({destino: 'comercializacao', v: 13}).status, STATUS.SEM_REFERENCIA); // norma do MAPA só no recebimento
+  // soja em grão: teor final entre 12% e 13% (Embrapa Soja, Circ. Téc. 224, 2026) — acima de 13% fora; abaixo de 12% atenção (supersecagem)
+  assert.equal(u({destino: 'agroindustria', v: 13.1}).status, STATUS.FORA_DO_PADRAO);
+  assert.equal(u({destino: 'comercializacao', v: 13}).status, STATUS.OK);
+  assert.equal(u({destino: 'armazenamento_graos', v: 12.5}).leituras[0].avaliacao.regraId, 'ARM-SOJA-GRAO-UMID-01');
+  assert.equal(u({destino: 'armazenamento_graos', v: 11.5}).status, STATUS.ATENCAO);
   assert.equal(u({destino: undefined, v: 13}).status, STATUS.DADOS_INSUFICIENTES);
   const moega = sec({equipamentoFamilia: 'moega', produto: 'soja', destino: 'agroindustria', etapa: 'recebimento', leituras: [L('amostra', 'umidade_graos', 18)]});
-  assert.equal(moega.status, STATUS.FORA_DO_PADRAO); assert.equal(moega.leituras[0].avaliacao.regraId, 'COM-SOJA-UMID-01'); // IN 11, Art. 4º, § 4º
+  // grão úmido na moega é o esperado na colheita: atenção (encaminhar ao secador), não alerta vermelho
+  assert.equal(moega.status, STATUS.ATENCAO); assert.equal(moega.leituras[0].avaliacao.regraId, 'COM-SOJA-UMID-01'); // IN 11, Art. 4º, § 4º
+  assert.match(moega.leituras[0].avaliacao.acaoRecomendada, /secador/);
 });
 
 test('semente armazenada: umidade por região e embalagem', () => {
@@ -344,8 +350,8 @@ test('moega: classificação integrada à leitura; umidade de comercialização 
   const r = m({produto: 'soja', destino: 'armazenamento_graos', leituras: [L('amostra', 'umidade_graos', 15)],
     classificacao: {grupo: 'II', valores: {avariados_total: 3, ardidos_queimados: 1, queimados: 0.1, mofados: 0.5, esverdeados: 2, quebrados: 10, impurezas: 0.5}}});
   assert.equal(r.classificacao.enquadramento, 'Padrão Básico');
-  assert.equal(r.leituras[0].avaliacao.regraId, 'COM-SOJA-UMID-01'); assert.equal(r.leituras[0].avaliacao.status, STATUS.FORA_DO_PADRAO);
-  assert.equal(r.status, STATUS.FORA_DO_PADRAO);
+  assert.equal(r.leituras[0].avaliacao.regraId, 'COM-SOJA-UMID-01'); assert.equal(r.leituras[0].avaliacao.status, STATUS.ATENCAO);
+  assert.equal(r.status, STATUS.ATENCAO);
   const so = m({produto: 'milho', destino: 'comercializacao', leituras: [], classificacao: {valores: {avariados_total: 5, ardidos: 0.8, quebrados: 2.5, impurezas: 0.9, carunchados: 1.5}}});
   assert.equal(so.status, STATUS.OK); assert.ok(!so.pendencias.includes('Nenhuma leitura informada.'));
   assert.equal(m({produto: 'milho', destino: 'comercializacao', leituras: [L('amostra', 'umidade_graos', 14)]}).status, STATUS.OK); // "até 14,0%"

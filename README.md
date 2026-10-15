@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.35.1-beta1` — **secador e moega revisados** (banco de referências 1.6.0): soja em grão passa a ter referência de secagem e armazenagem da Embrapa Soja, Circular Técnica 224 (2026) — massa de grãos até 40 °C e teor de água final entre 12% e 13% (acima de 13% fora; abaixo de 12% atenção por supersecagem); as regras antigas de 2005 (48 °C e 14% para agroindústria) foram suspensas; na moega, umidade acima de 14% virou **atenção** (encaminhar ao secador e aplicar desconto), não alerta vermelho a cada carga.
+
 `0.35.0-beta1` — **visual profissional e funcional**:
 - Padrão: um só estilo de ícone (linha) no lugar dos símbolos; três tipos de botão; cores com significado (verde ok, laranja atenção, vermelho urgente, azul informação; seleção em cor neutra); títulos em escala; números alinhados; gráfico mensal sem meses vazios no começo; telas vazias com a próxima ação.
 - Menu lateral: grupos que abrem e fecham (o da tela aberta fica aberto), nomes inteiros e **Mais usados** (aprende com o uso).
