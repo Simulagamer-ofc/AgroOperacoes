@@ -49,12 +49,12 @@ test('painel: nenhuma máquina ou dados fictícios em banco vazio; período inv�
   assert.doesNotMatch(html, /NaN|Infinity|Diesel|Semente de soja|18\.450/);
 });
 
-test('painel: custos mensais preservam meses sem gasto, virada do ano e mês parcial', () => {
+test('painel: custos mensais escondem meses vazios do começo (mínimo 3), virada do ano e mês parcial', () => {
   const {run} = painel({expenses: [{date:'2025-12-25', value:2500}, {date:'2026-01-03', value:200}, {date:'2026-01-25', value:999}]}, '30', '2026-01-10');
   const html = run('custosMes()');
   assert.match(html, /dez\/2025: R\$ 2\.500/);
   assert.match(html, /jan\/2026: R\$ 200, mês em andamento/);
-  assert.match(html, /ago\/2025: R\$ 0/);
+  assert.doesNotMatch(html, /ago\/2025/); assert.match(html, /nov\/2025: R\$ 0/, 'mostra ao menos 3 meses'); assert.match(html, /Últimos 3 meses/);
   assert.match(html, /até 10\/01\/2026/);
   assert.doesNotMatch(html, /R\$ 999/);
 });
@@ -82,4 +82,10 @@ test('painel: texto cadastrado é escapado nos rótulos e a área informa passag
   const html = run('painelNexus()'); assert.doesNotMatch(html, /<img|<script>/);
   assert.match(html, /&lt;script&gt;/);
   assert.match(run("graficoArea('2026-10-01','2026-10-10')"), /inclui passagens no mesmo talhão/);
+});
+
+test('painel: mês sem gasto no meio do período continua aparecendo', () => {
+  const {run} = painel({expenses: [{date:'2025-08-10', value:100}, {date:'2025-12-25', value:2500}]}, '30', '2026-01-10');
+  const html = run('custosMes()');
+  assert.match(html, /ago\/2025: R\$ 100/); assert.match(html, /out\/2025: R\$ 0/); assert.match(html, /Últimos 6 meses/);
 });

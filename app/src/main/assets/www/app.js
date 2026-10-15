@@ -142,17 +142,25 @@ function showToast(message, erro = false) {
   toastEl.textContent = message; toastEl.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('show'), erro ? 4500 : 2800);
 }
 save(); // grava migrações do banco (agora o aviso de armazenamento cheio já pode ser exibido)
-const savedTheme = safeStorage.get('agro-theme'); if (savedTheme) root.dataset.theme = savedTheme;
-// Botão de tema só com o ícone: lua passa para o noturno, sol passa para o claro
+// Temas: Noturno, Claro, Campo (claro de alto contraste, para ler no sol) e Automático (Campo de dia, Noturno à noite)
+const TEMAS = [['dark', 'Noturno'], ['light', 'Claro'], ['campo', 'Campo — alto contraste para sol forte'], ['auto', 'Automático — Campo de dia, Noturno à noite']];
+let temaEscolhido = TEMAS.some(([t]) => t === safeStorage.get('agro-theme')) ? safeStorage.get('agro-theme') : 'dark';
+const temaAtual = () => temaEscolhido === 'auto' ? (new Date().getHours() >= 6 && new Date().getHours() < 18 ? 'campo' : 'dark') : temaEscolhido;
 const ICONE_SOL = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M5.3 18.7l1.5-1.5M17.2 6.8l1.5-1.5"/></svg>';
 const ICONE_LUA = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>';
+const ICONE_CAMPO = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="5.2" style="fill:currentColor"/><path d="M12 1.8v3M12 19.2v3M1.8 12h3M19.2 12h3M4.8 4.8l2.1 2.1M17.1 17.1l2.1 2.1M4.8 19.2l2.1-2.1M17.1 6.9l2.1-2.1" style="stroke-width:2.4"/></svg>';
+const ICONE_AUTO = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18z" style="fill:currentColor"/><circle cx="12" cy="12" r="9"/></svg>';
 function iconeTema() {
-  const escuro = (root.dataset.theme || 'dark') === 'dark', b = $('#themeBtn');
-  b.innerHTML = escuro ? ICONE_SOL : ICONE_LUA;
-  b.title = escuro ? 'Mudar para o tema claro' : 'Mudar para o tema noturno'; b.setAttribute('aria-label', b.title);
+  const b = $('#themeBtn'), nome = TEMAS.find(([t]) => t === temaEscolhido)[1];
+  b.innerHTML = {dark: ICONE_LUA, light: ICONE_SOL, campo: ICONE_CAMPO, auto: ICONE_AUTO}[temaEscolhido];
+  b.title = `Tema: ${nome}. Toque para trocar.`; b.setAttribute('aria-label', b.title);
 }
-$('#themeBtn').onclick = () => { const next = (root.dataset.theme || 'dark') === 'dark' ? 'light' : 'dark'; root.dataset.theme = next; safeStorage.set('agro-theme', next); iconeTema(); };
-iconeTema();
+function aplicarTema() { const t = temaAtual(); root.dataset.theme = t === 'campo' ? 'light' : t; root.classList.toggle('modo-campo', t === 'campo'); iconeTema(); }
+$('#themeBtn').onclick = () => {
+  const i = TEMAS.findIndex(([t]) => t === temaEscolhido); temaEscolhido = TEMAS[(i + 1) % TEMAS.length][0];
+  safeStorage.set('agro-theme', temaEscolhido); aplicarTema(); showToast('Tema: ' + TEMAS.find(([t]) => t === temaEscolhido)[1]);
+};
+aplicarTema(); setInterval(() => { if (temaEscolhido === 'auto') aplicarTema(); }, 600000);
 const closeMenu = () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); marcarTrilho(); };
 const openMenu = () => { sidebar.classList.add('open'); overlay.classList.add('show'); marcarTrilho(); };
 // Menu lateral recolhível: no computador e tablet deitado vira uma faixa estreita (escolha guardada);
@@ -581,7 +589,7 @@ VIEWS.inicio = (anchor) => {
     ${isEmpty ? `<section class="card" style="margin-top:18px">${empty('Nenhum dado cadastrado ainda', 'Comece cadastrando talhões, máquinas e insumos.', {act: 'nav', id: 'cadastros', label: 'Abrir cadastros e backup'})}</section>` : ''}
     <section class="grid nexus">
       <article class="card panel"><div class="section-title" style="margin:0 0 4px"><h3>Operações de hoje</h3><button data-act="nav" data-id="operacoes">Ver todas</button></div>
-        ${upcoming.length ? upcoming.map(o => operationRow(o, false)).join('') : empty('Sem operações para hoje', 'Toque em “Nova operação” para registrar.')}
+        ${upcoming.length ? upcoming.map(o => operationRow(o, false)).join('') : empty('Sem operações para hoje', 'Programe ou registre o que a equipe vai fazer.', {act: 'op-new', label: '+ Nova operação'})}
       </article>
       <article class="card panel" id="alertas"><h3>Atenção</h3>
         ${al.length ? al.map(a => `<div class="alert clickable" data-act="nav" data-id="${esc(a.route)}"><span class="alert-icon ${a.color}">${a.icon}</span><div style="flex:1"><strong>${esc(a.title)}</strong><small>${esc(a.text)}</small>${a.progress != null ? `<div class="progress"><span style="width:${a.progress}%"></span></div>` : ''}</div></div>`).join('') : empty('Tudo em dia', 'Nenhuma pendência encontrada.')}
@@ -636,7 +644,7 @@ VIEWS.maquinas = () => {
     `<div class="section-title"><h3>Ordens de manutenção</h3></div><section class="card list">${mts.length ? mts.map(mt => {
       const color = mt.status === 'Concluída' ? 'gray' : mt.status === 'Em execução' ? 'blue' : 'orange';
       return `<div class="row"><span class="status ${color === 'gray' ? 'green' : color}"></span><div><strong>${esc(mt.kind)} — ${esc(machineName(mt.machineId) || 'Máquina removida')}</strong><small>${esc([mt.description, 'aberta ' + fmtDate(mt.date), mt.doneDate ? 'concluída ' + fmtDate(mt.doneDate) : '', mt.cost ? 'R$ ' + num(mt.cost, 2) : '', mt.fotos?.length ? '📷 ' + mt.fotos.length : ''].filter(Boolean).join(' • '))}</small></div><div class="row-actions">${chip(mt.status, color)}${mt.status !== 'Concluída' ? mini('✓ Concluir', 'mt-done', mt.id, 'ok') : ''}${mini('Editar', 'mt-edit', mt.id)}${mini('Excluir', 'mt-del', mt.id, 'del')}</div></div>`;
-    }).join('') : empty('Nenhuma manutenção registrada', '')}</section>`;
+    }).join('') : empty('Nenhuma manutenção registrada', 'Abra uma ordem de manutenção para acompanhar custo e revisões.', {act: 'mt-new', label: '+ Abrir manutenção'})}</section>`;
 };
 
 VIEWS.talhoes = () => {
@@ -646,7 +654,7 @@ VIEWS.talhoes = () => {
     (fs.length ? `<section class="cards">${fs.map(f => {
       const ops = db.operations.filter(o => o.fieldId === f.id).sort(byDateDesc);
       const lots = db.lots.filter(l => l.fieldId === f.id);
-      return `<article class="card item-card"><header><div><h4>${esc(f.name)}</h4><div class="meta">${esc([f.crop, f.cultivar, f.season].filter(Boolean).join(' • ') || 'Sem cultura informada')}</div></div>${chip(num(f.area) + ' ha', 'green')}</header>
+      return `<article class="card item-card"><header><div><h4>${esc(f.name)}</h4><div class="meta">${esc([f.crop, f.cultivar, f.season].filter(Boolean).join(' • ') || 'Sem cultura informada')}</div></div><div class="row-actions">${typeof chipSituacao === 'function' ? chipSituacao(f) : ''}${chip(num(f.area) + ' ha', 'gray')}</div></header>
         <div class="meta"><span>Plantio: ${fmtDate(f.plantingDate)}${typeof infoCiclo === 'function' ? infoCiclo(f) : ''}</span><span>Operações: ${ops.length}${ops[0] ? ` • última: ${esc(ops[0].type)} em ${fmtDate(ops[0].date)}` : ''}</span><span>Lotes de semente: ${esc(lots.map(l => l.code).join(', ') || '—')}</span></div>
         <div class="row-actions" style="justify-content:flex-start">${mini('+ Operação', 'op-field', f.id)}${mini('Histórico', 'fd-hist', f.id)}${mini('Editar', 'fd-edit', f.id)}${mini('Excluir', 'fd-del', f.id, 'del')}</div></article>`;
     }).join('')}</section>` : `<section class="card">${empty('Nenhum talhão cadastrado', 'Cadastre os talhões para vincular operações, consumo de insumos e lotes de sementes.', {act: 'fd-new', label: '+ Novo talhão'})}</section>`);
@@ -660,7 +668,7 @@ VIEWS.talhao = id => {
   const gastos = db.expenses.filter(g => g.fieldId === id && Number(g.value) > 0).sort(byDateDesc), totG = gastos.reduce((s, g) => s + Number(g.value), 0);
   return head(f.name, `${num(f.area)} ha • ${[f.crop, f.cultivar, f.season].filter(Boolean).join(' • ')}`, btn('← Talhões', 'nav', 'talhoes', 'secondary') + btn('⌖ Contorno (GPS)', 'nav', 'contorno/' + id, 'secondary') + btn('Relatório da safra', 'nav', 'safra/' + id, 'secondary') + btn('+ Colheita', 'pd-colheita', id, 'secondary') + btn('+ Operação', 'op-field', id)) +
     (f.contorno && typeof svgContorno === 'function' ? `<section class="card panel ctn-resumo">${svgContorno(f.contorno.pontos, {tam: 120, classe: 'ctn-mini', rotulo: 'Contorno de ' + f.name})}<div><strong>Contorno medido por GPS</strong><small>${um1(f.contorno.areaHa)} ha • perímetro ${num(f.contorno.perimetroM)} m • ${fmtDate(f.contorno.data)}${Math.abs(f.contorno.areaHa - Number(f.area || 0)) > 0.05 ? ` • cadastro: ${num(f.area)} ha` : ''}</small></div></section>` : '') +
-    `<div class="section-title"><h3>Operações (${ops.length})</h3></div><section class="card list">${ops.length ? ops.map(o => operationRow(o)).join('') : empty('Nenhuma operação neste talhão', '')}</section>` +
+    `<div class="section-title"><h3>Operações (${ops.length})</h3></div><section class="card list">${ops.length ? ops.map(o => operationRow(o)).join('') : empty('Nenhuma operação neste talhão', 'Registre plantio, aplicação, colheita e o que mais for feito aqui.', {act: 'op-new', label: '+ Nova operação'})}</section>` +
     `<div class="section-title"><h3>Insumos aplicados</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Data</th><th>Item</th><th class="num">Quantidade</th><th class="num">Por ha</th><th class="num">Custo</th></tr></thead><tbody>${movs.map(m => { const s = find('stock', m.itemId); return `<tr><td>${fmtDate(m.date)}</td><td>${esc(s?.name || 'Item removido')}</td><td class="num">${num(m.qty)} ${esc(s?.unit || '')}</td><td class="num">${Number(f.area) ? num(m.qty / f.area) : '—'}</td><td class="num">${Number(m.value) > 0 ? `R$ ${num(m.value, 2)}${Number(f.area) ? `<br><small>R$ ${num(m.value / f.area, 2)}/ha</small>` : ''}` : '—'}</td></tr>`; }).join('') || '<tr><td colspan="5">Nenhuma saída de estoque vinculada a este talhão.</td></tr>'}</tbody></table></div></section>` +
     `<div class="section-title"><h3>Gastos (R$ ${num(totG, 2)}${Number(f.area) > 0 && totG ? ` • R$ ${num(totG / f.area, 2)}/ha` : ''})</h3><button data-act="gs-talhao" data-id="${esc(id)}">+ Lançar gasto</button></div><section class="card panel">${gastos.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th class="num">Valor</th></tr></thead><tbody>${gastos.map(g => `<tr><td>${fmtDate(g.date)}</td><td>${esc(g.description)}</td><td>${esc(g.category)}</td><td class="num">R$ ${num(g.value, 2)}</td></tr>`).join('')}</tbody></table></div>` : 'Nenhum gasto vinculado a este talhão.'}</section>`;
 };
@@ -745,7 +753,7 @@ VIEWS.cadastros = () => {
   return head('Cadastros e backup', 'Dados da propriedade e cópia de segurança dos registros deste dispositivo.') +
     `<section class="settings">
       <article class="card panel"><h3>Propriedade</h3><p>Nome exibido no aplicativo e nos arquivos exportados.</p>
-        <form id="settingsForm"><div class="form"><div class="field full"><label for="s_farm">Fazenda / unidade</label><input id="s_farm" value="${esc(db.settings.farm)}" placeholder="Ex.: Fazenda Boa Vista"></div><div class="field full"><label for="s_owner">Responsável</label><input id="s_owner" value="${esc(db.settings.owner)}" placeholder="Nome do responsável"></div></div><div class="actions"><button class="primary" type="submit">Salvar</button></div></form>
+        <form id="settingsForm"><div class="form"><div class="field full"><label for="s_farm">Fazenda / unidade</label><input id="s_farm" value="${esc(db.settings.farm)}" placeholder="Ex.: Fazenda Boa Vista"></div><div class="field full"><label for="s_owner">Responsável</label><input id="s_owner" value="${esc(db.settings.owner)}" placeholder="Nome do responsável"></div><div class="field"><label for="s_rt">Responsável técnico (agrônomo)</label><input id="s_rt" value="${esc(db.settings.respTecnico || '')}" placeholder="Sai nos relatórios impressos"></div><div class="field"><label for="s_rtreg">CREA / CFTA</label><input id="s_rtreg" value="${esc(db.settings.respRegistro || '')}" placeholder="Ex.: CREA-MG 123456/D"></div></div><div class="actions"><button class="primary" type="submit">Salvar</button></div></form>
       </article>
       <article class="card panel"><h3>Registros no dispositivo</h3><table class="tbl"><tbody>${counts.map(([l, c]) => `<tr><td>${l}</td><td class="num">${db[c].length}</td></tr>`).join('')}</tbody></table></article>
       <article class="card panel"><h3>Backup</h3><p>Os dados ficam somente neste aparelho. Exporte um backup regularmente e guarde em local seguro (Drive, e-mail, computador).</p>
@@ -756,7 +764,7 @@ VIEWS.cadastros = () => {
     </section>`;
 };
 VIEWS.cadastros.after = () => {
-  $('#settingsForm').onsubmit = e => { e.preventDefault(); db.settings.farm = $('#s_farm').value.trim(); db.settings.owner = $('#s_owner').value.trim(); save(); applySettings(); showToast('Dados da propriedade salvos'); };
+  $('#settingsForm').onsubmit = e => { e.preventDefault(); db.settings.farm = $('#s_farm').value.trim(); db.settings.owner = $('#s_owner').value.trim(); db.settings.respTecnico = $('#s_rt').value.trim(); db.settings.respRegistro = $('#s_rtreg').value.trim(); save(); applySettings(); showToast('Dados da propriedade salvos'); };
   $('#restoreInput').onchange = e => { const file = e.target.files[0]; if (file) file.text().then(restoreBackup).catch(() => showToast('Não foi possível ler o arquivo')); e.target.value = ''; };
 };
 

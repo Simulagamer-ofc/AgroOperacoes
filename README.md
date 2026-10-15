@@ -4,6 +4,14 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.35.0-beta1` — **visual profissional e funcional**:
+- Padrão: um só estilo de ícone (linha) no lugar dos símbolos; três tipos de botão; cores com significado (verde ok, laranja atenção, vermelho urgente, azul informação; seleção em cor neutra); títulos em escala; números alinhados; gráfico mensal sem meses vazios no começo; telas vazias com a próxima ação.
+- Menu lateral: grupos que abrem e fecham (o da tela aberta fica aberto), nomes inteiros e **Mais usados** (aprende com o uso).
+- Campo: tema **Campo** (claro de alto contraste, letras maiores, para sol forte) e **Automático** (Campo de dia, Noturno à noite); alvos de toque de 44–48 px; botão **+** no celular com os registros mais comuns (respeita a função); sincronização sempre à vista no topo (sincronizado há X min, N na fila, sem internet, erro).
+- Agrônomo: **situação de cada talhão** (praga no nível de ação, carência, colheita próxima, sem monitoramento, em dia); **mapa da fazenda** pintado pela situação (contornos GPS, sem internet); **cartão do talhão** (cultura e estágio, última aplicação e carência, último monitoramento com foto, chuva, produtividade); **linha do tempo da safra** no talhão e no relatório.
+- Relatórios impressos/PDF com cabeçalho (fazenda, responsável técnico com CREA/CFTA, data de emissão) e linhas de assinatura; responsável técnico em Cadastros.
+- Tela inicial por função: agrônomo, monitor e encarregado veem a situação dos talhões; equipe de campo vê a lista do dia já aberta.
+
 `0.34.4-beta1` — **tela inicial organizada**: barra de pesquisa e avisos de volta ao topo; o quadro **Hoje** fica recolhido numa linha (quantas pendências, atrasadas, em andamento, avisos e a mais urgente) com botão para expandir, como o clima; os **gráficos voltam à mostra** logo abaixo dos indicadores.
 
 `0.34.3-beta1` — **clima no estilo dos apps de previsão**: próximos 4 períodos (madrugada, manhã, tarde, noite) com temperatura, ícone do tempo (sol, nuvens, chuva, trovoada) e chance de chuva; 7 dias com máxima e mínima, ícone, horas de sol, chance e milímetros de chuva, vento e confiança (rolagem lateral no celular).

@@ -124,13 +124,15 @@ function custosMes() {
   const meses = Array.from({length: 6}, (_, i) => new Date(hoje.getFullYear(), hoje.getMonth() - 5 + i, 1));
   const lanc = lancamentosCusto(isoDate(meses[0]), fim);
   const valores = meses.map(d => { const prefixo = isoDate(d).slice(0, 7); return {nome: MESES[d.getMonth()], ano: d.getFullYear(), valor: somaValor(lanc.filter(x => x.date.startsWith(prefixo)))}; });
-  const max = Math.max(0, ...valores.map(m => m.valor));
+  // Meses sem nenhum custo no começo não aparecem (mostra ao menos os 3 últimos)
+  const primeiro = valores.findIndex(m => m.valor > 0); if (primeiro > 0) valores.splice(0, Math.min(primeiro, 3));
+  const max = Math.max(0, ...valores.map(m => m.valor)), ult = valores.length - 1;
   const divisor = max >= 1e6 ? 1e6 : max >= 1000 ? 1000 : 1;
   const unidade = divisor === 1e6 ? 'R$ milhões' : divisor === 1000 ? 'R$ mil' : 'R$';
-  const barras = max > 0 ? `<div class="nx-months" role="group" aria-label="Custos dos últimos seis meses, ${unidade}">${valores.map((m, i) =>
-    `<button type="button" class="nx-month" aria-label="${esc(`${m.nome}/${m.ano}: ${dinheiroPainel(m.valor)}${i === 5 ? ', mês em andamento' : ''}`)}" ${tip(`${m.nome}/${m.ano}${i === 5 ? ' · até ' + fmtDate(fim) : ''}`, dinheiroPainel(m.valor))}>
-      <b>${num(m.valor / divisor)}</b><span class="nx-column" style="height:${m.valor / max * 140}px"></span><small>${m.nome}${i === 5 ? '*' : ''}</small></button>`).join('')}</div>` : semDados('Nenhum custo registrado nos últimos seis meses.');
-  return cartaoPainel('Evolução mensal dos custos', `Últimos 6 meses · valores em ${unidade}`, barras +
+  const barras = max > 0 ? `<div class="nx-months" role="group" aria-label="Custos dos últimos ${valores.length} meses, ${unidade}">${valores.map((m, i) =>
+    `<button type="button" class="nx-month" aria-label="${esc(`${m.nome}/${m.ano}: ${dinheiroPainel(m.valor)}${i === ult ? ', mês em andamento' : ''}`)}" ${tip(`${m.nome}/${m.ano}${i === ult ? ' · até ' + fmtDate(fim) : ''}`, dinheiroPainel(m.valor))}>
+      <b>${num(m.valor / divisor)}</b><span class="nx-column" style="height:${m.valor / max * 140}px"></span><small>${m.nome}${i === ult ? '*' : ''}</small></button>`).join('')}</div>` : semDados('Nenhum custo registrado nos últimos seis meses.');
+  return cartaoPainel('Evolução mensal dos custos', `Últimos ${valores.length} meses · valores em ${unidade}`, barras +
     `<p class="nx-detail">* ${esc(MESES[hoje.getMonth()])}/${hoje.getFullYear()} até ${fmtDate(fim)} · mês em andamento</p>`);
 }
 

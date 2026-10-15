@@ -31,7 +31,7 @@
       <polygon class="hex" points="9,3 23,3 30,16 23,29 9,29 2,16"/>
       <g class="glifo" transform="translate(6.4 6.4) scale(.8)">${desenho}</g></svg>`;
   };
-  window.iconeMenu = icone;
+  window.iconeMenu = icone; window.ICONES_MENU = ICONES;
   // Menu lateral: ícone + nome numa linha (o nome some quando o menu está recolhido)
   document.querySelectorAll('.sidebar .nav button[data-route]').forEach(b => {
     const nome = [...b.childNodes].filter(n => n.nodeType === 3).map(n => n.textContent).join('').trim();
