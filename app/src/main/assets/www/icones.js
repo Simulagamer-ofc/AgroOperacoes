@@ -15,6 +15,7 @@
     afericao: ['azul', '<path d="M3.5 17a8.5 8.5 0 1 1 17 0"/><path d="M12 17l3.8-5.2"/><circle cx="12" cy="17" r="1.3"/><path d="M6.5 13.5l1 .6M17.5 13.5l-1 .6M12 8.5v1.2"/>'],
     catalogo: ['azul', '<path d="M3 6.5h11v10H3zM14 10h4l3 3.2v3.3h-7"/><circle cx="7" cy="17.5" r="1.9"/><circle cx="17" cy="17.5" r="1.9"/>'],
     pontas: ['azul', '<path d="M9 3h6v4l-1.2 3h-3.6L9 7zM12 10v2.5M8.5 15.5 6.5 20M12 15.5V21M15.5 15.5l2 4.5"/>'],
+    graos: ['verde', '<path d="M5.5 21V8.5a3.5 3.5 0 0 1 7 0V21M12.5 21V11h6v10M3.5 21h17M5.5 13h7M5.5 17h7"/>'],
     secagem: ['verde', '<path d="M5.5 21V8.5a3.5 3.5 0 0 1 7 0V21M12.5 21V11h6v10M3.5 21h17M5.5 13h7M5.5 17h7"/>'],
     sementes: ['verde', '<ellipse cx="9" cy="10" rx="3.4" ry="5" transform="rotate(-30 9 10)"/><ellipse cx="15.5" cy="14.5" rx="3.4" ry="5" transform="rotate(-30 15.5 14.5)"/><path d="M7.6 7.6l2.8 4.8M14.1 12.1l2.8 4.8"/>'],
     estoque: ['verde', '<path d="M3.5 8 12 3.5 20.5 8v8.5L12 21l-8.5-4.5z"/><path d="M3.5 8 12 12.5 20.5 8M12 12.5V21"/>'],
