@@ -1,7 +1,7 @@
 {
   "banco": "Nexus Agro — referências de aferição e calibragem de máquinas e implementos",
-  "versaoBanco": "1.5.0",
-  "dataBanco": "2026-10-06",
+  "versaoBanco": "1.6.0",
+  "dataBanco": "2026-10-15",
   "observacaoGeral": "Somente regras com statusValidacao = 'validada' são usadas para concluir uma avaliação. Regras 'validada' tiveram o trecho conferido no documento original (ver fontes[].trechoLiteral). Regras 'pendente_conferencia' tiveram a fonte localizada, mas o texto ainda não foi conferido no documento original; o avaliador as mostra como referência candidata e devolve SEM_REFERENCIA. Escopo '*' significa que a regra declara expressamente não depender daquele campo.",
   "statusPossiveis": {
     "validada": "Valor conferido no documento original por um responsável (validadoPor/dataValidacao preenchidos).",
@@ -763,9 +763,74 @@
       ],
       "observacaoTecnica": "Vale para a massa de grãos (não para o ar). Destino: agroindústria.",
       "confianca": "alta",
-      "statusValidacao": "validada",
+      "statusValidacao": "suspensa",
       "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
-      "dataValidacao": "2026-10-05"
+      "dataValidacao": "2026-10-05",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-15",
+          "alteracao": "Suspensa: substituída por SEC-SOJA-GRAO-MASSA-01 (Embrapa Soja, Circular Técnica 224, 2026 — massa até 40 °C para grãos)."
+        }
+      ]
+    },
+    {
+      "id": "SEC-SOJA-GRAO-MASSA-01",
+      "versao": "1.0.0",
+      "titulo": "Temperatura da massa de grãos de soja durante a secagem",
+      "equipamentoFamilia": [
+        "secador"
+      ],
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "comercializacao",
+        "armazenamento_graos",
+        "agroindustria",
+        "moagem_alimentacao_humana",
+        "racao_animal"
+      ],
+      "etapa": [
+        "secagem"
+      ],
+      "ponto": [
+        "massa_graos"
+      ],
+      "posicao": "*",
+      "variavel": "temperatura",
+      "unidade": "°C",
+      "limiteMin": null,
+      "limiteMax": 40,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Reduzir a temperatura do ar de secagem ou aumentar a vazão de grãos até a massa ficar em até 40 °C (acima disso aumentam trincas, quebra e perda de qualidade).",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Secagem de grãos de soja: recomendações para preservação da qualidade — Circular Técnica 224 (ISSN 2176-2864)",
+          "autores": "Maurício Albertoni Scariot; Lauri Lourenço Radünz; Rafael Gomes Dionello; Fernando Augusto Henning; José de Barros França-Neto; Marcelo Álvares de Oliveira; Francisco Carlos Krzyzanowski",
+          "ano": 2026,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1187795/1/Circ-Tec-224.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 8; repetido nas boas práticas, p. 10",
+          "trechoLiteral": "Portanto, para a secagem segura, recomenda-se que a temperatura da massa de grãos não ultrapasse os 40 °C"
+        }
+      ],
+      "observacaoTecnica": "Vale para a massa de grãos, não para o ar de secagem (o documento cita ar entre 80 °C e 90 °C na secagem industrial, sem fixar limite). Grãos (não sementes).",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 15/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-15",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-15",
+          "alteracao": "Criação a partir da Circular Técnica 224 (Embrapa Soja, jun/2026)."
+        }
+      ]
     },
     {
       "id": "SEC-MILHO-SEM-AR-01",
@@ -946,10 +1011,78 @@
       ],
       "observacaoTecnica": "Texto: \"abaixo de 14%\" — 14,0% já está fora.",
       "confianca": "alta",
-      "statusValidacao": "validada",
+      "statusValidacao": "suspensa",
       "validadoPor": "Conferência documental feita por Claude Code (IA) em 05/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
       "dataValidacao": "2026-10-05",
-      "limiteMaxExclusivo": true
+      "limiteMaxExclusivo": true,
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-15",
+          "alteracao": "Suspensa: substituída por ARM-SOJA-GRAO-UMID-01 (Embrapa Soja, Circular Técnica 224, 2026 — teor de água final entre 12% e 13%)."
+        }
+      ]
+    },
+    {
+      "id": "ARM-SOJA-GRAO-UMID-01",
+      "versao": "1.0.0",
+      "titulo": "Teor de água final da soja em grão para armazenamento",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "soja"
+      ],
+      "destino": [
+        "comercializacao",
+        "armazenamento_graos",
+        "agroindustria",
+        "moagem_alimentacao_humana",
+        "racao_animal"
+      ],
+      "etapa": [
+        "pos_secagem",
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 13,
+      "alvo": null,
+      "faixaAtencao": {
+        "min": 12
+      },
+      "condicoes": [],
+      "acaoForaDoPadrao": "Grão acima de 13%: voltar ao secador (ou seca-aeração) antes de armazenar.",
+      "acaoAtencao": "Abaixo de 12%: secagem além do necessário — perde peso vendável e gasta mais combustível. Ajuste o ponto de saída do secador.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Soja",
+          "titulo": "Secagem de grãos de soja: recomendações para preservação da qualidade — Circular Técnica 224 (ISSN 2176-2864)",
+          "autores": "Maurício Albertoni Scariot; Lauri Lourenço Radünz; Rafael Gomes Dionello; Fernando Augusto Henning; José de Barros França-Neto; Marcelo Álvares de Oliveira; Francisco Carlos Krzyzanowski",
+          "ano": 2026,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1187795/1/Circ-Tec-224.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 10 (boas práticas); introdução, p. 1",
+          "trechoLiteral": "Para um armazenamento seguro e rentável, o teor de água final deve ser mantido entre 12% e 13%."
+        }
+      ],
+      "observacaoTecnica": "Introdução do mesmo documento: “recomenda-se que os grãos sejam secos e armazenados com teores de água inferiores a 13%”. Acima de 13% = fora; abaixo de 12% = atenção (supersecagem).",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 15/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-15",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-15",
+          "alteracao": "Criação a partir da Circular Técnica 224 (Embrapa Soja, jun/2026)."
+        }
+      ]
     },
     {
       "id": "ARM-MILHO-GRAO-UMID-01",
@@ -1440,7 +1573,7 @@
     },
     {
       "id": "COM-SOJA-UMID-01",
-      "versao": "1.1.0",
+      "versao": "1.2.0",
       "titulo": "Umidade recomendada para comercialização da soja (classificação)",
       "equipamentoFamilia": "*",
       "avaliacao": "secagem_armazenagem",
@@ -1467,7 +1600,7 @@
       "limiteMax": 14,
       "alvo": null,
       "condicoes": [],
-      "acaoForaDoPadrao": "Umidade acima do máximo recomendado de 14% (IN 11/2007, Art. 4º, § 4º). Não altera o tipo; registrar no laudo e secar antes de armazenar.",
+      "acaoForaDoPadrao": "Umidade acima de 14%: normal na colheita. Encaminhar ao secador e aplicar o desconto de umidade do contrato. Não altera o tipo (IN 11/2007, Art. 4º, § 4º).",
       "fontes": [
         {
           "organizacao": "MAPA",
@@ -1496,12 +1629,18 @@
           "versao": "1.1.0",
           "data": "2026-10-05",
           "alteracao": "Trecho conferido no texto oficial; escopo restrito ao recebimento e estendido a todos os destinos de grão."
+        },
+        {
+          "versao": "1.2.0",
+          "data": "2026-10-15",
+          "alteracao": "No recebimento, umidade acima de 14% passa a ser ATENÇÃO (encaminhar ao secador), não fora do padrão: grão úmido na moega é o esperado na colheita e gerava alerta vermelho a cada carga."
         }
-      ]
+      ],
+      "excedenteComoAtencao": true
     },
     {
       "id": "COM-MILHO-UMID-01",
-      "versao": "1.1.0",
+      "versao": "1.2.0",
       "titulo": "Umidade recomendada para comercialização do milho (classificação)",
       "equipamentoFamilia": "*",
       "avaliacao": "secagem_armazenagem",
@@ -1528,7 +1667,7 @@
       "limiteMax": 14,
       "alvo": null,
       "condicoes": [],
-      "acaoForaDoPadrao": "Umidade acima dos 14,0% recomendados (IN 60/2011, Art. 11). Pode ser comercializado, com a umidade registrada no documento de classificação; secar antes de armazenar.",
+      "acaoForaDoPadrao": "Umidade acima de 14%: normal na colheita. Encaminhar ao secador e aplicar o desconto de umidade do contrato. Não altera o tipo (IN 60/2011).",
       "fontes": [
         {
           "organizacao": "MAPA",
@@ -1557,8 +1696,14 @@
           "versao": "1.1.0",
           "data": "2026-10-05",
           "alteracao": "Trecho conferido no texto oficial; escopo restrito ao recebimento e estendido a todos os destinos de grão."
+        },
+        {
+          "versao": "1.2.0",
+          "data": "2026-10-15",
+          "alteracao": "No recebimento, umidade acima de 14% passa a ser ATENÇÃO (encaminhar ao secador), não fora do padrão: grão úmido na moega é o esperado na colheita e gerava alerta vermelho a cada carga."
         }
-      ]
+      ],
+      "excedenteComoAtencao": true
     },
     {
       "id": "CLA-SOJA-AVAR-01",

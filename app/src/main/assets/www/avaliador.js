@@ -196,8 +196,10 @@
     const abaixo = min !== null && (regra.limiteMinExclusivo ? v <= min : v < min);
     const acima = max !== null && (regra.limiteMaxExclusivo ? v >= max : v > max);
     res.limiteMinExclusivo = !!regra.limiteMinExclusivo; res.limiteMaxExclusivo = !!regra.limiteMaxExclusivo;
-    if (abaixo) { res.status = STATUS.FORA_DO_PADRAO; res.diferenca = arred(v - min); }
-    else if (acima) { res.status = STATUS.FORA_DO_PADRAO; res.diferenca = arred(v - max); }
+    // excedenteComoAtencao: passar do limite é esperado naquela etapa (ex.: grão úmido na moega) — pede ação, não é falha
+    const excede = regra.excedenteComoAtencao ? STATUS.ATENCAO : STATUS.FORA_DO_PADRAO;
+    if (abaixo) { res.status = excede; res.diferenca = arred(v - min); res.excedeu = true; }
+    else if (acima) { res.status = excede; res.diferenca = arred(v - max); res.excedeu = true; }
     else {
       const fa = regra.faixaAtencao;
       const atencao = fa && ((finito(fa.min) && v < fa.min) || (finito(fa.max) && v > fa.max));
@@ -206,7 +208,7 @@
     }
     // Outra regra validada poderia valer se a condição dela fosse informada: o resultado fica, mas o usuário é avisado
     if (faltandoValidadas.length) res.pendencias.push(...[...new Set(faltandoValidadas)].map(x => `Há outra referência validada que depende de dado não informado — ${x}. Informe para confirmar o resultado.`));
-    res.acaoRecomendada = res.status === STATUS.FORA_DO_PADRAO ? (regra.acaoForaDoPadrao || 'Corrigir a regulagem e repetir a medição.')
+    res.acaoRecomendada = res.status === STATUS.FORA_DO_PADRAO || res.excedeu ? (regra.acaoForaDoPadrao || 'Corrigir a regulagem e repetir a medição.')
       : res.status === STATUS.ATENCAO ? (regra.acaoAtencao || 'Acompanhar: valor dentro do limite, porém próximo dele.')
       : 'Nenhuma correção necessária para esta variável.';
     return res;
