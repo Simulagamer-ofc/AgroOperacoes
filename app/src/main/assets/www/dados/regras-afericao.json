@@ -1,6 +1,6 @@
 {
   "banco": "Nexus Agro — referências de aferição e calibragem de máquinas e implementos",
-  "versaoBanco": "1.6.0",
+  "versaoBanco": "1.7.0",
   "dataBanco": "2026-10-15",
   "observacaoGeral": "Somente regras com statusValidacao = 'validada' são usadas para concluir uma avaliação. Regras 'validada' tiveram o trecho conferido no documento original (ver fontes[].trechoLiteral). Regras 'pendente_conferencia' tiveram a fonte localizada, mas o texto ainda não foi conferido no documento original; o avaliador as mostra como referência candidata e devolve SEM_REFERENCIA. Escopo '*' significa que a regra declara expressamente não depender daquele campo.",
   "statusPossiveis": {
@@ -1882,6 +1882,280 @@
           "alteracao": "Suspensa — substituída pelas tabelas de classificação da IN 11/2007."
         }
       ]
+    },
+    {
+      "id": "COM-TRIGO-UMID-01",
+      "versao": "1.0.0",
+      "titulo": "Umidade recomendada do trigo no recebimento",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "trigo"
+      ],
+      "destino": [
+        "comercializacao",
+        "armazenamento_graos",
+        "agroindustria",
+        "moagem_alimentacao_humana",
+        "racao_animal"
+      ],
+      "etapa": [
+        "recebimento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 13,
+      "alvo": null,
+      "condicoes": [],
+      "excedenteComoAtencao": true,
+      "acaoForaDoPadrao": "Umidade acima de 13%: normal na colheita. Encaminhar ao secador e aplicar o desconto de umidade do contrato. Não entra no tipo (IN 38/2010, Art. 14).",
+      "fontes": [
+        {
+          "organizacao": "MAPA",
+          "titulo": "Instrução Normativa nº 38, de 30/11/2010 — Regulamento Técnico do Trigo",
+          "ano": 2010,
+          "url": "https://idrparana.pr.gov.br/sites/iapar/arquivos_restritos/files/documento/2020-07/trigoinstrucaonormativa3810.pdf",
+          "tipo": "norma",
+          "conferido": true,
+          "pagina": "Art. 14",
+          "trechoLiteral": "Art. 14. O teor de umidade, tecnicamente recomendável para o trigo, será de 13% (treze por cento)."
+        }
+      ],
+      "observacaoTecnica": "Umidade não é critério de tipo. No recebimento, acima de 13% é atenção (encaminhar ao secador).",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 15/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-15",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-15",
+          "alteracao": "Criação."
+        }
+      ]
+    },
+    {
+      "id": "ARM-TRIGO-UMID-01",
+      "versao": "1.0.0",
+      "titulo": "Umidade do trigo para armazenamento",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "trigo"
+      ],
+      "destino": [
+        "comercializacao",
+        "armazenamento_graos",
+        "agroindustria",
+        "moagem_alimentacao_humana",
+        "racao_animal"
+      ],
+      "etapa": [
+        "pos_secagem",
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 13,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Trigo acima de 13%: voltar ao secador (ou seca-aeração) antes de armazenar.",
+      "fontes": [
+        {
+          "organizacao": "MAPA",
+          "titulo": "Instrução Normativa nº 38, de 30/11/2010 — Regulamento Técnico do Trigo",
+          "ano": 2010,
+          "url": "https://idrparana.pr.gov.br/sites/iapar/arquivos_restritos/files/documento/2020-07/trigoinstrucaonormativa3810.pdf",
+          "tipo": "norma",
+          "conferido": true,
+          "pagina": "Art. 14",
+          "trechoLiteral": "Art. 14. O teor de umidade, tecnicamente recomendável para o trigo, será de 13% (treze por cento)."
+        }
+      ],
+      "observacaoTecnica": "Teor tecnicamente recomendável pela norma (13%).",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 15/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-15",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-15",
+          "alteracao": "Criação."
+        }
+      ]
+    },
+    {
+      "id": "SEC-TRIGO-MASSA-01",
+      "versao": "1.0.0",
+      "titulo": "Temperatura da massa de grãos de trigo durante a secagem",
+      "equipamentoFamilia": [
+        "secador"
+      ],
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "trigo"
+      ],
+      "destino": [
+        "comercializacao",
+        "armazenamento_graos",
+        "agroindustria",
+        "moagem_alimentacao_humana",
+        "racao_animal"
+      ],
+      "etapa": [
+        "secagem"
+      ],
+      "ponto": [
+        "massa_graos"
+      ],
+      "posicao": "*",
+      "variavel": "temperatura",
+      "unidade": "°C",
+      "limiteMin": null,
+      "limiteMax": 60,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Reduzir a temperatura do ar de secagem: a massa de trigo não deve passar de 60 °C (perda da qualidade tecnológica do grão).",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Cerrados (artigo na Revista Cultivar)",
+          "titulo": "Cuidados na colheita e pós-colheita do trigo no Cerrado do Brasil central — Julio César Albrecht",
+          "ano": 2015,
+          "url": "https://revistacultivar.com.br/artigos/cuidados-na-colheita-e-pos-colheita-do-trigo-no-cerrado-do-brasil-central",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "texto do artigo",
+          "trechoLiteral": "A temperatura na massa de grãos de trigo nunca deve ultrapassar 60°C, para manutenção da qualidade tecnológica do produto."
+        }
+      ],
+      "observacaoTecnica": "Vale para a massa de grãos (não para o ar). Grão de trigo (não semente).",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 15/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-15",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-15",
+          "alteracao": "Criação."
+        }
+      ]
+    },
+    {
+      "id": "SEC-ARROZ-SEM-MASSA-01",
+      "versao": "1.0.0",
+      "titulo": "Temperatura da massa de semente de arroz durante a secagem",
+      "equipamentoFamilia": [
+        "secador"
+      ],
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "arroz"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "secagem"
+      ],
+      "ponto": [
+        "massa_graos"
+      ],
+      "posicao": "*",
+      "variavel": "temperatura",
+      "unidade": "°C",
+      "limiteMin": null,
+      "limiteMax": 45,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Reduzir a temperatura do ar de secagem até a massa de sementes ficar em até 45 °C (calor excessivo reduz germinação e vigor).",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Arroz e Feijão",
+          "titulo": "A Cultura do Arroz no Brasil, 2ª ed. — Cap. 21: Secagem e beneficiamento de sementes (C. Bragantini)",
+          "ano": 2006,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/193316/1/lv-cultura-arroz-Brasil-2ed.cap21.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "p. 828",
+          "trechoLiteral": "Durante a secagem, a temperatura da massa de semente não deve ultrapassar 45oC."
+        }
+      ],
+      "observacaoTecnica": "Semente de arroz. Para arroz em grão não há referência conferida no banco.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 15/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-15",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-15",
+          "alteracao": "Criação."
+        }
+      ]
+    },
+    {
+      "id": "ARM-ARROZ-SEM-UMID-01",
+      "versao": "1.0.0",
+      "titulo": "Umidade da semente de arroz para armazenamento",
+      "equipamentoFamilia": "*",
+      "avaliacao": "secagem_armazenagem",
+      "produto": [
+        "arroz"
+      ],
+      "destino": [
+        "semente"
+      ],
+      "etapa": [
+        "pos_secagem",
+        "armazenamento"
+      ],
+      "ponto": [
+        "amostra"
+      ],
+      "posicao": "*",
+      "variavel": "umidade_graos",
+      "unidade": "%",
+      "limiteMin": null,
+      "limiteMax": 13,
+      "alvo": null,
+      "condicoes": [],
+      "acaoForaDoPadrao": "Semente de arroz acima de 13%: secar antes de armazenar.",
+      "fontes": [
+        {
+          "organizacao": "Embrapa Arroz e Feijão",
+          "titulo": "A Cultura do Arroz no Brasil, 2ª ed. — Cap. 21: Secagem e beneficiamento de sementes (C. Bragantini)",
+          "ano": 2006,
+          "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/193316/1/lv-cultura-arroz-Brasil-2ed.cap21.pdf",
+          "tipo": "publicacao_tecnica",
+          "conferido": true,
+          "pagina": "pp. 828-829",
+          "trechoLiteral": "a semente de arroz deve ser armazenada com teor de umidade máximo de 13%"
+        }
+      ],
+      "observacaoTecnica": "Semente de arroz.",
+      "confianca": "alta",
+      "statusValidacao": "validada",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 15/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-15",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-15",
+          "alteracao": "Criação."
+        }
+      ]
     }
   ],
   "tabelasReferencia": [
@@ -2567,6 +2841,265 @@
           "copiaLocal": "referencias/fontes/mapa/IN-60-2011-milho.txt"
         }
       ]
+    },
+    {
+      "id": "CLA-TRIGO-IN38-GI",
+      "versao": "1.0.0",
+      "equipamentoFamilia": "*",
+      "destino": [
+        "comercializacao",
+        "armazenamento_graos",
+        "agroindustria",
+        "moagem_alimentacao_humana",
+        "racao_animal"
+      ],
+      "etapa": [
+        "recebimento"
+      ],
+      "statusValidacao": "validada",
+      "confianca": "alta",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 15/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-15",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-15",
+          "alteracao": "Criação a partir do Anexo II da IN 38/2010."
+        }
+      ],
+      "titulo": "Trigo — Grupo I (alimentação humana direta): limites máximos de tolerância (IN 38/2010, Anexo II)",
+      "produto": "trigo",
+      "grupo": {
+        "campo": "grupo",
+        "valor": "I",
+        "rotulo": "Grupo I — trigo destinado diretamente à alimentação humana"
+      },
+      "casasDecimais": 2,
+      "tipos": [
+        {
+          "tipo": "Tipo 1",
+          "limites": {
+            "impurezas": 0.3,
+            "insetos": 0.3,
+            "calor_mofados_ardidos": 0.1,
+            "chochos_quebrados": 0.75
+          }
+        },
+        {
+          "tipo": "Tipo 2",
+          "limites": {
+            "impurezas": 0.5,
+            "insetos": 0.7,
+            "calor_mofados_ardidos": 0.2,
+            "chochos_quebrados": 1.5
+          }
+        },
+        {
+          "tipo": "Tipo 3",
+          "limites": {
+            "impurezas": 0.7,
+            "insetos": 1.0,
+            "calor_mofados_ardidos": 0.5,
+            "chochos_quebrados": 2.5
+          }
+        }
+      ],
+      "foraDeTipo": "Fora de Tipo",
+      "consequencias": {
+        "todos": {
+          "defeitos": [
+            "impurezas",
+            "insetos",
+            "calor_mofados_ardidos",
+            "chochos_quebrados"
+          ],
+          "texto": "Art. 7º: o trigo Fora de Tipo não pode ser comercializado como se apresenta; pode ser rebeneficiado para enquadramento em tipo."
+        }
+      },
+      "desclassificacao": [
+        {
+          "rotulo": "Matérias estranhas e impurezas acima de 1,50%",
+          "soma": [
+            "impurezas"
+          ],
+          "limiteMaxExclusivo": 1.5,
+          "artigo": "Art. 8º (Grupo I acima do limite de Fora de Tipo)"
+        },
+        {
+          "rotulo": "Danificados por insetos acima de 2,00%",
+          "soma": [
+            "insetos"
+          ],
+          "limiteMaxExclusivo": 2.0,
+          "artigo": "Art. 8º"
+        },
+        {
+          "rotulo": "Danificados pelo calor, mofados e ardidos acima de 1,00%",
+          "soma": [
+            "calor_mofados_ardidos"
+          ],
+          "limiteMaxExclusivo": 1.0,
+          "artigo": "Art. 8º"
+        },
+        {
+          "rotulo": "Chochos, triguilhos e quebrados acima de 5,00%",
+          "soma": [
+            "chochos_quebrados"
+          ],
+          "limiteMaxExclusivo": 5.0,
+          "artigo": "Art. 8º"
+        }
+      ],
+      "defeitos": [
+        {
+          "id": "impurezas",
+          "rotulo": "Matérias estranhas e impurezas"
+        },
+        {
+          "id": "insetos",
+          "rotulo": "Danificados por insetos"
+        },
+        {
+          "id": "calor_mofados_ardidos",
+          "rotulo": "Danificados pelo calor, mofados e ardidos"
+        },
+        {
+          "id": "chochos_quebrados",
+          "rotulo": "Chochos, triguilhos e quebrados"
+        }
+      ],
+      "fontes": [
+        {
+          "organizacao": "MAPA",
+          "titulo": "Instrução Normativa nº 38, de 30/11/2010 — Regulamento Técnico do Trigo",
+          "ano": 2010,
+          "url": "https://idrparana.pr.gov.br/sites/iapar/arquivos_restritos/files/documento/2020-07/trigoinstrucaonormativa3810.pdf",
+          "tipo": "norma",
+          "conferido": true,
+          "pagina": "Anexo II (Grupo I); Arts. 6º, 7º e 8º",
+          "trechoLiteral": "Grupo I — Tipo 1: 0,30 | 0,30 | 0,10 | 0,75; Tipo 2: 0,50 | 0,70 | 0,20 | 1,50; Tipo 3: 0,70 | 1,00 | 0,50 | 2,50; Fora de Tipo: 1,50 | 2,00 | 1,00 | 5,00 (Matérias Estranhas e Impurezas | Danificados por Insetos | Danificados pelo Calor, Mofados e Ardidos | Chochos, Triguilhos e Quebrados)."
+        }
+      ],
+      "observacaoTecnica": "Grupo II (moagem e outras finalidades, Anexo IV) não foi carregado: o texto disponível não permitiu conferir a coluna de cada valor. Para o Grupo II, cadastre a tabela do contrato como referência da fazenda. Desclassificação também por mofo generalizado, insetos vivos ou mortos (Grupo I), sementes tóxicas e odor estranho (verificação visual)."
+    },
+    {
+      "id": "CLA-ARROZ-CASCA-IN6",
+      "versao": "1.0.0",
+      "equipamentoFamilia": "*",
+      "destino": [
+        "comercializacao",
+        "armazenamento_graos",
+        "agroindustria",
+        "moagem_alimentacao_humana",
+        "racao_animal"
+      ],
+      "etapa": [
+        "recebimento"
+      ],
+      "statusValidacao": "validada",
+      "confianca": "media",
+      "validadoPor": "Conferência documental feita por Claude Code (IA) em 15/10/2026 a partir do documento original; recomenda-se revisão por responsável técnico.",
+      "dataValidacao": "2026-10-15",
+      "historico": [
+        {
+          "versao": "1.0.0",
+          "data": "2026-10-15",
+          "alteracao": "Criação a partir do anexo de arroz em casca natural da IN 2/2012 (altera a IN 6/2009)."
+        }
+      ],
+      "titulo": "Arroz em casca natural: limites máximos de tolerância (IN 6/2009 alterada pela IN 2/2012)",
+      "produto": "arroz",
+      "casasDecimais": 2,
+      "tipos": [
+        {
+          "tipo": "Tipo 1",
+          "limites": {
+            "ardidos": 0.15,
+            "picados_manchados": 1.75,
+            "gessados_verdes": 2.0,
+            "rajados": 1.0,
+            "amarelos": 0.5
+          }
+        },
+        {
+          "tipo": "Tipo 2",
+          "limites": {
+            "ardidos": 0.3,
+            "picados_manchados": 3.0,
+            "gessados_verdes": 4.0,
+            "rajados": 1.5,
+            "amarelos": 1.0
+          }
+        },
+        {
+          "tipo": "Tipo 3",
+          "limites": {
+            "ardidos": 0.5,
+            "picados_manchados": 4.5,
+            "gessados_verdes": 6.0,
+            "rajados": 2.0,
+            "amarelos": 2.0
+          }
+        },
+        {
+          "tipo": "Tipo 4",
+          "limites": {
+            "ardidos": 1.0,
+            "picados_manchados": 6.0,
+            "gessados_verdes": 8.0,
+            "rajados": 3.0,
+            "amarelos": 3.0
+          }
+        },
+        {
+          "tipo": "Tipo 5",
+          "limites": {
+            "ardidos": 1.5,
+            "picados_manchados": 8.0,
+            "gessados_verdes": 10.0,
+            "rajados": 4.0,
+            "amarelos": 5.0
+          }
+        }
+      ],
+      "foraDeTipo": "Fora de Tipo",
+      "consequencias": {},
+      "desclassificacao": [],
+      "defeitos": [
+        {
+          "id": "ardidos",
+          "rotulo": "Ardidos"
+        },
+        {
+          "id": "picados_manchados",
+          "rotulo": "Picados ou manchados"
+        },
+        {
+          "id": "gessados_verdes",
+          "rotulo": "Gessados e verdes"
+        },
+        {
+          "id": "rajados",
+          "rotulo": "Rajados"
+        },
+        {
+          "id": "amarelos",
+          "rotulo": "Amarelos"
+        }
+      ],
+      "fontes": [
+        {
+          "organizacao": "MAPA",
+          "titulo": "Instrução Normativa nº 2, de 06/02/2012 — altera a IN nº 6/2009 (Regulamento Técnico do Arroz)",
+          "ano": 2012,
+          "url": "https://www.idrparana.pr.gov.br/sites/iapar/arquivos_restritos/files/documento/2020-07/arrozin022012.pdf",
+          "tipo": "norma",
+          "conferido": true,
+          "pagina": "Anexo — arroz em casca natural (substitui o Anexo II da IN 6/2009)",
+          "trechoLiteral": "Tipo 1: 0,15 | 1,75 | 2,00 | 1,00 | 0,50; Tipo 2: 0,30 | 3,00 | 4,00 | 1,50 | 1,00; Tipo 3: 0,50 | 4,50 | 6,00 | 2,00 | 2,00; Tipo 4: 1,00 | 6,00 | 8,00 | 3,00 | 3,00; Tipo 5: 1,50 | 8,00 | 10,00 | 4,00 | 5,00 (Ardidos | Picados ou Manchados | Gessados e Verdes | Rajados | Amarelos)."
+        }
+      ],
+      "observacaoTecnica": "Só arroz em casca natural (parboilizado e beneficiado têm tabelas próprias, não carregadas). Matérias estranhas e impurezas: registrar quando acima de 2% e desclassifica a partir de 3% (IN 2/2012, Arts. 3º e 6º) — avaliação do classificador. Alfinetadas não contam como defeito (Art. 1º). Confiança média: o rótulo do anexo no texto disponível tem numeração inconsistente; recomenda-se revisão por classificador."
     }
   ]
 }
