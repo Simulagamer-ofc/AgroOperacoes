@@ -702,19 +702,23 @@ function lotDetail(id) {
 // VIEWS.estoque fica em estoque.js
 
 let reportDays = 30;
-VIEWS.relatorios = () => {
+function dadosRelatorio() {
   const from = daysAgo(reportDays - 1); // mesmo período de “N dias” usado no Controle de gastos
   const ops = db.operations.filter(o => o.date >= from && o.date <= today() && o.status !== 'Cancelada');
   const byType = OP_TYPES.map(t => [t, ops.filter(o => o.type === t)]).filter(([, l]) => l.length);
   const maxType = Math.max(1, ...byType.map(([, l]) => l.length));
   const hoursBy = db.machines.map(m => [m, db.hourLogs.filter(h => h.machineId === m.id && h.date >= from && h.date <= today()).reduce((s, h) => s + (Number(h.hours) - Number(h.previous || 0)), 0)]).filter(([, h]) => h > 0).sort((a, b) => b[1] - a[1]);
   const maxH = Math.max(1, ...hoursBy.map(([, h]) => h));
-  const consumption = db.stock.map(s => [s, db.movements.filter(m => m.itemId === s.id && m.kind === 'Saída' && m.date >= from).reduce((t, m) => t + Number(m.qty), 0)]).filter(([, q]) => q > 0).sort((a, b) => b[1] - a[1]);
+  const consumption = db.stock.map(s => [s, db.movements.filter(m => m.itemId === s.id && m.kind === 'Saída' && m.date >= from && m.date <= today()).reduce((t, m) => t + Number(m.qty), 0)]).filter(([, q]) => q > 0).sort((a, b) => b[1] - a[1]);
   // Mesmo critério de datas do Controle de gastos (manutenção pela data de conclusão, ou de abertura)
   const custos = lancamentosCusto(from, today()), custosManut = custos.filter(x => x.origem === 'manutencao');
   const maintCost = somaValor(custosManut), outrosGastos = somaValor(custos.filter(x => x.origem === 'gasto'));
   const area = ops.filter(o => o.status === 'Concluída' && opTemArea(o)).reduce((s, o) => s + Number(o.area || 0), 0);
-  return head('Relatórios', `Resumo dos últimos ${reportDays} dias (desde ${fmtDate(from)})`, btn('Exportar operações (CSV)', 'csv', 'operations', 'secondary') + btn('Exportar estoque (CSV)', 'csv', 'stock', 'secondary')) +
+  return {from, ops, byType, maxType, hoursBy, maxH, consumption, custosManut, maintCost, outrosGastos, area};
+}
+VIEWS.relatorios = () => {
+  const {from, ops, byType, maxType, hoursBy, maxH, consumption, custosManut, maintCost, outrosGastos, area} = dadosRelatorio();
+  return head('Relatórios', `Resumo dos últimos ${reportDays} dias (desde ${fmtDate(from)})`, btn('Baixar relatório (PDF)', 'relatorio-pdf') + btn('Exportar operações (CSV)', 'csv', 'operations', 'secondary') + btn('Exportar estoque (CSV)', 'csv', 'stock', 'secondary')) +
     `<div class="filters">${[7, 30, 90, 365].map(d => `<button class="${d === reportDays ? 'active' : ''}" data-act="rep-days" data-id="${d}">${d === 365 ? '12 meses' : d + ' dias'}</button>`).join('')}</div>
     <section class="kpis">
       <article class="card kpi"><div class="label">Operações no período</div><div class="value">${ops.length}</div><div class="hint">${ops.filter(o => o.status === 'Concluída').length} concluídas</div></article>

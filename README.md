@@ -13,6 +13,11 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 `0.38.1-beta1` — **Culturas do Rio Grande do Sul**: entram na lista de grãos o **trigo mourisco (sarraceno)** e o **linho (linhaça)**, em moega, secador, silos e relatórios. Ainda sem norma oficial carregada (a do sarraceno será conferida no texto do MAPA antes de entrar): nas avaliações aparece o botão "Inserir norma". O lote de semente com espécie "trigo mourisco" ou "sarraceno" não é mais confundido com trigo.
 
+`0.38.0-beta2` — **Relatório em PDF**:
+- botão **Baixar relatório (PDF)** em Relatórios, respeitando o período selecionado, com resumo, consumo e operações detalhadas; funciona offline. Exportações CSV preservadas.
+- salvamento binário no Android e paginação automática para relatórios longos.
+- consumo de insumos exclui movimentações futuras, como os demais indicadores do período.
+
 `0.38.0-beta1` — **Todas as culturas de grãos e "Inserir norma"**:
 - moega, secador, silos e relatórios aceitam as culturas de grão do Brasil (soja, milho, trigo, arroz, feijão, sorgo, algodão, amendoim, girassol, aveia, cevada, centeio, triticale, gergelim, ervilha, café, canola, milheto, grão-de-bico, lentilha, chia, crambe) e **Outro** com nome digitado.
 - normas oficiais conferidas com trecho literal: trigo (IN MAPA 38/2010 — classificação Grupo I; umidade de comercialização e armazenagem; temperatura da massa na secagem — Embrapa) e arroz em casca (IN MAPA 6/2009 alterada pela IN 2/2012; semente — Embrapa Arroz e Feijão). Não carregados por falta de fonte sem ambiguidade: trigo Grupo II e arroz beneficiado.
