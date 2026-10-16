@@ -157,7 +157,10 @@
       aplicaveis.push({regra: r, aplicadas: cond.aplicadas});
     }
 
-    const validadas = aplicaveis.filter(a => a.regra.statusValidacao === 'validada' && temLimite(a.regra));
+    let validadas = aplicaveis.filter(a => a.regra.statusValidacao === 'validada' && temLimite(a.regra));
+    // Referência cadastrada pela fazenda só vale onde não há norma/referência oficial validada para a mesma condição
+    const oficiais = validadas.filter(a => a.regra.origem !== 'fazenda');
+    if (oficiais.length && oficiais.length < validadas.length) validadas = oficiais;
     // Só as regras compatíveis com a condição informada (escopo e condições), mas sem validação ou sem limite
     res.referenciasCandidatas = compativeis.filter(r => !(r.statusValidacao === 'validada' && temLimite(r))).map(regra => ({
       regraId: regra.id, regraVersao: regra.versao, titulo: regra.titulo, statusValidacao: regra.statusValidacao,
@@ -189,7 +192,7 @@
     const v = arred(leitura.valor, 6), min = finito(regra.limiteMin) ? regra.limiteMin : null, max = finito(regra.limiteMax) ? regra.limiteMax : null;
     Object.assign(res, {
       limiteMin: min, limiteMax: max, alvo: finito(regra.alvo) ? regra.alvo : null,
-      regraId: regra.id, regraVersao: regra.versao, regraTitulo: regra.titulo,
+      regraId: regra.id, regraVersao: regra.versao, regraTitulo: regra.titulo, origem: regra.origem || 'oficial',
       fonte: fonteTexto(regra), fontes: (regra.fontes || []).map(f => ({...f})), condicoesAplicadas: aplicadas
     });
     // limites exclusivos: "abaixo de 14%" → 14,0 já está fora
@@ -380,7 +383,9 @@
       defeitos: [], motivos: [], consequencias: [], pendencias: [], fontes: [], casasDecimais: null,
       bancoVersao: banco.versaoBanco || '', dataAnalise: opcoes.dataAnalise || new Date().toISOString()};
     const fim = (status, pend) => { res.status = status; if (pend) res.pendencias.push(pend); return res; };
-    const tabs = (banco.tabelasClassificacao || []).filter(t => t.produto === dados.produto && t.statusValidacao !== 'suspensa');
+    let tabs = (banco.tabelasClassificacao || []).filter(t => t.produto === dados.produto && t.statusValidacao !== 'suspensa');
+    // Tabela da fazenda só onde não há tabela oficial validada para o mesmo grupo
+    tabs = tabs.filter(t => t.origem !== 'fazenda' || !tabs.some(o => o.origem !== 'fazenda' && o.statusValidacao === 'validada' && (o.grupo?.valor || '') === (t.grupo?.valor || '')));
     if (!tabs.length) return fim(STATUS.SEM_REFERENCIA, `Nenhuma tabela oficial de classificação cadastrada para "${dados.produto || 'produto não informado'}".`);
     if (vazio(dados.destino) || vazio(dados.etapa)) return fim(STATUS.DADOS_INSUFICIENTES, `Informe ${vazio(dados.destino) ? 'o destino' : 'a etapa'} do produto: a tabela oficial depende dele.`);
     const noEscopo = tabs.filter(t => (t.destino === '*' || lista(t.destino).includes(dados.destino)) && (t.etapa === '*' || lista(t.etapa).includes(dados.etapa)));
@@ -392,7 +397,7 @@
       tab = noEscopo.find(t => t.grupo?.valor === dados.grupo);
       if (!tab) return fim(STATUS.SEM_REFERENCIA, `Grupo "${dados.grupo}" sem tabela cadastrada.`);
     }
-    Object.assign(res, {tabelaId: tab.id, tabelaVersao: tab.versao, titulo: tab.titulo, casasDecimais: tab.casasDecimais,
+    Object.assign(res, {tabelaId: tab.id, tabelaVersao: tab.versao, titulo: tab.titulo, casasDecimais: tab.casasDecimais, origem: tab.origem || 'oficial',
       fontes: (tab.fontes || []).map(f => ({...f})), grupoRotulo: tab.grupo?.rotulo || null});
     if (tab.statusValidacao !== 'validada') return fim(STATUS.SEM_REFERENCIA, `Tabela ${tab.id} ainda não conferida no documento oficial.`);
 
