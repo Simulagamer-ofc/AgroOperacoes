@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
 
     // Conteúdo aguardando o usuário escolher onde salvar (backup JSON / CSV)
-    private var pendingFileContent: String? = null
+    private var pendingFileContent: ByteArray? = null
 
     // Callback do <input type="file"> (restaurar backup)
     private var fileChooserCallback: ValueCallback<Array<Uri>>? = null
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         val uri = result.data?.data
         val ok = if (result.resultCode == Activity.RESULT_OK && uri != null && content != null) {
             runCatching {
-                contentResolver.openOutputStream(uri)?.use { it.write(content.toByteArray(Charsets.UTF_8)) } != null
+                contentResolver.openOutputStream(uri)?.use { it.write(content) } != null
             }.getOrDefault(false)
         } else {
             false
@@ -93,10 +93,25 @@ class MainActivity : AppCompatActivity() {
         @JavascriptInterface
         fun saveFile(name: String, mime: String, content: String) {
             runOnUiThread {
-                pendingFileContent = content
+                pendingFileContent = content.toByteArray(Charsets.UTF_8)
                 val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
                     addCategory(Intent.CATEGORY_OPENABLE)
                     type = mime
+                    putExtra(Intent.EXTRA_TITLE, name)
+                }
+                createDocument.launch(intent)
+            }
+        }
+
+        /** PDF binário: base64 evita corromper os bytes com a conversão UTF-8. */
+        @JavascriptInterface
+        fun savePdf(name: String, base64: String) {
+            val bytes = runCatching { android.util.Base64.decode(base64, android.util.Base64.DEFAULT) }.getOrNull() ?: return
+            runOnUiThread {
+                pendingFileContent = bytes
+                val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    type = "application/pdf"
                     putExtra(Intent.EXTRA_TITLE, name)
                 }
                 createDocument.launch(intent)
