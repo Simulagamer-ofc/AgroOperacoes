@@ -290,9 +290,42 @@ function iconeDia(dados, i) {
 const hh = n => String(n).padStart(2, '0') + 'h';
 const DIA_SEMANA = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'], DIA_SEMANA_LONGO = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
 const climaAberto = () => safeStorage.get('agro-clima-aberto') === '1';
+// A chamada parte do toque, inclusive no Safari; não depende da Permissions API.
+// O navegador decide se mostra a confirmação. Um bloqueio salvo exige ajuste pelo usuário.
+let climaLocalEstado = '', climaLocalMensagem = '';
+function controleLocalClima() {
+  const buscando = climaLocalEstado === 'buscando';
+  return `<div class="btn-row"><button type="button" class="secondary" data-act="clima-local"${buscando ? ' disabled' : ''}>${buscando ? 'Buscando localização…' : '📍 Ativar localização'}</button></div>
+    <p class="nota" role="status" aria-live="polite">${esc(climaLocalMensagem || 'Toque em Ativar localização e, se o navegador solicitar, escolha Permitir para usar sua posição na previsão do tempo.')}</p>
+    ${climaLocalEstado === 'negada' ? `<details class="nota"><summary>Como liberar no Safari do iPhone</summary><p>No Safari, abra o menu da página ao lado do endereço (aA em algumas versões), entre em Ajustes do Site ou Mais → Ajustes do Site e selecione Localização → Permitir. Volte e toque em Ativar localização.</p><p>Se continuar bloqueado, confira Ajustes → Privacidade e Segurança → Serviços de Localização → Sites do Safari e permita durante o uso. Os Serviços de Localização também precisam estar ativados.</p><p>O Nexus Agro não consegue alterar uma permissão bloqueada pelo navegador.</p></details>` : ''}`;
+}
+function atualizarLocalClima() {
+  const el = document.getElementById('climaLocalControle');
+  if (el) el.innerHTML = controleLocalClima();
+}
+function solicitarLocalClima() {
+  if (climaLocalEstado === 'buscando') return;
+  const falha = (estado, mensagem) => { climaLocalEstado = estado; climaLocalMensagem = mensagem; atualizarLocalClima(); };
+  if (globalThis.isSecureContext === false) return falha('indisponivel', 'Abra o Nexus Agro pelo endereço HTTPS para usar a localização.');
+  if (!navigator.geolocation) return falha('indisponivel', 'Este navegador não disponibiliza localização. Confira os ajustes do aparelho.');
+  climaLocalEstado = 'buscando'; climaLocalMensagem = 'Aguardando a localização. Se o Safari pedir autorização, toque em Permitir.'; atualizarLocalClima();
+  try {
+    navigator.geolocation.getCurrentPosition(p => {
+      climaLocalEstado = ''; climaLocalMensagem = '';
+      db.settings.local = {lat: p.coords.latitude, lon: p.coords.longitude, origem: 'localização da sede'};
+      save(); render(); buscarClima(true);
+    }, erro => {
+      if (erro.code === 1) falha('negada', 'O acesso à localização foi negado ou está bloqueado. Tente novamente pelo botão; se o Safari não perguntar, siga as instruções abaixo.');
+      else if (erro.code === 3) falha('tempo', 'A localização demorou a responder. Vá para uma área aberta e toque em Ativar localização para tentar novamente.');
+      else falha('sinal', 'A posição está indisponível no momento. Confira os Serviços de Localização e tente novamente em uma área aberta.');
+    }, {enableHighAccuracy: false, timeout: 20000, maximumAge: 600000});
+  } catch (erro) {
+    falha('indisponivel', 'Não foi possível iniciar a localização neste navegador. Confira os ajustes do aparelho e tente novamente.');
+  }
+}
 function cartaoClima() {
   const loc = localDaFazenda(), c = lerClima();
-  if (!loc) return `<article class="card panel hoje-clima" id="hojeClima"><h3>Clima e pulverização</h3><p class="nota">Para ver a previsão do tempo e as melhores horas para pulverizar, informe onde fica a fazenda.</p><div class="btn-row">${btn('📍 Usar a localização atual', 'clima-local', '', 'secondary')}</div><small class="nota">Ou meça o contorno de um talhão pelo GPS: o app usa o centro dele.</small></article>`;
+  if (!loc) return `<article class="card panel hoje-clima" id="hojeClima"><h3>Clima e pulverização</h3><p class="nota">Para ver a previsão do tempo e as melhores horas para pulverizar, informe onde fica a fazenda.</p><div id="climaLocalControle">${controleLocalClima()}</div><small class="nota">Ou meça o contorno de um talhão pelo GPS: o app usa o centro dele.</small></article>`;
   if (!c?.dados?.daily) return `<article class="card panel hoje-clima" id="hojeClima"><h3>Clima e pulverização</h3><p class="nota">${navigator.onLine === false ? 'Sem internet: a previsão aparece quando o sinal voltar.' : 'Buscando a previsão…'}</p></article>`;
   const d = c.dados.daily, hoje = today(), i0 = Math.max(0, d.time.indexOf(hoje));
   const jan = janelasDoDia(c.dados, d.time[i0]), amanha = d.time[i0 + 1] ? janelasDoDia(c.dados, d.time[i0 + 1]) : null;
@@ -323,12 +356,7 @@ Object.assign(ACTIONS, {
   'clima-expandir': () => { safeStorage.set('agro-clima-aberto', climaAberto() ? '0' : '1'); const el = document.getElementById('hojeClima'); if (el) el.outerHTML = cartaoClima(); },
   'chuva-ontem': mm => chuvaForm({date: daysAgo(1), mm, notes: 'Estimativa da previsão do tempo (média dos modelos) — conferir no pluviômetro'}),
   'clima-atualizar': () => { if (navigator.onLine === false) return showToast('Sem internet agora'); buscarClima(true); showToast('Atualizando a previsão…'); },
-  'clima-local': () => {
-    if (!navigator.geolocation) return showToast('Este aparelho não oferece a localização ao app.', true);
-    showToast('Buscando a localização…');
-    navigator.geolocation.getCurrentPosition(p => { db.settings.local = {lat: p.coords.latitude, lon: p.coords.longitude, origem: 'localização da sede'}; save(); render(); buscarClima(true); },
-      () => showToast('Não foi possível obter a localização. Libere a localização para o app.', true), {enableHighAccuracy: false, timeout: 20000, maximumAge: 600000});
-  }
+  'clima-local': solicitarLocalClima
 });
 
 const nvAtualizarOuRender = () => typeof nvAtualizarTela === 'function' ? nvAtualizarTela() : render();
