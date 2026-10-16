@@ -784,3 +784,21 @@ tr.clickable{cursor:pointer} tr.clickable:hover td{background:rgba(23,135,212,.0
 .norma-chamada{border-left:4px solid var(--purple);margin-top:12px}
 .norma-ctx{border-left:4px solid var(--purple)}
 .norma-grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.norma-grade small{display:block;color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700}.norma-grade .full{grid-column:1/-1}
+/* Visão geral = painel do dia: Hoje com o crítico, resumo do dia em números e operações do período recolhidas */
+.hoje-fazer #hojeCorpo>:first-child{margin-top:10px}
+.hoje-crit-tit{margin:2px 0 2px;font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--orange)}
+.dia-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:0 0 16px}
+.dia-tile{display:grid;gap:3px;align-content:start;text-align:left;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text);font:inherit;cursor:pointer;min-width:0}
+.dia-tile:hover,.dia-tile:focus-visible{border-color:var(--blue)}
+.dia-tile small{font-size:.78rem;color:var(--muted);font-weight:600}
+.dia-tile strong{font-size:1.55rem;line-height:1.1;font-weight:800}
+.dia-tile span{font-size:.8rem;color:var(--muted);overflow-wrap:anywhere}
+.dia-tile em{font-style:normal;font-size:.8rem;font-weight:700;color:var(--orange)}
+@media(max-width:560px){.dia-tiles{grid-template-columns:1fr 1fr;gap:8px}.dia-tile{padding:10px 11px}.dia-tile strong{font-size:1.3rem}}
+.op-periodo{padding:10px 12px;margin-bottom:16px}
+.op-periodo #opPeriodoCorpo{margin-top:12px;display:grid;gap:12px}
+.op-periodo .nx-periods{justify-content:flex-start}
+.op-graficos{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.nx-custos .nx-dashboard-head h3{margin:0 0 2px;font-size:1.1rem}
+.nx-custos,.nx-estoque-painel{margin-bottom:16px}
+@media(max-width:760px){.nx-periods{justify-content:flex-start}.nx-periods button{padding:7px 9px;min-height:38px}}

@@ -136,19 +136,8 @@ function custosMes() {
     `<p class="nx-detail">* ${esc(MESES[hoje.getMonth()])}/${hoje.getFullYear()} até ${fmtDate(fim)} · mês em andamento</p>`);
 }
 
-function roscaSituacao(ini, fim) {
-  const ops = operacoesPainel(ini, fim), total = ops.length;
-  const cont = OP_STATUS.map(s => [s, ops.filter(o => o.status === s).length]);
-  const cores = ['var(--s1)', 'var(--s2)', 'var(--s3)', 'var(--s4)'];
-  let acumulado = 0;
-  const gradiente = cont.map(([, n], i) => { const de = acumulado; acumulado += total ? n / total * 100 : 0; return `${cores[i]} ${de}% ${acumulado}%`; }).join(',');
-  const corpo = total ? `<div class="nx-status-area"><div class="nx-status-ring" role="img" aria-label="${esc(cont.map(([s, n]) => `${s}: ${n}`).join(', '))}" style="background:conic-gradient(${gradiente})"><div class="nx-status-hole"><b>${total}</b><span class="nx-caption">operações</span></div></div>
-      <div class="nx-status-legend">${cont.map(([s, n]) => `<div><span>${esc(s === 'Programada' ? 'Planejadas' : s === 'Concluída' ? 'Concluídas' : s === 'Cancelada' ? 'Canceladas' : s)}</span><b>${n}</b></div>`).join('')}</div></div>` : semDados('Nenhuma operação com data no período.');
-  return cartaoPainel('Situação das operações', `Operações com data no período · ${descPeriodoMin()}`, corpo);
-}
-
-function estoqueInsumos() {
-  const itens = insumosAtencao(), exibidos = itens.slice(0, 2);
+function estoqueInsumos(naTelaEstoque = false) {
+  const itens = insumosAtencao(), exibidos = naTelaEstoque ? itens : itens.slice(0, 2);
   const corpo = exibidos.length ? exibidos.map(s => {
     const qtd = Number(s.qty), min = Number(s.min), unidade = esc(s.unit);
     const situacao = qtd < min ? `Abaixo do mínimo de ${num(min)} ${unidade} · faltam ${num(min - qtd)} ${unidade}` : qtd === min ? `No mínimo de ${num(min)} ${unidade}` : `Perto do mínimo de ${num(min)} ${unidade}`;
@@ -156,26 +145,45 @@ function estoqueInsumos() {
       <div class="nx-track"><div class="nx-fill nx-stock-fill" style="width:${Math.max(0, Math.min(100, qtd / (min * 2) * 100))}%"></div></div><p class="nx-warning">${situacao}</p></div>`;
   }).join('') : semDados(db.stock.length ? 'Nenhum insumo abaixo ou perto do mínimo.' : 'Nenhum insumo cadastrado.');
   return cartaoPainel('Insumos que precisam de atenção', 'Saldo atual · comparação com estoque mínimo', corpo +
-    `<button type="button" class="nx-stock-link" data-act="nav" data-id="estoque">Ver todos os insumos${itens.length > 2 ? ` (${itens.length} em atenção)` : ''} →</button>`);
+    (naTelaEstoque ? '' : `<button type="button" class="nx-stock-link" data-act="nav" data-id="estoque">Ver todos os insumos${itens.length > 2 ? ` (${itens.length} em atenção)` : ''} →</button>`));
 }
 
-function painelNexus() {
-  const {ini, fim} = periodoPainel(), custo = somaValor(lancamentosCusto(ini, fim));
-  const concluidas = operacoesPainel(ini, fim).filter(o => o.status === 'Concluída').length, atencao = insumosAtencao().length;
-  return `<section class="nx-dashboard viz-root"><header class="nx-dashboard-head"><div><h2>Centro de operações</h2><p class="nx-caption">${esc(typeof nvNomeExibido === 'function' ? nvNomeExibido() : db.settings.farm || 'Minha fazenda')}</p></div>
-      <div class="nx-periods" role="group" aria-label="Período do painel">${PERIODOS.map(([d, label]) => `<button type="button" class="${d === periodoGraf ? 'active' : ''}" data-act="graf-periodo" data-id="${d}" aria-pressed="${d === periodoGraf}">${label}</button>`).join('')}<button type="button" class="nx-periodo-datas ${periodoGraf === 0 ? 'active' : ''}" data-act="graf-periodo-datas" aria-pressed="${periodoGraf === 0}" title="Escolher as datas">${periodoGraf === 0 && periodoPers ? esc(descPeriodo()) : '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg> Datas'}</button></div></header>
-    <section class="nx-dashboard-kpis" aria-label="Resumo do painel">
+// Botões de período (compartilhados: custos no Financeiro e operações na Visão geral)
+const botoesPeriodo = () => `<div class="nx-periods" role="group" aria-label="Período">${PERIODOS.map(([d, label]) => `<button type="button" class="${d === periodoGraf ? 'active' : ''}" data-act="graf-periodo" data-id="${d}" aria-pressed="${d === periodoGraf}">${label}</button>`).join('')}<button type="button" class="nx-periodo-datas ${periodoGraf === 0 ? 'active' : ''}" data-act="graf-periodo-datas" aria-pressed="${periodoGraf === 0}" title="Escolher as datas">${periodoGraf === 0 && periodoPers ? esc(descPeriodo()) : '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg> Datas'}</button></div>`;
+
+// Custos (aba do Financeiro): total do período, custos por categoria e evolução mensal
+function painelCustos() {
+  const {ini, fim} = periodoPainel(), lanc = lancamentosCusto(ini, fim), custo = somaValor(lanc), dias = diasPeriodo();
+  return `<section class="nx-dashboard viz-root nx-custos"><header class="nx-dashboard-head"><div><h3>Custos da fazenda</h3><p class="nx-caption">Despesas, mão de obra, combustível e manutenções concluídas</p></div>${botoesPeriodo()}</header>
+    <section class="nx-dashboard-kpis" aria-label="Resumo dos custos">
       <article class="nx-panel nx-stat"><p class="nx-caption">Custos no período</p><div class="nx-metric">${dinheiroPainel(custo)}</div><p class="nx-caption">${esc(descPeriodo())}</p></article>
-      <article class="nx-panel nx-stat"><p class="nx-caption">Operações concluídas</p><div class="nx-metric">${concluidas}</div><p class="nx-caption">No período selecionado</p></article>
-      <article class="nx-panel nx-stat"><p class="nx-caption">Estoque em atenção</p><div class="nx-metric">${atencao} ${atencao === 1 ? 'item' : 'itens'}</div><p class="nx-caption">Saldo atual</p></article>
-    </section><div class="section-title nx-graf-tit"><h3>Gráficos</h3></div><section class="nx-dashboard-grid">${custosCategorias(ini, fim)}${custosMes()}${roscaSituacao(ini, fim)}${estoqueInsumos()}</section></section>`;
+      <article class="nx-panel nx-stat"><p class="nx-caption">Média por dia</p><div class="nx-metric">${dinheiroPainel(Math.round(custo / Math.max(1, dias)))}</div><p class="nx-caption">${dias} ${dias === 1 ? 'dia' : 'dias'}</p></article>
+      <article class="nx-panel nx-stat"><p class="nx-caption">Lançamentos</p><div class="nx-metric">${lanc.length}</div><p class="nx-caption">No período selecionado</p></article>
+    </section><section class="nx-dashboard-grid">${custosCategorias(ini, fim)}${custosMes()}</section></section>`;
 }
 
-function painelGraficos() {
-  const {ini, fim} = periodoPainel();
-  return `<div class="section-title"><h3>Indicadores adicionais · ${esc(descPeriodoMin())}</h3></div>
-    <section class="viz-root viz-grid">${graficoArea(ini, fim)}${graficoHoras(ini, fim)}${graficoEstoque()}</section>`;
+// Estoque: insumos em atenção e estoque × mínimo (tela Estoque)
+function painelEstoque() {
+  if (!db.stock.some(s => Number(s.min) > 0)) return '';
+  return `<section class="nx-dashboard viz-root nx-estoque-painel"><section class="nx-dashboard-grid">${estoqueInsumos(true)}${graficoEstoque()}</section></section>`;
 }
+
+// Operações no período (Visão geral): recolhido mostra uma linha; aberto, os gráficos da operação
+const opPeriodoAberto = () => safeStorage.get('agro-op-periodo-aberto') === '1';
+function painelOperacoes() {
+  const {ini, fim} = periodoPainel(), ops = operacoesPainel(ini, fim);
+  const conc = ops.filter(o => o.status === 'Concluída'), ha = conc.filter(o => Number(o.area) > 0 && (typeof opTemArea !== 'function' || opTemArea(o))).reduce((s, o) => s + Number(o.area), 0);
+  const horas = db.hourLogs.filter(h => h.date >= ini && h.date <= fim).reduce((s, h) => s + Math.max(0, Number(h.hours) - Number(h.previous || 0)), 0);
+  const aberto = opPeriodoAberto();
+  const resumo = ops.length ? [`${ops.length} ${ops.length === 1 ? 'operação' : 'operações'}`, `${conc.length} ${conc.length === 1 ? 'concluída' : 'concluídas'}`, ha ? `${num(ha)} ha` : '', horas ? `${num(horas)} h de máquina` : ''].filter(Boolean).join(' • ') : 'Nenhuma operação com data no período';
+  return `<article class="card panel op-periodo ${aberto ? 'aberto' : ''}" id="opPeriodo">
+    <button type="button" class="clima-linha" data-act="op-periodo-expandir" aria-expanded="${aberto}" aria-controls="opPeriodoCorpo">
+      <span class="alert-icon blue hoje-ic" aria-hidden="true">${typeof iconeLinha === 'function' ? iconeLinha('lista', 20) : '▤'}</span>
+      <span class="clima-txt"><strong>Operações <small class="hoje-data">${esc(descPeriodoMin())}</small></strong><small>${esc(resumo)}</small></span>
+      <span class="clima-seta" aria-hidden="true">${aberto ? '▴' : '▾'}</span><span class="sr-only">${aberto ? 'Recolher' : 'Ver'} os gráficos das operações</span></button>
+    ${aberto ? `<div id="opPeriodoCorpo" class="nx-dashboard">${botoesPeriodo()}<section class="viz-root viz-grid op-graficos">${graficoSituacao(ini, fim)}${graficoArea(ini, fim)}${graficoHoras(ini, fim)}</section></div>` : ''}</article>`;
+}
+ACTIONS['op-periodo-expandir'] = () => { safeStorage.set('agro-op-periodo-aberto', opPeriodoAberto() ? '0' : '1'); render(); };
 
 ACTIONS['graf-periodo-datas'] = () => openForm({
   title: 'Escolher o período', sub: 'O painel mostra os custos e as operações entre estas datas.', submit: 'Aplicar',

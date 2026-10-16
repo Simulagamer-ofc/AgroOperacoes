@@ -32,17 +32,17 @@ test('painel: custos usam período e conclusão da manutenção; filtros não mo
     operations: [{date:'2026-10-09', status:'Concluída'}, {date:'2026-09-20', status:'Concluída'}, {date:'2026-07-01', status:'Concluída'}]};
   const {run} = painel(dados); const snapshot = JSON.stringify(dados);
   assert.equal(run('somaValor(lancamentosCusto(periodoPainel().ini, periodoPainel().fim))'), 16700);
-  assert.match(run('painelNexus()'), /nx-metric">2<\/div>/);
+  assert.match(run('painelCustos()'), /nx-metric">3<\/div>/, '3 lançamentos em 30 dias');
   run("ACTIONS['graf-periodo']('7')");
   assert.equal(run('somaValor(lancamentosCusto(periodoPainel().ini, periodoPainel().fim))'), 13600);
-  assert.match(run('painelNexus()'), /nx-metric">1<\/div>/);
+  assert.match(run('painelCustos()'), /nx-metric">2<\/div>/, '2 lançamentos em 7 dias');
   assert.equal(JSON.stringify(dados), snapshot);
   run("ACTIONS['graf-periodo']('999')"); assert.equal(run('periodoGraf'), 7);
 });
 
 test('painel: nenhuma máquina ou dados fictícios em banco vazio; período inválido volta a 30', () => {
   const {run} = painel({}, '-1'); assert.equal(run('periodoGraf'), 30);
-  const html = run('painelNexus()');
+  const html = run('painelCustos()') + run('painelOperacoes()') + run('estoqueInsumos()');
   assert.match(html, /Nenhum custo registrado no período/);
   assert.match(html, /Nenhuma operação com data no período/);
   assert.match(html, /Nenhum insumo cadastrado/);
@@ -79,7 +79,7 @@ test('painel: categoria agrupada e Outras das horas nunca ultrapassam 100% da la
 
 test('painel: texto cadastrado é escapado nos rótulos e a área informa passagens repetidas', () => {
   const {run} = painel({settings:{farm:'<img src=x onerror=alert(1)>'}, expenses:[{date:'2026-10-09', value:10, category:'<script>x</script>'}], operations:[{date:'2026-10-09', status:'Concluída', area:10}]});
-  const html = run('painelNexus()'); assert.doesNotMatch(html, /<img|<script>/);
+  const html = run('painelCustos()'); assert.doesNotMatch(html, /<img|<script>/);
   assert.match(html, /&lt;script&gt;/);
   assert.match(run("graficoArea('2026-10-01','2026-10-10')"), /inclui passagens no mesmo talhão/);
 });

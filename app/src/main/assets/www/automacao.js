@@ -319,7 +319,7 @@ function cartaoClima() {
     <small class="nota">Critério: vento 3–10 km/h, Delta T 2–8 °C, até 30 °C, umidade ≥ 50% e sem chuva. Orientação — confirme as condições no campo. Previsão: ${esc(fonte)}, via Open-Meteo, para ${esc(loc.origem)}, atualizada há ${idade < 60 ? idade + ' min' : Math.round(idade / 60) + ' h'}. <button class="link" data-act="clima-atualizar">Atualizar agora</button></small></div>` : ''}</article>`;
 }
 Object.assign(ACTIONS, {
-  'hoje-mais': () => go('inicio', 'alertas'),
+  'hoje-mais': () => { hojeTodos = true; render(); },
   'clima-expandir': () => { safeStorage.set('agro-clima-aberto', climaAberto() ? '0' : '1'); const el = document.getElementById('hojeClima'); if (el) el.outerHTML = cartaoClima(); },
   'chuva-ontem': mm => chuvaForm({date: daysAgo(1), mm, notes: 'Estimativa da previsão do tempo (média dos modelos) — conferir no pluviômetro'}),
   'clima-atualizar': () => { if (navigator.onLine === false) return showToast('Sem internet agora'); buscarClima(true); showToast('Atualizando a previsão…'); },
@@ -355,24 +355,54 @@ function painelHoje() {
     : x.acao ? `<div class="hoje-item"><span class="alert-icon ${x.color}">${x.icon}</span><div><strong>${esc(x.title)}</strong><small>${esc(x.text)}</small></div>${mini(x.acao.label, x.acao.act, x.acao.id || '')}</div>`
     : `<div class="hoje-item clickable" data-act="nav" data-id="${esc(x.route)}"><span class="alert-icon ${x.color}">${x.icon}</span><div><strong>${esc(x.title)}</strong><small>${esc(x.text)}</small></div><span class="hoje-ir" aria-hidden="true">›</span></div>`;
   const data = new Date().toLocaleDateString('pt-BR', {weekday: 'long', day: 'numeric', month: 'long'});
-  // Recolhido (padrão): uma linha com quantas pendências há e a mais urgente; o botão expande a lista com as ações
+  // Recolhido (padrão): resumo + só o que é crítico (avisos vermelhos/laranja e operações atrasadas). Expandido: tudo.
   const aberto = hojeAberto(), atrasadas = ops.filter(o => o.status === 'Programada' && o.date < t).length, andamento = ops.filter(o => o.status === 'Em andamento').length;
-  const avisos = itens.length - ops.length, urgente = itens[0], nomeUrg = urgente ? (urgente.chuva ? `Choveu ~${num(urgente.chuva.mm)} mm ontem` : urgente.op ? `${urgente.op.type} — ${opPlace(urgente.op)}` : urgente.title) : '';
+  const critico = x => x.op ? x.op.status === 'Programada' && x.op.date < t : !x.chuva && (x.color === 'red' || x.color === 'orange');
+  const criticos = itens.filter(critico), avisos = itens.length - ops.length - (ch ? 1 : 0);
   const partes = [atrasadas ? `${atrasadas} ${atrasadas === 1 ? 'atrasada' : 'atrasadas'}` : '', andamento ? `${andamento} em andamento` : '', avisos > 0 ? `${avisos} ${avisos === 1 ? 'aviso' : 'avisos'}` : ''].filter(Boolean);
   const temUrgente = atrasadas > 0 || al.some(a => a.color === 'red');
+  const LIM = 12, lista = aberto ? (hojeTodos ? itens : itens.slice(0, LIM)) : criticos.slice(0, 5);
+  const resto = itens.length - lista.length;
+  const rodape = !itens.length ? '' : aberto
+    ? (resto > 0 ? `<button class="link hoje-vermais" data-act="hoje-mais">Ver mais ${resto} ${resto === 1 ? 'item' : 'itens'}</button>` : '')
+    : (resto > 0 ? `<button class="link hoje-vermais" data-act="hoje-expandir">Ver ${lista.length ? 'todas' : 'as'} ${itens.length} ${itens.length === 1 ? 'pendência' : 'pendências'} ▾</button>` : '');
   return `<section class="hoje">${cartaoClima()}<article class="card panel hoje-fazer ${aberto ? 'aberto' : ''}" id="hojeFazer">
     <button type="button" class="clima-linha" data-act="hoje-expandir" aria-expanded="${aberto}" aria-controls="hojeCorpo">
       <span class="alert-icon ${itens.length ? (temUrgente ? 'red' : 'blue') : 'green'} hoje-ic" aria-hidden="true">${typeof iconeLinha === 'function' ? iconeLinha(itens.length ? (temUrgente ? 'alerta' : 'lista') : 'check', 20) : ''}</span>
-      <span class="clima-txt"><strong>Hoje <small class="hoje-data">${esc(data)}</small></strong><small class="${temUrgente ? 'nao' : 'ok'}">${itens.length ? `${itens.length} ${itens.length === 1 ? 'pendência' : 'pendências'}${partes.length ? ' • ' + esc(partes.join(' • ')) : ''}${!aberto && nomeUrg ? ` — ${esc(nomeUrg)}` : ''}` : 'Tudo em dia'}</small></span>
-      <span class="clima-seta" aria-hidden="true">${aberto ? '▴' : '▾'}</span><span class="sr-only">${aberto ? 'Recolher' : 'Ver'} as pendências de hoje</span></button>
-    ${aberto ? `<div id="hojeCorpo"><div class="btn-row hoje-botoes">${btn('Resumo da semana', 'resumo-semana', '', 'secondary')}${btn('+ Operação', 'op-new', '', 'secondary')}</div>
-      ${itens.length ? itens.slice(0, 6).map(linha).join('') + (itens.length > 6 ? `<button class="link hoje-vermais" data-act="hoje-mais">Ver mais ${itens.length - 6} ${itens.length - 6 === 1 ? 'item' : 'itens'}</button>` : '') : empty('Tudo em dia', 'Nenhuma pendência para hoje.')}</div>` : ''}</article>
-    </section>`;
+      <span class="clima-txt"><strong>Hoje <small class="hoje-data">${esc(data)}</small></strong><small class="${temUrgente ? 'nao' : 'ok'}">${itens.length ? `${itens.length} ${itens.length === 1 ? 'pendência' : 'pendências'}${partes.length ? ' • ' + esc(partes.join(' • ')) : ''}` : 'Tudo em dia'}</small></span>
+      <span class="clima-seta" aria-hidden="true">${aberto ? '▴' : '▾'}</span><span class="sr-only">${aberto ? 'Mostrar só o crítico' : 'Ver todas as pendências de hoje'}</span></button>
+    <div id="hojeCorpo">${aberto ? `<div class="btn-row hoje-botoes">${btn('Resumo da semana', 'resumo-semana', '', 'secondary')}${btn('+ Operação', 'op-new', '', 'secondary')}</div>` : ''}
+      ${lista.length ? `${!aberto ? '<p class="hoje-crit-tit">Precisa de atenção</p>' : ''}${lista.map(linha).join('')}` : aberto && !itens.length ? empty('Tudo em dia', 'Nenhuma pendência para hoje.') : ''}${rodape}</div></article>
+    </section>${resumoDia()}<!--fim-hoje-->`;
 }
+// Resumo do dia: só operação (nada de custo ou estoque); cada número leva à tela dele
+function resumoDia() {
+  const t = today(), pode = r => typeof nvPodeRota !== 'function' || nvPodeRota(r), tiles = [];
+  const opsHoje = db.operations.filter(o => o.status === 'Em andamento' || o.date === t);
+  if (pode('operacoes')) {
+    const and = opsHoje.filter(o => o.status === 'Em andamento').length, prog = opsHoje.filter(o => o.status === 'Programada').length, conc = opsHoje.filter(o => o.status === 'Concluída').length;
+    const atr = db.operations.filter(o => o.status === 'Programada' && o.date && o.date < t).length;
+    tiles.push(['operacoes', 'Operações hoje', opsHoje.filter(o => o.status !== 'Cancelada').length, [and ? `${and} em andamento` : '', prog ? `${prog} programada${prog > 1 ? 's' : ''}` : '', conc ? `${conc} concluída${conc > 1 ? 's' : ''}` : ''].filter(Boolean).join(' • ') || 'nada programado', atr ? `${atr} atrasada${atr > 1 ? 's' : ''}` : '']);
+    const equipe = [...new Set(opsHoje.filter(o => o.status !== 'Cancelada').map(o => String(o.operator || '').trim()).filter(Boolean))];
+    tiles.push(['operacoes', 'Equipe nas operações', equipe.length, equipe.length ? equipe.slice(0, 3).join(', ') + (equipe.length > 3 ? ` e mais ${equipe.length - 3}` : '') : 'nenhum operador nas operações de hoje', '']);
+  }
+  if (pode('maquinas') && db.machines.length) {
+    const ativas = db.machines.filter(m => !isInactive(m)), emUso = new Set(db.operations.filter(o => o.status === 'Em andamento' && o.machineId).map(o => o.machineId));
+    const manut = ativas.filter(m => machineStatus(m) === 'Em manutenção').length, uso = ativas.filter(m => emUso.has(m.id)).length;
+    tiles.push(['maquinas', 'Máquinas', ativas.length, [`${uso} em uso`, `${ativas.length - uso - manut} disponíve${ativas.length - uso - manut === 1 ? 'l' : 'is'}`].join(' • '), manut ? `${manut} em manutenção` : '']);
+  }
+  const secando = (db.lotesSecagem || []).filter(l => l.status === 'Em andamento');
+  if (secando.length && pode('graos')) tiles.push(['graos', 'Secagem', secando.length, secando.slice(0, 2).map(l => { const u = (l.leituras || []).filter(x => x.umidade != null).at(-1)?.umidade ?? l.umidadeEntrada; return `${typeof nomeEquip === 'function' ? nomeEquip(l.secadorId) : 'Secador'}${u != null ? ` ${num(u, 1)}%` : ''}`; }).join(' • '), '']);
+  if (pode('chuva') && db.chuvas.length) {
+    const desde = daysAgo(6), mm = db.chuvas.filter(c => c.date >= desde && c.date <= t).reduce((s, c) => s + (Number(c.mm) || 0), 0), ult = db.chuvas.slice().sort(byDateDesc)[0];
+    tiles.push(['chuva', 'Chuva em 7 dias', `${num(mm)} mm`, ult ? `última: ${fmtDate(ult.date).slice(0, 5)}, ${num(ult.mm)} mm` : '', '']);
+  }
+  if (!tiles.length) return '';
+  return `<section class="dia-tiles" aria-label="Resumo do dia">${tiles.map(([rota, rot, val, sub, alerta]) => `<button type="button" class="dia-tile" data-act="nav" data-id="${rota}"><small>${esc(rot)}</small><strong>${typeof val === 'number' ? num(val) : esc(val)}</strong><span>${esc(sub)}</span>${alerta ? `<em>${esc(alerta)}</em>` : ''}</button>`).join('')}</section>`;
+}
+let hojeTodos = false;
 const hojeAberto = () => safeStorage.get('agro-hoje-aberto') === '1';
-ACTIONS['hoje-expandir'] = () => { safeStorage.set('agro-hoje-aberto', hojeAberto() ? '0' : '1'); render(); };
-const painelNexusCompleto = typeof painelNexus === 'function' ? painelNexus : null;
-if (painelNexusCompleto) painelNexus = () => typeof nvVeFinanceiro === 'function' && !nvVeFinanceiro() ? '' : painelNexusCompleto();
+ACTIONS['hoje-expandir'] = () => { hojeTodos = false; safeStorage.set('agro-hoje-aberto', hojeAberto() ? '0' : '1'); render(); };
 const inicioSemHoje = VIEWS.inicio;
 VIEWS.inicio = anchor => painelHoje() + inicioSemHoje(anchor);
 VIEWS.inicio.after = anchor => { inicioSemHoje.after?.(anchor); buscarClima(); };
