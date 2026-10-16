@@ -106,7 +106,10 @@ VIEWS.secagem.after = () => {
     const l = find('lots', sc.lotId);
     if (l) {
       const sp = semAcento(l.species || '');
-      const p = PRODUTOS_SEC.find(([k]) => k !== 'outro' && sp.includes(k));
+      // nome mais específico primeiro: "trigo mourisco" não pode cair em "trigo"
+      const nomesSec = PRODUTOS_SEC.filter(([k]) => k !== 'outro').map(([k, n]) => [k, [k.replace(/_/g, ' '), ...semAcento(n).split(/[()]/).map(t => t.trim()).filter(Boolean)]]);
+      const cand = nomesSec.flatMap(([k, ns]) => ns.filter(n => sp.includes(n)).map(n => [k, n.length])).sort((a, b) => b[1] - a[1]);
+      const p = cand[0];
       if (p) sc.produto = p[0];
       sc.destino = 'semente'; // lotes deste módulo são lotes de semente
     }
