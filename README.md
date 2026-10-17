@@ -4,6 +4,15 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.39.0-beta1` — **Visão geral virou o painel do dia** (só operação, sem poluição):
+- **Clima** recolhido numa linha (expande os períodos, 7 dias e janelas de pulverização). **Hoje** recolhido mostra só o crítico (avisos vermelhos/laranja e operações atrasadas); o botão expande todas as pendências, inclusive as de menor prioridade. O app lembra como cada bloco ficou. O sininho abre o "Hoje" expandido.
+- **Resumo do dia** em números que levam à tela de cada um: operações de hoje (e atrasadas), equipe nas operações, máquinas em uso / disponíveis / em manutenção, secagem em andamento e chuva dos últimos 7 dias (cada um só para quem vê aquela tela).
+- **Operações do período** recolhidas numa linha (operações, concluídas, ha e horas de máquina); abertas mostram a barra de situação (no lugar da rosca), área trabalhada e horas por máquina.
+- **Custos** saíram da Visão geral e foram para o **Financeiro → Custos e gráficos** (total, média por dia, custos por categoria e evolução mensal). **Insumos em atenção** e **Estoque × mínimo** foram para a tela **Estoque**.
+- Avisos e operações não aparecem mais repetidos (fim do bloco escondido "Operações, ações rápidas e indicadores adicionais"; as ações rápidas continuam no botão +).
+
+`0.38.1-beta1` — **Culturas do Rio Grande do Sul**: entram na lista de grãos o **trigo mourisco (sarraceno)** e o **linho (linhaça)**, em moega, secador, silos e relatórios. Ainda sem norma oficial carregada (a do sarraceno será conferida no texto do MAPA antes de entrar): nas avaliações aparece o botão "Inserir norma". O lote de semente com espécie "trigo mourisco" ou "sarraceno" não é mais confundido com trigo.
+
 `0.38.0-beta2` — **Relatório em PDF**:
 - botão **Baixar relatório (PDF)** em Relatórios, respeitando o período selecionado, com resumo, consumo e operações detalhadas; funciona offline. Exportações CSV preservadas.
 - salvamento binário no Android e paginação automática para relatórios longos.

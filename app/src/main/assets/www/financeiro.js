@@ -135,9 +135,10 @@ VIEWS.financeiro = () => {
   const venc = db.contas.filter(contaVencida);
   const soma = l => l.reduce((s, c) => s + valorAberto(c), 0);
   const fx = fluxoMensal(), mesAtual = fx.lista[2];
-  const abas = [['pagar', `A pagar (${pagarAbertas.length})`], ['receber', `A receber (${receberAbertas.length})`], ['fluxo', 'Fluxo de caixa']];
+  const abas = [['pagar', `A pagar (${pagarAbertas.length})`], ['receber', `A receber (${receberAbertas.length})`], ['fluxo', 'Fluxo de caixa'], ...(typeof painelCustos === 'function' ? [['custos', 'Custos e gráficos']] : [])];
   let corpo;
-  if (finAba === 'fluxo') {
+  if (finAba === 'custos' && typeof painelCustos === 'function') corpo = painelCustos();
+  else if (finAba === 'fluxo') {
     corpo = `<section class="card panel viz-root"><div class="section-title" style="margin:0 0 8px"><h3>Entradas e saídas por mês</h3>${btn(db.settings.saldoInicial != null && db.settings.saldoInicial !== '' ? 'Saldo inicial: ' + brl2(db.settings.saldoInicial) : 'Informar saldo inicial', 'fin-saldo', '', 'secondary')}</div>
       ${graficoFluxo(fx.lista)}
       <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Mês</th><th class="num">Entradas</th><th class="num">Saídas</th><th class="num">Resultado</th>${fx.temSaldo ? '<th class="num">Saldo</th>' : ''}</tr></thead><tbody>${fx.lista.map(x => { const r = x.ent + x.entPrev - x.sai - x.saiPrev; return `<tr><td>${x.rot}</td><td class="num">${brl2(x.ent + x.entPrev)}${x.entPrev ? `<br><small>previsto ${brl2(x.entPrev)}</small>` : ''}</td><td class="num">${brl2(x.sai + x.saiPrev)}${x.saiPrev ? `<br><small>previsto ${brl2(x.saiPrev)}</small>` : ''}</td><td class="num"><strong>${r < 0 ? '− ' : ''}${brl2(Math.abs(r))}</strong></td>${fx.temSaldo ? `<td class="num">${x.saldo < 0 ? '− ' : ''}${brl2(Math.abs(x.saldo))}</td>` : ''}</tr>`; }).join('')}</tbody></table></div>

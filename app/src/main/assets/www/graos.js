@@ -9,6 +9,7 @@
 const PRODUTOS_GRAO = [['soja', 'Soja'], ['milho', 'Milho'], ['trigo', 'Trigo'], ['arroz', 'Arroz'], ['feijao', 'Feijão'], ['sorgo', 'Sorgo'], ['algodao', 'Algodão (caroço)'],
   ['amendoim', 'Amendoim'], ['girassol', 'Girassol'], ['aveia', 'Aveia'], ['cevada', 'Cevada'], ['centeio', 'Centeio'], ['triticale', 'Triticale'], ['gergelim', 'Gergelim'],
   ['ervilha', 'Ervilha'], ['cafe', 'Café'], ['canola', 'Canola'], ['milheto', 'Milheto'], ['grao_de_bico', 'Grão-de-bico'], ['lentilha', 'Lentilha'], ['chia', 'Chia'], ['crambe', 'Crambe'],
+  ['trigo_mourisco', 'Trigo mourisco (sarraceno)'], ['linho', 'Linho (linhaça)'],
   ['outro', 'Outro (digitar)']];
 // Cultura digitada em “Outro”: vira uma chave própria (ex.: outro:quinoa), para ter referência da fazenda só dela
 const slugCultura = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');

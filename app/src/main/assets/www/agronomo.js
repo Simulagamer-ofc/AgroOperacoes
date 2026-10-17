@@ -141,7 +141,7 @@ VIEWS.inicio = (...a) => {
   const html = inicioSemFuncao(...a);
   if (!FUNCOES_TALHAO.includes(funcaoAtual()) || !db.fields.length) return html;
   // Agrônomo, monitor e encarregado: situação dos talhões logo depois do “Hoje”
-  const i = html.indexOf('</section>', html.indexOf('class="hoje"')) + '</section>'.length;
+  const fim = html.indexOf('<!--fim-hoje-->'), i = fim >= 0 ? fim : html.indexOf('</section>', html.indexOf('class="hoje"')) + '</section>'.length;
   return html.slice(0, i) + `<div class="section-title"><h3>Situação dos talhões</h3><button data-act="nav" data-id="talhoes">Ver talhões</button></div>` + mapaTalhoes() + html.slice(i);
 };
 VIEWS.inicio.after = inicioAfter;

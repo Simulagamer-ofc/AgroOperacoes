@@ -183,7 +183,7 @@ if (safeStorage.get('agro-menu') === 'recolhido') root.classList.add('menu-recol
 matchMedia('(min-width: 761px) and (max-width: 900px)').addEventListener?.('change', () => { closeMenu(); });
 marcarTrilho();
 $('#menuBtn').onclick = openMenu; $('#moreBtn').onclick = openMenu; overlay.onclick = closeMenu;
-$('#bellBtn').onclick = () => go('inicio', 'alertas');
+$('#bellBtn').onclick = () => { safeStorage.set('agro-hoje-aberto', '1'); go('inicio', 'hojeFazer'); };
 $$('[data-route]').forEach(b => b.addEventListener('click', () => { go(b.dataset.route); closeMenu(); }));
 $('#date').textContent = new Date().toLocaleDateString('pt-BR', {weekday: 'long', day: '2-digit', month: 'long'});
 $('#searchForm').onsubmit = e => { e.preventDefault(); const q = $('#searchInput').value.trim(); if (q) { go('busca/' + encodeURIComponent(q)); $('#searchInput').blur(); } };
@@ -577,33 +577,16 @@ function operationRow(o, actions = true) {
 const VIEWS = {};
 const TITLES = {inicio: 'Visão geral', operacoes: 'Operações do dia', maquinas: 'Máquinas e manutenção', talhoes: 'Talhões', sementes: 'Sementes e lotes', lotes: 'Lotes e rastreabilidade', estoque: 'Estoque e insumos', relatorios: 'Relatórios', cadastros: 'Cadastros e backup', busca: 'Pesquisa'};
 
+// Visão geral = painel do dia (operação). Custos ficam no Financeiro e insumos no Estoque.
+// O clima, o “Hoje” e o resumo do dia vêm de automacao.js; aqui, o primeiro uso e as operações do período.
 VIEWS.inicio = (anchor) => {
-  const t = today();
-  const al = alerts();
   const isEmpty = COLLECTIONS.every(c => !db[c].length);
-  const upcoming = db.operations.filter(o => o.status === 'Em andamento' || (o.date >= t && o.status === 'Programada') || o.date === t).sort((a, b) => String((a.date || '') + (a.time || '')).localeCompare((b.date || '') + (b.time || ''))).slice(0, 8);
-  return `
-    ${typeof painelNexus === 'function' ? painelNexus() : ''}
-    <details class="nx-home-more"><summary>Operações, ações rápidas e indicadores adicionais</summary>
-    <div class="nx-acoes"><button data-act="op-new">+ Nova operação</button><button data-act="hour-new">◷ Registrar horímetro</button><button data-act="mt-new">⚙ Abrir manutenção</button><button data-act="mov-new">⇄ Movimentar estoque</button><button data-act="cb-new">⛽ Abastecimento</button><button data-act="af-nova">◎ Nova aferição</button></div>
-    ${isEmpty ? `<section class="card" style="margin-top:18px">${empty('Nenhum dado cadastrado ainda', 'Comece cadastrando talhões, máquinas e insumos.', {act: 'nav', id: 'cadastros', label: 'Abrir cadastros e backup'})}</section>` : ''}
-    <section class="grid nexus">
-      <article class="card panel"><div class="section-title" style="margin:0 0 4px"><h3>Operações de hoje</h3><button data-act="nav" data-id="operacoes">Ver todas</button></div>
-        ${upcoming.length ? upcoming.map(o => operationRow(o, false)).join('') : empty('Sem operações para hoje', 'Programe ou registre o que a equipe vai fazer.', {act: 'op-new', label: '+ Nova operação'})}
-      </article>
-      <article class="card panel" id="alertas"><h3>Atenção</h3>
-        ${al.length ? al.map(a => `<div class="alert clickable" data-act="nav" data-id="${esc(a.route)}"><span class="alert-icon ${a.color}">${a.icon}</span><div style="flex:1"><strong>${esc(a.title)}</strong><small>${esc(a.text)}</small>${a.progress != null ? `<div class="progress"><span style="width:${a.progress}%"></span></div>` : ''}</div></div>`).join('') : empty('Tudo em dia', 'Nenhuma pendência encontrada.')}
-      </article>
-    </section>
-    ${!isEmpty && typeof painelGraficos === 'function' ? painelGraficos() : ''}
-    </details>`;
+  return `${isEmpty ? `<section class="card" style="margin-top:18px">${empty('Nenhum dado cadastrado ainda', 'Comece cadastrando talhões, máquinas e insumos.', {act: 'nav', id: 'cadastros', label: 'Abrir cadastros e backup'})}</section>` : ''}
+    ${!isEmpty && typeof painelOperacoes === 'function' && (typeof nvPodeRota !== 'function' || nvPodeRota('operacoes')) ? painelOperacoes() : ''}`;
 };
 VIEWS.inicio.after = anchor => {
   if (!anchor) return;
-  const alvo = document.getElementById(anchor);
-  const secao = alvo?.closest('.nx-home-more');
-  if (secao) secao.open = true;
-  alvo?.scrollIntoView({behavior: 'smooth'});
+  document.getElementById(anchor)?.scrollIntoView({behavior: 'smooth'});
 };
 
 let opFilter = 'hoje';

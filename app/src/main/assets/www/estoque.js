@@ -93,6 +93,7 @@ VIEWS.estoque = arg => {
       <article class="card kpi ${pertos.length ? 'aviso' : ''}"><div class="label">Perto do mínimo</div><div class="value">${pertos.length}</div><div class="hint">${esc(nomes(pertos) || 'até 50% acima do mínimo')}</div></article>
       <article class="card kpi"><div class="label">Saídas no mês</div><div class="value">${brl(valorSaidas)}</div><div class="hint">${saidasMes.length} ${saidasMes.length === 1 ? 'saída' : 'saídas'}${saidasSemCusto ? ` • ${saidasSemCusto} sem custo` : ''}</div></article>
     </section>
+    ${typeof painelEstoque === 'function' ? painelEstoque() : ''}
     <div class="cat-busca"><span aria-hidden="true">⌕</span><input id="estQ" type="search" value="${esc(estBusca)}" placeholder="Buscar item ou local" aria-label="Buscar no estoque"></div>
     <div class="filters" role="group" aria-label="Categoria"><button class="${!estCat ? 'active' : ''}" data-act="est-cat" data-id="">Todos (${db.stock.length})</button>${cats.map(c => `<button class="${estCat === c ? 'active' : ''}" data-act="est-cat" data-id="${esc(c)}">${esc(c)} (${db.stock.filter(s => (s.category || 'Outro') === c).length})</button>`).join('')}</div>
     <div id="esGrade">${gradeItens()}</div>
