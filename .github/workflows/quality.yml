@@ -1,0 +1,36 @@
+name: Qualidade Nexus Agro
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validar:
+    name: Testes e integridade
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Obter codigo
+        uses: actions/checkout@v4
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Testes automatizados (afericao, painel, GPS, PDF e demais regras)
+        run: node --test referencias/tests/*.test.js
+      - name: Conferir sintaxe JavaScript do aplicativo
+        run: |
+          find app/src/main/assets/www referencias -type f -name '*.js' \
+            -not -path '*/lib/*' -print0 |
+          xargs -0 -r -n1 node --check
+      - name: Conferir formato dos catalogos e referencias JSON
+        run: |
+          find referencias app/src/main/assets/www/dados -type f -name '*.json' -print0 |
+          xargs -0 -r -n1 node -e "JSON.parse(require('node:fs').readFileSync(process.argv[1], 'utf8'))"
+      - name: Conferir que APK e site usam a mesma base tecnica
+        run: |
+          cmp referencias/avaliador.js app/src/main/assets/www/avaliador.js
+          cmp referencias/regras-afericao.json app/src/main/assets/www/dados/regras-afericao.json
