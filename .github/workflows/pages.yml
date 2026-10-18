@@ -8,6 +8,7 @@ on:
       - 'app/src/main/assets/www/**'
       - 'referencias/**'
       - '.github/workflows/pages.yml'
+      - '.github/workflows/quality.yml'
 
 permissions:
   contents: read
@@ -19,23 +20,17 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  validar:
+    uses: ./.github/workflows/quality.yml
+
   deploy:
+    needs: validar
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      # Mesmo motor de avaliação do APK: só publica se os testes e a auditoria do banco passarem
-      - name: Testes do avaliador
-        run: node --test referencias/tests/*.test.js
-      - name: Conferir que o app usa o banco atual
-        run: |
-          cmp referencias/avaliador.js app/src/main/assets/www/avaliador.js
-          cmp referencias/regras-afericao.json app/src/main/assets/www/dados/regras-afericao.json
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
