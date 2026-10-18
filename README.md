@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.39.4-beta1` — **Previsão dia a dia**: na previsão de 7 dias, cada dia agora é tocável. O dia escolhido mostra madrugada, manhã, tarde e noite, as boas horas para pulverizar, a chuva prevista e se a previsão está incerta; "voltar para hoje" retorna ao dia atual.
+
 `0.39.3-beta1` — **Revisão da marca MercaPlant**: a senha provisória sugerida ao ADM não usa mais "nexus"; nome do banco de referências de aferição, modelo de PR e documentos de qualidade atualizados. Identificadores internos (domínio de login, chaves de armazenamento, pacote Android) continuam iguais para não perder dados nem logins.
 
 `0.39.2-beta1` — **Nova identidade MercaPlant**: nome atualizado no site/PWA, Android, tela inicial, acesso, PDFs, impressão e arquivos exportados. Mantidos os identificadores técnicos e formatos de dados anteriores para que instalações, login, sincronização e backups antigos continuem compatíveis. O visual e os módulos permanecem inalterados.
