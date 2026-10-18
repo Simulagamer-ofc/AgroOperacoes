@@ -2,7 +2,7 @@
 Explique as alterações e quais telas ou módulos são afetados.
 
 ## Verificações antes de incorporar
-- [ ] Workflow "Qualidade Nexus Agro / Testes e integridade" passou.
+- [ ] Workflow "Qualidade MercaPlant / Testes e integridade" passou.
 - [ ] APK compilou no GitHub Actions.
 - [ ] A alteração foi conferida sem regressões em módulos relacionados.
 - [ ] Se alterou interface: verificado em PC, tablet e celular.

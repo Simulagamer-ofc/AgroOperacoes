@@ -1,4 +1,4 @@
-# Qualidade e publicação — Nexus Agro
+# Qualidade e publicação — MercaPlant
 
 Este documento descreve o processo de alterações sem mudar o funcionamento do sistema.
 

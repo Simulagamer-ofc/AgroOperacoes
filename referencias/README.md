@@ -1,6 +1,6 @@
 # Banco de referências — aferição e calibragem
 
-Módulo independente da interface. Pode ser incorporado ao Nexus Agro 2.23 ou ao AgroOperacoes sem alterar telas existentes.
+Módulo independente da interface. Pode ser incorporado ao MercaPlant (antigo Nexus Agro / AgroOperacoes) sem alterar telas existentes.
 
 | Arquivo | Conteúdo |
 |---|---|
