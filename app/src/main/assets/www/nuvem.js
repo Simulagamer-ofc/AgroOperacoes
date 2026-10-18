@@ -873,7 +873,7 @@ function nvAcessoUsuario(id, autorizar = false) {
 // Senha provisória: a pessoa entra com ela e é obrigada a criar a dela
 function nvNovaSenha(id) {
   const u = (nvUsuarios || []).find(x => x.user_id === id); if (!u) return;
-  const sugestao = 'nexus' + String(Math.floor(1000 + Math.random() * 9000));
+  const sugestao = 'merca' + String(Math.floor(1000 + Math.random() * 9000));
   openForm({
     title: 'Senha provisória', sub: `Para ${nvNomeDe(u)} (${nvMostrarLogin(u.login)}), que esqueceu a senha. Passe esta senha para a pessoa: no próximo login ela cria uma senha só dela. Os aparelhos dela pedem login de novo.`, submit: 'Gerar senha provisória',
     fields: [{k: 'senha', label: 'Senha provisória', required: true, full: true, placeholder: 'Pelo menos 8 caracteres'}],

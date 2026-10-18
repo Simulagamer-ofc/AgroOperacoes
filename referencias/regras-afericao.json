@@ -1,5 +1,5 @@
 {
-  "banco": "Nexus Agro — referências de aferição e calibragem de máquinas e implementos",
+  "banco": "MercaPlant — referências de aferição e calibragem de máquinas e implementos",
   "versaoBanco": "1.7.0",
   "dataBanco": "2026-10-15",
   "observacaoGeral": "Somente regras com statusValidacao = 'validada' são usadas para concluir uma avaliação. Regras 'validada' tiveram o trecho conferido no documento original (ver fontes[].trechoLiteral). Regras 'pendente_conferencia' tiveram a fonte localizada, mas o texto ainda não foi conferido no documento original; o avaliador as mostra como referência candidata e devolve SEM_REFERENCIA. Escopo '*' significa que a regra declara expressamente não depender daquele campo.",
