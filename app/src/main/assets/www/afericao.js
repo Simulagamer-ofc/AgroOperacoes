@@ -1,5 +1,5 @@
 'use strict';
-/* Nexus Agro — Catálogo de máquinas e Aferição/Calibragem (usa referencias/avaliador.js, offline). */
+/* MercaPlant — Catálogo de máquinas e Aferição/Calibragem (usa referencias/avaliador.js, offline). */
 
 // ---------- Dados offline ----------
 const DADOS = {};
@@ -704,7 +704,7 @@ function relatorio(id) {
   const avisosRel = (e.avisos || []).filter(x => !(x.startsWith('Velocidade ') && a.tipo !== 'taxa') && !(x.startsWith('Pressão ') && a.tipo !== 'bicos'));
   return `<div class="no-print">${head('Relatório de aferição', `${TIPOS[a.tipo]?.titulo || a.tipo} • ${fmtDate(a.data)} ${a.hora}`, btn('← Aferições', 'nav', 'afericao', 'secondary') + btn('Imprimir / PDF', 'af-imprimir', '', 'secondary') + `<button class="danger" data-act="af-excluir" data-id="${esc(a.id)}">Excluir</button>`)}</div>
   <article class="card panel relatorio">
-    <header class="rel-head"><div><strong>${esc((a.propriedade ?? db.settings.farm) || 'Nexus Agro')}</strong><br><small>Medição e comparação com referência técnica</small></div><small>Registro ${esc(a.id)}</small></header>
+    <header class="rel-head"><div><strong>${esc((a.propriedade ?? db.settings.farm) || 'MercaPlant')}</strong><br><small>Medição e comparação com referência técnica</small></div><small>Registro ${esc(a.id)}</small></header>
     <h3>1. Resultado e ação recomendada</h3>${blocoResultado(r, a)}
     <h3>2. Identificação e rastreabilidade</h3><table class="tbl"><tbody>
       ${linha('Equipamento', a.maquina ? `${a.maquina.name}${a.maquina.model ? ' — ' + a.maquina.model : ''}` : 'Não cadastrado')}

@@ -1,5 +1,5 @@
 'use strict';
-/* Nexus Agro — automação do dia a dia: o sistema faz as contas para o produtor.
+/* MercaPlant — automação do dia a dia: o sistema faz as contas para o produtor.
    • Previsão da revisão por data (pelo ritmo de uso de cada máquina)
    • Estoque que avisa antes de acabar (pelo consumo das últimas semanas)
    • Concluir operação já atualiza o horímetro, as horas trabalhadas e a área
@@ -297,7 +297,7 @@ function controleLocalClima() {
   const buscando = climaLocalEstado === 'buscando';
   return `<div class="btn-row"><button type="button" class="secondary" data-act="clima-local"${buscando ? ' disabled' : ''}>${buscando ? 'Buscando localização…' : '📍 Ativar localização'}</button></div>
     <p class="nota" role="status" aria-live="polite">${esc(climaLocalMensagem || 'Toque em Ativar localização e, se o navegador solicitar, escolha Permitir para usar sua posição na previsão do tempo.')}</p>
-    ${climaLocalEstado === 'negada' ? `<details class="nota"><summary>Como liberar no Safari do iPhone</summary><p>No Safari, abra o menu da página ao lado do endereço (aA em algumas versões), entre em Ajustes do Site ou Mais → Ajustes do Site e selecione Localização → Permitir. Volte e toque em Ativar localização.</p><p>Se continuar bloqueado, confira Ajustes → Privacidade e Segurança → Serviços de Localização → Sites do Safari e permita durante o uso. Os Serviços de Localização também precisam estar ativados.</p><p>O Nexus Agro não consegue alterar uma permissão bloqueada pelo navegador.</p></details>` : ''}`;
+    ${climaLocalEstado === 'negada' ? `<details class="nota"><summary>Como liberar no Safari do iPhone</summary><p>No Safari, abra o menu da página ao lado do endereço (aA em algumas versões), entre em Ajustes do Site ou Mais → Ajustes do Site e selecione Localização → Permitir. Volte e toque em Ativar localização.</p><p>Se continuar bloqueado, confira Ajustes → Privacidade e Segurança → Serviços de Localização → Sites do Safari e permita durante o uso. Os Serviços de Localização também precisam estar ativados.</p><p>O MercaPlant não consegue alterar uma permissão bloqueada pelo navegador.</p></details>` : ''}`;
 }
 function atualizarLocalClima() {
   const el = document.getElementById('climaLocalControle');
@@ -306,7 +306,7 @@ function atualizarLocalClima() {
 function solicitarLocalClima() {
   if (climaLocalEstado === 'buscando') return;
   const falha = (estado, mensagem) => { climaLocalEstado = estado; climaLocalMensagem = mensagem; atualizarLocalClima(); };
-  if (globalThis.isSecureContext === false) return falha('indisponivel', 'Abra o Nexus Agro pelo endereço HTTPS para usar a localização.');
+  if (globalThis.isSecureContext === false) return falha('indisponivel', 'Abra o MercaPlant pelo endereço HTTPS para usar a localização.');
   if (!navigator.geolocation) return falha('indisponivel', 'Este navegador não disponibiliza localização. Confira os ajustes do aparelho.');
   climaLocalEstado = 'buscando'; climaLocalMensagem = 'Aguardando a localização. Se o Safari pedir autorização, toque em Permitir.'; atualizarLocalClima();
   try {
@@ -466,14 +466,14 @@ VIEWS.safra = id => {
   return `<div class="no-print">${head('Relatório da safra', `${f.name} • ${p.nome}`, btn('← Talhão', 'nav', 'talhao/' + id, 'secondary') + btn('Imprimir / PDF', 'af-imprimir', '', 'secondary'))}
     <section class="card panel safra-periodo"><label>De <input type="date" data-safra-ini="${esc(id)}" value="${p.ini}"></label><label>até <input type="date" data-safra-fim="${esc(id)}" value="${p.fim}"></label></section></div>
   <article class="card panel relatorio">
-    <header class="rel-head"><div><strong>${esc(db.settings.farm || 'Nexus Agro')}</strong><br><small>Relatório da safra — ${esc(f.name)}</small></div><small>${fmtDate(p.ini)} a ${fmtDate(p.fim)}</small></header>
+    <header class="rel-head"><div><strong>${esc(db.settings.farm || 'MercaPlant')}</strong><br><small>Relatório da safra — ${esc(f.name)}</small></div><small>${fmtDate(p.ini)} a ${fmtDate(p.fim)}</small></header>
     <h3>1. Talhão</h3><table class="tbl"><tbody>${linha('Talhão', f.name)}${linha('Área', area ? num(area) + ' ha' : '')}${linha('Cultura', f.crop)}${linha('Cultivar', f.cultivar)}${linha('Safra', f.season)}${linha('Chuva acumulada no período', chuva ? num(chuva, 0) + ' mm' : '')}${linha('Colheita liberada (carência)', lib ? (lib.libera > today() ? 'a partir de ' + fmtDate(lib.libera) : 'liberada') : '')}</tbody></table>
     <h3>2. Operações (${ops.length})</h3>${tabela(['Data', 'Operação', 'Máquina', 'Área / quantidade', 'Horas', 'Situação'], ops.map(o => `<tr><td>${fmtDate(o.date)}</td><td>${esc(o.type)}</td><td>${esc(machineName(o.machineId) || '—')}</td><td>${o.area && opTemArea(o) ? num(o.area) + ' ha' : o.kg ? num(o.kg) + ' kg' : '—'}</td><td>${o.horas ? um1(o.horas) + ' h' : '—'}</td><td>${esc(o.status)}</td></tr>`))}
     <h3>3. Aplicações de defensivos (${aps.length})</h3>${tabela(['Data', 'Produto e dose', 'Receituário', 'Resp. técnico', 'Carência'], aps.map(a => `<tr><td>${fmtDate(a.date)}</td><td><strong>${esc(a.produto)}</strong>${a.dose ? '<br><small>' + esc(a.dose) + '</small>' : ''}</td><td>${esc(a.receituario || '—')}</td><td>${esc(a.responsavel || '—')}</td><td>${num(a.carencia)} d (até ${fmtDate(addDias(a.date, Number(a.carencia) || 0))})</td></tr>`))}
     <h3>4. Monitoramento de pragas e doenças (${mon.length})</h3>${tabela(['Data', 'Alvo', 'Média', 'Nível de ação'], mon.map(m => `<tr><td>${fmtDate(m.date)}</td><td>${esc(m.alvo)}</td><td>${num(m.valor, 2)} ${esc(m.unidade || '')}</td><td>${m.nivelAcao !== '' && m.nivelAcao != null ? num(m.nivelAcao, 2) : '—'}</td></tr>`))}
     <h3>5. Colheita</h3><table class="tbl"><tbody>${col.length ? linha('Produção', `${sacas >= 100 ? num(sacas) : um1(sacas)} sacas de 60 kg`) + linha('Produtividade', area ? `${um1(sacas / area)} sc/ha` : '') : '<tr><td>Sem colheita registrada no período.</td></tr>'}</tbody></table>
     ${fin && ana ? `<h3>6. Custos e resultado</h3><table class="tbl"><tbody>${linha('Custo total', brlR(ana.custo))}${linha('Custo por hectare', ana.custoHa != null ? brlR(ana.custoHa) : '')}${linha('Custo por saca', ana.custoSc != null ? brlR(ana.custoSc) : '')}${linha('Receita (preço médio de venda)', ana.receita != null ? brlR(ana.receita) : '')}${linha('Margem', ana.margem != null ? brlR(ana.margem) : '')}${linha('Ponto de equilíbrio', ana.equilibrio != null ? num(ana.equilibrio, 1) + ' sc/ha' : '')}${(() => { const cm = ops.reduce((t, o) => t + (custoOperacao(o) || 0), 0); return cm > 0 ? linha('Custo estimado das máquinas nas operações (horas × custo/h; não somado acima)', brlR(cm)) : ''; })()}</tbody></table>` : ''}
-    <p class="nota">Gerado pelo Nexus Agro a partir dos registros da fazenda em ${fmtDate(today())}.</p>
+    <p class="nota">Gerado pelo MercaPlant a partir dos registros da fazenda em ${fmtDate(today())}.</p>
   </article>`;
 };
 TITLES.safra = 'Relatório da safra';
@@ -507,7 +507,7 @@ function abrirListaCompras() {
   const l = listaCompras();
   if (!l.length) { showToast('Nada a comprar: nenhum item abaixo do mínimo ou acabando em 30 dias'); return; }
   const texto = `🛒 Lista de compras — ${db.settings.farm || 'Fazenda'} (${fmtDate(today())})\n\n` + l.map(x => `• ${x.s.name}: ${num(x.qtd)} ${x.s.unit}  (${x.motivo}; saldo ${num(x.s.qty)} ${x.s.unit})`).join('\n') +
-    `\n\nQuantidades para cerca de 30 dias de consumo, pelo uso das últimas semanas. Gerado pelo Nexus Agro.`;
+    `\n\nQuantidades para cerca de 30 dias de consumo, pelo uso das últimas semanas. Gerado pelo MercaPlant.`;
   dialogoTexto('Lista de compras', `${l.length} ${l.length === 1 ? 'item' : 'itens'} — confira e compartilhe com quem compra.`, texto);
 }
 
@@ -534,7 +534,7 @@ function resumoSemana() {
     fin && gastos ? `💰 Gastos lançados: R$ ${num(gastos, 2)}` : '',
     '', `📅 Próximos 7 dias: ${prox.length ? prox.slice(0, 6).map(o => `${o.type} (${fmtDate(o.date).slice(0, 5)})`).join(', ') : 'nenhuma operação programada'}`,
     urg.length ? `⚠ Pendências urgentes: ${urg.slice(0, 5).map(a => a.title).join('; ')}` : '✔ Sem pendências urgentes',
-    '', 'Gerado pelo Nexus Agro.'];
+    '', 'Gerado pelo MercaPlant.'];
   return linhas.filter((l, i, a) => l !== '' || (a[i - 1] !== '' && i > 0)).join('\n');
 }
 Object.assign(ACTIONS, {

@@ -1,5 +1,5 @@
 'use strict';
-/* Nexus Agro — Inspeção periódica do pulverizador de barras (critérios da ISO 16122-2).
+/* MercaPlant — Inspeção periódica do pulverizador de barras (critérios da ISO 16122-2).
    Feita por exceção: cada grupo é marcado como conforme com um toque; só o que tem problema é detalhado.
    O manômetro é aferido contra um manômetro padrão e os bicos vêm da aferição de bicos já registrada.
    Critérios conforme o "Manual of inspection of sprayers — ISO 16122" (UPC / Unidade de Mecanização Agrária). Offline. */
@@ -153,7 +153,7 @@ function relatorioInspecao(a) {
   const ok = r.status === 'OK';
   return `<div class="no-print">${head('Relatório de inspeção periódica', `${fmtDate(a.data)} ${a.hora}`, btn('← Aferições', 'nav', 'afericao', 'secondary') + btn('Imprimir / PDF', 'af-imprimir', '', 'secondary') + `<button class="danger" data-act="af-excluir" data-id="${esc(a.id)}">Excluir</button>`)}</div>
   <article class="card panel relatorio">
-    <header class="rel-head"><div><strong>${esc((a.propriedade ?? db.settings.farm) || 'Nexus Agro')}</strong><br><small>Inspeção periódica de pulverizador de barras — critérios ISO 16122-2</small></div><small>Registro ${esc(a.id)}</small></header>
+    <header class="rel-head"><div><strong>${esc((a.propriedade ?? db.settings.farm) || 'MercaPlant')}</strong><br><small>Inspeção periódica de pulverizador de barras — critérios ISO 16122-2</small></div><small>Registro ${esc(a.id)}</small></header>
     <h3>1. Resultado</h3><div class="resultado ${ok ? 'green' : 'red'}"><small>RESULTADO</small><strong>${ok ? 'Aprovado' : 'Reprovado'}</strong><span>${ok ? `Válido até ${fmtDate(r.validade)}.` : 'Itens não conformes:'}</span>${ok ? '' : `<ul class="af-acao">${(r.naoConformes || []).map(x => `<li>${esc(x)}</li>`).join('')}</ul>`}</div>
     <h3>2. Identificação</h3><table class="tbl"><tbody>${linha('Pulverizador', a.maquina ? `${a.maquina.name}${a.maquina.model ? ' — ' + a.maquina.model : ''}` : '')}${linha('Horímetro', a.maquina?.hours ? num(a.maquina.hours) + ' h' : '')}${linha('Data / hora', `${fmtDate(a.data)} ${a.hora}`)}${linha('Propriedade', a.propriedade)}${linha('Próxima inspeção', fmtDate(r.validade))}</tbody></table>
     <h3>3. Grupos verificados</h3><table class="tbl"><thead><tr><th>Grupo</th><th>Item ISO</th><th>Situação</th><th>Observações</th></tr></thead><tbody>${INSP_GRUPOS.map(gr => { const s = g[gr.id] || {}; return `<tr><td>${esc(gr.titulo)}</td><td>${esc(gr.ref)}</td><td>${s.st ? chip(INSP_ST[s.st][0], INSP_ST[s.st][1]) : '—'}</td><td>${esc([...(s.falhas || []), s.obs].filter(Boolean).join('; '))}</td></tr>`; }).join('')}</tbody></table>

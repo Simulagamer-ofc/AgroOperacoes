@@ -1,5 +1,5 @@
 'use strict';
-/* Nexus Agro na nuvem (Supabase): contas, fazenda compartilhada pela equipe e sincronização automática.
+/* MercaPlant na nuvem (Supabase): contas, fazenda compartilhada pela equipe e sincronização automática.
    Os dados continuam no aparelho e o app funciona sem internet. Com internet, cada registro alterado sobe para a
    fazenda e as alterações dos outros aparelhos descem em ordem de chegada (seq).
    Conflito (mesmo registro alterado em dois aparelhos antes de sincronizar): vale a alteração mais recente (_mod);
@@ -94,7 +94,7 @@ function nvMensagem(data, status) {
   const bruto = typeof data === 'string' ? data : data?.msg || data?.message || data?.error_description || data?.error || '';
   const cod = typeof data === 'object' ? data?.error_code || data?.code || '' : '';
   for (const [re, txt] of NV_MENSAGENS) if (re.test(bruto) || re.test(cod)) return txt;
-  // Mensagens já escritas em português pelo próprio servidor (funções do Nexus Agro)
+  // Mensagens já escritas em português pelo próprio servidor (funções do MercaPlant)
   if (/[ãçéêíóôõú]|^Sem |^Só |^Você |^Dê |^Entre |^Digite |^Para /i.test(bruto)) return bruto;
   return bruto ? `Erro do servidor (${status}${cod ? ' ' + cod : ''}): ${bruto}` : `Erro do servidor (${status}).`;
 }
@@ -702,7 +702,7 @@ function nvPortao() {
     return;
   }
   el.dataset.modo = modo;
-  const marca = '<div class="nv-portao-topo"><img class="nv-portao-logo" src="img/logo-nexus.png" alt="" width="64" height="64"><p class="nv-portao-marca">NEXUS <span>AGRO</span></p></div>';
+  const marca = '<div class="nv-portao-topo"><img class="nv-portao-logo" src="img/logo-nexus.png" alt="" width="64" height="64"><p class="nv-portao-marca">MERCA<span>PLANT</span></p></div>';
   const erro = `<p class="nv-portao-erro" id="nvpErro" role="alert" ${nvMsgPortao ? '' : 'hidden'}>${esc(nvMsgPortao)}</p><p class="nv-portao-info" id="nvpInfo" ${nvInfo ? '' : 'hidden'}>${esc(nvInfo)}</p>`;
   const enviar = (txt, ocupado) => `<button class="primary" type="submit" data-nv-portao data-txt="${esc(txt)}" data-ocupado="${esc(ocupado)}">${esc(txt)}</button>`;
   const link = (txt, m) => `<button type="button" class="nv-link" data-nv-modo="${m}">${esc(txt)}</button>`;

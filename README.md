@@ -1,8 +1,10 @@
-# Nexus Agro
+# MercaPlant
 
 Aplicativo Android offline para operações agrícolas, máquinas, manutenção, talhões, produção de sementes, rastreabilidade e estoque.
 
 ## Versão atual
+
+`0.39.2-beta1` — **Nova identidade MercaPlant**: nome atualizado no site/PWA, Android, tela inicial, acesso, PDFs, impressão e arquivos exportados. Mantidos os identificadores técnicos e formatos de dados anteriores para que instalações, login, sincronização e backups antigos continuem compatíveis. O visual e os módulos permanecem inalterados.
 
 `0.39.1-beta1` — **Relatório em PDF e correções**:
 - botão **Baixar relatório (PDF)** em Relatórios, respeitando o período selecionado, com resumo, consumo e operações detalhadas; funciona offline. Exportações CSV preservadas. No Android o PDF é salvo como arquivo binário (precisa do APK desta versão); paginação automática para relatórios longos.

@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0a2134">
   <meta name="description" content="Painel offline para operações agrícolas, máquinas, talhões, sementes e estoque.">
-  <title>Nexus Agro</title>
+  <title>MercaPlant</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="stylesheet" href="styles.css">
-  <!-- Estilo inicial local: evita mostrar o painel antes da abertura Nexus. -->
+  <!-- Estilo inicial local: evita mostrar o painel antes da abertura MercaPlant. -->
   <style>
     .nexus-splash{display:none}
     html.nexus-booting{overflow:hidden}
@@ -29,13 +29,13 @@
   <script src="splash.js"></script>
 </head>
 <body>
-<div class="nexus-splash" id="nexusSplash" role="status" aria-live="polite" aria-label="Nexus Agro, carregando o sistema">
+<div class="nexus-splash" id="nexusSplash" role="status" aria-live="polite" aria-label="MercaPlant, carregando o sistema">
   <img class="nexus-splash-arte" src="img/nexus-globo.jpg" alt="" aria-hidden="true" fetchpriority="high">
-  <div class="nexus-splash-conteudo"><p class="nexus-splash-marca">NEXUS <span>AGRO</span></p><p class="nexus-splash-status"><span class="nexus-splash-spinner" aria-hidden="true"></span>Carregando o sistema…</p></div>
+  <div class="nexus-splash-conteudo"><p class="nexus-splash-marca">MERCA<span>PLANT</span></p><p class="nexus-splash-status"><span class="nexus-splash-spinner" aria-hidden="true"></span>Carregando o sistema…</p></div>
 </div>
 <div class="app">
   <aside class="sidebar" id="sidebar">
-    <div class="brand nexus"><strong class="marca">NEXUS<span>AGRO</span></strong><small class="versao" title="Versão de teste 0.39.0">v0.39.0</small><small id="farmName">Minha fazenda</small></div>
+    <div class="brand nexus"><strong class="marca">MERCA<span>PLANT</span></strong><small class="versao" title="Versão de teste 0.39.2-beta1">v0.39.2-beta1</small><small id="farmName">Minha fazenda</small></div>
     <nav class="nav" aria-label="Menu principal">
       <button data-route="inicio"><span class="icon">▦</span>Visão geral</button>
       <small class="nav-grupo">Campo</small>

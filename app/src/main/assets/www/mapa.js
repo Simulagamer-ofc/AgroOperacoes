@@ -70,7 +70,7 @@ TITLES.contorno = 'Contorno do talhão';
 
 function kmlTalhao(f) {
   const c = f.contorno.pontos.map(([la, lo]) => `${lo},${la},0`); c.push(c[0]);
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>${esc(db.settings.farm || 'Nexus Agro')}</name><Placemark><name>${esc(f.name)}</name><description>${esc(`${um1(f.contorno.areaHa)} ha medidos em ${fmtDate(f.contorno.data)}`)}</description><Polygon><outerBoundaryIs><LinearRing><coordinates>${c.join(' ')}</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark></Document></kml>`;
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<kml xmlns="http://www.opengis.net/kml/2.2"><Document><name>${esc(db.settings.farm || 'MercaPlant')}</name><Placemark><name>${esc(f.name)}</name><description>${esc(`${um1(f.contorno.areaHa)} ha medidos em ${fmtDate(f.contorno.data)}`)}</description><Polygon><outerBoundaryIs><LinearRing><coordinates>${c.join(' ')}</coordinates></LinearRing></outerBoundaryIs></Polygon></Placemark></Document></kml>`;
 }
 
 Object.assign(ACTIONS, {

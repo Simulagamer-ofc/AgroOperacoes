@@ -1,5 +1,5 @@
 'use strict';
-/* Nexus Agro — visão do agrônomo: situação de cada talhão (praga, carência, colheita, visita), mapa da fazenda
+/* MercaPlant — visão do agrônomo: situação de cada talhão (praga, carência, colheita, visita), mapa da fazenda
    pintado pela situação, resumo agronômico do talhão, linha do tempo da safra e cabeçalho/assinaturas nos relatórios.
    Também ajusta a tela inicial conforme a função de quem entrou. */
 
@@ -121,7 +121,7 @@ if (VIEWS.safra) {
 // ---------- Relatórios impressos com cara de documento ----------
 function cabecalhoImpressao() {
   const s = db.settings, agora = new Date().toLocaleString('pt-BR', {dateStyle: 'short', timeStyle: 'short'});
-  return `<div class="print-cab"><div><b class="print-marca">NEXUS<span>AGRO</span></b><small>${esc(s.farm || 'Propriedade')}${s.owner ? ' • ' + esc(s.owner) : ''}</small></div><div class="print-dir">${s.respTecnico ? `<small>Responsável técnico: <b>${esc(s.respTecnico)}</b>${s.respRegistro ? ' — ' + esc(s.respRegistro) : ''}</small>` : ''}<small>Emitido em ${esc(agora)}</small></div></div>`;
+  return `<div class="print-cab"><div><b class="print-marca">MERCA<span>PLANT</span></b><small>${esc(s.farm || 'Propriedade')}${s.owner ? ' • ' + esc(s.owner) : ''}</small></div><div class="print-dir">${s.respTecnico ? `<small>Responsável técnico: <b>${esc(s.respTecnico)}</b>${s.respRegistro ? ' — ' + esc(s.respRegistro) : ''}</small>` : ''}<small>Emitido em ${esc(agora)}</small></div></div>`;
 }
 const assinaturasImpressao = () => { const s = db.settings; return `<div class="print-assin"><div><span></span><small>${esc(s.respTecnico || 'Responsável técnico')}${s.respRegistro ? ' — ' + esc(s.respRegistro) : ''}</small></div><div><span></span><small>${esc(s.owner || 'Produtor / responsável')}</small></div></div>`; };
 function prepararImpressao(raiz = document) {

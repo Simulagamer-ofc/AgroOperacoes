@@ -1,7 +1,7 @@
 {
   "id": "./",
-  "name": "Nexus Agro",
-  "short_name": "Nexus Agro",
+  "name": "MercaPlant",
+  "short_name": "MercaPlant",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

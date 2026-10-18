@@ -1,5 +1,5 @@
 'use strict';
-// Abertura da Plataforma Nexus: uma vez por carregamento do documento, nunca por rota.
+// Abertura da MercaPlant: uma vez por carregamento do documento, nunca por rota.
 (() => {
   const root = document.documentElement, inicio = performance.now(), DURACAO = 5000;
   root.classList.add('nexus-booting');

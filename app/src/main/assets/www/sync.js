@@ -9,7 +9,7 @@ function idAparelho() { if (!db.settings.aparelhoId) { db.settings.aparelhoId = 
 function gerarArquivoSync() {
   const nome = db.settings.nomeAparelho || 'aparelho';
   const payload = JSON.stringify({app: 'agro-operacoes', tipo: 'sincronizacao', aparelho: idAparelho(), nomeAparelho: nome, exportedAt: new Date().toISOString(), data: db});
-  downloadFile(`nexus-sync-${semAcentoApp(nome).replace(/[^a-z0-9]+/g, '-')}-${today()}.json`, 'application/json', payload);
+  downloadFile(`mercaplant-sync-${semAcentoApp(nome).replace(/[^a-z0-9]+/g, '-')}-${today()}.json`, 'application/json', payload);
 }
 
 // Efeito de um movimento no saldo (ajuste = diferença registrada)
@@ -53,7 +53,7 @@ function mesclar(local, remoto) {
 
 function receberArquivoSync(texto) {
   let p; try { p = JSON.parse(texto); } catch { showToast('Arquivo inválido'); return; }
-  if (p?.app !== 'agro-operacoes' || !p.data) { showToast('Este arquivo não é do Nexus Agro'); return; }
+  if (p?.app !== 'agro-operacoes' || !p.data) { showToast('Este arquivo não é do MercaPlant'); return; }
   if (p.aparelho && p.aparelho === db.settings.aparelhoId) { showToast('Este arquivo foi gerado neste mesmo aparelho'); return; }
   const juntar = comCopia => {
     const r = mesclar(db, normalizarDb(p.data));

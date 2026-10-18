@@ -1,5 +1,5 @@
 'use strict';
-/* Nexus Agro — Secador e Moega: registro rápido em 4 etapas e avaliação contra referências por produto + destino + etapa + ponto. */
+/* MercaPlant — Secador e Moega: registro rápido em 4 etapas e avaliação contra referências por produto + destino + etapa + ponto. */
 
 const LOCAIS = {secador: 'Secador', moega: 'Moega (recebimento)', armazem: 'Silo / armazém'};
 const TIPO_SECADOR = [['estatico', 'Estático'], ['continuo', 'Contínuo'], ['intermitente', 'Intermitente']];
@@ -306,7 +306,7 @@ function relatorioSecagem(id) {
   const regras = r.leituras.filter(l => l.avaliacao.regraId);
   return `<div class="no-print">${head('Relatório — secador e moega', `${LOCAIS[a.local]} • ${fmtDate(a.data)} ${a.hora}`, btn('← Registros', 'nav', 'secagem', 'secondary') + btn('Imprimir / PDF', 'af-imprimir', '', 'secondary') + `<button class="danger" data-act="sc-excluir" data-id="${esc(a.id)}">Excluir</button>`)}</div>
   <article class="card panel relatorio">
-    <header class="rel-head"><div><strong>${esc((a.propriedade ?? db.settings.farm) || 'Nexus Agro')}</strong><br><small>Medição e comparação com referência técnica — secagem e armazenagem</small></div><small>Registro ${esc(a.id)}</small></header>
+    <header class="rel-head"><div><strong>${esc((a.propriedade ?? db.settings.farm) || 'MercaPlant')}</strong><br><small>Medição e comparação com referência técnica — secagem e armazenagem</small></div><small>Registro ${esc(a.id)}</small></header>
     <h3>1. Resultado e ação recomendada</h3>${resultadoSecagem(r, e)}
     <h3>2. Identificação e rastreabilidade</h3><table class="tbl"><tbody>
       ${linha('Local', LOCAIS[a.local])}${linha('Equipamento', a.equipamento?.name ? `${a.equipamento.name}${a.equipamento.model ? ' — ' + a.equipamento.model : ''}` : 'Não cadastrado')}

@@ -8,7 +8,7 @@
     const doc = new window.jspdf.jsPDF({unit: 'mm', format: 'a4'});
     const fim = today();
     let y = 22;
-    doc.setProperties({title: 'Relatório da propriedade - Nexus Agro', author: db.settings.farm || 'Nexus Agro'});
+    doc.setProperties({title: 'Relatório da propriedade - MercaPlant', author: db.settings.farm || 'MercaPlant'});
     const texto = v => String(v ?? '').replace(/[\u0000-\u001f]/g, ' ').replace(/—|–/g, '-');
     function linha(valor, tamanho = 10, negrito = false) {
       doc.setFont('helvetica', negrito ? 'bold' : 'normal');
@@ -23,7 +23,7 @@
       if (y > 252) { doc.addPage(); y = 22; }
       y += 5; doc.setTextColor(15, 70, 85); linha(titulo, 12, true); doc.setTextColor(30, 40, 45); y += 2;
     }
-    linha('NEXUS AGRO', 18, true);
+    linha('MERCAPLANT', 18, true);
     linha('Relatório da propriedade', 14, true);
     linha(db.settings.farm || 'Propriedade não informada', 12);
     linha(`Período: ${fmtDate(r.from)} a ${fmtDate(fim)} (${reportDays} dias)`);
@@ -64,10 +64,10 @@
     const paginas = doc.getNumberOfPages();
     for (let p = 1; p <= paginas; p++) {
       doc.setPage(p); doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(100);
-      doc.text(`Nexus Agro | ${fmtDate(r.from)} a ${fmtDate(fim)}`, 18, 287);
+      doc.text(`MercaPlant | ${fmtDate(r.from)} a ${fmtDate(fim)}`, 18, 287);
       doc.text(`${p} / ${paginas}`, 192, 287, {align: 'right'});
     }
-    const nome = `nexus-agro-relatorio-${r.from}-a-${fim}.pdf`;
+    const nome = `mercaplant-relatorio-${r.from}-a-${fim}.pdf`;
     if (window.AndroidBridge?.savePdf) {
       window.AndroidBridge.savePdf(nome, doc.output('datauristring').split(',')[1]);
     } else if (window.AndroidBridge?.printPage) {

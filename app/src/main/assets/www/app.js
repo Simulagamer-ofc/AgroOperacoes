@@ -1,5 +1,5 @@
 'use strict';
-/* Nexus Agro — app offline (dados salvos no dispositivo via localStorage). */
+/* MercaPlant — app offline (dados salvos no dispositivo via localStorage). */
 
 // ---------- Utilidades ----------
 const $ = (sel, el = document) => el.querySelector(sel);
@@ -189,7 +189,7 @@ $('#date').textContent = new Date().toLocaleDateString('pt-BR', {weekday: 'long'
 $('#searchForm').onsubmit = e => { e.preventDefault(); const q = $('#searchInput').value.trim(); if (q) { go('busca/' + encodeURIComponent(q)); $('#searchInput').blur(); } };
 function applySettings() {
   $('#farmName').textContent = db.settings.farm || 'Minha fazenda';
-  const initials = (db.settings.owner || db.settings.farm || 'Nexus Agro').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+  const initials = (db.settings.owner || db.settings.farm || 'MercaPlant').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
   $('#avatar').textContent = initials || 'NA';
 }
 applySettings();
@@ -794,13 +794,13 @@ window.onNativeFileSaved = ok => showToast(ok ? 'Arquivo salvo com sucesso' : 'E
 
 function exportBackup() {
   const payload = JSON.stringify({app: 'agro-operacoes', exportedAt: new Date().toISOString(), data: db}, null, 1);
-  downloadFile(`nexus-agro-backup-${today()}.json`, 'application/json', payload);
+  downloadFile(`mercaplant-backup-${today()}.json`, 'application/json', payload);
 }
 function restoreBackup(text) {
   let parsed;
   try { parsed = JSON.parse(text); } catch { showToast('Arquivo inválido'); return; }
   const data = parsed?.app === 'agro-operacoes' ? parsed.data : null;
-  if (!data || !COLLECTIONS.some(c => Array.isArray(data[c]))) { showToast('Este arquivo não é um backup do Nexus Agro'); return; }
+  if (!data || !COLLECTIONS.some(c => Array.isArray(data[c]))) { showToast('Este arquivo não é um backup do MercaPlant'); return; }
   const n = COLLECTIONS.reduce((s, c) => s + (data[c]?.length || 0), 0);
   confirmDialog(`Restaurar backup de ${parsed.exportedAt ? new Date(parsed.exportedAt).toLocaleString('pt-BR') : 'data desconhecida'} com ${n} registros? Os dados atuais deste dispositivo serão substituídos.`, () => {
     const deste = db.settings;
@@ -947,8 +947,8 @@ function render(anchor = pendingAnchor) {
     return;
   }
   document.querySelector('.app').classList.toggle('nx-home', key === 'inicio');
-  $('#viewTitle').textContent = TITLES[key] || (name === 'talhao' ? 'Talhões' : 'Nexus Agro');
-  document.title = `${TITLES[key] || 'Nexus Agro'} — Nexus Agro`;
+  $('#viewTitle').textContent = TITLES[key] || (name === 'talhao' ? 'Talhões' : 'MercaPlant');
+  document.title = `${TITLES[key] || 'MercaPlant'} — MercaPlant`;
   const menu = GRUPO_DA_ROTA[key] || key;
   $$('[data-route]').forEach(b => b.classList.toggle('active', b.dataset.route === menu));
   // Abas só nas telas de lista do grupo (não no detalhe de um lote ou de uma ordem)
@@ -986,7 +986,7 @@ if ('serviceWorker' in navigator && !window.AndroidBridge) addEventListener('loa
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     if (!jaControlado || document.getElementById('novaVersao')) return;
     const bar = Object.assign(document.createElement('div'), {id: 'novaVersao', className: 'nova-versao', role: 'status'});
-    bar.innerHTML = '<span>Nova versão do Nexus Agro disponível.</span><button type="button">Atualizar agora</button>';
+    bar.innerHTML = '<span>Nova versão do MercaPlant disponível.</span><button type="button">Atualizar agora</button>';
     bar.querySelector('button').onclick = () => location.reload();
     document.body.append(bar);
   });

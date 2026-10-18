@@ -1,4 +1,4 @@
-name: Qualidade Nexus Agro
+name: Qualidade MercaPlant
 
 on:
   workflow_call:
