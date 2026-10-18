@@ -6,8 +6,15 @@ on:
     branches: [ main ]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
+  validar:
+    uses: ./.github/workflows/quality.yml
+
   build:
+    needs: validar
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,7 +30,7 @@ jobs:
         run: gradle :app:assembleDebug --stacktrace
       - name: Read app version
         id: versao
-        run: echo "nome=$(sed -n 's/.*versionName = "\(.*\)".*/\1/p' app/build.gradle.kts)" >> "$GITHUB_OUTPUT"
+        run: echo "nome=$(sed -n 's/.*versionName = "\\(.*\\)".*/\\1/p' app/build.gradle.kts)" >> "$GITHUB_OUTPUT"
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
