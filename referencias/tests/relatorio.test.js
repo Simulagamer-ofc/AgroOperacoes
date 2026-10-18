@@ -18,3 +18,17 @@ test('relatório compartilha dados da tela e PDF e exclui registros fora do per�
   assert.equal(ctx.resultado.area, 60);
   assert.equal(ctx.resultado.consumption[0][1], 5);
 });
+test('relatório: valores em R$ só aparecem para quem tem acesso ao Financeiro', () => {
+  const tela = financeiro => {
+    const ctx = {reportDays: 30, daysAgo: () => '2026-10-01', today: () => '2026-10-16', OP_TYPES: [], opTemArea: () => false,
+      lancamentosCusto: () => [], somaValor: () => 1234, VIEWS: {}, esc: s => String(s), num: v => String(v), fmtDate: d => d,
+      head: (t, s, a) => t + a, btn: t => t, nvTemTela: tela => tela !== 'financeiro' || financeiro,
+      db: {operations: [], machines: [], hourLogs: [], stock: [], movements: []}};
+    vm.createContext(ctx);
+    vm.runInContext(src.slice(src.indexOf('let reportDays'), src.indexOf('VIEWS.cadastros =')).replace('let reportDays = 30;', ''), ctx);
+    return ctx.VIEWS.relatorios();
+  };
+  assert.match(tela(true), /Custo de manutenção[\s\S]*Outros gastos/);
+  assert.doesNotMatch(tela(false), /R\$|Custo de manutenção|Outros gastos/);
+  assert.match(tela(false), /Operações no período/);
+});

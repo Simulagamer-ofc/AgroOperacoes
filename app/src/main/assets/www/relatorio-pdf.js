@@ -33,8 +33,10 @@
     linha(`Operações: ${r.ops.length} | Concluídas: ${r.ops.filter(o => o.status === 'Concluída').length}`);
     linha(`Área trabalhada: ${num(r.area)} ha em operações concluídas`);
     linha(`Horas de máquina: ${num(r.hoursBy.reduce((s, [, h]) => s + h, 0))} h`);
-    linha(`Manutenção: R$ ${num(r.maintCost, 2)} (${r.custosManut.length} ordens concluídas com custo)`);
-    linha(`Outros gastos: R$ ${num(r.outrosGastos, 2)}`);
+    if (typeof relVerCustos !== 'function' || relVerCustos()) {
+      linha(`Manutenção: R$ ${num(r.maintCost, 2)} (${r.custosManut.length} ordens concluídas com custo)`);
+      linha(`Outros gastos: R$ ${num(r.outrosGastos, 2)}`);
+    }
     secao('Operações por tipo');
     if (!r.byType.length) linha('Sem operações no período.');
     r.byType.forEach(([tipo, lista]) => linha(`${tipo}: ${lista.length}`));
