@@ -702,6 +702,8 @@ function lotDetail(id) {
 // VIEWS.estoque fica em estoque.js
 
 let reportDays = 30;
+// Valores em R$ só para quem tem a tela Financeiro (ADM e uso local sem login: liberado)
+const relVerCustos = () => typeof nvTemTela !== 'function' || nvTemTela('financeiro');
 function dadosRelatorio() {
   const from = daysAgo(reportDays - 1); // mesmo período de “N dias” usado no Controle de gastos
   const ops = db.operations.filter(o => o.date >= from && o.date <= today() && o.status !== 'Cancelada');
@@ -724,8 +726,8 @@ VIEWS.relatorios = () => {
       <article class="card kpi"><div class="label">Operações no período</div><div class="value">${ops.length}</div><div class="hint">${ops.filter(o => o.status === 'Concluída').length} concluídas</div></article>
       <article class="card kpi"><div class="label">Área trabalhada</div><div class="value">${num(area)}</div><div class="hint">ha em operações concluídas</div></article>
       <article class="card kpi"><div class="label">Horas de máquina</div><div class="value">${num(hoursBy.reduce((s, [, h]) => s + h, 0))}</div><div class="hint">pelos registros de horímetro</div></article>
-      <article class="card kpi"><div class="label">Custo de manutenção</div><div class="value">R$ ${num(maintCost, 2)}</div><div class="hint">${custosManut.length} ${custosManut.length === 1 ? 'ordem concluída com custo' : 'ordens concluídas com custo'}</div></article>
-      <article class="card kpi clickable" data-act="nav" data-id="gastos" style="cursor:pointer"><div class="label">Outros gastos</div><div class="value">R$ ${num(outrosGastos, 2)}</div><div class="hint">combustível, peças, mão de obra e demais • ver detalhes</div></article>
+      ${relVerCustos() ? `      <article class="card kpi"><div class="label">Custo de manutenção</div><div class="value">R$ ${num(maintCost, 2)}</div><div class="hint">${custosManut.length} ${custosManut.length === 1 ? 'ordem concluída com custo' : 'ordens concluídas com custo'}</div></article>
+      <article class="card kpi clickable" data-act="nav" data-id="gastos" style="cursor:pointer"><div class="label">Outros gastos</div><div class="value">R$ ${num(outrosGastos, 2)}</div><div class="hint">combustível, peças, mão de obra e demais • ver detalhes</div></article>` : ''}
     </section>
     <section class="grid">
       <article class="card panel"><h3>Operações por tipo</h3>${byType.length ? `<table class="tbl"><tbody>${byType.map(([t, l]) => `<tr><td>${esc(t)}</td><td style="width:45%"><div class="bar"><span style="width:${l.length / maxType * 100}%"></span></div></td><td class="num">${l.length}</td></tr>`).join('')}</tbody></table>` : 'Sem operações no período.'}</article>

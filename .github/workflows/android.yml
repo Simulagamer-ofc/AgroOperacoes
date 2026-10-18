@@ -30,7 +30,7 @@ jobs:
         run: gradle :app:assembleDebug --stacktrace
       - name: Read app version
         id: versao
-        run: echo "nome=$(sed -n 's/.*versionName = "\\(.*\\)".*/\\1/p' app/build.gradle.kts)" >> "$GITHUB_OUTPUT"
+        run: echo "nome=$(sed -n 's/.*versionName = "\(.*\)".*/\1/p' app/build.gradle.kts)" >> "$GITHUB_OUTPUT"
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
