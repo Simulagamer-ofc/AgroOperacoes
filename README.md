@@ -4,6 +4,12 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.43.0-beta1` — **Planejado x realizado da safra** (Produção e margem):
+- **Planejar** o orçamento de cada talhão em R$/ha por categoria (sementes, fertilizantes, defensivos, combustível, mão de obra, manutenção e peças, serviços e frete, arrendamento, outros); dá para usar o mesmo planejamento em todos os talhões da safra.
+- O **realizado** vem sozinho dos gastos lançados com o talhão e das saídas de insumos aplicadas nele (os mesmos números de Produção e margem).
+- Barra de uso do orçamento por talhão (verde, laranja a partir de 90%, vermelho acima de 100%), aviso de talhão que passou do planejado e detalhe por categoria, com o que foi gasto sem estar planejado.
+- Só para quem vê o financeiro; na nuvem, os orçamentos têm a mesma proteção de gastos, contas e vendas.
+
 `0.42.0-beta1` — **Alertas no celular** (Cadastros → Alertas no celular, ou "🔔 Avisar no celular" no quadro Hoje):
 - **Chuva forte** (20 mm ou mais) — aviso na véspera, às 7h.
 - **Pulverização de amanhã** — às 18h da véspera: as boas horas, ou "sem boa janela" quando há aplicação programada.

@@ -352,7 +352,7 @@ const nvNomeFuncao = id => nvFuncao(id)?.[1] || '';
 const NV_ROTA_TELA = {operacoes: 'operacoes', talhoes: 'talhoes', talhao: 'talhoes', chuva: 'chuva', pragas: 'pragas', aplicacoes: 'aplicacoes', maodeobra: 'maodeobra',
   maquinas: 'maquinas', combustivel: 'combustivel', afericao: 'afericao', catalogo: 'catalogo', pontas: 'pontas', secagem: 'secagem',
   sementes: 'sementes', lotes: 'sementes', lote: 'sementes', ubs: 'sementes', etiqueta: 'sementes', estoque: 'estoque',
-  financeiro: 'financeiro', gastos: 'financeiro', lcdpr: 'financeiro', producao: 'producao', relatorios: 'relatorios'};
+  financeiro: 'financeiro', gastos: 'financeiro', lcdpr: 'financeiro', producao: 'producao', orcamento: 'producao', relatorios: 'relatorios'};
 // Telas liberadas para esta pessoa: null = todas (ADM, Admin do sistema, ou sem função definida)
 const nvTelasLiberadas = () => !nvVinculado() || nv.sysadm || nvPapel() === 'admin' || !Array.isArray(nv.modulos) ? null : nv.modulos;
 const nvTemTela = tela => { const l = nvTelasLiberadas(); return !l || l.includes(tela); };
@@ -376,7 +376,7 @@ const NV_TELAS_FIN = ['financeiro', 'gastos', 'lcdpr', 'producao'];
 // Botões de editar → coleção do registro (o comum edita só o que ele lançou)
 const NV_EDITAR = {'op-edit': 'operations', 'mc-edit': 'machines', 'mt-edit': 'maintenances', 'fd-edit': 'fields', 'lot-edit': 'lots', 'st-edit': 'stock',
   'mip-edit': 'monitoramentos', 'mo-edit': 'equipe', 'pd-colheita-edit': 'colheitas'};
-const nvAcaoProibida = act => /-(del|excluir)$/.test(act) || (/^(fin-|gs-)/.test(act) && !nvTemTelaComum('financeiro')) || (/^pd-venda/.test(act) && !nvTemTelaComum('producao')) || ['wipe', 'restore', 'seed', 'sync-receber', 'sync-desfazer'].includes(act);
+const nvAcaoProibida = act => /-(del|excluir)$/.test(act) || (/^(fin-|gs-)/.test(act) && !nvTemTelaComum('financeiro')) || (/^(pd-venda|orc-)/.test(act) && !nvTemTelaComum('producao')) || ['wipe', 'restore', 'seed', 'sync-receber', 'sync-desfazer'].includes(act);
 const nvTemTelaComum = tela => Array.isArray(nv.modulos) && nv.modulos.includes(tela);
 function nvAplicarPapel() { document.documentElement.dataset.nivel = nvPapel() || ''; nvAplicarMenu(); }
 function nvProteger() {
