@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.print.PrintAttributes
 import android.print.PrintManager
@@ -28,7 +29,17 @@ import java.io.File
 import androidx.webkit.WebViewAssetLoader
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        const val EXTRA_ROTA = "rota"
+        private val ROTA_SEGURA = Regex("^[a-z0-9/_-]{1,60}$")
+    }
+
     private lateinit var webView: WebView
+
+    // Autorização de notificações (Android 13+), pedida quando o usuário liga os alertas
+    private val requestNotif = registerForActivityResult(ActivityResultContracts.RequestPermission()) { ok ->
+        webView.evaluateJavascript("window.onNotificacoesPermitidas && onNotificacoesPermitidas($ok)", null)
+    }
 
     // Conteúdo aguardando o usuário escolher onde salvar (backup JSON / CSV)
     private var pendingFileContent: ByteArray? = null
@@ -143,6 +154,24 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /** Alertas da fazenda: agenda a lista calculada pela página (substitui o agendamento anterior). */
+        @JavascriptInterface
+        fun agendarAlertas(json: String) { Alertas.agendar(applicationContext, json) }
+
+        @JavascriptInterface
+        fun testarAlerta(json: String) { Alertas.testar(applicationContext, json) }
+
+        @JavascriptInterface
+        fun notificacoesPermitidas(): Boolean = Alertas.permitido(this@MainActivity)
+
+        @JavascriptInterface
+        fun pedirNotificacoes() {
+            runOnUiThread {
+                if (Build.VERSION.SDK_INT >= 33) requestNotif.launch(Manifest.permission.POST_NOTIFICATIONS)
+                else webView.evaluateJavascript("window.onNotificacoesPermitidas && onNotificacoesPermitidas(${Alertas.permitido(this@MainActivity)})", null)
+            }
+        }
+
         /** Versão instalada do APK (para avisar quando houver uma mais nova). */
         @JavascriptInterface
         fun appVersion(): String = runCatching { packageManager.getPackageInfo(packageName, 0).versionName ?: "" }.getOrDefault("")
@@ -235,7 +264,9 @@ class MainActivity : AppCompatActivity() {
             webView.restoreState(savedInstanceState)
         }
         if (webView.url == null) {
-            webView.loadUrl("https://appassets.androidplatform.net/assets/www/index.html")
+            // Aberto pelo toque num alerta: já entra na tela do aviso
+            val rota = intent?.getStringExtra(EXTRA_ROTA)?.takeIf { ROTA_SEGURA.matches(it) }
+            webView.loadUrl("https://appassets.androidplatform.net/assets/www/index.html" + (rota?.let { "#/$it" } ?: ""))
         }
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -248,6 +279,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        val rota = intent.getStringExtra(EXTRA_ROTA)?.takeIf { ROTA_SEGURA.matches(it) } ?: return
+        webView.evaluateJavascript("window.go && go('$rota')", null)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
