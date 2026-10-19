@@ -720,7 +720,7 @@ function dadosRelatorio() {
 }
 VIEWS.relatorios = () => {
   const {from, ops, byType, maxType, hoursBy, maxH, consumption, custosManut, maintCost, outrosGastos, area} = dadosRelatorio();
-  return head('Relatórios', `Resumo dos últimos ${reportDays} dias (desde ${fmtDate(from)})`, btn('Baixar relatório (PDF)', 'relatorio-pdf') + btn('Exportar operações (CSV)', 'csv', 'operations', 'secondary') + btn('Exportar estoque (CSV)', 'csv', 'stock', 'secondary')) +
+  return head('Relatórios', `Resumo dos últimos ${reportDays} dias (desde ${fmtDate(from)})`, btn('Baixar relatório (PDF)', 'relatorio-pdf') + btn('Enviar PDF (WhatsApp)', 'relatorio-pdf-enviar', '', 'secondary') + btn('Exportar operações (CSV)', 'csv', 'operations', 'secondary') + btn('Exportar estoque (CSV)', 'csv', 'stock', 'secondary')) +
     `<div class="filters">${[7, 30, 90, 365].map(d => `<button class="${d === reportDays ? 'active' : ''}" data-act="rep-days" data-id="${d}">${d === 365 ? '12 meses' : d + ' dias'}</button>`).join('')}</div>
     <section class="kpis">
       <article class="card kpi"><div class="label">Operações no período</div><div class="value">${ops.length}</div><div class="hint">${ops.filter(o => o.status === 'Concluída').length} concluídas</div></article>
@@ -990,4 +990,32 @@ if ('serviceWorker' in navigator && !window.AndroidBridge) addEventListener('loa
     bar.querySelector('button').onclick = () => location.reload();
     document.body.append(bar);
   });
+});
+// App Android (APK): confere no GitHub se há versão mais nova publicada e oferece o download
+const APK_RELEASES = 'https://api.github.com/repos/Simulagamer-ofc/AgroOperacoes/releases/latest';
+const versaoNums = v => (String(v).match(/\d+/g) || []).map(Number);
+function versaoMaior(a, b) {
+  const x = versaoNums(a), y = versaoNums(b);
+  for (let i = 0; i < Math.max(x.length, y.length); i++) { const d = (x[i] || 0) - (y[i] || 0); if (d) return d > 0; }
+  return false;
+}
+function avisoApk(instalada) {
+  let nova = null; try { nova = JSON.parse(safeStorage.get('agro-apk-nova') || 'null'); } catch { nova = null; }
+  if (!nova || !versaoMaior(nova.versao, instalada) || safeStorage.get('agro-apk-dispensado') === nova.versao || document.getElementById('novaVersaoApk')) return;
+  const bar = Object.assign(document.createElement('div'), {id: 'novaVersaoApk', className: 'nova-versao', role: 'status'});
+  bar.innerHTML = `<span>Nova versão do app: <b>${esc(nova.versao)}</b> (você tem ${esc(instalada)}).</span><a class="nova-versao-baixar" href="${esc(nova.url)}">Baixar</a><button type="button" class="nova-versao-fechar" aria-label="Depois">✕</button>`;
+  bar.querySelector('.nova-versao-fechar').onclick = () => { safeStorage.set('agro-apk-dispensado', nova.versao); bar.remove(); };
+  document.body.append(bar);
+}
+if (window.AndroidBridge?.appVersion) addEventListener('load', () => {
+  const instalada = window.AndroidBridge.appVersion(); if (!instalada) return;
+  avisoApk(instalada);
+  if (navigator.onLine === false || Date.now() - Number(safeStorage.get('agro-apk-conferido') || 0) < 6 * 3600000) return;
+  fetch(APK_RELEASES, {headers: {Accept: 'application/vnd.github+json'}}).then(r => r.ok ? r.json() : null).then(rel => {
+    if (!rel?.tag_name) return;
+    const apk = (rel.assets || []).find(a => /\.apk$/i.test(a.name));
+    safeStorage.set('agro-apk-nova', JSON.stringify({versao: rel.tag_name.replace(/^v/i, ''), url: apk?.browser_download_url || rel.html_url}));
+    safeStorage.set('agro-apk-conferido', String(Date.now()));
+    avisoApk(instalada);
+  }).catch(() => {});
 });

@@ -118,6 +118,35 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /** Envia o PDF por WhatsApp, e-mail etc.: grava no cache e abre o "Compartilhar" do Android. */
+        @JavascriptInterface
+        fun sharePdf(name: String, base64: String, texto: String) {
+            val bytes = runCatching { android.util.Base64.decode(base64, android.util.Base64.DEFAULT) }.getOrNull() ?: return
+            runOnUiThread {
+                runCatching {
+                    val pasta = File(cacheDir, "compartilhar").apply { mkdirs() }
+                    pasta.listFiles()?.filter { System.currentTimeMillis() - it.lastModified() > 86_400_000L }?.forEach { it.delete() }
+                    val seguro = name.replace(Regex("[^A-Za-z0-9._-]"), "_")
+                    val arquivo = File(pasta, seguro).apply { writeBytes(bytes) }
+                    val uri = FileProvider.getUriForFile(this@MainActivity, "$packageName.fotos", arquivo)
+                    val envio = Intent(Intent.ACTION_SEND).apply {
+                        type = "application/pdf"
+                        putExtra(Intent.EXTRA_STREAM, uri)
+                        putExtra(Intent.EXTRA_SUBJECT, name)
+                        if (texto.isNotBlank()) putExtra(Intent.EXTRA_TEXT, texto)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    startActivity(Intent.createChooser(envio, "Enviar relatório"))
+                }.onFailure {
+                    webView.evaluateJavascript("window.showToast && showToast('Não foi possível abrir o envio do PDF.', true)", null)
+                }
+            }
+        }
+
+        /** Versão instalada do APK (para avisar quando houver uma mais nova). */
+        @JavascriptInterface
+        fun appVersion(): String = runCatching { packageManager.getPackageInfo(packageName, 0).versionName ?: "" }.getOrDefault("")
+
         /** Imprime a página atual (relatório de aferição) ou salva como PDF pelo serviço de impressão do Android. */
         @JavascriptInterface
         fun printPage() {

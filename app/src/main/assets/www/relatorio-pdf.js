@@ -11,7 +11,31 @@
   // Fontes padrão do PDF usam a tabela Latin-1: acentos funcionam; o resto vira equivalente simples
   const texto = v => String(v ?? '').replace(/[\u0000-\u001f]/g, ' ').replace(/[—–]/g, '-').replace(/[“”]/g, '"').replace(/[‘’]/g, "'").replace(/…/g, '...').replace(/[^ -ÿ]/g, '');
 
-  function gerar() {
+  // Entrega do PDF: baixar (salvar no aparelho) ou enviar (WhatsApp, e-mail…). Usado também por outros relatórios.
+  function entregarPdf(doc, nome, enviar, textoEnvio = '') {
+    if (enviar) {
+      if (window.AndroidBridge?.sharePdf) { window.AndroidBridge.sharePdf(nome, doc.output('datauristring').split(',')[1], textoEnvio); return; }
+      try {
+        const arq = new File([doc.output('blob')], nome, {type: 'application/pdf'});
+        if (navigator.canShare?.({files: [arq]})) {
+          navigator.share({files: [arq], title: nome, text: textoEnvio}).catch(err => { if (err?.name !== 'AbortError') { showToast('Não foi possível enviar; o PDF foi baixado.', true); entregarPdf(doc, nome, false); } });
+          return;
+        }
+      } catch { /* navegador sem envio de arquivos: baixa */ }
+      showToast('Este navegador não envia arquivos direto. O PDF foi baixado: anexe no WhatsApp pelo clipe 📎.', true);
+    }
+    if (window.AndroidBridge?.savePdf) {
+      window.AndroidBridge.savePdf(nome, doc.output('datauristring').split(',')[1]);
+    } else if (window.AndroidBridge?.printPage) {
+      // APK antigo: o novo método binário exige atualização do aplicativo.
+      showToast('Atualize o aplicativo para baixar o PDF. Você também pode baixar pelo navegador.', true);
+    } else {
+      downloadFile(nome, 'application/pdf', doc.output('arraybuffer'));
+    }
+  }
+  window.entregarPdf = entregarPdf;
+
+  function gerar(enviar = false) {
     if (typeof nvPodeRota === 'function' && !nvPodeRota('relatorios')) {
       showToast('Sua função não permite acessar os relatórios.', true); return;
     }
@@ -201,15 +225,9 @@
     }
 
     const nome = `mercaplant-relatorio-${r.from}-a-${fim}.pdf`;
-    if (window.AndroidBridge?.savePdf) {
-      window.AndroidBridge.savePdf(nome, doc.output('datauristring').split(',')[1]);
-    } else if (window.AndroidBridge?.printPage) {
-      // APK antigo: o novo método binário exige atualização do aplicativo.
-      showToast('Atualize o aplicativo para baixar o PDF. Você também pode baixar pelo navegador.', true);
-    } else {
-      downloadFile(nome, 'application/pdf', doc.output('arraybuffer'));
-    }
+    entregarPdf(doc, nome, enviar === true, `Relatório MercaPlant - ${texto(fazenda)} - ${periodo}`);
     return doc;
   }
-  ACTIONS['relatorio-pdf'] = gerar;
+  ACTIONS['relatorio-pdf'] = () => gerar(false);
+  ACTIONS['relatorio-pdf-enviar'] = () => gerar(true);
 })();
