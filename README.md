@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.40.0-beta1` — **Relatório em PDF profissional**: cabeçalho com a marca MercaPlant, fazenda e período; cartões de resumo; **gráficos de barras** de operações por tipo, horas por máquina e custos por categoria (aparecem quando há 2 itens ou mais para comparar; com 1 item sai só a tabela); tabelas com cabeçalho verde, linhas alternadas e cabeçalho repetido nas páginas seguintes; detalhamento das operações em tabela; assinaturas do responsável e do responsável técnico; rodapé com data de emissão e "Página X de Y". Custos e gráfico de custos só para quem tem acesso ao Financeiro. Continua offline.
+
 `0.39.4-beta1` — **Previsão dia a dia**: na previsão de 7 dias, cada dia agora é tocável. O dia escolhido mostra madrugada, manhã, tarde e noite, as boas horas para pulverizar, a chuva prevista e se a previsão está incerta; "voltar para hoje" retorna ao dia atual.
 
 `0.39.3-beta1` — **Revisão da marca MercaPlant**: a senha provisória sugerida ao ADM não usa mais "nexus"; nome do banco de referências de aferição, modelo de PR e documentos de qualidade atualizados. Identificadores internos (domínio de login, chaves de armazenamento, pacote Android) continuam iguais para não perder dados nem logins.
