@@ -6,11 +6,14 @@ const path = require('node:path');
 const vm = require('node:vm');
 const src = fs.readFileSync(path.join(__dirname, '../../app/src/main/assets/www/alertas.js'), 'utf8');
 const addDias = (d, n) => { const x = new Date(d + 'T12:00:00'); x.setDate(x.getDate() + n); return x.toISOString().slice(0, 10); };
+// Relógio fixo (19/10/2026, 10h no fuso local): o resultado não depende da hora em que o teste roda
+const AGORA = new Date('2026-10-19T10:00:00').getTime();
+class DataFixa extends Date { constructor(...a) { if (a.length) super(...a); else super(AGORA); } static now() { return AGORA; } }
 function app({ponte, chuva = [0, 0, 35, 0], janelasAmanha = [[6, 10]]} = {}) {
   const mem = {};
   const dias = [0, 1, 2, 3].map(i => addDias('2026-10-19', i));
   const ctx = vm.createContext({
-    window: {AndroidBridge: ponte}, ACTIONS: {}, Date, Math, JSON, Number, String, Object, console,
+    window: {AndroidBridge: ponte}, ACTIONS: {}, Date: DataFixa, Math, JSON, Number, String, Object, console,
     safeStorage: {get: k => mem[k] ?? null, set: (k, v) => { mem[k] = v; }},
     today: () => '2026-10-19', addDias, isoLocal: dt => dt.toISOString().slice(0, 10), hh: n => String(n).padStart(2, '0') + 'h',
     num: (v, c = 0) => Number(v).toFixed(c), fmtDate: d => d.split('-').reverse().join('/'), esc: s => String(s), btn: (l, a) => `<button data-act="${a}">${l}</button>`,
