@@ -4,6 +4,12 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.44.0-beta1` — **Relatório da safra do talhão em PDF** (Talhão → Relatório da safra → Baixar PDF / Enviar PDF):
+- Mesmo visual do relatório da propriedade: marca, cartões (área, produção, chuva, operações, aplicações, monitoramentos e, com acesso ao financeiro, custo, custo por saca e margem).
+- **Planejado x realizado** do talhão com gráfico por categoria (barra vermelha quando passou do planejado) e tabela com saldo.
+- **Chuva por mês** em gráfico; operações, aplicações (receituário e carência), monitoramentos (com quem atingiu o nível de ação) e colheita em tabelas; assinaturas do responsável e do responsável técnico.
+- As peças do PDF agora são comuns aos dois relatórios (`pdfMercaPlant`).
+
 `0.43.0-beta1` — **Planejado x realizado da safra** (Produção e margem):
 - **Planejar** o orçamento de cada talhão em R$/ha por categoria (sementes, fertilizantes, defensivos, combustível, mão de obra, manutenção e peças, serviços e frete, arrendamento, outros); dá para usar o mesmo planejamento em todos os talhões da safra.
 - O **realizado** vem sozinho dos gastos lançados com o talhão e das saídas de insumos aplicadas nele (os mesmos números de Produção e margem).

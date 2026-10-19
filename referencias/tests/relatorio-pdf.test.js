@@ -44,3 +44,22 @@ test('PDF: "Enviar" abre o compartilhar do Android com o arquivo; "Baixar" salva
   assert.match(chamadas[0][3], /Fazenda Teste/);
   assert.equal(chamadas[1][0], 'salvar');
 });
+test('PDF da safra do talhão: resumo, planejado x realizado, chuva por mês e tabelas', () => {
+  const f = {id: 't1', name: 'Talhão 7', area: 10, season: '2026/27', crop: 'Soja'};
+  const db = {settings: {farm: 'Fazenda Teste'}, fields: [f],
+    operations: [{fieldId: 't1', date: '2026-09-01', type: 'Plantio', status: 'Concluída', area: 10}], aplicacoes: [], monitoramentos: [],
+    chuvas: [{fieldId: 't1', date: '2026-08-05', mm: 30}, {date: '2026-09-10', mm: 50}], colheitas: []};
+  const salvos = [];
+  const ctx = vm.createContext({window: {jspdf: {jsPDF: Doc}}, ACTIONS: {}, db, today: () => '2026-10-19', fmtDate: d => d, num: v => String(v), um1: v => String(v),
+    find: (c, id) => db[c === 'fields' ? 'fields' : c].find(x => x.id === id), periodoSafra: () => ({ini: '2026-07-01', fim: '2027-06-30', nome: 'Safra 2026/27'}),
+    analiseSafra: () => ({linhas: [{id: 't1', custo: 5000, custoHa: 500, custoSc: null, margem: null, margemHa: null, equilibrio: null}]}),
+    liberacaoColheita: () => null, machineName: () => 'Trator', opTemArea: () => true, addDias: d => d, semAcentoApp: s => s.toLowerCase(), showToast() {},
+    ORC_CATS: ['Sementes', 'Fertilizantes'], planejamentoSafra: () => ({linhas: [{id: 't1', area: 10, plan: 3000, real: 5000, pct: 166, o: {valores: {Sementes: 100, Fertilizantes: 200}}, porCat: {Sementes: 1500, Fertilizantes: 3500}}]}),
+    downloadFile: n => salvos.push(n)});
+  vm.runInContext(src, ctx);
+  const doc = ctx.ACTIONS['safra-pdf']('t1'), tudo = doc.textos.join('\n');
+  assert.match(tudo, /Relatório da safra - Talhão 7/);
+  assert.match(tudo, /Planejado x realizado/); assert.match(tudo, /Chuva por mês/); assert.match(tudo, /ago\/26/);
+  assert.match(tudo, /R\$ 5000/);
+  assert.match(salvos[0], /^mercaplant-safra-talhão-7-2026-07-01-a-2027-06-30\.pdf$|^mercaplant-safra-talh.o-7-/);
+});
