@@ -24,7 +24,7 @@ const safeStorage = {
 
 // ---------- Banco de dados local ----------
 const DB_KEY = 'agro-db-v1';
-const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs', 'fuel', 'contas', 'colheitas', 'vendas', 'chuvas', 'monitoramentos', 'aplicacoes', 'equipe', 'apontamentos', 'romaneios', 'lotesSecagem', 'movSilo', 'termometrias', 'checklistsGraos', 'referenciasFazenda'];
+const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs', 'fuel', 'contas', 'colheitas', 'vendas', 'chuvas', 'monitoramentos', 'aplicacoes', 'equipe', 'apontamentos', 'romaneios', 'lotesSecagem', 'movSilo', 'termometrias', 'checklistsGraos', 'referenciasFazenda', 'orcamentos'];
 const emptyDb = () => ({version: 1, settings: {farm: '', owner: ''}, ...Object.fromEntries(COLLECTIONS.map(c => [c, []]))});
 // Completa um banco vindo de fora (armazenamento, backup, sincronização): todas as coleções como listas e configurações completas
 function normalizarDb(data) {

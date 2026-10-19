@@ -814,3 +814,15 @@ tr.clickable{cursor:pointer} tr.clickable:hover td{background:rgba(23,135,212,.0
 .alerta-tipo{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:10px;cursor:pointer}
 .alerta-tipo input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var(--green)}
 .alerta-tipo span{display:grid;gap:2px}.alerta-tipo small{color:var(--muted);font-size:.8rem}
+/* Planejado x realizado */
+.orc-topo{display:grid;grid-template-columns:repeat(3,auto) 1fr;gap:18px;align-items:end;margin-bottom:10px}
+.orc-topo small{display:block;color:var(--muted);font-size:.78rem}.orc-topo strong{font-size:1.15rem}
+.orc-topo-barra{display:flex;align-items:center;gap:8px;min-width:140px}
+.orc-uso{min-width:150px}.orc-uso,.orc-topo-barra{white-space:nowrap}
+.orc-barra{display:inline-block;vertical-align:middle;width:100px;height:9px;border-radius:6px;background:var(--line);overflow:hidden;margin-right:6px}
+.orc-barra span{display:block;height:100%;background:var(--green);border-radius:6px}
+.orc-barra.perto span{background:var(--orange)}.orc-barra.acima span{background:#e05252}
+.orc-pct{font-weight:700}.orc-pct.ok{color:var(--green)}.orc-pct.perto{color:var(--orange)}.orc-pct.acima{color:#e05252}
+.orc .neg,.tbl td.neg{color:#e05252}
+.orc-aviso{margin:4px 0 8px;color:#e05252}
+@media(max-width:640px){.orc-topo{grid-template-columns:repeat(3,1fr)}.orc-topo-barra{grid-column:1/-1}}
