@@ -809,3 +809,8 @@ tr.clickable{cursor:pointer} tr.clickable:hover td{background:rgba(23,135,212,.0
 .nx-custos .nx-dashboard-head h3{margin:0 0 2px;font-size:1.1rem}
 .nx-custos,.nx-estoque-painel{margin-bottom:16px}
 @media(max-width:760px){.nx-periods{justify-content:flex-start}.nx-periods button{padding:7px 9px;min-height:38px}}
+/* Alertas no celular */
+.alertas-tipos{display:grid;gap:8px;margin:10px 0 8px}
+.alerta-tipo{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:10px;cursor:pointer}
+.alerta-tipo input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:var(--green)}
+.alerta-tipo span{display:grid;gap:2px}.alerta-tipo small{color:var(--muted);font-size:.8rem}

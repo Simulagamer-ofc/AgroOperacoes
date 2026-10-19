@@ -4,6 +4,12 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.42.0-beta1` — **Alertas no celular** (Cadastros → Alertas no celular, ou "🔔 Avisar no celular" no quadro Hoje):
+- **Chuva forte** (20 mm ou mais) — aviso na véspera, às 7h.
+- **Pulverização de amanhã** — às 18h da véspera: as boas horas, ou "sem boa janela" quando há aplicação programada.
+- **Revisão de máquina** chegando ou vencida; **estoque** abaixo do mínimo ou acabando em até 7 dias; **operações atrasadas** (opcional).
+- No **app Android** os avisos são agendados pelo próprio Android e chegam com o app fechado; tocar no aviso abre a tela certa. No **navegador**, aparecem ao abrir o MercaPlant. Cada aviso chega uma vez; avisos de madrugada vão para as 7h.
+
 `0.41.0-beta1` — **Ícone, envio do PDF e atualização do app**:
 - **Ícone** com o globo e o nome **MERCAPLANT** (Android, tela inicial do celular e navegador).
 - **Enviar PDF (WhatsApp)** em Relatórios: abre o "Compartilhar" do celular com o arquivo (WhatsApp, e-mail, Drive). No computador sem esse recurso, o PDF é baixado para anexar.

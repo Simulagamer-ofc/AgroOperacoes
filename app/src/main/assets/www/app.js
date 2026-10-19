@@ -748,6 +748,7 @@ VIEWS.cadastros = () => {
       <article class="card panel"><h3>Backup</h3><p>Os dados ficam somente neste aparelho. Exporte um backup regularmente e guarde em local seguro (Drive, e-mail, computador).</p>
         <div class="btn-row">${btn('⬇ Exportar backup', 'backup')}${btn('⬆ Restaurar backup', 'restore', '', 'secondary')}</div><input type="file" id="restoreInput" accept="application/json,.json" hidden></article>
       ${typeof cartaoSincronizacao === 'function' ? cartaoSincronizacao() : ''}
+      ${typeof cartaoAlertas === 'function' ? cartaoAlertas() : ''}
       <article class="card panel"><h3>Dados de exemplo e limpeza</h3><p>Carregue exemplos para treinar a equipe, ou apague todos os registros deste dispositivo.</p>
         <div class="btn-row">${btn('Carregar exemplos', 'seed', '', 'secondary')}<button class="danger" data-act="wipe">Apagar todos os dados</button></div></article>
     </section>`;

@@ -424,7 +424,7 @@ function painelHoje() {
       <span class="alert-icon ${itens.length ? (temUrgente ? 'red' : 'blue') : 'green'} hoje-ic" aria-hidden="true">${typeof iconeLinha === 'function' ? iconeLinha(itens.length ? (temUrgente ? 'alerta' : 'lista') : 'check', 20) : ''}</span>
       <span class="clima-txt"><strong>Hoje <small class="hoje-data">${esc(data)}</small></strong><small class="${temUrgente ? 'nao' : 'ok'}">${itens.length ? `${itens.length} ${itens.length === 1 ? 'pendência' : 'pendências'}${partes.length ? ' • ' + esc(partes.join(' • ')) : ''}` : 'Tudo em dia'}</small></span>
       <span class="clima-seta" aria-hidden="true">${aberto ? '▴' : '▾'}</span><span class="sr-only">${aberto ? 'Mostrar só o crítico' : 'Ver todas as pendências de hoje'}</span></button>
-    <div id="hojeCorpo">${aberto ? `<div class="btn-row hoje-botoes">${btn('Resumo da semana', 'resumo-semana', '', 'secondary')}${btn('+ Operação', 'op-new', '', 'secondary')}</div>` : ''}
+    <div id="hojeCorpo">${aberto ? `<div class="btn-row hoje-botoes">${btn('Resumo da semana', 'resumo-semana', '', 'secondary')}${btn('+ Operação', 'op-new', '', 'secondary')}${typeof alertaCfg === 'function' && !alertaCfg().ativo && suporteAlertas() ? btn('🔔 Avisar no celular', 'alertas-ligar', '', 'secondary') : ''}</div>` : ''}
       ${lista.length ? `${!aberto ? '<p class="hoje-crit-tit">Precisa de atenção</p>' : ''}${lista.map(linha).join('')}` : aberto && !itens.length ? empty('Tudo em dia', 'Nenhuma pendência para hoje.') : ''}${rodape}</div></article>
     </section>${resumoDia()}<!--fim-hoje-->`;
 }
