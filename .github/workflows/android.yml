@@ -16,6 +16,8 @@ jobs:
   build:
     needs: validar
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -26,7 +28,22 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.10.2'
+      - name: Chave de assinatura fixa (se configurada nos segredos)
+        env:
+          KEYSTORE_B64: ${{ secrets.MERCAPLANT_KEYSTORE_B64 }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/mercaplant.jks"
+            echo "MERCAPLANT_KEYSTORE=$RUNNER_TEMP/mercaplant.jks" >> "$GITHUB_ENV"
+            echo "Assinatura fixa: ativada"
+          else
+            echo "Assinatura fixa: não configurada (usa a chave de depuração do servidor)"
+          fi
       - name: Build debug APK
+        env:
+          MERCAPLANT_KEYSTORE_PASS: ${{ secrets.MERCAPLANT_KEYSTORE_PASS }}
+          MERCAPLANT_KEY_ALIAS: ${{ secrets.MERCAPLANT_KEY_ALIAS }}
+          MERCAPLANT_KEY_PASS: ${{ secrets.MERCAPLANT_KEY_PASS }}
         run: gradle :app:assembleDebug --stacktrace
       - name: Read app version
         id: versao
@@ -37,3 +54,18 @@ jobs:
           name: MercaPlant-${{ steps.versao.outputs.nome }}
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
+      # Na main: publica o APK como "versão mais recente" (link direto, sem precisar entrar no GitHub).
+      # O app confere esta publicação e avisa quando há versão nova.
+      - name: Publicar APK na página de versões
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VER: ${{ steps.versao.outputs.nome }}
+        run: |
+          cp app/build/outputs/apk/debug/app-debug.apk "MercaPlant-$VER.apk"
+          if gh release view "v$VER" >/dev/null 2>&1; then
+            gh release upload "v$VER" "MercaPlant-$VER.apk" --clobber
+          else
+            gh release create "v$VER" "MercaPlant-$VER.apk" --target "$GITHUB_SHA" --latest \
+              --title "MercaPlant $VER" --notes "APK gerado automaticamente a partir da main. Veja as novidades no README."
+          fi

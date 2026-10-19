@@ -2,4 +2,6 @@
 <!-- Fotos tiradas pela câmera para os registros (ficam no cache do app até a página ler) -->
 <paths>
     <cache-path name="fotos" path="fotos/" />
+    <!-- Relatórios em PDF enviados pelo "Compartilhar" (WhatsApp, e-mail) -->
+    <cache-path name="compartilhar" path="compartilhar/" />
 </paths>

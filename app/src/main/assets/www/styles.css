@@ -562,6 +562,8 @@ body{background:var(--bg)}
 .insp-itens li:has(label){list-style:none;margin-left:-18px}
 /* Aviso de nova versão */
 .nova-versao{position:fixed;left:50%;bottom:calc(80px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:30;display:flex;gap:12px;align-items:center;background:#0f3550;color:#fff;border:1px solid #2b6c8f;border-radius:14px;padding:10px 12px 10px 16px;box-shadow:0 12px 30px rgba(0,0,0,.35);font-size:.92rem;max-width:calc(100% - 24px)}
+.nova-versao-baixar{background:var(--green);color:#fff;border-radius:10px;padding:8px 14px;font-weight:700;text-decoration:none;white-space:nowrap}
+.nova-versao .nova-versao-fechar{background:transparent;color:#cfe3ee;padding:6px 8px;font-weight:400}
 .nova-versao button{background:var(--green);color:#fff;border:0;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer;white-space:nowrap}
 /* Visão geral: Hoje (o que fazer) e clima */
 .hoje{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:14px;margin-bottom:16px}

@@ -11,8 +11,22 @@ android {
         applicationId = "com.simulagamer.agrooperacoes"
         minSdk = 26
         targetSdk = 35
-        versionCode = 64
-        versionName = "0.40.0-beta1"
+        versionCode = 65
+        versionName = "0.41.0-beta1"
+    }
+
+    // Assinatura fixa (opcional): com a chave nos segredos do GitHub, cada APK novo instala POR CIMA do anterior
+    // sem desinstalar. Sem os segredos, usa a chave de depuração do próprio servidor (muda a cada compilação).
+    signingConfigs {
+        getByName("debug") {
+            val chave = System.getenv("MERCAPLANT_KEYSTORE")
+            if (!chave.isNullOrBlank() && file(chave).exists()) {
+                storeFile = file(chave)
+                storePassword = System.getenv("MERCAPLANT_KEYSTORE_PASS")
+                keyAlias = System.getenv("MERCAPLANT_KEY_ALIAS")
+                keyPassword = System.getenv("MERCAPLANT_KEY_PASS")
+            }
+        }
     }
 
     compileOptions {
