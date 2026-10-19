@@ -826,3 +826,5 @@ tr.clickable{cursor:pointer} tr.clickable:hover td{background:rgba(23,135,212,.0
 .orc .neg,.tbl td.neg{color:#e05252}
 .orc-aviso{margin:4px 0 8px;color:#e05252}
 @media(max-width:640px){.orc-topo{grid-template-columns:repeat(3,1fr)}.orc-topo-barra{grid-column:1/-1}}
+/* Visão do grupo */
+.tbl tr.total td{border-top:2px solid var(--line);background:rgba(24,166,106,.06)}

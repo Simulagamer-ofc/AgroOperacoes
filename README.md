@@ -4,6 +4,12 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.45.0-beta1` — **Visão do grupo** (menu Gestão → Visão do grupo; aparece para quem participa de 2 fazendas ou mais e para o ADM do sistema):
+- Todas as fazendas lado a lado no período (7, 30, 90 dias ou 12 meses): talhões e área, operações, área trabalhada (com barra), chuva, produção e pendências; custos e vendas onde a pessoa vê o financeiro.
+- Quadro **Atenção** com operações atrasadas, estoque baixo, revisões e máquinas em manutenção de cada fazenda.
+- **PDF do grupo** (baixar ou enviar) com gráficos de área trabalhada e de custos por fazenda.
+- Lê da nuvem somente leitura (nada é gravado no aparelho) e respeita as mesmas permissões da sincronização.
+
 `0.44.0-beta1` — **Relatório da safra do talhão em PDF** (Talhão → Relatório da safra → Baixar PDF / Enviar PDF):
 - Mesmo visual do relatório da propriedade: marca, cartões (área, produção, chuva, operações, aplicações, monitoramentos e, com acesso ao financeiro, custo, custo por saca e margem).
 - **Planejado x realizado** do talhão com gráfico por categoria (barra vermelha quando passou do planejado) e tabela com saldo.
