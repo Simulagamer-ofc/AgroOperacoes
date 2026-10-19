@@ -488,7 +488,7 @@ VIEWS.safra = id => {
   const linha = (k, v) => v ? `<tr><td>${esc(k)}</td><td>${esc(String(v))}</td></tr>` : '';
   const tabela = (cab, linhas) => linhas.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr>${cab.map(c => `<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>${linhas.join('')}</tbody></table></div>` : '<p class="nota">Nenhum registro no período.</p>';
   const brlR = v => v == null ? '—' : `${v < 0 ? '− ' : ''}R$ ${num(Math.abs(v), 2)}`;
-  return `<div class="no-print">${head('Relatório da safra', `${f.name} • ${p.nome}`, btn('← Talhão', 'nav', 'talhao/' + id, 'secondary') + btn('Imprimir / PDF', 'af-imprimir', '', 'secondary'))}
+  return `<div class="no-print">${head('Relatório da safra', `${f.name} • ${p.nome}`, btn('← Talhão', 'nav', 'talhao/' + id, 'secondary') + btn('Imprimir', 'af-imprimir', '', 'secondary') + btn('Enviar PDF (WhatsApp)', 'safra-pdf-enviar', id, 'secondary') + btn('Baixar PDF', 'safra-pdf', id))}
     <section class="card panel safra-periodo"><label>De <input type="date" data-safra-ini="${esc(id)}" value="${p.ini}"></label><label>até <input type="date" data-safra-fim="${esc(id)}" value="${p.fim}"></label></section></div>
   <article class="card panel relatorio">
     <header class="rel-head"><div><strong>${esc(db.settings.farm || 'MercaPlant')}</strong><br><small>Relatório da safra — ${esc(f.name)}</small></div><small>${fmtDate(p.ini)} a ${fmtDate(p.fim)}</small></header>
