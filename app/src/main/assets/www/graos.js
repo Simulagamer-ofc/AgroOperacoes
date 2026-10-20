@@ -494,7 +494,26 @@ function capacidadeForm(siloId) {
 // ---------- Telas ----------
 const ABAS_GRAOS = [['', 'Painel'], ['moega', 'Moega'], ['secador', 'Secador'], ['silos', 'Silos'], ['terceiros', 'Terceiros']];
 const abasGraos = atual => `<div class="filters graos-abas">${ABAS_GRAOS.map(([a, n]) => `<button class="${atual === a ? 'active' : ''}" data-act="nav" data-id="graos${a ? '/' + a : ''}">${n}</button>`).join('')}<button data-act="nav" data-id="secagem">Leituras avulsas</button></div>`;
-const semEquip = tipo => `<section class="card">${empty(`Nenhum ${tipo === 'Secador' ? 'secador' : tipo === 'Moega' ? 'moega' : 'silo'} cadastrado`, `Cadastre em Máquinas e manutenção com o tipo “${tipo}”.`, {act: 'mc-new', label: '+ Cadastrar'})}</section>`;
+const semEquip = tipo => tipo === 'Secador'
+  ? `<section class="card">${empty('Nenhum secador cadastrado', 'Cadastre o secador uma vez: nome, tipo e capacidade. Depois o sistema pergunta quais visores de temperatura ele tem.', {act: 'gr-novo-secador', label: '+ Cadastrar secador'})}</section>`
+  : `<section class="card">${empty('Nenhum silo cadastrado', 'Cadastre cada silo ou armazém com a capacidade em toneladas.', {act: 'gr-novo-silo', label: '+ Cadastrar silo'})}</section>`;
+// Cadastro rápido de secador e silo direto pela tela de grãos (vira máquina em Máquinas e manutenção)
+function novoSecadorForm() {
+  openForm({title: 'Cadastrar secador', sub: 'Só o essencial. Depois você informa os visores de temperatura do painel.', values: {tipoSecador: 'continuo'},
+    fields: [{k: 'name', label: 'Nome do secador', required: true, placeholder: 'Ex.: Secador 1 — Kepler 60', full: true},
+      {k: 'tipoSecador', label: 'Tipo', type: 'select', options: (typeof TIPO_SECADOR !== 'undefined' ? TIPO_SECADOR : [['continuo', 'Contínuo']]).map(([value, label]) => ({value, label})), hint: 'Contínuo: o grão passa sem parar. Intermitente: o grão circula até secar. Estático: secagem em leito/silo.'},
+      {k: 'model', label: 'Marca / modelo', placeholder: 'Ex.: Kepler Weber, Casp, Comil'}, {k: 'capacidadeTH', label: 'Capacidade (t/h)', type: 'number', min: 0, hint: 'Opcional — do catálogo do fabricante.'}],
+    submit: 'Cadastrar e configurar visores',
+    onSubmit: v => {
+      const id = uid(); upsert('machines', {id, name: v.name, type: 'Secador', model: v.model, tipoSecador: v.tipoSecador, capacidadeTH: v.capacidadeTH, hours: 0, interval: '', nextService: '', state: 'Ativa'});
+      showToast(`${v.name} cadastrado`); setTimeout(() => sensoresForm(id), 60);
+    }});
+}
+function novoSiloForm() {
+  openForm({title: 'Cadastrar silo ou armazém', fields: [{k: 'name', label: 'Nome', required: true, placeholder: 'Ex.: Silo 01 — soja', full: true}, {k: 'capacidadeT', label: 'Capacidade (t)', type: 'number', min: 0, required: true, hint: 'Usada na ocupação e no aviso de silo cheio.'}],
+    submit: 'Cadastrar silo',
+    onSubmit: v => { upsert('machines', {id: uid(), name: v.name, type: 'Silo/Armazém', capacidadeT: v.capacidadeT, hours: 0, interval: '', nextService: '', state: 'Ativa'}); showToast(`${v.name} cadastrado`); render(); }});
+}
 VIEWS.graos = arg => {
   carregarRegrasGraos();
   if (arg?.startsWith('lote/')) return telaLote(arg.slice(5));
@@ -554,7 +573,7 @@ function telaSecador() {
   const sec = equipDoTipo('Secador'); if (!sec.length) return semEquip('Secador');
   const abertas = db.lotesSecagem.filter(l => l.status === 'Em andamento'), feitas = db.lotesSecagem.filter(l => l.status === 'Concluída').sort((a, b) => (b.fim || '').localeCompare(a.fim || ''));
   const espera = cargasEsperando();
-  const limp = `<section class="card panel"><h3 style="margin-bottom:8px">Limpeza e inspeção</h3>${sec.map(m => { const u = ultimaLimpeza(m.id), d = u ? diasEntreAuto(u.date, today()) : null; return `<div class="hoje-item"><span class="alert-icon ${d == null || d > DIAS_LIMPEZA ? 'orange' : 'green'}">⚙</span><div><strong>${esc(m.name)}</strong><small>${u ? `Última em ${fmtDate(u.date)} (há ${d} ${d === 1 ? 'dia' : 'dias'})${u.pendentes ? ` • ${u.pendentes} ${u.pendentes === 1 ? 'item pendente' : 'itens pendentes'}` : ' • tudo feito'}` : 'Nenhuma limpeza registrada'}</small></div><div class="btn-row" style="margin:0">${mini('Sensores', 'gr-sensores', m.id)}${mini('Registrar limpeza', 'gr-limpeza', m.id)}</div></div>`; }).join('')}<p class="nota" style="margin:6px 0 0">Pó, palha e grãos acumulados no secador são a principal causa de incêndio. O app lembra a cada ${DIAS_LIMPEZA} dias de uso (critério do app; siga o manual do fabricante).</p></section>`;
+  const limp = `<section class="card panel"><div class="section-title" style="margin:0 0 8px"><h3>Secadores</h3>${btn('+ Secador', 'gr-novo-secador', '', 'secondary')}</div>${sec.map(m => { const u = ultimaLimpeza(m.id), d = u ? diasEntreAuto(u.date, today()) : null; return `<div class="hoje-item"><span class="alert-icon ${d == null || d > DIAS_LIMPEZA ? 'orange' : 'green'}">⚙</span><div><strong>${esc(m.name)}</strong><small>${u ? `Última em ${fmtDate(u.date)} (há ${d} ${d === 1 ? 'dia' : 'dias'})${u.pendentes ? ` • ${u.pendentes} ${u.pendentes === 1 ? 'item pendente' : 'itens pendentes'}` : ' • tudo feito'}` : 'Nenhuma limpeza registrada'}</small></div><div class="btn-row" style="margin:0">${mini('Sensores', 'gr-sensores', m.id)}${mini('Registrar limpeza', 'gr-limpeza', m.id)}</div></div>`; }).join('')}<p class="nota" style="margin:6px 0 0">Pó, palha e grãos acumulados no secador são a principal causa de incêndio. O app lembra a cada ${DIAS_LIMPEZA} dias de uso (critério do app; siga o manual do fabricante).</p></section>`;
   const tot = feitas.reduce((a, l) => { const c = calcSecagem(l); a.mf += c.mf || 0; a.agua += c.agua || 0; a.h += c.horas; a.custo += c.custo || 0; return a; }, {mf: 0, agua: 0, h: 0, custo: 0});
   return `${limp}${espera.length ? `<section class="card panel"><strong>${espera.length} ${espera.length === 1 ? 'carga esperando' : 'cargas esperando'} secagem</strong><small class="nota"> — ${kgT(espera.reduce((s, r) => s + (r.calc?.liquido || 0), 0))}</small><div class="btn-row" style="margin-top:8px">${btn('Iniciar secagem', 'gr-secar')}</div></section>` : ''}
     ${abertas.map(cartaoLote).join('')}
@@ -600,7 +619,7 @@ function graficoMassa(pts, lim) {
 }
 function telaSilos() {
   const silos = equipDoTipo('Silo/Armazém'); if (!silos.length) return semEquip('Silo/Armazém');
-  return `<section class="silos-grade">${silos.map(cartaoSilo).join('')}</section><p class="nota">Saldo = cargas recebidas direto + grão seco que saiu do secador + transferências − saídas. Aeração: o ar deve estar pelo menos 5 °C abaixo da temperatura dos grãos (Embrapa Milho e Sorgo, Circular Técnica 55). Cabo que sobe ${SUBIDA_CABO} °C ou mais entre leituras é marcado para verificação (critério do app).</p>`;
+  return `<div class="btn-row" style="margin:0 0 8px">${btn('+ Silo', 'gr-novo-silo', '', 'secondary')}</div><section class="silos-grade">${silos.map(cartaoSilo).join('')}</section><p class="nota">Saldo = cargas recebidas direto + grão seco que saiu do secador + transferências − saídas. Aeração: o ar deve estar pelo menos 5 °C abaixo da temperatura dos grãos (Embrapa Milho e Sorgo, Circular Técnica 55). Cabo que sobe ${SUBIDA_CABO} °C ou mais entre leituras é marcado para verificação (critério do app).</p>`;
 }
 function movimentosDialog(siloId) {
   const s = find('machines', siloId); if (!s) return;
@@ -615,7 +634,7 @@ Object.assign(ACTIONS, {
   'gr-secar': id => iniciarSecagemForm(id), 'gr-leitura': leituraForm, 'gr-finalizar': finalizarSecagemForm,
   'gr-lote-del': id => confirmDialog('Excluir esta secagem? As cargas voltam para “esperando secagem” e o grão seco sai do silo.', () => { remove('lotesSecagem', id); go('graos/secador'); }),
   'gr-saida': id => saidaSiloForm(id), 'gr-termo': termometriaForm, 'gr-cap': capacidadeForm, 'gr-movs': movimentosDialog,
-  'gr-mov-del': excluirMovSilo, 'gr-classif': classificacaoForm, 'gr-tarifas': tarifasForm, 'gr-expurgo': expurgoForm, 'gr-limpeza': limpezaForm, 'gr-sensores': sensoresForm, 'gr-inventario': inventarioForm, 'gr-medidor': medidorForm, 'gr-inmetro': inmetroForm,
+  'gr-mov-del': excluirMovSilo, 'gr-classif': classificacaoForm, 'gr-tarifas': tarifasForm, 'gr-expurgo': expurgoForm, 'gr-limpeza': limpezaForm, 'gr-sensores': sensoresForm, 'gr-novo-secador': novoSecadorForm, 'gr-novo-silo': novoSiloForm, 'gr-inventario': inventarioForm, 'gr-medidor': medidorForm, 'gr-inmetro': inmetroForm,
   'gr-expurgo-fim': id => { const e = find('checklistsGraos', id); if (!e) return; e.liberadoEm = agoraISO(); save(); showToast('Silo liberado do expurgo'); render(); }
 });
 if (typeof NV_ROTA_TELA === 'object') NV_ROTA_TELA.graos = 'secagem';

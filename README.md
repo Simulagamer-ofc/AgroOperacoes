@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.46.3-beta1` — **Cadastro do secador e do silo pela tela de Grãos**: “+ Cadastrar secador” pede só nome, tipo (contínuo, intermitente ou estático), marca e capacidade e já abre a configuração dos visores (ar quente e P1…P8). “+ Silo” pede nome e capacidade. Não precisa mais ir em Máquinas.
+
 `0.46.2-beta1` — **Leitura do secador igual ao painel**:
 - Em Secador → **Sensores**, cadastre uma vez os aparelhos do painel (ex.: controlador do ar Entringer e alarme TSW Winckieel) e o que cada ponto P1…P8 mede e onde fica.
 - A leitura pede exatamente o que aparece nos visores: “Ar quente — visor do Entringer” e “P1 — coluna, parte de baixo”, “P2 — coluna, meio”… Ponto em OFF fica em branco.
