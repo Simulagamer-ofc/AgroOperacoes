@@ -78,6 +78,7 @@
         if (sub) { fonte(8.5); cor(COR.suave); escrever(sub, A4.l - M, y, {align: 'right'}); }
         y += 6;
       },
+      espaco(mm) { y += mm; },
       nada(msg) { fonte(9.5); cor(COR.suave); escrever(msg, M + 4, y + 1); y += 8; },
       // Cartões de resumo (até 3 por linha): [rótulo, valor, dica, cor]
       cartoes(lista) {
@@ -340,4 +341,44 @@
   }
   ACTIONS['safra-pdf'] = id => gerarSafra(id, false);
   ACTIONS['safra-pdf-enviar'] = id => gerarSafra(id, true);
+
+  // ---------- Ticket do romaneio (comprovante da moega para o motorista e o dono da carga) ----------
+  function gerarTicket(id, enviar = false) {
+    const r = find('romaneios', id); if (!r) return showToast('Romaneio não encontrado', true);
+    if (!window.jspdf?.jsPDF) return showToast('Gerador de PDF não carregou. Atualize a página.', true);
+    const c = r.calc || calcRomaneio(r), cl = r.classif?.resultado, sc = v => `${num(v / 60, 2)} sc`;
+    const P = pdfMercaPlant({titulo: `Romaneio de recebimento nº ${r.numero}`, linha2: `${fmtDate(r.date)} ${r.time || ''}`.trim(), continuacao: `Romaneio nº ${r.numero}`});
+    P.secao('Resultado da carga');
+    P.cartoes([['Peso líquido', `${num(c.liquido)} kg`, 'bruto - tara'], ['Descontos', `${num(c.descontoKg)} kg`, `${num(c.descontoPct, 2)}% do líquido`, COR.laranja], ['Peso final', `${num(c.pesoFinal)} kg`, sc(c.pesoFinal) + ' de 60 kg', COR.verdeEsc]]);
+    P.secao('Carga');
+    P.ficha([['Produto', nomeProd(r.produto, r.produtoNome)], ['Safra', r.season || ''], ['Dono do grão', r.dono === 'terceiro' ? `Terceiro - ${r.depositante}` : (db.settings.farm || 'Próprio')],
+      ['Talhão de origem', fieldName(r.fieldId) || ''], ['Placa', r.placa || ''], ['Motorista', r.motorista || ''], ['Destino', nomeEquip(r.destinoId)], ['Amostra de contraprova', r.amostraRetida || '']]);
+    P.secao('Pesagem');
+    P.tabela([{t: 'Pesagem', w: 2}, {t: 'Data e hora', w: 1.6}, {t: 'Peso (kg)', w: 1.4, dir: true}],
+      [['Bruto (caminhão cheio)', r.entrada ? fmtDH(r.entrada) : `${fmtDate(r.date)} ${r.time || ''}`, num(r.pesoBruto)], ['Tara (caminhão vazio)', r.saida ? fmtDH(r.saida) : '', num(r.tara)], ['Líquido', '', num(c.liquido)]]);
+    P.secao('Amostra e descontos', r.metodoDesc === 'tabela' ? `Tabela: ${num(r.fatorUmid, 2)}% por ponto de umidade, ${num(r.fatorImp ?? 1, 2)}% por ponto de impureza` : 'Balanço de massa: desconta só o excesso de água e impureza sobre o padrão');
+    P.tabela([{t: 'Item', w: 2.4}, {t: 'Medido', w: 1, dir: true}, {t: 'Padrão', w: 1, dir: true}, {t: 'Desconto (kg)', w: 1.3, dir: true}],
+      [['Umidade', `${num(r.umidade, 1)}%`, `${num(r.umidadePadrao, 1)}%`, num(c.linhas.find(l => l.id === 'umidade')?.descontoKg || 0)],
+        ...(r.impureza !== '' && r.impureza != null ? [['Impureza e matérias estranhas', `${num(r.impureza, 1)}%`, `${num(r.impurezaPadrao, 1)}%`, num(c.linhas.find(l => l.id === 'impureza')?.descontoKg || 0)]] : []),
+        ...c.linhas.filter(l => !['umidade', 'impureza'].includes(l.id)).map(l => [l.rotulo, `${num(l.percentual, 2)}%`, '', num(l.descontoKg)]),
+        ['Peso final (líquido e limpo)', '', '', `${num(c.pesoFinal)} = ${sc(c.pesoFinal)}`]]);
+    if (cl) {
+      P.secao('Classificação', cl.grupoRotulo || '');
+      P.tabela([{t: 'Defeito', w: 3}, {t: '%', w: 1, dir: true}], [...Object.entries(r.classif.valores || {}).map(([k, x]) => [typeof rotuloDefeito === 'function' ? rotuloDefeito(r.produto, k) : k, num(x, 2)]), ['Enquadramento', cl.enquadramento || 'faltam defeitos']]);
+      P.nota(cl.origem === 'fazenda' ? `Tabela da fazenda (${cl.fonte || ''}), não é norma oficial.` : `Tabela ${cl.tabelaId || ''} (MAPA). A classificação oficial é feita por classificador credenciado.`);
+    }
+    if (r.notes) { P.secao('Observações'); P.nota(r.notes); }
+    P.assinaturas([[quemUsa?.() || db.settings.owner || 'Responsável', 'Balança / recebimento'], [r.motorista || 'Motorista', 'Motorista']]);
+    const alt = (r.historico || []).filter(h => h.mudancas);
+    if (alt.length) {
+      P.espaco(12);
+      alt.forEach(h => P.nota(`Alterado em ${fmtDH(h.em)} por ${h.por || '-'}: ${h.mudancas.map(m => `${m.campo} ${m.antes} -> ${m.depois}`).join('; ')}. Motivo: ${h.motivo || '-'}.`));
+    }
+    const doc = P.finalizar();
+    entregarPdf(doc, `mercaplant-romaneio-${r.numero}-${(r.placa || '').replace(/\W/g, '').toLowerCase() || r.date}.pdf`, enviar === true, `Romaneio nº ${r.numero} - ${texto(nomeProd(r.produto, r.produtoNome))} - ${num(c.pesoFinal)} kg`);
+    return doc;
+  }
+  window.gerarTicketRomaneio = gerarTicket;
+  ACTIONS['gr-ticket'] = id => gerarTicket(id, false);
+  ACTIONS['gr-ticket-enviar'] = id => gerarTicket(id, true);
 })();

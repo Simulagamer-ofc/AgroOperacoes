@@ -4,6 +4,12 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.46.0-beta1` — **Moega pronta para unidade armazenadora** (bateria de grãos: 79 casos aprovados):
+- **Pesagem em duas etapas**: “Chegada do caminhão” registra o peso cheio e deixa a carga no **pátio, aguardando tara**, com tempo de espera; “Pesar vazio” fecha o romaneio. A mesma placa não entra duas vezes no pátio, e tirar um caminhão sem descarregar exige motivo.
+- **Histórico de alterações do romaneio**: mudar peso, amostra, desconto, destino ou dono exige motivo e grava quem, quando, valor antigo e novo e o peso final antes e depois. Romaneio alterado aparece marcado na lista. Excluir exige motivo, fica no registro de excluídos e o número não é reaproveitado.
+- **Terceiros**: tarifa de **recepção** (R$/t) e **quebra técnica de armazenagem** (% ao mês sobre o saldo de cada dia, descontada do saldo do depositante), no extrato e no total a cobrar.
+- **Ticket do romaneio em PDF** para baixar ou enviar ao motorista pelo WhatsApp: pesagem com hora de entrada e saída, amostra, descontos, classificação, assinaturas e alterações.
+
 `0.45.3-beta1` — **Bateria de testes de moega, secador e silos** (66 casos, 148 cargas de bitrem e 21 secagens lançadas pelos formulários e conferidas com cálculo independente; roteiro em `referencias/e2e/`):
 - **Secador não mistura culturas**: com soja e milho esperando o mesmo secador, o lote levava todas as cargas e o milho ia parar no silo de soja (a rastreabilidade mostrava talhão de milho no silo de soja). Agora o lote leva só a cultura que chegou primeiro; a outra fica na fila para o próximo lote.
 - **Capacidade do silo**: carga direta, fim de secagem ou transferência que faria o silo passar da capacidade cadastrada pede confirmação, e silo acima da capacidade aparece em vermelho no painel.

@@ -85,7 +85,7 @@ async () => {
   T('MOE-15', 'Moega', 'Número ambíguo "45.000" não é aceito sem confirmar a escrita (evita 45 kg × 45 t)', 'pede para escrever 45000 ou 45.000,00', r.salvo ? 'registrou' : r.msgs[0], !r.salvo && /ambíguo/.test(r.msgs[0]));
   // Edição recalcula e atualiza a colheita
   const edit = db.romaneios[0];
-  r = await F('gr-rom-edit', edit.id, {umidade: '15,0'});
+  r = await F('gr-rom-edit', edit.id, {umidade: '15,0', motivoAlteracao: 'Reamostragem: medidor conferido com estufa'});
   const oEd = oraculoRomaneio({bruto: 52840, tara: 15620, u: 15.0, up: 14, imp: 2.0, ip: 1.0}), colEd = db.colheitas.find(c => c.romaneioId === edit.id);
   const edN = find('romaneios', edit.id);
   T('MOE-16', 'Moega', 'Editar a umidade do romaneio (17,5% → 15,0%) recalcula o desconto e a colheita em Produção', `final ${br(oEd.final)} kg • colheita ${Math.round(oEd.final)} kg`, `final ${br(edN.calc.pesoFinal)} kg • colheita ${colEd?.kg} kg`, perto(edN.calc.pesoFinal, oEd.final) && colEd?.kg === Math.round(oEd.final) && db.colheitas.filter(c => c.romaneioId === edit.id).length === 1);
@@ -189,6 +189,18 @@ async () => {
   const ex = extratoTerceiro('Agropecuária Lima');
   let armOr = 0; for (let d = 30; d >= 0; d--) { const dt = daysAgo(d); const sd = rt.calc.pesoFinal - (dt >= daysAgo(10) ? 15000 : 0); armOr += sd / 60 * 0.30 / 30; }
   T('SIL-11', 'Terceiros', 'Extrato do terceiro: saldo e armazenagem diária (R$ 0,30/sc/mês sobre o saldo de cada dia)', `saldo ${br(rt.calc.pesoFinal - 15000)} kg • armazenagem R$ ${br(armOr)}`, `saldo ${br(ex.saldo)} kg • armazenagem R$ ${br(ex.armazenagem)}`, perto(ex.saldo, rt.calc.pesoFinal - 15000) && perto(ex.armazenagem, armOr));
+
+  // Tarifas completas de terceiros: recepção, secagem, armazenagem e quebra técnica mensal
+  await F('gr-tarifas', undefined, {recepcaoT: '6', secagemT: '28', armazenagemScMes: '0,30', quebraMes: '0,1'});
+  const ex2 = extratoTerceiro('Agropecuária Lima');
+  let arm2 = 0, qb2 = 0; for (let d = 30; d >= 0; d--) { const dt = daysAgo(d); const sdB = rt.calc.pesoFinal - (dt >= daysAgo(10) ? 15000 : 0), sdL = Math.max(0, sdB - qb2); arm2 += sdL / 60 * 0.30 / 30; qb2 += sdL * 0.001 / 30; }
+  const rec2 = 6 * rt.calc.liquido / 1000;
+  T('TER-01', 'Terceiros', 'Quebra técnica de 0,1% ao mês sobre o saldo de cada dia sai do saldo do depositante; recepção de R$ 6/t sobre o líquido recebido', `quebra ${br(qb2)} kg • saldo ${br(rt.calc.pesoFinal - 15000 - qb2)} kg • recepção R$ ${br(rec2)} • armazenagem R$ ${br(arm2)}`, `quebra ${br(ex2.quebra)} kg • saldo ${br(ex2.saldo)} kg • recepção R$ ${br(ex2.recepcao)} • armazenagem R$ ${br(ex2.armazenagem)}`, perto(ex2.quebra, qb2) && perto(ex2.saldo, rt.calc.pesoFinal - 15000 - qb2) && perto(ex2.recepcao, rec2) && perto(ex2.armazenagem, arm2));
+  T('TER-02', 'Terceiros', 'Total a cobrar = recepção + secagem + armazenagem', `R$ ${br(rec2 + arm2)}`, `R$ ${br(ex2.total)}`, perto(ex2.total, rec2 + ex2.secagem + arm2) && perto(ex2.total, rec2 + arm2));
+  r = await F('gr-saida', S2, {siloId: S2, tipo: 'saida', date: today(), kg: String(Math.round(rt.calc.pesoFinal - 15000)), dono: 'terceiro|Agropecuária Lima', lancarVenda: 'nao'});
+  T('TER-03', 'Terceiros', 'Retirar o saldo sem descontar a quebra é bloqueado (o depositante tem menos por causa da quebra)', 'bloqueia e avisa', r.salvo ? 'registrou' : r.msgs[0], !r.salvo && /armazenados/.test(r.msgs[0]));
+  const htmlExt = VIEWS.graos('extrato/' + encodeURIComponent('Agropecuária Lima'));
+  T('TER-04', 'Terceiros', 'Extrato impresso mostra a recepção e a quebra técnica', 'linhas de recepção e quebra', `${/Recepção/.test(htmlExt) ? 'recepção' : 'sem recepção'} • ${/Quebra técnica/.test(htmlExt) ? 'quebra' : 'sem quebra'}`, /Recepção/.test(htmlExt) && /Quebra técnica de armazenagem/.test(htmlExt));
   // Termometria, expurgo, inventário
   await F('gr-termo', S1, {date: '2026-04-10', time: '08:00', c0: '22', c1: '23', c2: '22', c3: '21', insetos: 'nao'});
   await F('gr-termo', S1, {date: '2026-04-17', time: '08:00', c0: '22', c1: '25,5', c2: '22', c3: '21', insetos: 'poucos', especie: 'Rhyzopertha dominica'});
@@ -261,6 +273,45 @@ async () => {
   T('CAP-03', 'Silos', 'Desfeita a transferência, o aviso some e os saldos voltam', `Silo 02 ${br(s2c.saldo / 1000, 1)} t • Silo 04 ${br(s4c.saldo / 1000, 1)} t • sem aviso`, `Silo 02 ${br(saldo(S2).saldo / 1000, 1)} t • Silo 04 ${br(saldo(S4).saldo / 1000, 1)} t • ${alerts().some(a => /acima da capacidade/.test(a.title)) ? 'aviso ficou' : 'sem aviso'}`, perto(saldo(S2).saldo, s2c.saldo) && perto(saldo(S4).saldo, s4c.saldo) && !alerts().some(a => /acima da capacidade/.test(a.title)));
   r = await F('gr-romaneio', undefined, {dono: 'proprio', fieldId: F2, produto: 'soja', season: '2025/26', date: '2026-04-21', time: '09:10', placa: 'IZZ9A99', pesoBruto: '52600', tara: '16100', umidade: '13,2', impureza: '0,7', umidadePadrao: '14', impurezaPadrao: '1', metodoDesc: 'balanco', destino: 'silo|' + (saldo(S2).ocupacao > saldo(S1).ocupacao ? S2 : S1)});
   T('CAP-04', 'Silos', 'Carga seca direto a silo com espaço: registra sem aviso de capacidade', 'registra', r.salvo ? 'registrou' : r.msgs[0], r.salvo);
+  // ================= PAT/AUD: pesagem em duas etapas e histórico =================
+  r = await F('gr-chegada', undefined, {dono: 'proprio', fieldId: F2, produto: 'soja', season: '2025/26', date: today(), time: '07:15', placa: 'ixb-4f10', motorista: 'Carlos Menezes', pesoBruto: '51340', umidade: '13,1', impureza: '0,9', destino: 'silo|' + S1});
+  const pz = noPatio()[0];
+  T('PAT-01', 'Pátio', 'Chegada do caminhão (1ª pesagem, cheio): fica no pátio aguardando a tara', 'IXB-4F10 no pátio com 51.340 kg', pz ? `${pz.placa} no pátio com ${br(pz.pesoBruto, 0)} kg` : (r.msgs[0] || 'não entrou'), pz?.placa === 'IXB-4F10' && pz.pesoBruto === 51340 && /IXB-4F10/.test(VIEWS.graos('moega')));
+  r = await F('gr-chegada', undefined, {placa: 'IXB4F10', time: '07:40', pesoBruto: '50000', destino: 'silo|' + S1});
+  T('PAT-02', 'Pátio', 'Mesma placa não pode chegar de novo enquanto está no pátio', 'bloqueia e avisa', r.salvo ? 'registrou' : r.msgs[0], !r.salvo && /já está no pátio/.test(r.msgs[0]) && noPatio().length === 1);
+  const nRom0 = db.romaneios.length;
+  r = await F('gr-tara', pz.id, {tara: '15880'});
+  const rp = db.romaneios.at(-1), op = oraculoRomaneio({bruto: 51340, tara: 15880, u: 13.1, up: 14, imp: 0.9, ip: 1, quebra: Number(rp.quebraTecnica) || 0});
+  T('PAT-03', 'Pátio', '2ª pesagem (vazio, 15.880 kg) fecha o romaneio com o bruto da chegada; entrada e saída ficam no comprovante', `líquido ${br(op.liq, 0)} kg • final ${br(op.final)} kg • entrada e saída registradas • pátio vazio`, r.salvo ? `líquido ${br(rp.calc.liquido, 0)} kg • final ${br(rp.calc.pesoFinal)} kg • entrada ${rp.entrada ? 'ok' : 'falta'} • saída ${rp.saida ? 'ok' : 'falta'} • pátio ${noPatio().length ? 'com carga' : 'vazio'}` : r.msgs.join(' / '),
+    r.salvo && db.romaneios.length === nRom0 + 1 && perto(rp.calc.pesoFinal, op.final) && rp.entrada && rp.saida && !noPatio().length && find('pesagens', pz.id)?.status === 'fechada' && (rp.historico || []).length === 2);
+  await F('gr-chegada', undefined, {placa: 'JAA1B22', time: '08:05', pesoBruto: '49700', destino: 'silo|' + S1});
+  const pz2 = noPatio()[0];
+  r = await F('gr-patio-del', pz2.id, {motivo: ''});
+  const r2 = await F('gr-patio-del', pz2.id, {motivo: 'Caminhão voltou sem descarregar (carga recusada)'});
+  T('PAT-04', 'Pátio', 'Tirar caminhão do pátio sem descarregar exige motivo e fica registrado', 'sem motivo bloqueia; com motivo fica "cancelada"', `${r.salvo ? 'aceitou sem motivo' : 'pediu motivo'} • ${find('pesagens', pz2.id)?.status}`, !r.salvo && r2.salvo && find('pesagens', pz2.id)?.status === 'cancelada' && find('pesagens', pz2.id)?.motivo);
+  r = await F('gr-rom-edit', rp.id, {tara: '15680'});
+  T('AUD-01', 'Histórico', 'Alterar a tara de um romaneio sem informar o motivo é bloqueado', 'pede o motivo', r.salvo ? 'salvou sem motivo' : r.msgs[0], !r.salvo && /motivo da alteração/.test(r.msgs[0]) && find('romaneios', rp.id).tara === 15880);
+  const finAntes = find('romaneios', rp.id).calc.pesoFinal;
+  r = await F('gr-rom-edit', rp.id, {tara: '15680', motivoAlteracao: 'Tara repesada: caminhão estava com lona molhada'});
+  const ra = find('romaneios', rp.id), ha = (ra.historico || []).at(-1);
+  T('AUD-02', 'Histórico', 'Com motivo: grava quem alterou, quando, o valor antigo e o novo, e o peso final antes e depois', `Tara: 15.880 kg → 15.680 kg • final ${br(finAntes, 0)} → ${br(oraculoRomaneio({bruto: 51340, tara: 15680, u: 13.1, up: 14, imp: 0.9, ip: 1, quebra: Number(rp.quebraTecnica) || 0}).final, 0)} kg`, ha?.mudancas ? `${ha.mudancas.map(m => `${m.campo}: ${m.antes} → ${m.depois}`).join('; ')} • final ${br(ha.finalAntes, 0)} → ${br(ha.finalDepois, 0)} kg • por ${ha.por} • ${ha.motivo}` : 'sem histórico',
+    ha?.mudancas?.length === 1 && ha.mudancas[0].campo === 'Tara' && ha.mudancas[0].antes === '15.880 kg' && ha.mudancas[0].depois === '15.680 kg' && ha.por && ha.em && /alterado/.test(VIEWS.graos('moega')));
+  const nH = ra.historico.length;
+  r = await F('gr-rom-edit', rp.id, {notes: 'Descarga na moega 2'});
+  T('AUD-03', 'Histórico', 'Mudar só a observação não pede motivo nem cria registro de alteração', `salva • ${nH} registros`, `${r.salvo ? 'salva' : r.msgs[0]} • ${find('romaneios', rp.id).historico.length} registros`, r.salvo && find('romaneios', rp.id).historico.length === nH);
+  const numDel = rp.numero;
+  r = await F('gr-rom-del', rp.id, {motivo: ''});
+  const r3 = await F('gr-rom-del', rp.id, {motivo: 'Lançado na unidade errada'});
+  const exReg = db.checklistsGraos.find(c => c.tipo === 'romaneio_excluido' && c.numero === numDel);
+  await F('gr-romaneio', undefined, {dono: 'proprio', fieldId: F2, produto: 'soja', season: '2025/26', date: today(), time: '09:30', placa: 'JBC7H31', pesoBruto: '50120', tara: '15900', umidade: '13', impureza: '0,8', umidadePadrao: '14', impurezaPadrao: '1', metodoDesc: 'balanco', destino: 'silo|' + S1});
+  const novoNum = db.romaneios.at(-1).numero;
+  T('AUD-04', 'Histórico', 'Excluir romaneio exige motivo, fica no registro de excluídos e o número não é reaproveitado', `nº ${numDel} registrado como excluído • próximo romaneio nº ${numDel + 1}`, `${r.salvo ? 'excluiu sem motivo' : 'pediu motivo'} • nº ${exReg?.numero ?? '—'} ${exReg ? 'registrado' : 'sem registro'} (${exReg?.motivo || ''}) • próximo nº ${novoNum}`, !r.salvo && r3.salvo && !find('romaneios', rp.id) && exReg?.pesoFinal > 0 && novoNum === numDel + 1 && /Romaneios excluídos/.test(VIEWS.graos('moega')));
+  // Ticket em PDF
+  const _dl = downloadFile; let baixou = ''; downloadFile = (nome) => { baixou = nome; };
+  const rt2 = db.romaneios.at(-1); const docT = gerarTicketRomaneio(rt2.id); downloadFile = _dl;
+  const txtT = docT ? docT.output() : '';
+  T('TKT-01', 'Ticket', 'Ticket do romaneio em PDF para o motorista: número, placa, pesagem, descontos, peso final e assinaturas', `mercaplant-romaneio-${rt2.numero}-jbc7h31.pdf com peso final ${br(rt2.calc.pesoFinal, 0)} kg`, docT ? `${baixou} • ${docT.getNumberOfPages()} página(s)` : 'não gerou',
+    !!docT && baixou === `mercaplant-romaneio-${rt2.numero}-jbc7h31.pdf` && txtT.includes(`Romaneio de recebimento n${'º'} ${rt2.numero}`) && txtT.includes('JBC7H31') && txtT.includes(num(rt2.calc.pesoFinal)) && txtT.includes('Motorista'));
   const silosChk = [S1, S2, S3, S4].map(id => { const {ent, sai} = movimentosSilo(id); const e = ent.reduce((s, x) => s + x.kg, 0), sa = sai.reduce((s, x) => s + x.kg, 0); return {id, nome: find('machines', id).name, e, sa, saldo: saldo(id).saldo, ok: perto(saldo(id).saldo, Math.max(0, e - sa))}; });
   T('VOL-04', 'Volume', 'Balanço de cada silo: entradas − saídas = saldo', '4/4 silos fechando', `${silosChk.filter(x => x.ok).length}/4 silos fechando • ${silosChk.map(s => `${s.nome.split(' —')[0]}: ${br(s.saldo / 1000, 1)} t`).join(' • ')}`, silosChk.every(x => x.ok));
   const tVol = Math.round(t1 - t0);
