@@ -954,9 +954,10 @@ function render(anchor = pendingAnchor) {
     return;
   }
   document.querySelector('.app').classList.toggle('nx-home', key === 'inicio');
-  $('#viewTitle').textContent = TITLES[key] || (name === 'talhao' ? 'Talhões' : 'MercaPlant');
-  document.title = `${TITLES[key] || 'MercaPlant'} — MercaPlant`;
-  const menu = GRUPO_DA_ROTA[key] || key;
+  const menu = (typeof menuDaRota === 'function' && menuDaRota(name, arg)) || GRUPO_DA_ROTA[key] || key;
+  const titulo = TITLES[menu] || TITLES[key];
+  $('#viewTitle').textContent = titulo || (name === 'talhao' ? 'Talhões' : 'MercaPlant');
+  document.title = `${titulo || 'MercaPlant'} — MercaPlant`;
   $$('[data-route]').forEach(b => b.classList.toggle('active', b.dataset.route === menu));
   // Abas só nas telas de lista do grupo (não no detalhe de um lote ou de uma ordem)
   if (GRUPO_DA_ROTA[name] && !arg) view.querySelector('.view-head')?.insertAdjacentHTML('afterend', barraAbas(name));

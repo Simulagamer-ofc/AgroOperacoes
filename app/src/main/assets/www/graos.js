@@ -514,6 +514,28 @@ function novoSiloForm() {
     submit: 'Cadastrar silo',
     onSubmit: v => { upsert('machines', {id: uid(), name: v.name, type: 'Silo/Armazém', capacidadeT: v.capacidadeT, hours: 0, interval: '', nextService: '', state: 'Ativa'}); showToast(`${v.name} cadastrado`); render(); }});
 }
+// Menu: Painel de grãos, Moega, Secador e Silos são telas próprias; o fluxo no topo liga uma à outra
+function menuDaRota(name, arg) {
+  if (name === 'secagem') return 'graos/secador';
+  if (name !== 'graos') return '';
+  const a = String(arg || '').split('/')[0];
+  return ['moega', 'romaneio'].includes(a) ? 'graos/moega' : ['secador', 'lote'].includes(a) ? 'graos/secador' : ['silos', 'terceiros', 'extrato', 'saida'].includes(a) ? 'graos/silos' : 'graos';
+}
+Object.assign(TITLES, {'graos/moega': 'Moega', 'graos/secador': 'Secador', 'graos/silos': 'Silos e armazém'});
+// Faixa Moega → Secador → Silos: o número principal de cada etapa e o que está passando de uma para outra
+function fluxoGraos(atual) {
+  const t = today(), hoje = db.romaneios.filter(r => r.date === t), patio = typeof noPatio === 'function' ? noPatio().length : 0;
+  const espera = cargasEsperando(), kgEsp = espera.reduce((a, r) => a + (r.calc?.liquido || 0), 0);
+  const abertas = db.lotesSecagem.filter(l => l.status === 'Em andamento');
+  const silos = equipDoTipo('Silo/Armazém').map(saldoSilo), saldo = silos.reduce((a, d) => a + d.saldo, 0), cap = silos.reduce((a, d) => a + (d.cap || 0), 0);
+  const cheio = equipDoTipo('Silo/Armazém').some(m => { const d = saldoSilo(m); return d.cap && d.saldo > d.cap + 1; });
+  const ultLeit = l => (l.leituras || []).at(-1);
+  const etapas = [
+    ['moega', 'Moega', hoje.length ? `${hoje.length} ${hoje.length === 1 ? 'carga' : 'cargas'} hoje` : 'Nenhuma carga hoje', [hoje.length ? kgT(hoje.reduce((a, r) => a + (r.calc?.pesoFinal || 0), 0)) + ' recebidas' : '', patio ? `${patio} no pátio aguardando tara` : ''].filter(Boolean).join(' • ')],
+    ['secador', 'Secador', abertas.length ? `Secando ${abertas.map(l => { const u = ultLeit(l); return nomeProd(l.produto, l.produtoNome).toLowerCase() + (numOuU(u?.umidade) != null ? ' a ' + n1(u.umidade) + '%' : ''); }).join(', ')}` : 'Parado', espera.length ? `${espera.length} ${espera.length === 1 ? 'carga' : 'cargas'} da moega esperando (${kgT(kgEsp)})` : 'Nenhuma carga esperando'],
+    ['silos', 'Silos', silos.length ? `${kgT(saldo)} armazenadas` : 'Nenhum silo cadastrado', cheio ? 'Silo acima da capacidade' : cap ? `${n0(saldo / cap * 100)}% da capacidade` : '']];
+  return `<nav class="fluxo-graos" aria-label="Etapas do grão">${etapas.map(([a, nome, linha1, linha2], k) => `${k ? '<span class="fluxo-seta" aria-hidden="true">→</span>' : ''}<button class="fluxo-etapa ${a === atual ? 'atual' : ''} ${a === 'silos' && cheio ? 'alerta' : ''}" data-act="nav" data-id="graos/${a}"${a === atual ? ' aria-current="page"' : ''}><small>${k + 1}. ${nome}</small><b>${esc(linha1)}</b>${linha2 ? `<span>${esc(linha2)}</span>` : ''}</button>`).join('')}</nav>`;
+}
 VIEWS.graos = arg => {
   carregarRegrasGraos();
   if (arg?.startsWith('lote/')) return telaLote(arg.slice(5));
@@ -522,7 +544,15 @@ VIEWS.graos = arg => {
   if (arg === 'relatorio' || arg?.startsWith('relatorio/')) return relatorioSafraGraos(decodeURIComponent(arg.slice(10)));
   if (arg?.startsWith('extrato/')) return telaExtrato(decodeURIComponent(arg.slice(8)));
   const aba = ['moega', 'secador', 'silos', 'terceiros'].includes(arg) ? arg : '';
-  const topo = head('Moega, secador e silos', 'Recebimento, secagem e armazenagem ligados: a carga vira colheita do talhão e estoque no silo.', btn('+ Carga na moega', 'gr-romaneio') + btn('Iniciar secagem', 'gr-secar', '', 'secondary') + btn('Saída do silo', 'gr-saida', '', 'secondary') + btn('Relatório da safra', 'nav', 'graos/relatorio', 'secondary')) + abasGraos(aba);
+  const rel = btn('Relatório da safra', 'nav', 'graos/relatorio', 'secondary');
+  const topos = {
+    '': ['Painel de grãos', 'Resumo do dia e da safra: recebimento, secagem e armazenagem.', btn('+ Carga na moega', 'gr-romaneio') + btn('Iniciar secagem', 'gr-secar', '', 'secondary') + btn('Saída do silo', 'gr-saida', '', 'secondary') + rel],
+    moega: ['Moega', 'Pesagem, amostra e descontos. Cada carga segue para o secador ou direto ao silo e vira colheita do talhão.', btn('+ Chegada do caminhão', 'gr-chegada') + btn('+ Carga na moega', 'gr-romaneio', '', 'secondary') + rel],
+    secador: ['Secador', 'Seca as cargas que a moega mandou. Ao finalizar, o grão seco entra no silo escolhido.', btn('Iniciar secagem', 'gr-secar') + btn('Leituras avulsas', 'nav', 'secagem', 'secondary') + rel],
+    silos: ['Silos e armazém', 'Saldo, qualidade e expedição. As entradas vêm da moega (grão seco) e do secador.', btn('Saída do silo', 'gr-saida') + btn('Grão de terceiros', 'nav', 'graos/terceiros', 'secondary') + rel],
+    terceiros: ['Grão de terceiros', 'Saldo e cobrança de cada produtor que deixou grão na unidade.', btn('← Silos', 'nav', 'graos/silos', 'secondary') + btn('Tarifas', 'gr-tarifas', '', 'secondary')]};
+  const [tit, sub, acoes] = topos[aba];
+  const topo = head(tit, sub, acoes) + fluxoGraos(aba === 'terceiros' ? 'silos' : aba);
   return topo + (aba === 'moega' ? telaMoega() : aba === 'secador' ? telaSecador() : aba === 'silos' ? telaSilos() : aba === 'terceiros' ? telaTerceiros() : telaPainelGraos());
 };
 TITLES.graos = 'Grãos';

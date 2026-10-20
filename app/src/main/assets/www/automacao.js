@@ -446,7 +446,7 @@ function resumoDia() {
     tiles.push(['maquinas', 'Máquinas', ativas.length, [`${uso} em uso`, `${ativas.length - uso - manut} disponíve${ativas.length - uso - manut === 1 ? 'l' : 'is'}`].join(' • '), manut ? `${manut} em manutenção` : '']);
   }
   const secando = (db.lotesSecagem || []).filter(l => l.status === 'Em andamento');
-  if (secando.length && pode('graos')) tiles.push(['graos', 'Secagem', secando.length, secando.slice(0, 2).map(l => { const u = (l.leituras || []).filter(x => x.umidade != null).at(-1)?.umidade ?? l.umidadeEntrada; return `${typeof nomeEquip === 'function' ? nomeEquip(l.secadorId) : 'Secador'}${u != null ? ` ${num(u, 1)}%` : ''}`; }).join(' • '), '']);
+  if (secando.length && pode('graos')) tiles.push(['graos/secador', 'Secagem', secando.length, secando.slice(0, 2).map(l => { const u = (l.leituras || []).filter(x => x.umidade != null).at(-1)?.umidade ?? l.umidadeEntrada; return `${typeof nomeEquip === 'function' ? nomeEquip(l.secadorId) : 'Secador'}${u != null ? ` ${num(u, 1)}%` : ''}`; }).join(' • '), '']);
   if (pode('chuva') && db.chuvas.length) {
     const desde = daysAgo(6), mm = db.chuvas.filter(c => c.date >= desde && c.date <= t).reduce((s, c) => s + (Number(c.mm) || 0), 0), ult = db.chuvas.slice().sort(byDateDesc)[0];
     tiles.push(['chuva', 'Chuva em 7 dias', `${num(mm)} mm`, ult ? `última: ${fmtDate(ult.date).slice(0, 5)}, ${num(ult.mm)} mm` : '', '']);
