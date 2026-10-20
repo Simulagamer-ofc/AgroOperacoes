@@ -832,7 +832,7 @@ function relatorioSafraGraos(safraArg) {
   const tot = Object.values(porTalhao).reduce((a, p) => ({cargas: a.cargas + p.cargas, liq: a.liq + p.liq, desc: a.desc + p.desc, fin: a.fin + p.fin}), {cargas: 0, liq: 0, desc: 0, fin: 0});
   const silos = equipDoTipo('Silo/Armazém'), deps = depositantes(), kgSc = typeof KG_SACA_GRAO !== 'undefined' ? KG_SACA_GRAO : 60;
   const saidas = db.movSilo.filter(m => m.tipo === 'saida' && m.dono !== 'terceiro' && (!sf || db.vendas.find(v => v.id === m.vendaId)?.season === sf || !m.vendaId));
-  return `<div class="no-print">${head('Relatório da safra de grãos', sf ? `Safra ${sf}` : 'Todas as cargas', btn('← Grãos', 'nav', 'graos', 'secondary') + btn('Imprimir / PDF', 'af-imprimir'))}${safras.length > 1 ? `<div class="filters">${safras.map(x => `<button class="${x === sf ? 'active' : ''}" data-act="nav" data-id="graos/relatorio/${encodeURIComponent(x)}">${esc(x)}</button>`).join('')}</div>` : ''}</div>
+  return `<div class="no-print">${head('Relatório da safra de grãos', sf ? `Safra ${sf}` : 'Todas as cargas', btn('← Grãos', 'nav', 'graos', 'secondary') + btn('PDF', 'graos-pdf', sf, 'secondary') + btn('Enviar PDF', 'graos-pdf-enviar', sf, 'secondary') + btn('Imprimir', 'af-imprimir'))}${safras.length > 1 ? `<div class="filters">${safras.map(x => `<button class="${x === sf ? 'active' : ''}" data-act="nav" data-id="graos/relatorio/${encodeURIComponent(x)}">${esc(x)}</button>`).join('')}</div>` : ''}</div>
   <article class="card panel relatorio"><header class="rel-head"><div><strong>Recebimento, secagem e armazenagem${sf ? ' — safra ' + esc(sf) : ''}</strong><br><small>${esc(db.settings.farm || '')}</small></div><small>até ${fmtDate(today())}</small></header>
     <h3>1. Recebido por talhão (grão próprio)</h3><table class="tbl"><thead><tr><th>Talhão</th><th class="num">Cargas</th><th class="num">Líquido</th><th class="num">Umidade média</th><th class="num">Descontos</th><th class="num">Final</th><th class="num">Sacas</th></tr></thead><tbody>
       ${Object.entries(porTalhao).sort((a, b) => b[1].fin - a[1].fin).map(([k, p]) => `<tr><td>${esc(k)}</td><td class="num">${p.cargas}</td><td class="num">${kgT(p.liq)}</td><td class="num">${p.liq ? n1(p.um / p.liq) + '%' : '—'}</td><td class="num">${kgT(p.desc)}</td><td class="num">${kgT(p.fin)}</td><td class="num">${sacas(p.fin)}</td></tr>`).join('') || '<tr><td colspan="7">Nenhuma carga própria.</td></tr>'}
@@ -842,6 +842,29 @@ function relatorioSafraGraos(safraArg) {
     <h3>4. Expedições de grão próprio</h3><table class="tbl"><tbody>${linhaC('Saídas', `${saidas.length} • ${kgT(saidas.reduce((a, m) => a + (Number(m.kg) || 0), 0))} = ${sacas(saidas.reduce((a, m) => a + (Number(m.kg) || 0), 0))}`)}${linhaC('Vendas lançadas pela expedição', (() => { const vs = saidas.map(m => find('vendas', m.vendaId)).filter(Boolean); return vs.length ? `${vs.length} • R$ ${num(vs.reduce((a, v) => a + (Number(v.valor) || 0), 0), 2)}` : 'nenhuma'; })())}</tbody></table>
     ${deps.length ? `<h3>5. Terceiros</h3><table class="tbl"><thead><tr><th>Produtor</th><th class="num">Recebido</th><th class="num">Retirado</th><th class="num">Saldo</th><th class="num">A cobrar</th></tr></thead><tbody>${deps.map(d => { const e = extratoTerceiro(d); return `<tr><td>${esc(d)}</td><td class="num">${kgT(e.entrou)}</td><td class="num">${kgT(e.saiu)}</td><td class="num">${kgT(e.saldo)}</td><td class="num">R$ ${num(e.total, 2)}</td></tr>`; }).join('')}</tbody></table>` : ''}
   </article>`;
+}
+
+// Números do relatório da safra de grãos (usado pelo PDF): mesmo critério da tela
+function dadosSafraGraos(safraArg) {
+  const safras = [...new Set(db.romaneios.map(r => r.season).filter(Boolean))].sort().reverse(), sf = safraArg || safras[0] || '';
+  const rs = db.romaneios.filter(r => !sf || r.season === sf), proprio = rs.filter(r => r.dono !== 'terceiro');
+  const somar = (lista, chave) => { const g = {}; lista.forEach(r => { const k = chave(r), p = g[k] ||= {nome: k, cargas: 0, liq: 0, desc: 0, fin: 0, um: 0}; p.cargas++; p.liq += r.calc?.liquido || 0; p.desc += r.calc?.descontoKg || 0; p.fin += r.calc?.pesoFinal || 0; p.um += (Number(r.umidade) || 0) * (r.calc?.liquido || 0); }); return Object.values(g).map(p => ({...p, uMedia: p.liq ? p.um / p.liq : null})).sort((a, b) => b.fin - a.fin); };
+  const porTalhao = somar(proprio, r => fieldName(r.fieldId) || 'Sem talhão'), porProduto = somar(rs, r => nomeProd(r.produto, r.produtoNome));
+  const tot = porTalhao.reduce((a, p) => ({cargas: a.cargas + p.cargas, liq: a.liq + p.liq, desc: a.desc + p.desc, fin: a.fin + p.fin}), {cargas: 0, liq: 0, desc: 0, fin: 0});
+  const ids = new Set(rs.map(r => r.id)), lotes = db.lotesSecagem.filter(l => l.status === 'Concluída' && ((l.romaneioIds || []).some(i => ids.has(i)) || !l.romaneioIds?.length));
+  const secPorProd = {}; const sec = {lotes: lotes.length, mi: 0, mf: 0, agua: 0, h: 0, custo: 0, massaMax: null};
+  lotes.forEach(l => { const c = calcSecagem(l), k = nomeProd(l.produto, l.produtoNome), p = secPorProd[k] ||= {nome: k, lotes: 0, mi: 0, mf: 0, agua: 0, h: 0, custo: 0};
+    [sec, p].forEach(o => { o.mi += c.mi || 0; o.mf += c.mf || 0; o.agua += c.agua || 0; o.h += c.horas || 0; o.custo += c.custo || 0; }); p.lotes++;
+    (l.leituras || []).forEach(x => { const t = numOuU(x.tMassa); if (t != null && (sec.massaMax == null || t > sec.massaMax)) sec.massaMax = t; }); });
+  const silos = equipDoTipo('Silo/Armazém').map(s => { const d = saldoSilo(s), iv = ultimoInventario(s.id), tm = termometriaSilo(s.id); return {nome: s.name, saldo: d.saldo, cap: d.cap, ocupacao: d.ocupacao, uMedia: d.uMedia, inventario: iv, tMax: tm?.max ?? null, insetos: tm?.ult?.insetos && tm.ult.insetos !== 'nao'}; });
+  const saidas = db.movSilo.filter(m => m.tipo === 'saida' && m.dono !== 'terceiro' && (!sf || db.vendas.find(v => v.id === m.vendaId)?.season === sf || !m.vendaId));
+  const vendas = saidas.map(m => find('vendas', m.vendaId)).filter(Boolean);
+  const terceiros = depositantes().map(n => ({nome: n, ...extratoTerceiro(n)}));
+  const excl = db.checklistsGraos.filter(c => c.tipo === 'romaneio_excluido' && (!sf || rs.length === 0 || true));
+  const controle = {alterados: rs.filter(r => (r.historico || []).some(h => h.mudancas)).length, excluidos: excl.length, classificados: rs.filter(r => r.classif?.resultado?.enquadramento).length,
+    foraTipo: rs.filter(r => /Fora|Desclass/.test(r.classif?.resultado?.enquadramento || '')).length, expurgos: db.checklistsGraos.filter(c => c.tipo === 'expurgo').length,
+    inventarios: db.checklistsGraos.filter(c => c.tipo === 'inventario').length, medidor: db.checklistsGraos.filter(c => c.tipo === 'conf_umidade').sort((a, b) => b.date.localeCompare(a.date))[0] || null};
+  return {sf, safras, porTalhao, porProduto, tot, sec, secPorProd: Object.values(secPorProd), silos, saidas: {n: saidas.length, kg: saidas.reduce((a, m) => a + (Number(m.kg) || 0), 0)}, vendas: {n: vendas.length, sc: vendas.reduce((a, v) => a + (Number(v.sacas) || 0), 0), valor: vendas.reduce((a, v) => a + (Number(v.valor) || 0), 0)}, terceiros, controle};
 }
 
 // ---------- Avisos: secagem na meta e Inmetro vencido ----------

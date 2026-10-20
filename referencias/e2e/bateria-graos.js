@@ -255,7 +255,7 @@ async () => {
     const l = db.lotesSecagem.at(-1); l.inicio = `${data}T13:00`;
     const horas = Math.max(2, Math.round(mi / 1000 / (prod === 'milho' ? 32 : 45) * 10) / 10);
     const mfPrev = mi * (100 - ui) / 87, s2sd = saldo(S2), siloV = prod === 'milho' ? S3 : (s2sd.saldo + mfPrev <= s2sd.cap ? S2 : S1);
-    const rf = await F('gr-finalizar', l.id, {umidadeSaida: '13', siloId: siloV, combQtd: vir(Math.round(mi / 1000 * (ui - 13) * 0.012 * 100) / 100), combPreco: '95', kwh: String(Math.round(horas * 75)), precoKwh: '0,82'});
+    const rf = await F('gr-finalizar', l.id, {umidadeSaida: '13', siloId: siloV, combQtd: vir(Math.round(mi / 1000 * (ui - 13) * 0.025 * 100) / 100), combPreco: '95', kwh: String(Math.round(horas * 75)), precoKwh: '0,82'});
     const fim = new Date(new Date(`${data}T13:00`).getTime() + horas * 36e5); l.fim = `${isoDate(fim)}T${String(fim.getHours()).padStart(2, '0')}:${String(fim.getMinutes()).padStart(2, '0')}`; save();
     nLotes++; const c = calcSecagem(l), o = oraculoSecagem(l.massaEntradaKg, Number(l.umidadeEntrada), 13);
     if (rf.salvo && perto(c.mf, o.mf) && perto(l.massaEntradaKg, Math.round(mi / 100) * 100, 60)) okLotes++;
