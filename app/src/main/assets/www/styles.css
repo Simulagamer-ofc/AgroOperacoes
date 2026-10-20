@@ -838,3 +838,4 @@ tr.clickable{cursor:pointer} tr.clickable:hover td{background:rgba(23,135,212,.0
 .fluxo-etapa.alerta span{color:var(--red);opacity:1;font-weight:600}
 .fluxo-seta{align-self:center;opacity:.5;font-size:1.1rem}
 @media (max-width:600px){.fluxo-graos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.fluxo-seta{display:none}.fluxo-etapa{padding:8px 9px}.fluxo-etapa b{font-size:.8rem}.fluxo-etapa span{font-size:.72rem}}
+.hoje-chuva{margin:6px 0;padding:8px 10px;border-radius:10px;font-size:.9rem;border-left:4px solid var(--blue);background:color-mix(in srgb,var(--blue) 12%,transparent)}

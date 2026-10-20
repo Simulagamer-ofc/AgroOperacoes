@@ -34,8 +34,9 @@ function calcularAlertas(cfg = alertaCfg(), agora = Date.now()) {
     if (dia < t || dia > addDias(t, 4) || !(mm >= CHUVA_FORTE_MM)) return;
     const quando = dia === t ? horaBoa(agora) : horaDe(addDias(dia, -1), 7);
     const quandoTxt = dia === t ? 'hoje' : `amanhã (${fmtDate(dia).slice(0, 5)})`;
-    add({id: `chuva-${dia}`, tipo: 'chuva', rota: 'inicio', titulo: `🌧 Chuva de ${num(mm, 0)} mm ${quandoTxt}`,
-      texto: `Chance de ${Math.round(d.precipitation_probability_max[i] ?? 0)}%. Programe aplicações, plantio e colheita.${d.confianca?.[i] && !d.confianca[i].firme ? ' Previsão incerta: confira de novo.' : ''}`}, quando);
+    const fx = typeof horariosChuva === 'function' ? horariosChuva(c.dados, dia, new Date(agora)) : [], horaTxt = fx.length ? (fx[0].agora ? ', já chovendo' : `, a partir das ${String(fx[0].ini).padStart(2, '0')}h`) : '';
+    add({id: `chuva-${dia}`, tipo: 'chuva', rota: 'inicio', titulo: `🌧 Chuva de ${num(mm, 0)} mm ${quandoTxt}${horaTxt}`,
+      texto: `${fx.length ? 'Horários: ' + txtHorariosChuva(fx) + '. ' : ''}Chance de ${Math.round(d.precipitation_probability_max[i] ?? 0)}%. Programe aplicações, plantio e colheita.${d.confianca?.[i] && !d.confianca[i].firme ? ' Previsão incerta: confira de novo.' : ''}`}, quando);
   });
   if (d && cfg.pulverizar && typeof janelasDoDia === 'function') [amanha, addDias(t, 2), addDias(t, 3)].forEach(dia => {
     if (!d.time.includes(dia)) return;
