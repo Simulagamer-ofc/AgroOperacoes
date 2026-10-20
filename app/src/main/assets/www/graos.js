@@ -394,7 +394,7 @@ function leituraForm(id) {
     fields: [{k: 'hora', label: 'Hora da leitura', type: 'time', required: true},
       ...(sc.temAr ? [{k: 'tAr', label: `Ar quente — visor ${sc.arNome ? 'do ' + sc.arNome : 'do controlador do ar'} (°C)`, type: 'number', hint: 'Temperatura do ar que entra no secador.', full: true}] : []),
       ...[...arPts, ...massa].map((p, i) => ({k: 'p_' + p.id, label: rotP(p) + (p.tipo === 'ar' ? ' — ar' : ''), type: 'number', hint: i === 0 ? `Visor ${sc.alarmeNome ? 'do ' + sc.alarmeNome : 'do alarme'}: selecione ${p.id}, ${[...arPts, ...massa][1]?.id || ''}… e copie cada número.`.replace(', …', '…') : ''})),
-      ...(!massa.length ? [{k: 'tMassa', label: 'Temperatura da massa de grãos (°C)', type: 'number'}] : []),
+      {k: 'tMassa', label: massa.length ? 'Massa — termômetro portátil (°C)' : 'Temperatura da massa de grãos (°C)', type: 'number', hint: massa.length ? 'Só se o alarme mostrar OFF ou estiver apagado: espete o termômetro na massa (na descarga ou na coluna) e anote.' : ''},
       {k: 'umidade', label: 'Umidade do grão na saída (%)', type: 'number', min: 0, hint: 'Amostra da descarga, no medidor de umidade.'},
       {k: 'tDescarga', label: 'Temperatura do grão na descarga (°C)', type: 'number', hint: 'Opcional.'}],
     submit: 'Salvar leitura',
@@ -411,12 +411,14 @@ function leituraForm(id) {
       if (new Date(em) - Date.now() > 10 * 60000) em = `${daysAgo(1)}T${v.hora}`;
       const vm = massa.filter(p => pontos[p.id] != null), quente = vm.sort((a, b) => pontos[b.id] - pontos[a.id])[0];
       const va = arPts.filter(p => pontos[p.id] != null).sort((a, b) => pontos[b.id] - pontos[a.id])[0];
-      const tMassa = quente ? pontos[quente.id] : v.tMassa ?? '', tAr = numOuU(v.tAr) != null ? v.tAr : va ? pontos[va.id] : '';
-      const leit = {em, tAr, tMassa, umidade: v.umidade, tDescarga: v.tDescarga, ...(Object.keys(pontos).length ? {pontos, pontoQuente: quente?.id || ''} : {})};
+      const manual = numOuU(v.tMassa), tMassa = quente && (manual == null || pontos[quente.id] >= manual) ? pontos[quente.id] : manual ?? '', tAr = numOuU(v.tAr) != null ? v.tAr : va ? pontos[va.id] : '';
+      const leit = {em, tAr, tMassa, umidade: v.umidade, tDescarga: v.tDescarga, ...(Object.keys(pontos).length ? {pontos, pontoQuente: quente && tMassa === pontos[quente.id] ? quente.id : ''} : {}), ...(manual != null && tMassa === manual ? {massaManual: true} : {})};
       leit.aval = avaliarLeituraSecador(l, leit); l.leituras = [...(l.leituras || []), leit].sort((a, b) => (a.em || '').localeCompare(b.em || '')); save();
       const fora = leit.aval?.find(a => a.status === 'FORA_DO_PADRAO'), am = leit.aval?.find(a => a.ponto === 'massa_graos');
       if (fora) showToast(`Atenção: ${fora.ponto === 'massa_graos' ? `massa${quente ? ' no ' + quente.id : ''} com ${n0(tMassa)} °C` : `ar quente com ${n0(tAr)} °C`}, acima do limite de ${n0(fora.limite)} °C (${nomeLimite(l, fora.ponto)}). ${fora.acao || ''}`, true);
-      else showToast(numOuU(tMassa) != null ? `Leitura salva: massa ${n0(tMassa)} °C${quente ? ' (' + quente.id + ', o ponto mais quente)' : ''}${am?.limite != null ? ` — dentro do limite de ${n0(am.limite)} °C` : ''}` : 'Leitura salva');
+      else if (numOuU(tMassa) != null) showToast(`Leitura salva: massa ${n0(tMassa)} °C${leit.massaManual ? ' (termômetro portátil)' : leit.pontoQuente ? ' (' + leit.pontoQuente + ', o ponto mais quente)' : ''}${am?.limite != null ? ` — dentro do limite de ${n0(am.limite)} °C` : ''}`);
+      else if (massa.length) showToast('Leitura salva SEM a temperatura da massa. Se o alarme está em OFF, meça com termômetro portátil e anote no campo “Massa — termômetro portátil”. Sem essa medida o sistema não protege o grão contra superaquecimento.', true);
+      else showToast('Leitura salva');
     }});
 }
 function finalizarSecagemForm(id) {
@@ -665,7 +667,7 @@ function planilhaSecagem(l) {
   const temp = v => v !== '' && v != null ? n0(v) + ' °C' : '—';
   return `<div class="tbl-wrap"><table class="tbl tbl-leituras"><thead><tr><th>Hora</th><th class="num">Ar quente</th>${ids.map(id => `<th class="num" title="${esc(rot(id)?.local || '')}">${id}${rot(id)?.tipo === 'ar' ? ' (ar)' : ''}</th>`).join('')}<th class="num">Massa máx.</th><th class="num">Umidade</th><th>Situação</th><th></th></tr></thead><tbody>
     ${ls.map((x, i) => { const f = x.aval?.find(a => a.status === 'FORA_DO_PADRAO'), am = x.aval?.find(a => a.ponto === 'massa_graos');
-      const sit = f ? `<span class="chip sit-red">${f.ponto === 'massa_graos' ? 'Massa' : 'Ar'} acima de ${n0(f.limite)} °C${f.ponto === 'massa_graos' && x.pontoQuente ? ' (' + esc(x.pontoQuente) + ')' : ''}</span>` : am?.status === 'OK' ? '<span class="chip sit-green">Dentro do limite</span>' : x.aval?.length ? '<span class="chip sit-gray">Sem limite para este uso</span>' : '<small class="nota">—</small>';
+      const sit = f ? `<span class="chip sit-red">${f.ponto === 'massa_graos' ? 'Massa' : 'Ar'} acima de ${n0(f.limite)} °C${f.ponto === 'massa_graos' && x.pontoQuente ? ' (' + esc(x.pontoQuente) + ')' : ''}</span>` : am?.status === 'OK' ? `<span class="chip sit-green">Dentro do limite${x.massaManual ? ' (termômetro)' : ''}</span>` : numOuU(x.tMassa) == null && sc.ativos.some(p => p.tipo === 'massa') ? '<span class="chip sit-orange">Massa não medida</span>' : x.aval?.length ? '<span class="chip sit-gray">Sem limite para este uso</span>' : '<small class="nota">—</small>';
       return `<tr><td>${esc(x.em.slice(11, 16))}<br><small class="nota">${fmtDate(x.em.slice(0, 10))}</small></td><td class="num">${temp(x.tAr)}</td>${ids.map(id => `<td class="num ${f?.ponto === 'massa_graos' && x.pontoQuente === id ? 'txt-red' : ''}">${temp(x.pontos?.[id])}</td>`).join('')}<td class="num ${f?.ponto === 'massa_graos' ? 'txt-red' : ''}"><b>${temp(x.tMassa)}</b></td><td class="num">${x.umidade !== '' && x.umidade != null ? n1(x.umidade) + '%' : '—'}</td><td>${sit}</td><td><button class="link" data-act="gr-leit-del" data-id="${esc(l.id)}|${i}" title="Excluir esta leitura" aria-label="Excluir leitura das ${esc(x.em.slice(11, 16))}">Excluir</button></td></tr>`; }).join('')}
     </tbody></table></div>${ids.some(id => rot(id)?.local) ? `<p class="nota" style="margin:6px 0 0">${ids.filter(id => rot(id)?.local).map(id => `${id}: ${esc(rot(id).local)}`).join(' • ')}</p>` : ''}`;
 }
@@ -999,6 +1001,10 @@ const alertasSemGraos3 = alerts;
 alerts = function () {
   const lista = alertasSemGraos3();
   if (typeof nvPodeRota === 'function' && !nvPodeRota('graos')) return lista;
+  db.lotesSecagem.filter(l => l.status === 'Em andamento').forEach(l => {
+    const ult = (l.leituras || []).slice(-2);
+    if (ult.length === 2 && ult.every(x => numOuU(x.tMassa) == null) && sensoresSecador(l.secadorId).ativos.some(p => p.tipo === 'massa')) lista.unshift({color: 'red', icon: '!', title: `Secador sem temperatura da massa: ${nomeEquip(l.secadorId)}`, text: 'As duas últimas leituras não têm a temperatura do grão. Confira o alarme (OFF, apagado ou sensor com defeito) e meça com termômetro portátil até consertar.', route: 'graos/lote/' + l.id});
+  });
   db.lotesSecagem.filter(l => l.status === 'Em andamento').forEach(l => { const c = calcSecagem(l); if (c.previsao?.chegou) lista.unshift({color: 'green', icon: '✓', title: `Secagem chegou a ${n1(c.previsao.meta)}%: ${nomeEquip(l.secadorId)}`, text: 'Confira a amostra e finalize para mandar ao silo.', route: 'graos/lote/' + l.id}); });
   medidores().forEach(n => {
     const i = ultimoDoMedidor(n, 'inmetro_umidade'), c = ultimoDoMedidor(n, 'conf_umidade');
