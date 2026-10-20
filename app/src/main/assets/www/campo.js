@@ -96,7 +96,7 @@ function aplicacaoForm() {
       if (s && v.baixar === 'Sim' && v.qtd > 0) {
         if (v.qtd > Number(s.qty || 0)) return `Saldo insuficiente de ${s.name} (${num(s.qty)} ${s.unit})`;
         const mov = aplicarMovimento(s, 'Saída', v.qtd, 0);
-        v.movId = uid(); db.movements.push({id: v.movId, itemId: s.id, kind: 'Saída', qty: v.qtd, date: v.date, fieldId: v.fieldId, season: find('fields', v.fieldId)?.season || '', notes: `Aplicação${v.dose ? ' ' + v.dose : ''}`, ...mov});
+        v.movId = uid(); db.movements.push({id: v.movId, itemId: s.id, kind: 'Saída', qty: v.qtd, date: v.date, fieldId: v.fieldId, season: typeof safraDoLancamento === 'function' ? safraDoLancamento({fieldId: v.fieldId, date: v.date}) : find('fields', v.fieldId)?.season || '', notes: `Aplicação${v.dose ? ' ' + v.dose : ''}`, ...mov});
       }
       db.aplicacoes.push({id: uid(), ...v, produto: s ? s.name : v.produto}); save(); showToast(`Colheita liberada a partir de ${fmtDate(addDias(v.date, Number(v.carencia) || 0))}`);
     }});

@@ -533,7 +533,7 @@ function movementForm(itemId, kind) {
       const tinhaCusto = custoMedio(s) != null || Number(s.qty || 0) <= 0;
       const mov = aplicarMovimento(s, k, Number(v.qty), valor);
       const {gasto, value, supplier, doc, ...resto} = v;
-      const reg = {id: uid(), ...resto, kind: k, ...mov, ...(k === 'Entrada' ? {supplier, doc} : {}), ...(k === 'Saída' && v.fieldId ? {season: find('fields', v.fieldId)?.season || ''} : {})};
+      const reg = {id: uid(), ...resto, kind: k, ...mov, ...(k === 'Entrada' ? {supplier, doc} : {}), ...(k === 'Saída' && v.fieldId ? {season: typeof safraDoLancamento === 'function' ? safraDoLancamento({fieldId: v.fieldId, date: v.date}) : find('fields', v.fieldId)?.season || ''} : {})};
       db.movements.push(reg);
       if (valor && gasto === 'Sim') db.expenses.push({id: uid(), date: v.date, category: CAT_GASTO_DO_ITEM[s.category] || 'Insumos', description: `Compra: ${s.name} — ${num(v.qty)} ${s.unit}`, value: valor, supplier, doc, movementId: reg.id, notes: v.notes});
       save();
@@ -820,7 +820,7 @@ function exportCsv(kind) {
   const [name, cols, rows] = CSV_DEFS[kind];
   const cell = v => { const s = typeof v === 'number' ? String(v).replace('.', ',') : String(v ?? ''); return /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
   const csv = '﻿' + [cols.map(c => c[0]).join(';'), ...rows(db).map(r => cols.map(c => cell(c[1](r))).join(';'))].join('\r\n');
-  downloadFile(`agro-${name}-${today()}.csv`, 'text/csv', csv);
+  downloadFile(`mercaplant-${name}-${today()}.csv`, 'text/csv', csv);
 }
 
 function loadSamples() {

@@ -9,6 +9,22 @@ let prodSafra = '', prodRateio = false, avisoCarencia = '';
 
 const safrasConhecidas = () => [...new Set([...db.fields.map(f => f.season), ...db.colheitas.map(c => c.season), ...db.vendas.map(v => v.season)].filter(Boolean))].sort().reverse();
 const safraDoTalhao = id => find('fields', id)?.season || '';
+// Safra de um lançamento sem safra informada (saída de insumo, gasto): a do talhão só se a data cair na janela dela
+// (julho a junho); senão, a safra da própria data — compra de setembro de 2025 é da 2025/26, mesmo que o talhão já esteja na 2026/27
+function safraDaData(data, modelo = '') {
+  const m = String(data || '').match(/^(\d{4})-(\d{2})/); if (!m) return '';
+  const a = Number(m[2]) >= 7 ? Number(m[1]) : Number(m[1]) - 1;
+  return /\d{4}\s*\/\s*\d{4}/.test(modelo) ? `${a}/${a + 1}` : `${a}/${String(a + 1).slice(2)}`;
+}
+// Saída de insumo: a safra gravada era sempre a atual do talhão (a pessoa não escolhe), então vale a data
+const safraDoMovimento = m => safraDoLancamento({fieldId: m.fieldId, date: m.date}) || m.season || '';
+function safraDoLancamento(r) {
+  if (r.season) return r.season;
+  const st = safraDoTalhao(r.fieldId), m = String(st).match(/(\d{4})\s*\/\s*(\d{2,4})/);
+  if (!r.date || !m) return st; // safra com outro formato (ex.: "Safrinha"): mantém a do talhão
+  const ini = `${m[1]}-07-01`, fim = `${Number(m[1]) + 1}-06-30`;
+  return r.date >= ini && r.date <= fim ? st : safraDaData(r.date, st);
+}
 
 function colheitaForm(fieldId, c = {}) {
   if (!db.fields.length) { showToast('Cadastre o talhão primeiro'); return fieldForm(); }
@@ -66,10 +82,10 @@ function vendaForm() {
 // Custos de cada talhão na safra
 function custosSafra(season) {
   const porTalhao = {}, add = (id, v, tipo) => { if (!(v > 0)) return; (porTalhao[id] ||= {gastos: 0, insumos: 0})[tipo] += v; };
-  db.expenses.filter(g => g.fieldId && (g.season || safraDoTalhao(g.fieldId)) === season).forEach(g => add(g.fieldId, Number(g.value), 'gastos'));
-  db.movements.filter(m => m.kind === 'Saída' && m.fieldId && (m.season || safraDoTalhao(m.fieldId)) === season).forEach(m => add(m.fieldId, Number(m.value) || 0, 'insumos'));
+  db.expenses.filter(g => g.fieldId && safraDoLancamento(g) === season).forEach(g => add(g.fieldId, Number(g.value), 'gastos'));
+  db.movements.filter(m => m.kind === 'Saída' && m.fieldId && safraDoMovimento(m) === season).forEach(m => add(m.fieldId, Number(m.value) || 0, 'insumos'));
   const semTalhao = db.expenses.filter(g => !g.fieldId && g.season === season).reduce((s, g) => s + Number(g.value || 0), 0);
-  const insumosSemCusto = db.movements.filter(m => m.kind === 'Saída' && m.fieldId && (m.season || safraDoTalhao(m.fieldId)) === season && !(Number(m.value) > 0)).length;
+  const insumosSemCusto = db.movements.filter(m => m.kind === 'Saída' && m.fieldId && safraDoMovimento(m) === season && !(Number(m.value) > 0)).length;
   return {porTalhao, semTalhao, insumosSemCusto};
 }
 

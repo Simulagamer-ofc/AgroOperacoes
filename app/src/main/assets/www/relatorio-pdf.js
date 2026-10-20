@@ -262,7 +262,8 @@
     const mon = db.monitoramentos.filter(m => m.fieldId === id && no(m)).sort((a, b) => a.date.localeCompare(b.date));
     const chuvas = db.chuvas.filter(c => (c.fieldId === id || !c.fieldId) && no(c)), chuva = chuvas.reduce((t, c) => t + (Number(c.mm) || 0), 0);
     const col = db.colheitas.filter(c => c.fieldId === id && no(c)), sacas = col.reduce((t, c) => t + Number(c.kg || 0) / 60, 0);
-    const ana = typeof analiseSafra === 'function' && f.season ? analiseSafra(f.season).linhas.find(l => l.id === id) : null;
+    const sf = typeof safraDoPeriodo === 'function' ? safraDoPeriodo(f, p) : f.season;
+    const ana = typeof analiseSafra === 'function' && sf ? analiseSafra(sf).linhas.find(l => l.id === id) : null;
     const fin = typeof nvVeFinanceiro !== 'function' || nvVeFinanceiro();
     const lib = typeof liberacaoColheita === 'function' ? liberacaoColheita(id) : null;
     const periodo = `${fmtDate(p.ini)} a ${fmtDate(p.fim)}`;
@@ -285,12 +286,12 @@
     P.secao('Resumo da safra');
     P.cartoes(kpis);
     P.secao('Talhão');
-    P.ficha([['Talhão', f.name], ['Área', area ? `${num(area)} ha` : ''], ['Cultura', f.crop || ''], ['Cultivar', f.cultivar || ''], ['Safra', f.season || ''],
+    P.ficha([['Talhão', f.name], ['Área', area ? `${num(area)} ha` : ''], ['Cultura', f.crop || ''], ['Cultivar', f.cultivar || ''], ['Safra', sf || ''],
       ['Período do relatório', `${p.nome} (${periodo})`], ['Colheita liberada (carência)', lib ? (lib.libera > today() ? 'a partir de ' + fmtDate(lib.libera) : 'liberada') : '']]);
 
     // Planejado x realizado (quando há planejamento)
-    if (fin && f.season && typeof planejamentoSafra === 'function') {
-      const l = planejamentoSafra(f.season).linhas.find(x => x.id === id);
+    if (fin && sf && typeof planejamentoSafra === 'function') {
+      const l = planejamentoSafra(sf).linhas.find(x => x.id === id);
       if (l?.plan > 0) {
         P.secao('Planejado x realizado', `${num(Math.round(l.pct))}% do orçamento usado`);
         const cats = ORC_CATS.map(c => [c, (Number(l.o?.valores?.[c]) || 0) * l.area, l.porCat[c] || 0]).filter(([, a, b]) => a > 0 || b > 0);

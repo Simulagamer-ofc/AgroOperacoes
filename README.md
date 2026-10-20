@@ -4,6 +4,12 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.45.2-beta1` — **Correções do teste geral** (uma fazenda completa montada pelos formulários, safra 2025/26 inteira e 2026/27 em andamento):
+- **Custos por safra**: saídas de insumo e gastos sem safra informada iam sempre para a safra *atual* do talhão. Plantio de outubro de 2025 caía na 2026/27, deixando a 2025/26 sem custo de insumos (custo por saca de R$ 1,42 em vez de R$ 27,05) e o planejado x realizado da safra nova inflado. Agora vale a safra da data (julho a junho), também nos registros antigos de saída de insumo.
+- **Relatório da safra do talhão** (tela e PDF) com outro período escolhido: custo, custo por saca, margem e planejado x realizado passam a ser da safra do período, não da safra atual do talhão.
+- Primeira leitura de horímetro depois do cadastro da máquina não acusa mais "subiu X h em 1 dia" (sem leitura anterior não dá para saber os dias); só avisa salto acima de 500 h.
+- Planilhas CSV exportadas com o nome MercaPlant.
+
 `0.45.1-beta1` — **Revisão de moega, secador e silos** (antes dos testes de campo):
 - Secador ou silo marcado como **Inativo** em Máquinas não aparece mais como destino da carga nem para iniciar secagem.
 - **Carga de entrada do secador** sugerida sem toda a impureza medida na amostra (é o que sai na pré-limpeza); antes descontava só o excesso sobre o padrão do contrato e superestimava a carga e o grão seco.

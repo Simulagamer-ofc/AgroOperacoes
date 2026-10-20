@@ -42,7 +42,7 @@ function gastoForm(g = {}) {
     onSubmit: v => {
       if (!(Number(v.value) > 0)) return 'Informe um valor maior que zero';
       // Safra do talhão quando não informada
-      if (!v.season && v.fieldId) v.season = find('fields', v.fieldId)?.season || '';
+      if (!v.season && v.fieldId) v.season = typeof safraDoLancamento === 'function' ? safraDoLancamento({fieldId: v.fieldId, date: v.date}) : find('fields', v.fieldId)?.season || '';
       const {pagamento, parcelas, vencimento, ...dados} = v, id = g.id || uid();
       // Gasto a prazo já lançado: o novo valor é redistribuído só entre as parcelas em aberto (as pagas ficam como estão)
       const parc = g.id ? db.contas.filter(c => c.expenseId === g.id) : [];
@@ -112,7 +112,7 @@ function exportarGastosCsv() {
   const cols = [['Data', x => fmtDate(x.date)], ['Categoria', x => x.category], ['Descrição', x => x.desc], ['Valor (R$)', x => x.value], ['Máquina', x => machineName(x.machineId)], ['Talhão', x => fieldName(x.fieldId)], ['Safra', x => x.season], ['Fornecedor', x => x.origem === 'gasto' ? find('expenses', x.id)?.supplier : ''], ['Documento', x => x.origem === 'gasto' ? find('expenses', x.id)?.doc : ''], ['Origem', x => x.origem === 'gasto' ? 'Gasto lançado' : 'Ordem de manutenção']];
   const cell = v => { const s = typeof v === 'number' ? String(v).replace('.', ',') : String(v ?? ''); return /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
   const linhas = lancamentosCusto(inicioPeriodoGasto(), today()).filter(x => !gastoCat || x.category === gastoCat);
-  downloadFile(`agro-gastos-${today()}.csv`, 'text/csv', '﻿' + [cols.map(c => c[0]).join(';'), ...linhas.map(r => cols.map(c => cell(c[1](r))).join(';'))].join('\r\n'));
+  downloadFile(`mercaplant-gastos-${today()}.csv`, 'text/csv', '﻿' + [cols.map(c => c[0]).join(';'), ...linhas.map(r => cols.map(c => cell(c[1](r))).join(';'))].join('\r\n'));
 }
 
 TITLES.gastos = 'Controle de gastos';
