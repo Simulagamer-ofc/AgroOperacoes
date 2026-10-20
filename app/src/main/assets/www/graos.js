@@ -98,6 +98,13 @@ function saldoSilo(s) {
   const cap = Number(s.capacidadeT) > 0 ? Number(s.capacidadeT) * 1000 : null, saldo = Math.max(0, e - sa);
   return {entrou: e, saiu: sa, saldo, cap, ocupacao: cap ? saldo / cap * 100 : null, uMedia};
 }
+// Entrada que faria o silo passar da capacidade cadastrada: texto do aviso (ou '' se cabe / sem capacidade)
+function avisoCapacidade(siloId, kg, jaContado = 0) {
+  const s = find('machines', siloId); if (!s || !(kg > 0)) return '';
+  const sd = saldoSilo(s); if (!sd.cap) return '';
+  const depois = sd.saldo - jaContado + kg;
+  return depois > sd.cap + 1 ? `${s.name} tem ${kgT(sd.saldo - jaContado)} de ${kgT(sd.cap)}: com mais ${kgT(kg)} fica com ${n0(depois / sd.cap * 100)}% da capacidade.` : '';
+}
 // Termometria: variação de cada cabo desde a leitura anterior do mesmo silo
 function termometriaSilo(siloId) {
   const ls = db.termometrias.filter(t => t.siloId === siloId).sort((a, b) => (b.date + (b.time || '')).localeCompare(a.date + (a.time || '')) || (b.criadoEm || 0) - (a.criadoEm || 0));
@@ -166,6 +173,11 @@ function romaneioForm(r = {}) {
         return `Umidade ${n1(v.umidade)}% acima do padrão: o normal é mandar para o secador. Toque em registrar de novo para mandar direto ao silo mesmo assim.`;
       }
       romaneioForm.avisoSilo = '';
+      if (destinoTipo === 'silo') {
+        const kgNovo = calcRomaneio({...r, ...v, destinoTipo, destinoId}).pesoFinal, ja = r.destinoTipo === 'silo' && r.destinoId === destinoId ? r.calc?.pesoFinal || 0 : 0;
+        const cap = avisoCapacidade(destinoId, kgNovo, ja);
+        if (cap && romaneioForm.avisoCap !== destinoId + v.pesoBruto) { romaneioForm.avisoCap = destinoId + v.pesoBruto; return `${cap} Toque em registrar de novo para confirmar.`; }
+      }
       if (v.placa) v.placa = String(v.placa).trim().toUpperCase();
       const reg = {...r, ...v, id: r.id || uid(), numero: r.numero || proximoRomaneio(), destinoTipo, destinoId};
       delete reg.destino; reg.calc = calcRomaneio(reg);
@@ -192,14 +204,18 @@ function excluirRomaneio(id) {
 const cargasEsperando = secadorId => db.romaneios.filter(r => r.destinoTipo === 'secador' && (!secadorId || r.destinoId === secadorId) && !db.lotesSecagem.some(l => (l.romaneioIds || []).includes(r.id)));
 function iniciarSecagemForm(secadorId) {
   const sec = equipDoTipo('Secador'); if (!sec.length) return showToast('Cadastre o secador em Máquinas (tipo Secador).', true);
-  const sid = secadorId || sec[0].id, espera = cargasEsperando(sid), aberta = db.lotesSecagem.find(l => l.secadorId === sid && l.status === 'Em andamento');
+  const sid = secadorId || sec[0].id, todas = cargasEsperando(sid), aberta = db.lotesSecagem.find(l => l.secadorId === sid && l.status === 'Em andamento');
   if (aberta) return go('graos/lote/' + aberta.id);
+  // Um lote seca um só produto: entram as cargas da cultura que chegou primeiro (soja e milho não se misturam no secador)
+  const chave = r => r.produto === 'outro' ? 'outro|' + String(r.produtoNome || '').trim().toLowerCase() : r.produto;
+  const ordem = [...todas].sort((a, b) => ((a.date || '') + (a.time || '')).localeCompare((b.date || '') + (b.time || '')) || (a.numero || 0) - (b.numero || 0));
+  const espera = ordem.filter(r => chave(r) === chave(ordem[0] || {})), outras = todas.length - espera.length;
   // A pré-limpeza tira toda a impureza medida na amostra (o desconto do contrato é só o excesso sobre o padrão)
   const impMedida = r => numOuU(r.impureza) ?? r.calc?.linhas?.find(x => x.id === 'impureza')?.percentual ?? 0;
   const massa = espera.reduce((t, r) => t + (r.calc?.liquido || 0) * (1 - Math.min(100, impMedida(r)) / 100), 0);
   const uMed = espera.length ? espera.reduce((t, r) => t + (Number(r.umidade) || 0) * (r.calc?.liquido || 0), 0) / espera.reduce((t, r) => t + (r.calc?.liquido || 0), 0) : '';
   const prod = espera[0]?.produto || 'soja', ultimo = db.lotesSecagem.filter(l => l.secadorId === sid).sort((a, b) => (b.inicio || '').localeCompare(a.inicio || ''))[0];
-  openForm({title: 'Iniciar secagem', sub: espera.length ? `${espera.length} ${espera.length === 1 ? 'carga esperando' : 'cargas esperando'} este secador: carga e umidade já calculadas (sem a impureza, que sai na pré-limpeza).` : 'Nenhuma carga da moega esperando: informe a carga e a umidade.',
+  openForm({title: 'Iniciar secagem', sub: espera.length ? `${espera.length} ${espera.length === 1 ? 'carga' : 'cargas'} de ${esc(nomeProd(espera[0].produto, espera[0].produtoNome).toLowerCase())} esperando este secador: carga e umidade já calculadas (sem a impureza, que sai na pré-limpeza).${outras ? ` Outras ${outras} ${outras === 1 ? 'carga' : 'cargas'} de outra cultura ficam para o próximo lote.` : ''}` : 'Nenhuma carga da moega esperando: informe a carga e a umidade.',
     values: {secadorId: sid, produto: prod, produtoNome: espera[0]?.produtoNome || '', destino: ultimo?.destino || 'armazenamento_graos', massaT: massa ? Math.round(massa / 100) / 10 : '', umidadeEntrada: uMed !== '' ? Math.round(uMed * 10) / 10 : '', combTipo: ultimo?.combustivel?.tipo || 'lenha', umidadeMeta: ultimo?.umidadeMeta ?? 13, combPreco: ultimo?.combustivel?.preco || ''},
     fields: [
       {k: 'secadorId', label: 'Secador', type: 'select', options: sec.map(m => ({value: m.id, label: m.name})), required: true},
@@ -215,7 +231,7 @@ function iniciarSecagemForm(secadorId) {
       if (!(v.massaT > 0)) return 'Informe a carga de entrada';
       if (v.produto === 'outro' && !v.produtoNome) return 'Escreva qual é a cultura';
       const l = {id: uid(), secadorId: v.secadorId, produto: v.produto, produtoNome: v.produto === 'outro' ? v.produtoNome : '', destino: v.destino, inicio: agoraISO(), status: 'Em andamento', massaEntradaKg: v.massaT * 1000, umidadeEntrada: v.umidadeEntrada,
-        romaneioIds: v.secadorId === sid ? espera.map(r => r.id) : [], leituras: [], lotId: v.lotId || '', umidadeMeta: v.umidadeMeta, combustivel: {tipo: v.combTipo, preco: v.combPreco === '' ? null : v.combPreco}};
+        romaneioIds: v.secadorId === sid ? todas.filter(r => chave(r) === chave(v)).map(r => r.id) : [], leituras: [], lotId: v.lotId || '', umidadeMeta: v.umidadeMeta, combustivel: {tipo: v.combTipo, preco: v.combPreco === '' ? null : v.combPreco}};
       db.lotesSecagem.push(l); save(); showToast('Secagem iniciada: registre a leitura de hora em hora'); go('graos/lote/' + l.id);
     }});
 }
@@ -252,6 +268,8 @@ function finalizarSecagemForm(id) {
     onSubmit: v => {
       const av = avaliarUmidadeSaida(l, v.umidadeSaida);
       if (av?.status === 'FORA_DO_PADRAO' && finalizarSecagemForm.aviso !== id + v.umidadeSaida) { finalizarSecagemForm.aviso = id + v.umidadeSaida; return `${av.acao} Toque em finalizar de novo para encerrar mesmo assim.`; }
+      const cap = v.siloId ? avisoCapacidade(v.siloId, calcSecagem({...l, umidadeSaida: v.umidadeSaida}).mf) : '';
+      if (cap && finalizarSecagemForm.avisoCap !== id + v.siloId) { finalizarSecagemForm.avisoCap = id + v.siloId; return `${cap} Escolha outro silo ou toque em finalizar de novo para confirmar.`; }
       if (v.precoKwh !== '') db.settings.precoKwh = v.precoKwh;
       Object.assign(l, {energia: v.kwh !== '' ? {kwh: v.kwh, preco: v.precoKwh === '' ? null : v.precoKwh} : null, umidadeSaida: v.umidadeSaida, siloId: v.siloId, tDescarga: v.tDescarga, fim: agoraISO(), status: 'Concluída', avalSaida: av, combustivel: {...(l.combustivel || {}), qtd: v.combQtd === '' ? null : v.combQtd, preco: v.combPreco === '' ? null : v.combPreco}});
       const c = calcSecagem(l); l.calc = {mf: c.mf, agua: c.agua, horas: c.horas};
@@ -284,6 +302,8 @@ function saidaSiloForm(siloId) {
       if (v.tipo === 'transferencia' && (!v.destinoSiloId || v.destinoSiloId === v.siloId)) return 'Escolha outro silo de destino';
       const s = find('machines', v.siloId), saldo = saldoSilo(s).saldo, exp = expurgoAtivo(v.siloId);
       if (v.tipo !== 'ajuste' && v.kg > saldo + 1) return `O silo tem ${kgT(saldo)}: a saída não pode passar do saldo`;
+      const capT = v.tipo === 'transferencia' ? avisoCapacidade(v.destinoSiloId, v.kg) : '';
+      if (capT && saidaSiloForm.avisoCap !== v.destinoSiloId + v.kg) { saidaSiloForm.avisoCap = v.destinoSiloId + v.kg; return `${capT} Toque em registrar de novo para confirmar.`; }
       const [dono, depositante] = v.dono.split('|');
       if (dono === 'terceiro' && v.tipo === 'saida') { const sd = extratoTerceiro(depositante).saldo; if (v.kg > sd + 1) return `${depositante} tem ${kgT(sd)} armazenados: a saída não pode passar disso`; }
       if (exp && v.tipo !== 'ajuste' && saidaSiloForm.aviso !== v.siloId + v.date) { saidaSiloForm.aviso = v.siloId + v.date; return `Silo em expurgo até ${fmtDH(exp.fimExposicao)} (${exp.produto}): não abrir nem movimentar antes do fim da exposição. Toque em registrar de novo só se a liberação já foi feita.`; }
@@ -627,6 +647,10 @@ alerts = function () {
   equipDoTipo('Secador').forEach(m => {
     const usado = db.lotesSecagem.some(l => l.secadorId === m.id && (l.status === 'Em andamento' || (l.fim || '') >= daysAgo(DIAS_LIMPEZA) + 'T')), u = ultimaLimpeza(m.id);
     if (usado && (!u || diasEntreAuto(u.date, today()) > DIAS_LIMPEZA)) lista.push({color: 'orange', icon: '⚙', title: `Limpeza do secador: ${m.name}`, text: u ? `Última há ${diasEntreAuto(u.date, today())} dias. Pó e palha acumulados causam incêndio.` : 'Nenhuma limpeza registrada com o secador em uso.', route: 'graos/secador'});
+  });
+  equipDoTipo('Silo/Armazém').forEach(m => {
+    const sd = saldoSilo(m);
+    if (sd.cap && sd.saldo > sd.cap + 1) lista.push({color: 'red', icon: '⚠', title: `Silo acima da capacidade: ${m.name}`, text: `${kgT(sd.saldo)} lançados para ${kgT(sd.cap)} (${n0(sd.ocupacao)}%). Confira os lançamentos ou a capacidade cadastrada.`, route: 'graos/silos'});
   });
   equipDoTipo('Silo/Armazém').forEach(s => {
     const e = expurgoAtivo(s.id), tm = termometriaSilo(s.id);

@@ -4,6 +4,10 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.45.3-beta1` — **Bateria de testes de moega, secador e silos** (66 casos, 148 cargas de bitrem e 21 secagens lançadas pelos formulários e conferidas com cálculo independente; roteiro em `referencias/e2e/`):
+- **Secador não mistura culturas**: com soja e milho esperando o mesmo secador, o lote levava todas as cargas e o milho ia parar no silo de soja (a rastreabilidade mostrava talhão de milho no silo de soja). Agora o lote leva só a cultura que chegou primeiro; a outra fica na fila para o próximo lote.
+- **Capacidade do silo**: carga direta, fim de secagem ou transferência que faria o silo passar da capacidade cadastrada pede confirmação, e silo acima da capacidade aparece em vermelho no painel.
+
 `0.45.2-beta1` — **Correções do teste geral** (uma fazenda completa montada pelos formulários, safra 2025/26 inteira e 2026/27 em andamento):
 - **Custos por safra**: saídas de insumo e gastos sem safra informada iam sempre para a safra *atual* do talhão. Plantio de outubro de 2025 caía na 2026/27, deixando a 2025/26 sem custo de insumos (custo por saca de R$ 1,42 em vez de R$ 27,05) e o planejado x realizado da safra nova inflado. Agora vale a safra da data (julho a junho), também nos registros antigos de saída de insumo.
 - **Relatório da safra do talhão** (tela e PDF) com outro período escolhido: custo, custo por saca, margem e planejado x realizado passam a ser da safra do período, não da safra atual do talhão.
