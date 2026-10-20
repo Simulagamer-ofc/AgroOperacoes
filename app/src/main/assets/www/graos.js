@@ -394,9 +394,9 @@ function leituraForm(id) {
     fields: [{k: 'hora', label: 'Hora da leitura', type: 'time', required: true},
       ...(sc.temAr ? [{k: 'tAr', label: `Ar quente — visor ${sc.arNome ? 'do ' + sc.arNome : 'do controlador do ar'} (°C)`, type: 'number', hint: 'Temperatura do ar que entra no secador.', full: true}] : []),
       ...[...arPts, ...massa].map((p, i) => ({k: 'p_' + p.id, label: rotP(p) + (p.tipo === 'ar' ? ' — ar' : ''), type: 'number', hint: i === 0 ? `Visor ${sc.alarmeNome ? 'do ' + sc.alarmeNome : 'do alarme'}: selecione ${p.id}, ${[...arPts, ...massa][1]?.id || ''}… e copie cada número.`.replace(', …', '…') : ''})),
-      {k: 'tMassa', label: massa.length ? 'Massa — termômetro portátil (°C)' : 'Temperatura da massa de grãos (°C)', type: 'number', hint: massa.length ? 'Só se o alarme mostrar OFF ou estiver apagado: espete o termômetro na massa (na descarga ou na coluna) e anote.' : ''},
+      {k: 'tMassa', label: massa.length ? 'Massa — termômetro portátil (°C)' : 'Temperatura da massa de grãos (°C)', type: 'number', hint: massa.length ? 'Só se o alarme mostrar OFF: espete o termômetro no grão da coluna, pela janela de inspeção da zona de secagem. O grão da descarga já passou pelo resfriamento e vai no campo de baixo.' : ''},
       {k: 'umidade', label: 'Umidade do grão na saída (%)', type: 'number', min: 0, hint: 'Amostra da descarga, no medidor de umidade.'},
-      {k: 'tDescarga', label: 'Temperatura do grão na descarga (°C)', type: 'number', hint: 'Opcional.'}],
+      {k: 'tDescarga', label: 'Temperatura do grão na descarga (°C)', type: 'number', hint: 'Opcional — amostra na bica de saída, em recipiente fechado, termômetro espetado no meio do grão.'}],
     submit: 'Salvar leitura',
     onSubmit: v => {
       const pontos = {}; sc.ativos.forEach(p => { if (v['p_' + p.id] !== '' && v['p_' + p.id] != null) pontos[p.id] = Number(v['p_' + p.id]); });
