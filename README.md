@@ -4,7 +4,7 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.46.3-beta1` — **Cadastro do secador e do silo pela tela de Grãos**: “+ Cadastrar secador” pede só nome, tipo (contínuo, intermitente ou estático), marca e capacidade e já abre a configuração dos visores (ar quente e P1…P8). “+ Silo” pede nome e capacidade. Não precisa mais ir em Máquinas.
+`0.46.3-beta1` — **Cadastro do secador e do silo pela tela de Grãos**: “+ Cadastrar secador” pede só nome, tipo (contínuo, intermitente ou estático), marca e capacidade e já abre a configuração dos visores (ar quente e P1…P8). “+ Silo” pede nome e capacidade. Não precisa mais ir em Máquinas. Em Máquinas, o horímetro deixou de ser obrigatório para secador, moega, silo e implemento (continua obrigatório para trator, colheitadeira, pulverizador, plantadeira e caminhão).
 
 `0.46.2-beta1` — **Leitura do secador igual ao painel**:
 - Em Secador → **Sensores**, cadastre uma vez os aparelhos do painel (ex.: controlador do ar Entringer e alarme TSW Winckieel) e o que cada ponto P1…P8 mede e onde fica.

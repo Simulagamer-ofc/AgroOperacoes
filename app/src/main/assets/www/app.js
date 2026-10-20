@@ -321,6 +321,7 @@ function operationForm(op = {}) {
   if (tipo) { tipo.addEventListener('change', mostrar); mostrar(); }
 }
 
+const TIPOS_COM_HORIMETRO = ['Trator', 'Colheitadeira', 'Pulverizador', 'Plantadeira', 'Caminhão'];
 function machineForm(m = {}) {
   openForm({
     title: m.id ? 'Editar máquina' : 'Nova máquina',
@@ -329,13 +330,18 @@ function machineForm(m = {}) {
       {k: 'name', label: 'Identificação', required: true, placeholder: 'Ex.: Trator 7230J', full: true},
       {k: 'type', label: 'Tipo', type: 'select', options: MACHINE_TYPES, required: true},
       {k: 'model', label: 'Marca / modelo'},
-      {k: 'hours', label: 'Horímetro atual (h)', type: 'number', min: 0, required: true},
+      {k: 'hours', label: 'Horímetro atual (h)', type: 'number', min: 0, hint: 'Obrigatório para trator, colheitadeira, pulverizador, plantadeira e caminhão. Secador, moega e silo: deixe em branco.'},
       {k: 'interval', label: 'Intervalo de revisão (h)', type: 'number', min: 0},
       {k: 'nextService', label: 'Próxima revisão em (h)', type: 'number', min: 0, hint: 'Vazio = horímetro atual + intervalo'},
       {k: 'state', label: 'Situação', type: 'select', options: ['Ativa', 'Inativa'], required: true},
       {k: 'reaferirDias', label: 'Reaferir a cada (dias)', type: 'number', min: 0, hint: 'Opcional — conforme o seu procedimento de qualidade. Gera lembrete.'}
     ],
     onSubmit: v => {
+      // Horímetro só faz sentido em máquina com motor próprio; secador, moega, silo e implemento não têm
+      if (v.hours === '' || v.hours == null) {
+        if (TIPOS_COM_HORIMETRO.includes(v.type)) return `Informe o horímetro atual do ${String(v.type).toLowerCase()}`;
+        v.hours = 0; if (!m.id) { v.interval = v.interval === 250 || v.interval === '250' ? '' : v.interval; }
+      }
       if (v.nextService === '' && v.interval) v.nextService = Number(v.hours) + Number(v.interval);
       upsert('machines', {...m, ...v, id: m.id || uid()});
       showToast('Máquina salva');
