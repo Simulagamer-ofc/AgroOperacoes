@@ -14,9 +14,9 @@ const brlOrc = v => `${v < 0 ? '− ' : ''}R$ ${num(Math.abs(v), 2)}`;
 
 function realizadoPorCategoria(season, fieldId) {
   const out = Object.fromEntries(ORC_CATS.map(c => [c, 0]));
-  db.expenses.filter(g => g.fieldId === fieldId && (g.season || safraDoTalhao(g.fieldId)) === season && Number(g.value) > 0)
+  db.expenses.filter(g => g.fieldId === fieldId && safraDoLancamento(g) === season && Number(g.value) > 0)
     .forEach(g => { out[ORC_DE_GASTO[g.category] || 'Outros'] += Number(g.value); });
-  db.movements.filter(m => m.kind === 'Saída' && m.fieldId === fieldId && (m.season || safraDoTalhao(m.fieldId)) === season && Number(m.value) > 0)
+  db.movements.filter(m => m.kind === 'Saída' && m.fieldId === fieldId && safraDoMovimento(m) === season && Number(m.value) > 0)
     .forEach(m => { out[ORC_DE_ESTOQUE[find('stock', m.itemId)?.category] || 'Outros'] += Number(m.value); });
   return out;
 }

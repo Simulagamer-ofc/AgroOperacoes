@@ -96,7 +96,8 @@ const pedirConfirmacao = (chave, msg) => { if (confirmado === chave) { confirmad
 function conferirSalto(m, novo, data = today()) {
   const atual = Number(m.hours) || 0, sobe = Number(novo) - atual; if (!(sobe > 0) || !(atual > 0)) return '';
   const ult = db.hourLogs.filter(h => h.machineId === m.id).sort((a, b) => (b.date || '').localeCompare(a.date || ''))[0];
-  const dias = Math.max(1, ult?.date ? diasEntreAuto(ult.date, data) : 1);
+  if (!ult?.date) return sobe > 500 ? pedirConfirmacao(`salto|${m.id}|${novo}`, `Atenção: o horímetro de ${m.name} subiria ${num(sobe)} h de uma vez. Confira se não houve erro de digitação`) : '';
+  const dias = Math.max(1, diasEntreAuto(ult.date, data));
   return sobe > 24 * dias ? pedirConfirmacao(`salto|${m.id}|${novo}`, `Atenção: o horímetro de ${m.name} subiria ${num(sobe)} h em ${dias} ${dias === 1 ? 'dia' : 'dias'} (mais de 24 h por dia). Confira se não houve erro de digitação`) : '';
 }
 function conferirRepetido(colecao, igual, descricao) {
@@ -473,6 +474,13 @@ function periodoSafra(f) {
   const tem = ['operations', 'aplicacoes', 'monitoramentos', 'colheitas'].some(c => db[c].some(r => r.fieldId === f.id && (r.date || '') >= p.ini && (r.date || '') <= p.fim));
   return tem ? p : doze;
 }
+// Safra mostrada no relatório: a do talhão quando o período é o dela; com outro período escolhido, a safra do meio do período
+// (custos, margem e planejado x realizado precisam ser da mesma safra das operações listadas)
+function safraDoPeriodo(f, p) {
+  if (!p || p.nome === `Safra ${f.season}`) return f.season || '';
+  const meio = new Date((new Date(p.ini + 'T12:00:00').getTime() + new Date(p.fim + 'T12:00:00').getTime()) / 2);
+  return (typeof safraDaData === 'function' && safraDaData(isoDate(meio), f.season)) || f.season || '';
+}
 VIEWS.safra = id => {
   const f = find('fields', id); if (!f) return empty('Talhão não encontrado', '');
   const p = periodoSafra(f), no = r => (r.date || '') >= p.ini && (r.date || '') <= p.fim;
@@ -482,7 +490,7 @@ VIEWS.safra = id => {
   const chuva = db.chuvas.filter(c => (c.fieldId === id || !c.fieldId) && no(c)).reduce((t, c) => t + (Number(c.mm) || 0), 0);
   const col = db.colheitas.filter(c => c.fieldId === id && no(c));
   const sacas = col.reduce((t, c) => t + Number(c.kg || 0) / 60, 0), area = Number(f.area) || 0;
-  const ana = typeof analiseSafra === 'function' && f.season ? analiseSafra(f.season).linhas.find(l => l.id === id) : null;
+  const sf = safraDoPeriodo(f, p), ana = typeof analiseSafra === 'function' && sf ? analiseSafra(sf).linhas.find(l => l.id === id) : null;
   const fin = typeof nvVeFinanceiro !== 'function' || nvVeFinanceiro();
   const lib = typeof liberacaoColheita === 'function' ? liberacaoColheita(id) : null;
   const linha = (k, v) => v ? `<tr><td>${esc(k)}</td><td>${esc(String(v))}</td></tr>` : '';
@@ -492,7 +500,7 @@ VIEWS.safra = id => {
     <section class="card panel safra-periodo"><label>De <input type="date" data-safra-ini="${esc(id)}" value="${p.ini}"></label><label>até <input type="date" data-safra-fim="${esc(id)}" value="${p.fim}"></label></section></div>
   <article class="card panel relatorio">
     <header class="rel-head"><div><strong>${esc(db.settings.farm || 'MercaPlant')}</strong><br><small>Relatório da safra — ${esc(f.name)}</small></div><small>${fmtDate(p.ini)} a ${fmtDate(p.fim)}</small></header>
-    <h3>1. Talhão</h3><table class="tbl"><tbody>${linha('Talhão', f.name)}${linha('Área', area ? num(area) + ' ha' : '')}${linha('Cultura', f.crop)}${linha('Cultivar', f.cultivar)}${linha('Safra', f.season)}${linha('Chuva acumulada no período', chuva ? num(chuva, 0) + ' mm' : '')}${linha('Colheita liberada (carência)', lib ? (lib.libera > today() ? 'a partir de ' + fmtDate(lib.libera) : 'liberada') : '')}</tbody></table>
+    <h3>1. Talhão</h3><table class="tbl"><tbody>${linha('Talhão', f.name)}${linha('Área', area ? num(area) + ' ha' : '')}${linha('Cultura', f.crop)}${linha('Cultivar', f.cultivar)}${linha('Safra', sf)}${linha('Chuva acumulada no período', chuva ? num(chuva, 0) + ' mm' : '')}${linha('Colheita liberada (carência)', lib ? (lib.libera > today() ? 'a partir de ' + fmtDate(lib.libera) : 'liberada') : '')}</tbody></table>
     <h3>2. Operações (${ops.length})</h3>${tabela(['Data', 'Operação', 'Máquina', 'Área / quantidade', 'Horas', 'Situação'], ops.map(o => `<tr><td>${fmtDate(o.date)}</td><td>${esc(o.type)}</td><td>${esc(machineName(o.machineId) || '—')}</td><td>${o.area && opTemArea(o) ? num(o.area) + ' ha' : o.kg ? num(o.kg) + ' kg' : '—'}</td><td>${o.horas ? um1(o.horas) + ' h' : '—'}</td><td>${esc(o.status)}</td></tr>`))}
     <h3>3. Aplicações de defensivos (${aps.length})</h3>${tabela(['Data', 'Produto e dose', 'Receituário', 'Resp. técnico', 'Carência'], aps.map(a => `<tr><td>${fmtDate(a.date)}</td><td><strong>${esc(a.produto)}</strong>${a.dose ? '<br><small>' + esc(a.dose) + '</small>' : ''}</td><td>${esc(a.receituario || '—')}</td><td>${esc(a.responsavel || '—')}</td><td>${num(a.carencia)} d (até ${fmtDate(addDias(a.date, Number(a.carencia) || 0))})</td></tr>`))}
     <h3>4. Monitoramento de pragas e doenças (${mon.length})</h3>${tabela(['Data', 'Alvo', 'Média', 'Nível de ação'], mon.map(m => `<tr><td>${fmtDate(m.date)}</td><td>${esc(m.alvo)}</td><td>${num(m.valor, 2)} ${esc(m.unidade || '')}</td><td>${m.nivelAcao !== '' && m.nivelAcao != null ? num(m.nivelAcao, 2) : '—'}</td></tr>`))}

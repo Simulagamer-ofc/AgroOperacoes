@@ -15,6 +15,7 @@ function app() {
   };
   const ctx = vm.createContext({db, VIEWS: {}, TITLES: {}, ACTIONS: {}, prodSafra: '2026/27', num: (v, c = 0) => Number(v).toFixed(c),
     find: (c, id) => db[c].find(x => x.id === id), safraDoTalhao: id => db.fields.find(f => f.id === id)?.season || '', esc: s => String(s),
+    safraDoLancamento: r => r.season || db.fields.find(f => f.id === r.fieldId)?.season || '', safraDoMovimento: m => db.fields.find(f => f.id === m.fieldId)?.season || '',
     btn: (l, a, id) => `<b data-act="${a}" data-id="${id}">${l}</b>`, mini: (l, a, id) => `<i data-act="${a}" data-id="${id}">${l}</i>`, head: t => t, empty: t => t});
   vm.runInContext(src, ctx);
   return {db, run: s => vm.runInContext(s, ctx)};
@@ -35,4 +36,17 @@ test('planejado x realizado: sem acesso ao financeiro a seção não aparece', (
   const a = app();
   a.run('nvVeFinanceiro = () => false');
   assert.equal(a.run("secaoOrcamento('2026/27')"), '');
+});
+test('safra do lançamento: saída sem safra vai para a safra da data, não para a safra atual do talhão', () => {
+  const src = fs.readFileSync(path.join(__dirname, '../../app/src/main/assets/www/producao.js'), 'utf8');
+  const fields = [{id: 't1', season: '2026/27'}, {id: 't2', season: '2026/2027'}, {id: 't3', season: 'Safrinha'}];
+  const ctx = vm.createContext({find: (c, id) => fields.find(f => f.id === id)});
+  vm.runInContext(src.slice(src.indexOf('const safraDoTalhao'), src.indexOf('function colheitaForm')), ctx);
+  const s = r => vm.runInContext(`safraDoLancamento(${JSON.stringify(r)})`, ctx);
+  assert.equal(s({fieldId: 't1', date: '2025-10-10'}), '2025/26');
+  assert.equal(s({fieldId: 't1', date: '2026-03-01'}), '2025/26');
+  assert.equal(s({fieldId: 't1', date: '2026-10-08'}), '2026/27');
+  assert.equal(s({fieldId: 't1', date: '2025-10-10', season: '2024/25'}), '2024/25', 'safra informada vale');
+  assert.equal(s({fieldId: 't2', date: '2025-10-10'}), '2025/2026', 'segue o formato da safra do talhão');
+  assert.equal(s({fieldId: 't3', date: '2025-10-10'}), 'Safrinha', 'formato livre: mantém a do talhão');
 });
