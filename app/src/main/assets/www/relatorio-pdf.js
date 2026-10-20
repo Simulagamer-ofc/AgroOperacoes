@@ -379,6 +379,79 @@
     return doc;
   }
   window.gerarTicketRomaneio = gerarTicket;
+
+  // ---------- Relatório da safra de grãos (moega, secador, silos e terceiros) ----------
+  function gerarGraos(safra, enviar = false) {
+    if (!window.jspdf?.jsPDF) return showToast('Gerador de PDF não carregou. Atualize a página.', true);
+    const d = dadosSafraGraos(safra || undefined), verCustos = typeof relVerCustos !== 'function' || relVerCustos();
+    const r1 = v => Math.round(v * 10) / 10, t = kg => `${num(r1(kg / 1000), 1)} t`, sc = kg => `${num(Math.round(kg / 60))} sc`, pc = v => `${num(r1(v), 1)}%`;
+    const P = pdfMercaPlant({titulo: 'Relatório da safra de grãos', linha2: `${d.sf ? 'Safra ' + d.sf : 'Todas as cargas'} - até ${fmtDate(today())}`, continuacao: `Grãos${d.sf ? ' ' + d.sf : ''}`});
+    const totRec = d.porProduto.reduce((a, p) => ({liq: a.liq + p.liq, fin: a.fin + p.fin, desc: a.desc + p.desc, cargas: a.cargas + p.cargas}), {liq: 0, fin: 0, desc: 0, cargas: 0});
+    const saldoSilos = d.silos.reduce((a, s) => a + s.saldo, 0), capSilos = d.silos.reduce((a, s) => a + (s.cap || 0), 0);
+    const aCobrar = d.terceiros.reduce((a, x) => a + x.total, 0);
+    P.secao('Resumo');
+    P.cartoes([
+      ['Recebido', t(totRec.fin), `${totRec.cargas} cargas - ${sc(totRec.fin)}`],
+      ['Descontos na moega', t(totRec.desc), `${pc(totRec.liq ? totRec.desc / totRec.liq * 100 : 0)} do líquido`, COR.laranja],
+      ['Grão seco', t(d.sec.mf), `${d.sec.lotes} secagens - ${t(d.sec.agua)} de água`, COR.azul],
+      ['Nos silos hoje', t(saldoSilos), capSilos ? `${num(Math.round(saldoSilos / capSilos * 100))}% da capacidade` : '', COR.verdeEsc],
+      ...(verCustos && d.sec.custo ? [['Custo da secagem', brl(d.sec.custo), d.sec.mf ? `${brl(d.sec.custo / (d.sec.mf / 60))} por saca seca` : '', COR.laranja]] : []),
+      ...(verCustos && d.terceiros.length ? [['Terceiros a cobrar', brl(aCobrar), `${d.terceiros.length} ${d.terceiros.length === 1 ? 'produtor' : 'produtores'}`]] : [])]);
+
+    P.secao('Recebimento na moega', 'Peso final: líquido menos os descontos de umidade, impureza e outros');
+    if (!totRec.cargas) P.nada('Nenhuma carga recebida nesta safra.');
+    else {
+      if (d.porProduto.length >= 2) P.grafico(d.porProduto.map(p => [p.nome, p.fin / 60]), {formato: v => `${num(Math.round(v))} sc`});
+      P.tabela([{t: 'Produto', w: 1.6}, {t: 'Cargas', w: .8, dir: true}, {t: 'Líquido', w: 1.1, dir: true}, {t: 'Umidade média', w: 1.1, dir: true}, {t: 'Descontos', w: 1.3, dir: true}, {t: 'Peso final', w: 1.1, dir: true}, {t: 'Sacas', w: 1.1, dir: true}],
+        [...d.porProduto.map(p => [p.nome, num(p.cargas), t(p.liq), p.uMedia != null ? pc(p.uMedia) : '-', `${t(p.desc)} (${pc(p.liq ? p.desc / p.liq * 100 : 0)})`, t(p.fin), sc(p.fin)]),
+          ...(d.porProduto.length > 1 ? [['Total', num(totRec.cargas), t(totRec.liq), '', `${t(totRec.desc)} (${pc(totRec.liq ? totRec.desc / totRec.liq * 100 : 0)})`, t(totRec.fin), sc(totRec.fin)]] : [])]);
+      if (d.porTalhao.length) {
+        P.secao('Grão próprio por talhão');
+        if (d.porTalhao.length >= 2) P.grafico(d.porTalhao.map(p => [p.nome, p.fin / 60]), {formato: v => `${num(Math.round(v))} sc`, corBarra: COR.verdeEsc});
+        P.tabela([{t: 'Talhão', w: 2}, {t: 'Cargas', w: .8, dir: true}, {t: 'Líquido', w: 1.1, dir: true}, {t: 'Umidade média', w: 1.1, dir: true}, {t: 'Peso final', w: 1.1, dir: true}, {t: 'Sacas', w: 1.1, dir: true}],
+          d.porTalhao.map(p => [p.nome, num(p.cargas), t(p.liq), p.uMedia != null ? pc(p.uMedia) : '-', t(p.fin), sc(p.fin)]));
+      }
+    }
+
+    P.secao('Secagem', d.sec.massaMax != null ? `Maior temperatura da massa registrada: ${num(d.sec.massaMax)} °C` : '');
+    if (!d.sec.lotes) P.nada('Nenhuma secagem concluída.');
+    else P.tabela([{t: 'Produto', w: 1.5}, {t: 'Secagens', w: .9, dir: true}, {t: 'Entrada', w: 1.1, dir: true}, {t: 'Grão seco', w: 1.1, dir: true}, {t: 'Água retirada', w: 1.1, dir: true}, {t: 'Horas', w: .9, dir: true}, ...(verCustos ? [{t: 'Custo / saca', w: 1.1, dir: true}] : [])],
+      [...d.secPorProd.map(p => [p.nome, num(p.lotes), t(p.mi), t(p.mf), t(p.agua), num(r1(p.h), 1), ...(verCustos ? [p.mf && p.custo ? brl(p.custo / (p.mf / 60)) : '-'] : [])]),
+        ...(d.secPorProd.length > 1 ? [['Total', num(d.sec.lotes), t(d.sec.mi), t(d.sec.mf), t(d.sec.agua), num(r1(d.sec.h), 1), ...(verCustos ? [d.sec.mf && d.sec.custo ? brl(d.sec.custo / (d.sec.mf / 60)) : '-'] : [])]] : [])]);
+
+    P.secao('Silos hoje');
+    if (!d.silos.length) P.nada('Nenhum silo cadastrado.');
+    else {
+      const comCap = d.silos.filter(s => s.ocupacao != null);
+      if (comCap.length >= 2) P.grafico(comCap.map(s => [s.nome, s.ocupacao]), {formato: v => pc(v), corBarra: COR.azul});
+      P.tabela([{t: 'Silo', w: 1.8}, {t: 'Saldo', w: 1.1, dir: true}, {t: 'Sacas', w: 1.1, dir: true}, {t: 'Ocupação', w: .9, dir: true}, {t: 'Umidade', w: .9, dir: true}, {t: 'Temp. máx.', w: .9, dir: true}, {t: 'Último inventário', w: 1.5}],
+        d.silos.map(s => [s.nome, t(s.saldo), sc(s.saldo), s.ocupacao != null ? pc(s.ocupacao) : '-', s.uMedia != null ? pc(s.uMedia) : '-', s.tMax != null ? `${num(r1(s.tMax), 1)} °C${s.insetos ? ' *' : ''}` : '-', s.inventario ? `${fmtDate(s.inventario.date)} (${pc(s.inventario.difPct)})` : '-']));
+    }
+
+    if (d.silos.some(s => s.insetos)) P.nota('* Insetos vivos na última vistoria de termometria.');
+    P.nota(`Expedições de grão próprio: ${d.saidas.n ? `${d.saidas.n} ${d.saidas.n === 1 ? 'saída' : 'saídas'}, ${t(d.saidas.kg)} = ${sc(d.saidas.kg)}` : 'nenhuma'}${verCustos && d.vendas.n ? `; ${d.vendas.n} ${d.vendas.n === 1 ? 'venda lançada' : 'vendas lançadas'}, ${num(Math.round(d.vendas.sc))} sc, ${brl(d.vendas.valor)}` : ''}.`);
+
+    if (d.terceiros.length) {
+      P.secao('Grão de terceiros');
+      P.tabela([{t: 'Produtor', w: 1.9}, {t: 'Recebido', w: 1, dir: true}, {t: 'Retirado', w: 1, dir: true}, {t: 'Quebra', w: .9, dir: true}, {t: 'Saldo', w: 1, dir: true}, ...(verCustos ? [{t: 'A cobrar', w: 1.1, dir: true}] : [])],
+        d.terceiros.map(x => [x.nome, t(x.entrou), t(x.saiu), x.quebra >= .5 ? `${num(Math.round(x.quebra))} kg` : '-', t(x.saldo), ...(verCustos ? [brl(x.total)] : [])]));
+    }
+
+    const c = d.controle;
+    P.secao('Controles e qualidade');
+    P.ficha([['Cargas classificadas', `${c.classificados} de ${totRec.cargas}${c.foraTipo ? ` - ${c.foraTipo} fora de tipo` : ''}`],
+      ['Romaneios alterados depois do registro', c.alterados ? `${c.alterados} (com motivo no histórico)` : 'nenhum'], ['Romaneios excluídos', c.excluidos ? `${c.excluidos} (registrados com motivo)` : 'nenhum'],
+      ['Conferência do medidor de umidade', c.medidor ? `${fmtDate(c.medidor.date)} - erro médio ${num(c.medidor.erroMedio, 2)} ponto - ${c.medidor.ok ? 'dentro' : 'fora'} da tolerância` : 'não registrada'],
+      ['Expurgos registrados', String(c.expurgos)], ['Inventários de silo', String(c.inventarios)]]);
+    P.nota('Descontos pelo balanço de massa ou pela tabela do comprador informada em cada romaneio. Grão seco pelo balanço de água: Mf = Mi x (100 - Ui) / (100 - Uf). A classificação oficial é feita por classificador credenciado.');
+    P.assinaturas(assinaturasPadrao());
+    const doc = P.finalizar();
+    entregarPdf(doc, `mercaplant-graos-${(d.sf || 'todas').replace(/[^0-9a-z]+/gi, '-')}.pdf`, enviar === true, `Relatório da safra de grãos${d.sf ? ' ' + d.sf : ''} - ${texto(db.settings.farm || '')}`);
+    return doc;
+  }
+  window.gerarRelatorioGraos = gerarGraos;
+  ACTIONS['graos-pdf'] = sf => gerarGraos(sf, false);
+  ACTIONS['graos-pdf-enviar'] = sf => gerarGraos(sf, true);
   ACTIONS['gr-ticket'] = id => gerarTicket(id, false);
   ACTIONS['gr-ticket-enviar'] = id => gerarTicket(id, true);
 })();

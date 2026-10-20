@@ -332,23 +332,62 @@ function iniciarSecagemForm(secadorId) {
       db.lotesSecagem.push(l); save(); showToast('Secagem iniciada: registre a leitura de hora em hora'); go('graos/lote/' + l.id);
     }});
 }
+// ---------- Sensores do secador: como estão os visores no painel (ex.: controlador do ar e alarme com P1…P4) ----------
+const PONTOS_MAX = 8;
+function sensoresSecador(secadorId) {
+  const cfg = find('machines', secadorId)?.sensores || {};
+  const pontos = Array.from({length: PONTOS_MAX}, (_, i) => { const id = 'P' + (i + 1), c = (cfg.pontos || []).find(x => x.id === id); return {id, local: c?.local || '', tipo: c?.tipo || (i < 4 ? 'massa' : 'nao')}; });
+  return {arNome: cfg.arNome || '', alarmeNome: cfg.alarmeNome || '', temAr: cfg.temAr !== 'nao', pontos, ativos: pontos.filter(x => x.tipo !== 'nao')};
+}
+function sensoresForm(secadorId) {
+  const m = find('machines', secadorId); if (!m) return;
+  const sc = sensoresSecador(secadorId), tipos = [{value: 'massa', label: 'Massa de grãos (coluna)'}, {value: 'ar', label: 'Ar quente'}, {value: 'nao', label: 'Não usado'}];
+  openForm({title: `Sensores — ${m.name}`, sub: 'Deixe a leitura igual ao painel do secador: o operador só copia os números dos visores. Configure uma vez.',
+    values: {arNome: sc.arNome, alarmeNome: sc.alarmeNome, temAr: sc.temAr ? 'sim' : 'nao', ...Object.fromEntries(sc.pontos.flatMap(p => [['tipo_' + p.id, p.tipo], ['local_' + p.id, p.local]]))},
+    fields: [
+      {k: 'temAr', label: 'Tem visor da temperatura do ar quente?', type: 'select', options: [{value: 'sim', label: 'Sim'}, {value: 'nao', label: 'Não'}]},
+      {k: 'arNome', label: 'Nome do aparelho do ar quente', placeholder: 'Ex.: Entringer (Fockink)'},
+      {k: 'alarmeNome', label: 'Nome do aparelho com os pontos P1, P2…', placeholder: 'Ex.: TSW Winckieel', full: true},
+      ...sc.pontos.flatMap(p => [{k: 'tipo_' + p.id, label: `${p.id} mede`, type: 'select', options: tipos}, {k: 'local_' + p.id, label: `${p.id} fica onde`, placeholder: 'Ex.: coluna, parte de baixo'}])],
+    submit: 'Salvar sensores',
+    onSubmit: v => {
+      const novo = {arNome: String(v.arNome || '').trim(), alarmeNome: String(v.alarmeNome || '').trim(), temAr: v.temAr, pontos: sc.pontos.map(p => ({id: p.id, tipo: v['tipo_' + p.id], local: String(v['local_' + p.id] || '').trim()}))};
+      if (!novo.pontos.some(p => p.tipo !== 'nao') && v.temAr === 'nao') return 'Marque pelo menos um sensor';
+      m.sensores = novo;
+      save(); showToast('Sensores salvos: a leitura do secador segue o painel'); render();
+    }});
+}
+const nomeLimite = (l, ponto) => `${ponto === 'massa_graos' ? 'massa' : 'ar'} de ${nomeProd(l.produto, l.produtoNome).toLowerCase()}${l.destino ? ' para ' + ((DESTINOS_GRAO.find(d => d[0] === l.destino) || [, l.destino])[1] || '').toLowerCase() : ''}`;
 function leituraForm(id) {
   carregarRegrasGraos();
   const l = find('lotesSecagem', id); if (!l) return;
-  openForm({title: 'Leitura do secador', sub: `${nomeEquip(l.secadorId)} • ${nomeProd(l.produto, l.produtoNome)} • ${fmtDH(agoraISO())}`, values: {hora: nowTime()},
-    fields: [{k: 'hora', label: 'Hora', type: 'time', required: true}, {k: 'tAr', label: 'Temperatura do ar de entrada (°C)', type: 'number'},
-      {k: 'tMassa', label: 'Temperatura da massa de grãos (°C)', type: 'number', hint: 'O limite de referência vale para a massa.'}, {k: 'umidade', label: 'Umidade na saída (%)', type: 'number', min: 0},
-      {k: 'tDescarga', label: 'Temperatura do grão na descarga (°C)', type: 'number', hint: 'Opcional — grão quente vai para resfriamento/aeração antes de armazenar.'}],
+  const sc = sensoresSecador(l.secadorId), massa = sc.ativos.filter(p => p.tipo === 'massa'), arPts = sc.ativos.filter(p => p.tipo === 'ar');
+  const rotP = p => `${p.id}${p.local ? ' — ' + p.local : ''} (°C)`;
+  openForm({title: 'Leitura do secador', sub: `${nomeEquip(l.secadorId)} • ${nomeProd(l.produto, l.produtoNome)}. Copie os números que aparecem nos visores. Se um ponto mostrar OFF ou ficar apagado, deixe em branco.`, values: {hora: nowTime()},
+    fields: [{k: 'hora', label: 'Hora da leitura', type: 'time', required: true},
+      ...(sc.temAr ? [{k: 'tAr', label: `Ar quente — visor ${sc.arNome ? 'do ' + sc.arNome : 'do controlador do ar'} (°C)`, type: 'number', hint: 'Temperatura do ar que entra no secador.', full: true}] : []),
+      ...[...arPts, ...massa].map((p, i) => ({k: 'p_' + p.id, label: rotP(p) + (p.tipo === 'ar' ? ' — ar' : ''), type: 'number', hint: i === 0 ? `Visor ${sc.alarmeNome ? 'do ' + sc.alarmeNome : 'do alarme'}: selecione ${p.id}, ${[...arPts, ...massa][1]?.id || ''}… e copie cada número.`.replace(', …', '…') : ''})),
+      ...(!massa.length ? [{k: 'tMassa', label: 'Temperatura da massa de grãos (°C)', type: 'number'}] : []),
+      {k: 'umidade', label: 'Umidade do grão na saída (%)', type: 'number', min: 0, hint: 'Amostra da descarga, no medidor de umidade.'},
+      {k: 'tDescarga', label: 'Temperatura do grão na descarga (°C)', type: 'number', hint: 'Opcional.'}],
     submit: 'Salvar leitura',
     onSubmit: v => {
-      if ([v.tAr, v.tMassa, v.umidade, v.tDescarga].every(x => x === '')) return 'Informe pelo menos uma medida';
-      // Hora mais de 10 min à frente do relógio = leitura de ontem anotada depois da meia-noite
+      const pontos = {}; sc.ativos.forEach(p => { if (v['p_' + p.id] !== '' && v['p_' + p.id] != null) pontos[p.id] = Number(v['p_' + p.id]); });
+      if ([v.tAr, v.tMassa, v.umidade, v.tDescarga].every(x => x === '' || x == null) && !Object.keys(pontos).length) return 'Informe pelo menos um número dos visores ou a umidade';
+      // Número fora do possível: quase sempre erro de digitação (ex.: 410 em vez de 41)
+      const errado = [...Object.entries(pontos).map(([k, x]) => [k, x, sc.pontos.find(p => p.id === k)?.tipo === 'ar' ? 200 : 100]), ['Ar quente', numOuU(v.tAr), 200], ['Massa', numOuU(v.tMassa), 100]].find(([, x, max]) => x != null && (x < 0 || x > max));
+      if (errado) return `${errado[0]} com ${n0(errado[1])} °C parece digitado errado. Confira o visor.`;
+      if (numOuU(v.umidade) != null && (v.umidade < 5 || v.umidade > 40)) return `Umidade ${n1(v.umidade)}% parece digitada errada. Confira o medidor.`;
       let em = `${today()}T${v.hora || nowTime()}`;
       if (new Date(em) - Date.now() > 10 * 60000) em = `${daysAgo(1)}T${v.hora}`;
-      const leit = {em, tAr: v.tAr, tMassa: v.tMassa, umidade: v.umidade, tDescarga: v.tDescarga};
+      const vm = massa.filter(p => pontos[p.id] != null), quente = vm.sort((a, b) => pontos[b.id] - pontos[a.id])[0];
+      const va = arPts.filter(p => pontos[p.id] != null).sort((a, b) => pontos[b.id] - pontos[a.id])[0];
+      const tMassa = quente ? pontos[quente.id] : v.tMassa ?? '', tAr = numOuU(v.tAr) != null ? v.tAr : va ? pontos[va.id] : '';
+      const leit = {em, tAr, tMassa, umidade: v.umidade, tDescarga: v.tDescarga, ...(Object.keys(pontos).length ? {pontos, pontoQuente: quente?.id || ''} : {})};
       leit.aval = avaliarLeituraSecador(l, leit); l.leituras = [...(l.leituras || []), leit].sort((a, b) => (a.em || '').localeCompare(b.em || '')); save();
-      const fora = leit.aval?.find(a => a.status === 'FORA_DO_PADRAO');
-      showToast(fora ? `Atenção: ${fora.ponto === 'massa_graos' ? 'massa' : 'ar'} acima de ${n0(fora.limite)} °C — ${fora.acao}` : 'Leitura registrada', !!fora);
+      const fora = leit.aval?.find(a => a.status === 'FORA_DO_PADRAO'), am = leit.aval?.find(a => a.ponto === 'massa_graos');
+      if (fora) showToast(`Atenção: ${fora.ponto === 'massa_graos' ? `massa${quente ? ' no ' + quente.id : ''} com ${n0(tMassa)} °C` : `ar quente com ${n0(tAr)} °C`}, acima do limite de ${n0(fora.limite)} °C (${nomeLimite(l, fora.ponto)}). ${fora.acao || ''}`, true);
+      else showToast(numOuU(tMassa) != null ? `Leitura salva: massa ${n0(tMassa)} °C${quente ? ' (' + quente.id + ', o ponto mais quente)' : ''}${am?.limite != null ? ` — dentro do limite de ${n0(am.limite)} °C` : ''}` : 'Leitura salva');
     }});
 }
 function finalizarSecagemForm(id) {
@@ -515,7 +554,7 @@ function telaSecador() {
   const sec = equipDoTipo('Secador'); if (!sec.length) return semEquip('Secador');
   const abertas = db.lotesSecagem.filter(l => l.status === 'Em andamento'), feitas = db.lotesSecagem.filter(l => l.status === 'Concluída').sort((a, b) => (b.fim || '').localeCompare(a.fim || ''));
   const espera = cargasEsperando();
-  const limp = `<section class="card panel"><h3 style="margin-bottom:8px">Limpeza e inspeção</h3>${sec.map(m => { const u = ultimaLimpeza(m.id), d = u ? diasEntreAuto(u.date, today()) : null; return `<div class="hoje-item"><span class="alert-icon ${d == null || d > DIAS_LIMPEZA ? 'orange' : 'green'}">⚙</span><div><strong>${esc(m.name)}</strong><small>${u ? `Última em ${fmtDate(u.date)} (há ${d} ${d === 1 ? 'dia' : 'dias'})${u.pendentes ? ` • ${u.pendentes} ${u.pendentes === 1 ? 'item pendente' : 'itens pendentes'}` : ' • tudo feito'}` : 'Nenhuma limpeza registrada'}</small></div>${mini('Registrar limpeza', 'gr-limpeza', m.id)}</div>`; }).join('')}<p class="nota" style="margin:6px 0 0">Pó, palha e grãos acumulados no secador são a principal causa de incêndio. O app lembra a cada ${DIAS_LIMPEZA} dias de uso (critério do app; siga o manual do fabricante).</p></section>`;
+  const limp = `<section class="card panel"><h3 style="margin-bottom:8px">Limpeza e inspeção</h3>${sec.map(m => { const u = ultimaLimpeza(m.id), d = u ? diasEntreAuto(u.date, today()) : null; return `<div class="hoje-item"><span class="alert-icon ${d == null || d > DIAS_LIMPEZA ? 'orange' : 'green'}">⚙</span><div><strong>${esc(m.name)}</strong><small>${u ? `Última em ${fmtDate(u.date)} (há ${d} ${d === 1 ? 'dia' : 'dias'})${u.pendentes ? ` • ${u.pendentes} ${u.pendentes === 1 ? 'item pendente' : 'itens pendentes'}` : ' • tudo feito'}` : 'Nenhuma limpeza registrada'}</small></div><div class="btn-row" style="margin:0">${mini('Sensores', 'gr-sensores', m.id)}${mini('Registrar limpeza', 'gr-limpeza', m.id)}</div></div>`; }).join('')}<p class="nota" style="margin:6px 0 0">Pó, palha e grãos acumulados no secador são a principal causa de incêndio. O app lembra a cada ${DIAS_LIMPEZA} dias de uso (critério do app; siga o manual do fabricante).</p></section>`;
   const tot = feitas.reduce((a, l) => { const c = calcSecagem(l); a.mf += c.mf || 0; a.agua += c.agua || 0; a.h += c.horas; a.custo += c.custo || 0; return a; }, {mf: 0, agua: 0, h: 0, custo: 0});
   return `${limp}${espera.length ? `<section class="card panel"><strong>${espera.length} ${espera.length === 1 ? 'carga esperando' : 'cargas esperando'} secagem</strong><small class="nota"> — ${kgT(espera.reduce((s, r) => s + (r.calc?.liquido || 0), 0))}</small><div class="btn-row" style="margin-top:8px">${btn('Iniciar secagem', 'gr-secar')}</div></section>` : ''}
     ${abertas.map(cartaoLote).join('')}
@@ -539,10 +578,18 @@ function telaLote(id) {
     ${l.avalSaida ? `<section class="card panel"><span class="chip ${l.avalSaida.status === 'OK' ? 'sit-green' : l.avalSaida.status === 'ATENCAO' ? 'sit-orange' : l.avalSaida.status === 'FORA_DO_PADRAO' ? 'sit-red' : 'sit-gray'}">Umidade final: ${esc(STATUS_INFO?.[l.avalSaida.status]?.rotulo || l.avalSaida.status)}</span> <span class="nota">${esc(l.avalSaida.acao || '')}${l.avalSaida.regra ? ` (${esc(l.avalSaida.regra)})` : ''}</span>${l.avalSaida.status === 'SEM_REFERENCIA' && typeof botaoInserirNorma === 'function' ? ' ' + botaoInserirNorma(ctxNormaGrao(l, 'pos_secagem', 'amostra', 'umidade_graos', l.umidadeSaida), 'lote:' + l.id) : ''}</section>` : ''}
     ${pontosMassa.length > 1 ? `<section class="card panel"><h3>Temperatura da massa</h3>${graficoMassa(pontosMassa, lim)}</section>` : ''}
     <div class="section-title"><h3>Planilha de secagem (${(l.leituras || []).length})</h3>${aberta ? `<button data-act="gr-leitura" data-id="${esc(l.id)}">+ Leitura</button>` : ''}</div>
-    <section class="card panel">${(l.leituras || []).length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Hora</th><th class="num">Ar de entrada</th><th class="num">Massa</th><th class="num">Umidade saída</th><th class="num">Descarga</th><th>Referência</th></tr></thead><tbody>
-      ${l.leituras.map(x => { const f = x.aval?.find(a => a.status === 'FORA_DO_PADRAO'), ok = x.aval?.some(a => a.status === 'OK'); return `<tr><td>${esc(x.em.slice(11, 16))}<br><small class="nota">${fmtDate(x.em.slice(0, 10))}</small></td><td class="num">${x.tAr !== '' && x.tAr != null ? n0(x.tAr) + ' °C' : '—'}</td><td class="num ${f?.ponto === 'massa_graos' ? 'txt-red' : ''}">${x.tMassa !== '' && x.tMassa != null ? n0(x.tMassa) + ' °C' : '—'}</td><td class="num">${x.umidade !== '' && x.umidade != null ? n1(x.umidade) + '%' : '—'}</td><td class="num">${x.tDescarga !== '' && x.tDescarga != null ? n0(x.tDescarga) + ' °C' : '—'}</td><td>${f ? `<span class="chip sit-red">acima de ${n0(f.limite)} °C</span>` : ok ? '<span class="chip sit-green">ok</span>' : (() => { const sr = x.aval?.find(a => a.status === 'SEM_REFERENCIA'); return sr && typeof botaoInserirNorma === 'function' ? botaoInserirNorma(ctxNormaGrao(l, 'secagem', sr.ponto, 'temperatura', sr.ponto === 'massa_graos' ? x.tMassa : x.tAr), 'lote:' + l.id) : '<small class="nota">sem referência</small>'; })()}</td></tr>`; }).join('')}
-    </tbody></table></div>` : `<p class="nota" style="margin:0">Registre a temperatura do ar, a da massa e a umidade na saída de hora em hora. A massa é comparada com a referência do produto e destino.</p>`}</section>
+    <section class="card panel">${(l.leituras || []).length ? planilhaSecagem(l) : `<p class="nota" style="margin:0">De hora em hora, copie os números dos visores do secador (ar quente e pontos P1, P2…) e a umidade da saída. O sistema guarda tudo, pega o ponto mais quente da massa e compara com a referência do produto.</p>`}</section>
     ${roms.length ? `<div class="section-title"><h3>Cargas da moega</h3></div><section class="card panel"><table class="tbl"><tbody>${roms.map(r => `<tr><td>Nº ${r.numero} • ${fmtDate(r.date)}</td><td>${esc(fieldName(r.fieldId) || 'Terceiros')}</td><td class="num">${n0(r.calc?.liquido)} kg a ${n1(r.umidade)}%</td></tr>`).join('')}</tbody></table></section>` : ''}`;
+}
+function planilhaSecagem(l) {
+  const ls = l.leituras || [], sc = sensoresSecador(l.secadorId);
+  const ids = sc.pontos.map(p => p.id).filter(id => ls.some(x => x.pontos?.[id] != null)), rot = id => sc.pontos.find(p => p.id === id);
+  const temp = v => v !== '' && v != null ? n0(v) + ' °C' : '—';
+  return `<div class="tbl-wrap"><table class="tbl tbl-leituras"><thead><tr><th>Hora</th><th class="num">Ar quente</th>${ids.map(id => `<th class="num" title="${esc(rot(id)?.local || '')}">${id}${rot(id)?.tipo === 'ar' ? ' (ar)' : ''}</th>`).join('')}<th class="num">Massa máx.</th><th class="num">Umidade</th><th>Situação</th></tr></thead><tbody>
+    ${ls.map(x => { const f = x.aval?.find(a => a.status === 'FORA_DO_PADRAO'), am = x.aval?.find(a => a.ponto === 'massa_graos');
+      const sit = f ? `<span class="chip sit-red">${f.ponto === 'massa_graos' ? 'Massa' : 'Ar'} acima de ${n0(f.limite)} °C${f.ponto === 'massa_graos' && x.pontoQuente ? ' (' + esc(x.pontoQuente) + ')' : ''}</span>` : am?.status === 'OK' ? '<span class="chip sit-green">Dentro do limite</span>' : x.aval?.length ? '<span class="chip sit-gray">Sem limite para este uso</span>' : '<small class="nota">—</small>';
+      return `<tr><td>${esc(x.em.slice(11, 16))}<br><small class="nota">${fmtDate(x.em.slice(0, 10))}</small></td><td class="num">${temp(x.tAr)}</td>${ids.map(id => `<td class="num ${f?.ponto === 'massa_graos' && x.pontoQuente === id ? 'txt-red' : ''}">${temp(x.pontos?.[id])}</td>`).join('')}<td class="num ${f?.ponto === 'massa_graos' ? 'txt-red' : ''}"><b>${temp(x.tMassa)}</b></td><td class="num">${x.umidade !== '' && x.umidade != null ? n1(x.umidade) + '%' : '—'}</td><td>${sit}</td></tr>`; }).join('')}
+    </tbody></table></div>${ids.some(id => rot(id)?.local) ? `<p class="nota" style="margin:6px 0 0">${ids.filter(id => rot(id)?.local).map(id => `${id}: ${esc(rot(id).local)}`).join(' • ')}</p>` : ''}`;
 }
 function graficoMassa(pts, lim) {
   const vs = pts.map(p => Number(p.tMassa)), max = Math.max(...vs, lim || 0) + 5, min = Math.max(0, Math.min(...vs) - 5), W = 600, H = 160;
@@ -568,7 +615,7 @@ Object.assign(ACTIONS, {
   'gr-secar': id => iniciarSecagemForm(id), 'gr-leitura': leituraForm, 'gr-finalizar': finalizarSecagemForm,
   'gr-lote-del': id => confirmDialog('Excluir esta secagem? As cargas voltam para “esperando secagem” e o grão seco sai do silo.', () => { remove('lotesSecagem', id); go('graos/secador'); }),
   'gr-saida': id => saidaSiloForm(id), 'gr-termo': termometriaForm, 'gr-cap': capacidadeForm, 'gr-movs': movimentosDialog,
-  'gr-mov-del': excluirMovSilo, 'gr-classif': classificacaoForm, 'gr-tarifas': tarifasForm, 'gr-expurgo': expurgoForm, 'gr-limpeza': limpezaForm, 'gr-inventario': inventarioForm, 'gr-medidor': medidorForm, 'gr-inmetro': inmetroForm,
+  'gr-mov-del': excluirMovSilo, 'gr-classif': classificacaoForm, 'gr-tarifas': tarifasForm, 'gr-expurgo': expurgoForm, 'gr-limpeza': limpezaForm, 'gr-sensores': sensoresForm, 'gr-inventario': inventarioForm, 'gr-medidor': medidorForm, 'gr-inmetro': inmetroForm,
   'gr-expurgo-fim': id => { const e = find('checklistsGraos', id); if (!e) return; e.liberadoEm = agoraISO(); save(); showToast('Silo liberado do expurgo'); render(); }
 });
 if (typeof NV_ROTA_TELA === 'object') NV_ROTA_TELA.graos = 'secagem';
@@ -832,7 +879,7 @@ function relatorioSafraGraos(safraArg) {
   const tot = Object.values(porTalhao).reduce((a, p) => ({cargas: a.cargas + p.cargas, liq: a.liq + p.liq, desc: a.desc + p.desc, fin: a.fin + p.fin}), {cargas: 0, liq: 0, desc: 0, fin: 0});
   const silos = equipDoTipo('Silo/Armazém'), deps = depositantes(), kgSc = typeof KG_SACA_GRAO !== 'undefined' ? KG_SACA_GRAO : 60;
   const saidas = db.movSilo.filter(m => m.tipo === 'saida' && m.dono !== 'terceiro' && (!sf || db.vendas.find(v => v.id === m.vendaId)?.season === sf || !m.vendaId));
-  return `<div class="no-print">${head('Relatório da safra de grãos', sf ? `Safra ${sf}` : 'Todas as cargas', btn('← Grãos', 'nav', 'graos', 'secondary') + btn('Imprimir / PDF', 'af-imprimir'))}${safras.length > 1 ? `<div class="filters">${safras.map(x => `<button class="${x === sf ? 'active' : ''}" data-act="nav" data-id="graos/relatorio/${encodeURIComponent(x)}">${esc(x)}</button>`).join('')}</div>` : ''}</div>
+  return `<div class="no-print">${head('Relatório da safra de grãos', sf ? `Safra ${sf}` : 'Todas as cargas', btn('← Grãos', 'nav', 'graos', 'secondary') + btn('PDF', 'graos-pdf', sf, 'secondary') + btn('Enviar PDF', 'graos-pdf-enviar', sf, 'secondary') + btn('Imprimir', 'af-imprimir'))}${safras.length > 1 ? `<div class="filters">${safras.map(x => `<button class="${x === sf ? 'active' : ''}" data-act="nav" data-id="graos/relatorio/${encodeURIComponent(x)}">${esc(x)}</button>`).join('')}</div>` : ''}</div>
   <article class="card panel relatorio"><header class="rel-head"><div><strong>Recebimento, secagem e armazenagem${sf ? ' — safra ' + esc(sf) : ''}</strong><br><small>${esc(db.settings.farm || '')}</small></div><small>até ${fmtDate(today())}</small></header>
     <h3>1. Recebido por talhão (grão próprio)</h3><table class="tbl"><thead><tr><th>Talhão</th><th class="num">Cargas</th><th class="num">Líquido</th><th class="num">Umidade média</th><th class="num">Descontos</th><th class="num">Final</th><th class="num">Sacas</th></tr></thead><tbody>
       ${Object.entries(porTalhao).sort((a, b) => b[1].fin - a[1].fin).map(([k, p]) => `<tr><td>${esc(k)}</td><td class="num">${p.cargas}</td><td class="num">${kgT(p.liq)}</td><td class="num">${p.liq ? n1(p.um / p.liq) + '%' : '—'}</td><td class="num">${kgT(p.desc)}</td><td class="num">${kgT(p.fin)}</td><td class="num">${sacas(p.fin)}</td></tr>`).join('') || '<tr><td colspan="7">Nenhuma carga própria.</td></tr>'}
@@ -842,6 +889,29 @@ function relatorioSafraGraos(safraArg) {
     <h3>4. Expedições de grão próprio</h3><table class="tbl"><tbody>${linhaC('Saídas', `${saidas.length} • ${kgT(saidas.reduce((a, m) => a + (Number(m.kg) || 0), 0))} = ${sacas(saidas.reduce((a, m) => a + (Number(m.kg) || 0), 0))}`)}${linhaC('Vendas lançadas pela expedição', (() => { const vs = saidas.map(m => find('vendas', m.vendaId)).filter(Boolean); return vs.length ? `${vs.length} • R$ ${num(vs.reduce((a, v) => a + (Number(v.valor) || 0), 0), 2)}` : 'nenhuma'; })())}</tbody></table>
     ${deps.length ? `<h3>5. Terceiros</h3><table class="tbl"><thead><tr><th>Produtor</th><th class="num">Recebido</th><th class="num">Retirado</th><th class="num">Saldo</th><th class="num">A cobrar</th></tr></thead><tbody>${deps.map(d => { const e = extratoTerceiro(d); return `<tr><td>${esc(d)}</td><td class="num">${kgT(e.entrou)}</td><td class="num">${kgT(e.saiu)}</td><td class="num">${kgT(e.saldo)}</td><td class="num">R$ ${num(e.total, 2)}</td></tr>`; }).join('')}</tbody></table>` : ''}
   </article>`;
+}
+
+// Números do relatório da safra de grãos (usado pelo PDF): mesmo critério da tela
+function dadosSafraGraos(safraArg) {
+  const safras = [...new Set(db.romaneios.map(r => r.season).filter(Boolean))].sort().reverse(), sf = safraArg || safras[0] || '';
+  const rs = db.romaneios.filter(r => !sf || r.season === sf), proprio = rs.filter(r => r.dono !== 'terceiro');
+  const somar = (lista, chave) => { const g = {}; lista.forEach(r => { const k = chave(r), p = g[k] ||= {nome: k, cargas: 0, liq: 0, desc: 0, fin: 0, um: 0}; p.cargas++; p.liq += r.calc?.liquido || 0; p.desc += r.calc?.descontoKg || 0; p.fin += r.calc?.pesoFinal || 0; p.um += (Number(r.umidade) || 0) * (r.calc?.liquido || 0); }); return Object.values(g).map(p => ({...p, uMedia: p.liq ? p.um / p.liq : null})).sort((a, b) => b.fin - a.fin); };
+  const porTalhao = somar(proprio, r => fieldName(r.fieldId) || 'Sem talhão'), porProduto = somar(rs, r => nomeProd(r.produto, r.produtoNome));
+  const tot = porTalhao.reduce((a, p) => ({cargas: a.cargas + p.cargas, liq: a.liq + p.liq, desc: a.desc + p.desc, fin: a.fin + p.fin}), {cargas: 0, liq: 0, desc: 0, fin: 0});
+  const ids = new Set(rs.map(r => r.id)), lotes = db.lotesSecagem.filter(l => l.status === 'Concluída' && ((l.romaneioIds || []).some(i => ids.has(i)) || !l.romaneioIds?.length));
+  const secPorProd = {}; const sec = {lotes: lotes.length, mi: 0, mf: 0, agua: 0, h: 0, custo: 0, massaMax: null};
+  lotes.forEach(l => { const c = calcSecagem(l), k = nomeProd(l.produto, l.produtoNome), p = secPorProd[k] ||= {nome: k, lotes: 0, mi: 0, mf: 0, agua: 0, h: 0, custo: 0};
+    [sec, p].forEach(o => { o.mi += c.mi || 0; o.mf += c.mf || 0; o.agua += c.agua || 0; o.h += c.horas || 0; o.custo += c.custo || 0; }); p.lotes++;
+    (l.leituras || []).forEach(x => { const t = numOuU(x.tMassa); if (t != null && (sec.massaMax == null || t > sec.massaMax)) sec.massaMax = t; }); });
+  const silos = equipDoTipo('Silo/Armazém').map(s => { const d = saldoSilo(s), iv = ultimoInventario(s.id), tm = termometriaSilo(s.id); return {nome: s.name, saldo: d.saldo, cap: d.cap, ocupacao: d.ocupacao, uMedia: d.uMedia, inventario: iv, tMax: tm?.max ?? null, insetos: tm?.ult?.insetos && tm.ult.insetos !== 'nao'}; });
+  const saidas = db.movSilo.filter(m => m.tipo === 'saida' && m.dono !== 'terceiro' && (!sf || db.vendas.find(v => v.id === m.vendaId)?.season === sf || !m.vendaId));
+  const vendas = saidas.map(m => find('vendas', m.vendaId)).filter(Boolean);
+  const terceiros = depositantes().map(n => ({nome: n, ...extratoTerceiro(n)}));
+  const excl = db.checklistsGraos.filter(c => c.tipo === 'romaneio_excluido' && (!sf || rs.length === 0 || true));
+  const controle = {alterados: rs.filter(r => (r.historico || []).some(h => h.mudancas)).length, excluidos: excl.length, classificados: rs.filter(r => r.classif?.resultado?.enquadramento).length,
+    foraTipo: rs.filter(r => /Fora|Desclass/.test(r.classif?.resultado?.enquadramento || '')).length, expurgos: db.checklistsGraos.filter(c => c.tipo === 'expurgo').length,
+    inventarios: db.checklistsGraos.filter(c => c.tipo === 'inventario').length, medidor: db.checklistsGraos.filter(c => c.tipo === 'conf_umidade').sort((a, b) => b.date.localeCompare(a.date))[0] || null};
+  return {sf, safras, porTalhao, porProduto, tot, sec, secPorProd: Object.values(secPorProd), silos, saidas: {n: saidas.length, kg: saidas.reduce((a, m) => a + (Number(m.kg) || 0), 0)}, vendas: {n: vendas.length, sc: vendas.reduce((a, v) => a + (Number(v.sacas) || 0), 0), valor: vendas.reduce((a, v) => a + (Number(v.valor) || 0), 0)}, terceiros, controle};
 }
 
 // ---------- Avisos: secagem na meta e Inmetro vencido ----------
