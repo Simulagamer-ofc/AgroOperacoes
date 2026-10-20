@@ -4,6 +4,13 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.47.1-beta1` — **Secador à prova de erro de preenchimento** (vistos no primeiro teste real):
+- Carga é em **toneladas**: acima de 500 t o sistema avisa (“21.300 kg = 21,3 t”).
+- Umidade final desejada obrigatória (8% a 18%); umidade de entrada abaixo da final pede para conferir a amostra.
+- Rendimento (t/h) só depois de 15 min de secagem (não mostra mais “1.278.000 t/h” no início).
+- Leitura com todos os pontos iguais ao ar quente avisa que P1, P2… são do outro aparelho; sensores sem nenhum ponto de massa avisam que o grão não será comparado com o limite.
+- **Corrigir dados** de uma secagem em andamento (carga, umidades, produto, destino) e **excluir leitura** errada, sem apagar a secagem.
+
 `0.47.0-beta1` — **Moega, Secador e Silos separados no menu** (grupo Grãos e sementes: Painel de grãos, Moega, Secador, Silos e armazém). Cada tela tem seus botões e, no topo, a faixa **Moega → Secador → Silos** com o que está passando de uma etapa para a outra (cargas de hoje e pátio, o que está secando e as cargas esperando, saldo e ocupação dos silos); tocar numa etapa abre a tela dela. O menu fica marcado na etapa certa também no comprovante do romaneio, na secagem e no extrato de terceiros.
 
 `0.46.3-beta1` — **Cadastro do secador e do silo pela tela de Grãos**: “+ Cadastrar secador” pede só nome, tipo (contínuo, intermitente ou estático), marca e capacidade e já abre a configuração dos visores (ar quente e P1…P8). “+ Silo” pede nome e capacidade. Não precisa mais ir em Máquinas. Em Máquinas, o horímetro deixou de ser obrigatório para secador, moega, silo e implemento (continua obrigatório para trator, colheitadeira, pulverizador, plantadeira e caminhão).

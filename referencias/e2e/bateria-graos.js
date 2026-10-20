@@ -328,6 +328,23 @@ async () => {
   const txtT = docT ? docT.output() : '';
   T('TKT-01', 'Ticket', 'Ticket do romaneio em PDF para o motorista: número, placa, pesagem, descontos, peso final e assinaturas', `mercaplant-romaneio-${rt2.numero}-jbc7h31.pdf com peso final ${br(rt2.calc.pesoFinal, 0)} kg`, docT ? `${baixou} • ${docT.getNumberOfPages()} página(s)` : 'não gerou',
     !!docT && baixou === `mercaplant-romaneio-${rt2.numero}-jbc7h31.pdf` && txtT.includes(`Romaneio de recebimento n${'º'} ${rt2.numero}`) && txtT.includes('JBC7H31') && txtT.includes(num(rt2.calc.pesoFinal)) && txtT.includes('Motorista'));
+  // ================= VAL: erros comuns de preenchimento no secador =================
+  r = await F('gr-secar', SEC, {produto: 'trigo', destino: 'racao_animal', umidadeMeta: '', massaT: '21,3', umidadeEntrada: '18'});
+  T('VAL-01', 'Validação', 'Umidade final desejada em branco: pede o valor (sem ela a previsão seria "chega a 0,0%")', 'pede a umidade final', r.salvo ? 'iniciou' : r.msgs[0], !r.salvo && /umidade final desejada/.test(r.msgs[0]));
+  r = await F('gr-secar', SEC, {produto: 'trigo', destino: 'racao_animal', umidadeMeta: '13', massaT: '21300', umidadeEntrada: '18'});
+  T('VAL-02', 'Validação', 'Carga de 21.300 "t" (digitada em kg no campo de toneladas): avisa que 21.300 kg = 21,3 t', 'avisa antes de iniciar', r.salvo ? 'iniciou sem avisar' : r.msgs[0], !r.salvo && /TONELADAS/.test(r.msgs[0]) && /21,3 t/.test(r.msgs[0]));
+  r = await F('gr-secar', SEC, {produto: 'trigo', destino: 'racao_animal', umidadeMeta: '13', massaT: '21,3', umidadeEntrada: '7,9'});
+  T('VAL-03', 'Validação', 'Umidade de entrada 7,9% (abaixo da final desejada de 13%): pede para conferir a amostra', 'avisa antes de iniciar', r.salvo ? 'iniciou sem avisar' : r.msgs[0], !r.salvo && /abaixo da umidade final/.test(r.msgs[0]));
+  r = await F('gr-secar', SEC, {produto: 'trigo', destino: 'racao_animal', umidadeMeta: '13', massaT: '21,3', umidadeEntrada: '17,9'});
+  const LV = db.lotesSecagem.at(-1);
+  T('VAL-04', 'Validação', 'Rendimento (t/h) só aparece depois de 15 min de secagem (evita "1.278.000 t/h" logo no início)', 'sem rendimento no início', `${calcSecagem(LV).tph == null ? 'sem rendimento' : br(calcSecagem(LV).tph) + ' t/h'}`, r.salvo && calcSecagem(LV).tph == null);
+  r = await F('gr-leitura', LV.id, {hora: '00:30', tAr: '116', p_P1: '116', p_P2: '116', p_P3: '116', p_P4: '116'});
+  T('VAL-05', 'Validação', 'Leitura com P1…P4 iguais ao ar quente (116 °C copiado do outro visor): explica que os pontos são do alarme', 'pede para conferir', r.salvo ? 'salvou sem avisar' : r.msgs[0], !r.salvo && /mesmo número do ar quente/.test(r.msgs[0]));
+  r = await F('gr-lote-editar', LV.id, {massaT: '22,5', umidadeEntrada: '18,4', umidadeMeta: '13'});
+  T('VAL-06', 'Validação', 'Corrigir dados de uma secagem em andamento sem excluir', 'carga 22,5 t a 18,4%', `carga ${br(LV.massaEntradaKg / 1000, 1)} t a ${br(LV.umidadeEntrada, 1)}%`, r.salvo && LV.massaEntradaKg === 22500 && LV.umidadeEntrada === 18.4);
+  r = await F('gr-sensores', SEC, {temAr: 'sim', arNome: 'Entringer', alarmeNome: 'TSW', tipo_P1: 'ar', tipo_P2: 'ar', tipo_P3: 'ar', tipo_P4: 'ar'});
+  T('VAL-07', 'Validação', 'Sensores com todos os pontos marcados como "ar": avisa que sem ponto de massa o sistema não compara o grão com o limite', 'avisa antes de salvar', r.salvo ? 'salvou sem avisar' : r.msgs[0], !r.salvo && /Massa de grãos/.test(r.msgs[0]) && sensoresSecador(SEC).pontos[0].tipo === 'massa');
+  remove('lotesSecagem', LV.id);
   const silosChk = [S1, S2, S3, S4].map(id => { const {ent, sai} = movimentosSilo(id); const e = ent.reduce((s, x) => s + x.kg, 0), sa = sai.reduce((s, x) => s + x.kg, 0); return {id, nome: find('machines', id).name, e, sa, saldo: saldo(id).saldo, ok: perto(saldo(id).saldo, Math.max(0, e - sa))}; });
   T('VOL-04', 'Volume', 'Balanço de cada silo: entradas − saídas = saldo', '4/4 silos fechando', `${silosChk.filter(x => x.ok).length}/4 silos fechando • ${silosChk.map(s => `${s.nome.split(' —')[0]}: ${br(s.saldo / 1000, 1)} t`).join(' • ')}`, silosChk.every(x => x.ok));
   const tVol = Math.round(t1 - t0);
