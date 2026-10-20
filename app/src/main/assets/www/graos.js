@@ -19,7 +19,7 @@ const COMBUSTIVEIS = [['lenha', 'Lenha', 'm³ st'], ['cavaco', 'Cavaco', 't'], [
 const n0 = v => Math.round(Number(v) || 0).toLocaleString('pt-BR'), n1 = v => (Number(v) || 0).toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1});
 const nomeProd = (p, nome) => p === 'outro' ? (nome || 'Outro') : String(p || '').startsWith('outro:') ? (nome || p.slice(6).replace(/_/g, ' ')) : (PRODUTOS_GRAO.find(x => x[0] === p) || [, p || '—'])[1];
 const unComb = t => (COMBUSTIVEIS.find(x => x[0] === t) || [, , 'un'])[2];
-const equipDoTipo = tipo => db.machines.filter(m => m.type === tipo && m.status !== 'Inativa');
+const equipDoTipo = tipo => db.machines.filter(m => m.type === tipo && m.state !== 'Inativa' && m.status !== 'Inativa');
 const nomeEquip = id => find('machines', id)?.name || '—';
 const kgT = kg => n1((Number(kg) || 0) / 1000) + ' t';
 const sacas = kg => n0((Number(kg) || 0) / (typeof KG_SACA_GRAO !== 'undefined' ? KG_SACA_GRAO : 60)) + ' sc';
@@ -166,6 +166,7 @@ function romaneioForm(r = {}) {
         return `Umidade ${n1(v.umidade)}% acima do padrão: o normal é mandar para o secador. Toque em registrar de novo para mandar direto ao silo mesmo assim.`;
       }
       romaneioForm.avisoSilo = '';
+      if (v.placa) v.placa = String(v.placa).trim().toUpperCase();
       const reg = {...r, ...v, id: r.id || uid(), numero: r.numero || proximoRomaneio(), destinoTipo, destinoId};
       delete reg.destino; reg.calc = calcRomaneio(reg);
       db.settings.padroesGrao = {...(db.settings.padroesGrao || {}), [v.produto]: {umidade: numOuU(v.umidadePadrao) ?? padNovo.umidade, impureza: numOuU(v.impurezaPadrao) ?? padNovo.impureza, metodoDesc: v.metodoDesc, fatorUmid: v.fatorUmid, fatorImp: v.fatorImp, quebraTecnica: v.quebraTecnica}};
@@ -193,7 +194,9 @@ function iniciarSecagemForm(secadorId) {
   const sec = equipDoTipo('Secador'); if (!sec.length) return showToast('Cadastre o secador em Máquinas (tipo Secador).', true);
   const sid = secadorId || sec[0].id, espera = cargasEsperando(sid), aberta = db.lotesSecagem.find(l => l.secadorId === sid && l.status === 'Em andamento');
   if (aberta) return go('graos/lote/' + aberta.id);
-  const massa = espera.reduce((t, r) => t + (r.calc?.liquido || 0) * (1 - (r.calc?.linhas?.find(x => x.id === 'impureza')?.percentual || 0) / 100), 0);
+  // A pré-limpeza tira toda a impureza medida na amostra (o desconto do contrato é só o excesso sobre o padrão)
+  const impMedida = r => numOuU(r.impureza) ?? r.calc?.linhas?.find(x => x.id === 'impureza')?.percentual ?? 0;
+  const massa = espera.reduce((t, r) => t + (r.calc?.liquido || 0) * (1 - Math.min(100, impMedida(r)) / 100), 0);
   const uMed = espera.length ? espera.reduce((t, r) => t + (Number(r.umidade) || 0) * (r.calc?.liquido || 0), 0) / espera.reduce((t, r) => t + (r.calc?.liquido || 0), 0) : '';
   const prod = espera[0]?.produto || 'soja', ultimo = db.lotesSecagem.filter(l => l.secadorId === sid).sort((a, b) => (b.inicio || '').localeCompare(a.inicio || ''))[0];
   openForm({title: 'Iniciar secagem', sub: espera.length ? `${espera.length} ${espera.length === 1 ? 'carga esperando' : 'cargas esperando'} este secador: carga e umidade já calculadas (sem a impureza, que sai na pré-limpeza).` : 'Nenhuma carga da moega esperando: informe a carga e a umidade.',
@@ -226,8 +229,11 @@ function leituraForm(id) {
     submit: 'Salvar leitura',
     onSubmit: v => {
       if ([v.tAr, v.tMassa, v.umidade, v.tDescarga].every(x => x === '')) return 'Informe pelo menos uma medida';
-      const leit = {em: `${today()}T${v.hora || nowTime()}`, tAr: v.tAr, tMassa: v.tMassa, umidade: v.umidade, tDescarga: v.tDescarga};
-      leit.aval = avaliarLeituraSecador(l, leit); l.leituras = [...(l.leituras || []), leit]; save();
+      // Hora mais de 10 min à frente do relógio = leitura de ontem anotada depois da meia-noite
+      let em = `${today()}T${v.hora || nowTime()}`;
+      if (new Date(em) - Date.now() > 10 * 60000) em = `${daysAgo(1)}T${v.hora}`;
+      const leit = {em, tAr: v.tAr, tMassa: v.tMassa, umidade: v.umidade, tDescarga: v.tDescarga};
+      leit.aval = avaliarLeituraSecador(l, leit); l.leituras = [...(l.leituras || []), leit].sort((a, b) => (a.em || '').localeCompare(b.em || '')); save();
       const fora = leit.aval?.find(a => a.status === 'FORA_DO_PADRAO');
       showToast(fora ? `Atenção: ${fora.ponto === 'massa_graos' ? 'massa' : 'ar'} acima de ${n0(fora.limite)} °C — ${fora.acao}` : 'Leitura registrada', !!fora);
     }});
