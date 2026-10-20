@@ -4,6 +4,13 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.46.2-beta1` — **Leitura do secador igual ao painel**:
+- Em Secador → **Sensores**, cadastre uma vez os aparelhos do painel (ex.: controlador do ar Entringer e alarme TSW Winckieel) e o que cada ponto P1…P8 mede e onde fica.
+- A leitura pede exatamente o que aparece nos visores: “Ar quente — visor do Entringer” e “P1 — coluna, parte de baixo”, “P2 — coluna, meio”… Ponto em OFF fica em branco.
+- O sistema guarda todos os pontos, usa o **mais quente** como temperatura da massa e avisa em linguagem simples: “massa no P3 com 41 °C, acima do limite de 40 °C (massa de soja para grão — armazenagem)”, com a ação recomendada.
+- Número impossível (ex.: 410 °C no lugar de 41) é barrado como erro de digitação.
+- Planilha de secagem com uma coluna por ponto, massa máxima e situação de cada hora.
+
 `0.46.1-beta1` — **Relatório da safra de grãos em PDF** com a marca MercaPlant (Grãos → Relatório da safra → PDF ou Enviar PDF): resumo em cartões, recebimento por produto e por talhão com gráficos, secagem por produto com água retirada e custo por saca, ocupação dos silos em gráfico, terceiros com quebra e valor a cobrar, controles (classificação, romaneios alterados e excluídos, medidor, expurgos e inventários) e assinaturas. Valores em R$ só para quem tem acesso ao financeiro.
 
 `0.46.0-beta1` — **Moega pronta para unidade armazenadora** (bateria de grãos: 79 casos aprovados):

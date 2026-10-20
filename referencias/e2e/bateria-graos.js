@@ -120,11 +120,27 @@ async () => {
   const milhoFora = esperaTodas.filter(x => x.produto === 'milho');
   T('SEC-18', 'Secador', `Havia ${esperaTodas.length} cargas na fila (${espera1.length} de soja e ${milhoFora.length} de milho): o lote de soja não mistura o milho, que fica esperando o próximo lote`, `milho fora do lote e ainda na fila`, `${milhoFora.some(x => L.romaneioIds.includes(x.id)) ? 'milho entrou no lote de soja' : 'milho fora do lote'} • ${cargasEsperando(SEC).filter(x => x.produto === 'milho').length} de milho na fila`, milhoFora.length > 0 && !milhoFora.some(x => L.romaneioIds.includes(x.id)) && cargasEsperando(SEC).filter(x => x.produto === 'milho').length === milhoFora.length);
   // Leituras de hora em hora (o roteiro ajusta o horário de cada leitura para simular a secagem real)
-  const leituras = [[10, 82, 36, 17.1], [11, 88, 38, 16.0], [12, 92, 41, 15.0], [13, 90, 39, 14.1]];
-  for (const [h, ar, massa, u] of leituras) { await F('gr-leitura', L.id, {hora: '00:30', tAr: String(ar), tMassa: String(massa), umidade: vir(u)}); const lt = L.leituras.at(-1); lt.em = `2026-03-10T${h}:00`; L.leituras.sort((a, b) => a.em.localeCompare(b.em)); }
+  // Sensores do secador iguais ao painel: controlador do ar (Entringer) e alarme com P1…P4 (TSW Winckieel)
+  await F('gr-sensores', SEC, {temAr: 'sim', arNome: 'Entringer', alarmeNome: 'TSW Winckieel', tipo_P1: 'massa', local_P1: 'coluna, parte de baixo', tipo_P2: 'massa', local_P2: 'coluna, meio', tipo_P3: 'massa', local_P3: 'coluna, parte de cima', tipo_P4: 'massa', local_P4: 'saída do grão'});
+  ACTIONS['gr-leitura'](L.id); await espera(20);
+  const rotulos = [...document.querySelectorAll('#dialog form label')].map(x => x.textContent.replace(/\s+/g, ' ').trim()); closeModal();
+  T('LEI-01', 'Leitura', 'Leitura do secador segue o painel: ar quente do Entringer e pontos P1 a P4 do TSW, com o local de cada um', 'campos "Ar quente — visor do Entringer" e "P1 — coluna, parte de baixo" … "P4"', rotulos.filter(x => /Ar quente|^P\d/.test(x)).map(x => x.replace(/ \(°C\).*/, '')).join(' • '),
+    rotulos.some(x => /Ar quente — visor do Entringer/.test(x)) && ['P1 — coluna, parte de baixo', 'P2 — coluna, meio', 'P3 — coluna, parte de cima', 'P4 — saída do grão'].every(r => rotulos.some(x => x.startsWith(r))) && !rotulos.some(x => /Temperatura da massa/.test(x)));
+  r = await F('gr-leitura', L.id, {hora: '00:30', tAr: '95', p_P1: '36', p_P2: '410', umidade: '17'});
+  T('LEI-02', 'Leitura', 'Número fora do possível (410 °C no P2, em vez de 41) é barrado como erro de digitação', 'pede para conferir o visor', r.salvo ? 'salvou' : r.msgs[0], !r.salvo && /digitado errado/.test(r.msgs[0]) && /P2/.test(r.msgs[0]));
+  // P1…P4 de hora em hora (a massa é o ponto mais quente); às 12h o P3 passa de 40 °C; às 13h o P4 mostra OFF (em branco)
+  const leituras = [[10, 82, [31, 34, 36, 33], 17.1], [11, 88, [33, 38, 37, 35], 16.0], [12, 92, [35, 39, 41, 38], 15.0], [13, 90, [34, 37, 39, ''], 14.1]];
+  let toastMassa = '';
+  for (const [h, ar, ps, u] of leituras) { const rr = await F('gr-leitura', L.id, {hora: '00:30', tAr: String(ar), p_P1: String(ps[0]), p_P2: String(ps[1]), p_P3: String(ps[2]), p_P4: String(ps[3]), umidade: vir(u)}); if (h === 12) toastMassa = rr.toast; const lt = L.leituras.at(-1); lt.em = `2026-03-10T${h}:00`; L.leituras.sort((a, b) => a.em.localeCompare(b.em)); }
+  const l12 = L.leituras.find(x => x.em.endsWith('12:00')), l13 = L.leituras.find(x => x.em.endsWith('13:00'));
+  T('LEI-03', 'Leitura', 'Guarda os 4 pontos, usa o mais quente como temperatura da massa e diz em linguagem simples qual ponto passou do limite', 'massa 41 °C no P3 • aviso cita P3 e o limite de 40 °C', `massa ${l12?.tMassa} °C no ${l12?.pontoQuente} • ${toastMassa.replace('[!] ', '')}`,
+    l12?.tMassa === 41 && l12.pontoQuente === 'P3' && Object.keys(l12.pontos).length === 4 && /P3 com 41 °C/.test(toastMassa) && /limite de 40 °C/.test(toastMassa));
+  T('LEI-04', 'Leitura', 'Ponto mostrando OFF fica em branco e não atrapalha: a massa é o maior dos outros', 'P4 vazio • massa 39 °C (P3)', `P4 ${l13?.pontos?.P4 ?? 'vazio'} • massa ${l13?.tMassa} °C (${l13?.pontoQuente})`, l13 && l13.pontos.P4 == null && l13.tMassa === 39 && l13.pontoQuente === 'P3');
   save();
   const avs = L.leituras.map(x => x.aval?.find(a => a.ponto === 'massa_graos')?.status);
   T('SEC-06', 'Secador', 'Massa de soja (grão) comparada ao limite de 40 °C (Embrapa): 36, 38, 41 e 39 °C', 'OK, OK, FORA, OK', avs.map(s => s === 'FORA_DO_PADRAO' ? 'FORA' : s).join(', '), avs.join() === 'OK,OK,FORA_DO_PADRAO,OK');
+  const htmlLote = VIEWS.graos('lote/' + L.id);
+  T('LEI-05', 'Leitura', 'Planilha de secagem mostra P1 a P4, a massa máxima e a situação de cada hora', 'colunas P1…P4 • "Massa acima de 40 °C (P3)"', `${['P1', 'P2', 'P3', 'P4'].every(p => htmlLote.includes(`>${p}</th>`)) ? 'colunas P1…P4' : 'faltam colunas'} • ${/Massa acima de 40 °C \(P3\)/.test(htmlLote) ? 'situação com P3' : 'sem situação'}`, ['P1', 'P2', 'P3', 'P4'].every(p => htmlLote.includes(`>${p}</th>`)) && /Massa acima de 40 °C \(P3\)/.test(htmlLote));
   const prev = calcSecagem({...L, fim: null});
   const ritmo = (14.1 - 15.0) / -1, faltam = (14.1 - 13) / ritmo;
   T('SEC-07', 'Secador', 'Previsão de término pelo ritmo das duas últimas leituras (15,0% → 14,1% em 1 h; meta 13%)', `${br(ritmo)} ponto/h • chega ~${String(13 + Math.floor(faltam)).padStart(2, '0')}:${String(Math.round((faltam % 1) * 60)).padStart(2, '0')}`, prev.previsao?.fim ? `${br(prev.previsao.ritmo)} ponto/h • chega ~${String(prev.previsao.fim.getHours()).padStart(2, '0')}:${String(prev.previsao.fim.getMinutes()).padStart(2, '0')}` : 'sem previsão', perto(prev.previsao?.ritmo, ritmo) && prev.previsao.fim.getHours() === 14 && Math.abs(prev.previsao.fim.getMinutes() - Math.round((faltam % 1) * 60)) <= 1);
