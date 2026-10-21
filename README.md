@@ -4,6 +4,11 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.49.0-beta1` — **Mais prático e mais confiável**:
+- **Avaliações da lavoura** no talhão (agrônomo e produtor): **estande** (plantas contadas em alguns pontos → plantas por metro, por m² e por hectare, variação entre pontos e % da população planejada) e **estimativa de produtividade** pelos componentes da planta (soja: plantas/m² × vagens × grãos por vagem × PMG; milho: espigas/ha × fileiras × grãos por fileira × PMG), em sc/ha e sacas no talhão, com perdas de colheita opcionais e comparação com o que foi colhido. Histórico por talhão.
+- **Moega mais simples**: o romaneio mostra só o dia a dia (dono, talhão, produto, data, placa, pesos, umidade, impureza e destino); padrão do contrato, tabela da cooperativa, quebra técnica, safra, contraprova e observações ficam em “Contrato e descontos”, e o padrão em uso aparece no topo do formulário. Nome do terceiro só aparece para carga de terceiro, talhão só para grão próprio.
+- **Teste automático a cada mudança**: a bateria de grãos (94 casos pelos formulários) roda no GitHub junto com os testes de regras.
+
 `0.48.0-beta1` — **Secador mais simples** (nenhuma função removida):
 - Tela do Secador virou um **cartão de comando por secador**: o que está acontecendo (umidade atual e meta, massa e ponto mais quente, tempo, previsão de término), **o próximo passo** (“Próxima leitura às 16:36” ou “Faça a leitura agora — a última foi há 1 h 15 min”) e o botão certo em destaque (+ Leitura, ou Finalizar quando chega à meta). Limpeza e sensores no rodapé do cartão; secagens concluídas recolhidas.
 - Formulários com só o essencial: iniciar secagem (produto, destino, umidade final, carga, umidade de entrada), leitura (hora, visores, umidade) e finalizar (umidade final e silo). Combustível, energia, lote de semente, termômetro portátil e grão da descarga ficam em “Mais opções”. “Qual cultura” só aparece quando o produto é “Outro”.
