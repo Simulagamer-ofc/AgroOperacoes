@@ -4,7 +4,9 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.54.0-beta1` — **Menu reorganizado** (nenhuma função retirada): Campo (Operações, Talhões, MercaClima, Pragas e doenças, Aplicações), Máquinas (Máquinas e manutenção, Combustível, Aferição), Grãos e sementes, Gestão (Estoque, Financeiro, Produção e margem, Mão de obra, Relatórios) e o grupo novo **Configurações** no fim, que começa fechado (Cadastros, Catálogo de máquinas, Catálogo de pontas, Referências técnicas). **Chuvas** sai do menu e abre pelo MercaClima (“Ver todas”), com botão “← MercaClima”; o “+” do celular continua registrando chuva.
+`0.55.0-beta1` — **Nova tela inicial para começar o dia.** No celular: saudação, **clima em destaque** (temperatura de agora, chuva, umidade, vento, horário para pulverizar e “Detalhar no MercaClima”), **Resumo de hoje** (em andamento e para hoje, com atrasadas), **Operações do dia** (as 3 principais com Iniciar/Concluir), **Acesso rápido** (conforme a função), **Atenção no campo** (alertas do clima e pendências urgentes) e o botão **Novo lançamento**. No computador: clima em cima, operações à esquerda e atenção no campo à direita. Fazenda sem dados mostra **Prepare a fazenda** (talhões, máquinas, estoque). Os demais avisos ficam no **sino** (tela Avisos e pendências).
+
+Anterior: `0.54.0-beta1` — **Menu reorganizado** (nenhuma função retirada): Campo (Operações, Talhões, MercaClima, Pragas e doenças, Aplicações), Máquinas (Máquinas e manutenção, Combustível, Aferição), Grãos e sementes, Gestão (Estoque, Financeiro, Produção e margem, Mão de obra, Relatórios) e o grupo novo **Configurações** no fim, que começa fechado (Cadastros, Catálogo de máquinas, Catálogo de pontas, Referências técnicas). **Chuvas** sai do menu e abre pelo MercaClima (“Ver todas”), com botão “← MercaClima”; o “+” do celular continua registrando chuva.
 
 Anterior: `0.53.2-beta1` — Menu lateral sem a seção **“Mais usados”** (repetia telas que já estão no menu e poluía a lista). Os grupos que abrem e fecham continuam.
 

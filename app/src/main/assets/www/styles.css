@@ -876,3 +876,76 @@ tr.clickable{cursor:pointer} tr.clickable:hover td{background:rgba(23,135,212,.0
 @media (max-width:900px){.clima-tela{grid-template-columns:1fr}.mt-tela .mt-mapa{height:min(55vh,460px)}}
 .clima-curto .clima-risco small{display:none}.clima-curto .clima-risco{padding:6px 10px}
 .clima-curto .mt-alerta,.clima-tela .mt-alerta{display:none!important}
+/* Tela inicial: clima do dia + operações em andamento e programadas */
+.ini{display:grid;gap:14px;max-width:1280px;grid-template-columns:1fr;grid-template-areas:"saud" "clima" "principal" "lado"}
+.ini-saud{grid-area:saud;margin:2px 2px 0}.ini-saud h2{margin:0;font-size:1.45rem}.ini-saud p{margin:3px 0 0;color:var(--muted);font-size:.92rem}
+.ini-clima{grid-area:clima}.ini-principal{grid-area:principal;min-width:0}.ini-lado{grid-area:lado;display:grid;gap:14px;align-content:start;min-width:0}
+.ini .hoje-clima{margin:0}
+.ini-card{padding:16px 18px;margin:0}
+@media(min-width:1000px){.ini{grid-template-columns:minmax(0,1.65fr) minmax(300px,1fr);grid-template-areas:"saud saud" "clima clima" "principal lado"}}
+.ini-vazio{display:grid;justify-items:center;text-align:center;gap:4px;padding:22px 10px 10px}
+.ini-vazio-ic{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:1.6rem;background:var(--bg);border:1px solid var(--line);margin-bottom:6px}
+.ini-vazio strong{font-size:1rem}.ini-vazio small{color:var(--muted);max-width:340px;line-height:1.4}.ini-vazio button{margin-top:10px}
+.ini-urgentes .ini-vazio-ic{color:var(--destaque);background:rgba(36,166,114,.14);border-color:rgba(36,166,114,.35)}
+.ini-urg{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid var(--line);color:var(--text);padding:10px 0}
+.ini-urg:last-of-type{border-bottom:0}.ini-urg strong{display:block;font-size:.92rem}.ini-urg small{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}
+.ini-prog{height:7px;background:var(--bg);border-radius:7px;overflow:hidden;margin:8px 0 6px}.ini-prog span{display:block;height:100%;background:var(--green);border-radius:7px}
+.ini-passo{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.ini-passo:last-child{border-bottom:0}
+.ini-passo-n{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:.9rem}
+.ini-passo.feito .ini-passo-n{background:var(--green);border-color:var(--green);color:#fff}.ini-passo strong{display:block;font-size:.93rem}.ini-passo small{display:block;color:var(--muted);font-size:.8rem}
+.ini-passo button{padding:8px 12px;border-radius:9px}
+.ini-ops-topo{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:4px}.ini-card h3{margin:0;font-size:1.05rem}
+.ini-ops-topo h3{margin:0;font-size:1.05rem}.ini-ops-topo small{color:var(--muted);font-size:.85rem}
+.ini-ops-topo .btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.ini-grupo{display:flex;align-items:center;gap:8px;margin:14px 0 2px;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ini-grupo span{background:var(--bg);border-radius:999px;padding:1px 8px;font-size:.75rem;color:var(--text)}
+.ini-grupo.andamento{color:var(--destaque)}.ini-grupo.atrasada{color:var(--red)}
+.ini-op{display:grid;grid-template-columns:6px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.ini-op:last-child{border-bottom:0}
+.ini-barra{align-self:stretch;border-radius:6px;min-height:36px}
+.ini-op strong{display:block;font-size:.95rem}.ini-op small{display:block;color:var(--muted);font-size:.83rem;margin-top:2px}
+.ini-chuva{display:inline-block;margin-top:5px;font-size:.75rem;padding:3px 8px}
+.ini-mais{margin-top:8px;color:var(--blue);background:transparent;border:0;padding:6px 0;font-weight:600}
+.ini-atalhos{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+@media(min-width:761px){.ini .clima-curto .clima-abrir{width:auto;display:block;margin:8px 0 0 auto;padding:9px 16px}}
+@media(max-width:760px){.ini-op{grid-template-columns:6px 1fr}.ini-op .row-actions{grid-column:2;justify-content:flex-start}.ini-op .row-actions button{min-height:40px;padding:8px 14px}.ini-ops-topo .btn-row{width:100%}.ini-ops-topo .btn-row button{flex:1}}
+/* Tela inicial — organização: celular em blocos (saudação, clima, resumo, operações, acesso rápido, atenção, novo lançamento); computador em duas colunas */
+.ini{display:flex;flex-direction:column;gap:18px;max-width:1280px;grid-template-areas:none}
+.ini>*{margin:0;min-width:0}
+.ini-tit{margin:0 0 10px;font-size:1.12rem}.ini-tit-linha{display:flex;justify-content:space-between;align-items:baseline}.ini-tit-linha .link{background:transparent;border:0;color:var(--blue);font-weight:600}
+.so-computador{display:none}
+.ini-clima-hero{padding:16px 18px;background:linear-gradient(135deg,color-mix(in srgb,var(--green) 34%,var(--panel)),var(--panel) 75%);border-color:color-mix(in srgb,var(--green) 40%,var(--line))}
+.ini-clima-local{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:.88rem}.ini-clima-local span{white-space:nowrap}
+.ini-clima-agora{display:flex;align-items:center;gap:14px;margin:6px 0 12px}.ini-clima-ic{font-size:3rem;line-height:1}
+.ini-clima-agora b{display:block;font-size:2.9rem;line-height:1;font-weight:800;font-variant-numeric:tabular-nums}.ini-clima-agora span{color:var(--text);font-size:1rem}
+.ini-clima-met{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);padding-top:10px}
+.ini-clima-met div{padding:0 8px;border-left:1px solid var(--line)}.ini-clima-met div:first-child{border-left:0;padding-left:0}
+.ini-clima-met small{display:block;color:var(--muted);font-size:.8rem}.ini-clima-met b{font-size:1.15rem}
+.ini-clima-rodape{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.ini-clima-rodape small{font-size:.85rem}.ini-clima-rodape small.ok{color:var(--destaque)}.ini-clima-rodape small.nao{color:var(--orange)}
+.ini-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ini-tile .hoje-ir{display:none}
+.ini-tile{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center;padding:14px;text-align:left;color:var(--text);margin:0}
+.ini-tile-ic{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--green) 18%,transparent);color:var(--destaque)}
+.ini-tile small{display:block;color:var(--muted);font-size:.8rem}.ini-tile b{display:block;font-size:1.8rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.ini-tile em{display:block;font-style:normal;color:var(--muted);font-size:.75rem}.ini-tile em.nao{color:var(--red)}
+.ini-atalho strong{font-size:.95rem}
+.ini-card{padding:4px 16px}
+.ini-atencao #climaRiscos .clima-risco,.ini-urg,.ini-ok{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;width:100%;text-align:left;color:var(--text);padding:12px 14px;margin:0 0 8px;border-radius:14px;border:1px solid color-mix(in srgb,var(--orange) 45%,var(--line));background:color-mix(in srgb,var(--orange) 12%,var(--panel))}
+.ini-atencao #climaRiscos .clima-risco{grid-template-columns:auto 1fr;border-left-width:1px}
+.ini-atencao #climaRiscos .clima-risco.red,.ini-urg.red{border-color:color-mix(in srgb,var(--red) 50%,var(--line));background:color-mix(in srgb,var(--red) 12%,var(--panel))}
+.ini-atencao #climaRiscos .clima-risco>span,.ini-urg-ic{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:1.15rem;background:color-mix(in srgb,var(--orange) 25%,transparent)}
+.ini-urg.red .ini-urg-ic,.ini-atencao #climaRiscos .clima-risco.red>span{background:color-mix(in srgb,var(--red) 25%,transparent)}
+.ini-urg strong,.ini-ok strong{display:block;font-size:.95rem}.ini-urg small,.ini-ok small{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}
+.ini-ok{grid-template-columns:auto 1fr;border-color:color-mix(in srgb,var(--green) 40%,var(--line));background:color-mix(in srgb,var(--green) 10%,var(--panel))}.ini-ok .ini-urg-ic{background:color-mix(in srgb,var(--green) 25%,transparent);color:var(--destaque)}
+.ini-ok[hidden]{display:none}
+.ini-lancar{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;font-size:1.05rem;border-radius:14px}
+.ini-prep:empty{display:none}
+@media(max-width:760px){body:has(.app.nx-home) #fabBtn{display:none}.ini-clima-rodape button{width:100%}}
+@media(min-width:761px){
+  .so-celular{display:none!important}.so-computador{display:block}
+  .ini{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(300px,1fr);grid-template-areas:"saud saud" "clima clima" "principal atencao" "principal prep" "principal .";grid-template-rows:auto auto auto auto 1fr;gap:16px}
+  .ini-saud{grid-area:saud}.ini>.ini-clima,.ini-clima-hero{grid-area:clima}.ini-principal{grid-area:principal}.ini-atencao{grid-area:atencao}.ini-prep{grid-area:prep}
+  .ini-clima-hero{display:grid;grid-template-columns:auto 1fr;grid-template-areas:"local local" "agora met" "rodape rodape";column-gap:30px;align-items:center}
+  .ini-clima-local{grid-area:local}.ini-clima-agora{grid-area:agora;margin:6px 0}.ini-clima-met{grid-area:met;border-top:0;padding-top:0}.ini-clima-rodape{grid-area:rodape}
+}
