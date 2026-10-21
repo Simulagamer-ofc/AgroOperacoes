@@ -75,15 +75,69 @@ function iniSaudacao() {
   return `<header class="ini-saud"><h2>${esc(oi)}${nome && !nome.includes('@') ? ', ' + esc(nome) : ''}</h2><p>${esc([fazenda, data].filter(Boolean).join(' • '))}</p></header>`;
 }
 
-// Pendências urgentes: só o vermelho (e revisão vencida); operação atrasada já aparece em Operações
-function iniUrgentes() {
-  const lista = (typeof alerts === 'function' ? alerts() : []).filter(a => !/^Operação atrasada/.test(a.title) && (a.color === 'red' || /^Revisão vencida/.test(a.title)));
-  const total = typeof alerts === 'function' ? alerts().length : 0;
-  const linha = a => `<button type="button" class="ini-urg" data-act="nav" data-id="${esc(a.route || 'avisos')}"><span class="alert-icon ${a.color}" aria-hidden="true">${esc(a.icon || '!')}</span><span><strong>${esc(a.title)}</strong><small>${esc(a.text)}</small></span><span class="hoje-ir" aria-hidden="true">›</span></button>`;
-  return `<section class="card panel ini-card ini-urgentes"><div class="ini-ops-topo"><div><h3>Pendências urgentes</h3><small>${lista.length ? `${lista.length} ${lista.length === 1 ? 'precisa' : 'precisam'} de atenção hoje` : 'Nada urgente'}</small></div></div>
-    ${lista.length ? lista.slice(0, 4).map(linha).join('') : iniVazio('✓', 'Tudo em dia', 'Nenhuma pendência urgente na fazenda.')}
-    ${total ? `<button type="button" class="link ini-mais" data-act="nav" data-id="avisos">Ver todos os avisos (${total}) ›</button>` : ''}</section>`;
+// Clima em destaque: temperatura de agora, condição, chuva/umidade/vento, horário para pulverizar e próxima chuva
+function iniClima() {
+  const loc = typeof localDaFazenda === 'function' ? localDaFazenda() : null, c = typeof lerClima === 'function' ? lerClima() : null;
+  const h = c?.dados?.hourly, d = c?.dados?.daily;
+  if (!loc || !h?.time || !d?.time) return `<div class="ini-clima">${typeof cartaoClima === 'function' ? cartaoClima() : ''}</div>`;
+  const t = today(), hora = new Date().getHours(), i = Math.max(0, h.time.indexOf(`${t}T${String(hora).padStart(2, '0')}:00`)), i0 = Math.max(0, d.time.indexOf(t));
+  const temp = h.temperature_2m?.[i], ur = h.relative_humidity_2m?.[i], vento = h.wind_speed_10m?.[i], nuvem = h.cloud_cover?.[i] ?? 0, mm = h.precipitation?.[i] || 0;
+  const noite = hora < 6 || hora >= 19, trov = (h.trovoada?.[i] || 0) >= 0.5;
+  const [ic, cond] = trov ? ['⛈️', 'Trovoada'] : mm >= 0.3 ? ['🌧️', 'Chuva'] : nuvem >= 80 ? ['☁️', 'Nublado'] : nuvem >= 35 ? [noite ? '☁️' : '⛅', 'Parcialmente nublado'] : [noite ? '🌙' : '☀️', noite ? 'Céu limpo' : 'Ensolarado'];
+  const chuvaProb = Math.round(d.precipitation_probability_max?.[i0] ?? 0);
+  const jan = typeof janelasDoDia === 'function' ? janelasDoDia(c.dados, d.time[i0]) : {janelas: []};
+  const ch = typeof horariosChuva === 'function' ? horariosChuva(c.dados, t) : [];
+  const prox = ch.length ? (ch[0].agora ? 'chovendo agora' : `chuva às ${hh2(ch[0].ini)}`) : (() => { const k = d.precipitation_sum.findIndex((x, j) => j > i0 && x >= 1); return k > 0 ? `chuva ${typeof nomeDiaCurto === 'function' ? nomeDiaCurto(d.time[k]) : fmtDate(d.time[k])}` : 'sem chuva prevista'; })();
+  const pulv = jan.janelas.length ? 'Pulverizar ' + jan.janelas.map(([x, y]) => `${hh(x)}–${hh(y)}`).join(', ') : 'Sem janela para pulverizar';
+  const fazenda = (typeof nv !== 'undefined' && nv?.fazenda?.name) || db.settings.farm || 'Fazenda';
+  return `<section class="card ini-clima ini-clima-hero" id="hojeClima">
+    <div class="ini-clima-local">📍 ${esc(fazenda)} <span>Hoje ${Math.round(d.temperature_2m_max[i0])}° / ${Math.round(d.temperature_2m_min[i0])}°</span></div>
+    <div class="ini-clima-agora"><span class="ini-clima-ic" aria-hidden="true">${ic}</span><div><b>${temp != null ? Math.round(temp) + '°' : '—'}</b><span>${esc(cond)}</span></div></div>
+    <div class="ini-clima-met"><div><small>Chuva</small><b>${chuvaProb}%</b></div><div><small>Umidade</small><b>${ur != null ? Math.round(ur) + '%' : '—'}</b></div><div><small>Vento</small><b>${vento != null ? Math.round(vento) + ' km/h' : '—'}</b></div></div>
+    <div class="ini-clima-rodape"><small class="${jan.janelas.length ? 'ok' : 'nao'}">${esc(pulv)} • ${esc(prox)}</small>
+      <button type="button" class="secondary" data-act="nav" data-id="clima">Detalhar no MercaClima ›</button></div></section>`;
 }
+
+// Atenção no campo: alertas do clima que atrapalham operações + pendências urgentes (vermelho e revisão vencida)
+function iniAtencao() {
+  const todos = typeof alerts === 'function' ? alerts() : [];
+  const lista = todos.filter(a => !/^Operação atrasada/.test(a.title) && (a.color === 'red' || /^Revisão vencida/.test(a.title)));
+  const riscos = typeof riscosClima === 'function' && typeof htmlRiscos === 'function' ? riscosClima() : [];
+  const linha = a => `<button type="button" class="ini-urg ${a.color === 'red' ? 'red' : 'orange'}" data-act="nav" data-id="${esc(a.route || 'avisos')}"><span class="ini-urg-ic" aria-hidden="true">${esc(a.icon || '!')}</span><span><strong>${esc(a.title)}</strong><small>${esc(a.text)}</small></span><span class="hoje-ir" aria-hidden="true">›</span></button>`;
+  const nada = !lista.length && !riscos.length;
+  return `<section class="ini-bloco ini-atencao"><h3 class="ini-tit">Atenção no campo</h3>
+    <div id="climaRiscos">${riscos.length ? htmlRiscos(riscos) : ''}</div>
+    ${lista.slice(0, Math.max(1, 3 - riscos.length)).map(linha).join('')}
+    <div class="card ini-ok" ${nada ? '' : 'hidden'}><span class="ini-urg-ic" aria-hidden="true">✓</span><span><strong>Tudo em dia</strong><small>Nenhum alerta do clima nem pendência urgente.</small></span></div>
+    ${todos.length ? `<button type="button" class="link ini-mais" data-act="nav" data-id="avisos">Ver todos os avisos (${todos.length}) ›</button>` : ''}</section>`;
+}
+
+// Resumo de hoje (celular): dois números grandes
+function iniResumo() {
+  const t = today(), ops = db.operations;
+  const and = ops.filter(o => o.status === 'Em andamento'), hoje = ops.filter(o => o.status === 'Programada' && o.date === t), atr = ops.filter(o => o.status === 'Programada' && o.date && o.date < t);
+  const tile = (ic, rot, n, sub, cls = '') => `<button type="button" class="card ini-tile" data-act="nav" data-id="operacoes"><span class="ini-tile-ic" aria-hidden="true">${iconeLinha(ic, 24)}</span><span><small>${rot}</small><b>${String(n).padStart(2, '0')}</b><em class="${cls}">${esc(sub)}</em></span><span class="hoje-ir" aria-hidden="true">›</span></button>`;
+  return `<section class="ini-bloco ini-resumo so-celular"><h3 class="ini-tit">Resumo de hoje</h3><div class="ini-tiles">
+    ${tile('operacoes', 'Em andamento', and.length, and.length ? 'rodando agora' : 'nada rodando')}
+    ${tile('lista', 'Para hoje', hoje.length + atr.length, atr.length ? `${atr.length} ${atr.length === 1 ? 'atrasada' : 'atrasadas'}` : 'nenhuma atrasada', atr.length ? 'nao' : '')}</div></section>`;
+}
+
+// Operações do dia (celular): só as 3 mais importantes — em andamento, atrasadas e de hoje
+function iniOpsCurtas() {
+  const t = today(), ops = db.operations, porData = (a, b) => String(a.date || '').localeCompare(b.date || '') || String(a.time || '').localeCompare(b.time || '');
+  const lista = [...ops.filter(o => o.status === 'Em andamento').map(o => [o, 'andamento']), ...ops.filter(o => o.status === 'Programada' && o.date && o.date < t).sort(porData).map(o => [o, 'atrasada']), ...ops.filter(o => o.status === 'Programada' && o.date === t).sort(porData).map(o => [o, 'hoje'])];
+  const corpo = lista.length ? `<div class="card ini-card">${lista.slice(0, 3).map(([o, tipo]) => iniLinhaOp(o, tipo)).join('')}${lista.length > 3 ? `<button type="button" class="link ini-mais" data-act="nav" data-id="operacoes">Ver todas (${lista.length}) ›</button>` : ''}</div>`
+    : `<div class="card ini-card">${iniVazio('🚜', 'Nenhuma operação para hoje', 'Programe aqui o trabalho do dia.', {act: 'op-new', label: '+ Programar operação'})}</div>`;
+  return `<section class="ini-bloco ini-opscurtas so-celular"><div class="ini-tit-linha"><h3 class="ini-tit">Operações do dia</h3>${lista.length ? '<button type="button" class="link" data-act="op-new">+ Programar</button>' : ''}</div>${corpo}</section>`;
+}
+
+// Acesso rápido (celular): 4 atalhos conforme a função
+function iniAcesso() {
+  const itens = [['operacoes', 'Operações'], ['maquinas', 'Manutenção'], ['clima', 'MercaClima'], ['relatorios', 'Relatórios'], ['graos', 'Grãos'], ['estoque', 'Estoque']].filter(([r]) => iniPode(r)).slice(0, 4);
+  if (!itens.length) return '';
+  return `<section class="ini-bloco ini-acesso so-celular"><h3 class="ini-tit">Acesso rápido</h3><div class="ini-tiles">${itens.map(([r, rot]) => `<button type="button" class="card ini-tile ini-atalho" data-act="nav" data-id="${r}"><span class="ini-tile-ic" aria-hidden="true">${iconeLinha(r, 24)}</span><strong>${rot}</strong><span class="hoje-ir" aria-hidden="true">›</span></button>`).join('')}</div></section>`;
+}
+ACTIONS['ini-lancar'] = () => { if (typeof abrirAtalhos === 'function') abrirAtalhos(); else ACTIONS['op-new']?.(); };
 
 // Fazenda começando: passos que faltam (somem sozinhos quando cadastrados)
 function iniPreparar() {
@@ -107,13 +161,23 @@ function iniAtalhosFuncao() {
 }
 
 const inicioDepois = VIEWS.inicio.after;
+// Celular: saudação, clima, resumo, operações do dia, acesso rápido, atenção no campo, preparar a fazenda e “Novo lançamento”.
+// Computador: clima em cima; operações à esquerda; atenção no campo e preparar a fazenda à direita.
 VIEWS.inicio = () => {
-  const clima = typeof cartaoClima === 'function' ? cartaoClima() : '';
-  const principal = iniPode('operacoes') ? painelOperacoesDia() : iniAtalhosFuncao();
-  return `<div class="ini">${iniSaudacao()}<div class="ini-clima">${clima}</div>
-    <div class="ini-principal">${principal}</div><aside class="ini-lado">${iniUrgentes()}${iniPreparar()}</aside></div>`;
+  const ops = iniPode('operacoes');
+  return `<div class="ini">${iniSaudacao()}${iniClima()}
+    ${ops ? iniResumo() + iniOpsCurtas() : ''}
+    <div class="ini-principal so-computador">${ops ? painelOperacoesDia() : iniAtalhosFuncao()}</div>
+    ${ops ? iniAcesso() : `<div class="so-celular ini-bloco">${iniAtalhosFuncao()}</div>`}
+    ${iniAtencao()}<div class="ini-prep">${iniPreparar()}</div>
+    <button type="button" class="primary ini-lancar so-celular" data-act="ini-lancar">${iconeLinha('mais', 22)} Novo lançamento</button></div>`;
 };
-VIEWS.inicio.after = (...a) => inicioDepois?.(...a);
+VIEWS.inicio.after = (...a) => {
+  inicioDepois?.(...a);
+  // O aviso de tempestade chega depois (REDEMET): quando aparece, some o “Tudo em dia”
+  const box = document.getElementById('climaRiscos'), ok = document.querySelector('.ini-atencao .ini-ok');
+  if (box && ok) new MutationObserver(() => { if (box.children.length) ok.hidden = true; }).observe(box, {childList: true});
+};
 
 // ---------- Avisos e pendências (o sino): o que antes ficava no “Hoje” da tela inicial ----------
 VIEWS.avisos = () => {
