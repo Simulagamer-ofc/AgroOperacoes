@@ -1,11 +1,12 @@
-const CACHE = "agro-ops-v100";
+// Versão nova: baixa todos os arquivos direto do servidor (cache "reload"), sem reaproveitar cópias antigas do navegador
+const CACHE = "agro-ops-v101";
 const ASSETS = ["./", "index.html", "styles.css", "splash.js", "img/nexus-globo.jpg", "app.js", "lib/jspdf.umd.min.js", "relatorio-pdf.js", "grupo.js", "icones.js", "avaliador.js", "inteligencia.js", "afericao.js", "inspecao.js", "secagem.js", "gastos.js", "estoque.js", "ubs.js", "combustivel.js", "financeiro.js", "producao.js", "orcamento.js", "lib/qrcode.js", "lib/webp/webp_enc.js", "lib/webp/webp_enc.wasm", "rastreio.js", "campo.js", "nfe.js", "sync.js", "nuvem.js", "mapa.js", "lcdpr.js", "graficos.js", "automacao.js", "alertas.js", "comparativo.js", "graos.js", "referencias.js", "fotos.js", "agronomo.js", "lavoura.js", "mapa-tempo.js", "clima.js", "lib/leaflet/leaflet.js", "lib/leaflet/leaflet.css", "visual.js", "catalogo.js", "maqconfig.js", "pontas.js", "dados/pontas.json", "dados/regras-afericao.json", "dados/catalogo-modelos.json", "dados/finame.json", "dados/marcas.json", "manifest.webmanifest", "icon.svg", "img/centro-operacoes.jpg", "img/logo-nexus.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"];
-self.addEventListener("install", event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting())));
+self.addEventListener("install", event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS.map(a => new Request(a, {cache: "reload"})))).then(() => self.skipWaiting())));
 self.addEventListener("activate", event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim())));
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET" || !event.request.url.startsWith(self.location.origin)) return;
   // Cache primeiro (abre rápido mesmo com sinal fraco); a cópia é atualizada pela rede em segundo plano para a próxima abertura
-  const rede = fetch(event.request).then(response => {
+  const rede = fetch(event.request.mode === "navigate" ? event.request.url : event.request, {cache: "no-cache"}).then(response => {
     if (!response.ok) return response;
     const copy = response.clone();
     return caches.open(CACHE).then(cache => cache.put(event.request, copy)).then(() => response, () => response);
