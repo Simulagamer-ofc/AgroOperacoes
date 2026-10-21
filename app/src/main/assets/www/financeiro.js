@@ -33,11 +33,11 @@ function contaForm(tipo, c = {}) {
       {k: 'valor', label: nova ? 'Valor total (R$)' : 'Valor (R$)', type: 'number', min: 0, required: true},
       ...(nova ? [{k: 'parcelas', label: 'Parcelas', type: 'number', min: 1, required: true}] : []),
       {k: 'vencimento', label: nova ? 'Vencimento (1ª parcela)' : 'Vencimento', type: 'date', required: true},
-      {k: 'doc', label: 'Documento', placeholder: 'Nota, boleto, contrato'},
+      {k: 'doc', label: 'Documento', placeholder: 'Nota, boleto, contrato', mais: true},
       ...(pagar ? [{k: 'machineId', label: 'Máquina', type: 'select', options: () => db.machines.map(m => ({value: m.id, label: m.name})), labelAusente: maquinaAusente},
         {k: 'fieldId', label: 'Talhão', type: 'select', options: fieldOptions}, {k: 'season', label: 'Safra', placeholder: 'Ex.: 2026/27'},
         ...(c.expenseId ? [] : [{k: 'lancarGasto', label: 'Lançar como gasto ao pagar', type: 'select', options: ['Sim', 'Não'], required: true, hint: 'Use “Não” se o gasto já foi lançado (ex.: compra no estoque).'}])] : [{k: 'season', label: 'Safra', placeholder: 'Ex.: 2026/27'}]),
-      {k: 'notas', label: 'Observações', type: 'textarea'}
+      {k: 'notas', label: 'Observações', type: 'textarea', mais: true}
     ],
     onSubmit: v => {
       if (!(v.valor > 0)) return 'Informe um valor maior que zero';

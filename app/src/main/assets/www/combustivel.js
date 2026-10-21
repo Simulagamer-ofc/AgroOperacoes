@@ -50,11 +50,11 @@ function abastecimentoForm(machineId) {
       {k: 'hours', label: 'Horímetro no abastecimento (h)', type: 'number', min: 0, required: true, hint: m0 ? `Último horímetro: ${num(m0.hours)} h` : ''},
       {k: 'cheio', label: 'Tanque cheio?', type: 'select', options: ['Sim', 'Não'], required: true},
       {k: 'origem', label: 'Origem do combustível', type: 'select', options: [{value: 'estoque', label: 'Tanque da fazenda (sai do estoque)'}, {value: 'posto', label: 'Posto / compra direta'}], required: true},
-      {k: 'itemId', label: 'Item do estoque (tanque da fazenda)', type: 'select', options: () => diesel.map(s => ({value: s.id, label: `${s.name} — ${num(s.qty)} ${s.unit}`})), full: true},
-      {k: 'value', label: 'Valor pago (R$) — compra no posto', type: 'number', min: 0},
-      {k: 'gasto', label: 'Lançar compra no posto em Controle de gastos', type: 'select', options: ['Sim', 'Não'], required: true},
-      {k: 'operator', label: 'Operador'},
-      {k: 'notes', label: 'Observações', type: 'textarea'}
+      {k: 'itemId', label: 'Item do estoque (tanque da fazenda)', mostrarSe: ['origem', 'estoque'], type: 'select', options: () => diesel.map(s => ({value: s.id, label: `${s.name} — ${num(s.qty)} ${s.unit}`})), full: true},
+      {k: 'value', label: 'Valor pago no posto (R$)', type: 'number', min: 0, mostrarSe: ['origem', 'posto']},
+      {k: 'gasto', label: 'Lançar em Controle de gastos', type: 'select', options: ['Sim', 'Não'], required: true, mostrarSe: ['origem', 'posto']},
+      {k: 'operator', label: 'Operador', mais: true},
+      {k: 'notes', label: 'Observações', type: 'textarea', mais: true}
     ],
     onSubmit: v => {
       const m = find('machines', v.machineId); if (!m) return 'Selecione a máquina';

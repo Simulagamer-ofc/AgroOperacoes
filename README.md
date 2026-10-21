@@ -4,6 +4,14 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.49.1-beta1` — **Formulários mais curtos, sem perder campo**: cada formulário mostra só o que vale para a escolha feita e deixa o resto em “Mais opções”.
+- Saída do silo (18 → 11 campos visíveis): silo de destino só na transferência; comprador e placa só na expedição; venda só para grão próprio; preço, safra e recebimento só se lançar a venda; vencimento só a prazo.
+- Gasto (13 → 8): parcelas e vencimento só a prazo; safra, documento e observações em “Mais opções”.
+- Abastecimento (11 → 8): item do estoque só para tanque da fazenda; valor e gasto só para posto.
+- Venda (10 → 7), conta a pagar (12 → 10), aplicação (13 → 10, nome do produto só sem item do estoque), monitoramento (12 → 10), operação (local só sem talhão; sementes só em plantio e beneficiamento), sensores do secador (P5 a P8 recolhidos).
+- Carga do secador sugerida pelas cargas da moega não dispara mais o aviso de “carga muito alta”.
+- Conferido com a fazenda completa lançada pelos formulários (288 lançamentos, nenhuma falha) e com a bateria de grãos (94/94).
+
 `0.49.0-beta1` — **Mais prático e mais confiável**:
 - **Avaliações da lavoura** no talhão (agrônomo e produtor): **estande** (plantas contadas em alguns pontos → plantas por metro, por m² e por hectare, variação entre pontos e % da população planejada) e **estimativa de produtividade** pelos componentes da planta (soja: plantas/m² × vagens × grãos por vagem × PMG; milho: espigas/ha × fileiras × grãos por fileira × PMG), em sc/ha e sacas no talhão, com perdas de colheita opcionais e comparação com o que foi colhido. Histórico por talhão.
 - **Moega mais simples**: o romaneio mostra só o dia a dia (dono, talhão, produto, data, placa, pesos, umidade, impureza e destino); padrão do contrato, tabela da cooperativa, quebra técnica, safra, contraprova e observações ficam em “Contrato e descontos”, e o padrão em uso aparece no topo do formulário. Nome do terceiro só aparece para carga de terceiro, talhão só para grão próprio.

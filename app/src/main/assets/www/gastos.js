@@ -32,12 +32,12 @@ function gastoForm(g = {}) {
       {k: 'supplier', label: 'Fornecedor'},
       {k: 'machineId', label: 'Máquina', type: 'select', options: () => db.machines.map(m => ({value: m.id, label: m.name}))},
       {k: 'fieldId', label: 'Talhão', type: 'select', options: fieldOptions},
-      {k: 'season', label: 'Safra', placeholder: 'Ex.: 2026/27'},
-      {k: 'doc', label: 'Documento', placeholder: 'Nº da nota ou recibo'},
+      {k: 'season', label: 'Safra', placeholder: 'Ex.: 2026/27', mais: true, hint: 'Vazio = safra do talhão na data.'},
+      {k: 'doc', label: 'Documento', placeholder: 'Nº da nota ou recibo', mais: true},
       // Só ao lançar: compra a prazo gera as parcelas em Financeiro → A pagar
       ...(g.id ? [] : [{k: 'pagamento', label: 'Pagamento', type: 'select', options: ['À vista', 'A prazo'], required: true},
-        {k: 'parcelas', label: 'Parcelas (se a prazo)', type: 'number', min: 1}, {k: 'vencimento', label: '1º vencimento (se a prazo)', type: 'date'}]),
-      {k: 'notes', label: 'Observações', type: 'textarea'}
+        {k: 'parcelas', label: 'Parcelas', type: 'number', min: 1, mostrarSe: ['pagamento', 'A prazo']}, {k: 'vencimento', label: '1º vencimento', type: 'date', mostrarSe: ['pagamento', 'A prazo']}]),
+      {k: 'notes', label: 'Observações', type: 'textarea', mais: true}
     ],
     onSubmit: v => {
       if (!(Number(v.value) > 0)) return 'Informe um valor maior que zero';

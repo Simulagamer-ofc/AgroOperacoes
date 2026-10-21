@@ -329,7 +329,7 @@ function iniciarSecagemForm(secadorId) {
       const meta = numOuU(v.umidadeMeta);
       if (meta == null || meta < 8 || meta > 18) return 'Informe a umidade final desejada, normalmente entre 12% e 14% (ex.: 13). É ela que o sistema usa para prever o fim da secagem.';
       // Carga em toneladas: 21300 digitado como t quase sempre era 21.300 kg
-      if (v.massaT > 500 && iniciarSecagemForm.avisoT !== v.massaT) { iniciarSecagemForm.avisoT = v.massaT; return `Carga de ${num(v.massaT)} t está muito alta. O campo é em TONELADAS: ${num(v.massaT)} kg = ${num(v.massaT / 1000, 1)} t. Corrija ou toque em iniciar de novo se for isso mesmo.`; }
+      if (v.massaT > 500 && Math.abs(v.massaT - Math.round(massa / 100) / 10) > 0.05 && iniciarSecagemForm.avisoT !== v.massaT) { iniciarSecagemForm.avisoT = v.massaT; return `Carga de ${num(v.massaT)} t está muito alta. O campo é em TONELADAS: ${num(v.massaT)} kg = ${num(v.massaT / 1000, 1)} t. Corrija ou toque em iniciar de novo se for isso mesmo.`; }
       if (numOuU(v.umidadeEntrada) != null && v.umidadeEntrada <= meta && iniciarSecagemForm.avisoU !== v.umidadeEntrada) { iniciarSecagemForm.avisoU = v.umidadeEntrada; return `Umidade de entrada ${n1(v.umidadeEntrada)}% já está abaixo da umidade final desejada (${n1(meta)}%). O grão úmido costuma entrar no secador entre 14% e 25%. Confira a amostra ou toque em iniciar de novo.`; }
       if (numOuU(v.umidadeEntrada) != null && (v.umidadeEntrada < 5 || v.umidadeEntrada > 40)) return `Umidade de entrada ${n1(v.umidadeEntrada)}% parece digitada errada. Confira o medidor.`;
       if (v.produto === 'outro' && !v.produtoNome) return 'Escreva qual é a cultura';
@@ -354,8 +354,8 @@ function sensoresForm(secadorId) {
       {k: 'temAr', label: 'Tem visor da temperatura do ar quente?', type: 'select', options: [{value: 'sim', label: 'Sim'}, {value: 'nao', label: 'Não'}]},
       {k: 'arNome', label: 'Nome do aparelho do ar quente', placeholder: 'Ex.: Entringer (Fockink)'},
       {k: 'alarmeNome', label: 'Nome do aparelho com os pontos P1, P2…', placeholder: 'Ex.: TSW Winckieel', full: true},
-      ...sc.pontos.flatMap(p => [{k: 'tipo_' + p.id, label: `${p.id} mede`, type: 'select', options: tipos}, {k: 'local_' + p.id, label: `${p.id} fica onde`, placeholder: 'Ex.: coluna, parte de baixo'}])],
-    submit: 'Salvar sensores',
+      ...sc.pontos.flatMap((p, i) => [{k: 'tipo_' + p.id, label: `${p.id} mede`, type: 'select', options: tipos, mais: i >= 4}, {k: 'local_' + p.id, label: `${p.id} fica onde`, placeholder: 'Ex.: coluna, parte de baixo', mais: i >= 4}])],
+    submit: 'Salvar sensores', maisRotulo: 'Pontos P5 a P8 (se o alarme tiver mais de 4)', 
     onSubmit: v => {
       const novo = {arNome: String(v.arNome || '').trim(), alarmeNome: String(v.alarmeNome || '').trim(), temAr: v.temAr, pontos: sc.pontos.map(p => ({id: p.id, tipo: v['tipo_' + p.id], local: String(v['local_' + p.id] || '').trim()}))};
       if (!novo.pontos.some(p => p.tipo !== 'nao') && v.temAr === 'nao') return 'Marque pelo menos um sensor';
@@ -455,14 +455,14 @@ function saidaSiloForm(siloId) {
       {k: 'tipo', label: 'Tipo', type: 'select', options: [{value: 'saida', label: 'Expedição / venda'}, {value: 'transferencia', label: 'Transferência para outro silo'}, {value: 'ajuste', label: 'Ajuste de estoque (quebra, conferência)'}], required: true},
       {k: 'date', label: 'Data', type: 'date', required: true}, {k: 'kg', label: 'Quantidade (kg)', type: 'number', required: true, hint: 'No ajuste, use negativo para baixar e positivo para somar.'},
       {k: 'dono', label: 'Grão de quem', type: 'select', options: [{value: 'proprio', label: 'Próprio'}, ...deps.map(d => ({value: 'terceiro|' + d, label: 'Terceiro — ' + d}))], required: true},
-      {k: 'destinoSiloId', label: 'Silo de destino (transferência)', type: 'select', options: silos.map(m => ({value: m.id, label: m.name}))},
-      {k: 'umidade', label: 'Umidade na expedição (%)', type: 'number', min: 0}, {k: 'impureza', label: 'Impureza na expedição (%)', type: 'number', min: 0},
-      {k: 'comprador', label: 'Comprador / destino'}, {k: 'placa', label: 'Placa'}, {k: 'motorista', label: 'Motorista'}, {k: 'doc', label: 'Nota fiscal / contrato'},
-      {k: 'lancarVenda', label: 'Lançar como venda (grão próprio)', type: 'select', options: [{value: 'sim', label: 'Sim — Produção e Financeiro'}, {value: 'nao', label: 'Não'}]},
-      {k: 'preco', label: 'Preço por saca (R$)', type: 'number', min: 0}, {k: 'season', label: 'Safra da venda'},
-      {k: 'recebimento', label: 'Recebimento', type: 'select', options: ['À vista', 'A prazo']}, {k: 'vencimento', label: 'Vencimento (a prazo)', type: 'date'},
-      {k: 'notes', label: 'Observações', type: 'textarea'}],
-    submit: 'Registrar',
+      {k: 'destinoSiloId', label: 'Silo de destino', mostrarSe: ['tipo', 'transferencia'], type: 'select', options: silos.map(m => ({value: m.id, label: m.name}))},
+      {k: 'umidade', label: 'Umidade na expedição (%)', type: 'number', min: 0, mais: true, mostrarSe: ['tipo', 'saida']}, {k: 'impureza', label: 'Impureza na expedição (%)', type: 'number', min: 0, mais: true, mostrarSe: ['tipo', 'saida']},
+      {k: 'comprador', label: 'Comprador / destino', mostrarSe: ['tipo', 'saida']}, {k: 'placa', label: 'Placa', mostrarSe: ['tipo', 'saida']}, {k: 'motorista', label: 'Motorista', mais: true, mostrarSe: ['tipo', 'saida']}, {k: 'doc', label: 'Nota fiscal / contrato', mais: true, mostrarSe: ['tipo', 'saida']},
+      {k: 'lancarVenda', label: 'Lançar como venda', mostrarSe: [['tipo', 'saida'], ['dono', 'proprio']], type: 'select', options: [{value: 'sim', label: 'Sim — Produção e Financeiro'}, {value: 'nao', label: 'Não'}]},
+      {k: 'preco', label: 'Preço por saca (R$)', type: 'number', min: 0, mostrarSe: ['lancarVenda', 'sim']}, {k: 'season', label: 'Safra da venda', mostrarSe: ['lancarVenda', 'sim']},
+      {k: 'recebimento', label: 'Recebimento', type: 'select', options: ['À vista', 'A prazo'], mostrarSe: ['lancarVenda', 'sim']}, {k: 'vencimento', label: 'Vencimento', type: 'date', mostrarSe: ['recebimento', 'A prazo']},
+      {k: 'notes', label: 'Observações', type: 'textarea', mais: true}],
+    submit: 'Registrar', maisRotulo: 'Qualidade, motorista, nota e observações',
     onSubmit: v => {
       if (!v.kg) return 'Informe a quantidade';
       if (v.tipo !== 'ajuste' && v.kg < 0) return 'Use quantidade positiva';

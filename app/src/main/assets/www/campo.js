@@ -51,7 +51,7 @@ function monitoramentoForm(m = {}) {
       {k: 'alvo', label: 'Praga / doença / planta', required: true, placeholder: 'Ex.: Percevejo-marrom'}, {k: 'estadio', label: 'Estádio da cultura', placeholder: 'Ex.: R5.1'},
       {k: 'valor', label: 'Média encontrada', type: 'number', min: 0, required: true}, {k: 'unidade', label: 'Unidade', required: true, placeholder: 'Ex.: percevejos/pano, % desfolha'},
       {k: 'pontos', label: 'Pontos amostrados', type: 'number', min: 0}, {k: 'nivelAcao', label: 'Nível de ação (da recomendação)', type: 'number', min: 0, hint: 'Opcional. O app só compara com o valor que você informar.'},
-      {k: 'responsavel', label: 'Responsável'}, {k: 'notes', label: 'Observações', type: 'textarea'}],
+      {k: 'responsavel', label: 'Responsável', mais: true}, {k: 'notes', label: 'Observações', type: 'textarea', mais: true}],
     onSubmit: v => { upsert('monitoramentos', {...m, ...v, id: idMon}); if (typeof fotosAoSalvar === 'function') fotosAoSalvar('monitoramentos', idMon); showToast('Monitoramento salvo'); }});
   if (typeof anexarCampoFotos === 'function') anexarCampoFotos('monitoramentos', idMon, m.fotos || []);
 }
@@ -82,11 +82,11 @@ function aplicacaoForm() {
   openForm({title: 'Registrar aplicação de defensivo', sub: 'Carência e reentrada conforme a bula/receituário. A quantidade total pode sair do estoque.', values: {date: today(), baixar: 'Sim'},
     fields: [{k: 'fieldId', label: 'Talhão', type: 'select', options: fieldOptions, required: true, full: true}, {k: 'date', label: 'Data da aplicação', type: 'date', required: true},
       {k: 'itemId', label: 'Produto do estoque', type: 'select', full: true, options: () => db.stock.map(s => ({value: s.id, label: `${s.name} — ${num(s.qty)} ${s.unit}`}))},
-      {k: 'produto', label: 'ou nome do produto', placeholder: 'Se não estiver no estoque'}, {k: 'dose', label: 'Dose aplicada', placeholder: 'Ex.: 1,5 L/ha'},
-      {k: 'qtd', label: 'Quantidade total usada', type: 'number', min: 0, hint: 'Na unidade do item do estoque.'}, {k: 'baixar', label: 'Tirar a quantidade do estoque', type: 'select', options: ['Sim', 'Não'], required: true},
+      {k: 'produto', label: 'Nome do produto', placeholder: 'Se não estiver no estoque', mostrarSe: ['itemId', '']}, {k: 'dose', label: 'Dose aplicada', placeholder: 'Ex.: 1,5 L/ha'},
+      {k: 'qtd', label: 'Quantidade total usada', type: 'number', min: 0, hint: 'Na unidade do item do estoque.'}, {k: 'baixar', label: 'Tirar a quantidade do estoque', type: 'select', options: ['Sim', 'Não'], required: true, mostrarSe: ['itemId', '!']},
       {k: 'carencia', label: 'Carência (dias, da bula)', type: 'number', min: 0, required: true}, {k: 'reentrada', label: 'Reentrada (horas, da bula)', type: 'number', min: 0},
       {k: 'machineId', label: 'Pulverizador', type: 'select', options: pulvs, hint: 'O app avisa se a aferição ou a inspeção dele estiver vencida ou reprovada.'},
-      {k: 'receituario', label: 'Nº do receituário agronômico'}, {k: 'responsavel', label: 'Responsável técnico'}, {k: 'notes', label: 'Observações', type: 'textarea'}],
+      {k: 'receituario', label: 'Nº do receituário agronômico'}, {k: 'responsavel', label: 'Responsável técnico', mais: true}, {k: 'notes', label: 'Observações', type: 'textarea', mais: true}],
     onSubmit: v => {
       const s = v.itemId ? find('stock', v.itemId) : null;
       if (!s && !v.produto) return 'Escolha o produto do estoque ou informe o nome';
