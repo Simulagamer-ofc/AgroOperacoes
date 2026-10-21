@@ -1,6 +1,6 @@
 'use strict';
-/* MercaPlant — menu Clima e radar + alertas de tempo que interferem nas operações.
-   • Tela "Clima e radar": alertas, mapa grande (satélite, radar, tempestades e chuva prevista), previsão completa e chuvas registradas.
+/* MercaPlant — menu MercaClima + alertas de tempo que interferem nas operações.
+   • Tela "MercaClima": alertas, mapa grande (satélite, radar, tempestades e chuva prevista), previsão completa e chuvas registradas.
    • Início: cartão curto do tempo; quando alguma condição atrapalha uma operação, aparecem os alertas e o mapa pequeno.
    Critérios do app (orientação; confirmar no campo): chuva por hora ≥ 0,2 mm ou chance ≥ 60%; chuva forte ≥ 10 mm no dia;
    rajadas ≥ 50 km/h (≥ 70 vermelho); geada provável com mínima ≤ 3 °C (≤ 0 vermelho); calor ≥ 35 °C;
@@ -62,7 +62,7 @@ const riscoTempestade = tp => !tp || tp.nenhuma || tp.d > LIM.tempAtencao ? null
   titulo: `Tempestade a ${Math.round(tp.d)} km ${tp.rumo} da fazenda${tp.chegando === true ? ' — se aproximando' : ''}`, texto: `Detectada às ${hhmm(tp.t)} (REDEMET). Raios: suspenda trabalho em campo aberto e em silos e secadores; recolha a equipe.`};
 const htmlRiscos = rs => rs.map(r => `<div class="clima-risco ${r.nivel}"><span aria-hidden="true">${r.icone}</span><div><strong>${esc(r.titulo)}</strong><small>${esc(r.texto)}</small></div></div>`).join('');
 
-// ---------- Início: cartão curto + alertas (+ mapa pequeno quando há risco) ----------
+// ---------- Início: só a previsão do dia + alertas de uma linha; o resto fica no MercaClima ----------
 const cartaoClimaCompleto = cartaoClima;
 function cartaoClimaCurto() {
   const loc = typeof localDaFazenda === 'function' ? localDaFazenda() : null, c = lerClima();
@@ -74,28 +74,25 @@ function cartaoClimaCurto() {
     <button type="button" class="clima-linha" data-act="nav" data-id="clima"><span class="clima-ic" aria-hidden="true">${iconeDia(c.dados, i0)}</span>
       <span class="clima-txt"><strong>Hoje ${Math.round(d.temperature_2m_max[i0])}° / ${Math.round(d.temperature_2m_min[i0])}°</strong><small class="${jan.janelas.length ? 'ok' : 'nao'}">${jan.janelas.length ? 'Pulverizar ' + jan.janelas.map(([a, b]) => `${hh(a)}–${hh(b)}`).join(', ') : 'Sem janela para pulverizar'} • ${esc(proxChuva)}</small></span><span class="clima-seta" aria-hidden="true">›</span></button>
     <div id="climaRiscos">${htmlRiscos(rs)}</div>
-    ${rs.length ? painelMapaHTML(true) : ''}
-    <button type="button" class="secondary clima-abrir" data-act="nav" data-id="clima">🗺 Abrir clima e radar</button></article>`;
+    <button type="button" class="secondary clima-abrir" data-act="nav" data-id="clima">Detalhar no MercaClima ›</button></article>`;
 }
 // eslint-disable-next-line no-global-assign
 cartaoClima = () => (parseRoute().name === 'clima' ? cartaoClimaCompleto() : cartaoClimaCurto());
 async function completarAlertasInicio() {
   const loc = localDaFazenda?.(), box = document.getElementById('climaRiscos'); if (!loc || !box) return;
-  if (document.getElementById('mtCasa')) iniciarMapaTempo();
   const r = riscoTempestade(await tempestadePerto(loc)); if (!r || !document.getElementById('climaRiscos')) return;
-  const b = document.getElementById('climaRiscos'); b.insertAdjacentHTML('afterbegin', htmlRiscos([r]));
-  if (!document.getElementById('mtCasa')) { b.insertAdjacentHTML('afterend', painelMapaHTML(true)); iniciarMapaTempo(); }
+  document.getElementById('climaRiscos').insertAdjacentHTML('afterbegin', htmlRiscos([r]));
 }
 if (VIEWS.inicio) {
   const depoisSemAlertas = VIEWS.inicio.after;
   VIEWS.inicio.after = (...a) => { depoisSemAlertas?.(...a); completarAlertasInicio(); };
 }
 
-// ---------- Tela Clima e radar ----------
+// ---------- Tela MercaClima ----------
 VIEWS.clima = () => {
   safeStorage.set('agro-clima-aberto', '1'); // previsão sempre aberta nesta tela
   const loc = typeof localDaFazenda === 'function' ? localDaFazenda() : null;
-  const topo = head('Clima e radar', 'Previsão, mapa do tempo, alertas para as operações e chuvas da fazenda', btn('+ Registrar chuva', 'ch-new') + btn('Atualizar previsão', 'clima-atualizar', '', 'secondary'));
+  const topo = head('MercaClima', 'Previsão, mapa do tempo, alertas para as operações e chuvas da fazenda', btn('+ Registrar chuva', 'ch-new') + btn('Atualizar previsão', 'clima-atualizar', '', 'secondary'));
   if (!loc) return topo + cartaoClimaCompleto();
   const rs = riscosClima(), chuvas = db.chuvas.slice().sort(byDateDesc), soma = dias => chuvas.filter(x => x.date >= daysAgo(dias)).reduce((t, x) => t + (Number(x.mm) || 0), 0);
   return topo + `<section class="clima-tela">
@@ -107,7 +104,7 @@ VIEWS.clima = () => {
         <div class="lote-nums"><span><small>Últimos 7 dias</small><b>${num(soma(7))} mm</b></span><span><small>Últimos 30 dias</small><b>${num(soma(30))} mm</b></span><span><small>Último registro</small><b>${chuvas[0] ? `${num(chuvas[0].mm)} mm` : '—'}</b><small>${chuvas[0] ? fmtDate(chuvas[0].date) : 'nenhum'}</small></span></div></section>
     </div></section>`;
 };
-TITLES.clima = 'Clima e radar';
+TITLES.clima = 'MercaClima';
 VIEWS.clima.after = async () => {
   iniciarMapaTempo();
   const loc = localDaFazenda?.(); if (!loc) return;

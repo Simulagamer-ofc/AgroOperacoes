@@ -874,4 +874,5 @@ tr.clickable{cursor:pointer} tr.clickable:hover td{background:rgba(23,135,212,.0
 .mt-tela .mt-mapa{height:min(70vh,640px)}
 .clima-tela .clima-linha{pointer-events:none}.clima-tela .clima-seta{display:none}
 @media (max-width:900px){.clima-tela{grid-template-columns:1fr}.mt-tela .mt-mapa{height:min(55vh,460px)}}
+.clima-curto .clima-risco small{display:none}.clima-curto .clima-risco{padding:6px 10px}
 .clima-curto .mt-alerta,.clima-tela .mt-alerta{display:none!important}

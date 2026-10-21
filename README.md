@@ -4,7 +4,9 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.52.0-beta1` — **Menu “Clima e radar”** (em Campo): mapa grande (satélite, radar, tempestades e chuva prevista), previsão completa, alertas para as operações e chuva registrada (7 e 30 dias). No **Início** fica só um cartão curto (hoje, janela de pulverização, próxima chuva) com **alertas de qualquer condição que atrapalhe uma operação**: chuva (com as operações programadas afetadas), pulverização programada sem janela, rajadas ≥ 50 km/h, geada (mín. ≤ 3 °C), calor (máx. ≥ 35 °C), solo encharcado (≥ 30 mm em 48 h) e tempestade a até 100 km. O mapa pequeno só aparece no Início quando há risco.
+`0.53.0-beta1` — Clima com nome **MercaClima** (menu e tela). O **Início fica sem mapa**: só a previsão do dia (temperatura, horário bom para pulverizar, próxima chuva), os alertas em uma linha cada e o botão **“Detalhar no MercaClima”**, que abre o mapa, a previsão completa, os alertas com detalhes e as chuvas registradas.
+
+Anterior: `0.52.0-beta1` — **Menu “Clima e radar”** (em Campo): mapa grande (satélite, radar, tempestades e chuva prevista), previsão completa, alertas para as operações e chuva registrada (7 e 30 dias). No **Início** fica só um cartão curto (hoje, janela de pulverização, próxima chuva) com **alertas de qualquer condição que atrapalhe uma operação**: chuva (com as operações programadas afetadas), pulverização programada sem janela, rajadas ≥ 50 km/h, geada (mín. ≤ 3 °C), calor (máx. ≥ 35 °C), solo encharcado (≥ 30 mm em 48 h) e tempestade a até 100 km. O mapa pequeno só aparece no Início quando há risco.
 
 Anterior: `0.51.0-beta1` — **Mapa do tempo no Início, logo abaixo da previsão** (abre junto com o cartão do clima; “Tela cheia” para ver maior) e **aviso de tempestade perto da fazenda**: “⚡ Tempestade a 31 km a oeste da fazenda — se aproximando”, pela tempestade mais próxima no STSC/REDEMET e comparando com meia hora antes. Menu **Cadastros** (antes “Cadastros e backup”): exportar e restaurar backup ficam só para o administrador da fazenda e o Admin do sistema, ou para quem usa sem nuvem (aí o backup é a única cópia).
 
