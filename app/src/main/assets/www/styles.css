@@ -876,3 +876,22 @@ tr.clickable{cursor:pointer} tr.clickable:hover td{background:rgba(23,135,212,.0
 @media (max-width:900px){.clima-tela{grid-template-columns:1fr}.mt-tela .mt-mapa{height:min(55vh,460px)}}
 .clima-curto .clima-risco small{display:none}.clima-curto .clima-risco{padding:6px 10px}
 .clima-curto .mt-alerta,.clima-tela .mt-alerta{display:none!important}
+/* Tela inicial: clima do dia + operações em andamento e programadas */
+.ini{display:grid;gap:14px;max-width:1100px}
+.ini .hoje-clima{margin:0}
+.ini-ops{padding:16px 18px}
+.ini-ops-topo{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.ini-ops-topo h3{margin:0;font-size:1.05rem}.ini-ops-topo small{color:var(--muted);font-size:.85rem}
+.ini-ops-topo .btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.ini-grupo{display:flex;align-items:center;gap:8px;margin:14px 0 2px;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ini-grupo span{background:var(--bg);border-radius:999px;padding:1px 8px;font-size:.75rem;color:var(--text)}
+.ini-grupo.andamento{color:var(--destaque)}.ini-grupo.atrasada{color:var(--red)}
+.ini-op{display:grid;grid-template-columns:6px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.ini-op:last-child{border-bottom:0}
+.ini-barra{align-self:stretch;border-radius:6px;min-height:36px}
+.ini-op strong{display:block;font-size:.95rem}.ini-op small{display:block;color:var(--muted);font-size:.83rem;margin-top:2px}
+.ini-chuva{display:inline-block;margin-top:5px;font-size:.75rem;padding:3px 8px}
+.ini-mais{margin-top:8px;color:var(--blue);background:transparent;border:0;padding:6px 0;font-weight:600}
+.ini-atalhos{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+@media(min-width:761px){.ini .clima-curto .clima-abrir{width:auto;display:block;margin:8px 0 0 auto;padding:9px 16px}}
+@media(max-width:760px){.ini-op{grid-template-columns:6px 1fr}.ini-op .row-actions{grid-column:2;justify-content:flex-start}.ini-op .row-actions button{min-height:40px;padding:8px 14px}.ini-ops-topo .btn-row{width:100%}.ini-ops-topo .btn-row button{flex:1}}

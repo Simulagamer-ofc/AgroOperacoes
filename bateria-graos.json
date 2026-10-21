@@ -308,8 +308,8 @@
    "id": "SEC-13",
    "mod": "Secador",
    "desc": "Leitura anotada após a meia-noite para um horário \"à frente\" do relógio fica no dia anterior",
-   "esperado": "2026-10-20 17:00",
-   "obtido": "2026-10-20 17:00",
+   "esperado": "2026-10-20 22:00",
+   "obtido": "2026-10-20 22:00",
    "ok": true
   },
   {
@@ -485,7 +485,7 @@
    "mod": "Silos",
    "desc": "Silo em expurgo (120 h de exposição): movimentação pede confirmação de liberação",
    "esperado": "bloqueia e avisa",
-   "obtido": "[!] Silo em expurgo até 26/10/2026 14:00 (Fosfina (fosfeto de alumínio)): não abrir nem movimentar antes do fim da exposição. Toque em registrar de novo só se a liberação já foi feita.",
+   "obtido": "[!] Silo em expurgo até 26/10/2026 19:00 (Fosfina (fosfeto de alumínio)): não abrir nem movimentar antes do fim da exposição. Toque em registrar de novo só se a liberação já foi feita.",
    "ok": true
   },
   {
@@ -741,7 +741,7 @@
    "mod": "Volume",
    "desc": "Desempenho: lançar as 140 cargas pelo formulário no navegador",
    "esperado": "menos de 1 s por carga",
-   "obtido": "0,07 s por carga (9,3 s no total)",
+   "obtido": "0,06 s por carga (8,8 s no total)",
    "ok": true
   },
   {
@@ -792,6 +792,6 @@
    }
   ]
  },
- "versao": "v0.51.0-beta1",
+ "versao": "v0.55.0-beta1",
  "errosJs": []
 }

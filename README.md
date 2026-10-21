@@ -4,7 +4,9 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.54.0-beta1` — **Menu reorganizado** (nenhuma função retirada): Campo (Operações, Talhões, MercaClima, Pragas e doenças, Aplicações), Máquinas (Máquinas e manutenção, Combustível, Aferição), Grãos e sementes, Gestão (Estoque, Financeiro, Produção e margem, Mão de obra, Relatórios) e o grupo novo **Configurações** no fim, que começa fechado (Cadastros, Catálogo de máquinas, Catálogo de pontas, Referências técnicas). **Chuvas** sai do menu e abre pelo MercaClima (“Ver todas”), com botão “← MercaClima”; o “+” do celular continua registrando chuva.
+`0.55.0-beta1` — **Tela inicial para começar o dia**: só o **clima do dia** (com alertas que atrapalham operações e o botão “Detalhar no MercaClima”) e as **operações**: em andamento (desde quando, máquina, operador, área, “Concluir”), atrasadas, programadas para hoje (“Iniciar”) e os próximos 7 dias, com aviso de chuva prevista no dia de cada operação. Os avisos e pendências (estoque, contas, revisões, aferições…) foram para o **sino**, na tela nova **Avisos e pendências**. Quem não usa Operações vê atalhos para as suas telas.
+
+Anterior: `0.54.0-beta1` — **Menu reorganizado** (nenhuma função retirada): Campo (Operações, Talhões, MercaClima, Pragas e doenças, Aplicações), Máquinas (Máquinas e manutenção, Combustível, Aferição), Grãos e sementes, Gestão (Estoque, Financeiro, Produção e margem, Mão de obra, Relatórios) e o grupo novo **Configurações** no fim, que começa fechado (Cadastros, Catálogo de máquinas, Catálogo de pontas, Referências técnicas). **Chuvas** sai do menu e abre pelo MercaClima (“Ver todas”), com botão “← MercaClima”; o “+” do celular continua registrando chuva.
 
 Anterior: `0.53.2-beta1` — Menu lateral sem a seção **“Mais usados”** (repetia telas que já estão no menu e poluía a lista). Os grupos que abrem e fecham continuam.
 
