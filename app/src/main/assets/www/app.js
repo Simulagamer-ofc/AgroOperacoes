@@ -249,7 +249,7 @@ function openForm({title, sub, fields, values = {}, submit = 'Salvar no disposit
     if (f.type === 'number') return `<input ${common} type="text" inputmode="decimal" autocomplete="off" value="${esc(typeof v === 'number' ? String(v).replace('.', ',') : v)}" placeholder="${esc(f.placeholder || '')}">`;
     return `<input ${common} type="${f.type || 'text'}" value="${esc(v)}" ${f.min != null ? `min="${f.min}"` : ''} placeholder="${esc(f.placeholder || '')}">`;
   };
-  const campo = f => `<div class="field ${f.full || f.type === 'textarea' ? 'full' : ''}"${f.mostrarSe ? ` data-se="${esc(f.mostrarSe[0])}" data-se-v="${esc([].concat(f.mostrarSe[1]).join('|'))}"` : ''}><label for="f_${f.k}">${esc(f.label)}${f.required ? ' *' : ''}</label>${input(f)}${f.hint ? `<span class="hint">${esc(f.hint)}</span>` : ''}</div>`;
+  const campo = f => `<div class="field ${f.full || f.type === 'textarea' ? 'full' : ''}"${f.mostrarSe ? ` data-se="${esc((typeof f.mostrarSe[0] === 'string' ? [f.mostrarSe] : f.mostrarSe).map(([c, v]) => c + '=' + [].concat(v).join('|')).join(';'))}"` : ''}><label for="f_${f.k}">${esc(f.label)}${f.required ? ' *' : ''}</label>${input(f)}${f.hint ? `<span class="hint">${esc(f.hint)}</span>` : ''}</div>`;
   const mais = fields.filter(f => f.mais);
   dialog.innerHTML = `<h3>${esc(title)}</h3>${sub ? `<p class="sub">${esc(sub)}</p>` : ''}<form novalidate><div class="form">${fields.filter(f => !f.mais).map(campo).join('')}</div>${mais.length ? `<details class="form-mais"><summary>${esc(maisRotulo)}</summary><div class="form">${mais.map(campo).join('')}</div></details>` : ''}<div class="actions"><button type="button" class="secondary" data-close>Cancelar</button><button class="primary" type="submit">${esc(submit)}</button></div></form>`;
   const form = $('form', dialog);
@@ -258,7 +258,9 @@ function openForm({title, sub, fields, values = {}, submit = 'Salvar no disposit
   const marcar = (el, msg) => { el.setCustomValidity(msg); let s = el.parentElement.querySelector('.erro-campo'); if (!s && msg) { s = Object.assign(document.createElement('span'), {className: 'hint erro-campo'}); s.style.color = 'var(--red)'; el.after(s); } if (s) s.textContent = msg; };
   form.addEventListener('input', e => { if (e.target.parentElement?.querySelector('.erro-campo')) marcar(e.target, ''); });
   // Campos condicionais: escondidos (e fora da validação) enquanto a condição não vale
-  const aplicarSe = () => form.querySelectorAll('[data-se]').forEach(d => { const ctl = form.elements[d.dataset.se], vis = !!ctl && d.dataset.seV.split('|').includes(ctl.value); d.hidden = !vis; d.querySelectorAll('input,select,textarea').forEach(el => { el.disabled = !vis; }); });
+  // Condições: "campo=valor|valor2;outro=!valor" (todas valem; "!x" = diferente de x; campo escondido não conta)
+  const vale = cond => { const [c, vs] = cond.split('='), ctl = form.elements[c]; if (!ctl || ctl.closest('.field')?.hidden) return false; return vs.split('|').some(x => x.startsWith('!') ? ctl.value !== x.slice(1) : ctl.value === x); };
+  const aplicarSe = () => { for (let i = 0; i < 3; i++) form.querySelectorAll('[data-se]').forEach(d => { const vis = d.dataset.se.split(';').every(vale); d.hidden = !vis; d.querySelectorAll('input,select,textarea').forEach(el => { el.disabled = !vis; }); }); };
   form.addEventListener('change', aplicarSe); aplicarSe();
   form.onsubmit = e => {
     e.preventDefault();
@@ -303,15 +305,15 @@ function operationForm(op = {}) {
     fields: [
       {k: 'type', label: 'Tipo de operação', type: 'select', options: OP_TYPES, required: true, full: true},
       {k: 'fieldId', label: 'Talhão', type: 'select', options: fieldOptions, hint: db.fields.length ? '' : 'Cadastre talhões para selecioná-los aqui'},
-      {k: 'place', label: 'Outro local', placeholder: 'Ex.: Unidade de beneficiamento'},
+      {k: 'place', label: 'Local (sem talhão)', placeholder: 'Ex.: Unidade de beneficiamento', mostrarSe: ['fieldId', '']},
       {k: 'date', label: 'Data', type: 'date', required: true},
       {k: 'time', label: 'Horário', type: 'time'},
       {k: 'machineId', label: 'Máquina', type: 'select', options: machineOptions, labelAusente: maquinaAusente},
       {k: 'status', label: 'Situação', type: 'select', options: OP_STATUS, required: true},
       {k: 'area', label: 'Área trabalhada (ha)', type: 'number', min: 0},
-      {k: 'kg', label: 'Quantidade de sementes (kg)', type: 'number', min: 0},
+      {k: 'kg', label: 'Quantidade de sementes (kg)', type: 'number', min: 0, mostrarSe: ['type', [...OP_COM_KG, 'Plantio']]},
       {k: 'operator', label: 'Operador / equipe'},
-      {k: 'notes', label: 'Observações', type: 'textarea', placeholder: 'Insumos, dose, condições do tempo...'}
+      {k: 'notes', label: 'Observações', type: 'textarea', placeholder: 'Insumos, dose, condições do tempo...', mais: true}
     ],
     onSubmit: v => {
       if (!v.fieldId && !v.place) return 'Informe o talhão ou o local da operação';

@@ -63,9 +63,9 @@ function vendaForm() {
       {k: 'preco', label: 'Preço por saca (R$)', type: 'number', min: 0, required: true},
       {k: 'comprador', label: 'Comprador'},
       {k: 'recebimento', label: 'Recebimento', type: 'select', options: ['À vista', 'A prazo'], required: true},
-      {k: 'vencimento', label: 'Vencimento (se a prazo)', type: 'date'},
-      {k: 'doc', label: 'Contrato / nota'},
-      {k: 'notes', label: 'Observações', type: 'textarea'}
+      {k: 'vencimento', label: 'Vencimento', type: 'date', mostrarSe: ['recebimento', 'A prazo']},
+      {k: 'doc', label: 'Contrato / nota', mais: true},
+      {k: 'notes', label: 'Observações', type: 'textarea', mais: true}
     ],
     onSubmit: v => {
       if (!(v.sacas > 0 && v.preco > 0)) return 'Informe sacas e preço';
