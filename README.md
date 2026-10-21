@@ -4,6 +4,10 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.48.0-beta1` — **Secador mais simples** (nenhuma função removida):
+- Tela do Secador virou um **cartão de comando por secador**: o que está acontecendo (umidade atual e meta, massa e ponto mais quente, tempo, previsão de término), **o próximo passo** (“Próxima leitura às 16:36” ou “Faça a leitura agora — a última foi há 1 h 15 min”) e o botão certo em destaque (+ Leitura, ou Finalizar quando chega à meta). Limpeza e sensores no rodapé do cartão; secagens concluídas recolhidas.
+- Formulários com só o essencial: iniciar secagem (produto, destino, umidade final, carga, umidade de entrada), leitura (hora, visores, umidade) e finalizar (umidade final e silo). Combustível, energia, lote de semente, termômetro portátil e grão da descarga ficam em “Mais opções”. “Qual cultura” só aparece quando o produto é “Outro”.
+
 `0.47.3-beta1` — **Horário da chuva na previsão**: o resumo do clima mostra “chuva às 21h” (ou “chovendo agora”), e o detalhe de cada dia lista as faixas de chuva com início, fim, milímetros e chance (ex.: “das 05h até 10h, 12,5 mm, 80%; das 15h até 17h, 5,0 mm”). O aviso de chuva forte no celular também diz a partir de que horas.
 
 `0.47.2-beta1` — **Alarme da massa em OFF**: a leitura salva mesmo com os pontos P em branco, mas avisa que a massa não foi medida e a planilha marca “Massa não medida”. Novo campo **“Massa — termômetro portátil”** para medir o grão na descarga ou na coluna enquanto o alarme não funciona. Duas leituras seguidas sem a massa geram aviso vermelho no painel.

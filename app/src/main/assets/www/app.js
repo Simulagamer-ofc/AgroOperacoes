@@ -233,7 +233,8 @@ function numeroBR(str) {
  * fields: [{k, label, type, options, required, full, hint, step, placeholder}]
  * onSubmit(values) → retorna string de erro para manter aberto, ou nada para fechar.
  */
-function openForm({title, sub, fields, values = {}, submit = 'Salvar no dispositivo', onSubmit}) {
+// Campos: mais: true → ficam em “Mais opções” (recolhido); mostrarSe: [campo, valor ou lista] → só aparece quando o outro campo tem esse valor
+function openForm({title, sub, fields, values = {}, submit = 'Salvar no dispositivo', onSubmit, maisRotulo = 'Mais opções'}) {
   const input = f => {
     const v = values[f.k] ?? f.default ?? '';
     const common = `name="${f.k}" id="f_${f.k}" ${f.required ? 'required' : ''}`;
@@ -248,12 +249,17 @@ function openForm({title, sub, fields, values = {}, submit = 'Salvar no disposit
     if (f.type === 'number') return `<input ${common} type="text" inputmode="decimal" autocomplete="off" value="${esc(typeof v === 'number' ? String(v).replace('.', ',') : v)}" placeholder="${esc(f.placeholder || '')}">`;
     return `<input ${common} type="${f.type || 'text'}" value="${esc(v)}" ${f.min != null ? `min="${f.min}"` : ''} placeholder="${esc(f.placeholder || '')}">`;
   };
-  dialog.innerHTML = `<h3>${esc(title)}</h3>${sub ? `<p class="sub">${esc(sub)}</p>` : ''}<form novalidate><div class="form">${fields.map(f => `<div class="field ${f.full || f.type === 'textarea' ? 'full' : ''}"><label for="f_${f.k}">${esc(f.label)}${f.required ? ' *' : ''}</label>${input(f)}${f.hint ? `<span class="hint">${esc(f.hint)}</span>` : ''}</div>`).join('')}</div><div class="actions"><button type="button" class="secondary" data-close>Cancelar</button><button class="primary" type="submit">${esc(submit)}</button></div></form>`;
+  const campo = f => `<div class="field ${f.full || f.type === 'textarea' ? 'full' : ''}"${f.mostrarSe ? ` data-se="${esc(f.mostrarSe[0])}" data-se-v="${esc([].concat(f.mostrarSe[1]).join('|'))}"` : ''}><label for="f_${f.k}">${esc(f.label)}${f.required ? ' *' : ''}</label>${input(f)}${f.hint ? `<span class="hint">${esc(f.hint)}</span>` : ''}</div>`;
+  const mais = fields.filter(f => f.mais);
+  dialog.innerHTML = `<h3>${esc(title)}</h3>${sub ? `<p class="sub">${esc(sub)}</p>` : ''}<form novalidate><div class="form">${fields.filter(f => !f.mais).map(campo).join('')}</div>${mais.length ? `<details class="form-mais"><summary>${esc(maisRotulo)}</summary><div class="form">${mais.map(campo).join('')}</div></details>` : ''}<div class="actions"><button type="button" class="secondary" data-close>Cancelar</button><button class="primary" type="submit">${esc(submit)}</button></div></form>`;
   const form = $('form', dialog);
   $('[data-close]', dialog).onclick = closeModal;
   // Erro de um campo numérico: aparece abaixo do campo e no aviso do navegador
   const marcar = (el, msg) => { el.setCustomValidity(msg); let s = el.parentElement.querySelector('.erro-campo'); if (!s && msg) { s = Object.assign(document.createElement('span'), {className: 'hint erro-campo'}); s.style.color = 'var(--red)'; el.after(s); } if (s) s.textContent = msg; };
   form.addEventListener('input', e => { if (e.target.parentElement?.querySelector('.erro-campo')) marcar(e.target, ''); });
+  // Campos condicionais: escondidos (e fora da validação) enquanto a condição não vale
+  const aplicarSe = () => form.querySelectorAll('[data-se]').forEach(d => { const ctl = form.elements[d.dataset.se], vis = !!ctl && d.dataset.seV.split('|').includes(ctl.value); d.hidden = !vis; d.querySelectorAll('input,select,textarea').forEach(el => { el.disabled = !vis; }); });
+  form.addEventListener('change', aplicarSe); aplicarSe();
   form.onsubmit = e => {
     e.preventDefault();
     const out = {};
@@ -264,7 +270,7 @@ function openForm({title, sub, fields, values = {}, submit = 'Salvar no disposit
       marcar(el, n === undefined ? (ambiguoBR(raw) ? `Valor ambíguo: escreva ${raw.replace('.', '')} ou ${raw},00` : 'Número inválido') : n !== '' && f.min != null && n < f.min ? `O valor mínimo é ${num(f.min)}` : '');
       out[f.k] = n;
     });
-    if (!form.checkValidity()) { const inv = form.querySelector(':invalid'); form.reportValidity(); if (inv?.validity.customError) showToast(inv.validationMessage); return; }
+    if (!form.checkValidity()) { const inv = form.querySelector(':invalid'); const det = inv?.closest('details'); if (det) det.open = true; form.reportValidity(); if (inv?.validity.customError) showToast(inv.validationMessage); return; }
     const err = onSubmit(out);
     if (err) { showToast(err, true); return; }
     closeModal(); render();
