@@ -41,7 +41,7 @@ function loadDb() {
   try { data = JSON.parse(bruto || 'null'); } catch {
     // Dados ilegíveis: guarda uma cópia intacta antes de começar do zero (nada é sobrescrito sem cópia)
     const copia = 'agro-db-corrompido-' + Date.now();
-    avisoBanco = safeStorage.set(copia, bruto) ? `Os dados salvos neste aparelho estavam danificados. Uma cópia foi guardada (${copia}); restaure um backup em Cadastros e backup.` : 'Os dados salvos neste aparelho estavam danificados e não puderam ser lidos. Restaure um backup em Cadastros e backup.';
+    avisoBanco = safeStorage.set(copia, bruto) ? `Os dados salvos neste aparelho estavam danificados. Uma cópia foi guardada (${copia}); restaure um backup em Cadastros.` : 'Os dados salvos neste aparelho estavam danificados e não puderam ser lidos. Restaure um backup em Cadastros.';
     data = null;
   }
   if (data && typeof data !== 'object') data = null;
@@ -589,7 +589,7 @@ function operationRow(o, actions = true) {
 
 // ---------- Telas ----------
 const VIEWS = {};
-const TITLES = {inicio: 'Visão geral', operacoes: 'Operações do dia', maquinas: 'Máquinas e manutenção', talhoes: 'Talhões', sementes: 'Sementes e lotes', lotes: 'Lotes e rastreabilidade', estoque: 'Estoque e insumos', relatorios: 'Relatórios', cadastros: 'Cadastros e backup', busca: 'Pesquisa'};
+const TITLES = {inicio: 'Visão geral', operacoes: 'Operações do dia', maquinas: 'Máquinas e manutenção', talhoes: 'Talhões', sementes: 'Sementes e lotes', lotes: 'Lotes e rastreabilidade', estoque: 'Estoque e insumos', relatorios: 'Relatórios', cadastros: 'Cadastros', busca: 'Pesquisa'};
 
 // Visão geral = painel do dia (operação). Custos ficam no Financeiro e insumos no Estoque.
 // O clima, o “Hoje” e o resumo do dia vêm de automacao.js; aqui, o primeiro uso e as operações do período.
@@ -751,16 +751,18 @@ VIEWS.relatorios = () => {
     <section class="card panel">${consumption.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Item</th><th class="num">Consumo</th><th class="num">Saldo atual</th></tr></thead><tbody>${consumption.map(([s, q]) => `<tr><td>${esc(s.name)}</td><td class="num">${num(q)} ${esc(s.unit)}</td><td class="num">${num(s.qty)} ${esc(s.unit)}</td></tr>`).join('')}</tbody></table></div>` : 'Nenhuma saída de estoque no período.'}</section>`;
 };
 
+// Backup só para quem administra: Admin do sistema, administrador da fazenda ou quem usa sem nuvem (aí ele é a única cópia)
+const backupVisivel = () => typeof nvVinculado !== 'function' || !nvVinculado() || !!nv.sysadm || nvPapel() === 'admin';
 VIEWS.cadastros = () => {
   const counts = [['Operações', 'operations'], ['Máquinas', 'machines'], ['Registros de horímetro', 'hourLogs'], ['Manutenções', 'maintenances'], ['Talhões', 'fields'], ['Lotes', 'lots'], ['Itens de estoque', 'stock'], ['Movimentações', 'movements'], ['Gastos', 'expenses'], ['Ordens de beneficiamento', 'ubs'], ['Abastecimentos', 'fuel'], ['Contas a pagar e receber', 'contas'], ['Colheitas', 'colheitas'], ['Vendas', 'vendas'], ['Chuvas', 'chuvas'], ['Monitoramentos de pragas', 'monitoramentos'], ['Aplicações', 'aplicacoes'], ['Equipe', 'equipe'], ['Apontamentos de trabalho', 'apontamentos']];
-  return head('Cadastros e backup', 'Dados da propriedade e cópia de segurança dos registros deste dispositivo.') +
+  return head('Cadastros', 'Dados da propriedade, conta na nuvem e alertas.') +
     `<section class="settings">
       <article class="card panel"><h3>Propriedade</h3><p>Nome exibido no aplicativo e nos arquivos exportados.</p>
         <form id="settingsForm"><div class="form"><div class="field full"><label for="s_farm">Fazenda / unidade</label><input id="s_farm" value="${esc(db.settings.farm)}" placeholder="Ex.: Fazenda Boa Vista"></div><div class="field full"><label for="s_owner">Responsável</label><input id="s_owner" value="${esc(db.settings.owner)}" placeholder="Nome do responsável"></div><div class="field"><label for="s_rt">Responsável técnico (agrônomo)</label><input id="s_rt" value="${esc(db.settings.respTecnico || '')}" placeholder="Sai nos relatórios impressos"></div><div class="field"><label for="s_rtreg">CREA / CFTA</label><input id="s_rtreg" value="${esc(db.settings.respRegistro || '')}" placeholder="Ex.: CREA-MG 123456/D"></div></div><div class="actions"><button class="primary" type="submit">Salvar</button></div></form>
       </article>
       <article class="card panel"><h3>Registros no dispositivo</h3><table class="tbl"><tbody>${counts.map(([l, c]) => `<tr><td>${l}</td><td class="num">${db[c].length}</td></tr>`).join('')}</tbody></table></article>
-      <article class="card panel"><h3>Backup</h3><p>Os dados ficam somente neste aparelho. Exporte um backup regularmente e guarde em local seguro (Drive, e-mail, computador).</p>
-        <div class="btn-row">${btn('⬇ Exportar backup', 'backup')}${btn('⬆ Restaurar backup', 'restore', '', 'secondary')}</div><input type="file" id="restoreInput" accept="application/json,.json" hidden></article>
+      ${backupVisivel() ? `<article class="card panel"><h3>Backup</h3><p>${typeof nvVinculado === 'function' && nvVinculado() ? 'Os dados ficam na nuvem da fazenda. O backup é uma cópia extra, para o administrador guardar fora do sistema.' : 'Sem conta na nuvem, os dados ficam somente neste aparelho. Exporte um backup regularmente e guarde em local seguro (Drive, e-mail, computador).'}</p>
+        <div class="btn-row">${btn('⬇ Exportar backup', 'backup')}${btn('⬆ Restaurar backup', 'restore', '', 'secondary')}</div><input type="file" id="restoreInput" accept="application/json,.json" hidden></article>` : ''}
       ${typeof cartaoSincronizacao === 'function' ? cartaoSincronizacao() : ''}
       ${typeof cartaoAlertas === 'function' ? cartaoAlertas() : ''}
       <article class="card panel"><h3>Dados de exemplo e limpeza</h3><p>Carregue exemplos para treinar a equipe, ou apague todos os registros deste dispositivo.</p>
@@ -958,7 +960,7 @@ function render(anchor = pendingAnchor) {
   const key = name === 'talhao' ? 'talhoes' : name;
   try { view.innerHTML = VIEWS[name](arg || anchor); } catch (err) {
     console.error(err);
-    view.innerHTML = `<section class="card">${empty('Não foi possível abrir esta tela', 'Seus dados salvos não foram afetados. Volte ao início e tente de novo; se continuar, faça um backup em Cadastros e backup.', {act: 'nav', id: 'inicio', label: 'Voltar ao início'})}</section>`;
+    view.innerHTML = `<section class="card">${empty('Não foi possível abrir esta tela', 'Seus dados salvos não foram afetados. Volte ao início e tente de novo; se continuar, faça um backup em Cadastros.', {act: 'nav', id: 'inicio', label: 'Voltar ao início'})}</section>`;
     return;
   }
   document.querySelector('.app').classList.toggle('nx-home', key === 'inicio');
