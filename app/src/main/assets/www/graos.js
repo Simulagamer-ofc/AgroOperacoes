@@ -315,14 +315,14 @@ function iniciarSecagemForm(secadorId) {
   openForm({title: 'Iniciar secagem', sub: espera.length ? `${espera.length} ${espera.length === 1 ? 'carga' : 'cargas'} de ${esc(nomeProd(espera[0].produto, espera[0].produtoNome).toLowerCase())} esperando este secador: carga e umidade já calculadas (sem a impureza, que sai na pré-limpeza).${outras ? ` Outras ${outras} ${outras === 1 ? 'carga' : 'cargas'} de outra cultura ficam para o próximo lote.` : ''}` : 'Nenhuma carga da moega esperando: informe a carga e a umidade.',
     values: {secadorId: sid, produto: prod, produtoNome: espera[0]?.produtoNome || '', destino: ultimo?.destino || 'armazenamento_graos', massaT: massa ? Math.round(massa / 100) / 10 : '', umidadeEntrada: uMed !== '' ? Math.round(uMed * 10) / 10 : '', combTipo: ultimo?.combustivel?.tipo || 'lenha', umidadeMeta: ultimo?.umidadeMeta ?? 13, combPreco: ultimo?.combustivel?.preco || ''},
     fields: [
-      {k: 'secadorId', label: 'Secador', type: 'select', options: sec.map(m => ({value: m.id, label: m.name})), required: true},
+      {k: 'secadorId', label: 'Secador', type: 'select', options: sec.map(m => ({value: m.id, label: m.name})), required: true, mais: sec.length < 2},
       {k: 'produto', label: 'Produto', type: 'select', options: PRODUTOS_GRAO.map(([v, l]) => ({value: v, label: l})), required: true},
-      {k: 'produtoNome', label: 'Qual cultura (se “Outro”)'},
+      {k: 'produtoNome', label: 'Qual cultura', mostrarSe: ['produto', 'outro']},
       {k: 'destino', label: 'Destino do produto', type: 'select', options: DESTINOS_GRAO.map(([v, l]) => ({value: v, label: l})), required: true, hint: 'Define a temperatura máxima e a umidade final de referência.', full: true},
-      {k: 'umidadeMeta', label: 'Umidade final desejada (%)', type: 'number', min: 0, hint: 'Para prever o fim e avisar quando chegar. Soja em grão: 12–13% (Embrapa).'},
+      {k: 'umidadeMeta', label: 'Umidade final desejada (%) *', type: 'number', min: 0, hint: 'Normalmente 13%. O sistema avisa quando chegar.'},
       {k: 'massaT', label: 'Carga de entrada (toneladas)', type: 'number', min: 0, required: true, hint: 'Em toneladas: 21.300 kg = 21,3 t.'}, {k: 'umidadeEntrada', label: 'Umidade do grão úmido que entra (%)', type: 'number', min: 0, required: true, hint: 'Do medidor, antes de secar. Normalmente 14% a 25%.'},
-      {k: 'lotId', label: 'Lote de semente (se for semente)', type: 'select', options: db.lots.map(x => ({value: x.id, label: `${x.code} — ${[x.species, x.cultivar].filter(Boolean).join(' ')}`})), hint: 'A secagem entra no histórico do lote.'},
-      {k: 'combTipo', label: 'Combustível', type: 'select', options: COMBUSTIVEIS.map(([v, l, u]) => ({value: v, label: `${l} (${u})`}))}, {k: 'combPreco', label: 'Preço do combustível (R$ por unidade)', type: 'number', min: 0, hint: 'Para o custo por saca. Lembra o último.'}],
+      {k: 'lotId', label: 'Lote de semente (se for semente)', type: 'select', mais: true, options: db.lots.map(x => ({value: x.id, label: `${x.code} — ${[x.species, x.cultivar].filter(Boolean).join(' ')}`})), hint: 'A secagem entra no histórico do lote.'},
+      {k: 'combTipo', label: 'Combustível', type: 'select', mais: true, options: COMBUSTIVEIS.map(([v, l, u]) => ({value: v, label: `${l} (${u})`}))}, {k: 'combPreco', label: 'Preço do combustível (R$ por unidade)', type: 'number', min: 0, mais: true, hint: 'Para o custo por saca. Lembra o último.'}],
     submit: 'Iniciar secagem',
     onSubmit: v => {
       if (!(v.massaT > 0)) return 'Informe a carga de entrada';
@@ -394,10 +394,10 @@ function leituraForm(id) {
     fields: [{k: 'hora', label: 'Hora da leitura', type: 'time', required: true},
       ...(sc.temAr ? [{k: 'tAr', label: `Ar quente — visor ${sc.arNome ? 'do ' + sc.arNome : 'do controlador do ar'} (°C)`, type: 'number', hint: 'Temperatura do ar que entra no secador.', full: true}] : []),
       ...[...arPts, ...massa].map((p, i) => ({k: 'p_' + p.id, label: rotP(p) + (p.tipo === 'ar' ? ' — ar' : ''), type: 'number', hint: i === 0 ? `Visor ${sc.alarmeNome ? 'do ' + sc.alarmeNome : 'do alarme'}: selecione ${p.id}, ${[...arPts, ...massa][1]?.id || ''}… e copie cada número.`.replace(', …', '…') : ''})),
-      {k: 'tMassa', label: massa.length ? 'Massa — termômetro portátil (°C)' : 'Temperatura da massa de grãos (°C)', type: 'number', hint: massa.length ? 'Só se o alarme mostrar OFF: espete o termômetro no grão da coluna, pela janela de inspeção da zona de secagem. O grão da descarga já passou pelo resfriamento e vai no campo de baixo.' : ''},
+      {k: 'tMassa', label: massa.length ? 'Massa — termômetro portátil (°C)' : 'Temperatura da massa de grãos (°C)', type: 'number', mais: massa.length > 0, hint: massa.length ? 'Só se o alarme mostrar OFF: espete o termômetro no grão da coluna, pela janela de inspeção da zona de secagem. O grão da descarga já passou pelo resfriamento e vai no campo de baixo.' : ''},
       {k: 'umidade', label: 'Umidade do grão na saída (%)', type: 'number', min: 0, hint: 'Amostra da descarga, no medidor de umidade.'},
-      {k: 'tDescarga', label: 'Temperatura do grão na descarga (°C)', type: 'number', hint: 'Opcional — amostra na bica de saída, em recipiente fechado, termômetro espetado no meio do grão.'}],
-    submit: 'Salvar leitura',
+      {k: 'tDescarga', label: 'Temperatura do grão na descarga (°C)', type: 'number', mais: true, hint: 'Opcional — amostra na bica de saída, em recipiente fechado, termômetro espetado no meio do grão.'}],
+    submit: 'Salvar leitura', maisRotulo: 'Alarme em OFF ou grão da descarga',
     onSubmit: v => {
       const pontos = {}; sc.ativos.forEach(p => { if (v['p_' + p.id] !== '' && v['p_' + p.id] != null) pontos[p.id] = Number(v['p_' + p.id]); });
       if ([v.tAr, v.tMassa, v.umidade, v.tDescarga].every(x => x === '' || x == null) && !Object.keys(pontos).length) return 'Informe pelo menos um número dos visores ou a umidade';
@@ -428,10 +428,10 @@ function finalizarSecagemForm(id) {
   openForm({title: 'Finalizar secagem', sub: `${nomeEquip(l.secadorId)} • ${kgT(l.massaEntradaKg)} a ${n1(l.umidadeEntrada)}% • início ${fmtDH(l.inicio)}`,
     values: {umidadeSaida: [...(l.leituras || [])].reverse().find(x => numOuU(x.umidade) != null)?.umidade ?? '', siloId: silos[0]?.id || '', combPreco: l.combustivel?.preco ?? '', precoKwh: db.settings.precoKwh ?? ''},
     fields: [{k: 'umidadeSaida', label: 'Umidade final (%)', type: 'number', min: 0, required: true}, {k: 'siloId', label: 'Silo de destino', type: 'select', options: silos.map(m => ({value: m.id, label: m.name})), hint: silos.length ? '' : 'Cadastre os silos em Máquinas (tipo Silo/Armazém).'},
-      {k: 'combQtd', label: `${(COMBUSTIVEIS.find(c => c[0] === l.combustivel?.tipo) || COMBUSTIVEIS[0])[1]} gasto (${unComb(l.combustivel?.tipo)})`, type: 'number', min: 0}, {k: 'combPreco', label: 'Preço (R$ por unidade)', type: 'number', min: 0},
-      {k: 'tDescarga', label: 'Temperatura do grão na descarga (°C)', type: 'number', hint: 'Opcional — registra o resfriamento antes do silo.'},
-      {k: 'kwh', label: 'Energia elétrica (kWh)', type: 'number', min: 0, hint: 'Opcional — leitura do medidor do secador (motores e ventiladores).'}, {k: 'precoKwh', label: 'Preço do kWh (R$)', type: 'number', min: 0}],
-    submit: 'Finalizar',
+      {k: 'combQtd', mais: true, label: `${(COMBUSTIVEIS.find(c => c[0] === l.combustivel?.tipo) || COMBUSTIVEIS[0])[1]} gasto (${unComb(l.combustivel?.tipo)})`, type: 'number', min: 0}, {k: 'combPreco', mais: true, label: 'Preço (R$ por unidade)', type: 'number', min: 0},
+      {k: 'tDescarga', mais: true, label: 'Temperatura do grão na descarga (°C)', type: 'number', hint: 'Opcional — registra o resfriamento antes do silo.'},
+      {k: 'kwh', mais: true, label: 'Energia elétrica (kWh)', type: 'number', min: 0, hint: 'Opcional — leitura do medidor do secador (motores e ventiladores).'}, {k: 'precoKwh', mais: true, label: 'Preço do kWh (R$)', type: 'number', min: 0}],
+    submit: 'Finalizar', maisRotulo: 'Combustível, energia e descarga (para o custo)',
     onSubmit: v => {
       const av = avaliarUmidadeSaida(l, v.umidadeSaida);
       if (av?.status === 'FORA_DO_PADRAO' && finalizarSecagemForm.aviso !== id + v.umidadeSaida) { finalizarSecagemForm.aviso = id + v.umidadeSaida; return `${av.acao} Toque em finalizar de novo para encerrar mesmo assim.`; }
@@ -630,18 +630,42 @@ function telaMoegaLista() {
     </tbody></table></div><p class="nota">Toque na carga para ver o comprovante, classificar, editar ou excluir. Desconto por balanço de massa sobre o padrão do contrato: o grão seco e limpo se conserva, desconta-se só o excesso de água e impureza. Cada romaneio com talhão vira colheita em Produção.</p></section>`
     : `<section class="card">${empty('Nenhuma carga recebida', 'Registre a pesagem, a amostra e o destino de cada caminhão.', {act: 'gr-romaneio', label: '+ Carga na moega'})}</section>`;
 }
+// Cartão de comando de cada secador: o que está acontecendo agora e o próximo passo, com o botão certo em destaque
+const INTERVALO_LEITURA_MIN = 60;
+function painelSecador(m) {
+  const l = db.lotesSecagem.find(x => x.secadorId === m.id && x.status === 'Em andamento'), u = ultimaLimpeza(m.id), dl = u ? diasEntreAuto(u.date, today()) : null;
+  const rodape = `<div class="sec-rodape"><span class="${dl == null || dl > DIAS_LIMPEZA ? 'txt-laranja' : ''}">Limpeza: ${u ? `há ${dl} ${dl === 1 ? 'dia' : 'dias'}` : 'nenhuma registrada'}</span>${mini('Registrar limpeza', 'gr-limpeza', m.id)}${mini('Sensores', 'gr-sensores', m.id)}</div>`;
+  if (!l) {
+    const esp = cargasEsperando(m.id), kg = esp.reduce((a, r) => a + (r.calc?.liquido || 0), 0);
+    return `<section class="card panel sec-painel parado"><div class="sec-topo"><strong>${esc(m.name)}</strong><span class="chip sit-gray">Parado</span></div>
+      <p class="sec-estado">${esp.length ? `<b>${esp.length} ${esp.length === 1 ? 'carga' : 'cargas'} da moega esperando</b> — ${kgT(kg)}` : 'Nenhuma carga da moega esperando.'}</p>
+      <div class="sec-acoes">${btn('Iniciar secagem', 'gr-secar', m.id, esp.length ? 'primary' : 'secondary')}</div>${rodape}</section>`;
+  }
+  const c = calcSecagem(l), ls = l.leituras || [], ult = ls.at(-1), uU = [...ls].reverse().find(x => numOuU(x.umidade) != null);
+  const fora = ult?.aval?.find(a => a.status === 'FORA_DO_PADRAO'), desde = ult ? ult.em : l.inicio, minSem = Math.round(horasEntre(desde, agoraISO()) * 60);
+  const prox = new Date(new Date(desde).getTime() + INTERVALO_LEITURA_MIN * 60000), proxTxt = `${String(prox.getHours()).padStart(2, '0')}:${String(prox.getMinutes()).padStart(2, '0')}`;
+  const atrasada = minSem > INTERVALO_LEITURA_MIN + 10, chegou = c.previsao?.chegou;
+  const chip = fora ? `<span class="chip sit-red">${fora.ponto === 'massa_graos' ? 'Massa' : 'Ar'} acima de ${n0(fora.limite)} °C</span>` : chegou ? '<span class="chip sit-green">Chegou à umidade final</span>' : atrasada ? `<span class="chip sit-orange">Leitura atrasada</span>` : '<span class="chip sit-green">Secando</span>';
+  const proximo = chegou ? 'Confira a amostra e finalize a secagem.' : atrasada ? `Faça a leitura agora — a última foi há ${minSem >= 60 ? Math.floor(minSem / 60) + ' h ' + (minSem % 60) + ' min' : minSem + ' min'}.` : `Próxima leitura às ${proxTxt}.`;
+  return `<section class="card panel sec-painel ${fora ? 'alerta' : ''}"><div class="sec-topo"><strong>${esc(m.name)} — secando ${esc(nomeProd(l.produto, l.produtoNome).toLowerCase())}</strong>${chip}</div>
+    <div class="lote-nums"><span><small>Umidade</small><b>${n1(c.ui)}% → ${uU ? n1(uU.umidade) + '%' : '—'}</b><small>meta ${numOuU(l.umidadeMeta) != null ? n1(l.umidadeMeta) + '%' : '—'}</small></span>
+      <span><small>Massa</small><b class="${fora?.ponto === 'massa_graos' ? 'txt-red' : ''}">${numOuU(ult?.tMassa) != null ? n0(ult.tMassa) + ' °C' : '—'}</b><small>${ult?.pontoQuente ? 'ponto ' + esc(ult.pontoQuente) : ult?.massaManual ? 'termômetro' : ''}</small></span>
+      <span><small>Tempo</small><b>${um1(c.horas)} h</b><small>${kgT(c.mi)}</small></span>
+      <span><small>Termina</small><b>${chegou ? 'agora' : c.previsao?.fim ? '~' + String(c.previsao.fim.getHours()).padStart(2, '0') + ':' + String(c.previsao.fim.getMinutes()).padStart(2, '0') : '—'}</b><small>${c.previsao?.fim && !chegou ? 'pelo ritmo atual' : ''}</small></span></div>
+    <p class="sec-estado ${atrasada || fora ? 'atencao' : ''}">${esc(proximo)}${fora ? ' ' + esc(fora.acao || '') : ''}</p>
+    <div class="sec-acoes">${btn('+ Leitura', 'gr-leitura', l.id, chegou ? 'secondary' : 'primary')}${btn('Finalizar', 'gr-finalizar', l.id, chegou ? 'primary' : 'secondary')}${btn('Planilha', 'nav', 'graos/lote/' + l.id, 'secondary')}</div>${rodape}</section>`;
+}
 function telaSecador() {
   const sec = equipDoTipo('Secador'); if (!sec.length) return semEquip('Secador');
   const abertas = db.lotesSecagem.filter(l => l.status === 'Em andamento'), feitas = db.lotesSecagem.filter(l => l.status === 'Concluída').sort((a, b) => (b.fim || '').localeCompare(a.fim || ''));
   const espera = cargasEsperando();
-  const limp = `<section class="card panel"><div class="section-title" style="margin:0 0 8px"><h3>Secadores</h3>${btn('+ Secador', 'gr-novo-secador', '', 'secondary')}</div>${sec.map(m => { const u = ultimaLimpeza(m.id), d = u ? diasEntreAuto(u.date, today()) : null; return `<div class="hoje-item"><span class="alert-icon ${d == null || d > DIAS_LIMPEZA ? 'orange' : 'green'}">⚙</span><div><strong>${esc(m.name)}</strong><small>${u ? `Última em ${fmtDate(u.date)} (há ${d} ${d === 1 ? 'dia' : 'dias'})${u.pendentes ? ` • ${u.pendentes} ${u.pendentes === 1 ? 'item pendente' : 'itens pendentes'}` : ' • tudo feito'}` : 'Nenhuma limpeza registrada'}</small></div><div class="btn-row" style="margin:0">${mini('Sensores', 'gr-sensores', m.id)}${mini('Registrar limpeza', 'gr-limpeza', m.id)}</div></div>`; }).join('')}<p class="nota" style="margin:6px 0 0">Pó, palha e grãos acumulados no secador são a principal causa de incêndio. O app lembra a cada ${DIAS_LIMPEZA} dias de uso (critério do app; siga o manual do fabricante).</p></section>`;
   const tot = feitas.reduce((a, l) => { const c = calcSecagem(l); a.mf += c.mf || 0; a.agua += c.agua || 0; a.h += c.horas; a.custo += c.custo || 0; return a; }, {mf: 0, agua: 0, h: 0, custo: 0});
-  return `${limp}${espera.length ? `<section class="card panel"><strong>${espera.length} ${espera.length === 1 ? 'carga esperando' : 'cargas esperando'} secagem</strong><small class="nota"> — ${kgT(espera.reduce((s, r) => s + (r.calc?.liquido || 0), 0))}</small><div class="btn-row" style="margin-top:8px">${btn('Iniciar secagem', 'gr-secar')}</div></section>` : ''}
-    ${abertas.map(cartaoLote).join('')}
-    ${feitas.length ? `<div class="section-title"><h3>Secagens concluídas</h3></div><section class="kpis"><article class="card kpi"><div class="label">Grão seco</div><div class="value">${kgT(tot.mf)}</div><div class="hint">${sacas(tot.mf)}</div></article><article class="card kpi"><div class="label">Água retirada</div><div class="value">${kgT(tot.agua)}</div></article><article class="card kpi"><div class="label">Rendimento médio</div><div class="value">${tot.h ? n1(feitas.reduce((s, l) => s + (Number(l.massaEntradaKg) || 0), 0) / 1000 / tot.h) + ' t/h' : '—'}</div></article><article class="card kpi"><div class="label">Custo de combustível</div><div class="value">${tot.custo ? 'R$ ' + num(tot.custo / (tot.mf / (typeof KG_SACA_GRAO !== 'undefined' ? KG_SACA_GRAO : 60)), 2) + '/sc' : '—'}</div><div class="hint">${tot.custo ? 'R$ ' + n0(tot.custo) + ' no total' : 'informe o preço ao finalizar'}</div></article></section>
+  return `${sec.map(painelSecador).join('')}<div class="btn-row" style="margin:0 0 6px">${btn('+ Secador', 'gr-novo-secador', '', 'secondary')}</div>
+    <p class="nota">Pó, palha e grãos acumulados no secador são a principal causa de incêndio: o sistema lembra a limpeza a cada ${DIAS_LIMPEZA} dias de uso (siga o manual do fabricante).</p>
+    ${feitas.length ? `<details class="secagens-feitas"><summary><b>Secagens concluídas (${feitas.length})</b> <small class="nota">totais, rendimento e custo</small></summary><section class="kpis"><article class="card kpi"><div class="label">Grão seco</div><div class="value">${kgT(tot.mf)}</div><div class="hint">${sacas(tot.mf)}</div></article><article class="card kpi"><div class="label">Água retirada</div><div class="value">${kgT(tot.agua)}</div></article><article class="card kpi"><div class="label">Rendimento médio</div><div class="value">${tot.h ? n1(feitas.reduce((s, l) => s + (Number(l.massaEntradaKg) || 0), 0) / 1000 / tot.h) + ' t/h' : '—'}</div></article><article class="card kpi"><div class="label">Custo de combustível</div><div class="value">${tot.custo ? 'R$ ' + num(tot.custo / (tot.mf / (typeof KG_SACA_GRAO !== 'undefined' ? KG_SACA_GRAO : 60)), 2) + '/sc' : '—'}</div><div class="hint">${tot.custo ? 'R$ ' + n0(tot.custo) + ' no total' : 'informe o preço ao finalizar'}</div></article></section>
     <section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Fim</th><th>Secador / produto</th><th class="num">Entrada</th><th class="num">Umidade</th><th class="num">Saída</th><th class="num">Horas</th><th class="num">t/h</th><th class="num">Combustível</th><th class="num">R$/sc</th></tr></thead><tbody>
       ${feitas.map(l => { const c = calcSecagem(l); return `<tr class="clickable" data-act="nav" data-id="graos/lote/${esc(l.id)}"><td>${fmtDH(l.fim)}</td><td>${esc(nomeEquip(l.secadorId))}<br><small class="nota">${esc(nomeProd(l.produto, l.produtoNome))}</small></td><td class="num">${kgT(c.mi)}</td><td class="num">${n1(c.ui)} → ${n1(c.uf)}%</td><td class="num">${c.mf ? kgT(c.mf) : '—'}</td><td class="num">${um1(c.horas)}</td><td class="num">${c.tph ? n1(c.tph) : '—'}</td><td class="num">${c.combPorT ? num(c.combPorT, 2) + ' ' + unComb(l.combustivel?.tipo) + '/t' : '—'}</td><td class="num">${c.custoSc ? num(c.custoSc, 2) : '—'}</td></tr>`; }).join('')}
-    </tbody></table></div></section>` : !abertas.length && !espera.length ? `<section class="card">${empty('Nenhuma secagem registrada', 'Inicie a secagem com as cargas da moega e registre a leitura de hora em hora.', {act: 'gr-secar', label: 'Iniciar secagem'})}</section>` : ''}`;
+    </tbody></table></div></section></details>` : !abertas.length && !espera.length ? `<section class="card">${empty('Nenhuma secagem registrada', 'Inicie a secagem com as cargas da moega e registre a leitura de hora em hora.', {act: 'gr-secar', label: 'Iniciar secagem'})}</section>` : ''}`;
 }
 function telaLote(id) {
   const l = find('lotesSecagem', id); if (!l) return empty('Secagem não encontrada', '', {act: 'nav', id: 'graos/secador', label: 'Voltar'});
