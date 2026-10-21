@@ -118,7 +118,7 @@ function criarCamadaSatelite(L, limitesImg) {
 function painelMapaHTML(compacto = false) {
   const v = mtEstado.vis, bt = (k, rot) => `<button class="${v[k] ? 'active' : ''}" data-act="mt-camada" data-id="${k}" aria-pressed="${v[k]}">${rot}</button>`;
   return `<section class="card panel mt-painel ${compacto ? 'mt-compacto' : ''}" ${compacto ? 'id="mtCasa"' : ''}>
-    ${compacto ? `<div class="section-title" style="margin:0"><h3>Radar e chuva no mapa</h3><button type="button" data-act="nav" data-id="clima">⛶ Abrir clima e radar</button></div>` : ''}
+    ${compacto ? `<div class="section-title" style="margin:0"><h3>Radar e chuva no mapa</h3><button type="button" data-act="nav" data-id="clima">⛶ Abrir MercaClima</button></div>` : ''}
     <p class="mt-alerta" id="mtAlerta" hidden></p>
     <div class="filters mt-camadas" role="group" aria-label="Camadas do mapa">${bt('sat', '☁ Satélite')}${bt('radar', '📡 Radar')}${bt('stsc', '⚡ Tempestades')}${bt('prev', '🌧 Chuva prevista')}</div>
     <div id="mapaTempo" class="mt-mapa" role="img" aria-label="Mapa do tempo em volta da fazenda"></div>
@@ -132,7 +132,7 @@ function painelMapaHTML(compacto = false) {
 VIEWS['clima-mapa'] = () => {
   const loc = typeof localDaFazenda === 'function' ? localDaFazenda() : null;
   if (!loc) return head('Mapa do tempo', 'Radar, satélite, tempestades e chuva prevista em volta da fazenda', btn('← Início', 'nav', 'inicio', 'secondary')) + `<section class="card">${empty('Informe onde fica a fazenda', 'O mapa é centrado na fazenda. Ative a localização no cartão do clima, na tela inicial.', {act: 'nav', id: 'inicio', label: 'Ir para o início'})}</section>`;
-  return head('Mapa do tempo', 'Radar, satélite, tempestades e chuva prevista em volta da fazenda', btn('← Clima e radar', 'nav', 'clima', 'secondary')) + painelMapaHTML(false);
+  return head('Mapa do tempo', 'Radar, satélite, tempestades e chuva prevista em volta da fazenda', btn('← MercaClima', 'nav', 'clima', 'secondary')) + painelMapaHTML(false);
 };
 TITLES['clima-mapa'] = 'Mapa do tempo';
 async function iniciarMapaTempo() {
