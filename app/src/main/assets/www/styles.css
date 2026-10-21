@@ -669,13 +669,13 @@ button.link{font-weight:600}
 /* Números: dígitos de mesma largura, alinhados */
 .kpi .value,.nx-kpi b,.tbl td.num,.tbl th.num,.num,.clima-max,.clima-min,.clima-t{font-variant-numeric:tabular-nums}
 /* Menu lateral: grupos que abrem e fecham, nomes inteiros (sem “…”) */
-.sidebar .nav .nav-grupo:not(.nav-fav-tit){cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-radius:6px;user-select:none}
-.sidebar .nav .nav-grupo:not(.nav-fav-tit)::after{content:'▾';font-size:.8rem;opacity:.7;transition:transform .15s}
+.sidebar .nav .nav-grupo{cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-radius:6px;user-select:none}
+.sidebar .nav .nav-grupo::after{content:'▾';font-size:.8rem;opacity:.7;transition:transform .15s}
 .sidebar .nav .nav-grupo.fechado::after{transform:rotate(-90deg)}
-.sidebar .nav .nav-grupo:not(.nav-fav-tit):hover{color:var(--text)}
+.sidebar .nav .nav-grupo:hover{color:var(--text)}
 .sidebar .nav button.nav-oculto{display:none!important}
 .sidebar .nav .nav-txt{white-space:normal!important;line-height:1.2;text-overflow:clip!important}
-.sidebar .nav-fav-tit{color:var(--destaque,#65e6a8)!important}
+
 /* Toque: alvos de pelo menos 44–48 px em telas de toque */
 @media(pointer:coarse){
   .content button,.dialog button,.mobile-nav button{min-height:44px}

@@ -27,7 +27,7 @@ VIEWS.chuva = () => {
   const media = (de, ate) => { const l = db.chuvas.filter(c => c.date >= de && c.date <= ate), n = new Set(l.map(c => c.fieldId || '')).size; return {mm: n ? soma(l) / n : 0, n}; };
   const plu = n => `${n} ${n === 1 ? 'pluviômetro' : 'pluviômetros'} com leitura`;
   const m30 = media(ini30, t), mAno = media(anoIni, t);
-  return head('Chuvas', 'Pluviometria por talhão ou da sede', btn('+ Chuva', 'ch-new')) +
+  return head('Chuvas', 'Pluviometria por talhão ou da sede', btn('← MercaClima', 'nav', 'clima', 'secondary') + btn('+ Chuva', 'ch-new')) +
     (db.chuvas.length ? `<section class="es-kpis">
       <article class="card kpi"><div class="label">Últimos 30 dias</div><div class="value">${um1(m30.mm)} mm</div><div class="hint">${m30.n > 1 ? 'média entre ' + plu(m30.n) : m30.n ? plu(1) : 'sem leitura no período'}</div></article>
       <article class="card kpi"><div class="label">No ano</div><div class="value">${um1(mAno.mm)} mm</div><div class="hint">desde 01/01${mAno.n > 1 ? ' • média entre ' + plu(mAno.n) : ''}</div></article>
