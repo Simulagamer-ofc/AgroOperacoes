@@ -34,3 +34,24 @@ jobs:
         run: |
           cmp referencias/avaliador.js app/src/main/assets/www/avaliador.js
           cmp referencias/regras-afericao.json app/src/main/assets/www/dados/regras-afericao.json
+
+  graos:
+    name: Bateria de grãos (moega, secador e silos)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Obter codigo
+        uses: actions/checkout@v4
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Instalar navegador de teste
+        run: |
+          pip install playwright==1.47.0
+          python -m playwright install --with-deps chromium
+      - name: Rodar a bateria pelos formularios do sistema
+        run: |
+          (cd app/src/main/assets/www && python -m http.server 8772 >/dev/null 2>&1 &)
+          sleep 2
+          python referencias/e2e/rodar-bateria-graos.py
