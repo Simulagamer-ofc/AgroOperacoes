@@ -865,3 +865,13 @@ tr.clickable{cursor:pointer} tr.clickable:hover td{background:rgba(23,135,212,.0
 .mt-alerta.ok{background:color-mix(in srgb,var(--green) 12%,transparent);color:var(--muted);font-weight:500}
 .mt-compacto .mt-mapa{height:min(48vh,380px);min-height:260px}.mt-compacto{margin-top:12px}
 .hoje>#mtCasa{grid-column:1/-1;margin-top:0}
+/* Clima e radar */
+.clima-risco{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:10px;margin:6px 0;border-left:4px solid var(--orange);background:color-mix(in srgb,var(--orange) 12%,transparent)}
+.clima-risco.red{border-left-color:var(--red);background:color-mix(in srgb,var(--red) 14%,transparent)}
+.clima-risco>span{font-size:1.2rem;line-height:1.2}.clima-risco strong{display:block;font-size:.92rem}.clima-risco small{display:block;color:var(--muted);font-size:.82rem;margin-top:2px}
+.clima-curto .clima-abrir{width:100%;margin-top:8px}.clima-curto .mt-painel{padding:8px 0 0;border:0;box-shadow:none;background:transparent;margin:0}
+.clima-tela{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:14px;align-items:start}.clima-col-prev{display:grid;gap:14px}.clima-col-mapa .mt-painel{margin:0}
+.mt-tela .mt-mapa{height:min(70vh,640px)}
+.clima-tela .clima-linha{pointer-events:none}.clima-tela .clima-seta{display:none}
+@media (max-width:900px){.clima-tela{grid-template-columns:1fr}.mt-tela .mt-mapa{height:min(55vh,460px)}}
+.clima-curto .mt-alerta,.clima-tela .mt-alerta{display:none!important}

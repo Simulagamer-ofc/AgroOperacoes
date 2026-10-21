@@ -118,7 +118,7 @@ function criarCamadaSatelite(L, limitesImg) {
 function painelMapaHTML(compacto = false) {
   const v = mtEstado.vis, bt = (k, rot) => `<button class="${v[k] ? 'active' : ''}" data-act="mt-camada" data-id="${k}" aria-pressed="${v[k]}">${rot}</button>`;
   return `<section class="card panel mt-painel ${compacto ? 'mt-compacto' : ''}" ${compacto ? 'id="mtCasa"' : ''}>
-    ${compacto ? `<div class="section-title" style="margin:0"><h3>Radar e chuva no mapa</h3><button type="button" data-act="nav" data-id="clima-mapa">⛶ Tela cheia</button></div>` : ''}
+    ${compacto ? `<div class="section-title" style="margin:0"><h3>Radar e chuva no mapa</h3><button type="button" data-act="nav" data-id="clima">⛶ Abrir clima e radar</button></div>` : ''}
     <p class="mt-alerta" id="mtAlerta" hidden></p>
     <div class="filters mt-camadas" role="group" aria-label="Camadas do mapa">${bt('sat', '☁ Satélite')}${bt('radar', '📡 Radar')}${bt('stsc', '⚡ Tempestades')}${bt('prev', '🌧 Chuva prevista')}</div>
     <div id="mapaTempo" class="mt-mapa" role="img" aria-label="Mapa do tempo em volta da fazenda"></div>
@@ -132,7 +132,7 @@ function painelMapaHTML(compacto = false) {
 VIEWS['clima-mapa'] = () => {
   const loc = typeof localDaFazenda === 'function' ? localDaFazenda() : null;
   if (!loc) return head('Mapa do tempo', 'Radar, satélite, tempestades e chuva prevista em volta da fazenda', btn('← Início', 'nav', 'inicio', 'secondary')) + `<section class="card">${empty('Informe onde fica a fazenda', 'O mapa é centrado na fazenda. Ative a localização no cartão do clima, na tela inicial.', {act: 'nav', id: 'inicio', label: 'Ir para o início'})}</section>`;
-  return head('Mapa do tempo', 'Radar, satélite, tempestades e chuva prevista em volta da fazenda', btn('← Início', 'nav', 'inicio', 'secondary')) + painelMapaHTML(false);
+  return head('Mapa do tempo', 'Radar, satélite, tempestades e chuva prevista em volta da fazenda', btn('← Clima e radar', 'nav', 'clima', 'secondary')) + painelMapaHTML(false);
 };
 TITLES['clima-mapa'] = 'Mapa do tempo';
 async function iniciarMapaTempo() {
@@ -235,23 +235,3 @@ Object.assign(ACTIONS, {
     mtEstado.tocando = setInterval(() => { if (!document.getElementById('mapaTempo')) return pararAnimacao(); mostrarQuadro((mtEstado.quadro + 1) % Math.max(1, mtEstado.quadros.length)); }, 700);
   }
 });
-
-// ---------- Mapa embutido no Início, logo abaixo da previsão (quando o cartão do clima está aberto) ----------
-function comMapaNoClima(html) {
-  if (!(typeof climaAberto === 'function' && climaAberto()) || !(typeof localDaFazenda === 'function' && localDaFazenda())) return html;
-  const i = html.indexOf('id="hojeClima"'); if (i < 0) return html;
-  const j = html.indexOf('</article>', i); if (j < 0) return html;
-  return html.slice(0, j + 10) + painelMapaHTML(true) + html.slice(j + 10);
-}
-function sincronizarMapaCasa() {
-  const card = document.getElementById('hojeClima'), atual = document.getElementById('mtCasa');
-  const quer = !!card && card.classList.contains('aberto') && typeof localDaFazenda === 'function' && !!localDaFazenda();
-  if (quer && !atual) { card.insertAdjacentHTML('afterend', painelMapaHTML(true)); iniciarMapaTempo(); }
-  else if (!quer && atual) { pararAnimacao(); mtEstado.mapa?.remove(); mtEstado.mapa = null; atual.remove(); }
-}
-if (VIEWS.inicio) {
-  const inicioSemMapa = VIEWS.inicio, depoisSemMapa = VIEWS.inicio.after;
-  VIEWS.inicio = (...a) => comMapaNoClima(inicioSemMapa(...a));
-  VIEWS.inicio.after = (...a) => { depoisSemMapa?.(...a); if (document.getElementById('mtCasa')) iniciarMapaTempo(); };
-}
-if (ACTIONS['clima-expandir']) { const expandirSemMapa = ACTIONS['clima-expandir']; ACTIONS['clima-expandir'] = (...a) => { expandirSemMapa(...a); sincronizarMapaCasa(); }; }
