@@ -6,6 +6,7 @@
     inicio: ['verde', '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>'],
     operacoes: ['verde', '<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/>'],
     talhoes: ['verde', '<path d="M3 20h18M4 20 9 5M9 20l2-15M15 20l-2-15M20 20 15 5M6.5 12.5h11"/>'],
+    clima: ['azul', '<path d="M7 16a4 4 0 0 1 .6-8 5.2 5.2 0 0 1 9.9 1.7A3.4 3.4 0 0 1 17 16z"/><path d="M12 18.5 10.5 21M15.5 18.5 14 21"/><path d="M13 12.5l-2 3h3l-2 3"/>'],
     chuva: ['verde', '<path d="M7 15a4 4 0 0 1 .6-8 5.2 5.2 0 0 1 9.9 1.7A3.4 3.4 0 0 1 17 15z"/><path d="M8.5 18 7.5 20.5M12.5 18l-1 2.5M16.5 18l-1 2.5"/>'],
     pragas: ['verde', '<ellipse cx="12" cy="14.5" rx="4.2" ry="5.5"/><circle cx="12" cy="7" r="2.2"/><path d="M12 9.2V20M7.8 12.5H4.5M7.8 16.5H4.5M16.2 12.5h3.3M16.2 16.5h3.3M10.8 5.2 9.5 3M13.2 5.2 14.5 3"/>'],
     aplicacoes: ['verde', '<path d="M12 3.5s6 6.8 6 10.8a6 6 0 0 1-12 0c0-4 6-10.8 6-10.8z"/><path d="M9.5 15a2.6 2.6 0 0 0 2.5 2.5"/>'],

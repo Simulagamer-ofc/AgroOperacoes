@@ -1,0 +1,797 @@
+{
+ "casos": [
+  {
+   "id": "MOE-01",
+   "mod": "Moega",
+   "desc": "Soja úmida e suja — balanço de massa (impureza e umidade acima do padrão)",
+   "esperado": "líquido 37.220 kg • desconto 1.875,43 kg (5,039%) • final 35.344,57 kg = 589,08 sc",
+   "obtido": "líquido 37.220 kg • desconto 1.875,43 kg (5,039%) • final 35.344,57 kg",
+   "ok": true
+  },
+  {
+   "id": "MOE-02",
+   "mod": "Moega",
+   "desc": "Soja seca e limpa — abaixo do padrão não tem desconto",
+   "esperado": "líquido 35.720 kg • desconto 0,00 kg (0,000%) • final 35.720,00 kg = 595,33 sc",
+   "obtido": "líquido 35.720 kg • desconto 0,00 kg (0,000%) • final 35.720,00 kg",
+   "ok": true
+  },
+  {
+   "id": "MOE-03",
+   "mod": "Moega",
+   "desc": "Só umidade acima do padrão (impureza dentro)",
+   "esperado": "líquido 34.760 kg • desconto 2.101,77 kg (6,047%) • final 32.658,23 kg = 544,30 sc",
+   "obtido": "líquido 34.760 kg • desconto 2.101,77 kg (6,047%) • final 32.658,23 kg",
+   "ok": true
+  },
+  {
+   "id": "MOE-04",
+   "mod": "Moega",
+   "desc": "Tabela da cooperativa: 1,5% por ponto de umidade e 1% por ponto de impureza, com quebra técnica de 0,3%",
+   "esperado": "líquido 34.260 kg • desconto 1.790,15 kg (5,225%) • final 32.469,85 kg = 541,16 sc",
+   "obtido": "líquido 34.260 kg • desconto 1.790,15 kg (5,225%) • final 32.469,85 kg",
+   "ok": true
+  },
+  {
+   "id": "MOE-05",
+   "mod": "Moega",
+   "desc": "Milho úmido — balanço de massa com outros descontos (avariados) de 0,5%",
+   "esperado": "líquido 32.020 kg • desconto 3.871,77 kg (12,092%) • final 28.148,23 kg = 469,14 sc",
+   "obtido": "líquido 32.020 kg • desconto 3.871,78 kg (12,092%) • final 28.148,23 kg",
+   "ok": true
+  },
+  {
+   "id": "MOE-06",
+   "mod": "Moega",
+   "desc": "Carga própria com talhão vira colheita do talhão em Produção (peso já descontado)",
+   "esperado": "35345 kg na safra 2025/26",
+   "obtido": "35345 kg na safra 2025/26",
+   "ok": true
+  },
+  {
+   "id": "MOE-07",
+   "mod": "Moega",
+   "desc": "Numeração sequencial dos romaneios",
+   "esperado": "1, 2, 3, 4, 5",
+   "obtido": "1, 2, 3, 4, 5",
+   "ok": true
+  },
+  {
+   "id": "MOE-08",
+   "mod": "Moega",
+   "desc": "Bloqueia peso bruto menor ou igual à tara",
+   "esperado": "não registra e avisa",
+   "obtido": "[!] O peso bruto precisa ser maior que a tara",
+   "ok": true
+  },
+  {
+   "id": "MOE-09",
+   "mod": "Moega",
+   "desc": "Carga de terceiro exige o nome do dono",
+   "esperado": "não registra e avisa",
+   "obtido": "[!] Informe o nome do terceiro dono da carga",
+   "ok": true
+  },
+  {
+   "id": "MOE-10",
+   "mod": "Moega",
+   "desc": "Cultura \"Outro\" exige o nome da cultura",
+   "esperado": "não registra e avisa",
+   "obtido": "[!] Escreva qual é a cultura",
+   "ok": true
+  },
+  {
+   "id": "MOE-11",
+   "mod": "Moega",
+   "desc": "Tabela da cooperativa exige o desconto por ponto de umidade",
+   "esperado": "não registra e avisa",
+   "obtido": "[!] Informe o desconto por ponto de umidade da tabela",
+   "ok": true
+  },
+  {
+   "id": "MOE-12",
+   "mod": "Moega",
+   "desc": "Mesma placa em até 30 min: avisa possível lançamento em dobro (placa digitada em minúscula e com traço)",
+   "esperado": "pede confirmação",
+   "obtido": "[!] A placa tst-0001 já tem o romaneio nº 1 às 08:00 (37.220 kg). Se for outra viagem, toque em registrar de novo.",
+   "ok": true
+  },
+  {
+   "id": "MOE-13",
+   "mod": "Moega",
+   "desc": "Carga úmida (16,5%) mandada direto ao silo: alerta antes de registrar",
+   "esperado": "pede confirmação",
+   "obtido": "[!] Umidade 16,5% acima do padrão: o normal é mandar para o secador. Toque em registrar de novo para mandar direto ao silo mesmo assim.",
+   "ok": true
+  },
+  {
+   "id": "MOE-14",
+   "mod": "Moega",
+   "desc": "Secador desativado não aparece como destino",
+   "esperado": "só equipamentos ativos",
+   "obtido": "Secador — Secador contínuo 60 t/h • Silo direto — Silo 01 — soja • Silo direto — Silo 02 — soja • Silo direto — Silo 03 — milho • Silo direto — Silo 04 — pulmão",
+   "ok": true
+  },
+  {
+   "id": "MOE-15",
+   "mod": "Moega",
+   "desc": "Número ambíguo \"45.000\" não é aceito sem confirmar a escrita (evita 45 kg × 45 t)",
+   "esperado": "pede para escrever 45000 ou 45.000,00",
+   "obtido": "Valor ambíguo: escreva 45000 ou 45.000,00",
+   "ok": true
+  },
+  {
+   "id": "MOE-16",
+   "mod": "Moega",
+   "desc": "Editar a umidade do romaneio (17,5% → 15,0%) recalcula o desconto e a colheita em Produção",
+   "esperado": "final 36.415,62 kg • colheita 36416 kg",
+   "obtido": "final 36.415,62 kg • colheita 36416 kg",
+   "ok": true
+  },
+  {
+   "id": "MOE-17",
+   "mod": "Classificação",
+   "desc": "Soja Grupo II dentro de todos os limites da IN MAPA 11/2007",
+   "esperado": "Padrão Básico",
+   "obtido": "Padrão Básico",
+   "ok": true
+  },
+  {
+   "id": "MOE-18",
+   "mod": "Classificação",
+   "desc": "Soja Grupo II com avariados 9,5% (limite 8%)",
+   "esperado": "Fora de Tipo",
+   "obtido": "Fora do Padrão Básico",
+   "ok": true
+  },
+  {
+   "id": "MOE-19",
+   "mod": "Classificação",
+   "desc": "Milho com ardidos 1,6%, quebrados 3,6%, impurezas 1,2% (IN MAPA 60/2011)",
+   "esperado": "Tipo 2",
+   "obtido": "Tipo 2",
+   "ok": true
+  },
+  {
+   "id": "MOE-20",
+   "mod": "Classificação",
+   "desc": "Milho com avariados 18% e ardidos 3,5% (acima do Tipo 3)",
+   "esperado": "Fora de Tipo",
+   "obtido": "Fora de Tipo",
+   "ok": true
+  },
+  {
+   "id": "SEC-01",
+   "mod": "Secador",
+   "desc": "Carga sugerida = líquido das 3 cargas de soja em espera menos a impureza medida (sai na pré-limpeza)",
+   "esperado": "104,2 t",
+   "obtido": "104,2 t",
+   "ok": true
+  },
+  {
+   "id": "SEC-02",
+   "mod": "Secador",
+   "desc": "Umidade de entrada sugerida = média ponderada pelo peso líquido",
+   "esperado": "16,7%",
+   "obtido": "16,7%",
+   "ok": true
+  },
+  {
+   "id": "SEC-03",
+   "mod": "Secador",
+   "desc": "Secador desativado não aparece para iniciar secagem",
+   "esperado": "só o secador ativo",
+   "obtido": "Secador contínuo 60 t/h",
+   "ok": true
+  },
+  {
+   "id": "SEC-04",
+   "mod": "Secador",
+   "desc": "Com um lote em andamento, \"Iniciar secagem\" abre o lote aberto (não cria dois no mesmo secador)",
+   "esperado": "1 lote em andamento",
+   "obtido": "1 em andamento",
+   "ok": true
+  },
+  {
+   "id": "SEC-05",
+   "mod": "Secador",
+   "desc": "Cargas de soja em espera ficam vinculadas ao lote (rastreabilidade carga → secagem)",
+   "esperado": "3 cargas",
+   "obtido": "3 cargas",
+   "ok": true
+  },
+  {
+   "id": "SEC-18",
+   "mod": "Secador",
+   "desc": "Havia 4 cargas na fila (3 de soja e 1 de milho): o lote de soja não mistura o milho, que fica esperando o próximo lote",
+   "esperado": "milho fora do lote e ainda na fila",
+   "obtido": "milho fora do lote • 1 de milho na fila",
+   "ok": true
+  },
+  {
+   "id": "LEI-01",
+   "mod": "Leitura",
+   "desc": "Leitura do secador segue o painel: ar quente do Entringer e pontos P1 a P4 do TSW, com o local de cada um",
+   "esperado": "campos \"Ar quente — visor do Entringer\" e \"P1 — coluna, parte de baixo\" … \"P4\"",
+   "obtido": "Ar quente — visor do Entringer • P1 — coluna, parte de baixo • P2 — coluna, meio • P3 — coluna, parte de cima • P4 — saída do grão",
+   "ok": true
+  },
+  {
+   "id": "LEI-02",
+   "mod": "Leitura",
+   "desc": "Número fora do possível (410 °C no P2, em vez de 41) é barrado como erro de digitação",
+   "esperado": "pede para conferir o visor",
+   "obtido": "[!] P2 com 410 °C parece digitado errado. Confira o visor.",
+   "ok": true
+  },
+  {
+   "id": "LEI-03",
+   "mod": "Leitura",
+   "desc": "Guarda os 4 pontos, usa o mais quente como temperatura da massa e diz em linguagem simples qual ponto passou do limite",
+   "esperado": "massa 41 °C no P3 • aviso cita P3 e o limite de 40 °C",
+   "obtido": "massa 41 °C no P3 • Atenção: massa no P3 com 41 °C, acima do limite de 40 °C (massa de soja para grão — armazenagem). Reduzir a temperatura do ar de secagem ou aumentar a vazão de grãos até a massa ficar em até 40 °C (acima disso aumentam trincas, quebra e perda de qualidade).",
+   "ok": true
+  },
+  {
+   "id": "LEI-04",
+   "mod": "Leitura",
+   "desc": "Ponto mostrando OFF fica em branco e não atrapalha: a massa é o maior dos outros",
+   "esperado": "P4 vazio • massa 39 °C (P3)",
+   "obtido": "P4 vazio • massa 39 °C (P3)",
+   "ok": true
+  },
+  {
+   "id": "SEC-06",
+   "mod": "Secador",
+   "desc": "Massa de soja (grão) comparada ao limite de 40 °C (Embrapa): 36, 38, 41 e 39 °C",
+   "esperado": "OK, OK, FORA, OK",
+   "obtido": "OK, OK, FORA, OK",
+   "ok": true
+  },
+  {
+   "id": "LEI-05",
+   "mod": "Leitura",
+   "desc": "Planilha de secagem mostra P1 a P4, a massa máxima e a situação de cada hora",
+   "esperado": "colunas P1…P4 • \"Massa acima de 40 °C (P3)\"",
+   "obtido": "colunas P1…P4 • situação com P3",
+   "ok": true
+  },
+  {
+   "id": "SEC-07",
+   "mod": "Secador",
+   "desc": "Previsão de término pelo ritmo das duas últimas leituras (15,0% → 14,1% em 1 h; meta 13%)",
+   "esperado": "0,90 ponto/h • chega ~14:13",
+   "obtido": "0,90 ponto/h • chega ~14:13",
+   "ok": true
+  },
+  {
+   "id": "SEC-08",
+   "mod": "Secador",
+   "desc": "Finalizar com 14,5% (acima do limite de armazenagem de 13% para soja): pede confirmação",
+   "esperado": "avisa e não finaliza",
+   "obtido": "[!] Grão acima de 13%: voltar ao secador (ou seca-aeração) antes de armazenar. Toque em finalizar de novo para encerrar mesmo assim.",
+   "ok": true
+  },
+  {
+   "id": "SEC-09",
+   "mod": "Secador",
+   "desc": "Grão seco pelo balanço de água: 120 t de 18% para 13% (Mf = Mi × (100−Ui)/(100−Uf))",
+   "esperado": "113.103,45 kg • água 6.896,55 kg",
+   "obtido": "113.103,45 kg • água 6.896,55 kg",
+   "ok": true
+  },
+  {
+   "id": "SEC-10",
+   "mod": "Secador",
+   "desc": "Rendimento e pontos retirados por hora (6 h de secagem)",
+   "esperado": "20,00 t/h • 0,83 ponto/h",
+   "obtido": "20,00 t/h • 0,83 ponto/h",
+   "ok": true
+  },
+  {
+   "id": "SEC-11",
+   "mod": "Secador",
+   "desc": "Custo da secagem: 7,2 m³ de lenha × R$ 95 + 480 kWh × R$ 0,82, por saca seca",
+   "esperado": "R$ 1.077,60 • R$ 0,57/sc • 0,060 m³/t",
+   "obtido": "R$ 1.077,60 • R$ 0,57/sc • 0,060 m³/t",
+   "ok": true
+  },
+  {
+   "id": "SEC-12",
+   "mod": "Secador",
+   "desc": "Grão seco entra no silo de destino",
+   "esperado": "Silo 01 recebe 113.103 kg do secador",
+   "obtido": "Silo 01 recebe 113.103 kg do secador",
+   "ok": true
+  },
+  {
+   "id": "SEC-13",
+   "mod": "Secador",
+   "desc": "Leitura anotada após a meia-noite para um horário \"à frente\" do relógio fica no dia anterior",
+   "esperado": "2026-10-20 17:00",
+   "obtido": "2026-10-20 17:00",
+   "ok": true
+  },
+  {
+   "id": "SEC-14",
+   "mod": "Secador",
+   "desc": "Milho para ração: ar de entrada 80 °C comparado ao limite de 82 °C",
+   "esperado": "OK",
+   "obtido": "OK",
+   "ok": true
+  },
+  {
+   "id": "SEC-17",
+   "mod": "Secador",
+   "desc": "Secador em uso sem limpeza registrada: aviso de risco de incêndio; some após registrar a limpeza",
+   "esperado": "aviso aparece → some",
+   "obtido": "aviso aparece → some",
+   "ok": true
+  },
+  {
+   "id": "SEC-15",
+   "mod": "Secador",
+   "desc": "Excluir uma secagem devolve as cargas para \"esperando secagem\"",
+   "esperado": "2 cargas voltam",
+   "obtido": "2 esperando",
+   "ok": true
+  },
+  {
+   "id": "SEC-16",
+   "mod": "Secador",
+   "desc": "Romaneio que já entrou numa secagem não pode ser excluído",
+   "esperado": "bloqueia e avisa",
+   "obtido": "bloqueou",
+   "ok": true
+  },
+  {
+   "id": "SIL-01",
+   "mod": "Silos",
+   "desc": "Saldo do silo = cargas recebidas direto + grão seco do secador",
+   "esperado": "148.823,45 kg",
+   "obtido": "148.823,45 kg",
+   "ok": true
+  },
+  {
+   "id": "SIL-02",
+   "mod": "Silos",
+   "desc": "Ocupação sobre a capacidade de 3.000 t",
+   "esperado": "4,96%",
+   "obtido": "4,96%",
+   "ok": true
+  },
+  {
+   "id": "SIL-03",
+   "mod": "Silos",
+   "desc": "Umidade média do silo ponderada pelo peso de cada entrada",
+   "esperado": "12,95%",
+   "obtido": "12,95%",
+   "ok": true
+  },
+  {
+   "id": "SIL-04",
+   "mod": "Silos",
+   "desc": "Expedição maior que o saldo é bloqueada",
+   "esperado": "bloqueia e avisa",
+   "obtido": "[!] O silo tem 148,8 t: a saída não pode passar do saldo",
+   "ok": true
+  },
+  {
+   "id": "SIL-05",
+   "mod": "Silos",
+   "desc": "Transferência para o mesmo silo é bloqueada",
+   "esperado": "bloqueia e avisa",
+   "obtido": "[!] Escolha outro silo de destino",
+   "ok": true
+  },
+  {
+   "id": "SIL-06",
+   "mod": "Silos",
+   "desc": "Expedição de 60.000 kg a R$ 128,50/sc lança a venda (1.000 sc) e a conta a receber a prazo",
+   "esperado": "1.000 sc • R$ 128.500,00 • conta aberta venc. 03/05/2026",
+   "obtido": "1.000 sc • R$ 128.500,00 • conta aberta venc. 03/05/2026",
+   "ok": true
+  },
+  {
+   "id": "SIL-07",
+   "mod": "Silos",
+   "desc": "Transferência de 20 t do Silo 01 para o 04 e ajuste de −180 kg no 04",
+   "esperado": "Silo 01: 68.823,45 kg • Silo 04: 19.820,00 kg",
+   "obtido": "Silo 01: 68.823,45 kg • Silo 04: 19.820,00 kg",
+   "ok": true
+  },
+  {
+   "id": "SIL-08",
+   "mod": "Silos",
+   "desc": "Excluir a expedição remove junto a venda e a conta a receber",
+   "esperado": "venda e conta removidas; saldo volta",
+   "obtido": "venda removida • conta removida • saldo 128.823,45 kg",
+   "ok": true
+  },
+  {
+   "id": "SIL-09",
+   "mod": "Terceiros",
+   "desc": "Grão de terceiro não vira colheita da fazenda",
+   "esperado": "nenhuma colheita gerada",
+   "obtido": "nenhuma colheita",
+   "ok": true
+  },
+  {
+   "id": "SIL-10",
+   "mod": "Terceiros",
+   "desc": "Retirada de 40 t por terceiro que tem 30,8 t é bloqueada (silo tem saldo, o terceiro não)",
+   "esperado": "bloqueia e avisa",
+   "obtido": "[!] Agropecuária Lima tem 30,8 t armazenados: a saída não pode passar disso",
+   "ok": true
+  },
+  {
+   "id": "SIL-11",
+   "mod": "Terceiros",
+   "desc": "Extrato do terceiro: saldo e armazenagem diária (R$ 0,30/sc/mês sobre o saldo de cada dia)",
+   "esperado": "saldo 15.800,00 kg • armazenagem R$ 131,63",
+   "obtido": "saldo 15.800,00 kg • armazenagem R$ 131,63",
+   "ok": true
+  },
+  {
+   "id": "TER-01",
+   "mod": "Terceiros",
+   "desc": "Quebra técnica de 0,1% ao mês sobre o saldo de cada dia sai do saldo do depositante; recepção de R$ 6/t sobre o líquido recebido",
+   "esperado": "quebra 26,31 kg • saldo 15.773,69 kg • recepção R$ 184,80 • armazenagem R$ 131,56",
+   "obtido": "quebra 26,31 kg • saldo 15.773,69 kg • recepção R$ 184,80 • armazenagem R$ 131,56",
+   "ok": true
+  },
+  {
+   "id": "TER-02",
+   "mod": "Terceiros",
+   "desc": "Total a cobrar = recepção + secagem + armazenagem",
+   "esperado": "R$ 316,36",
+   "obtido": "R$ 316,36",
+   "ok": true
+  },
+  {
+   "id": "TER-03",
+   "mod": "Terceiros",
+   "desc": "Retirar o saldo sem descontar a quebra é bloqueado (o depositante tem menos por causa da quebra)",
+   "esperado": "bloqueia e avisa",
+   "obtido": "[!] Agropecuária Lima tem 15,8 t armazenados: a saída não pode passar disso",
+   "ok": true
+  },
+  {
+   "id": "TER-04",
+   "mod": "Terceiros",
+   "desc": "Extrato impresso mostra a recepção e a quebra técnica",
+   "esperado": "linhas de recepção e quebra",
+   "obtido": "recepção • quebra",
+   "ok": true
+  },
+  {
+   "id": "SIL-12",
+   "mod": "Silos",
+   "desc": "Termometria: cabo 2 subiu 2,5 °C em uma semana (critério: ≥ 2 °C)",
+   "esperado": "cabo 2 marcado",
+   "obtido": "cabo 2 +2,5 °C",
+   "ok": true
+  },
+  {
+   "id": "SIL-13",
+   "mod": "Silos",
+   "desc": "Insetos vivos na vistoria geram aviso",
+   "esperado": "aviso \"Insetos no Silo 01\"",
+   "obtido": "Insetos no Silo 01 — soja",
+   "ok": true
+  },
+  {
+   "id": "SIL-14",
+   "mod": "Silos",
+   "desc": "Silo em expurgo (120 h de exposição): movimentação pede confirmação de liberação",
+   "esperado": "bloqueia e avisa",
+   "obtido": "[!] Silo em expurgo até 26/10/2026 14:00 (Fosfina (fosfeto de alumínio)): não abrir nem movimentar antes do fim da exposição. Toque em registrar de novo só se a liberação já foi feita.",
+   "ok": true
+  },
+  {
+   "id": "SIL-15",
+   "mod": "Silos",
+   "desc": "Inventário por cubagem: diferença calculada e estoque ajustado ao medido",
+   "esperado": "-4.323 kg (-5,48%) • saldo 74.500 kg",
+   "obtido": "-4.323 kg (-5,48%) • saldo 74.500 kg",
+   "ok": true
+  },
+  {
+   "id": "SIL-16",
+   "mod": "Silos",
+   "desc": "Rastreabilidade: origem do grão do Silo 01 por talhão (só talhões de soja, soma 100%)",
+   "esperado": "Talhão 01 — Coxilha 100%",
+   "obtido": "Talhão 01 — Coxilha 100,0%",
+   "ok": true
+  },
+  {
+   "id": "SIL-17",
+   "mod": "Medidor",
+   "desc": "Conferência do medidor da moega contra estufa (5 amostras, tolerância ±0,5 ponto)",
+   "esperado": "erro médio +0,36 ponto • dentro da tolerância",
+   "obtido": "erro médio +0,36 ponto • dentro da tolerância",
+   "ok": true
+  },
+  {
+   "id": "SIL-18",
+   "mod": "Medidor",
+   "desc": "Medidor sem verificação anual do Inmetro (Portaria 47/2022) fica sinalizado",
+   "esperado": "pendente",
+   "obtido": "sinalizado",
+   "ok": true
+  },
+  {
+   "id": "VOL-01",
+   "mod": "Volume",
+   "desc": "140 cargas de bitrem (34 a 38,5 t líquidas) lançadas pela moega e conferidas uma a uma com o cálculo independente",
+   "esperado": "140/140 registradas • diferença máx. 0,01 kg",
+   "obtido": "140/140 registradas • diferença máx. 0,0005 kg",
+   "ok": true
+  },
+  {
+   "id": "VOL-02",
+   "mod": "Volume",
+   "desc": "Totais da safra simulada (peso líquido e peso final descontado)",
+   "esperado": "líquido 5.054,4 t • final 4.754,705 t",
+   "obtido": "final 4.754,705 t",
+   "ok": true
+  },
+  {
+   "id": "VOL-03",
+   "mod": "Volume",
+   "desc": "Secagens por dia e produto: carga de entrada sugerida e grão seco pelo balanço de água conferidos",
+   "esperado": "21/21 lotes corretos",
+   "obtido": "21/21 lotes corretos",
+   "ok": true
+  },
+  {
+   "id": "CAP-01",
+   "mod": "Silos",
+   "desc": "Transferir 700 t para o Silo 04 (capacidade 600 t, já com 19,8 t): avisa antes de passar da capacidade",
+   "esperado": "avisa e não registra",
+   "obtido": "[!] Silo 04 — pulmão tem 19,8 t de 600,0 t: com mais 700,0 t fica com 120% da capacidade. Toque em registrar de novo para confirmar.",
+   "ok": true
+  },
+  {
+   "id": "CAP-02",
+   "mod": "Silos",
+   "desc": "Se o operador confirma mesmo assim, o painel mostra aviso vermelho de silo acima da capacidade",
+   "esperado": "aviso vermelho",
+   "obtido": "red: Silo acima da capacidade: Silo 04 — pulmão — 719,8 t lançados para 600,0 t (120%). Confira os lançamentos ou a capacidade cadastrada.",
+   "ok": true
+  },
+  {
+   "id": "CAP-03",
+   "mod": "Silos",
+   "desc": "Desfeita a transferência, o aviso some e os saldos voltam",
+   "esperado": "Silo 02 2.891,6 t • Silo 04 19,8 t • sem aviso",
+   "obtido": "Silo 02 2.891,6 t • Silo 04 19,8 t • sem aviso",
+   "ok": true
+  },
+  {
+   "id": "CAP-04",
+   "mod": "Silos",
+   "desc": "Carga seca direto a silo com espaço: registra sem aviso de capacidade",
+   "esperado": "registra",
+   "obtido": "registrou",
+   "ok": true
+  },
+  {
+   "id": "PAT-01",
+   "mod": "Pátio",
+   "desc": "Chegada do caminhão (1ª pesagem, cheio): fica no pátio aguardando a tara",
+   "esperado": "IXB-4F10 no pátio com 51.340 kg",
+   "obtido": "IXB-4F10 no pátio com 51.340 kg",
+   "ok": true
+  },
+  {
+   "id": "PAT-02",
+   "mod": "Pátio",
+   "desc": "Mesma placa não pode chegar de novo enquanto está no pátio",
+   "esperado": "bloqueia e avisa",
+   "obtido": "[!] A placa IXB4F10 já está no pátio desde 21/10/2026 07:15 (51.340 kg). Feche a pesagem dela antes.",
+   "ok": true
+  },
+  {
+   "id": "PAT-03",
+   "mod": "Pátio",
+   "desc": "2ª pesagem (vazio, 15.880 kg) fecha o romaneio com o bruto da chegada; entrada e saída ficam no comprovante",
+   "esperado": "líquido 35.460 kg • final 35.460,00 kg • entrada e saída registradas • pátio vazio",
+   "obtido": "líquido 35.460 kg • final 35.460,00 kg • entrada ok • saída ok • pátio vazio",
+   "ok": true
+  },
+  {
+   "id": "PAT-04",
+   "mod": "Pátio",
+   "desc": "Tirar caminhão do pátio sem descarregar exige motivo e fica registrado",
+   "esperado": "sem motivo bloqueia; com motivo fica \"cancelada\"",
+   "obtido": "pediu motivo • cancelada",
+   "ok": true
+  },
+  {
+   "id": "AUD-01",
+   "mod": "Histórico",
+   "desc": "Alterar a tara de um romaneio sem informar o motivo é bloqueado",
+   "esperado": "pede o motivo",
+   "obtido": "[!] Informe o motivo da alteração (tara): fica no histórico do romaneio",
+   "ok": true
+  },
+  {
+   "id": "AUD-02",
+   "mod": "Histórico",
+   "desc": "Com motivo: grava quem alterou, quando, o valor antigo e o novo, e o peso final antes e depois",
+   "esperado": "Tara: 15.880 kg → 15.680 kg • final 35.460 → 35.660 kg",
+   "obtido": "Tara: 15.880 kg → 15.680 kg • final 35.460 → 35.660 kg • por Edson • Tara repesada: caminhão estava com lona molhada",
+   "ok": true
+  },
+  {
+   "id": "AUD-03",
+   "mod": "Histórico",
+   "desc": "Mudar só a observação não pede motivo nem cria registro de alteração",
+   "esperado": "salva • 3 registros",
+   "obtido": "salva • 3 registros",
+   "ok": true
+  },
+  {
+   "id": "AUD-04",
+   "mod": "Histórico",
+   "desc": "Excluir romaneio exige motivo, fica no registro de excluídos e o número não é reaproveitado",
+   "esperado": "nº 149 registrado como excluído • próximo romaneio nº 150",
+   "obtido": "pediu motivo • nº 149 registrado (Lançado na unidade errada) • próximo nº 150",
+   "ok": true
+  },
+  {
+   "id": "TKT-01",
+   "mod": "Ticket",
+   "desc": "Ticket do romaneio em PDF para o motorista: número, placa, pesagem, descontos, peso final e assinaturas",
+   "esperado": "mercaplant-romaneio-150-jbc7h31.pdf com peso final 34.220 kg",
+   "obtido": "mercaplant-romaneio-150-jbc7h31.pdf • 1 página(s)",
+   "ok": true
+  },
+  {
+   "id": "VAL-01",
+   "mod": "Validação",
+   "desc": "Umidade final desejada em branco: pede o valor (sem ela a previsão seria \"chega a 0,0%\")",
+   "esperado": "pede a umidade final",
+   "obtido": "[!] Informe a umidade final desejada, normalmente entre 12% e 14% (ex.: 13). É ela que o sistema usa para prever o fim da secagem.",
+   "ok": true
+  },
+  {
+   "id": "VAL-02",
+   "mod": "Validação",
+   "desc": "Carga de 21.300 \"t\" (digitada em kg no campo de toneladas): avisa que 21.300 kg = 21,3 t",
+   "esperado": "avisa antes de iniciar",
+   "obtido": "[!] Carga de 21.300 t está muito alta. O campo é em TONELADAS: 21.300 kg = 21,3 t. Corrija ou toque em iniciar de novo se for isso mesmo.",
+   "ok": true
+  },
+  {
+   "id": "VAL-03",
+   "mod": "Validação",
+   "desc": "Umidade de entrada 7,9% (abaixo da final desejada de 13%): pede para conferir a amostra",
+   "esperado": "avisa antes de iniciar",
+   "obtido": "[!] Umidade de entrada 7,9% já está abaixo da umidade final desejada (13,0%). O grão úmido costuma entrar no secador entre 14% e 25%. Confira a amostra ou toque em iniciar de novo.",
+   "ok": true
+  },
+  {
+   "id": "VAL-04",
+   "mod": "Validação",
+   "desc": "Rendimento (t/h) só aparece depois de 15 min de secagem (evita \"1.278.000 t/h\" logo no início)",
+   "esperado": "sem rendimento no início",
+   "obtido": "sem rendimento",
+   "ok": true
+  },
+  {
+   "id": "VAL-05",
+   "mod": "Validação",
+   "desc": "Leitura com P1…P4 iguais ao ar quente (116 °C copiado do outro visor): explica que os pontos são do alarme",
+   "esperado": "pede para conferir",
+   "obtido": "[!] Todos os pontos estão com 116 °C, o mesmo número do ar quente. Os pontos P1, P2, P3, P4 são do outro aparelho (alarme): selecione cada P no alarme e copie o número dele. Se mostrar OFF, deixe em branco. Toque em salvar de novo se os números são esses mesmo.",
+   "ok": true
+  },
+  {
+   "id": "VAL-06",
+   "mod": "Validação",
+   "desc": "Corrigir dados de uma secagem em andamento sem excluir",
+   "esperado": "carga 22,5 t a 18,4%",
+   "obtido": "carga 22,5 t a 18,4%",
+   "ok": true
+  },
+  {
+   "id": "VAL-07",
+   "mod": "Validação",
+   "desc": "Sensores com todos os pontos marcados como \"ar\": avisa que sem ponto de massa o sistema não compara o grão com o limite",
+   "esperado": "avisa antes de salvar",
+   "obtido": "[!] Nenhum ponto está marcado como “Massa de grãos”. Sem isso o sistema não compara a temperatura do grão com o limite (é a que protege contra trinca e incêndio). No alarme com P1, P2… os pontos da coluna medem a massa. Toque em salvar de novo se o painel não tem nenhum.",
+   "ok": true
+  },
+  {
+   "id": "MAN-01",
+   "mod": "Leitura",
+   "desc": "Alarme em OFF (P1…P4 em branco): salva a leitura, avisa que a massa não foi medida e marca na planilha",
+   "esperado": "salva • aviso • \"Massa não medida\"",
+   "obtido": "salva • aviso • \"Massa não medida\"",
+   "ok": true
+  },
+  {
+   "id": "MAN-02",
+   "mod": "Leitura",
+   "desc": "Duas leituras seguidas sem a massa: aviso vermelho no painel para conferir o alarme e medir com termômetro",
+   "esperado": "aviso vermelho",
+   "obtido": "red: Secador sem temperatura da massa: Secador contínuo 60 t/h",
+   "ok": true
+  },
+  {
+   "id": "MAN-03",
+   "mod": "Leitura",
+   "desc": "Massa medida com termômetro portátil (38 °C) entra como temperatura da massa e o aviso some",
+   "esperado": "massa 38 °C (termômetro) • sem aviso",
+   "obtido": "massa 38 °C (termômetro) • sem aviso",
+   "ok": true
+  },
+  {
+   "id": "VOL-04",
+   "mod": "Volume",
+   "desc": "Balanço de cada silo: entradas − saídas = saldo",
+   "esperado": "4/4 silos fechando",
+   "obtido": "4/4 silos fechando • Silo 01: 824,9 t • Silo 02: 2.928,1 t • Silo 03: 1.167,6 t • Silo 04: 19,8 t",
+   "ok": true
+  },
+  {
+   "id": "VOL-05",
+   "mod": "Volume",
+   "desc": "Desempenho: lançar as 140 cargas pelo formulário no navegador",
+   "esperado": "menos de 1 s por carga",
+   "obtido": "0,07 s por carga (9,3 s no total)",
+   "ok": true
+  },
+  {
+   "id": "VOL-06",
+   "mod": "Telas",
+   "desc": "Painel, Moega, Secador, Silos, Terceiros e Relatório da safra abrem com o volume da safra",
+   "esperado": "6/6",
+   "obtido": "6/6",
+   "ok": true
+  }
+ ],
+ "resumoSafra": {
+  "cargas": 149,
+  "liquidoT": 5362.058,
+  "finalT": 5050.446544000003,
+  "lotes": 22,
+  "secoT": 4822.6764367816095,
+  "aguaT": 333.52356321839096,
+  "custoSec": 76367.02999999998,
+  "silos": [
+   {
+    "nome": "Silo 01 — soja",
+    "saldoT": 824.9160804597701,
+    "cap": 3000,
+    "ocup": 27.497202681992338,
+    "u": 12.99205550542093
+   },
+   {
+    "nome": "Silo 02 — soja",
+    "saldoT": 2928.102643678161,
+    "cap": 3000,
+    "ocup": 97.6034214559387,
+    "u": 13.00252324265644
+   },
+   {
+    "nome": "Silo 03 — milho",
+    "saldoT": 1167.5747126436781,
+    "cap": 1500,
+    "ocup": 77.8383141762452,
+    "u": 13.000000000000002
+   },
+   {
+    "nome": "Silo 04 — pulmão",
+    "saldoT": 19.82,
+    "cap": 600,
+    "ocup": 3.3033333333333332,
+    "u": null
+   }
+  ]
+ },
+ "versao": "v0.51.0-beta1",
+ "errosJs": []
+}
