@@ -853,7 +853,8 @@ tr.clickable{cursor:pointer} tr.clickable:hover td{background:rgba(23,135,212,.0
 /* Mapa do tempo */
 .mt-abrir{width:100%;margin:4px 0 10px;font-weight:650}
 .mt-painel{display:grid;gap:10px}.mt-camadas{margin:0}
-.mt-mapa{height:min(62vh,560px);min-height:320px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#cfd8dc}
+.mt-mapa{position:relative;z-index:0;isolation:isolate;height:min(62vh,560px);min-height:320px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#cfd8dc}
+.mt-sat{mix-blend-mode:screen;opacity:.9;pointer-events:none}
 .mt-tempo{display:flex;align-items:center;gap:10px}.mt-tempo input{flex:1;min-width:0}.mt-tempo b{min-width:96px;text-align:right;font-variant-numeric:tabular-nums}.mt-play{width:46px;height:46px;padding:0;border-radius:50%;font-size:1rem}
 .mt-dias{display:flex;gap:6px;flex-wrap:wrap}.mt-dias .chip{border:1px solid var(--line);cursor:pointer;color:var(--text)}
 .mt-legenda{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:.8rem}.mt-legenda span{display:inline-flex;align-items:center;gap:4px}.mt-legenda i{width:14px;height:14px;border-radius:3px;display:inline-block;border:1px solid var(--line)}.mt-legenda small{color:var(--muted)}

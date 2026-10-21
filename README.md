@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.50.1-beta1` — Mapa do tempo: o menu lateral passa a ficar **por cima** do mapa (antes o mapa aparecia através dele); satélite em tons de cinza sobreposto em modo “clarear” — nuvens brancas por cima do mapa e o chão continua visível, como nos apps de radar.
+
 `0.50.0-beta1` — **Mapa do tempo** (Início → clima → “Mapa do tempo”), no estilo dos apps de radar, numa linha do tempo só, do observado ao previsto:
 - **Observado (última 1 h 30, a cada 10 min), da REDEMET/DECEA**: **satélite** infravermelho realçado (reprojetado para o mapa), **radar** MaxCAPPI dos radares do DECEA até ~400 km da fazenda (Santiago, Morro da Igreja e Canguçu no RS) quando eles publicam imagem, e **tempestades** do STSC (células por radar e descargas elétricas; vermelho = últimos 6 min).
 - **Previsão (48 h, hora a hora)**: chuva da média dos modelos (Open-Meteo) numa grade 9 × 9 (~40 km), suavizada e pintada por mm/h; toque no mapa mostra mm/h e chance.

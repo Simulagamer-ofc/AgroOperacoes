@@ -1,7 +1,8 @@
 'use strict';
 /* MercaPlant — Mapa do tempo (no estilo dos apps de radar): uma linha do tempo só, do passado recente ao futuro.
    Observado (últimas ~1 h 30, a cada 10 min) — fonte oficial REDEMET/DECEA, pela função "redemet" do Supabase:
-     • Satélite: imagem infravermelha realçada da América do Sul (equiretangular), reprojetada aqui para o mapa.
+     • Satélite: imagem infravermelha (tons de cinza) da América do Sul (equiretangular), reprojetada aqui para o mapa e
+       sobreposta em modo “clarear”: nuvem fica branca por cima do mapa e o chão escuro some (como nos apps de radar).
      • Radar: MaxCAPPI dos radares do DECEA perto da fazenda (quando o radar publica imagem).
      • Tempestades: STSC (células de tempestade por radar e descargas elétricas), mais recentes em vermelho.
    Previsão (próximas 48 h, hora a hora): chuva da média dos modelos (Open-Meteo) numa grade 9 × 9 em volta da fazenda.
@@ -130,7 +131,7 @@ VIEWS['clima-mapa'].after = async () => {
   L.circleMarker([loc.lat, loc.lon], {radius: 7, color: '#fff', weight: 2, fillColor: '#e0443f', fillOpacity: 1}).addTo(mapa).bindTooltip(db.settings.farm || 'Fazenda');
   if (navigator.onLine === false) { avisos.push('Sem internet: o mapa do tempo precisa de conexão.'); return status(); }
   const perto = radaresPerto(loc.lat, loc.lon);
-  const [sat, rad, tem, grade] = await Promise.allSettled([redemet({produto: 'satelite', tipo: 'realcada', anima: 9}),
+  const [sat, rad, tem, grade] = await Promise.allSettled([redemet({produto: 'satelite', tipo: 'ir', anima: 9}),
     perto.length ? redemet({produto: 'radar', tipo: 'maxcappi', areas: perto.map(r => r.k).join(','), anima: 9}) : Promise.resolve(null),
     redemet({produto: 'stsc', anima: 15, lat: loc.lat.toFixed(2), lon: loc.lon.toFixed(2), graus: 8}), gradeChuva(loc)]);
   if (!document.getElementById('mapaTempo')) return; // saiu da tela enquanto carregava
@@ -188,7 +189,7 @@ VIEWS['clima-mapa'].after = async () => {
   if (dias) dias.innerHTML = atalhos.map(([k, r]) => `<button type="button" class="chip" data-act="mt-quadro" data-id="${k}">${esc(r)}</button>`).join('');
   const leg = document.getElementById('mtLegenda');
   if (leg) leg.innerHTML = `<span><i style="background:#ff2d2d;border-radius:50%"></i>tempestade nos últimos 6 min</span><span><i style="background:#ff9f1c;border-radius:50%"></i>até 30 min</span>` +
-    ESCALA_CHUVA.map(([min, cor, n]) => `<span><i style="background:${cor}"></i>${num(min, min < 1 ? 1 : 0)}${n ? ' ' + n : ''}</span>`).join('') + '<small>chuva prevista em mm/h • satélite: cores = topo de nuvem frio (mais chance de chuva forte)</small>';
+    ESCALA_CHUVA.map(([min, cor, n]) => `<span><i style="background:${cor}"></i>${num(min, min < 1 ? 1 : 0)}${n ? ' ' + n : ''}</span>`).join('') + '<small>chuva prevista em mm/h • satélite: quanto mais branca a nuvem, mais alta e fria (mais chance de chuva forte)</small>';
   const slider = document.getElementById('mtSlider');
   if (!mtEstado.quadros.length) { avisos.push('Nada para mostrar agora.'); return status(); }
   slider.max = mtEstado.quadros.length - 1; slider.oninput = () => { pararAnimacao(); mostrarQuadro(Number(slider.value)); };
