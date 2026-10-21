@@ -4,6 +4,11 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.50.0-beta1` — **Mapa do tempo** (Início → clima → “Mapa do tempo”), no estilo dos apps de radar:
+- **Chuva prevista**: mapa em volta da fazenda (~350 km) pintado pela intensidade da chuva (mm/h), hora a hora nas próximas 48 h, com animação, atalhos “agora / amanhã / …” e toque no mapa para ver mm/h e a chance de chuva. Vem da mesma previsão (média dos modelos do Open-Meteo) do cartão do clima, numa grade de 9 × 9 pontos.
+- **Nuvens (satélite)**: imagem infravermelha do GOES-East (NOAA) pela NASA GIBS, últimas 2 horas, com animação.
+- Mapa base OpenStreetMap; biblioteca Leaflet 1.9.4 (BSD-2) carregada só ao abrir o mapa.
+
 `0.49.1-beta1` — **Formulários mais curtos, sem perder campo**: cada formulário mostra só o que vale para a escolha feita e deixa o resto em “Mais opções”.
 - Saída do silo (18 → 11 campos visíveis): silo de destino só na transferência; comprador e placa só na expedição; venda só para grão próprio; preço, safra e recebimento só se lançar a venda; vencimento só a prazo.
 - Gasto (13 → 8): parcelas e vencimento só a prazo; safra, documento e observações em “Mais opções”.
