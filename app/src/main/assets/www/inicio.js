@@ -1,6 +1,6 @@
 'use strict';
 /* MercaPlant — tela inicial para começar o dia: clima do dia (com “Detalhar no MercaClima”) e as operações
-   em andamento e programadas. Avisos e pendências (estoque, contas, revisões…) ficam no sino → tela “Avisos”. */
+   em andamento e programadas, pendências urgentes e (fazenda começando) os passos de cadastro. Os demais avisos e pendências (estoque, contas, revisões…) ficam no sino → tela “Avisos”. */
 
 const INI_PROXIMOS_DIAS = 7, INI_MAX_PROXIMAS = 6;
 const iniPode = r => typeof nvPodeRota !== 'function' || nvPodeRota(r);
@@ -51,10 +51,10 @@ function painelOperacoesDia() {
   const nada = !andamento.length && !atrasadas.length && !hoje.length && !proximas.length;
   const resumo = [andamento.length ? `${andamento.length} em andamento` : '', hoje.length ? `${hoje.length} para hoje` : '', atrasadas.length ? `${atrasadas.length} ${atrasadas.length === 1 ? 'atrasada' : 'atrasadas'}` : '', concluidasHoje ? `${concluidasHoje} ${concluidasHoje === 1 ? 'concluída' : 'concluídas'} hoje` : ''].filter(Boolean).join(' • ');
   const semCadastro = !db.fields.length && !db.machines.length;
-  return `<section class="card panel ini-ops" id="iniOps">
+  return `<section class="card panel ini-card ini-ops" id="iniOps">
     <div class="ini-ops-topo"><div><h3>Operações</h3><small>${esc(resumo || 'Nada em andamento')}</small></div>
-      <div class="btn-row">${btn('Ver todas', 'nav', 'operacoes', 'secondary')}${btn('+ Programar', 'op-new')}</div></div>
-    ${nada ? empty(semCadastro ? 'Comece pelos cadastros' : 'Nenhuma operação programada', semCadastro ? 'Cadastre talhões e máquinas para programar as operações do dia.' : `Nada em andamento nem programado para os próximos ${INI_PROXIMOS_DIAS} dias.`, semCadastro ? {act: 'nav', id: 'cadastros', label: 'Abrir cadastros'} : {act: 'op-new', label: '+ Programar operação'}) : ''}
+      <div class="btn-row">${btn('Ver todas', 'nav', 'operacoes', 'secondary')}${nada ? '' : btn('+ Programar', 'op-new')}</div></div>
+    ${nada ? iniVazio('🚜', 'Nenhuma operação para hoje', semCadastro ? 'Depois de cadastrar talhões e máquinas, programe aqui o trabalho do dia.' : `Nada em andamento nem programado para os próximos ${INI_PROXIMOS_DIAS} dias.`, {act: 'op-new', label: '+ Programar operação'}) : ''}
     ${grupo('Em andamento', andamento, 'andamento')}
     ${grupo('Atrasadas', atrasadas, 'atrasada')}
     ${grupo('Programadas para hoje', hoje, 'hoje')}
@@ -62,18 +62,56 @@ function painelOperacoesDia() {
   </section>`;
 }
 
+// Vazio agradável: ícone, frase curta e uma ação
+const iniVazio = (icone, titulo, texto, acao) => `<div class="ini-vazio"><span class="ini-vazio-ic" aria-hidden="true">${icone}</span><strong>${esc(titulo)}</strong><small>${esc(texto)}</small>${acao ? `<button type="button" class="${acao.cls || 'primary'}" data-act="${acao.act}"${acao.id ? ` data-id="${esc(acao.id)}"` : ''}>${esc(acao.label)}</button>` : ''}</div>`;
+
+// Saudação: “Bom dia, Edson” + fazenda e data
+function iniSaudacao() {
+  const h = new Date().getHours(), oi = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+  const usu = typeof nv !== 'undefined' ? nv?.sessao?.usuario : '', nomeNuvem = usu && nv?.nomes?.[usu];
+  const nome = String(nomeNuvem || db.settings.owner || '').trim().split(/\s+/)[0];
+  const fazenda = (typeof nv !== 'undefined' && nv?.fazenda?.name) || db.settings.farm || '';
+  const data = new Date().toLocaleDateString('pt-BR', {weekday: 'long', day: 'numeric', month: 'long'});
+  return `<header class="ini-saud"><h2>${esc(oi)}${nome && !nome.includes('@') ? ', ' + esc(nome) : ''}</h2><p>${esc([fazenda, data].filter(Boolean).join(' • '))}</p></header>`;
+}
+
+// Pendências urgentes: só o vermelho (e revisão vencida); operação atrasada já aparece em Operações
+function iniUrgentes() {
+  const lista = (typeof alerts === 'function' ? alerts() : []).filter(a => !/^Operação atrasada/.test(a.title) && (a.color === 'red' || /^Revisão vencida/.test(a.title)));
+  const total = typeof alerts === 'function' ? alerts().length : 0;
+  const linha = a => `<button type="button" class="ini-urg" data-act="nav" data-id="${esc(a.route || 'avisos')}"><span class="alert-icon ${a.color}" aria-hidden="true">${esc(a.icon || '!')}</span><span><strong>${esc(a.title)}</strong><small>${esc(a.text)}</small></span><span class="hoje-ir" aria-hidden="true">›</span></button>`;
+  return `<section class="card panel ini-card ini-urgentes"><div class="ini-ops-topo"><div><h3>Pendências urgentes</h3><small>${lista.length ? `${lista.length} ${lista.length === 1 ? 'precisa' : 'precisam'} de atenção hoje` : 'Nada urgente'}</small></div></div>
+    ${lista.length ? lista.slice(0, 4).map(linha).join('') : iniVazio('✓', 'Tudo em dia', 'Nenhuma pendência urgente na fazenda.')}
+    ${total ? `<button type="button" class="link ini-mais" data-act="nav" data-id="avisos">Ver todos os avisos (${total}) ›</button>` : ''}</section>`;
+}
+
+// Fazenda começando: passos que faltam (somem sozinhos quando cadastrados)
+function iniPreparar() {
+  const passos = [
+    ['fields', 'Talhões', 'Nome, área e cultura — base das operações', 'fd-new', '+ Talhão', 'talhoes'],
+    ['machines', 'Máquinas', 'Horímetro, revisões e combustível', 'mc-new', '+ Máquina', 'maquinas'],
+    ['stock', 'Estoque de insumos', 'Sementes, adubos e defensivos com o saldo de hoje', 'st-new', '+ Insumo', 'estoque']
+  ].filter(p => iniPode(p[5]));
+  const feitos = passos.filter(p => db[p[0]].length).length;
+  if (!passos.length || feitos === passos.length) return '';
+  return `<section class="card panel ini-card ini-preparar"><div class="ini-ops-topo"><div><h3>Prepare a fazenda</h3><small>${feitos} de ${passos.length} prontos</small></div></div>
+    <div class="ini-prog"><span style="width:${Math.round(feitos / passos.length * 100)}%"></span></div>
+    ${passos.map(([c, tit, txt, act, rot, rota], i) => { const ok = db[c].length > 0; return `<div class="ini-passo ${ok ? 'feito' : ''}"><span class="ini-passo-n" aria-hidden="true">${ok ? '✓' : i + 1}</span><span><strong>${esc(tit)}</strong><small>${ok ? `${db[c].length} ${db[c].length === 1 ? 'cadastrado' : 'cadastrados'}` : esc(txt)}</small></span>${ok ? `<button type="button" class="secondary" data-act="nav" data-id="${rota}">Ver</button>` : `<button type="button" class="primary" data-act="${act}">${esc(rot)}</button>`}</div>`; }).join('')}</section>`;
+}
+
 // Quem não usa Operações (ex.: só grãos ou estoque): atalhos para as telas a que tem acesso
 function iniAtalhosFuncao() {
   const bts = [...document.querySelectorAll('.sidebar .nav button[data-route]')].filter(b => !b.hidden && b.dataset.route !== 'inicio' && iniPode(b.dataset.route)).slice(0, 8);
   if (!bts.length) return '';
-  return `<section class="card panel"><h3>Suas telas</h3><div class="ini-atalhos">${bts.map(b => `<button type="button" class="secondary" data-act="nav" data-id="${esc(b.dataset.route)}">${esc(b.textContent.trim())}</button>`).join('')}</div></section>`;
+  return `<section class="card panel ini-card ini-ops"><h3>Suas telas</h3><div class="ini-atalhos">${bts.map(b => `<button type="button" class="secondary" data-act="nav" data-id="${esc(b.dataset.route)}">${esc(b.textContent.trim())}</button>`).join('')}</div></section>`;
 }
 
 const inicioDepois = VIEWS.inicio.after;
 VIEWS.inicio = () => {
-  const vazio = COLLECTIONS.every(c => !db[c].length);
   const clima = typeof cartaoClima === 'function' ? cartaoClima() : '';
-  return `<div class="ini">${clima}${iniPode('operacoes') && !vazio ? painelOperacoesDia() : vazio ? `<section class="card">${empty('Nenhum dado cadastrado ainda', 'Comece cadastrando talhões, máquinas e insumos.', {act: 'nav', id: 'cadastros', label: 'Abrir cadastros'})}</section>` : iniAtalhosFuncao()}</div>`;
+  const principal = iniPode('operacoes') ? painelOperacoesDia() : iniAtalhosFuncao();
+  return `<div class="ini">${iniSaudacao()}<div class="ini-clima">${clima}</div>
+    <div class="ini-principal">${principal}</div><aside class="ini-lado">${iniUrgentes()}${iniPreparar()}</aside></div>`;
 };
 VIEWS.inicio.after = (...a) => inicioDepois?.(...a);
 
