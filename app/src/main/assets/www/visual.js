@@ -1,6 +1,6 @@
 'use strict';
 /* Nexus Agro — padrão visual: um só estilo de ícone (linha), menu lateral com grupos que abrem e fecham e
-   “Mais usados” (aprende com o uso), e acabamento comum a todas as telas. Carregado por último. */
+   acabamento comum a todas as telas. Carregado por último. */
 
 // ---------- Ícones de linha (mesmo traço dos ícones do menu, sem o hexágono) ----------
 const ICONES_EXTRA = {
@@ -35,12 +35,12 @@ function trocarGlifos(raiz = document) {
   });
 }
 
-// ---------- Menu lateral: grupos que abrem e fecham + “Mais usados” ----------
+// ---------- Menu lateral: grupos que abrem e fecham ----------
 const MENU_FECHADOS = 'agro-menu-fechados', USO_ROTAS = 'agro-uso-rotas';
 const lerJSON = (k, padrao) => { try { return JSON.parse(safeStorage.get(k) || '') ?? padrao; } catch { return padrao; } };
 function aplicarGruposMenu() {
-  const fechados = new Set(lerJSON(MENU_FECHADOS, [])), ativo = document.querySelector('.sidebar .nav button.active[data-route]:not(.nav-fav-bt)');
-  document.querySelectorAll('.sidebar .nav .nav-grupo:not(.nav-fav-tit)').forEach(g => {
+  const fechados = new Set(lerJSON(MENU_FECHADOS, [])), ativo = document.querySelector('.sidebar .nav button.active[data-route]');
+  document.querySelectorAll('.sidebar .nav .nav-grupo').forEach(g => {
     const nome = g.textContent.trim();
     if (!g.dataset.grupo) {
       g.dataset.grupo = nome; g.setAttribute('role', 'button'); g.tabIndex = 0;
@@ -54,37 +54,14 @@ function aplicarGruposMenu() {
     itens.forEach(b => b.classList.toggle('nav-oculto', fechado));
   });
 }
-// Conta as telas abertas (com o tempo, as antigas pesam menos) e mostra as 4 mais usadas logo abaixo da Visão geral
-function registrarUso(rota) {
-  if (!rota || rota === 'inicio' || !document.querySelector(`.sidebar .nav button[data-route="${rota}"]`)) return;
-  const uso = lerJSON(USO_ROTAS, {});
-  Object.keys(uso).forEach(k => { uso[k] *= 0.97; if (uso[k] < 0.05) delete uso[k]; });
-  uso[rota] = (uso[rota] || 0) + 1; safeStorage.set(USO_ROTAS, JSON.stringify(uso));
-}
-function montarMaisUsados() {
-  const nav = document.querySelector('.sidebar .nav'), inicio = nav?.querySelector('button[data-route="inicio"]'); if (!inicio) return;
-  nav.querySelectorAll('.nav-fav-tit, .nav-fav-bt').forEach(e => e.remove());
-  const uso = lerJSON(USO_ROTAS, {});
-  const top = Object.entries(uso).filter(([r, n]) => n >= 1.5 && nav.querySelector(`button[data-route="${r}"]:not([hidden])`)).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([r]) => r);
-  if (top.length < 2) return; // só aparece depois de algum uso
-  const rota = typeof parseRoute === 'function' ? parseRoute().name : '';
-  const tit = Object.assign(document.createElement('small'), {className: 'nav-grupo nav-fav-tit', textContent: 'Mais usados'});
-  const bts = top.map(r => {
-    const b = nav.querySelector(`button[data-route="${r}"]:not(.nav-fav-bt)`).cloneNode(true);
-    b.classList.add('nav-fav-bt'); b.classList.remove('nav-oculto'); b.classList.toggle('active', r === rota); b.removeAttribute('data-route'); b.dataset.favRota = r;
-    b.addEventListener('click', () => { go(r); closeMenu(); }); return b;
-  });
-  inicio.after(tit, ...bts);
-}
-function atualizarMenu() { montarMaisUsados(); aplicarGruposMenu(); }
+// (“Mais usados” retirado do menu a pedido: poluía a lista; apaga o contador antigo guardado no aparelho)
+safeStorage.del(USO_ROTAS);
+function atualizarMenu() { aplicarGruposMenu(); }
 
 // ---------- Depois de cada tela ----------
-let rotaAnterior = '';
 const renderSemVisual = render;
 render = function (...a) {
   const r = renderSemVisual.apply(this, a);
-  const rota = typeof parseRoute === 'function' ? parseRoute().name : '';
-  if (rota !== rotaAnterior) { registrarUso(rota); rotaAnterior = rota; }
   trocarGlifos(document); atualizarMenu(); mostrarSync();
   return r;
 };

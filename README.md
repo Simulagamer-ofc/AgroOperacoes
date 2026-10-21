@@ -4,7 +4,9 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.53.1-beta1` — **Correção da atualização da versão web**: ao chegar versão nova, o app baixava alguns arquivos de uma cópia antiga guardada pelo navegador (até 10 min) e continuava mostrando telas da versão anterior (ex.: mapa ainda no Início). Agora a versão nova é baixada sempre direto do servidor.
+`0.53.2-beta1` — Menu lateral sem a seção **“Mais usados”** (repetia telas que já estão no menu e poluía a lista). Os grupos que abrem e fecham continuam.
+
+Anterior: `0.53.1-beta1` — **Correção da atualização da versão web**: ao chegar versão nova, o app baixava alguns arquivos de uma cópia antiga guardada pelo navegador (até 10 min) e continuava mostrando telas da versão anterior (ex.: mapa ainda no Início). Agora a versão nova é baixada sempre direto do servidor.
 
 Anterior: `0.53.0-beta1` — Clima com nome **MercaClima** (menu e tela). O **Início fica sem mapa**: só a previsão do dia (temperatura, horário bom para pulverizar, próxima chuva), os alertas em uma linha cada e o botão **“Detalhar no MercaClima”**, que abre o mapa, a previsão completa, os alertas com detalhes e as chuvas registradas.
 
