@@ -308,8 +308,8 @@
    "id": "SEC-13",
    "mod": "Secador",
    "desc": "Leitura anotada após a meia-noite para um horário \"à frente\" do relógio fica no dia anterior",
-   "esperado": "2026-10-20 22:00",
-   "obtido": "2026-10-20 22:00",
+   "esperado": "2026-10-20 23:00",
+   "obtido": "2026-10-20 23:00",
    "ok": true
   },
   {
@@ -485,7 +485,7 @@
    "mod": "Silos",
    "desc": "Silo em expurgo (120 h de exposição): movimentação pede confirmação de liberação",
    "esperado": "bloqueia e avisa",
-   "obtido": "[!] Silo em expurgo até 26/10/2026 19:00 (Fosfina (fosfeto de alumínio)): não abrir nem movimentar antes do fim da exposição. Toque em registrar de novo só se a liberação já foi feita.",
+   "obtido": "[!] Silo em expurgo até 26/10/2026 20:00 (Fosfina (fosfeto de alumínio)): não abrir nem movimentar antes do fim da exposição. Toque em registrar de novo só se a liberação já foi feita.",
    "ok": true
   },
   {
