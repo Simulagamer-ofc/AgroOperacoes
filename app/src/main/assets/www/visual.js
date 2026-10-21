@@ -37,14 +37,20 @@ function trocarGlifos(raiz = document) {
 
 // ---------- Menu lateral: grupos que abrem e fecham ----------
 const MENU_FECHADOS = 'agro-menu-fechados', USO_ROTAS = 'agro-uso-rotas';
+// Configurações (cadastros, catálogos, referências) começa fechado; depois vale a escolha de cada pessoa
+const FECHADOS_PADRAO = ['Configurações'];
+// Telas fora do menu que acendem o item do assunto (ex.: Chuvas abre pelo MercaClima)
+const MENU_DA_TELA = {chuva: 'clima', 'clima-mapa': 'clima'};
 const lerJSON = (k, padrao) => { try { return JSON.parse(safeStorage.get(k) || '') ?? padrao; } catch { return padrao; } };
 function aplicarGruposMenu() {
-  const fechados = new Set(lerJSON(MENU_FECHADOS, [])), ativo = document.querySelector('.sidebar .nav button.active[data-route]');
+  const rota = typeof parseRoute === 'function' ? parseRoute().name : '', pai = MENU_DA_TELA[rota];
+  if (pai) document.querySelectorAll(`.sidebar .nav button[data-route="${pai}"]`).forEach(b => b.classList.add('active'));
+  const fechados = new Set(lerJSON(MENU_FECHADOS, FECHADOS_PADRAO)), ativo = document.querySelector('.sidebar .nav button.active[data-route]');
   document.querySelectorAll('.sidebar .nav .nav-grupo').forEach(g => {
     const nome = g.textContent.trim();
     if (!g.dataset.grupo) {
       g.dataset.grupo = nome; g.setAttribute('role', 'button'); g.tabIndex = 0;
-      const alternar = () => { const f = new Set(lerJSON(MENU_FECHADOS, [])); f.has(nome) ? f.delete(nome) : f.add(nome); safeStorage.set(MENU_FECHADOS, JSON.stringify([...f])); aplicarGruposMenu(); };
+      const alternar = () => { const f = new Set(lerJSON(MENU_FECHADOS, FECHADOS_PADRAO)); f.has(nome) ? f.delete(nome) : f.add(nome); safeStorage.set(MENU_FECHADOS, JSON.stringify([...f])); aplicarGruposMenu(); };
       g.addEventListener('click', alternar); g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); alternar(); } });
     }
     const itens = []; let el = g.nextElementSibling;
