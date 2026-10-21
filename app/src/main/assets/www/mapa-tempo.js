@@ -61,6 +61,16 @@ function horariosStsc(s) {
   return (s.quadros || []).map(q => { let d = dataUTC(`${dia} ${q.hora}:00`); if (d > ult.getTime() + 60000) d = new Date(d.getTime() - 864e5); return {t: d, pontos: q.pontos || []}; });
 }
 
+// Tempestade mais perto da fazenda no último quadro do STSC, direção e se está chegando (comparando com ~30 min antes)
+const RUMOS = ['ao norte', 'a nordeste', 'a leste', 'a sudeste', 'ao sul', 'a sudoeste', 'a oeste', 'a noroeste'];
+function rumo(lat, lon, la, lo) { const r = Math.PI / 180, y = Math.sin((lo - lon) * r) * Math.cos(la * r), x = Math.cos(lat * r) * Math.sin(la * r) - Math.sin(lat * r) * Math.cos(la * r) * Math.cos((lo - lon) * r); return RUMOS[Math.round(((Math.atan2(y, x) / r + 360) % 360) / 45) % 8]; }
+function tempestadeMaisPerto(T, lat, lon) {
+  const ult = T.at(-1); if (!ult) return null;
+  const maisPerto = q => (q?.pontos || []).reduce((m, [la, lo]) => { const d = distKm(lat, lon, la, lo); return !m || d < m.d ? {d, la, lo} : m; }, null);
+  const agora = maisPerto(ult); if (!agora) return {nenhuma: true, t: ult.t};
+  const antes = T.filter(x => x.t <= new Date(ult.t.getTime() - 25 * 60000)).at(-1), a = maisPerto(antes);
+  return {d: agora.d, rumo: rumo(lat, lon, agora.la, agora.lo), t: ult.t, chegando: a ? agora.d < a.d - 5 : null};
+}
 // Imagem da chuva prevista de uma hora: interpolação bilinear da grade, pintada pela escala (transparente sem chuva)
 function imagemChuva(g, idx, limites) {
   const W = 168, cv = document.createElement('canvas'); cv.width = cv.height = W; const ctx = cv.getContext('2d'), im = ctx.createImageData(W, W);
@@ -104,23 +114,28 @@ function criarCamadaSatelite(L, limitesImg) {
   return new Camada();
 }
 
-VIEWS['clima-mapa'] = () => {
-  const loc = typeof localDaFazenda === 'function' ? localDaFazenda() : null;
-  if (!loc) return head('Mapa do tempo', 'Radar, satélite, tempestades e chuva prevista em volta da fazenda', btn('← Início', 'nav', 'inicio', 'secondary')) + `<section class="card">${empty('Informe onde fica a fazenda', 'O mapa é centrado na fazenda. Ative a localização no cartão do clima, na tela inicial.', {act: 'nav', id: 'inicio', label: 'Ir para o início'})}</section>`;
+// Painel do mapa (tela cheia ou embutido no cartão do clima do Início)
+function painelMapaHTML(compacto = false) {
   const v = mtEstado.vis, bt = (k, rot) => `<button class="${v[k] ? 'active' : ''}" data-act="mt-camada" data-id="${k}" aria-pressed="${v[k]}">${rot}</button>`;
-  return head('Mapa do tempo', 'Radar, satélite, tempestades e chuva prevista em volta da fazenda', btn('← Início', 'nav', 'inicio', 'secondary')) + `
-  <section class="card panel mt-painel">
+  return `<section class="card panel mt-painel ${compacto ? 'mt-compacto' : ''}" ${compacto ? 'id="mtCasa"' : ''}>
+    ${compacto ? `<div class="section-title" style="margin:0"><h3>Radar e chuva no mapa</h3><button type="button" data-act="nav" data-id="clima-mapa">⛶ Tela cheia</button></div>` : ''}
+    <p class="mt-alerta" id="mtAlerta" hidden></p>
     <div class="filters mt-camadas" role="group" aria-label="Camadas do mapa">${bt('sat', '☁ Satélite')}${bt('radar', '📡 Radar')}${bt('stsc', '⚡ Tempestades')}${bt('prev', '🌧 Chuva prevista')}</div>
     <div id="mapaTempo" class="mt-mapa" role="img" aria-label="Mapa do tempo em volta da fazenda"></div>
     <div class="mt-tempo"><button type="button" class="primary mt-play" data-act="mt-play" aria-label="Animar">▶</button><input type="range" id="mtSlider" min="0" max="0" value="0" aria-label="Hora"><b id="mtHora">—</b></div>
     <div class="mt-dias" id="mtDias"></div>
-    <div class="mt-legenda" id="mtLegenda"></div>
+    ${compacto ? '' : '<div class="mt-legenda" id="mtLegenda"></div>'}
     <p class="nota" id="mtStatus">Carregando o mapa…</p>
-    <small class="nota">Observado (radar, satélite e tempestades): REDEMET/DECEA — não substitui informação oficial para a aviação. Chuva prevista: média dos modelos (Open-Meteo), em pontos a cada ~40 km. Mapa © OpenStreetMap.</small>
+    <small class="nota">Observado (radar, satélite e tempestades): REDEMET/DECEA — não substitui informação oficial para a aviação. Chuva prevista: média dos modelos (Open-Meteo). Mapa © OpenStreetMap.</small>
   </section>`;
+}
+VIEWS['clima-mapa'] = () => {
+  const loc = typeof localDaFazenda === 'function' ? localDaFazenda() : null;
+  if (!loc) return head('Mapa do tempo', 'Radar, satélite, tempestades e chuva prevista em volta da fazenda', btn('← Início', 'nav', 'inicio', 'secondary')) + `<section class="card">${empty('Informe onde fica a fazenda', 'O mapa é centrado na fazenda. Ative a localização no cartão do clima, na tela inicial.', {act: 'nav', id: 'inicio', label: 'Ir para o início'})}</section>`;
+  return head('Mapa do tempo', 'Radar, satélite, tempestades e chuva prevista em volta da fazenda', btn('← Início', 'nav', 'inicio', 'secondary')) + painelMapaHTML(false);
 };
 TITLES['clima-mapa'] = 'Mapa do tempo';
-VIEWS['clima-mapa'].after = async () => {
+async function iniciarMapaTempo() {
   const loc = typeof localDaFazenda === 'function' ? localDaFazenda() : null, el = document.getElementById('mapaTempo'); if (!loc || !el) return;
   const avisos = [], status = () => { const s = document.getElementById('mtStatus'); if (s) s.textContent = avisos.join(' '); };
   try { await carregarLeaflet(); } catch { avisos.push('Não foi possível carregar o mapa. Confira a internet e abra de novo.'); return status(); }
@@ -137,6 +152,12 @@ VIEWS['clima-mapa'].after = async () => {
   if (!document.getElementById('mapaTempo')) return; // saiu da tela enquanto carregava
   // --- Observado ---
   const S = sat.status === 'fulfilled' ? sat.value : null, R = rad.status === 'fulfilled' ? rad.value : null, T = tem.status === 'fulfilled' ? horariosStsc(tem.value) : [];
+  const tp = T.length ? tempestadeMaisPerto(T, loc.lat, loc.lon) : null, al = document.getElementById('mtAlerta');
+  if (al && tp) {
+    const perto = !tp.nenhuma && tp.d <= 150;
+    al.hidden = false; al.className = 'mt-alerta ' + (perto ? (tp.d <= 40 ? 'perigo' : 'atencao') : 'ok');
+    al.textContent = perto ? `⚡ Tempestade a ${Math.round(tp.d)} km ${tp.rumo} da fazenda (às ${hhmm(tp.t)})${tp.chegando === true ? ' — se aproximando' : tp.chegando === false ? ' — não está se aproximando' : ''}.` : `Nenhuma tempestade num raio de 150 km (última verificação às ${hhmm(tp.t)}).`;
+  }
   if (!S && !R && !T.length) avisos.push('Os dados observados da REDEMET (radar, satélite e tempestades) não responderam agora. Tente de novo em alguns minutos.');
   let tempos = (S?.quadros || []).map(q => dataUTC(q.data)).filter(Boolean);
   if (!tempos.length) tempos = T.slice(-9).map(x => x.t);
@@ -195,7 +216,8 @@ VIEWS['clima-mapa'].after = async () => {
   slider.max = mtEstado.quadros.length - 1; slider.oninput = () => { pararAnimacao(); mostrarQuadro(Number(slider.value)); };
   status(); mostrarQuadro(nObs ? nObs - 1 : 0);
   setTimeout(() => mapa.invalidateSize(), 50);
-};
+}
+VIEWS['clima-mapa'].after = () => iniciarMapaTempo();
 function mostrarQuadro(k) {
   const q = mtEstado.quadros[k]; if (!q) return; mtEstado.quadro = k;
   mtEstado.desenhar?.(k);
@@ -213,3 +235,23 @@ Object.assign(ACTIONS, {
     mtEstado.tocando = setInterval(() => { if (!document.getElementById('mapaTempo')) return pararAnimacao(); mostrarQuadro((mtEstado.quadro + 1) % Math.max(1, mtEstado.quadros.length)); }, 700);
   }
 });
+
+// ---------- Mapa embutido no Início, logo abaixo da previsão (quando o cartão do clima está aberto) ----------
+function comMapaNoClima(html) {
+  if (!(typeof climaAberto === 'function' && climaAberto()) || !(typeof localDaFazenda === 'function' && localDaFazenda())) return html;
+  const i = html.indexOf('id="hojeClima"'); if (i < 0) return html;
+  const j = html.indexOf('</article>', i); if (j < 0) return html;
+  return html.slice(0, j + 10) + painelMapaHTML(true) + html.slice(j + 10);
+}
+function sincronizarMapaCasa() {
+  const card = document.getElementById('hojeClima'), atual = document.getElementById('mtCasa');
+  const quer = !!card && card.classList.contains('aberto') && typeof localDaFazenda === 'function' && !!localDaFazenda();
+  if (quer && !atual) { card.insertAdjacentHTML('afterend', painelMapaHTML(true)); iniciarMapaTempo(); }
+  else if (!quer && atual) { pararAnimacao(); mtEstado.mapa?.remove(); mtEstado.mapa = null; atual.remove(); }
+}
+if (VIEWS.inicio) {
+  const inicioSemMapa = VIEWS.inicio, depoisSemMapa = VIEWS.inicio.after;
+  VIEWS.inicio = (...a) => comMapaNoClima(inicioSemMapa(...a));
+  VIEWS.inicio.after = (...a) => { depoisSemMapa?.(...a); if (document.getElementById('mtCasa')) iniciarMapaTempo(); };
+}
+if (ACTIONS['clima-expandir']) { const expandirSemMapa = ACTIONS['clima-expandir']; ACTIONS['clima-expandir'] = (...a) => { expandirSemMapa(...a); sincronizarMapaCasa(); }; }

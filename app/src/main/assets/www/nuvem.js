@@ -242,7 +242,7 @@ async function nvConferirFazenda() {
   if (papel === 'admin') {
     const pend = await nvHttp(`/rest/v1/farm_members?select=user_id&farm_id=eq.${encodeURIComponent(f.id)}&status=eq.pendente`).catch(() => null);
     if (Array.isArray(pend)) {
-      if (pend.length > (nv.pedidos || 0)) { showToast(`${pend.length} ${pend.length === 1 ? 'pedido de acesso aguardando' : 'pedidos de acesso aguardando'} sua autorização (Cadastros e backup)`); nvUsuarios = null; if (parseRoute().name === 'cadastros') nvAtualizarTela(); }
+      if (pend.length > (nv.pedidos || 0)) { showToast(`${pend.length} ${pend.length === 1 ? 'pedido de acesso aguardando' : 'pedidos de acesso aguardando'} sua autorização (Cadastros)`); nvUsuarios = null; if (parseRoute().name === 'cadastros') nvAtualizarTela(); }
       nv.pedidos = pend.length;
     }
   } else nv.pedidos = 0;
@@ -320,7 +320,7 @@ addEventListener('pagehide', () => { if (nvVinculado() && navigator.onLine !== f
 addEventListener('DOMContentLoaded', () => nvAgendar(1500));
 
 // ---------- Funções: cada pessoa vê as telas da sua função ----------
-// Telas que podem ser liberadas (Visão geral e Cadastros e backup ficam sempre disponíveis)
+// Telas que podem ser liberadas (Visão geral e Cadastros ficam sempre disponíveis)
 const NV_TELAS = [
   ['operacoes', 'Operações do dia'], ['talhoes', 'Talhões'], ['chuva', 'Chuvas'], ['pragas', 'Pragas e doenças (MIP)'],
   ['aplicacoes', 'Aplicações e carência'], ['maodeobra', 'Mão de obra'], ['maquinas', 'Máquinas e manutenção'], ['combustivel', 'Combustível'],
@@ -465,7 +465,7 @@ async function nvEscolherFazenda() {
   if (nv.fazenda && fazendas && !fazendas.some(f => f.id === nv.fazenda.id)) nvEsquecerFazenda();
   nvFazendas = fazendas;
   if (nv.fazenda) { nv.papel = null; nvSalvar(); showToast('Bem-vindo de volta'); nvSincronizar(true); return; }
-  if (nv.sysadm) { showToast('Entrou como Admin do sistema. As fazendas ficam em Cadastros e backup.'); go('cadastros'); return; }
+  if (nv.sysadm) { showToast('Entrou como Admin do sistema. As fazendas ficam em Cadastros.'); go('cadastros'); return; }
   if (nvFazendas?.length === 1) nvVincular(nvFazendas[0]);
 }
 
@@ -631,7 +631,7 @@ function nvVincular(f) {
     return;
   }
   if (nv.dadosDe) return confirmDialog(`Os dados guardados neste aparelho são de outra fazenda. Para entrar em “${f.name}”, eles serão apagados deste aparelho (continuam na nuvem da outra fazenda) e os dados de “${f.name}” serão baixados. Continuar?`, () => { nvLimparAparelho(); ligar(); }, 'Apagar e entrar');
-  confirmDialog(`Este aparelho tem ${n} registros que ainda não estão em nenhuma fazenda. Eles serão enviados para “${f.name}” e juntados com os dados da equipe. Se forem só dados de exemplo, toque em “Cancelar”, apague-os em Cadastros e backup e entre de novo. Continuar?`, ligar, 'Enviar e juntar');
+  confirmDialog(`Este aparelho tem ${n} registros que ainda não estão em nenhuma fazenda. Eles serão enviados para “${f.name}” e juntados com os dados da equipe. Se forem só dados de exemplo, toque em “Cancelar”, apague-os em Cadastros e entre de novo. Continuar?`, ligar, 'Enviar e juntar');
 }
 const nvCriarFazenda = () => nvComOcupado(async () => {
   const nome = ($('#nvp_fazenda')?.value || $('#nvs_fazenda')?.value || '').trim();
@@ -841,7 +841,7 @@ function nvAcessoUsuario(id, autorizar = false) {
   // Autorizar: começa com a função de operador (o ADM escolhe a certa)
   if (autorizar && !u.funcao) u.funcao = 'operador', u.modulos = nvFuncao('operador')[4];
   const marcadas = new Set(Array.isArray(u.modulos) ? u.modulos : NV_TODAS_TELAS);
-  dialog.innerHTML = `<h3>${autorizar ? 'Autorizar acesso' : 'Função e telas'}</h3><p class="sub">${autorizar ? `${esc(nvNomeDe(u))} (${esc(nvMostrarLogin(u.login))}) pediu acesso a “${esc(nv.fazenda.name)}”. Escolha a função e o nível. ` : ''}${esc(nvNomeDe(u))} vê no menu só as telas marcadas. Visão geral e Cadastros e backup ficam sempre disponíveis.</p>
+  dialog.innerHTML = `<h3>${autorizar ? 'Autorizar acesso' : 'Função e telas'}</h3><p class="sub">${autorizar ? `${esc(nvNomeDe(u))} (${esc(nvMostrarLogin(u.login))}) pediu acesso a “${esc(nv.fazenda.name)}”. Escolha a função e o nível. ` : ''}${esc(nvNomeDe(u))} vê no menu só as telas marcadas. Visão geral e Cadastros ficam sempre disponíveis.</p>
     <form novalidate><div class="form"><div class="field full"><label for="nva_funcao">Função</label><select id="nva_funcao">${NV_FUNCOES.map(([v, n, g]) => `<option value="${v}" ${v === (u.funcao || '') ? 'selected' : ''}>${esc(n)} (${esc(g)})</option>`).join('')}${u.funcao ? '' : '<option value="" selected>Sem função definida (todas as telas)</option>'}</select></div>
     ${autorizar ? `<div class="field full"><label for="nva_papel">Nível</label><select id="nva_papel">${Object.entries(NV_NIVEIS).map(([v, t]) => `<option value="${v}">${t}</option>`).join('')}</select><span class="hint">Comum lança; Supervisor também edita, exclui e vê o financeiro; ADM faz tudo.</span></div>` : ''}</div>
     <p class="nota" id="nva_todas" hidden>Esta função vê todas as telas.</p>
@@ -910,7 +910,7 @@ const nvMudarNivel = (id, papel) => nvComOcupado(async () => {
   await nvFuncaoUsuarios({acao: 'nivel', user_id: id, papel}); showToast(`Nível alterado para ${NV_NIVEIS[papel]}`); await nvCarregarUsuarios();
 });
 
-// ---------- Tela (Cadastros e backup) ----------
+// ---------- Tela (Cadastros) ----------
 function nvTextoStatus() {
   const pend = nvVinculado() ? nvPendentes().length : 0, aguardando = pend ? ` • ${pend} ${pend === 1 ? 'alteração aguardando envio' : 'alterações aguardando envio'}` : '';
   if (nvStatus === 'sincronizando') return 'Sincronizando…';

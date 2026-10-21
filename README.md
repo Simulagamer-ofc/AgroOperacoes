@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.51.0-beta1` — **Mapa do tempo no Início, logo abaixo da previsão** (abre junto com o cartão do clima; “Tela cheia” para ver maior) e **aviso de tempestade perto da fazenda**: “⚡ Tempestade a 31 km a oeste da fazenda — se aproximando”, pela tempestade mais próxima no STSC/REDEMET e comparando com meia hora antes. Menu **Cadastros** (antes “Cadastros e backup”): exportar e restaurar backup ficam só para o administrador da fazenda e o Admin do sistema, ou para quem usa sem nuvem (aí o backup é a única cópia).
+
 `0.50.1-beta1` — Mapa do tempo: o menu lateral passa a ficar **por cima** do mapa (antes o mapa aparecia através dele); satélite em tons de cinza sobreposto em modo “clarear” — nuvens brancas por cima do mapa e o chão continua visível, como nos apps de radar.
 
 `0.50.0-beta1` — **Mapa do tempo** (Início → clima → “Mapa do tempo”), no estilo dos apps de radar, numa linha do tempo só, do observado ao previsto:
