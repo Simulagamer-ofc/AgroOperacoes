@@ -4,6 +4,10 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`0.47.3-beta1` — **Horário da chuva na previsão**: o resumo do clima mostra “chuva às 21h” (ou “chovendo agora”), e o detalhe de cada dia lista as faixas de chuva com início, fim, milímetros e chance (ex.: “das 05h até 10h, 12,5 mm, 80%; das 15h até 17h, 5,0 mm”). O aviso de chuva forte no celular também diz a partir de que horas.
+
+`0.47.2-beta1` — **Alarme da massa em OFF**: a leitura salva mesmo com os pontos P em branco, mas avisa que a massa não foi medida e a planilha marca “Massa não medida”. Novo campo **“Massa — termômetro portátil”** para medir o grão na descarga ou na coluna enquanto o alarme não funciona. Duas leituras seguidas sem a massa geram aviso vermelho no painel.
+
 `0.47.1-beta1` — **Secador à prova de erro de preenchimento** (vistos no primeiro teste real):
 - Carga é em **toneladas**: acima de 500 t o sistema avisa (“21.300 kg = 21,3 t”).
 - Umidade final desejada obrigatória (8% a 18%); umidade de entrada abaixo da final pede para conferir a amostra.

@@ -37,10 +37,25 @@ test('clima: os 7 dias são botões e o dia tocado mostra os detalhes dele', () 
   a.run("ACTIONS['clima-dia']('2')");
   const h = a.html();
   assert.match(h, /voltar para hoje/);
-  assert.match(h, /48 mm previstos neste dia/);
+  assert.match(h, /Chuva neste dia:<\/strong> o dia todo/);
+  assert.match(h, /total do dia 48 mm/);
   assert.match(h, /Sem janela boa para pulverizar neste dia/);
   assert.match(h, /data-id="2" aria-pressed="true"/);
   a.run("ACTIONS['clima-dia']('0')");
   assert.doesNotMatch(a.html(), /voltar para hoje/);
   assert.match(a.html(), /pulverizar hoje/);
+});
+
+test('clima: mostra o horário em que a chuva começa e termina', () => {
+  const a = app();
+  const d = {hourly: {time: [], precipitation: [], precipitation_probability: []}};
+  for (let h = 0; h < 24; h++) { d.hourly.time.push(`2026-10-21T${String(h).padStart(2, '0')}:00`); const chove = h >= 14 && h <= 17; d.hourly.precipitation.push(chove ? 3 : 0); d.hourly.precipitation_probability.push(chove ? 85 : 10); }
+  a.ctx.__d = d;
+  const fx = a.run("horariosChuva(__d, '2026-10-21', new Date('2026-10-20T10:00:00'))");
+  assert.equal(fx.length, 1);
+  assert.equal(fx[0].ini, 14); assert.equal(fx[0].fim, 17);
+  assert.equal(a.run("txtHorariosChuva(horariosChuva(__d, '2026-10-21', new Date('2026-10-20T10:00:00')))"), 'das 14h até 18h, 12 mm, 85%');
+  // Hoje às 15h: a faixa já começou, mostra "agora"
+  const hoje = a.run("txtHorariosChuva(horariosChuva(__d, '2026-10-21', new Date('2026-10-21T15:20:00')))");
+  assert.equal(hoje, 'agora até 18h, 9,0 mm, 85%'.replace('9,0', a.run('num(9, 1)')));
 });
