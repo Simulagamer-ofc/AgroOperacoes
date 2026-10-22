@@ -8,7 +8,7 @@
    Previsão (próximas 48 h, hora a hora): chuva da média dos modelos (Open-Meteo) numa grade 9 × 9 em volta da fazenda.
    Mapa base OpenStreetMap; Leaflet 1.9.4 (BSD-2) carregado só ao abrir o mapa. */
 
-safeStorage.del?.('agro-clima-grade'); // grade antiga (só em volta da fazenda)
+try { safeStorage.del('agro-clima-grade'); } catch { /* grade antiga (só em volta da fazenda) */ }
 const ESCALA_CHUVA = [[0.2, '#a9d8f7', 'fraca'], [1, '#4aa8ec', ''], [2.5, '#1f6fd1', 'moderada'], [5, '#f2d43f', ''], [10, '#f39a3c', 'forte'], [20, '#e0443f', 'muito forte']];
 const corChuva = mm => { let c = null; ESCALA_CHUVA.forEach(([min, cor]) => { if (mm >= min) c = cor; }); return c; };
 // Radares do DECEA (centro e alcance de 400 km do MaxCAPPI)
