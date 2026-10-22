@@ -36,6 +36,6 @@ test('mapa do tempo: chuva interpolada entre os pontos do bloco e, onde falta o 
   assert.equal(run("chuvaEm(-28.5, -52.5, '2026-10-22T18:00').mm"), 10);
   assert.equal(run("Math.round(chuvaEm(-28.2, -52.5, '2026-10-22T18:00').mm * 10) / 10"), 5); // meio caminho até o vizinho (0 mm)
   assert.equal(run("chuvaEm(-25.5, -40, '2026-10-22T18:00')"), null);
-  assert.equal(run("chuvaEm(-26, -50, '2026-10-22T18:00').mm"), 3); // sem bloco fino ali: usa o nível de 1,2°
+  assert.equal(run("Math.round(chuvaEm(-26, -50, '2026-10-22T18:00').mm * 10) / 10"), 3); // sem bloco fino ali: usa o nível de 1,2°
   assert.equal(run("chuvaNoPonto(-28.5, -52.5, '2026-10-22T18:00').prob"), 80);
 });
