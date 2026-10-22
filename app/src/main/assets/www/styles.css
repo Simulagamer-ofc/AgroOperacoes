@@ -1001,3 +1001,9 @@ tr.clickable{cursor:pointer} tr.clickable:hover td{background:rgba(23,135,212,.0
   .ini-gastos{grid-area:gastos}.ini-tabela{grid-area:tabela}.ini-tabela.so-pc{display:block!important}
   .ini-clima-hero .ini-clima-rodape{flex-direction:column;align-items:stretch}
 }
+/* Mapa do tempo: tempestades em mancha, raios, seta de deslocamento e anéis de distância */
+.mt-temp{position:absolute;left:0;top:0;pointer-events:none}
+.mt-raio{font-size:17px;line-height:22px;text-align:center;filter:drop-shadow(0 0 2px #000) drop-shadow(0 0 1px #000)}
+.mt-seta span{display:block;font-size:22px;line-height:26px;text-align:center;color:#fff;text-shadow:0 0 3px #000,0 0 2px #000}
+.mt-vel{color:#fff;font-size:12px;font-weight:700;white-space:nowrap;text-shadow:0 0 3px #000,0 0 2px #000}
+.mt-anel-rot{color:#0b2236;background:rgba(232,245,251,.85);border-radius:8px;font-size:10px;font-weight:700;text-align:center;line-height:16px}
