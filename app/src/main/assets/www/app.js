@@ -94,10 +94,11 @@ const remove = (col, id) => { const r = db[col].find(x => x.id === id); if (r?.f
 
 // ---------- Regras de negócio ----------
 // Operações fora do talhão: não têm área trabalhada (beneficiamento e tratamento de sementes medem a quantidade em kg)
-const OP_SEM_AREA = ['Beneficiamento de sementes', 'Tratamento de sementes', 'Transporte', 'Manutenção'];
+const OP_GRAOS = ['Secagem', 'Recebimento de grãos', 'Limpeza de secador/silo']; // operações na unidade de grãos (secador, moega, silo)
+const OP_SEM_AREA = ['Beneficiamento de sementes', 'Tratamento de sementes', 'Transporte', 'Manutenção', ...OP_GRAOS];
 const OP_COM_KG = ['Beneficiamento de sementes', 'Tratamento de sementes'];
 const opTemArea = o => !OP_SEM_AREA.includes(o?.type);
-const OP_TYPES = ['Plantio', 'Aplicação', 'Adubação', 'Colheita', 'Preparo de solo', 'Transporte', 'Beneficiamento de sementes', 'Tratamento de sementes', 'Manutenção', 'Outra'];
+const OP_TYPES = ['Plantio', 'Aplicação', 'Adubação', 'Colheita', 'Preparo de solo', 'Transporte', 'Secagem', 'Recebimento de grãos', 'Limpeza de secador/silo', 'Beneficiamento de sementes', 'Tratamento de sementes', 'Manutenção', 'Outra'];
 const OP_STATUS = ['Programada', 'Em andamento', 'Concluída', 'Cancelada'];
 const STATUS_COLOR = {'Programada': 'blue', 'Em andamento': 'green', 'Concluída': 'gray', 'Cancelada': 'red'};
 const MACHINE_TYPES = ['Trator', 'Colheitadeira', 'Pulverizador', 'Plantadeira', 'Caminhão', 'Implemento', 'Secador', 'Moega', 'Silo/Armazém', 'Beneficiamento', 'Outro'];
@@ -291,7 +292,11 @@ function confirmDialog(message, onYes, yesLabel = 'Excluir') {
 
 // ---------- Formulários de cada entidade ----------
 const fieldOptions = () => db.fields.map(f => ({value: f.id, label: f.name}));
-const machineOptions = () => db.machines.filter(m => !isInactive(m)).map(m => ({value: m.id, label: `${m.name} (${num(m.hours)} h)`}));
+// Máquinas para a operação: na unidade de grãos só secador, moega e silo; no campo, as máquinas (implemento tem campo próprio)
+const TIPOS_GRAOS_EQUIP = ['Secador', 'Moega', 'Silo/Armazém'];
+const rotuloMaquina = m => TIPOS_COM_HORIMETRO.includes(m.type) || Number(m.hours) > 0 ? `${m.name} (${num(m.hours)} h)` : m.name;
+const OP_QUALQUER_MAQ = ['Manutenção', 'Outra'];
+const machineOptions = tipoOp => db.machines.filter(m => !isInactive(m) && m.type !== 'Implemento' && (typeof tipoOp !== 'string' || OP_QUALQUER_MAQ.includes(tipoOp) || (OP_GRAOS.includes(tipoOp) === TIPOS_GRAOS_EQUIP.includes(m.type)))).map(m => ({value: m.id, label: rotuloMaquina(m)}));
 // Rótulo para máquina inativa que já está gravada no registro
 const maquinaAusente = id => { const m = find('machines', id); return m ? `${m.name} (inativa)` : '(máquina removida)'; };
 const stockOptions = () => db.stock.map(s => ({value: s.id, label: `${s.name} — ${num(s.qty)} ${s.unit}`}));
@@ -308,7 +313,8 @@ function operationForm(op = {}) {
       {k: 'place', label: 'Local (sem talhão)', placeholder: 'Ex.: Unidade de beneficiamento', mostrarSe: ['fieldId', '']},
       {k: 'date', label: 'Data', type: 'date', required: true},
       {k: 'time', label: 'Horário', type: 'time'},
-      {k: 'machineId', label: 'Máquina', type: 'select', options: machineOptions, labelAusente: maquinaAusente},
+      {k: 'machineId', label: 'Máquina', type: 'select', options: () => machineOptions(op.type || 'Plantio'), labelAusente: maquinaAusente},
+      ...(typeof implementoOptions === 'function' && db.machines.some(m => m.type === 'Implemento') ? [{k: 'implementoId', label: 'Implemento', type: 'select', options: () => implementoOptions(op.type || 'Plantio'), labelAusente: maquinaAusente}] : []),
       {k: 'status', label: 'Situação', type: 'select', options: OP_STATUS, required: true},
       {k: 'area', label: 'Área trabalhada (ha)', type: 'number', min: 0},
       {k: 'kg', label: 'Quantidade de sementes (kg)', type: 'number', min: 0, mostrarSe: ['type', [...OP_COM_KG, 'Plantio']]},
@@ -316,7 +322,7 @@ function operationForm(op = {}) {
       {k: 'notes', label: 'Observações', type: 'textarea', placeholder: 'Insumos, dose, condições do tempo...', mais: true}
     ],
     onSubmit: v => {
-      if (!v.fieldId && !v.place) return 'Informe o talhão ou o local da operação';
+      if (!v.fieldId && !v.place && !(OP_GRAOS.includes(v.type) && v.machineId)) return OP_GRAOS.includes(v.type) ? 'Informe o secador, a moega ou o silo (ou o local)' : 'Informe o talhão ou o local da operação';
       if (!opTemArea(v)) v.area = ''; if (!OP_COM_KG.includes(v.type)) v.kg = '';
       const lib = v.type === 'Colheita' && v.fieldId && typeof liberacaoColheita === 'function' ? liberacaoColheita(v.fieldId) : null;
       if (lib && v.date < lib.libera && avisoColheitaOk !== v.fieldId + v.date) { avisoColheitaOk = v.fieldId + v.date; return `Atenção: ${fieldName(v.fieldId)} está na carência de ${lib.a.produto} (aplicado em ${fmtDate(lib.a.date)}); a colheita só está liberada a partir de ${fmtDate(lib.libera)}. Toque em salvar de novo para registrar mesmo assim.`; }
@@ -325,7 +331,11 @@ function operationForm(op = {}) {
     }
   });
   // Mostra só o que vale para o tipo: área (no talhão) ou quantidade de sementes (beneficiamento e tratamento)
-  const tipo = $('#f_type', dialog), mostrar = () => { const t = tipo.value; $('#f_area', dialog).closest('.field').hidden = !opTemArea({type: t}); $('#f_kg', dialog).closest('.field').hidden = !OP_COM_KG.includes(t); };
+  // e troca as listas de máquina e implemento conforme o tipo (secagem: secador/moega/silo; plantio: plantadeiras…)
+  const trocarLista = (sel, opcoes) => { if (!sel) return; const atual = sel.value; sel.innerHTML = '<option value="">—</option>' + opcoes.map(o => `<option value="${esc(o.value)}">${esc(o.label)}</option>`).join(''); sel.value = opcoes.some(o => o.value === atual) ? atual : ''; };
+  const tipo = $('#f_type', dialog), mostrar = () => { const t = tipo.value; $('#f_area', dialog).closest('.field').hidden = !opTemArea({type: t}); $('#f_kg', dialog).closest('.field').hidden = !OP_COM_KG.includes(t);
+    trocarLista($('#f_machineId', dialog), machineOptions(t)); const im = $('#f_implementoId', dialog); if (im) { trocarLista(im, implementoOptions(t)); im.closest('.field').hidden = OP_GRAOS.includes(t) || OP_COM_KG.includes(t); }
+    $('#f_fieldId', dialog).closest('.field').querySelector('label').textContent = OP_GRAOS.includes(t) ? 'Talhão (opcional)' : 'Talhão'; };
   if (tipo) { tipo.addEventListener('change', mostrar); mostrar(); }
 }
 
@@ -336,7 +346,7 @@ function machineForm(m = {}) {
     values: {interval: 250, state: 'Ativa', ...m},
     fields: [
       {k: 'name', label: 'Identificação', required: true, placeholder: 'Ex.: Trator 7230J', full: true},
-      {k: 'type', label: 'Tipo', type: 'select', options: MACHINE_TYPES, required: true},
+      {k: 'type', label: 'Tipo', type: 'select', options: MACHINE_TYPES.filter(t => t !== 'Implemento' || m.type === 'Implemento'), required: true, hint: 'Plantadeira, grade, pulverizador de arrasto e outros implementos: cadastre em Máquinas → Implementos.'},
       {k: 'model', label: 'Marca / modelo'},
       {k: 'hours', label: 'Horímetro atual (h)', type: 'number', min: 0, hint: 'Obrigatório para trator, colheitadeira, pulverizador, plantadeira e caminhão. Secador, moega e silo: deixe em branco.'},
       {k: 'interval', label: 'Intervalo de revisão (h)', type: 'number', min: 0},
@@ -582,7 +592,7 @@ function operationRow(o, actions = true) {
   const horas = Number(o.horas) > 0 ? `${um1(o.horas)} h${Number(o.area) > 0 && opTemArea(o) ? ` (${um1(o.area / o.horas)} ha/h)` : Number(o.kg) > 0 ? ` (${num(o.kg / o.horas)} kg/h)` : ''}` : '';
   const por = typeof quemLancou === 'function' ? quemLancou(o) : '';
   const prev = typeof duracaoPrevista === 'function' ? duracaoPrevista(o) : null, custo = typeof custoOperacao === 'function' ? custoOperacao(o) : null;
-  const parts = [fmtDate(o.date) + (o.time ? ' ' + o.time : ''), machineName(o.machineId), o.area && opTemArea(o) ? `${num(o.area)} ha` : '', Number(o.kg) > 0 ? `${num(o.kg)} kg` : '', horas, prev ? `previsto ~${um1(prev.horas)} h` : '', custo ? `máquina ≈ R$ ${num(custo, 0)}` : '', o.operator, o.notes, por ? 'lançado por ' + por : ''].filter(Boolean);
+  const parts = [fmtDate(o.date) + (o.time ? ' ' + o.time : ''), [machineName(o.machineId), machineName(o.implementoId)].filter(Boolean).join(' + '), o.area && opTemArea(o) ? `${num(o.area)} ha` : '', Number(o.kg) > 0 ? `${num(o.kg)} kg` : '', horas, prev ? `previsto ~${um1(prev.horas)} h` : '', custo ? `máquina ≈ R$ ${num(custo, 0)}` : '', o.operator, o.notes, por ? 'lançado por ' + por : ''].filter(Boolean);
   const acts = !actions ? chip(o.status, color) : `<div class="row-actions">${chip(o.status, color)}${o.status === 'Programada' ? mini('▶ Iniciar', 'op-start', o.id) : ''}${o.status === 'Em andamento' ? mini('✓ Concluir', 'op-done', o.id, 'ok') : ''}${mini('Editar', 'op-edit', o.id)}${mini('Excluir', 'op-del', o.id, 'del')}</div>`;
   return `<div class="row"><span class="status ${color === 'gray' ? 'green' : color}"></span><div><strong>${esc(o.type)} — ${esc(opPlace(o))}</strong><small>${esc(parts.join(' • '))}</small></div>${acts}</div>`;
 }
@@ -614,7 +624,7 @@ VIEWS.operacoes = () => {
 };
 
 VIEWS.maquinas = () => {
-  const ms = db.machines.slice().sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')));
+  const ms = db.machines.filter(m => m.type !== 'Implemento').sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''))); // implementos: aba própria
   const mts = db.maintenances.slice().sort((a, b) => (a.status === 'Concluída') - (b.status === 'Concluída') || String(b.date || '').localeCompare(String(a.date || '')));
   return head('Máquinas e manutenção', 'Horímetro, revisões programadas e ordens de manutenção.', btn('Registrar horímetro', 'hour-new', '', 'secondary') + btn('Abrir manutenção', 'mt-new', '', 'secondary') + btn('+ Nova máquina', 'mc-new')) +
     (ms.length ? `<section class="cards">${ms.map(m => {
@@ -950,7 +960,8 @@ let pendingAnchor;
 // Telas agrupadas num só item do menu, com abas no topo (a rota de cada aba continua valendo em links e atalhos)
 const ABAS = {
   financeiro: [['gastos', 'Gastos'], ['financeiro', 'Contas'], ['lcdpr', 'LCDPR']],
-  sementes: [['sementes', 'Painel'], ['lotes', 'Lotes'], ['ubs', 'Beneficiamento']]
+  sementes: [['sementes', 'Painel'], ['lotes', 'Lotes'], ['ubs', 'Beneficiamento']],
+  maquinas: [['maquinas', 'Máquinas'], ['implementos', 'Implementos']]
 };
 const GRUPO_DA_ROTA = Object.fromEntries(Object.entries(ABAS).flatMap(([g, l]) => l.map(([r]) => [r, g])));
 const barraAbas = name => { const g = GRUPO_DA_ROTA[name]; return g ? `<nav class="abas" aria-label="Seções">${ABAS[g].map(([r, t]) => `<button class="${r === name ? 'active' : ''}" data-act="nav" data-id="${r}"${r === name ? ' aria-current="page"' : ''}>${esc(t)}</button>`).join('')}</nav>` : ''; };
