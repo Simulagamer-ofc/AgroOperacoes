@@ -135,7 +135,7 @@ function iniOpsCurtas() {
 function iniAcesso() {
   const itens = [['operacoes', 'Operações'], ['maquinas', 'Manutenção'], ['clima', 'MercaClima'], ['relatorios', 'Relatórios'], ['graos', 'Grãos'], ['estoque', 'Estoque']].filter(([r]) => iniPode(r)).slice(0, 4);
   if (!itens.length) return '';
-  return `<section class="ini-bloco ini-acesso so-celular"><h3 class="ini-tit">Acesso rápido</h3><div class="ini-tiles">${itens.map(([r, rot]) => `<button type="button" class="card ini-tile ini-atalho" data-act="nav" data-id="${r}"><span class="ini-tile-ic" aria-hidden="true">${iconeLinha(r, 24)}</span><strong>${rot}</strong><span class="hoje-ir" aria-hidden="true">›</span></button>`).join('')}</div></section>`;
+  return `<section class="ini-bloco ini-acesso so-ate-tablet"><h3 class="ini-tit">Acesso rápido</h3><div class="ini-tiles">${itens.map(([r, rot]) => `<button type="button" class="card ini-tile ini-atalho" data-act="nav" data-id="${r}"><span class="ini-tile-ic" aria-hidden="true">${iconeLinha(r, 24)}</span><strong>${rot}</strong><span class="hoje-ir" aria-hidden="true">›</span></button>`).join('')}</div></section>`;
 }
 ACTIONS['ini-lancar'] = () => { if (typeof abrirAtalhos === 'function') abrirAtalhos(); else ACTIONS['op-new']?.(); };
 
@@ -160,17 +160,80 @@ function iniAtalhosFuncao() {
   return `<section class="card panel ini-card ini-ops"><h3>Suas telas</h3><div class="ini-atalhos">${bts.map(b => `<button type="button" class="secondary" data-act="nav" data-id="${esc(b.dataset.route)}">${esc(b.textContent.trim())}</button>`).join('')}</div></section>`;
 }
 
+// ---------- Tablet e computador ----------
+const iniVeFin = () => typeof nvVeFinanceiro !== 'function' || nvVeFinanceiro();
+const iniHoraOp = o => o.status === 'Em andamento' ? (iniHora(o.startedAt) || o.time || '') : (o.time || '');
+
+// Indicadores: em andamento, para hoje, máquinas e gastos do mês (só para quem vê o financeiro; senão, chuva em 7 dias)
+function iniKpis() {
+  const t = today(), ops = db.operations, ms = db.machines.filter(m => !isInactive(m));
+  const and = ops.filter(o => o.status === 'Em andamento'), hoje = ops.filter(o => o.status === 'Programada' && o.date === t), atr = ops.filter(o => o.status === 'Programada' && o.date && o.date < t);
+  const usoIds = new Set(and.map(o => o.machineId).filter(Boolean)), manut = ms.filter(m => machineStatus(m) === 'Em manutenção').length;
+  const revProx = ms.filter(m => Number(m.nextService) > 0 && hoursToService(m) <= SERVICE_WARN_HOURS).length;
+  const kpi = (ic, rot, valor, sub, rota, cls = '', subCls = '') => `<button type="button" class="card ini-kpi ${cls}" data-act="nav" data-id="${rota}"><span class="ini-tile-ic" aria-hidden="true">${iconeLinha(ic, 22)}</span><span><small>${esc(rot)}</small><b>${valor}</b><em class="${subCls}">${esc(sub)}</em></span><span class="hoje-ir" aria-hidden="true">›</span></button>`;
+  let quarto;
+  if (iniVeFin() && typeof lancamentosCusto === 'function') {
+    const v = somaValor(lancamentosCusto(t.slice(0, 8) + '01', t));
+    quarto = kpi('financeiro', 'Gastos do mês', 'R$ ' + num(v, 0), v ? `até ${fmtDate(t).slice(0, 5)}` : 'nenhum gasto lançado', 'financeiro', 'so-pc');
+  } else {
+    const mm = db.chuvas.filter(c => c.date >= daysAgo(6)).reduce((x, c) => x + (Number(c.mm) || 0), 0);
+    quarto = kpi('chuva', 'Chuva em 7 dias', num(mm) + ' mm', 'registrada na fazenda', 'chuva', 'so-pc');
+  }
+  return `<section class="ini-kpis so-grande">
+    ${kpi('operacoes', 'Em andamento', String(and.length).padStart(2, '0'), and.length ? 'rodando agora' : 'nada rodando', 'operacoes')}
+    ${kpi('lista', 'Para hoje', String(hoje.length + atr.length).padStart(2, '0'), atr.length ? `${atr.length} ${atr.length === 1 ? 'atrasada' : 'atrasadas'}` : 'nenhuma atrasada', 'operacoes', '', atr.length ? 'nao' : '')}
+    ${kpi('maquinas', 'Máquinas', String(ms.length).padStart(2, '0'), ms.length ? [`${usoIds.size} em uso`, manut ? `${manut} em manutenção` : '', revProx ? `${revProx} com revisão próxima` : ''].filter(Boolean).join(' • ') : 'nenhuma cadastrada', 'maquinas', 'so-pc', manut || revProx ? 'atencao' : '')}
+    ${quarto}</section>`;
+}
+
+// Agenda de hoje: em andamento, atrasadas e programadas para hoje, por horário
+function iniAgenda() {
+  const t = today(), ops = db.operations;
+  const itens = [...ops.filter(o => o.status === 'Em andamento').map(o => [o, 'andamento']), ...ops.filter(o => o.status === 'Programada' && o.date && o.date < t).map(o => [o, 'atrasada']), ...ops.filter(o => o.status === 'Programada' && o.date === t).map(o => [o, 'hoje'])]
+    .sort((a, b) => ['andamento', 'atrasada', 'hoje'].indexOf(a[1]) - ['andamento', 'atrasada', 'hoje'].indexOf(b[1]) || String(iniHoraOp(a[0])).localeCompare(iniHoraOp(b[0])));
+  const linha = ([o, tipo]) => `<div class="ini-ag"><span class="ini-ag-ponto ${tipo}" aria-hidden="true"></span><b>${esc((iniHoraOp(o) || '—').replace(/:00$/, 'h'))}</b>
+    <span><strong>${esc(o.type)} — ${esc(opPlace(o))}</strong><small>${tipo === 'andamento' ? 'em andamento' : tipo === 'atrasada' ? `atrasada (era ${fmtDate(o.date).slice(0, 5)})` : esc(o.machineId ? machineName(o.machineId) : 'programada')}</small></span>
+    ${tipo === 'andamento' ? mini('✓ Concluir', 'op-done', o.id, 'ok') : mini('▶ Iniciar', 'op-start', o.id)}</div>`;
+  return `<section class="card ini-card ini-agenda so-grande"><div class="ini-tit-linha"><h3 class="ini-tit">${iconeLinha('lista', 18)} Agenda de hoje</h3><button type="button" class="link" data-act="nav" data-id="operacoes">Ver todas ›</button></div>
+    ${itens.length ? itens.slice(0, 5).map(linha).join('') + (itens.length > 5 ? `<button type="button" class="link ini-mais" data-act="nav" data-id="operacoes">+ ${itens.length - 5} — ver todas</button>` : '') : iniVazio('📅', 'Nada na agenda de hoje', 'As operações programadas para hoje aparecem aqui.', {act: 'op-new', label: '+ Programar operação', cls: 'secondary'})}</section>`;
+}
+
+// Gastos do mês por categoria (computador; só para quem vê o financeiro)
+function iniGastos() {
+  if (!iniVeFin() || typeof lancamentosCusto !== 'function') return '';
+  const t = today(), lanc = lancamentosCusto(t.slice(0, 8) + '01', t), grupos = agrupar(lanc, x => x.category || 'Outros');
+  const linhas = grupos.length > 4 ? [...grupos.slice(0, 3), ['Outras', grupos.slice(3).reduce((s, [, v]) => s + v, 0)]] : grupos, max = Math.max(1, ...linhas.map(([, v]) => v));
+  const curto = v => v >= 1000 ? `R$ ${num(v / 1000, v >= 10000 ? 0 : 1)} mil` : `R$ ${num(v, 0)}`;
+  return `<section class="card ini-card ini-gastos so-pc"><div class="ini-tit-linha"><h3 class="ini-tit">${iconeLinha('financeiro', 18)} Gastos por categoria</h3><button type="button" class="link" data-act="nav" data-id="financeiro">Financeiro ›</button></div>
+    ${linhas.length ? `<div class="ini-barras" role="img" aria-label="Gastos do mês por categoria">${linhas.map(([n, v]) => `<div class="ini-barra-col" title="${esc(n)}: R$ ${num(v, 2)}"><b>${curto(v)}</b><span style="height:${Math.max(4, v / max * 100)}%"></span><small>${esc(n)}</small></div>`).join('')}</div><small class="ini-nota">Mês atual • total R$ ${num(somaValor(lanc), 0)}</small>`
+      : iniVazio('📊', 'Nenhum gasto neste mês', 'Combustível, manutenção e insumos lançados aparecem aqui por categoria.')}</section>`;
+}
+
+// Operações (computador): tabela com em andamento, programadas e concluídas recentes
+function iniTabelaOps() {
+  const t = today(), ops = db.operations;
+  const lista = [...ops.filter(o => o.status === 'Em andamento'), ...ops.filter(o => o.status === 'Programada' && o.date && o.date <= t).sort((a, b) => String(a.date).localeCompare(b.date)),
+    ...ops.filter(o => o.status === 'Programada' && o.date > t).sort((a, b) => String(a.date).localeCompare(b.date)).slice(0, 3),
+    ...ops.filter(o => o.status === 'Concluída').sort((a, b) => String(b.finishedAt || b.date).localeCompare(a.finishedAt || a.date)).slice(0, 3)].slice(0, 7);
+  const sit = o => o.status === 'Em andamento' ? ['blue', 'Em andamento'] : o.status === 'Concluída' ? ['green', 'Concluída'] : o.date < t ? ['red', 'Atrasada'] : ['orange', o.date === t ? 'Programada hoje' : 'Programada'];
+  return `<section class="card ini-card ini-tabela so-pc"><div class="ini-tit-linha"><h3 class="ini-tit">${iconeLinha('operacoes', 18)} Operações</h3><div class="btn-row"><button type="button" class="link" data-act="op-new">+ Programar</button><button type="button" class="link" data-act="nav" data-id="operacoes">Ver todas ›</button></div></div>
+    ${lista.length ? `<table class="ini-tab"><thead><tr><th>Operação</th><th>Talhão / local</th><th>Data</th><th>Máquina</th><th>Situação</th></tr></thead><tbody>${lista.map(o => { const [cor, txt] = sit(o); return `<tr data-act="nav" data-id="operacoes"><td>${esc(o.type)}</td><td>${esc(opPlace(o))}</td><td>${fmtDate(o.date).slice(0, 5)}${o.time ? ' ' + esc(o.time) : ''}</td><td>${esc(o.machineId ? machineName(o.machineId) : '—')}</td><td><span class="ini-sit ${cor}"></span>${txt}</td></tr>`; }).join('')}</tbody></table>`
+      : iniVazio('🚜', 'Nenhuma operação ainda', 'Programe as operações e acompanhe aqui o andamento.', {act: 'op-new', label: '+ Programar operação'})}</section>`;
+}
+
 const inicioDepois = VIEWS.inicio.after;
-// Celular: saudação, clima, resumo, operações do dia, acesso rápido, atenção no campo, preparar a fazenda e “Novo lançamento”.
-// Computador: clima em cima; operações à esquerda; atenção no campo e preparar a fazenda à direita.
+// Celular: saudação, clima, resumo, operações do dia, acesso rápido, atenção no campo, novo lançamento (aprovado em 21/10).
+// Tablet: clima e acesso rápido à esquerda; indicadores, agenda, atenção e novo lançamento à direita.
+// Computador: indicadores; clima, gastos e agenda; tabela de operações e atenção no campo.
 VIEWS.inicio = () => {
-  const ops = iniPode('operacoes');
-  return `<div class="ini">${iniSaudacao()}${iniClima()}
-    ${ops ? iniResumo() + iniOpsCurtas() : ''}
-    <div class="ini-principal so-computador">${ops ? painelOperacoesDia() : iniAtalhosFuncao()}</div>
-    ${ops ? iniAcesso() : `<div class="so-celular ini-bloco">${iniAtalhosFuncao()}</div>`}
+  const ops = iniPode('operacoes'), gastos = iniGastos();
+  return `<div class="ini ${gastos ? '' : 'sem-fin'} ${ops ? '' : 'sem-ops'}">
+    <header class="ini-topo">${iniSaudacao()}<button type="button" class="primary ini-lancar-pc so-pc" data-act="ini-lancar">${iconeLinha('mais', 20)} Novo lançamento</button></header>
+    ${ops ? iniKpis() : ''}${iniClima()}${gastos}${ops ? iniAgenda() : ''}
+    ${ops ? iniResumo() + iniOpsCurtas() + iniTabelaOps() : `<div class="ini-bloco ini-suas">${iniAtalhosFuncao()}</div>`}
+    ${ops ? iniAcesso() : ''}
     ${iniAtencao()}<div class="ini-prep">${iniPreparar()}</div>
-    <button type="button" class="primary ini-lancar so-celular" data-act="ini-lancar">${iconeLinha('mais', 22)} Novo lançamento</button></div>`;
+    <button type="button" class="primary ini-lancar so-ate-tablet" data-act="ini-lancar">${iconeLinha('mais', 22)} Novo lançamento</button></div>`;
 };
 VIEWS.inicio.after = (...a) => {
   inicioDepois?.(...a);
