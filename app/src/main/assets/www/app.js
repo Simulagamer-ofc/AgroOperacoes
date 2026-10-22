@@ -314,7 +314,7 @@ function operationForm(op = {}) {
       {k: 'date', label: 'Data', type: 'date', required: true},
       {k: 'time', label: 'Horário', type: 'time'},
       {k: 'machineId', label: 'Máquina', type: 'select', options: () => machineOptions(op.type || 'Plantio'), labelAusente: maquinaAusente},
-      ...(typeof implementoOptions === 'function' && db.machines.some(m => m.type === 'Implemento') ? [{k: 'implementoId', label: 'Implemento', type: 'select', options: () => implementoOptions(op.type || 'Plantio'), labelAusente: maquinaAusente}] : []),
+      ...(typeof implementoOptions === 'function' ? [{k: 'implementoId', label: 'Implemento', type: 'select', options: () => implementoOptions(op.type || 'Plantio'), labelAusente: maquinaAusente, hint: db.machines.some(m => m.type === 'Implemento') ? ' ' : 'Nenhum implemento cadastrado: cadastre em Máquinas → Implementos.'}] : []),
       {k: 'status', label: 'Situação', type: 'select', options: OP_STATUS, required: true},
       {k: 'area', label: 'Área trabalhada (ha)', type: 'number', min: 0},
       {k: 'kg', label: 'Quantidade de sementes (kg)', type: 'number', min: 0, mostrarSe: ['type', [...OP_COM_KG, 'Plantio']]},
@@ -335,7 +335,9 @@ function operationForm(op = {}) {
   const trocarLista = (sel, opcoes) => { if (!sel) return; const atual = sel.value; sel.innerHTML = '<option value="">—</option>' + opcoes.map(o => `<option value="${esc(o.value)}">${esc(o.label)}</option>`).join(''); sel.value = opcoes.some(o => o.value === atual) ? atual : ''; };
   const tipo = $('#f_type', dialog), mostrar = () => { const t = tipo.value; $('#f_area', dialog).closest('.field').hidden = !opTemArea({type: t}); $('#f_kg', dialog).closest('.field').hidden = !OP_COM_KG.includes(t);
     trocarLista($('#f_machineId', dialog), machineOptions(t)); const im = $('#f_implementoId', dialog); if (im) { trocarLista(im, implementoOptions(t)); im.closest('.field').hidden = OP_GRAOS.includes(t) || OP_COM_KG.includes(t); }
-    $('#f_fieldId', dialog).closest('.field').querySelector('label').textContent = OP_GRAOS.includes(t) ? 'Talhão (opcional)' : 'Talhão'; };
+    $('#f_fieldId', dialog).closest('.field').querySelector('label').textContent = OP_GRAOS.includes(t) ? 'Talhão (opcional)' : 'Talhão';
+    // Sem implemento que sirva para este tipo: diz o que fazer (em vez de uma lista vazia)
+    const hi = im?.closest('.field').querySelector('.hint'); if (hi && db.machines.some(m => m.type === 'Implemento')) hi.textContent = implementoOptions(t).length ? '' : `Nenhum implemento cadastrado serve para ${t.toLowerCase()}. Cadastre em Máquinas → Implementos.`; };
   if (tipo) { tipo.addEventListener('change', mostrar); mostrar(); }
 }
 
