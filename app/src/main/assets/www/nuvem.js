@@ -350,7 +350,7 @@ const nvFuncao = id => NV_FUNCOES.find(f => f[0] === id);
 const nvNomeFuncao = id => nvFuncao(id)?.[1] || '';
 // Rota → tela da lista acima (rotas fora daqui ficam sempre liberadas)
 const NV_ROTA_TELA = {operacoes: 'operacoes', talhoes: 'talhoes', talhao: 'talhoes', chuva: 'chuva', pragas: 'pragas', aplicacoes: 'aplicacoes', maodeobra: 'maodeobra',
-  maquinas: 'maquinas', combustivel: 'combustivel', afericao: 'afericao', catalogo: 'catalogo', pontas: 'pontas', secagem: 'secagem',
+  maquinas: 'maquinas', implementos: 'maquinas', combustivel: 'combustivel', afericao: 'afericao', catalogo: 'catalogo', pontas: 'pontas', secagem: 'secagem',
   sementes: 'sementes', lotes: 'sementes', lote: 'sementes', ubs: 'sementes', etiqueta: 'sementes', estoque: 'estoque',
   financeiro: 'financeiro', gastos: 'financeiro', lcdpr: 'financeiro', producao: 'producao', orcamento: 'producao', relatorios: 'relatorios'};
 // Telas liberadas para esta pessoa: null = todas (ADM, Admin do sistema, ou sem função definida)
