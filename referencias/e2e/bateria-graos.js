@@ -344,14 +344,16 @@ async () => {
   T('VAL-06', 'Validação', 'Corrigir dados de uma secagem em andamento sem excluir', 'carga 22,5 t a 18,4%', `carga ${br(LV.massaEntradaKg / 1000, 1)} t a ${br(LV.umidadeEntrada, 1)}%`, r.salvo && LV.massaEntradaKg === 22500 && LV.umidadeEntrada === 18.4);
   r = await F('gr-sensores', SEC, {temAr: 'sim', arNome: 'Entringer', alarmeNome: 'TSW', tipo_P1: 'ar', tipo_P2: 'ar', tipo_P3: 'ar', tipo_P4: 'ar'});
   T('VAL-07', 'Validação', 'Sensores com todos os pontos marcados como "ar": avisa que sem ponto de massa o sistema não compara o grão com o limite', 'avisa antes de salvar', r.salvo ? 'salvou sem avisar' : r.msgs[0], !r.salvo && /Massa de grãos/.test(r.msgs[0]) && sensoresSecador(SEC).pontos[0].tipo === 'massa');
+  // Horas sempre no passado (leitura com hora à frente do relógio é tratada como do dia anterior; rodando entre 0h e 0h30 a ordem mudava)
+  const horaAtras = min => { const d = new Date(Date.now() - min * 60000); return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; };
   // Alarme da massa em OFF: leitura sem a massa, aviso e termômetro portátil
-  r = await F('gr-leitura', LV.id, {hora: '00:10', tAr: '96', umidade: '17,5'});
+  r = await F('gr-leitura', LV.id, {hora: horaAtras(30), tAr: '96', umidade: '17,5'});
   const hLV = VIEWS.graos('lote/' + LV.id);
   T('MAN-01', 'Leitura', 'Alarme em OFF (P1…P4 em branco): salva a leitura, avisa que a massa não foi medida e marca na planilha', 'salva • aviso • "Massa não medida"', `${r.salvo ? 'salva' : 'não salvou'} • ${/SEM a temperatura da massa/.test(r.toast) ? 'aviso' : 'sem aviso'} • ${/Massa não medida/.test(hLV) ? '"Massa não medida"' : 'sem marca'}`, r.salvo && /SEM a temperatura da massa/.test(r.toast) && /Massa não medida/.test(hLV));
-  await F('gr-leitura', LV.id, {hora: '00:20', tAr: '97', umidade: '17,0'});
+  await F('gr-leitura', LV.id, {hora: horaAtras(20), tAr: '97', umidade: '17,0'});
   const alM = alerts().find(a => /sem temperatura da massa/.test(a.title));
   T('MAN-02', 'Leitura', 'Duas leituras seguidas sem a massa: aviso vermelho no painel para conferir o alarme e medir com termômetro', 'aviso vermelho', alM ? `${alM.color}: ${alM.title}` : 'sem aviso', alM?.color === 'red');
-  r = await F('gr-leitura', LV.id, {hora: '00:30', tAr: '98', tMassa: '38', umidade: '16,4'});
+  r = await F('gr-leitura', LV.id, {hora: horaAtras(10), tAr: '98', tMassa: '38', umidade: '16,4'});
   const lm = LV.leituras.find(x => x.massaManual);
   T('MAN-03', 'Leitura', 'Massa medida com termômetro portátil (38 °C) entra como temperatura da massa e o aviso some', 'massa 38 °C (termômetro) • sem aviso', `${lm ? `massa ${lm.tMassa} °C (termômetro)` : 'não registrou'} • ${alerts().some(a => /sem temperatura da massa/.test(a.title)) ? 'aviso continua' : 'sem aviso'}`, lm?.tMassa === 38 && !alerts().some(a => /sem temperatura da massa/.test(a.title)));
   remove('lotesSecagem', LV.id);
