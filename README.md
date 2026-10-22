@@ -4,7 +4,9 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.58.0-beta1` — **MercaClima: tempestades fáceis de ler.** No lugar dos pontinhos, a tempestade aparece como **mancha** (amarelo → laranja → vermelho, mais forte e mais recente no vermelho), com **⚡** só nos núcleos com raios nos últimos 10 min, **seta tracejada com a velocidade** mostrando para onde a tempestade mais perto da fazenda está indo, e **anéis de 20, 50 e 100 km** em volta da fazenda. Com as tempestades ligadas, o satélite fica mais claro para não esconder o mapa.
+`0.59.0-beta1` — **MercaClima: tocar num dia da previsão leva o mapa para a chuva prevista daquele dia**, no horário de mais chuva (dia seco: meio-dia), ligando a camada “Chuva prevista”; no celular, a tela rola até o mapa. O caminho inverso também vale: arrastar a barra do mapa para outro dia marca esse dia nos cartões. A chuva prevista no mapa passa a cobrir **7 dias** (48 h de hora em hora; depois de 3 em 3 h).
+
+Anterior: `0.58.0-beta1` — **MercaClima: tempestades fáceis de ler.** No lugar dos pontinhos, a tempestade aparece como **mancha** (amarelo → laranja → vermelho, mais forte e mais recente no vermelho), com **⚡** só nos núcleos com raios nos últimos 10 min, **seta tracejada com a velocidade** mostrando para onde a tempestade mais perto da fazenda está indo, e **anéis de 20, 50 e 100 km** em volta da fazenda. Com as tempestades ligadas, o satélite fica mais claro para não esconder o mapa.
 
 Anterior: `0.57.1-beta1` — Campo **Implemento** sempre aparece na operação (antes só aparecia depois do primeiro implemento cadastrado); sem implemento que sirva para o tipo, explica onde cadastrar.
 

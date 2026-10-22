@@ -39,7 +39,7 @@ async function redemet(params) {
 // Previsão de chuva em blocos (25 pontos cada), buscados conforme a área que aparece no mapa — a chuva cobre o mapa
 // inteiro, não só em volta da fazenda. Perto (zoom ≥ 7): blocos de 3° com pontos a cada 0,6° (~65 km); afastando, a grade
 // fica mais aberta (6° e 12°) para cobrir o estado ou o país sem pesar. Até 9 blocos por tela; cada um guardado 30 min.
-const NIVEIS_CHUVA = [{g: 3, p: 0.6}, {g: 6, p: 1.2}, {g: 12, p: 2.4}], BLOCO_N = 5, BLOCO_KEY = 'agro-clima-blocos', BLOCO_VALIDADE = 1800000, BLOCO_MAX_TELA = 9;
+const NIVEIS_CHUVA = [{g: 3, p: 0.6}, {g: 6, p: 1.2}, {g: 12, p: 2.4}], BLOCO_N = 5, BLOCO_KEY = 'agro-clima-blocos7', BLOCO_VALIDADE = 1800000, BLOCO_MAX_TELA = 9;
 const nivelDoZoom = z => z >= 7 ? 0 : z >= 6 ? 1 : 2;
 const blocosChuva = new Map(), blocosBuscando = new Map();
 const fusoLocal = () => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Sao_Paulo'; } catch { return 'America/Sao_Paulo'; } };
@@ -55,7 +55,7 @@ async function buscarBloco(nv, bi, bj) {
   if (blocosBuscando.has(k)) return blocosBuscando.get(k);
   const pts = [];
   for (let i = 0; i < BLOCO_N; i++) for (let j = 0; j < BLOCO_N; j++) pts.push([bi * g + (i + 0.5) * p, bj * g + (j + 0.5) * p]);
-  const q = new URLSearchParams({latitude: pts.map(x => x[0].toFixed(2)).join(','), longitude: pts.map(x => x[1].toFixed(2)).join(','), hourly: 'precipitation,precipitation_probability', forecast_days: '3', timezone: fusoLocal()});
+  const q = new URLSearchParams({latitude: pts.map(x => x[0].toFixed(2)).join(','), longitude: pts.map(x => x[1].toFixed(2)).join(','), hourly: 'precipitation,precipitation_probability', forecast_days: '7', timezone: fusoLocal()});
   const pr = fetch('https://api.open-meteo.com/v1/forecast?' + q).then(r => { if (!r.ok) throw new Error('grade ' + r.status); return r.json(); }).then(j => {
     const lista = Array.isArray(j) ? j : [j];
     const novo = {em: Date.now(), horas: lista[0].hourly.time, mm: lista.map(x => x.hourly.precipitation.map(v => v == null ? 0 : Math.round(v * 10) / 10)), prob: lista.map(x => x.hourly.precipitation_probability)};
@@ -282,8 +282,9 @@ async function iniciarMapaTempo() {
   let chuvaCamada = null, G = null;
   if (grade.status === 'fulfilled' && grade.value) {
     G = grade.value; const proxHora = new Date(); proxHora.setMinutes(0, 0, 0); proxHora.setHours(proxHora.getHours() + 1);
-    const iso0 = `${isoDate(proxHora)}T${String(proxHora.getHours()).padStart(2, '0')}:00`, i0 = Math.max(0, G.horas.indexOf(iso0)), n = Math.min(48, G.horas.length - i0);
-    G.horas.slice(i0, i0 + n).forEach((h, k) => mtEstado.quadros.push({tipo: 'prev', iso: h, idx: i0 + k, rotulo: rotuloHora(h)}));
+    // Previsão de 7 dias: as primeiras 48 h de hora em hora; depois, de 3 em 3 horas (a barra não fica pesada)
+    const iso0 = `${isoDate(proxHora)}T${String(proxHora.getHours()).padStart(2, '0')}:00`, i0 = Math.max(0, G.horas.indexOf(iso0));
+    G.horas.slice(i0).forEach((h, k) => { if (k < 48 || Number(h.slice(11, 13)) % 3 === 0) mtEstado.quadros.push({tipo: 'prev', iso: h, idx: i0 + k, rotulo: rotuloHora(h)}); });
     chuvaCamada = criarCamadaChuva(L).addTo(mapa);
     // Ao arrastar ou afastar: busca a previsão da nova área e redesenha
     let espera = null;
@@ -354,7 +355,40 @@ function mostrarQuadro(k) {
   mtEstado.desenhar?.(k);
   const h = document.getElementById('mtHora'), s = document.getElementById('mtSlider');
   if (h) h.textContent = q.rotulo; if (s) s.value = k;
+  // Caminho inverso: a barra do mapa num outro dia marca esse dia na previsão (cartões)
+  if (q.tipo === 'prev') marcarDiaDaPrevisao(q.iso.slice(0, 10));
 }
+// Índice do dia nos cartões da previsão (0 = hoje) ou -1
+function indiceDiaPrevisao(data) {
+  const d = typeof lerClima === 'function' ? lerClima()?.dados?.daily : null; if (!d?.time) return -1;
+  const i0 = Math.max(0, d.time.indexOf(today())), k = d.time.indexOf(data) - i0;
+  return k >= 0 && k < 7 ? k : -1;
+}
+let marcandoDia = false;
+function marcarDiaDaPrevisao(data) {
+  const k = indiceDiaPrevisao(data); if (k < 0 || marcandoDia || typeof climaDiaSel === 'undefined' || climaDiaSel === k || !document.querySelector('#hojeClima .clima-dias')) return;
+  marcandoDia = true; try { climaDiaBase?.(String(k)); } finally { marcandoDia = false; }
+}
+// Tocar num dia da previsão: o mapa vai para a chuva prevista desse dia, no horário de mais chuva (dia seco: meio-dia)
+function mapaIrParaDia(data) {
+  if (!mtEstado.mapa || !mtEstado.quadros.length) return;
+  const doDia = mtEstado.quadros.map((q, k) => [q, k]).filter(([q]) => q.tipo === 'prev' && q.iso.startsWith(data)); if (!doDia.length) return;
+  const h = lerClima?.()?.dados?.hourly, mmHora = iso => { const i = h?.time?.indexOf(iso) ?? -1; return i >= 0 ? (h.precipitation?.[i] || 0) : 0; };
+  let melhor = doDia.reduce((m, x) => mmHora(x[0].iso) > mmHora(m[0].iso) ? x : m, doDia[0]);
+  if (mmHora(melhor[0].iso) < 0.2) melhor = doDia.reduce((m, x) => Math.abs(Number(x[0].iso.slice(11, 13)) - 12) < Math.abs(Number(m[0].iso.slice(11, 13)) - 12) ? x : m, doDia[0]);
+  if (!mtEstado.vis.prev) { mtEstado.vis.prev = true; document.querySelectorAll('[data-act="mt-camada"][data-id="prev"]').forEach(b => { b.classList.add('active'); b.setAttribute('aria-pressed', 'true'); }); }
+  pararAnimacao(); marcandoDia = true; try { mostrarQuadro(melhor[1]); } finally { marcandoDia = false; }
+}
+const climaDiaBase = ACTIONS['clima-dia'];
+ACTIONS['clima-dia'] = k => {
+  climaDiaBase?.(k);
+  if (marcandoDia) return;
+  const d = lerClima?.()?.dados?.daily; if (!d?.time) return;
+  const data = d.time[Math.max(0, d.time.indexOf(today())) + (Number(k) || 0)]; if (!data) return;
+  mapaIrParaDia(data);
+  // No celular o mapa fica acima dos cartões: rola até ele para ver a chuva do dia escolhido
+  const m = document.getElementById('mapaTempo'); if (m && innerWidth < 900) { const r = m.getBoundingClientRect(); if (r.bottom < 60 || r.top > innerHeight - 60) m.scrollIntoView({behavior: 'smooth', block: 'center'}); }
+};
 function pararAnimacao() { if (mtEstado.tocando) clearInterval(mtEstado.tocando); mtEstado.tocando = null; const b = document.querySelector('.mt-play'); if (b) b.textContent = '▶'; }
 Object.assign(ACTIONS, {
   'clima-mapa': () => go('clima-mapa'),
