@@ -4,7 +4,9 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.55.1-beta1` — **MercaClima: chuva prevista no mapa inteiro.** Antes a chuva aparecia só num quadrado em volta da fazenda; agora a previsão é buscada para a área que está na tela (ao arrastar ou afastar o mapa, completa sozinha), em blocos guardados por 30 min. Perto, pontos a cada ~65 km; afastando, a grade fica mais aberta para cobrir o estado ou o país sem pesar.
+`0.56.0-beta1` — **Tela inicial no tablet e no computador.** Computador: saudação com **Novo lançamento**, quatro indicadores (em andamento, para hoje, máquinas e **gastos do mês** — este só para quem vê o Financeiro; para os outros, chuva em 7 dias), clima em destaque, **gastos por categoria**, **agenda de hoje** (Iniciar/Concluir), tabela de **operações** e **atenção no campo**. Tablet: clima e acesso rápido à esquerda; indicadores, agenda e atenção no campo à direita. Celular sem mudança.
+
+Anterior: `0.55.1-beta1` — **MercaClima: chuva prevista no mapa inteiro.** Antes a chuva aparecia só num quadrado em volta da fazenda; agora a previsão é buscada para a área que está na tela (ao arrastar ou afastar o mapa, completa sozinha), em blocos guardados por 30 min. Perto, pontos a cada ~65 km; afastando, a grade fica mais aberta para cobrir o estado ou o país sem pesar.
 
 Anterior: `0.55.0-beta1` — **Nova tela inicial para começar o dia.** No celular: saudação, **clima em destaque** (temperatura de agora, chuva, umidade, vento, horário para pulverizar e “Detalhar no MercaClima”), **Resumo de hoje** (em andamento e para hoje, com atrasadas), **Operações do dia** (as 3 principais com Iniciar/Concluir), **Acesso rápido** (conforme a função), **Atenção no campo** (alertas do clima e pendências urgentes) e o botão **Novo lançamento**. No computador: clima em cima, operações à esquerda e atenção no campo à direita. Fazenda sem dados mostra **Prepare a fazenda** (talhões, máquinas, estoque). Os demais avisos ficam no **sino** (tela Avisos e pendências).
 
