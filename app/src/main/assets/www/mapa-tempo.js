@@ -200,6 +200,46 @@ async function carregarChuvaDaTela(mapa) {
   const ok = res.find(r => r.status === 'fulfilled')?.value; if (!ok) throw new Error('previsão indisponível');
   return ok;
 }
+// Tempestades como mancha contínua (em vez de pontinhos): cada ponto do STSC vira um borrão de ~7 km; a soma é colorida
+// amarelo → laranja → vermelho (mais pontos e mais recentes = mais forte). Os pixels são nossos: dá para ler e colorir.
+const RAMPA_TEMP = [[0.18, [255, 210, 63]], [0.34, [255, 159, 28]], [0.55, [235, 64, 52]], [0.8, [190, 20, 60]]];
+function criarCamadaTempestade(L) {
+  const Camada = L.Layer.extend({
+    onAdd(map) { this._map = map; this.cv = L.DomUtil.create('canvas', 'leaflet-zoom-hide mt-temp'); map.getPanes().overlayPane.appendChild(this.cv); map.on('moveend zoomend resize viewreset', this.desenhar, this); this.desenhar(); },
+    onRemove(map) { this.cv.remove(); map.off('moveend zoomend resize viewreset', this.desenhar, this); },
+    usar(pontos) { this.pontos = pontos; this.desenhar(); },
+    desenhar() {
+      const map = this._map, cv = this.cv; if (!map || !cv) return;
+      const tam = map.getSize(); L.DomUtil.setPosition(cv, map.containerPointToLayerPoint([0, 0]));
+      cv.width = tam.x; cv.height = tam.y; const ctx = cv.getContext('2d'); ctx.clearRect(0, 0, tam.x, tam.y);
+      if (!this.pontos?.length) return;
+      const c = map.getCenter(), mpp = 40075016.686 * Math.cos(c.lat * Math.PI / 180) / Math.pow(2, map.getZoom() + 8), r = Math.max(5, 7000 / mpp);
+      const b = map.getBounds().pad(0.1);
+      ctx.globalCompositeOperation = 'lighter';
+      this.pontos.forEach(([la, lo, w]) => {
+        if (!b.contains([la, lo])) return;
+        const pt = map.latLngToContainerPoint([la, lo]), g = ctx.createRadialGradient(pt.x, pt.y, 0, pt.x, pt.y, r);
+        g.addColorStop(0, `rgba(0,0,0,${0.55 * w})`); g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g; ctx.fillRect(pt.x - r, pt.y - r, 2 * r, 2 * r);
+      });
+      ctx.globalCompositeOperation = 'source-over';
+      const im = ctx.getImageData(0, 0, tam.x, tam.y), d = im.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const a = d[i + 3] / 255; if (a < RAMPA_TEMP[0][0]) { d[i + 3] = 0; continue; }
+        let cor = RAMPA_TEMP[0][1]; RAMPA_TEMP.forEach(([lim, cc]) => { if (a >= lim) cor = cc; });
+        const borda = a < RAMPA_TEMP[0][0] + 0.05; // contorno mais forte na borda da mancha
+        d[i] = cor[0]; d[i + 1] = cor[1]; d[i + 2] = cor[2]; d[i + 3] = Math.round(255 * (borda ? 0.85 : Math.min(0.72, 0.38 + a * 0.45)));
+      }
+      ctx.putImageData(im, 0, 0);
+    }
+  });
+  return new Camada();
+}
+// Agrupa pontos numa grade de ~0,15° (≈ 15 km): centro de cada grupo
+function gruposTempestade(pontos, passo = 0.15) {
+  const g = new Map(); pontos.forEach(([la, lo]) => { const k = `${Math.round(la / passo)},${Math.round(lo / passo)}`, x = g.get(k) || {la: 0, lo: 0, n: 0}; x.la += la; x.lo += lo; x.n++; g.set(k, x); });
+  return [...g.values()].map(x => ({la: x.la / x.n, lo: x.lo / x.n, n: x.n}));
+}
 async function iniciarMapaTempo() {
   const loc = typeof localDaFazenda === 'function' ? localDaFazenda() : null, el = document.getElementById('mapaTempo'); if (!loc || !el) return;
   const avisos = [], status = () => { const s = document.getElementById('mtStatus'); if (s) s.textContent = avisos.join(' '); };
@@ -232,7 +272,10 @@ async function iniciarMapaTempo() {
   if (perto.length && R) { const semImg = perto.filter(r => !radQ.some(q => q.area === r.k)); if (semImg.length === perto.length) avisos.push(`Radar: ${semImg.map(r => r.nome).join(', ')} não ${semImg.length === 1 ? 'publicou' : 'publicaram'} imagem na REDEMET agora; aparecem o satélite e as tempestades.`); }
   if (!perto.length) avisos.push('Não há radar do DECEA a menos de 400 km da fazenda.');
   perto.forEach(r => { radOverlays[r.k] = null; });
-  const stscGrupo = L.layerGroup().addTo(mapa);
+  const stscGrupo = L.layerGroup().addTo(mapa), tempCamada = criarCamadaTempestade(L).addTo(mapa);
+  // Anéis de distância em volta da fazenda (20, 50 e 100 km)
+  const aneis = L.layerGroup(); [20, 50, 100].forEach(km => { L.circle([loc.lat, loc.lon], {radius: km * 1000, color: '#e8f5fb', weight: 1, opacity: 0.55, dashArray: '4 6', fill: false, interactive: false}).addTo(aneis);
+    L.marker([loc.lat + km / 111.32, loc.lon], {interactive: false, icon: L.divIcon({className: 'mt-anel-rot', html: `${km} km`, iconSize: [44, 16], iconAnchor: [22, 8]})}).addTo(aneis); });
   mtEstado.quadros = tempos.map(t => ({tipo: 'obs', t, rotulo: `${hhmm(t)}${t.getTime() === tempos.at(-1)?.getTime() ? ' (último)' : ''}`}));
   const nObs = mtEstado.quadros.length;
   // --- Previsão (chuva em blocos que acompanham o mapa) ---
@@ -264,10 +307,31 @@ async function iniciarMapaTempo() {
       if (!radOverlays[a]) radOverlays[a] = L.imageOverlay(rq.path, rq.limites, {opacity: 0.8}).addTo(mapa); else { radOverlays[a].setUrl(rq.path); radOverlays[a].setBounds(L.latLngBounds(rq.limites)); radOverlays[a].setOpacity(0.8); }
     });
     stscGrupo.clearLayers();
-    if (obs && v.stsc) T.filter(x => x.t <= new Date(q.t.getTime() + 5 * 60000) && x.t > new Date(q.t.getTime() - 30 * 60000)).forEach(x => {
-      const idade = (q.t - x.t) / 60000, cor = idade <= 6 ? '#ff2d2d' : idade <= 18 ? '#ff9f1c' : '#ffd23f';
-      x.pontos.forEach(([la, lo]) => L.circleMarker([la, lo], {radius: idade <= 6 ? 4 : 3, stroke: false, fillColor: cor, fillOpacity: 0.9, interactive: false}).addTo(stscGrupo));
-    });
+    if (satCamada?.cv) satCamada.cv.style.opacity = v.stsc && obs ? '0.5' : ''; // satélite mais claro com as tempestades
+    if (v.stsc && obs) aneis.addTo(mapa); else aneis.remove();
+    if (obs && v.stsc) {
+      const janela = T.filter(x => x.t <= new Date(q.t.getTime() + 5 * 60000) && x.t > new Date(q.t.getTime() - 30 * 60000));
+      // Mancha: pontos dos últimos 30 min, mais peso para os recentes
+      tempCamada.usar(janela.flatMap(x => { const idade = (q.t - x.t) / 60000, w = idade <= 6 ? 1 : idade <= 18 ? 0.6 : 0.3; return x.pontos.map(([la, lo]) => [la, lo, w]); }));
+      // Raios agora: ⚡ só nos núcleos com mais descargas nos últimos 10 min (no máximo 8, para não poluir)
+      const recentes = janela.filter(x => (q.t - x.t) / 60000 <= 10).flatMap(x => x.pontos);
+      gruposTempestade(recentes, 0.3).filter(gp => gp.n >= 3).sort((a, b) => b.n - a.n).slice(0, 8).forEach(gp => L.marker([gp.la, gp.lo], {interactive: false, icon: L.divIcon({className: 'mt-raio', html: '⚡', iconSize: [22, 22], iconAnchor: [11, 11]})}).addTo(stscGrupo));
+      // Rastro: centro da tempestade mais perto da fazenda agora × 30 min antes (seta tracejada e velocidade)
+      const centro = l => l.length ? {la: l.reduce((t, p) => t + p[0], 0) / l.length, lo: l.reduce((t, p) => t + p[1], 0) / l.length} : null;
+      const ptsAgora = janela.filter(x => (q.t - x.t) / 60000 <= 6).flatMap(x => x.pontos);
+      const perto = gruposTempestade(ptsAgora, 0.3).map(gp => ({...gp, d: distKm(loc.lat, loc.lon, gp.la, gp.lo)})).sort((a, b) => a.d - b.d)[0];
+      if (perto && perto.d <= 200) {
+        const agora = centro(ptsAgora.filter(([la, lo]) => distKm(perto.la, perto.lo, la, lo) <= 40));
+        const antes = centro(T.filter(x => x.t <= new Date(q.t.getTime() - 24 * 60000) && x.t > new Date(q.t.getTime() - 36 * 60000)).flatMap(x => x.pontos).filter(([la, lo]) => distKm(agora.la, agora.lo, la, lo) <= 60));
+        const dKm = antes ? distKm(antes.la, antes.lo, agora.la, agora.lo) : 0;
+        if (antes && dKm >= 3) {
+          L.polyline([[antes.la, antes.lo], [agora.la, agora.lo]], {color: '#ffffff', weight: 2.5, opacity: 0.9, dashArray: '6 6', interactive: false}).addTo(stscGrupo);
+          const ang = Math.atan2(agora.la - antes.la, (agora.lo - antes.lo) * Math.cos(agora.la * Math.PI / 180)) * 180 / Math.PI;
+          L.marker([agora.la, agora.lo], {interactive: false, icon: L.divIcon({className: 'mt-seta', html: `<span style="transform:rotate(${-ang}deg)">➤</span>`, iconSize: [26, 26], iconAnchor: [13, 13]})}).addTo(stscGrupo);
+          L.marker([agora.la, agora.lo], {interactive: false, icon: L.divIcon({className: 'mt-vel', html: `~${Math.round(dKm * 2)} km/h`, iconSize: [70, 16], iconAnchor: [35, 30]})}).addTo(stscGrupo);
+        }
+      }
+    } else tempCamada.usar(null);
     chuvaCamada?.usar(G && v.prev && !obs ? q.iso : null);
   };
   // Atalhos: observado (−1 h, último) e previsão por dia
@@ -276,7 +340,7 @@ async function iniciarMapaTempo() {
   [...new Set(mtEstado.quadros.filter(q => q.tipo === 'prev').map(q => q.iso.slice(0, 10)))].forEach(d => atalhos.push([mtEstado.quadros.findIndex(q => q.tipo === 'prev' && q.iso.startsWith(d)), d === today() ? 'próximas horas' : d === addDias(today(), 1) ? 'amanhã' : fmtDate(d).slice(0, 5)]));
   if (dias) dias.innerHTML = atalhos.map(([k, r]) => `<button type="button" class="chip" data-act="mt-quadro" data-id="${k}">${esc(r)}</button>`).join('');
   const leg = document.getElementById('mtLegenda');
-  if (leg) leg.innerHTML = `<span><i style="background:#ff2d2d;border-radius:50%"></i>tempestade nos últimos 6 min</span><span><i style="background:#ff9f1c;border-radius:50%"></i>até 30 min</span>` +
+  if (leg) leg.innerHTML = `<span><i style="background:linear-gradient(90deg,#ffd23f,#ff9f1c,#eb4034,#be143c)"></i>tempestade (mais vermelho = mais forte e mais recente)</span><span>⚡ raios nos últimos 10 min</span><span>➤ para onde a tempestade mais perto está indo</span><span>◌ 20 / 50 / 100 km da fazenda</span>` +
     ESCALA_CHUVA.map(([min, cor, n]) => `<span><i style="background:${cor}"></i>${num(min, min < 1 ? 1 : 0)}${n ? ' ' + n : ''}</span>`).join('') + '<small>chuva prevista em mm/h • satélite: quanto mais branca a nuvem, mais alta e fria (mais chance de chuva forte)</small>';
   const slider = document.getElementById('mtSlider');
   if (!mtEstado.quadros.length) { avisos.push('Nada para mostrar agora.'); return status(); }

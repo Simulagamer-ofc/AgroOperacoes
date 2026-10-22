@@ -4,7 +4,9 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.57.1-beta1` — Campo **Implemento** sempre aparece na operação (antes só aparecia depois do primeiro implemento cadastrado); sem implemento que sirva para o tipo, explica onde cadastrar.
+`0.58.0-beta1` — **MercaClima: tempestades fáceis de ler.** No lugar dos pontinhos, a tempestade aparece como **mancha** (amarelo → laranja → vermelho, mais forte e mais recente no vermelho), com **⚡** só nos núcleos com raios nos últimos 10 min, **seta tracejada com a velocidade** mostrando para onde a tempestade mais perto da fazenda está indo, e **anéis de 20, 50 e 100 km** em volta da fazenda. Com as tempestades ligadas, o satélite fica mais claro para não esconder o mapa.
+
+Anterior: `0.57.1-beta1` — Campo **Implemento** sempre aparece na operação (antes só aparecia depois do primeiro implemento cadastrado); sem implemento que sirva para o tipo, explica onde cadastrar.
 
 Anterior: `0.57.0-beta1` — **Cadastro de implementos** (Máquinas → aba **Implementos**): plantadeira, semeadora, pulverizador de arrasto, distribuidor, grade, subsolador, escarificador, rolo-faca, plataforma e carreta, com largura de trabalho, linhas e espaçamento, capacidade, trator que costuma puxar e **revisão por hectares trabalhados** (e/ou dias), com aviso. Na operação: **Máquina** (trator) + **Implemento**, filtrado pelo tipo (plantio → plantadeiras; preparo → grade/subsolador…). Novos tipos de operação **Secagem**, **Recebimento de grãos** e **Limpeza de secador/silo**: a lista de máquinas mostra só secador, moega e silo e o talhão fica opcional; nas operações de campo, secador/moega/silo não aparecem.
 
