@@ -8,7 +8,7 @@
    Previsão (próximas 48 h, hora a hora): chuva da média dos modelos (Open-Meteo) numa grade 9 × 9 em volta da fazenda.
    Mapa base OpenStreetMap; Leaflet 1.9.4 (BSD-2) carregado só ao abrir o mapa. */
 
-const GRADE_N = 9, GRADE_PASSO = 0.4, GRADE_KEY = 'agro-clima-grade';
+try { safeStorage.del('agro-clima-grade'); } catch { /* grade antiga (só em volta da fazenda) */ }
 const ESCALA_CHUVA = [[0.2, '#a9d8f7', 'fraca'], [1, '#4aa8ec', ''], [2.5, '#1f6fd1', 'moderada'], [5, '#f2d43f', ''], [10, '#f39a3c', 'forte'], [20, '#e0443f', 'muito forte']];
 const corChuva = mm => { let c = null; ESCALA_CHUVA.forEach(([min, cor]) => { if (mm >= min) c = cor; }); return c; };
 // Radares do DECEA (centro e alcance de 400 km do MaxCAPPI)
@@ -36,17 +36,88 @@ async function redemet(params) {
   if (!r.ok) throw new Error('redemet ' + r.status);
   return r.json();
 }
-// Previsão de chuva em grade (uma chamada para os 81 pontos), guardada por 1 hora
-async function gradeChuva(loc) {
-  try { const g = JSON.parse(safeStorage.get(GRADE_KEY) || 'null'); if (g && Date.now() - g.em < 3600000 && Math.abs(g.lat - loc.lat) < 0.05 && Math.abs(g.lon - loc.lon) < 0.05) return g; } catch { /* refaz */ }
-  const meio = (GRADE_N - 1) / 2, pts = [];
-  for (let i = 0; i < GRADE_N; i++) for (let j = 0; j < GRADE_N; j++) pts.push([loc.lat + (i - meio) * GRADE_PASSO, loc.lon + (j - meio) * GRADE_PASSO]);
-  const q = new URLSearchParams({latitude: pts.map(p => p[0].toFixed(3)).join(','), longitude: pts.map(p => p[1].toFixed(3)).join(','), hourly: 'precipitation,precipitation_probability', forecast_days: '3', timezone: 'auto'});
-  const r = await fetch('https://api.open-meteo.com/v1/forecast?' + q); if (!r.ok) throw new Error('grade ' + r.status);
-  const j = await r.json(), lista = Array.isArray(j) ? j : [j];
-  const g = {em: Date.now(), lat: loc.lat, lon: loc.lon, horas: lista[0].hourly.time, pontos: lista.map((x, k) => ({lat: pts[k][0], lon: pts[k][1], mm: x.hourly.precipitation, prob: x.hourly.precipitation_probability}))};
-  safeStorage.set(GRADE_KEY, JSON.stringify(g));
-  return g;
+// Previsão de chuva em blocos (25 pontos cada), buscados conforme a área que aparece no mapa — a chuva cobre o mapa
+// inteiro, não só em volta da fazenda. Perto (zoom ≥ 7): blocos de 3° com pontos a cada 0,6° (~65 km); afastando, a grade
+// fica mais aberta (6° e 12°) para cobrir o estado ou o país sem pesar. Até 9 blocos por tela; cada um guardado 30 min.
+const NIVEIS_CHUVA = [{g: 3, p: 0.6}, {g: 6, p: 1.2}, {g: 12, p: 2.4}], BLOCO_N = 5, BLOCO_KEY = 'agro-clima-blocos', BLOCO_VALIDADE = 1800000, BLOCO_MAX_TELA = 9;
+const nivelDoZoom = z => z >= 7 ? 0 : z >= 6 ? 1 : 2;
+const blocosChuva = new Map(), blocosBuscando = new Map();
+const fusoLocal = () => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Sao_Paulo'; } catch { return 'America/Sao_Paulo'; } };
+(() => { try { const g = JSON.parse(safeStorage.get(BLOCO_KEY) || '{}'); Object.entries(g).forEach(([k, b]) => { if (Date.now() - b.em < BLOCO_VALIDADE) blocosChuva.set(k, b); }); } catch { /* recomeça */ } })();
+function guardarBlocos() {
+  const lista = [...blocosChuva.entries()].filter(([, b]) => Date.now() - b.em < BLOCO_VALIDADE).sort((x, y) => y[1].em - x[1].em).slice(0, 14);
+  try { safeStorage.set(BLOCO_KEY, JSON.stringify(Object.fromEntries(lista))); } catch { /* sem espaço: fica só na memória */ }
+}
+const chaveBloco = (nv, bi, bj) => `${nv}:${bi},${bj}`;
+async function buscarBloco(nv, bi, bj) {
+  const k = chaveBloco(nv, bi, bj), b = blocosChuva.get(k), {g, p} = NIVEIS_CHUVA[nv];
+  if (b && Date.now() - b.em < BLOCO_VALIDADE) return b;
+  if (blocosBuscando.has(k)) return blocosBuscando.get(k);
+  const pts = [];
+  for (let i = 0; i < BLOCO_N; i++) for (let j = 0; j < BLOCO_N; j++) pts.push([bi * g + (i + 0.5) * p, bj * g + (j + 0.5) * p]);
+  const q = new URLSearchParams({latitude: pts.map(x => x[0].toFixed(2)).join(','), longitude: pts.map(x => x[1].toFixed(2)).join(','), hourly: 'precipitation,precipitation_probability', forecast_days: '3', timezone: fusoLocal()});
+  const pr = fetch('https://api.open-meteo.com/v1/forecast?' + q).then(r => { if (!r.ok) throw new Error('grade ' + r.status); return r.json(); }).then(j => {
+    const lista = Array.isArray(j) ? j : [j];
+    const novo = {em: Date.now(), horas: lista[0].hourly.time, mm: lista.map(x => x.hourly.precipitation.map(v => v == null ? 0 : Math.round(v * 10) / 10)), prob: lista.map(x => x.hourly.precipitation_probability)};
+    blocosChuva.set(k, novo); guardarBlocos(); return novo;
+  }).finally(() => blocosBuscando.delete(k));
+  blocosBuscando.set(k, pr);
+  return pr;
+}
+// Blocos que cobrem uma área [[s, w], [n, e]] num nível; os mais perto do centro primeiro
+function blocosDaArea(nv, s, w, n, e) {
+  const {g} = NIVEIS_CHUVA[nv], lista = [], cLat = (s + n) / 2, cLon = (w + e) / 2;
+  for (let bi = Math.floor(s / g); bi <= Math.floor(n / g); bi++) for (let bj = Math.floor(w / g); bj <= Math.floor(e / g); bj++) lista.push([bi, bj]);
+  const dist = ([bi, bj]) => Math.hypot((bi + 0.5) * g - cLat, (bj + 0.5) * g - cLon);
+  return lista.sort((x, y) => dist(x) - dist(y));
+}
+// Valor de um ponto da grade (índices globais do nível) numa hora; null quando o bloco ainda não chegou
+function pontoChuva(nv, gi, gj, iso, campo = 'mm') {
+  const bi = Math.floor(gi / BLOCO_N), bj = Math.floor(gj / BLOCO_N), b = blocosChuva.get(chaveBloco(nv, bi, bj)); if (!b) return null;
+  const h = b.horas.indexOf(iso); if (h < 0) return null;
+  const v = b[campo][(gi - bi * BLOCO_N) * BLOCO_N + (gj - bj * BLOCO_N)]?.[h];
+  return v == null ? null : v;
+}
+// Chuva interpolada (bilinear) num lugar; usa o nível pedido e, onde ainda não chegou, um nível mais aberto
+function chuvaEm(lat, lon, iso, nv0 = 0) {
+  for (let nv = nv0; nv < NIVEIS_CHUVA.length; nv++) {
+    const {p} = NIVEIS_CHUVA[nv], fi = lat / p - 0.5, fj = lon / p - 0.5, i = Math.floor(fi), j = Math.floor(fj), di = fi - i, dj = fj - j;
+    let soma = 0, peso = 0;
+    [[i, j, (1 - di) * (1 - dj)], [i + 1, j, di * (1 - dj)], [i, j + 1, (1 - di) * dj], [i + 1, j + 1, di * dj]].forEach(([a, b, w]) => { const v = pontoChuva(nv, a, b, iso); if (v != null) { soma += v * w; peso += w; } });
+    if (peso) return {mm: soma / peso, peso};
+  }
+  return null;
+}
+function chuvaNoPonto(lat, lon, iso, nv0 = 0) {
+  for (let nv = nv0; nv < NIVEIS_CHUVA.length; nv++) { const {p} = NIVEIS_CHUVA[nv], gi = Math.round(lat / p - 0.5), gj = Math.round(lon / p - 0.5), mm = pontoChuva(nv, gi, gj, iso); if (mm != null) return {mm, prob: pontoChuva(nv, gi, gj, iso, 'prob')}; }
+  return null;
+}
+// Camada da chuva prevista: pinta a área visível inteira (em baixa resolução, suavizada pelo navegador)
+function criarCamadaChuva(L) {
+  const Camada = L.Layer.extend({
+    onAdd(map) { this._map = map; this.cv = L.DomUtil.create('canvas', 'leaflet-zoom-hide mt-prev'); map.getPanes().overlayPane.appendChild(this.cv); map.on('moveend zoomend resize viewreset', this.desenhar, this); this.desenhar(); },
+    onRemove(map) { this.cv.remove(); map.off('moveend zoomend resize viewreset', this.desenhar, this); },
+    usar(iso) { this.iso = iso; this.desenhar(); },
+    desenhar() {
+      const map = this._map, cv = this.cv; if (!map || !cv) return;
+      const tam = map.getSize(), topo = map.containerPointToLayerPoint([0, 0]);
+      L.DomUtil.setPosition(cv, topo); cv.style.width = tam.x + 'px'; cv.style.height = tam.y + 'px';
+      const F = 4, W = Math.ceil(tam.x / F), H = Math.ceil(tam.y / F); cv.width = W; cv.height = H;
+      const ctx = cv.getContext('2d'); ctx.clearRect(0, 0, W, H); if (!this.iso) return;
+      const im = ctx.createImageData(W, H), lats = [], lons = [], nv = nivelDoZoom(map.getZoom());
+      for (let y = 0; y < H; y++) lats.push(map.containerPointToLatLng([0, (y + 0.5) * F]).lat);
+      for (let x = 0; x < W; x++) lons.push(map.containerPointToLatLng([(x + 0.5) * F, 0]).lng);
+      const hex = c => [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)], cores = new Map();
+      for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+        const r = chuvaEm(lats[y], lons[x], this.iso, nv); if (!r) continue;
+        const cor = corChuva(r.mm); if (!cor) continue;
+        if (!cores.has(cor)) cores.set(cor, hex(cor));
+        const [R, G, B] = cores.get(cor), o = (y * W + x) * 4; im.data[o] = R; im.data[o + 1] = G; im.data[o + 2] = B; im.data[o + 3] = Math.round(150 * Math.min(1, r.peso * 1.3));
+      }
+      ctx.putImageData(im, 0, 0);
+    }
+  });
+  return new Camada();
 }
 const dataUTC = s => s ? new Date(String(s).replace(' ', 'T') + (/[zZ]|[+-]\d\d:?\d\d$/.test(s) ? '' : 'Z')) : null;
 const hhmm = d => `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
@@ -70,22 +141,6 @@ function tempestadeMaisPerto(T, lat, lon) {
   const agora = maisPerto(ult); if (!agora) return {nenhuma: true, t: ult.t};
   const antes = T.filter(x => x.t <= new Date(ult.t.getTime() - 25 * 60000)).at(-1), a = maisPerto(antes);
   return {d: agora.d, rumo: rumo(lat, lon, agora.la, agora.lo), t: ult.t, chegando: a ? agora.d < a.d - 5 : null};
-}
-// Imagem da chuva prevista de uma hora: interpolação bilinear da grade, pintada pela escala (transparente sem chuva)
-function imagemChuva(g, idx, limites) {
-  const W = 168, cv = document.createElement('canvas'); cv.width = cv.height = W; const ctx = cv.getContext('2d'), im = ctx.createImageData(W, W);
-  const lat0 = Math.min(...g.pontos.map(p => p.lat)), lon0 = Math.min(...g.pontos.map(p => p.lon)), n = GRADE_N;
-  const v = (i, j) => g.pontos[Math.max(0, Math.min(n - 1, i)) * n + Math.max(0, Math.min(n - 1, j))].mm[idx] || 0;
-  const [[sLat, sLon], [nLat, nLon]] = limites, hex = c => [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)];
-  for (let y = 0; y < W; y++) for (let x = 0; x < W; x++) {
-    const lat = nLat - (y + 0.5) / W * (nLat - sLat), lon = sLon + (x + 0.5) / W * (nLon - sLon);
-    const fi = Math.max(0, Math.min(n - 1, (lat - lat0) / GRADE_PASSO)), fj = Math.max(0, Math.min(n - 1, (lon - lon0) / GRADE_PASSO)), i = Math.floor(fi), j = Math.floor(fj), di = fi - i, dj = fj - j;
-    const mm = v(i, j) * (1 - di) * (1 - dj) + v(i + 1, j) * di * (1 - dj) + v(i, j + 1) * (1 - di) * dj + v(i + 1, j + 1) * di * dj;
-    const cor = corChuva(mm); if (!cor) continue;
-    const borda = Math.min(fi, n - 1 - fi, fj, n - 1 - fj), a = Math.round(150 * Math.min(1, 0.15 + borda / 1.2)); // some aos poucos na borda da grade
-    const [r, gg, b] = hex(cor), o = (y * W + x) * 4; im.data[o] = r; im.data[o + 1] = gg; im.data[o + 2] = b; im.data[o + 3] = a;
-  }
-  ctx.putImageData(im, 0, 0); return cv.toDataURL('image/png');
 }
 // Camada do satélite: a imagem da REDEMET é equiretangular (lat/lon proporcionais); o mapa é Mercator.
 // Desenha faixa por faixa num canvas, cada uma na latitude certa (sem ler os pixels: não precisa de CORS).
@@ -135,6 +190,16 @@ VIEWS['clima-mapa'] = () => {
   return head('Mapa do tempo', 'Radar, satélite, tempestades e chuva prevista em volta da fazenda', btn('← MercaClima', 'nav', 'clima', 'secondary')) + painelMapaHTML(false);
 };
 TITLES['clima-mapa'] = 'Mapa do tempo';
+// Busca os blocos da área visível (com folga). Afastado demais: só os mais perto do centro, para não pesar
+let avisoAfastado = false;
+async function carregarChuvaDaTela(mapa) {
+  const b = mapa.getBounds().pad(0.1), nv = nivelDoZoom(mapa.getZoom()), todos = blocosDaArea(nv, b.getSouth(), b.getWest(), b.getNorth(), b.getEast()), lista = todos.slice(0, BLOCO_MAX_TELA);
+  avisoAfastado = todos.length > lista.length;
+  const st = document.getElementById('mtStatus'); if (st) st.dataset.afastado = avisoAfastado ? '1' : '';
+  const res = await Promise.allSettled(lista.map(([bi, bj]) => buscarBloco(nv, bi, bj)));
+  const ok = res.find(r => r.status === 'fulfilled')?.value; if (!ok) throw new Error('previsão indisponível');
+  return ok;
+}
 async function iniciarMapaTempo() {
   const loc = typeof localDaFazenda === 'function' ? localDaFazenda() : null, el = document.getElementById('mapaTempo'); if (!loc || !el) return;
   const avisos = [], status = () => { const s = document.getElementById('mtStatus'); if (s) s.textContent = avisos.join(' '); };
@@ -148,7 +213,7 @@ async function iniciarMapaTempo() {
   const perto = radaresPerto(loc.lat, loc.lon);
   const [sat, rad, tem, grade] = await Promise.allSettled([redemet({produto: 'satelite', tipo: 'ir', anima: 9}),
     perto.length ? redemet({produto: 'radar', tipo: 'maxcappi', areas: perto.map(r => r.k).join(','), anima: 9}) : Promise.resolve(null),
-    redemet({produto: 'stsc', anima: 15, lat: loc.lat.toFixed(2), lon: loc.lon.toFixed(2), graus: 8}), gradeChuva(loc)]);
+    redemet({produto: 'stsc', anima: 15, lat: loc.lat.toFixed(2), lon: loc.lon.toFixed(2), graus: 8}), carregarChuvaDaTela(mapa)]);
   if (!document.getElementById('mapaTempo')) return; // saiu da tela enquanto carregava
   // --- Observado ---
   const S = sat.status === 'fulfilled' ? sat.value : null, R = rad.status === 'fulfilled' ? rad.value : null, T = tem.status === 'fulfilled' ? horariosStsc(tem.value) : [];
@@ -170,16 +235,19 @@ async function iniciarMapaTempo() {
   const stscGrupo = L.layerGroup().addTo(mapa);
   mtEstado.quadros = tempos.map(t => ({tipo: 'obs', t, rotulo: `${hhmm(t)}${t.getTime() === tempos.at(-1)?.getTime() ? ' (último)' : ''}`}));
   const nObs = mtEstado.quadros.length;
-  // --- Previsão ---
-  let prevImg = null, G = null, limitesG = null;
-  if (grade.status === 'fulfilled') {
+  // --- Previsão (chuva em blocos que acompanham o mapa) ---
+  let chuvaCamada = null, G = null;
+  if (grade.status === 'fulfilled' && grade.value) {
     G = grade.value; const proxHora = new Date(); proxHora.setMinutes(0, 0, 0); proxHora.setHours(proxHora.getHours() + 1);
     const iso0 = `${isoDate(proxHora)}T${String(proxHora.getHours()).padStart(2, '0')}:00`, i0 = Math.max(0, G.horas.indexOf(iso0)), n = Math.min(48, G.horas.length - i0);
     G.horas.slice(i0, i0 + n).forEach((h, k) => mtEstado.quadros.push({tipo: 'prev', iso: h, idx: i0 + k, rotulo: rotuloHora(h)}));
-    const meio = GRADE_PASSO / 2, la = G.pontos.map(p => p.lat), lo = G.pontos.map(p => p.lon);
-    limitesG = [[Math.min(...la) - meio, Math.min(...lo) - meio], [Math.max(...la) + meio, Math.max(...lo) + meio]];
-    mapa.on('click', e => { const q = mtEstado.quadros[mtEstado.quadro]; if (q?.tipo !== 'prev') return; const p = G.pontos.reduce((m, x) => Math.hypot(x.lat - e.latlng.lat, x.lon - e.latlng.lng) < Math.hypot(m.lat - e.latlng.lat, m.lon - e.latlng.lng) ? x : m, G.pontos[0]);
-      L.popup().setLatLng(e.latlng).setContent(`<b>${esc(q.rotulo)}</b><br>${num(p.mm[q.idx] || 0, 1)} mm/h • chance ${Math.round(p.prob[q.idx] ?? 0)}%`).openOn(mapa); });
+    chuvaCamada = criarCamadaChuva(L).addTo(mapa);
+    // Ao arrastar ou afastar: busca a previsão da nova área e redesenha
+    let espera = null;
+    mapa.on('moveend', () => { clearTimeout(espera); espera = setTimeout(() => carregarChuvaDaTela(mapa).then(() => { if (mtEstado.quadros[mtEstado.quadro]?.tipo === 'prev') chuvaCamada.desenhar(); }).catch(() => {}), 350); });
+    mapa.on('click', e => { const q = mtEstado.quadros[mtEstado.quadro]; if (q?.tipo !== 'prev') return;
+      const c = chuvaNoPonto(e.latlng.lat, e.latlng.lng, q.iso, nivelDoZoom(mapa.getZoom())), mm = c?.mm, pb = c?.prob;
+      L.popup().setLatLng(e.latlng).setContent(mm == null ? `<b>${esc(q.rotulo)}</b><br>Carregando a previsão desta área…` : `<b>${esc(q.rotulo)}</b><br>${num(mm, 1)} mm/h • chance ${Math.round(pb ?? 0)}%`).openOn(mapa); });
   } else avisos.push('A chuva prevista não respondeu agora.');
   // --- Desenhar um quadro ---
   mtEstado.desenhar = k => {
@@ -200,8 +268,7 @@ async function iniciarMapaTempo() {
       const idade = (q.t - x.t) / 60000, cor = idade <= 6 ? '#ff2d2d' : idade <= 18 ? '#ff9f1c' : '#ffd23f';
       x.pontos.forEach(([la, lo]) => L.circleMarker([la, lo], {radius: idade <= 6 ? 4 : 3, stroke: false, fillColor: cor, fillOpacity: 0.9, interactive: false}).addTo(stscGrupo));
     });
-    if (G && v.prev && !obs) { const url = imagemChuva(G, q.idx, limitesG); if (!prevImg) prevImg = L.imageOverlay(url, limitesG, {opacity: 1}).addTo(mapa); else { prevImg.setUrl(url); prevImg.setOpacity(1); } }
-    else prevImg?.setOpacity(0);
+    chuvaCamada?.usar(G && v.prev && !obs ? q.iso : null);
   };
   // Atalhos: observado (−1 h, último) e previsão por dia
   const dias = document.getElementById('mtDias'), atalhos = [];

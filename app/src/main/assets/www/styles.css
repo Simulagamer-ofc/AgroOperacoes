@@ -949,3 +949,4 @@ tr.clickable{cursor:pointer} tr.clickable:hover td{background:rgba(23,135,212,.0
   .ini-clima-hero{display:grid;grid-template-columns:auto 1fr;grid-template-areas:"local local" "agora met" "rodape rodape";column-gap:30px;align-items:center}
   .ini-clima-local{grid-area:local}.ini-clima-agora{grid-area:agora;margin:6px 0}.ini-clima-met{grid-area:met;border-top:0;padding-top:0}.ini-clima-rodape{grid-area:rodape}
 }
+.mt-prev{position:absolute;left:0;top:0;pointer-events:none}
