@@ -6,26 +6,67 @@ const talhaoOuGeral = id => id ? (fieldName(id) || 'Talhão removido') : 'Sede /
 const diasEntre = (a, b) => Math.round((new Date(b + 'T12:00:00') - new Date(a + 'T12:00:00')) / 864e5);
 
 // ---------------- Chuvas ----------------
+// Estimativa da chuva pela previsão do tempo (média dos modelos, local da fazenda) entre a leitura anterior do mesmo
+// pluviômetro (até 3 dias antes) — ou as 24 h anteriores — e a hora desta leitura. É só um ponto de partida: confira no pluviômetro.
+function chuvaEstimada(data, hora, fieldId) {
+  const c = typeof lerClima === 'function' ? lerClima() : null, h = c?.dados?.hourly;
+  if (!h?.time?.length || !h.precipitation || !data) return null;
+  const fim = `${data}T${(hora || nowTime()).slice(0, 2)}:00`;
+  const ant = db.chuvas.filter(x => (x.fieldId || '') === (fieldId || '') && `${x.date}T${x.hora || '07:00'}` < `${data}T${hora || '23:59'}`).map(x => `${x.date}T${(x.hora || '07:00').slice(0, 2)}:00`).sort().at(-1);
+  const d24 = new Date(fim + ':00'); d24.setHours(d24.getHours() - 24);
+  const ini24 = `${isoDate(d24)}T${String(d24.getHours()).padStart(2, '0')}:00`;
+  const d72 = new Date(fim + ':00'); d72.setHours(d72.getHours() - 72);
+  let ini = ant && ant >= `${isoDate(d72)}T${String(d72.getHours()).padStart(2, '0')}:00` ? ant : ini24, desdeLeitura = ini === ant;
+  if (ini < h.time[0]) ini = h.time[0];
+  if (fim <= h.time[0] || fim > h.time.at(-1)) return null;
+  let mm = 0, n = 0;
+  h.time.forEach((t, i) => { if (t > ini && t <= fim) { mm += Number(h.precipitation[i]) || 0; n++; } });
+  if (!n) return null;
+  return {mm: Math.round(mm * 10) / 10, ini, fim, desdeLeitura, atualizada: c.em};
+}
+const fmtDiaHoraChuva = iso => `${fmtDate(iso.slice(0, 10)).slice(0, 5)} ${iso.slice(11, 13)}h`;
 function chuvaForm(valores = {}) {
+  const manual = valores.mm != null && valores.mm !== '';
   openForm({title: 'Registrar chuva', sub: 'Leitura do pluviômetro (mm). Sem talhão = pluviômetro da sede.', values: {date: today(), hora: valores.notes ? '' : nowTime(), ...valores},
     fields: [{k: 'date', label: 'Data da leitura', type: 'date', required: true}, {k: 'hora', label: 'Hora da leitura', type: 'time', hint: 'Já vem com a hora de agora; ajuste se leu o pluviômetro antes.'},
-      {k: 'mm', label: 'Chuva (mm)', type: 'number', min: 0, required: true},
+      {k: 'mm', label: 'Chuva (mm)', type: 'number', min: 0, required: true, hint: ' '},
       {k: 'fieldId', label: 'Talhão / pluviômetro', type: 'select', options: fieldOptions}, {k: 'notes', label: 'Observações', type: 'textarea'}],
     onSubmit: v => { if (!(v.mm >= 0)) return 'Informe os milímetros';
       if (v.mm > 400) return 'Mais de 400 mm numa leitura: confira o valor';
       if (v.date > today() || (v.date === today() && v.hora && v.hora > nowTime())) return 'A leitura não pode ser no futuro: confira a data e a hora';
       // Repetido: mesmo local, mesmo dia e mesma hora (duas leituras no mesmo dia, em horas diferentes, valem)
       const dup = typeof conferirRepetido === 'function' ? conferirRepetido('chuvas', c => c.date === v.date && (c.fieldId || '') === (v.fieldId || '') && (c.hora || '') === (v.hora || ''), `já existe chuva registrada em ${fmtDate(v.date)}${v.hora ? ' às ' + v.hora : ''} neste local`) : ''; if (dup) return dup;
-      const reg = {id: uid(), ...v}; db.chuvas.push(reg); save(); showToast(`${um1(v.mm)} mm registrados`);
+      // Valor da estimativa sem mudar = registro estimado (fica marcado); mudou = leitura do pluviômetro
+      if (!mmMexido && $('#f_mm', dialog).value !== ultimoPreenchido) mmMexido = true;
+      const est = estAtual, estimada = !!est && !mmMexido && Math.abs(Number(v.mm) - est.mm) < 1e-9;
+      const reg = {id: uid(), ...v, fonte: estimada ? 'estimativa' : (mmMexido && manual ? 'pluviômetro' : (valores.fonte || 'pluviômetro'))};
+      if (estimada && !v.notes) reg.notes = 'Estimativa da previsão do tempo (média dos modelos) — conferir no pluviômetro';
+      db.chuvas.push(reg); save(); showToast(`${um1(v.mm)} mm registrados${estimada ? ' (estimativa)' : ''}`);
       setTimeout(() => perguntarCompartilharChuva(reg.id), 350);
     }});
+  // Preenche os mm pela previsão (enquanto a pessoa não digitar) e explica de onde veio o número
+  const mmEl = $('#f_mm', dialog), dica = mmEl?.closest('.field').querySelector('.hint');
+  let mmMexido = manual, estAtual = null, ultimoPreenchido = '';
+  const atualizar = () => {
+    const e = chuvaEstimada($('#f_date', dialog).value, $('#f_hora', dialog).value, $('#f_fieldId', dialog).value);
+    estAtual = manual ? null : e;
+    if (!dica) return;
+    if (!e) { dica.textContent = manual ? '' : 'Sem previsão do tempo para estimar (ative a localização da fazenda no MercaClima). Digite a leitura do pluviômetro.'; return; }
+    // Só troca o número se o campo ainda tem a estimativa anterior (ou está vazio): nunca apaga o que a pessoa digitou
+    if (!mmMexido && mmEl.value !== '' && mmEl.value !== ultimoPreenchido) mmMexido = true;
+    if (!mmMexido) { mmEl.value = String(e.mm).replace('.', ','); ultimoPreenchido = mmEl.value; }
+    dica.innerHTML = `${mmMexido ? 'Previsão do tempo para o mesmo período' : '<b>Preenchido pela previsão do tempo</b>'}: ≈ ${esc(um1(e.mm))} mm de ${esc(fmtDiaHoraChuva(e.ini))} a ${esc(fmtDiaHoraChuva(e.fim))}${e.desdeLeitura ? ' (desde a leitura anterior)' : ''}. ${mmMexido ? '' : 'É estimativa: confira no pluviômetro e corrija se precisar.'}`;
+  };
+  mmEl?.addEventListener('input', () => { mmMexido = true; atualizar(); });
+  ['f_date', 'f_hora', 'f_fieldId'].forEach(id => $('#' + id, dialog)?.addEventListener('change', atualizar));
+  atualizar();
 }
 // ---------- Compartilhar chuva (WhatsApp, grupo da fazenda…) ----------
 const nomeFazendaChuva = () => (typeof nv !== 'undefined' && nv?.fazenda?.name) || db.settings.farm || 'Fazenda';
 const somaChuva = (fieldId, de, ate) => db.chuvas.filter(c => (c.fieldId || '') === (fieldId || '') && c.date >= de && c.date <= ate).reduce((s, c) => s + (Number(c.mm) || 0), 0);
 function textoChuva(c) {
   const t = c.date, mesIni = t.slice(0, 8) + '01', ini7 = addDias(t, -6);
-  return [`🌧️ Chuva — ${nomeFazendaChuva()}`, `📍 ${talhaoOuGeral(c.fieldId)}`, `💧 ${um1(c.mm)} mm`, `🕖 Leitura: ${fmtDate(c.date)}${c.hora ? ' às ' + c.hora : ''}`,
+  return [`🌧️ Chuva — ${nomeFazendaChuva()}`, `📍 ${talhaoOuGeral(c.fieldId)}`, `💧 ${um1(c.mm)} mm${c.fonte === 'estimativa' ? ' (estimativa da previsão do tempo)' : ''}`, `🕖 Leitura: ${fmtDate(c.date)}${c.hora ? ' às ' + c.hora : ''}`,
     `Últimos 7 dias: ${um1(somaChuva(c.fieldId, ini7, t))} mm • No mês: ${um1(somaChuva(c.fieldId, mesIni, t))} mm`, c.notes ? `📝 ${c.notes}` : '', '— registrado no MercaPlant'].filter(Boolean).join('\n');
 }
 function textoResumoChuva() {
@@ -66,7 +107,7 @@ VIEWS.chuva = () => {
     </section>
     <section class="card panel viz-root"><h3>Chuva por mês (mm)</h3><div class="fx-graf ch-graf" role="img" aria-label="Chuva por mês">${porMes.map(m => `<div class="fx-mes"><div class="fx-par"><div class="fx-barra ch" ${tip(m.rot, um1(m.mm) + ' mm')}><span class="ent" style="height:${m.mm / max * 100}%"></span></div></div><small>${m.rot.split('/')[0]}</small></div>`).join('')}</div>
       ${tabela(['Mês', 'mm'], porMes.map(m => [m.rot, um1(m.mm)]))}</section>
-    <div class="section-title"><h3>Registros</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><tbody>${lista.map(c => `<tr><td>${fmtDate(c.date)}${c.hora ? `<br><small style="color:var(--muted)">${esc(c.hora)}</small>` : ''}</td><td>${esc(talhaoOuGeral(c.fieldId))}</td><td class="num"><strong>${um1(c.mm)} mm</strong></td><td><div class="row-actions">${mini('Compartilhar', 'ch-comp', c.id)}${mini('Excluir', 'ch-del', c.id, 'del')}</div></td></tr>`).join('')}</tbody></table></div></section>`
+    <div class="section-title"><h3>Registros</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><tbody>${lista.map(c => `<tr><td>${fmtDate(c.date)}${c.hora ? `<br><small style="color:var(--muted)">${esc(c.hora)}</small>` : ''}</td><td>${esc(talhaoOuGeral(c.fieldId))}</td><td class="num"><strong>${um1(c.mm)} mm</strong>${c.fonte === 'estimativa' ? '<br><small class="ch-est" title="Estimativa da previsão do tempo">≈ estimada</small>' : ''}</td><td><div class="row-actions">${mini('Compartilhar', 'ch-comp', c.id)}${mini('Excluir', 'ch-del', c.id, 'del')}</div></td></tr>`).join('')}</tbody></table></div></section>`
     : `<section class="card">${empty('Nenhuma chuva registrada', 'Lance a leitura do pluviômetro de cada talhão ou da sede.', {act: 'ch-new', label: '+ Chuva'})}</section>`);
 };
 

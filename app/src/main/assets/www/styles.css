@@ -1012,3 +1012,4 @@ tr.clickable{cursor:pointer} tr.clickable:hover td{background:rgba(23,135,212,.0
 .nv-semfazenda>span{font-size:1.3rem}.nv-semfazenda div{flex:1}.nv-semfazenda strong{display:block}.nv-semfazenda small{display:block;color:var(--muted)}
 @media(max-width:760px){.nv-semfazenda{flex-wrap:wrap}.nv-semfazenda button{width:100%}}
 .es-ficha{display:block;color:var(--muted);font-size:.78rem;margin-top:2px}
+.ch-est{color:var(--orange);font-size:.72rem;font-weight:600}
