@@ -64,11 +64,15 @@ function aplicarGruposMenu() {
 safeStorage.del(USO_ROTAS);
 function atualizarMenu() { aplicarGruposMenu(); }
 
+// Tabela mais larga que a tela (celular): rola para o lado dentro do cartão, sem empurrar a página
+function rolarTabelas(raiz) {
+  raiz?.querySelectorAll('table.tbl').forEach(t => { if (t.parentElement?.classList.contains('tbl-wrap')) return; const w = document.createElement('div'); w.className = 'tbl-wrap'; t.before(w); w.append(t); });
+}
 // ---------- Depois de cada tela ----------
 const renderSemVisual = render;
 render = function (...a) {
   const r = renderSemVisual.apply(this, a);
-  trocarGlifos(document); atualizarMenu(); mostrarSync();
+  trocarGlifos(document); atualizarMenu(); mostrarSync(); rolarTabelas(document.getElementById('view'));
   return r;
 };
 addEventListener('DOMContentLoaded', () => { trocarGlifos(document); atualizarMenu(); });
