@@ -450,7 +450,7 @@ function finalizarSecagemForm(id) {
 function saidaSiloForm(siloId) {
   const silos = equipDoTipo('Silo/Armazém'); if (!silos.length) return showToast('Cadastre os silos em Máquinas (tipo Silo/Armazém).', true);
   const deps = depositantes(), sf = typeof safrasConhecidas === 'function' ? safrasConhecidas()[0] : '';
-  openForm({title: 'Saída do silo', sub: 'Expedição, transferência ou ajuste. Na expedição de grão próprio, a venda pode entrar em Produção e no Financeiro junto.', values: {date: today(), siloId: siloId || silos[0].id, tipo: 'saida', dono: 'proprio', lancarVenda: 'sim', season: sf || '', recebimento: 'À vista'},
+  openForm({title: 'Saída do silo', sub: 'Expedição, transferência ou ajuste. Na expedição de grão próprio, a venda pode entrar em Produção e no Financeiro junto.', values: {date: today(), siloId: silos.some(s => s.id === siloId) ? siloId : silos[0].id, tipo: 'saida', dono: 'proprio', lancarVenda: 'sim', season: sf || '', recebimento: 'À vista'},
     fields: [{k: 'siloId', label: 'Silo', type: 'select', options: silos.map(m => ({value: m.id, label: `${m.name} (${kgT(saldoSilo(m).saldo)})`})), required: true},
       {k: 'tipo', label: 'Tipo', type: 'select', options: [{value: 'saida', label: 'Expedição / venda'}, {value: 'transferencia', label: 'Transferência para outro silo'}, {value: 'ajuste', label: 'Ajuste de estoque (quebra, conferência)'}], required: true},
       {k: 'date', label: 'Data', type: 'date', required: true}, {k: 'kg', label: 'Quantidade (kg)', type: 'number', required: true, hint: 'No ajuste, use negativo para baixar e positivo para somar.'},
