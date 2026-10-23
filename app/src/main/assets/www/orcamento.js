@@ -5,7 +5,7 @@
    Só para quem vê o financeiro. Os orçamentos ficam na coleção "orcamentos" e vão para a nuvem como os demais registros. */
 const ORC_CATS = ['Sementes', 'Fertilizantes', 'Defensivos', 'Combustível', 'Mão de obra', 'Manutenção e peças', 'Serviços e frete', 'Arrendamento', 'Outros'];
 // De onde vem o realizado de cada categoria
-const ORC_DE_ESTOQUE = {'Semente': 'Sementes', 'Tratamento de sementes': 'Sementes', 'Fertilizante': 'Fertilizantes', 'Defensivo': 'Defensivos', 'Combustível': 'Combustível', 'Peças': 'Manutenção e peças'};
+const ORC_DE_ESTOQUE = {'Semente': 'Sementes', 'Inoculante': 'Sementes', 'Adjuvante': 'Defensivos', 'Corretivo (calcário/gesso)': 'Fertilizantes', 'Lubrificante / óleo': 'Manutenção e peças', 'Tratamento de sementes': 'Sementes', 'Fertilizante': 'Fertilizantes', 'Defensivo': 'Defensivos', 'Combustível': 'Combustível', 'Peças': 'Manutenção e peças'};
 const ORC_DE_GASTO = {'Combustível': 'Combustível', 'Peças': 'Manutenção e peças', 'Manutenção': 'Manutenção e peças', 'Mão de obra': 'Mão de obra', 'Serviços de terceiros': 'Serviços e frete', 'Frete': 'Serviços e frete', 'Arrendamento': 'Arrendamento'};
 const orcVeFin = () => typeof nvVeFinanceiro !== 'function' || nvVeFinanceiro();
 const orcamentoDe = (season, fieldId) => db.orcamentos.find(o => o.season === season && o.fieldId === fieldId);

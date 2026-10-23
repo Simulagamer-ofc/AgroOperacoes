@@ -47,7 +47,7 @@ function lotesVencendo() {
 function cartaoItem(s) {
   const n = nivelEstoque(s), cm = custoMedio(s), v = valorItem(s);
   return `<article class="card es-item" id="item-${esc(s.id)}">
-    <div class="es-topo"><div><strong>${esc(s.name)}</strong><small>${esc([s.category, s.location].filter(Boolean).join(' • ') || 'Sem categoria')}</small></div>
+    <div class="es-topo"><div><strong>${esc(s.name)}</strong><small>${esc([s.category, s.classe, s.location].filter(Boolean).join(' • ') || 'Sem categoria')}</small>${(() => { const d = [s.principioAtivo, s.cultivar, typeof textoEmbalagem === 'function' ? textoEmbalagem(s) : '', s.carencia !== '' && s.carencia != null ? `carência ${num(s.carencia)} d` : '', s.germinacao ? `germ. ${num(s.germinacao)}%` : ''].filter(Boolean); return d.length ? `<small class="es-ficha">${esc(d.join(' • '))}</small>` : ''; })()}</div>
       <div class="es-topo-dir">${chip(n.rotulo, n.cor)}<details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">
         <button data-act="nav" data-id="estoque/${esc(s.id)}">Extrato e lotes</button><button data-act="st-ajuste" data-id="${esc(s.id)}">⇄ Ajuste de inventário</button><button data-act="st-edit" data-id="${esc(s.id)}">Editar item</button><button class="del" data-act="st-del" data-id="${esc(s.id)}">Excluir</button></div></details></div></div>
     <div class="es-saldo"><b>${num(s.qty)}</b><span>${esc(s.unit)}</span></div>
