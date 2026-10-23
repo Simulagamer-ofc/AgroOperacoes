@@ -4,7 +4,9 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.59.0-beta1` — **MercaClima: tocar num dia da previsão leva o mapa para a chuva prevista daquele dia**, no horário de mais chuva (dia seco: meio-dia), ligando a camada “Chuva prevista”; no celular, a tela rola até o mapa. O caminho inverso também vale: arrastar a barra do mapa para outro dia marca esse dia nos cartões. A chuva prevista no mapa passa a cobrir **7 dias** (48 h de hora em hora; depois de 3 em 3 h).
+`0.59.1-beta1` — Verificação geral de todas as telas (computador e celular, com e sem dados): no celular, tabelas mais largas que a tela (ex.: Relatório da safra de grãos) agora rolam para o lado dentro do cartão, sem empurrar a página.
+
+Anterior: `0.59.0-beta1` — **MercaClima: tocar num dia da previsão leva o mapa para a chuva prevista daquele dia**, no horário de mais chuva (dia seco: meio-dia), ligando a camada “Chuva prevista”; no celular, a tela rola até o mapa. O caminho inverso também vale: arrastar a barra do mapa para outro dia marca esse dia nos cartões. A chuva prevista no mapa passa a cobrir **7 dias** (48 h de hora em hora; depois de 3 em 3 h).
 
 Anterior: `0.58.0-beta1` — **MercaClima: tempestades fáceis de ler.** No lugar dos pontinhos, a tempestade aparece como **mancha** (amarelo → laranja → vermelho, mais forte e mais recente no vermelho), com **⚡** só nos núcleos com raios nos últimos 10 min, **seta tracejada com a velocidade** mostrando para onde a tempestade mais perto da fazenda está indo, e **anéis de 20, 50 e 100 km** em volta da fazenda. Com as tempestades ligadas, o satélite fica mais claro para não esconder o mapa.
 
