@@ -89,6 +89,7 @@ function registrarEtapaUbs(ordemId) {
       {k: 'regulagem', label: 'Regulagem usada', placeholder: id === 'ar_peneiras' ? 'Ex.: peneiras 6,5 / 5,0 mm' : id === 'mesa' ? 'Ex.: inclinação, ar' : ''}, notas];
     onSubmit = v => {
       if (v.descarteKg > c.restante) return `Descarte maior que o peso que entrou na etapa (${kgFmt(c.restante)})`;
+      if (c.restante > 0 && v.descarteKg === c.restante) return `O descarte é o peso todo da etapa (${kgFmt(c.restante)}). Confira a pesagem; se o lote inteiro foi descartado, exclua a ordem.`;
       gravar(v, `Descarte ${kgFmt(v.descarteKg)} (${pctDe(v.descarteKg, c.restante)} da etapa)${v.regulagem ? ' • ' + v.regulagem : ''}`);
     };
   } else if (e.tipo === 'secagem') {
@@ -98,6 +99,7 @@ function registrarEtapaUbs(ordemId) {
       {k: 'umidadeInicial', label: 'Umidade antes (%)', type: 'number', min: 0, required: true, hint: ur !== undefined && ur !== '' ? `Na recepção: ${num(ur, 1)}%` : ''},
       {k: 'umidadeFinal', label: 'Umidade depois (%)', type: 'number', min: 0, required: true}, notas];
     onSubmit = v => {
+      if (!(c.restante > 0)) return 'Não há peso nesta etapa (o lote todo saiu nos descartes anteriores). Confira os pesos das etapas anteriores.';
       if (!(v.umidadeInicial < 100 && v.umidadeFinal < 100)) return 'Umidades devem ser menores que 100%';
       if (v.umidadeFinal > v.umidadeInicial) return 'Umidade depois maior que a de antes: confira as leituras';
       const fim = AV().calculos.massaAposSecagem(c.restante, v.umidadeInicial, v.umidadeFinal);
