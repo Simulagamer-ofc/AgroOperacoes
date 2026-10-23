@@ -4,7 +4,9 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.59.2-beta1` — Correções achadas no teste de todas as funcionalidades: **UBS** — a etapa de secagem não trava mais quando o peso da etapa chegou a zero (explica o motivo) e um descarte igual ao peso todo da etapa pede conferência; **Saída do silo** aberta com um silo inválido usa o primeiro silo em vez de dar erro.
+`0.60.0-beta1` — **Sincronização por fazenda.** O Admin do sistema continua entrando como Admin do sistema e, ao abrir uma fazenda, entra nela como Admin do sistema; tudo o que lançar sobe para a fazenda aberta. Cada fazenda tem os seus dados guardados no aparelho (**cofre por fazenda**): dá para trocar de fazenda mesmo sem internet, e quando a internet volta o que ficou pendente de cada uma sobe **para a fazenda certa**, sem precisar abri-la de novo. Sem fazenda aberta, um aviso no topo explica que o que for lançado fica só no aparelho; ao entrar numa fazenda, o app oferece “Enviar e juntar”. Aparelhos que estavam em modo Admin com dados de uma fazenda não enviados enviam esses dados para ela automaticamente.
+
+Anterior: `0.59.2-beta1` — Correções achadas no teste de todas as funcionalidades: **UBS** — a etapa de secagem não trava mais quando o peso da etapa chegou a zero (explica o motivo) e um descarte igual ao peso todo da etapa pede conferência; **Saída do silo** aberta com um silo inválido usa o primeiro silo em vez de dar erro.
 
 Anterior: `0.59.1-beta1` — Verificação geral de todas as telas (computador e celular, com e sem dados): no celular, tabelas mais largas que a tela (ex.: Relatório da safra de grãos) agora rolam para o lado dentro do cartão, sem empurrar a página.
 

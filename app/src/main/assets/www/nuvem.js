@@ -54,27 +54,85 @@ const nvBaseDe = (c, r) => c === 'stock' ? [nvHash(r), Number(r.qty) || 0] : [nv
 const nvArred = x => Math.round(x * 1e6) / 1e6;
 
 // Exclusões feitas neste aparelho: 'coleção|id' → momento da exclusão
-function nvExclusoes() {
+function nvExclusoes(d = db) {
   const m = new Map();
-  for (const e of db._removidos || []) { if (!e?.id) continue; const k = nvChave(e.c, e.id); if (!m.has(k) || e.at > m.get(k).at) m.set(k, {c: e.c, id: e.id, at: e.at || 0}); }
+  for (const e of d._removidos || []) { if (!e?.id) continue; const k = nvChave(e.c, e.id); if (!m.has(k) || e.at > m.get(k).at) m.set(k, {c: e.c, id: e.id, at: e.at || 0}); }
   return m;
 }
-const nvPresentes = () => Object.fromEntries(COLLECTIONS.map(c => [c, new Set(db[c].map(r => r?.id))]));
+const nvPresentes = (d = db) => Object.fromEntries(COLLECTIONS.map(c => [c, new Set((d[c] || []).map(r => r?.id))]));
 
 // Quantas alterações deste aparelho ainda não subiram (vale também depois de sair da conta)
-const nvFaltamEnviar = () => nv.dadosDe ? nvPendentes().length : 0;
+const nvFaltamEnviar = () => (nv.dadosDe ? nvPendentes().length : 0) + nvPendentesCofres();
 const nvNomeDados = () => nv.dadosNome || nv.fazenda?.name || 'a fazenda anterior';
 // Alterações deste aparelho que o servidor ainda não tem
-function nvPendentes() {
-  const itens = [], presentes = nvPresentes();
-  for (const c of COLLECTIONS) for (const r of db[c]) {
+function nvPendentes(d = db, base = nvBase) {
+  const itens = [], presentes = nvPresentes(d);
+  for (const c of COLLECTIONS) for (const r of d[c] || []) {
     if (!r?.id) continue;
     const b = nvBaseDe(c, r);
-    if (nvBase[nvChave(c, r.id)]?.[0] !== b[0]) itens.push({c, id: r.id, data: JSON.parse(JSON.stringify(r)), deleted: false, base: b});
+    if (base[nvChave(c, r.id)]?.[0] !== b[0]) itens.push({c, id: r.id, data: JSON.parse(JSON.stringify(r)), deleted: false, base: b});
   }
-  for (const [k, e] of nvExclusoes()) if (nvBase[k] && !presentes[e.c]?.has(e.id)) itens.push({c: e.c, id: e.id, data: {_mod: e.at}, deleted: true, base: null});
+  for (const [k, e] of nvExclusoes(d)) if (base[k] && !presentes[e.c]?.has(e.id)) itens.push({c: e.c, id: e.id, data: {_mod: e.at}, deleted: true, base: null});
   return itens;
 }
+
+// ---------- Cofre por fazenda ----------
+// Cada fazenda tem os seus dados guardados no aparelho. Ao trocar de fazenda (mesmo sem internet), os dados da fazenda
+// que estava aberta vão para o cofre dela — com o que ainda não subiu — e os da outra fazenda são abertos.
+// Com internet, o que ficou pendente em cada cofre sobe para a fazenda certa, sem precisar abrir a fazenda de novo.
+const NV_COFRE = 'agro-cofre-';
+const nvChavesCofres = () => { const l = []; try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(NV_COFRE)) l.push(k); } } catch { /* sem armazenamento */ } return l; };
+const nvLerCofre = id => nvLer(NV_COFRE + id, null);
+function nvPendentesCofres() {
+  let n = 0;
+  for (const k of nvChavesCofres()) { const id = k.slice(NV_COFRE.length); if (id === nv.dadosDe) continue; const c = nvLer(k, null); if (c?.db) n += nvPendentes(c.db, c.base || {}).length; }
+  return n;
+}
+// Guarda os dados da fazenda aberta no cofre dela; false se o aparelho não tiver espaço
+function nvGuardarCofre() {
+  if (!nv.dadosDe) return true;
+  const c = {db, base: nvBase, cursor: nv.cursor || 0, ultima: nv.ultima || null, rejeitados: nv.rejeitados || {}, nome: nv.dadosNome || nv.fazenda?.name || '', em: Date.now()};
+  return safeStorage.set(NV_COFRE + nv.dadosDe, JSON.stringify(c));
+}
+// Abre os dados de uma fazenda: do cofre, se houver; senão começa vazio e baixa da nuvem
+function nvAbrirCofre(f) {
+  const settings = db.settings, c = nvLerCofre(f.id);
+  if (c?.db) { db = normalizarDb(c.db); db.settings = settings; db._removidos = c.db._removidos || []; nvBase = c.base || {}; nv.cursor = c.cursor || 0; nv.ultima = c.ultima || null; nv.rejeitados = c.rejeitados || {}; }
+  else { db = emptyDb(); db.settings = settings; db._removidos = []; nvBase = {}; nv.cursor = 0; nv.ultima = null; nv.rejeitados = {}; }
+  safeStorage.del(NV_COFRE + f.id); // os dados dela agora estão abertos (no banco principal)
+  nv.dadosDe = f.id; nv.dadosNome = f.name; impressoes = null; salvarSemNuvem(); nvSalvar();
+}
+// Fecha a fazenda dos dados abertos: guarda no cofre e deixa o aparelho “sem fazenda” (vazio)
+function nvFecharDados() {
+  if (!nv.dadosDe) return true;
+  if (!nvGuardarCofre()) { showToast('Sem espaço no aparelho para guardar os dados desta fazenda. Sincronize com internet antes de trocar.', true); return false; }
+  const settings = db.settings; db = emptyDb(); db.settings = settings; db._removidos = [];
+  nvBase = {}; nv.cursor = 0; nv.ultima = null; nv.rejeitados = {}; nv.dadosDe = null; nv.dadosNome = null; impressoes = null; salvarSemNuvem(); nvSalvar();
+  return true;
+}
+// Envia o que ficou pendente nos cofres (fazendas que não estão abertas), cada um para a sua fazenda
+async function nvEnviarCofres() {
+  if (!nv.sessao) return 0;
+  let enviados = 0, recusados = 0; nvErroCofres = '';
+  for (const k of nvChavesCofres()) {
+    const id = k.slice(NV_COFRE.length); if (id === nv.dadosDe) continue;
+    const c = nvLer(k, null); if (!c?.db) continue;
+    c.base ||= {};
+    const itens = nvPendentes(c.db, c.base); if (!itens.length) continue;
+    try {
+      for (let i = 0; i < itens.length; i += NV_LOTE_ENVIO) {
+        const lote = itens.slice(i, i + NV_LOTE_ENVIO);
+        const rej = await nvHttp('/rest/v1/rpc/push_records', {method: 'POST', body: {p_farm: id, p_rows: lote.map(it => ({store: it.c, id: it.id, data: it.data, deleted: it.deleted}))}}) || [];
+        const recusa = new Set((Array.isArray(rej) ? rej : []).map(r => nvChave(r.store, r.id)));
+        for (const it of lote) { const kk = nvChave(it.c, it.id); if (recusa.has(kk)) recusados++; else enviados++; if (it.deleted) delete c.base[kk]; else c.base[kk] = it.base; }
+        safeStorage.set(k, JSON.stringify(c));
+      }
+    } catch (err) { if (err.rede || err.sessao) throw err; nvErroCofres = `“${c.nome || 'outra fazenda'}”: ${err.message}`; }
+  }
+  if (recusados) showToast(`${recusados} ${recusados === 1 ? 'alteração de outra fazenda não foi aceita' : 'alterações de outra fazenda não foram aceitas'} pelo seu nível de acesso.`, true);
+  return enviados;
+}
+let nvErroCofres = '';
 
 // ---------- Comunicação com o servidor ----------
 class NvErro extends Error { constructor(msg, {rede = false, sessao = false} = {}) { super(msg); this.rede = rede; this.sessao = sessao; } }
@@ -267,7 +325,12 @@ function nvMarcarPedidos() {
 }
 
 function nvSincronizar(manual = false) {
-  if (!nvVinculado()) return Promise.resolve();
+  if (!nvVinculado()) {
+    // Sem fazenda aberta (ex.: Admin do sistema): ainda envia o que ficou guardado de cada fazenda
+    if (!nv.sessao || nvRodando || !nvPendentesCofres()) return nvRodando || Promise.resolve();
+    nvRodando = (async () => { try { const n = await nvEnviarCofres(); if (manual || n) showToast(`Nuvem: ${n} ${n === 1 ? 'alteração enviada' : 'alterações enviadas'} para a fazenda de origem`); } catch (err) { if (manual) showToast(err.message, !err.rede); } finally { nvRodando = null; nvMostrar(); } })();
+    return nvRodando;
+  }
   if (nvRodando) { nvRepetir = true; return nvRodando; }
   nvRodando = (async () => {
     nvStatus = 'sincronizando'; nvMostrar();
@@ -279,6 +342,7 @@ function nvSincronizar(manual = false) {
         recebidos += await nvReceber(); // recebe antes de enviar: o conflito é resolvido aqui pela data da alteração
         enviados += await nvEnviar();
       } while (nvRepetir);
+      enviados += await nvEnviarCofres(); // o que ficou de outras fazendas (usadas sem internet) vai cada um para a sua
       nv.ultima = new Date().toISOString(); nvSalvar();
       nvStatus = 'ok'; nvErro = '';
       if (recebidos) { nvAtualizarTela(); showToast(`Nuvem: ${recebidos} ${recebidos === 1 ? 'alteração recebida' : 'alterações recebidas'} da equipe`); }
@@ -299,7 +363,7 @@ function nvAtualizarTela() {
 }
 
 function nvAgendar(ms = 3000) {
-  if (!nvVinculado()) return;
+  if (!nvVinculado() && !(nv.sessao && nvPendentesCofres())) return;
   clearTimeout(nvAgenda);
   nvAgenda = setTimeout(() => { if (navigator.onLine !== false) nvSincronizar(); }, ms);
 }
@@ -465,7 +529,7 @@ async function nvEscolherFazenda() {
   if (nv.fazenda && fazendas && !fazendas.some(f => f.id === nv.fazenda.id)) nvEsquecerFazenda();
   nvFazendas = fazendas;
   if (nv.fazenda) { nv.papel = null; nvSalvar(); showToast('Bem-vindo de volta'); nvSincronizar(true); return; }
-  if (nv.sysadm) { showToast('Entrou como Admin do sistema. As fazendas ficam em Cadastros.'); go('cadastros'); return; }
+  if (nv.sysadm) { nvSemFazendaAberta(); showToast('Entrou como Admin do sistema. Para lançar dados, entre numa fazenda em Cadastros.'); go('cadastros'); nvAgendar(1500); return; }
   if (nvFazendas?.length === 1) nvVincular(nvFazendas[0]);
 }
 
@@ -584,6 +648,7 @@ async function nvFinalizarSaida(apagar) {
   nv.sessao = null; nv.trocarSenha = false; nv.papel = null; nv.funcao = null; nv.modulos = null; nv.sysadm = false; nvTodas = null; nvFazendas = null; nvUsuarios = null; nvAcessos = null; nvModo = 'entrar';
   if (apagar) {
     nvLimparAparelho(); nv.fazenda = null; nv.ultimoLogin = '';
+    nvChavesCofres().forEach(k => safeStorage.del(k)); // dados guardados de outras fazendas também saem (já foram enviados)
     db.settings = {...emptyDb().settings}; salvarSemNuvem();
     // Cópias guardadas (antes de sincronizar, dados danificados) também saem
     try { for (let i = localStorage.length - 1; i >= 0; i--) { const k = localStorage.key(i); if (/^agro-db-(antes-sync|corrompido)/.test(k)) localStorage.removeItem(k); } } catch { /* ignora */ }
@@ -617,21 +682,23 @@ function nvListaFazendas() {
 }
 
 function nvVincular(f) {
-  const n = COLLECTIONS.reduce((s, c) => s + db[c].length, 0);
   const ligar = () => {
-    if (nv.dadosDe !== f.id) { nvBase = {}; nv.cursor = 0; nv.ultima = null; nv.rejeitados = {}; }
+    if (nv.dadosDe !== f.id) nvAbrirCofre(f);
     nv.fazenda = {id: f.id, name: f.name, join_code: f.join_code}; nv.dadosDe = f.id; nv.dadosNome = f.name; nv.papel = null;
-    nvSalvar(); nvPortao(); showToast(`Entrando em “${f.name}”…`); nvSincronizar(true);
+    nvSalvar(); nvPortao(); showToast(`Entrando em “${f.name}”…`); nvSincronizar(true); if (typeof render === 'function') render();
   };
-  if (!n || nv.dadosDe === f.id) return ligar();
-  const faltam = nvFaltamEnviar();
-  if (nv.dadosDe && faltam) {
-    nvPortaoErro(`Este aparelho tem ${faltam} ${faltam === 1 ? 'alteração' : 'alterações'} de “${nvNomeDados()}” que ainda não ${faltam === 1 ? 'foi enviada' : 'foram enviadas'}. Entre com uma conta dessa fazenda, com internet, para enviar antes de usar outra fazenda neste aparelho.`);
-    showToast('Há dados de outra fazenda ainda não enviados neste aparelho.', true);
-    return;
-  }
-  if (nv.dadosDe) return confirmDialog(`Os dados guardados neste aparelho são de outra fazenda. Para entrar em “${f.name}”, eles serão apagados deste aparelho (continuam na nuvem da outra fazenda) e os dados de “${f.name}” serão baixados. Continuar?`, () => { nvLimparAparelho(); ligar(); }, 'Apagar e entrar');
-  confirmDialog(`Este aparelho tem ${n} registros que ainda não estão em nenhuma fazenda. Eles serão enviados para “${f.name}” e juntados com os dados da equipe. Se forem só dados de exemplo, toque em “Cancelar”, apague-os em Cadastros e entre de novo. Continuar?`, ligar, 'Enviar e juntar');
+  if (nv.dadosDe === f.id) return ligar();
+  // Dados de outra fazenda abertos: vão para o cofre dela (o que não subiu é enviado depois, para ela)
+  if (nv.dadosDe) { if (!nvFecharDados()) return; return ligar(); }
+  // Registros lançados sem fazenda neste aparelho: pergunta se vão para esta fazenda
+  const n = COLLECTIONS.reduce((s, c) => s + db[c].length, 0);
+  if (!n) return ligar();
+  confirmDialog(`Este aparelho tem ${n} registros lançados sem fazenda. Eles serão enviados para “${f.name}” e juntados com os dados da equipe. Se forem só dados de exemplo, toque em “Cancelar”, apague-os em Cadastros e entre de novo. Continuar?`, () => {
+    const soltos = {}; COLLECTIONS.forEach(c => { soltos[c] = db[c]; });
+    nvAbrirCofre(f);
+    COLLECTIONS.forEach(c => { const ids = new Set(db[c].map(r => r?.id)); soltos[c].forEach(r => { if (r?.id && !ids.has(r.id)) db[c].push(r); }); });
+    impressoes = null; salvarSemNuvem(); ligar();
+  }, 'Enviar e juntar');
 }
 const nvCriarFazenda = () => nvComOcupado(async () => {
   const nome = ($('#nvp_fazenda')?.value || $('#nvs_fazenda')?.value || '').trim();
@@ -912,7 +979,9 @@ const nvMudarNivel = (id, papel) => nvComOcupado(async () => {
 
 // ---------- Tela (Cadastros) ----------
 function nvTextoStatus() {
-  const pend = nvVinculado() ? nvPendentes().length : 0, aguardando = pend ? ` • ${pend} ${pend === 1 ? 'alteração aguardando envio' : 'alterações aguardando envio'}` : '';
+  const outras = nvPendentesCofres(), deOutras = outras ? ` • ${outras} de outras fazendas aguardando envio` : '';
+  const pend = nvVinculado() ? nvPendentes().length : 0, aguardando0 = pend ? ` • ${pend} ${pend === 1 ? 'alteração aguardando envio' : 'alterações aguardando envio'}` : '';
+  const aguardando = aguardando0 + deOutras + (nvErroCofres ? ` • ⚠ ${nvErroCofres}` : '');
   if (nvStatus === 'sincronizando') return 'Sincronizando…';
   if (nvStatus === 'erro') return '⚠ ' + nvErro + aguardando;
   if (nvStatus === 'offline' || navigator.onLine === false) return 'Sem internet: as alterações ficam guardadas e sobem sozinhas quando o sinal voltar' + aguardando;
@@ -993,8 +1062,8 @@ function nvAntesDeTrocar() {
 Object.assign(ACTIONS, {
   'nv-entrar': nvEntrar, 'nv-sair': nvSair, 'nv-nova': nvCriarFazenda,
   'nv-usar': id => { const f = (nvFazendas || []).find(x => x.id === id); if (f) nvVincular(f); },
-  'nv-trocar': () => nvAntesDeTrocar() && confirmDialog('Trocar de fazenda? Você vai escolher outra fazenda desta conta; os dados deste aparelho continuam guardados na nuvem da fazenda atual.', () => { nvEsquecerFazenda(); nvTodas = null; nvSalvar(); nvPortao(); if (nv.sysadm) go('cadastros'); }, 'Trocar'),
-  'nv-sys-fechar': () => nvAntesDeTrocar() && confirmDialog(`Fechar “${nv.fazenda?.name}” neste aparelho? Você continua conectado como Admin do sistema e pode entrar em outra fazenda.`, () => { nvEsquecerFazenda(); nvTodas = null; nvSalvar(); nvPortao(); }, 'Fechar'),
+  'nv-trocar': () => confirmDialog(`Trocar de fazenda? Os dados de “${nv.fazenda?.name}” ficam guardados neste aparelho${nvFaltamEnviar() ? ' e o que ainda não subiu é enviado para ela assim que houver internet' : ''}.`, () => { if (!nvFecharDados()) return; nvEsquecerFazenda(); nvTodas = null; nvSalvar(); nvPortao(); render(); if (nv.sysadm) go('cadastros'); }, 'Trocar'),
+  'nv-sys-fechar': () => confirmDialog(`Fechar “${nv.fazenda?.name}” neste aparelho? Você continua como Admin do sistema e pode entrar em outra fazenda. Os dados dela ficam guardados${nvFaltamEnviar() ? ' e o que ainda não subiu é enviado para ela assim que houver internet' : ''}.`, () => { if (!nvFecharDados()) return; nvEsquecerFazenda(); nvTodas = null; nvSalvar(); nvPortao(); render(); }, 'Fechar'),
   'nv-u-acesso': id => nvAcessoUsuario(id), 'nv-u-autorizar': id => nvAcessoUsuario(id, true), 'nv-u-recusar': nvRecusar,
   'nv-u-senha': nvNovaSenha, 'nv-u-remover': nvRemoverUsuario,
   'nv-u-desativar': id => nvMudarStatus(id, 'inativo'), 'nv-u-reativar': id => nvMudarStatus(id, 'ativo'),
@@ -1007,3 +1076,17 @@ Object.assign(ACTIONS, {
   }
 });
 nvProteger();
+
+// Sem fazenda aberta mas com dados de uma fazenda no aparelho (versões anteriores deixavam assim ao fechar a fazenda
+// ou ao entrar como Admin do sistema): os dados vão para o cofre dessa fazenda e sobem para ela
+function nvSemFazendaAberta() { if (nv.sessao && !nv.fazenda && nv.dadosDe) nvFecharDados(); }
+nvSemFazendaAberta();
+// Aviso no topo das telas quando está conectado sem fazenda aberta (Admin do sistema)
+const renderSemAvisoFazenda = render;
+render = function (...a) {
+  const r = renderSemAvisoFazenda.apply(this, a);
+  const v = document.getElementById('view');
+  if (v && nv.sessao && !nvVinculado() && !v.querySelector('.nv-semfazenda'))
+    v.insertAdjacentHTML('afterbegin', `<div class="nv-semfazenda" role="status"><span>⚠</span><div><strong>Nenhuma fazenda aberta</strong><small>O que for lançado agora fica só neste aparelho e não vai para nenhuma fazenda. Entre numa fazenda para ver e lançar os dados dela.</small></div>${parseRoute().name === 'cadastros' ? '' : btn('Escolher fazenda', 'nav', 'cadastros', 'secondary')}</div>`);
+  return r;
+};
