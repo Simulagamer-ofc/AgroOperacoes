@@ -104,7 +104,7 @@ const STATUS_COLOR = {'Programada': 'blue', 'Em andamento': 'green', 'Concluída
 const MACHINE_TYPES = ['Trator', 'Colheitadeira', 'Pulverizador', 'Plantadeira', 'Caminhão', 'Implemento', 'Secador', 'Moega', 'Silo/Armazém', 'Beneficiamento', 'Outro'];
 const LOT_STATUS = ['Em campo', 'Colhido', 'Em beneficiamento', 'Aguardando análise', 'Aprovado', 'Reprovado', 'Expedido'];
 const LOT_COLOR = {'Em campo': 'green', 'Colhido': 'blue', 'Em beneficiamento': 'purple', 'Aguardando análise': 'orange', 'Aprovado': 'green', 'Reprovado': 'red', 'Expedido': 'gray'};
-const UNITS = ['L', 'kg', 't', 'sc', 'un', 'm³', 'big bag'];
+const UNITS = ['L', 'mL', 'kg', 'g', 't', 'sc', 'un', 'dose', 'm³', 'big bag'];
 const SERVICE_WARN_HOURS = 25;
 
 const fieldName = id => find('fields', id)?.name || '';
@@ -491,26 +491,99 @@ function lotEventForm(lotId) {
   });
 }
 
+// ---------- Cadastro de item do estoque ----------
+const CAT_ESTOQUE = ['Defensivo', 'Adjuvante', 'Fertilizante', 'Corretivo (calcário/gesso)', 'Semente', 'Inoculante', 'Tratamento de sementes', 'Combustível', 'Lubrificante / óleo', 'Peças', 'Embalagem', 'Outro'];
+// Unidade sugerida para cada categoria (a pessoa pode trocar)
+const UNID_DA_CAT = {'Defensivo': 'L', 'Adjuvante': 'L', 'Fertilizante': 'kg', 'Corretivo (calcário/gesso)': 't', 'Semente': 'sc', 'Inoculante': 'dose', 'Tratamento de sementes': 'L', 'Combustível': 'L', 'Lubrificante / óleo': 'L', 'Peças': 'un', 'Embalagem': 'un', 'Outro': 'un'};
+const TIPOS_EMBALAGEM = ['Saco', 'Big bag', 'Galão', 'Bombona', 'Frasco', 'Caixa', 'Balde', 'Tambor', 'Outra'];
+const CLASSES_DEFENSIVO = ['Herbicida', 'Inseticida', 'Fungicida', 'Acaricida', 'Nematicida', 'Inseticida/Fungicida', 'Biológico', 'Regulador de crescimento', 'Adjuvante', 'Outro'];
+const CAT_DEFENSIVO = ['Defensivo', 'Adjuvante', 'Tratamento de sementes'];
+const normNome = t => String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+// “1 saco = 50 kg” (texto da embalagem do item) ou ''
+const textoEmbalagem = s => s?.embalagem && Number(s.conteudoEmb) > 0 ? `1 ${String(s.embalagem).toLowerCase()} = ${num(s.conteudoEmb)} ${s.unit}` : '';
+let stockDupConfirmado = '';
 function stockForm(s = {}) {
+  stockDupConfirmado = '';
+  const novo = !s.id, cat0 = s.category || '';
   openForm({
     title: s.id ? 'Editar item' : 'Novo item de estoque',
-    values: {unit: 'L', qty: 0, ...s},
+    sub: novo ? 'Só o nome, a categoria e a unidade são obrigatórios. Os outros dados ajudam nas entradas, nas aplicações e nos avisos.' : '',
+    values: {unit: UNID_DA_CAT[cat0] || 'L', qty: 0, ...s, category: cat0},
     fields: [
-      {k: 'name', label: 'Produto / insumo', required: true, full: true},
-      {k: 'category', label: 'Categoria', type: 'select', options: ['Defensivo', 'Fertilizante', 'Semente', 'Tratamento de sementes', 'Combustível', 'Peças', 'Embalagem', 'Outro']},
-      {k: 'unit', label: 'Unidade', type: 'select', options: UNITS, required: true},
-      ...(s.id ? [] : [{k: 'qty', label: 'Saldo inicial', type: 'number', min: 0, required: true}]),
+      {k: 'name', label: 'Produto / insumo', required: true, full: true, placeholder: 'Ex.: Glifosato 480 SL, Ureia 46%, Soja BMX Zeus'},
+      {k: 'category', label: 'Categoria *', type: 'select', options: CAT_ESTOQUE.concat(cat0 && !CAT_ESTOQUE.includes(cat0) ? [cat0] : [])},
+      {k: 'unit', label: 'Unidade do estoque', type: 'select', options: UNITS.concat(s.unit && !UNITS.includes(s.unit) ? [s.unit] : []), required: true, hint: 'Em que unidade o saldo é contado (entradas, saídas e aplicações usam esta unidade).'},
+      ...(novo ? [{k: 'qty', label: 'Saldo inicial', type: 'number', min: 0, required: true, hint: 'O que tem hoje no depósito (0 se ainda vai comprar).'}] : []),
       {k: 'min', label: 'Estoque mínimo', type: 'number', min: 0, hint: 'Gera alerta quando o saldo ficar abaixo'},
-      {k: 'location', label: 'Local de armazenagem'},
-      {k: 'avgCost', label: 'Custo médio atual (R$ por unidade)', type: 'number', min: 0, full: true, hint: 'Opcional — informe só se souber o custo do saldo atual. Depois ele é recalculado pelas entradas com valor.'}
+      {k: 'embalagem', label: 'Embalagem', type: 'select', options: TIPOS_EMBALAGEM, hint: 'Opcional: para lançar entradas em sacos, galões…'},
+      {k: 'conteudoEmb', label: 'Conteúdo de 1 embalagem', type: 'number', min: 0, mostrarSe: ['embalagem', '!'], hint: 'Na unidade do estoque. Ex.: saco de 50 kg → 50.'},
+      // Defensivo, adjuvante e tratamento de sementes
+      {k: 'classe', label: 'Classe', type: 'select', options: CLASSES_DEFENSIVO, mostrarSe: ['category', CAT_DEFENSIVO]},
+      {k: 'principioAtivo', label: 'Princípio ativo e concentração', placeholder: 'Ex.: glifosato 480 g/L', mostrarSe: ['category', CAT_DEFENSIVO]},
+      {k: 'carencia', label: 'Carência (dias, da bula)', type: 'number', min: 0, mostrarSe: ['category', CAT_DEFENSIVO], hint: 'Preenche sozinha na aplicação (dá para mudar lá).'},
+      {k: 'reentrada', label: 'Reentrada (horas, da bula)', type: 'number', min: 0, mostrarSe: ['category', CAT_DEFENSIVO]},
+      {k: 'registroMapa', label: 'Registro no MAPA', mostrarSe: ['category', CAT_DEFENSIVO], mais: true},
+      // Semente
+      {k: 'cultivar', label: 'Cultivar', mostrarSe: ['category', 'Semente']},
+      {k: 'peneira', label: 'Peneira', placeholder: 'Ex.: 6,5 mm', mostrarSe: ['category', 'Semente']},
+      {k: 'germinacao', label: 'Germinação (%)', type: 'number', min: 0, mostrarSe: ['category', 'Semente']},
+      {k: 'vigor', label: 'Vigor (%)', type: 'number', min: 0, mostrarSe: ['category', 'Semente']},
+      // Lote do saldo inicial (entra como uma entrada com lote, para o aviso de validade)
+      ...(novo ? [{k: 'loteIni', label: 'Lote do saldo inicial', mais: true}, {k: 'validadeIni', label: 'Validade do saldo inicial', type: 'date', mais: true, hint: 'Avisa 60 dias antes de vencer.'}] : []),
+      {k: 'location', label: 'Local de armazenagem', mais: true},
+      {k: 'fornecedor', label: 'Fornecedor habitual', mais: true},
+      {k: 'codigo', label: 'Código do produto (do fornecedor / NF-e)', mais: true},
+      {k: 'avgCost', label: 'Custo médio atual (R$ por unidade)', type: 'number', min: 0, full: true, mais: true, hint: 'Opcional — informe só se souber o custo do saldo atual. Depois ele é recalculado pelas entradas com valor.'}
     ],
-    onSubmit: v => { upsert('stock', {...s, ...v, id: s.id || uid()}); showToast('Item salvo'); }
+    maisRotulo: 'Mais opções (lote e validade, local, fornecedor, código, custo)',
+    onSubmit: v => {
+      v.name = String(v.name || '').replace(/\s+/g, ' ').trim();
+      if (!v.name) return 'Informe o nome do produto';
+      if (!v.category) return 'Escolha a categoria (define os campos e a unidade sugerida)';
+      if (v.embalagem && !(Number(v.conteudoEmb) > 0)) return `Informe quanto cabe em 1 ${v.embalagem.toLowerCase()} (em ${v.unit})`;
+      if (!v.embalagem) v.conteudoEmb = '';
+      if ((v.germinacao !== '' && v.germinacao > 100) || (v.vigor !== '' && v.vigor > 100)) return 'Germinação e vigor vão de 0 a 100%';
+      if (!CAT_DEFENSIVO.includes(v.category)) ['classe', 'principioAtivo', 'carencia', 'reentrada', 'registroMapa'].forEach(k => { v[k] = ''; });
+      if (v.category !== 'Semente') ['cultivar', 'peneira', 'germinacao', 'vigor'].forEach(k => { v[k] = ''; });
+      if (novo && (v.loteIni || v.validadeIni) && !(v.qty > 0)) return 'Lote e validade são do saldo inicial: informe o saldo (ou deixe lote e validade para a primeira entrada).';
+      // Mesmo produto já cadastrado (nome igual, sem contar acentos e maiúsculas)
+      const igual = db.stock.find(x => x.id !== s.id && normNome(x.name) === normNome(v.name));
+      if (igual && stockDupConfirmado !== normNome(v.name)) { stockDupConfirmado = normNome(v.name); return `Já existe “${igual.name}” no estoque (${num(igual.qty)} ${igual.unit}). Para não duplicar, use + Entrada nele. Se for outro produto, toque em salvar de novo.`; }
+      if (!novo && s.unit && v.unit !== s.unit && Number(s.qty) > 0 && stockDupConfirmado !== 'un:' + v.unit) { stockDupConfirmado = 'un:' + v.unit; return `Atenção: o saldo atual (${num(s.qty)} ${s.unit}) não é convertido ao trocar a unidade para ${v.unit}. Se a troca estiver certa, ajuste o saldo depois em ⇄ Ajuste de inventário. Toque em salvar de novo para confirmar.`; }
+      const {loteIni, validadeIni, qty, ...dados} = v;
+      if (!novo) { upsert('stock', {...s, ...dados}); showToast('Item salvo'); return; }
+      const item = {...dados, id: uid(), qty: 0};
+      db.stock.push(item);
+      if (qty > 0) {
+        const valor = Number(dados.avgCost) > 0 ? Math.round(qty * Number(dados.avgCost) * 100) / 100 : 0;
+        const mov = aplicarMovimento(item, 'Entrada', qty, valor);
+        db.movements.push({id: uid(), itemId: item.id, kind: 'Entrada', qty, date: today(), notes: 'Saldo inicial', inicial: true, lote: loteIni || undefined, validade: validadeIni || undefined, ...mov});
+      }
+      save(); showToast(`${item.name} cadastrado${qty > 0 ? `: saldo ${num(item.qty)} ${item.unit}` : ''}`);
+    }
   });
+  // Unidade acompanha a categoria enquanto a pessoa não escolher outra
+  const cat = $('#f_category', dialog), un = $('#f_unit', dialog); let unMexida = !novo;
+  un?.addEventListener('change', () => { unMexida = true; });
+  cat?.addEventListener('change', () => { if (!unMexida && UNID_DA_CAT[cat.value]) un.value = UNID_DA_CAT[cat.value]; });
 }
 
 // Custo médio ponderado (R$ por unidade). Desconhecido = null: o app nunca supõe preço.
 const custoMedio = s => Number(s?.avgCost) > 0 ? Number(s.avgCost) : null;
 const CAT_GASTO_DO_ITEM = {'Combustível': 'Combustível', 'Peças': 'Peças'};
+// Entrada/saída em embalagens: “40 sacos” vira 2.000 kg (o saldo continua na unidade do item)
+function ligarEmbalagem() {
+  const sel = $('#f_itemId', dialog), q = $('#f_qty', dialog); if (!sel || !q) return;
+  const caixa = document.createElement('div'); caixa.className = 'field full emb-ajuda'; caixa.hidden = true;
+  caixa.innerHTML = '<label for="f_emb">Em embalagens</label><input id="f_emb" type="text" inputmode="decimal" autocomplete="off"><span class="hint"></span>';
+  q.closest('.field').after(caixa);
+  const emb = $('#f_emb', dialog), dica = caixa.querySelector('.hint');
+  const atual = () => find('stock', sel.value);
+  const mostrar = () => { const s = atual(), t = textoEmbalagem(s); caixa.hidden = !t; if (t) { caixa.querySelector('label').textContent = `Em ${String(s.embalagem).toLowerCase()}s (opcional)`; dica.textContent = `${t}. Preencha aqui e a quantidade é calculada.`; } };
+  emb.addEventListener('input', () => { const s = atual(), n = numeroBR(emb.value.trim()); if (s && n > 0) { q.value = String(Math.round(n * Number(s.conteudoEmb) * 1e4) / 1e4).replace('.', ','); q.dispatchEvent(new Event('input', {bubbles: true})); } });
+  sel.addEventListener('change', () => { emb.value = ''; mostrar(); });
+  mostrar();
+}
 function aplicarMovimento(s, kind, qty, value) {
   const before = Number(s.qty || 0), avg = custoMedio(s), mov = {before};
   if (kind === 'Entrada') {
@@ -567,6 +640,7 @@ function movementForm(itemId, kind) {
       showToast(`${s.name}: saldo ${num(s.qty)} ${s.unit}${aviso}`);
     }
   });
+  ligarEmbalagem();
   // Mostra o custo unitário e o novo custo médio enquanto digita
   if (!saida && !ajuste) {
     const qEl = $('#f_qty', dialog), vEl = $('#f_value', dialog), itEl = $('#f_itemId', dialog), hint = vEl?.parentElement.querySelector('.hint');

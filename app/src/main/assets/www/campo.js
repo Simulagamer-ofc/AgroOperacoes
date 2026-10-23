@@ -101,6 +101,14 @@ function aplicacaoForm() {
       db.aplicacoes.push({id: uid(), ...v, produto: s ? s.name : v.produto}); save(); showToast(`Colheita liberada a partir de ${fmtDate(addDias(v.date, Number(v.carencia) || 0))}`);
     }});
 }
+// Ao escolher o produto do estoque na aplicação: carência e reentrada do cadastro do item (da bula) entram sozinhas se estiverem vazias
+document.addEventListener('change', e => {
+  if (e.target?.id !== 'f_itemId' || !/aplicação/i.test(dialog.querySelector('h3')?.textContent || '')) return;
+  const s = find('stock', e.target.value); if (!s) return;
+  const c = $('#f_carencia', dialog), r = $('#f_reentrada', dialog);
+  if (c && !c.value && s.carencia !== '' && s.carencia != null) c.value = String(s.carencia);
+  if (r && !r.value && s.reentrada !== '' && s.reentrada != null) r.value = String(s.reentrada);
+});
 // Data a partir da qual o talhão pode ser colhido (maior fim de carência entre as aplicações)
 function liberacaoColheita(fieldId) {
   const ap = db.aplicacoes.filter(a => a.fieldId === fieldId && Number(a.carencia) >= 0).map(a => ({a, libera: addDias(a.date, Number(a.carencia) || 0)})).sort((x, y) => y.libera.localeCompare(x.libera))[0];
