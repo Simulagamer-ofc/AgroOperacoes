@@ -627,7 +627,7 @@ VIEWS.operacoes = () => {
 
 VIEWS.maquinas = () => {
   const ms = db.machines.filter(m => m.type !== 'Implemento').sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''))); // implementos: aba própria
-  const mts = db.maintenances.slice().sort((a, b) => (a.status === 'Concluída') - (b.status === 'Concluída') || String(b.date || '').localeCompare(String(a.date || '')));
+  const mts = db.maintenances.filter(mt => find('machines', mt.machineId)?.type !== 'Implemento').sort((a, b) => (a.status === 'Concluída') - (b.status === 'Concluída') || String(b.date || '').localeCompare(String(a.date || '')));
   return head('Máquinas e manutenção', 'Horímetro, revisões programadas e ordens de manutenção.', btn('Registrar horímetro', 'hour-new', '', 'secondary') + btn('Abrir manutenção', 'mt-new', '', 'secondary') + btn('+ Nova máquina', 'mc-new')) +
     (ms.length ? `<section class="cards">${ms.map(m => {
       const st = machineStatus(m), left = hoursToService(m), temRev = Number(m.nextService) > 0;
