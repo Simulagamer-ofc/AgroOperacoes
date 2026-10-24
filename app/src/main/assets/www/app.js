@@ -110,7 +110,9 @@ const SERVICE_WARN_HOURS = 25;
 const fieldName = id => find('fields', id)?.name || '';
 const machineName = id => find('machines', id)?.name || '';
 const opPlace = op => fieldName(op.fieldId) || op.place || 'Local não informado';
-const openMaintenances = machineId => db.maintenances.filter(m => m.status !== 'Concluída' && (!machineId || m.machineId === machineId));
+// Em aberto = aberta ou em execução (a programada para uma data futura não deixa a máquina “em manutenção”)
+const openMaintenances = machineId => db.maintenances.filter(m => m.status !== 'Concluída' && m.status !== 'Programada' && (!machineId || m.machineId === machineId));
+const manutProgramadas = machineId => db.maintenances.filter(m => m.status === 'Programada' && (!machineId || m.machineId === machineId));
 const isInactive = m => m.state === 'Inativa';
 const machineStatus = m => openMaintenances(m.id).length ? 'Em manutenção' : (isInactive(m) ? 'Inativa' : 'Disponível');
 const hoursToService = m => (Number(m.nextService) || 0) - (Number(m.hours) || 0);
@@ -126,6 +128,8 @@ function alerts() {
     list.push({color: 'orange', icon: '⚙', title: left <= 0 ? `Revisão vencida: ${m.name}` : `Revisão em ${num(left)} h: ${m.name}`, text: `Horímetro em ${num(m.hours)} h; revisão programada para ${num(m.nextService)} h.${pr?.data && left > 0 ? ` Pelo ritmo de uso (~${um1(pr.ritmo)} h/dia), por volta de ${fmtDate(pr.data)}.` : ''}`, progress: pct, route: 'maquinas',
       acao: openMaintenances(m.id).length ? null : {act: 'rev-abrir', id: m.id, label: 'Abrir revisão'}});
   });
+  manutProgramadas().forEach(mt => { const d = mt.dataPrevista ? diasEntre(today(), mt.dataPrevista) : null; if (d == null || d > 7) return;
+    list.push({color: d < 0 ? 'red' : 'orange', icon: '⚙', title: `${d < 0 ? 'Manutenção programada atrasada' : d === 0 ? 'Manutenção programada para hoje' : `Manutenção programada em ${d} ${d === 1 ? 'dia' : 'dias'}`}: ${machineName(mt.machineId) || 'equipamento'}`, text: `${mt.description || mt.kind} — ${fmtDate(mt.dataPrevista)}.`, route: 'maquinas', acao: {act: 'mt-iniciar', id: mt.id, label: '▶ Iniciar'}}); });
   openMaintenances().forEach(mt => list.push({color: 'orange', icon: '⚙', title: `Manutenção aberta: ${machineName(mt.machineId) || 'máquina'}`, text: `${mt.kind} — ${mt.description || 'sem descrição'} (desde ${fmtDate(mt.date)}).`, route: 'maquinas'}));
   db.lots.filter(l => l.status === 'Aguardando análise').forEach(l => list.push({color: 'purple', icon: '⌁', title: `Lote aguardando análise: ${l.code}`, text: 'Registre o resultado de germinação/vigor.', route: 'lotes/' + l.id}));
   db.operations.filter(o => o.status === 'Programada' && o.date && o.date < today()).forEach(o => list.push({color: 'red', icon: '◷', title: `Operação atrasada: ${o.type} — ${opPlace(o)}`, text: `Programada para ${fmtDate(o.date)}.`, route: 'operacoes'}));
@@ -394,22 +398,36 @@ function hourForm(machineId) {
   });
 }
 
+// Ordem da lista: em aberto, programadas (pela data), concluídas (mais recentes primeiro)
+const pesoManut = mt => mt.status === 'Concluída' ? 2 : mt.status === 'Programada' ? 1 : 0;
+const ordemManut = (a, b) => pesoManut(a) - pesoManut(b) || (a.status === 'Programada' ? String(a.dataPrevista || '').localeCompare(String(b.dataPrevista || '')) : String(b.date || '').localeCompare(String(a.date || '')));
+function linhaManutencao(mt, semNome = 'Máquina removida') {
+  const prog = mt.status === 'Programada', d = prog && mt.dataPrevista ? diasEntre(today(), mt.dataPrevista) : null;
+  const color = mt.status === 'Concluída' ? 'gray' : mt.status === 'Em execução' ? 'blue' : prog ? (d != null && d < 0 ? 'red' : 'purple') : 'orange';
+  const quando = prog ? `programada para ${fmtDate(mt.dataPrevista)}${d != null ? (d < 0 ? ` (atrasada ${-d} d)` : d === 0 ? ' (hoje)' : ` (em ${d} d)`) : ''}` : 'aberta ' + fmtDate(mt.date);
+  return `<div class="row"><span class="status ${color === 'gray' ? 'green' : color}"></span><div><strong>${esc(mt.kind)} — ${esc(machineName(mt.machineId) || semNome)}</strong><small>${esc([mt.description, quando, mt.doneDate ? 'concluída ' + fmtDate(mt.doneDate) : '', mt.cost ? 'R$ ' + num(mt.cost, 2) : '', mt.fotos?.length ? '📷 ' + mt.fotos.length : ''].filter(Boolean).join(' • '))}</small></div><div class="row-actions">${chip(mt.status, color)}${prog ? mini('▶ Iniciar', 'mt-iniciar', mt.id) : mt.status !== 'Concluída' ? mini('✓ Concluir', 'mt-done', mt.id, 'ok') : ''}${mini('Editar', 'mt-edit', mt.id)}${mini('Excluir', 'mt-del', mt.id, 'del')}</div></div>`;
+}
 function maintenanceForm(mt = {}) {
   if (!db.machines.length) { showToast('Cadastre uma máquina primeiro'); return machineForm(); }
   const idMt = mt.id || uid(); // id já na abertura, para as fotos
   openForm({
     title: mt.id ? 'Editar manutenção' : 'Abrir manutenção',
     values: {date: today(), kind: 'Preventiva', status: 'Aberta', ...mt},
+    sub: 'Para deixar marcada para um dia, escolha a situação “Programada” e a data prevista.',
     fields: [
       {k: 'machineId', label: 'Máquina', type: 'select', options: () => db.machines.map(m => ({value: m.id, label: m.name})), required: true, full: true},
       {k: 'kind', label: 'Tipo', type: 'select', options: ['Preventiva', 'Corretiva'], required: true},
       {k: 'date', label: 'Data de abertura', type: 'date', required: true},
       {k: 'description', label: 'Serviço', placeholder: 'Ex.: Troca de óleo e filtros', full: true, required: true},
       {k: 'cost', label: 'Custo (R$)', type: 'number', min: 0},
-      {k: 'status', label: 'Situação', type: 'select', options: ['Aberta', 'Em execução', 'Concluída'], required: true},
+      {k: 'status', label: 'Situação', type: 'select', options: ['Programada', 'Aberta', 'Em execução', 'Concluída'], required: true},
+      {k: 'dataPrevista', label: 'Data prevista', type: 'date', mostrarSe: ['status', 'Programada'], hint: 'O app avisa 7 dias antes e no dia.'},
       {k: 'notes', label: 'Peças e observações', type: 'textarea'}
     ],
     onSubmit: v => {
+      if (v.status === 'Programada' && !v.dataPrevista) return 'Informe a data prevista da manutenção programada';
+      if (v.status === 'Programada' && v.dataPrevista < today() && !mt.id) return 'A data prevista já passou: escolha uma data a partir de hoje ou abra a manutenção agora';
+      if (v.status !== 'Programada') v.dataPrevista = mt.dataPrevista || '';
       const item = {...mt, ...v, id: idMt};
       if (v.status === 'Concluída' && mt.status !== 'Concluída') finishMaintenance(item, false);
       upsert('maintenances', item);
@@ -701,7 +719,7 @@ VIEWS.operacoes = () => {
 
 VIEWS.maquinas = () => {
   const ms = db.machines.filter(m => m.type !== 'Implemento').sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''))); // implementos: aba própria
-  const mts = db.maintenances.filter(mt => find('machines', mt.machineId)?.type !== 'Implemento').sort((a, b) => (a.status === 'Concluída') - (b.status === 'Concluída') || String(b.date || '').localeCompare(String(a.date || '')));
+  const mts = db.maintenances.filter(mt => find('machines', mt.machineId)?.type !== 'Implemento').sort(ordemManut);
   return head('Máquinas e manutenção', 'Horímetro, revisões programadas e ordens de manutenção.', btn('Registrar horímetro', 'hour-new', '', 'secondary') + btn('Abrir manutenção', 'mt-new', '', 'secondary') + btn('+ Nova máquina', 'mc-new')) +
     (ms.length ? `<section class="cards">${ms.map(m => {
       const st = machineStatus(m), left = hoursToService(m), temRev = Number(m.nextService) > 0;
@@ -724,10 +742,7 @@ VIEWS.maquinas = () => {
             ${isInactive(m) ? '' : mini('⛽ Abastecimento', 'cb-new', m.id)}${mini('◎ Aferição e calibragem', 'af-nova', m.id)}${mini('Histórico de aferições', 'af-maq', m.id)}${mini('⚙ Configuração para aferição', 'mc-config', m.id)}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
           </div></details></div></article>`;
     }).join('')}</section>` : `<section class="card">${empty('Nenhuma máquina cadastrada', 'Cadastre tratores, colheitadeiras e implementos para controlar horímetro e revisões.', {act: 'mc-new', label: '+ Nova máquina'})}</section>`) +
-    `<div class="section-title"><h3>Ordens de manutenção</h3></div><section class="card list">${mts.length ? mts.map(mt => {
-      const color = mt.status === 'Concluída' ? 'gray' : mt.status === 'Em execução' ? 'blue' : 'orange';
-      return `<div class="row"><span class="status ${color === 'gray' ? 'green' : color}"></span><div><strong>${esc(mt.kind)} — ${esc(machineName(mt.machineId) || 'Máquina removida')}</strong><small>${esc([mt.description, 'aberta ' + fmtDate(mt.date), mt.doneDate ? 'concluída ' + fmtDate(mt.doneDate) : '', mt.cost ? 'R$ ' + num(mt.cost, 2) : '', mt.fotos?.length ? '📷 ' + mt.fotos.length : ''].filter(Boolean).join(' • '))}</small></div><div class="row-actions">${chip(mt.status, color)}${mt.status !== 'Concluída' ? mini('✓ Concluir', 'mt-done', mt.id, 'ok') : ''}${mini('Editar', 'mt-edit', mt.id)}${mini('Excluir', 'mt-del', mt.id, 'del')}</div></div>`;
-    }).join('') : empty('Nenhuma manutenção registrada', 'Abra uma ordem de manutenção para acompanhar custo e revisões.', {act: 'mt-new', label: '+ Abrir manutenção'})}</section>`;
+    `<div class="section-title"><h3>Ordens de manutenção</h3></div><section class="card list">${mts.length ? mts.map(mt => linhaManutencao(mt, 'Máquina removida')).join('') : empty('Nenhuma manutenção registrada', 'Abra uma ordem de manutenção para acompanhar custo e revisões.', {act: 'mt-new', label: '+ Abrir manutenção'})}</section>`;
 };
 
 VIEWS.talhoes = () => {
@@ -990,6 +1005,7 @@ const ACTIONS = {
   'hour-new': id => hourForm(id),
   'mt-new': id => maintenanceForm(id ? {machineId: id} : {}), 'mt-edit': id => maintenanceForm(find('maintenances', id)),
   'mt-done': id => { finishMaintenance(find('maintenances', id)); render(); },
+  'mt-iniciar': id => { const mt = find('maintenances', id); if (!mt) return; mt.status = 'Aberta'; mt.date = today(); upsert('maintenances', mt); showToast(`Manutenção iniciada: ${mt.description || mt.kind}`); render(); },
   'mt-del': id => confirmDialog('Excluir esta ordem de manutenção?', () => remove('maintenances', id)),
   'fd-new': () => fieldForm(), 'fd-edit': id => fieldForm(find('fields', id)), 'fd-hist': id => go('talhao/' + id),
   'fd-del': id => confirmDialog('Excluir este talhão? Operações e lotes vinculados ficarão sem talhão.', () => remove('fields', id)),
