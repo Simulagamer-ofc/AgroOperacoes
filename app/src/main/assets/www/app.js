@@ -94,11 +94,16 @@ const remove = (col, id) => { const r = db[col].find(x => x.id === id); if (r?.f
 
 // ---------- Regras de negócio ----------
 // Operações fora do talhão: não têm área trabalhada (beneficiamento e tratamento de sementes medem a quantidade em kg)
-const OP_GRAOS = ['Secagem', 'Recebimento de grãos', 'Limpeza de secador/silo']; // operações na unidade de grãos (secador, moega, silo)
+// Operações na unidade de grãos: cada uma com o seu equipamento (secador, moega ou silo).
+// "Limpeza de secador/silo" é o tipo antigo (antes da separação): continua valendo nos registros já gravados.
+const OP_LIMPEZA_ANTIGA = 'Limpeza de secador/silo';
+const EQUIP_DA_OP = {'Secagem': ['Secador'], 'Recebimento de grãos': ['Moega'], 'Limpeza de secador': ['Secador'], 'Limpeza de moega': ['Moega'], 'Limpeza de silo': ['Silo/Armazém'], [OP_LIMPEZA_ANTIGA]: ['Secador', 'Moega', 'Silo/Armazém']};
+const OP_GRAOS = Object.keys(EQUIP_DA_OP);
 const OP_SEM_AREA = ['Beneficiamento de sementes', 'Tratamento de sementes', 'Transporte', 'Manutenção', ...OP_GRAOS];
 const OP_COM_KG = ['Beneficiamento de sementes', 'Tratamento de sementes'];
 const opTemArea = o => !OP_SEM_AREA.includes(o?.type);
-const OP_TYPES = ['Plantio', 'Aplicação', 'Adubação', 'Colheita', 'Preparo de solo', 'Transporte', 'Secagem', 'Recebimento de grãos', 'Limpeza de secador/silo', 'Beneficiamento de sementes', 'Tratamento de sementes', 'Manutenção', 'Outra'];
+const OP_TYPES = ['Plantio', 'Aplicação', 'Adubação', 'Colheita', 'Preparo de solo', 'Transporte', 'Secagem', 'Recebimento de grãos', 'Limpeza de secador', 'Limpeza de moega', 'Limpeza de silo', 'Beneficiamento de sementes', 'Tratamento de sementes', 'Manutenção', 'Outra'];
+const OP_TYPES_TODOS = [...OP_TYPES, OP_LIMPEZA_ANTIGA]; // para listas e totais de registros antigos
 const OP_STATUS = ['Programada', 'Em andamento', 'Concluída', 'Cancelada'];
 const STATUS_COLOR = {'Programada': 'blue', 'Em andamento': 'green', 'Concluída': 'gray', 'Cancelada': 'red'};
 const MACHINE_TYPES = ['Trator', 'Colheitadeira', 'Pulverizador', 'Plantadeira', 'Caminhão', 'Implemento', 'Secador', 'Moega', 'Silo/Armazém', 'Beneficiamento', 'Outro'];
@@ -300,7 +305,27 @@ const fieldOptions = () => db.fields.map(f => ({value: f.id, label: f.name}));
 const TIPOS_GRAOS_EQUIP = ['Secador', 'Moega', 'Silo/Armazém'];
 const rotuloMaquina = m => TIPOS_COM_HORIMETRO.includes(m.type) || Number(m.hours) > 0 ? `${m.name} (${num(m.hours)} h)` : m.name;
 const OP_QUALQUER_MAQ = ['Manutenção', 'Outra'];
-const machineOptions = tipoOp => db.machines.filter(m => !isInactive(m) && m.type !== 'Implemento' && (typeof tipoOp !== 'string' || OP_QUALQUER_MAQ.includes(tipoOp) || (OP_GRAOS.includes(tipoOp) === TIPOS_GRAOS_EQUIP.includes(m.type)))).map(m => ({value: m.id, label: rotuloMaquina(m)}));
+// Máquinas que servem para cada operação de campo (tipo “Outro” sempre aparece)
+const MAQ_DA_OP = {'Plantio': ['Trator', 'Plantadeira'], 'Aplicação': ['Trator', 'Pulverizador'], 'Adubação': ['Trator', 'Plantadeira'], 'Preparo de solo': ['Trator'], 'Colheita': ['Colheitadeira', 'Trator', 'Caminhão'], 'Transporte': ['Caminhão', 'Trator'], 'Beneficiamento de sementes': ['Beneficiamento'], 'Tratamento de sementes': ['Beneficiamento']};
+const maqServe = (tipoOp, tm) => typeof tipoOp !== 'string' || OP_QUALQUER_MAQ.includes(tipoOp) ? true : EQUIP_DA_OP[tipoOp] ? EQUIP_DA_OP[tipoOp].includes(tm) : MAQ_DA_OP[tipoOp] ? MAQ_DA_OP[tipoOp].includes(tm) || tm === 'Outro' : !TIPOS_GRAOS_EQUIP.includes(tm);
+const machineOptions = (tipoOp, manter) => db.machines.filter(m => m.type !== 'Implemento' && ((!isInactive(m) && maqServe(tipoOp, m.type)) || (manter && m.id === manter))).map(m => ({value: m.id, label: rotuloMaquina(m)}));
+// Campos do formulário de operação conforme o tipo: só aparece o que vale para aquela operação.
+// talhao: 'sim' | 'origem' (opcional, de onde veio o grão) | 'nao'; local: rótulo ou '' (sem local); maquina: rótulo ou '' ; obrig: máquina obrigatória
+const OP_LAVOURA = ['Plantio', 'Aplicação', 'Adubação', 'Colheita', 'Preparo de solo'];
+function camposDaOp(t) {
+  const equip = EQUIP_DA_OP[t];
+  if (equip) {
+    const nome = equip.length > 1 ? 'Secador, moega ou silo' : equip[0] === 'Silo/Armazém' ? 'Silo / armazém' : equip[0];
+    return {talhao: ['Secagem', 'Recebimento de grãos'].includes(t) ? 'origem' : 'nao', local: '', maquina: nome, obrig: true, implemento: false, area: false, kg: false,
+      notas: t === 'Secagem' ? 'Ex.: umidade de entrada e saída, lenha usada…' : t === 'Recebimento de grãos' ? 'Ex.: cargas recebidas, placa, observações…' : 'Ex.: pó e palha retirados, fosso, dutos, sem focos de insetos…'};
+  }
+  if (OP_LAVOURA.includes(t)) return {talhao: 'sim', local: 'Local (sem talhão)', maquina: 'Máquina', implemento: true, area: true, kg: t === 'Plantio',
+    notas: t === 'Plantio' ? 'Ex.: cultivar, população, espaçamento, adubo de base…' : t === 'Colheita' ? 'Ex.: umidade, perdas, destino das cargas…' : t === 'Preparo de solo' ? 'Ex.: profundidade, condição do solo…' : 'Ex.: produto, dose, vazão, condições do tempo…'};
+  if (t === 'Transporte') return {talhao: 'origem', local: 'Origem / destino', maquina: 'Caminhão / trator', implemento: true, area: false, kg: false, notas: 'Ex.: o que foi levado, quantidade, destino…'};
+  if (OP_COM_KG.includes(t)) return {talhao: 'nao', local: 'Local', maquina: 'Máquina / equipamento', implemento: false, area: false, kg: true, notas: t === 'Tratamento de sementes' ? 'Ex.: produtos e doses do tratamento, lote…' : 'Ex.: lote, peneira, descarte…'};
+  if (t === 'Manutenção') return {talhao: 'nao', local: 'Local (opcional)', maquina: 'Máquina', obrig: true, implemento: false, area: false, kg: false, notas: 'Ex.: serviço feito, peças trocadas…', dica: 'Para registrar custo, peças e o plano de revisões, use Máquinas → Manutenção.'};
+  return {talhao: 'sim', local: 'Local (sem talhão)', maquina: 'Máquina', implemento: true, area: true, kg: false, notas: 'Descreva a operação'};
+}
 // Rótulo para máquina inativa que já está gravada no registro
 const maquinaAusente = id => { const m = find('machines', id); return m ? `${m.name} (inativa)` : '(máquina removida)'; };
 const stockOptions = () => db.stock.map(s => ({value: s.id, label: `${s.name} — ${num(s.qty)} ${s.unit}`}));
@@ -308,41 +333,67 @@ const stockOptions = () => db.stock.map(s => ({value: s.id, label: `${s.name} �
 let avisoColheitaOk = '';
 function operationForm(op = {}) {
   avisoColheitaOk = '';
+  // Registro antigo "Limpeza de secador/silo": abre já no tipo separado, pelo equipamento gravado
+  if (op.type === OP_LIMPEZA_ANTIGA) { const tq = find('machines', op.machineId)?.type; op = {...op, type: tq === 'Moega' ? 'Limpeza de moega' : tq === 'Silo/Armazém' ? 'Limpeza de silo' : 'Limpeza de secador'}; }
+  const tipoIni = op.type || 'Plantio';
   openForm({
     title: op.id ? 'Editar operação' : 'Nova operação',
     values: {date: today(), time: nowTime(), status: 'Programada', ...op},
     fields: [
       {k: 'type', label: 'Tipo de operação', type: 'select', options: OP_TYPES, required: true, full: true},
+      {k: 'machineId', label: 'Máquina', type: 'select', options: () => machineOptions(tipoIni, op.machineId), labelAusente: maquinaAusente},
       {k: 'fieldId', label: 'Talhão', type: 'select', options: fieldOptions, hint: db.fields.length ? '' : 'Cadastre talhões para selecioná-los aqui'},
-      {k: 'place', label: 'Local (sem talhão)', placeholder: 'Ex.: Unidade de beneficiamento', mostrarSe: ['fieldId', '']},
+      {k: 'place', label: 'Local (sem talhão)', placeholder: 'Ex.: Unidade de beneficiamento'},
+      ...(typeof implementoOptions === 'function' ? [{k: 'implementoId', label: 'Implemento', type: 'select', options: () => implementoOptions(tipoIni), labelAusente: maquinaAusente, hint: db.machines.some(m => m.type === 'Implemento') ? ' ' : 'Nenhum implemento cadastrado: cadastre em Máquinas → Implementos.'}] : []),
       {k: 'date', label: 'Data', type: 'date', required: true},
       {k: 'time', label: 'Horário', type: 'time'},
-      {k: 'machineId', label: 'Máquina', type: 'select', options: () => machineOptions(op.type || 'Plantio'), labelAusente: maquinaAusente},
-      ...(typeof implementoOptions === 'function' ? [{k: 'implementoId', label: 'Implemento', type: 'select', options: () => implementoOptions(op.type || 'Plantio'), labelAusente: maquinaAusente, hint: db.machines.some(m => m.type === 'Implemento') ? ' ' : 'Nenhum implemento cadastrado: cadastre em Máquinas → Implementos.'}] : []),
       {k: 'status', label: 'Situação', type: 'select', options: OP_STATUS, required: true},
       {k: 'area', label: 'Área trabalhada (ha)', type: 'number', min: 0},
-      {k: 'kg', label: 'Quantidade de sementes (kg)', type: 'number', min: 0, mostrarSe: ['type', [...OP_COM_KG, 'Plantio']]},
+      {k: 'kg', label: 'Quantidade de sementes (kg)', type: 'number', min: 0},
       {k: 'operator', label: 'Operador / equipe'},
       {k: 'notes', label: 'Observações', type: 'textarea', placeholder: 'Insumos, dose, condições do tempo...', mais: true}
     ],
     onSubmit: v => {
-      if (!v.fieldId && !v.place && !(OP_GRAOS.includes(v.type) && v.machineId)) return OP_GRAOS.includes(v.type) ? 'Informe o secador, a moega ou o silo (ou o local)' : 'Informe o talhão ou o local da operação';
-      if (!opTemArea(v)) v.area = ''; if (!OP_COM_KG.includes(v.type)) v.kg = '';
+      const c = camposDaOp(v.type);
+      // Limpa o que não vale para o tipo (campos escondidos não são gravados)
+      if (c.talhao === 'nao') v.fieldId = ''; if (!c.local || (c.talhao === 'sim' && v.fieldId)) v.place = '';
+      if (!c.implemento) v.implementoId = ''; if (!c.area) v.area = ''; if (!c.kg) v.kg = '';
+      if (c.obrig && !v.machineId) return `Informe ${c.maquina === 'Máquina' ? 'a máquina' : EQUIP_DA_OP[v.type] ? 'o equipamento: ' + c.maquina.toLowerCase() : 'a máquina'}`;
+      if (c.talhao === 'sim' && !v.fieldId && !v.place) return 'Informe o talhão ou o local da operação';
+      if (OP_COM_KG.includes(v.type) && !v.place && !v.machineId) return 'Informe o local ou a máquina';
       const lib = v.type === 'Colheita' && v.fieldId && typeof liberacaoColheita === 'function' ? liberacaoColheita(v.fieldId) : null;
       if (lib && v.date < lib.libera && avisoColheitaOk !== v.fieldId + v.date) { avisoColheitaOk = v.fieldId + v.date; return `Atenção: ${fieldName(v.fieldId)} está na carência de ${lib.a.produto} (aplicado em ${fmtDate(lib.a.date)}); a colheita só está liberada a partir de ${fmtDate(lib.libera)}. Toque em salvar de novo para registrar mesmo assim.`; }
       upsert('operations', {...op, ...v, id: op.id || uid(), createdAt: op.createdAt || new Date().toISOString()});
       showToast('Operação salva no dispositivo');
     }
   });
-  // Mostra só o que vale para o tipo: área (no talhão) ou quantidade de sementes (beneficiamento e tratamento)
-  // e troca as listas de máquina e implemento conforme o tipo (secagem: secador/moega/silo; plantio: plantadeiras…)
+  // Mostra só os campos do tipo escolhido e troca a lista de máquinas/equipamentos (secagem: só secadores; moega; silo…)
   const trocarLista = (sel, opcoes) => { if (!sel) return; const atual = sel.value; sel.innerHTML = '<option value="">—</option>' + opcoes.map(o => `<option value="${esc(o.value)}">${esc(o.label)}</option>`).join(''); sel.value = opcoes.some(o => o.value === atual) ? atual : ''; };
-  const tipo = $('#f_type', dialog), mostrar = () => { const t = tipo.value; $('#f_area', dialog).closest('.field').hidden = !opTemArea({type: t}); $('#f_kg', dialog).closest('.field').hidden = !OP_COM_KG.includes(t);
-    trocarLista($('#f_machineId', dialog), machineOptions(t)); const im = $('#f_implementoId', dialog); if (im) { trocarLista(im, implementoOptions(t)); im.closest('.field').hidden = OP_GRAOS.includes(t) || OP_COM_KG.includes(t); }
-    $('#f_fieldId', dialog).closest('.field').querySelector('label').textContent = OP_GRAOS.includes(t) ? 'Talhão (opcional)' : 'Talhão';
-    // Sem implemento que sirva para este tipo: diz o que fazer (em vez de uma lista vazia)
-    const hi = im?.closest('.field').querySelector('.hint'); if (hi && db.machines.some(m => m.type === 'Implemento')) hi.textContent = implementoOptions(t).length ? '' : `Nenhum implemento cadastrado serve para ${t.toLowerCase()}. Cadastre em Máquinas → Implementos.`; };
-  if (tipo) { tipo.addEventListener('change', mostrar); mostrar(); }
+  const campo = k => $('#f_' + k, dialog)?.closest('.field');
+  const rotulo = (k, txt, obrig) => { const l = campo(k)?.querySelector('label'); if (l) l.textContent = txt + (obrig ? ' *' : ''); };
+  const dica = (k, txt) => { const f = campo(k); if (!f) return; let h = f.querySelector('.hint'); if (!h) { h = Object.assign(document.createElement('span'), {className: 'hint'}); f.append(h); } h.textContent = txt; };
+  const tipo = $('#f_type', dialog);
+  const mostrar = () => {
+    const t = tipo.value, c = camposDaOp(t), temTalhao = !!$('#f_fieldId', dialog).value;
+    campo('fieldId').hidden = c.talhao === 'nao';
+    rotulo('fieldId', c.talhao === 'origem' ? 'Talhão de origem (opcional)' : 'Talhão');
+    campo('place').hidden = !c.local || (c.talhao === 'sim' && temTalhao);
+    rotulo('place', c.local || 'Local');
+    campo('area').hidden = !c.area; campo('kg').hidden = !c.kg;
+    // Na unidade de grãos e na manutenção o equipamento vem primeiro; no campo, o talhão
+    const fm = campo('machineId'), im0 = campo('implementoId');
+    if (c.obrig) campo('type').after(fm); else campo('place').after(fm);
+    if (im0) fm.after(im0);
+    const lista = machineOptions(t, op.machineId), equip = EQUIP_DA_OP[t];
+    trocarLista($('#f_machineId', dialog), lista);
+    rotulo('machineId', c.maquina, c.obrig);
+    dica('machineId', lista.length ? (c.dica || '') : equip ? `Nenhum ${c.maquina.toLowerCase()} cadastrado: cadastre em Grãos → ${equip[0] === 'Silo/Armazém' ? 'Silos' : equip[0]}.` : `Nenhuma máquina cadastrada serve para ${t.toLowerCase()} (${(MAQ_DA_OP[t] || []).join(', ').toLowerCase()}). Cadastre em Máquinas.`);
+    const im = $('#f_implementoId', dialog);
+    if (im) { trocarLista(im, implementoOptions(t)); campo('implementoId').hidden = !c.implemento;
+      const hi = campo('implementoId').querySelector('.hint'); if (hi && db.machines.some(m => m.type === 'Implemento')) hi.textContent = implementoOptions(t).length ? '' : `Nenhum implemento cadastrado serve para ${t.toLowerCase()}. Cadastre em Máquinas → Implementos.`; }
+    const notas = $('#f_notes', dialog); if (notas) notas.placeholder = c.notas;
+  };
+  if (tipo) { tipo.addEventListener('change', mostrar); $('#f_fieldId', dialog)?.addEventListener('change', mostrar); mostrar(); }
 }
 
 const TIPOS_COM_HORIMETRO = ['Trator', 'Colheitadeira', 'Pulverizador', 'Plantadeira', 'Caminhão'];
@@ -822,7 +873,7 @@ const relVerCustos = () => typeof nvTemTela !== 'function' || nvTemTela('finance
 function dadosRelatorio() {
   const from = daysAgo(reportDays - 1); // mesmo período de “N dias” usado no Controle de gastos
   const ops = db.operations.filter(o => o.date >= from && o.date <= today() && o.status !== 'Cancelada');
-  const byType = OP_TYPES.map(t => [t, ops.filter(o => o.type === t)]).filter(([, l]) => l.length);
+  const byType = OP_TYPES_TODOS.map(t => [t, ops.filter(o => o.type === t)]).filter(([, l]) => l.length);
   const maxType = Math.max(1, ...byType.map(([, l]) => l.length));
   const hoursBy = db.machines.map(m => [m, db.hourLogs.filter(h => h.machineId === m.id && h.date >= from && h.date <= today()).reduce((s, h) => s + (Number(h.hours) - Number(h.previous || 0)), 0)]).filter(([, h]) => h > 0).sort((a, b) => b[1] - a[1]);
   const maxH = Math.max(1, ...hoursBy.map(([, h]) => h));
