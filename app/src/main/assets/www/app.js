@@ -368,7 +368,11 @@ function operationForm(op = {}) {
     }
   });
   // Mostra só os campos do tipo escolhido e troca a lista de máquinas/equipamentos (secagem: só secadores; moega; silo…)
-  const trocarLista = (sel, opcoes) => { if (!sel) return; const atual = sel.value; sel.innerHTML = '<option value="">—</option>' + opcoes.map(o => `<option value="${esc(o.value)}">${esc(o.label)}</option>`).join(''); sel.value = opcoes.some(o => o.value === atual) ? atual : ''; };
+  // Lista com grupos: as indicadas para o tipo primeiro, depois todas as outras cadastradas (qualquer uma pode ser escolhida)
+  const opcao = o => `<option value="${esc(o.value)}">${esc(o.label)}</option>`;
+  const trocarLista = (sel, indicadas, outras = [], rotIndicadas = '', rotOutras = '') => { if (!sel) return; const atual = sel.value, todas = [...indicadas, ...outras];
+    sel.innerHTML = '<option value="">—</option>' + (outras.length && indicadas.length ? `<optgroup label="${esc(rotIndicadas)}">${indicadas.map(opcao).join('')}</optgroup><optgroup label="${esc(rotOutras)}">${outras.map(opcao).join('')}</optgroup>` : todas.map(opcao).join(''));
+    sel.value = todas.some(o => o.value === atual) ? atual : ''; };
   const campo = k => $('#f_' + k, dialog)?.closest('.field');
   const rotulo = (k, txt, obrig) => { const l = campo(k)?.querySelector('label'); if (l) l.textContent = txt + (obrig ? ' *' : ''); };
   const dica = (k, txt) => { const f = campo(k); if (!f) return; let h = f.querySelector('.hint'); if (!h) { h = Object.assign(document.createElement('span'), {className: 'hint'}); f.append(h); } h.textContent = txt; };
@@ -384,13 +388,18 @@ function operationForm(op = {}) {
     const fm = campo('machineId'), im0 = campo('implementoId');
     if (c.obrig) campo('type').after(fm); else campo('place').after(fm);
     if (im0) fm.after(im0);
-    const lista = machineOptions(t, op.machineId), equip = EQUIP_DA_OP[t];
-    trocarLista($('#f_machineId', dialog), lista);
+    // Equipamento da unidade de grãos (secador, moega, silo): só aquele tipo. Demais operações: qualquer máquina cadastrada,
+    // com as indicadas para o tipo no topo da lista
+    const equip = EQUIP_DA_OP[t], indicadas = machineOptions(t, op.machineId);
+    const outras = equip ? [] : machineOptions(null, op.machineId).filter(o => !indicadas.some(x => x.value === o.value));
+    const minus = t.toLowerCase();
+    trocarLista($('#f_machineId', dialog), indicadas, outras, `Indicadas para ${minus}`, 'Outras máquinas cadastradas');
     rotulo('machineId', c.maquina, c.obrig);
-    dica('machineId', lista.length ? (c.dica || '') : equip ? `Nenhum ${c.maquina.toLowerCase()} cadastrado: cadastre em Grãos → ${equip[0] === 'Silo/Armazém' ? 'Silos' : equip[0]}.` : `Nenhuma máquina cadastrada serve para ${t.toLowerCase()} (${(MAQ_DA_OP[t] || []).join(', ').toLowerCase()}). Cadastre em Máquinas.`);
+    dica('machineId', indicadas.length || outras.length ? (c.dica || '') : equip ? `Nenhum ${c.maquina.toLowerCase()} cadastrado: cadastre em Grãos → ${equip[0] === 'Silo/Armazém' ? 'Silos' : equip[0]}.` : 'Nenhuma máquina cadastrada: cadastre em Máquinas.');
     const im = $('#f_implementoId', dialog);
-    if (im) { trocarLista(im, implementoOptions(t)); campo('implementoId').hidden = !c.implemento;
-      const hi = campo('implementoId').querySelector('.hint'); if (hi && db.machines.some(m => m.type === 'Implemento')) hi.textContent = implementoOptions(t).length ? '' : `Nenhum implemento cadastrado serve para ${t.toLowerCase()}. Cadastre em Máquinas → Implementos.`; }
+    if (im) { const ii = implementoOptions(t), io = implementoOptions(null).filter(o => !ii.some(x => x.value === o.value));
+      trocarLista(im, ii, io, `Indicados para ${minus}`, 'Outros implementos'); campo('implementoId').hidden = !c.implemento;
+      const hi = campo('implementoId').querySelector('.hint'); if (hi && db.machines.some(m => m.type === 'Implemento')) hi.textContent = ''; }
     const notas = $('#f_notes', dialog); if (notas) notas.placeholder = c.notas;
   };
   if (tipo) { tipo.addEventListener('change', mostrar); $('#f_fieldId', dialog)?.addEventListener('change', mostrar); mostrar(); }
