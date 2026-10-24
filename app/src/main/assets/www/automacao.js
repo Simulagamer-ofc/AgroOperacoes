@@ -400,7 +400,7 @@ function cartaoClima() {
 Object.assign(ACTIONS, {
   'hoje-mais': () => { hojeTodos = true; render(); },
   'clima-expandir': () => { safeStorage.set('agro-clima-aberto', climaAberto() ? '0' : '1'); const el = document.getElementById('hojeClima'); if (el) el.outerHTML = cartaoClima(); },
-  'chuva-ontem': mm => chuvaForm({date: daysAgo(1), mm, notes: 'Estimativa da previsão do tempo (média dos modelos) — conferir no pluviômetro'}),
+  'chuva-ontem': mm => chuvaForm({date: daysAgo(1), mm, fonte: 'estimativa', notes: 'Estimativa da previsão do tempo (média dos modelos) — conferir no pluviômetro'}),
   'clima-atualizar': () => { if (navigator.onLine === false) return showToast('Sem internet agora'); buscarClima(true); showToast('Atualizando a previsão…'); },
   'clima-local': solicitarLocalClima,
   'clima-dia': k => {
