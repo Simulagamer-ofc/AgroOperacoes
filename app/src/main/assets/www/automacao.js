@@ -137,6 +137,7 @@ function iniciarOperacao(id) {
     const m = o.machineId ? find('machines', o.machineId) : null;
     o.status = 'Em andamento'; o.startedAt = new Date().toISOString(); if (!o.time) o.time = nowTime();
     if (m && Number(m.hours) > 0) o.horimetroIni = Number(m.hours);
+    if (typeof confAoIniciar === 'function') confAoIniciar(o);
     save(); showToast('Operação iniciada'); render();
   };
   const aviso = o.machineId && pulverizacao(o) && typeof avisoPulverizador === 'function' ? avisoPulverizador(o.machineId) : '';
@@ -154,6 +155,7 @@ function concluirOperacao(id) {
   openForm({title: `Concluir: ${o.type}`, sub: [opPlace(o), m?.name].filter(Boolean).join(' • '), submit: 'Concluir operação',
     values: {horimetro: m ? m.hours : '', area: o.area || (f ? f.area : ''), kg: o.kg || '', notes: o.notes || ''}, fields,
     onSubmit: v => {
+      const faltaComprovar = typeof confValidarConclusao === 'function' ? confValidarConclusao(o) : ''; if (faltaComprovar) return faltaComprovar;
       if (m && v.horimetro !== '' && Number(v.horimetro) < Number(o.horimetroIni || 0)) return `O horímetro final não pode ser menor que o do início (${num(o.horimetroIni)} h)`;
       if (m && v.horimetro !== '') { const salto = conferirSalto(m, v.horimetro); if (salto) return salto; }
       if (m && v.horimetro !== '' && Number(v.horimetro) > Number(m.hours || 0)) {
@@ -164,12 +166,14 @@ function concluirOperacao(id) {
       if (opTemArea(o) && v.area !== '' && v.area != null) o.area = Number(v.area);
       if (OP_COM_KG.includes(o.type) && v.kg !== '' && v.kg != null) o.kg = Number(v.kg);
       o.notes = v.notes; o.status = 'Concluída'; o.finishedAt = new Date().toISOString();
+      if (typeof confAoConcluir === 'function') confAoConcluir(o);
       // Plantio concluído: a data de plantio do talhão é preenchida sozinha (nova safra quando a anterior tem mais de 150 dias)
       const ft = o.type === 'Plantio' && o.fieldId ? find('fields', o.fieldId) : null;
       if (ft && (!ft.plantingDate || diasEntreAuto(ft.plantingDate, o.date || today()) > 150)) { ft.plantingDate = o.date || today(); setTimeout(() => showToast(`Plantio de ${ft.name} registrado em ${fmtDate(ft.plantingDate)}`), 2900); }
       save();
       showToast(`Operação concluída${o.horas > 0 ? ` — ${um1(o.horas)} h` : ''}${o.horas > 0 && o.area > 0 && opTemArea(o) ? `, ${um1(o.area / o.horas)} ha/h` : o.horas > 0 && o.kg > 0 ? `, ${num(o.kg / o.horas)} kg/h` : ''}`);
     }});
+  if (typeof confAoAbrirConclusao === 'function') confAoAbrirConclusao(o);
 }
 Object.assign(ACTIONS, {'op-start': iniciarOperacao, 'op-done': concluirOperacao});
 

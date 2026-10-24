@@ -1020,3 +1020,13 @@ tr.clickable{cursor:pointer} tr.clickable:hover td{background:rgba(23,135,212,.0
 .pm-txt .maq-rev{margin:0}.pm-avulsa .pm-txt small{color:var(--purple)}
 @media(max-width:760px){.pm-tarefa{grid-template-columns:1fr}.pm-tarefa .row-actions{justify-content:flex-start}}
 .status.purple{background:var(--purple)}
+
+/* Conferência das operações */
+.conf-selos{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}.conf-selo{font-size:.74rem;color:var(--muted);background:var(--bg);border-radius:999px;padding:3px 8px}.conf-selo.green{color:var(--green)}.conf-selo.red{color:var(--red);background:rgba(224,82,82,.12)}.conf-selo.orange{color:#c27c06}.conf-selo.blue{color:var(--blue)}
+button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3px 9px}
+.conf-cartao{margin-top:14px}.conf-topo{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:8px}.conf-topo h3{margin:0 0 4px}
+.conf-linha{display:grid;grid-template-columns:110px 1fr;gap:10px;padding:9px 0;border-top:1px solid var(--line);align-items:start}.conf-linha>span{color:var(--muted);font-size:.84rem}.conf-linha a{font-size:.84rem;color:var(--blue)}
+.conf-alertas{display:grid;gap:6px;margin:10px 0}.conf-al{padding:9px 11px;border-radius:10px;font-size:.86rem;background:var(--bg)}.conf-al.red{background:rgba(224,82,82,.13);color:var(--red)}.conf-al.orange{background:rgba(245,158,11,.14);color:#c27c06}.conf-al.green{background:rgba(24,166,106,.12);color:var(--green)}
+.conf-ajustes{margin-top:14px}.conf-ajustes summary{cursor:pointer}.conf-tipos{display:flex;flex-wrap:wrap;gap:6px}.conf-tipos .chip{border:0;cursor:pointer;font:inherit;font-size:.78rem}
+.conf-gps{margin:0 0 6px}.conf-gps.conf-ruim{color:var(--red)}
+@media(max-width:760px){.conf-linha{grid-template-columns:1fr;gap:3px}}

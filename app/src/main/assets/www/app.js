@@ -333,6 +333,7 @@ const stockOptions = () => db.stock.map(s => ({value: s.id, label: `${s.name} �
 let avisoColheitaOk = '';
 function operationForm(op = {}) {
   avisoColheitaOk = '';
+  const travada = typeof confTravada === 'function' ? confTravada(op) : ''; if (travada) { showToast(travada, true); return; }
   // Registro antigo "Limpeza de secador/silo": abre já no tipo separado, pelo equipamento gravado
   if (op.type === OP_LIMPEZA_ANTIGA) { const tq = find('machines', op.machineId)?.type; op = {...op, type: tq === 'Moega' ? 'Limpeza de moega' : tq === 'Silo/Armazém' ? 'Limpeza de silo' : 'Limpeza de secador'}; }
   const tipoIni = op.type || 'Plantio';
@@ -354,6 +355,7 @@ function operationForm(op = {}) {
       {k: 'notes', label: 'Observações', type: 'textarea', placeholder: 'Insumos, dose, condições do tempo...', mais: true}
     ],
     onSubmit: v => {
+      const semComprovar = typeof confValidarEdicao === 'function' ? confValidarEdicao(op, v) : ''; if (semComprovar) return semComprovar;
       const c = camposDaOp(v.type);
       // Limpa o que não vale para o tipo (campos escondidos não são gravados)
       if (c.talhao === 'nao') v.fieldId = ''; if (!c.local || (c.talhao === 'sim' && v.fieldId)) v.place = '';
