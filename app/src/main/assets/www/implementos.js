@@ -35,7 +35,7 @@ function usoImplemento(m) {
   const mts = db.maintenances.filter(x => x.machineId === m.id), custo = mts.reduce((s, x) => s + (Number(x.cost) || 0), 0);
   const haT = ha(ops);
   return {haTotal: haT, haDesde: ha(desde), ultRev, dias, haPorHora: horas ? ha(comHoras) / horas : null, ultimaOp: ops.sort(byDateDesc)[0] || null,
-    custo, custoHa: custo > 0 && haT > 0 ? custo / haT : null, abertas: mts.filter(x => x.status !== 'Concluída').length};
+    custo, custoHa: custo > 0 && haT > 0 ? custo / haT : null, abertas: mts.filter(x => x.status !== 'Concluída' && x.status !== 'Programada').length};
 }
 // Situação da revisão: {nivel: ok|perto|vencida, texto, pct}
 function revisaoImplemento(m) {
@@ -99,12 +99,9 @@ VIEWS.implementos = () => {
 // Ordens de manutenção só dos implementos (as das máquinas ficam na aba Máquinas)
 function ordensImplementos(lista) {
   const ids = new Set(lista.map(m => m.id));
-  const mts = db.maintenances.filter(mt => ids.has(mt.machineId)).sort((a, b) => (a.status === 'Concluída') - (b.status === 'Concluída') || String(b.date || '').localeCompare(String(a.date || '')));
+  const mts = db.maintenances.filter(mt => ids.has(mt.machineId)).sort(ordemManut);
   const total = mts.reduce((s, x) => s + (Number(x.cost) || 0), 0);
-  return `<div class="section-title"><h3>Ordens de manutenção dos implementos</h3>${total ? `<small class="nota">total R$ ${num(total, 2)}</small>` : ''}</div><section class="card list">${mts.length ? mts.map(mt => {
-    const color = mt.status === 'Concluída' ? 'gray' : mt.status === 'Em execução' ? 'blue' : 'orange';
-    return `<div class="row"><span class="status ${color === 'gray' ? 'green' : color}"></span><div><strong>${esc(mt.kind)} — ${esc(machineName(mt.machineId) || 'Implemento removido')}</strong><small>${esc([mt.description, 'aberta ' + fmtDate(mt.date), mt.doneDate ? 'concluída ' + fmtDate(mt.doneDate) : '', mt.cost ? 'R$ ' + num(mt.cost, 2) : '', mt.fotos?.length ? '📷 ' + mt.fotos.length : ''].filter(Boolean).join(' • '))}</small></div><div class="row-actions">${chip(mt.status, color)}${mt.status !== 'Concluída' ? mini('✓ Concluir', 'mt-done', mt.id, 'ok') : ''}${mini('Editar', 'mt-edit', mt.id)}${mini('Excluir', 'mt-del', mt.id, 'del')}</div></div>`;
-  }).join('') : empty('Nenhuma manutenção de implemento', 'Use “⚙ Manutenção” no cartão do implemento para abrir uma ordem (troca de discos, rolamentos, lubrificação…).')}</section>`;
+  return `<div class="section-title"><h3>Ordens de manutenção dos implementos</h3>${total ? `<small class="nota">total R$ ${num(total, 2)}</small>` : ''}</div><section class="card list">${mts.length ? mts.map(mt => linhaManutencao(mt, 'Implemento removido')).join('') : empty('Nenhuma manutenção de implemento', 'Use “⚙ Manutenção” no cartão do implemento para abrir uma ordem (troca de discos, rolamentos, lubrificação…).')}</section>`;
 }
 // Concluir manutenção de implemento: não há horímetro — a contagem de hectares recomeça
 const concluirManutSemImpl = finishMaintenance;

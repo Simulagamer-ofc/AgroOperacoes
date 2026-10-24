@@ -1013,3 +1013,10 @@ tr.clickable{cursor:pointer} tr.clickable:hover td{background:rgba(23,135,212,.0
 @media(max-width:760px){.nv-semfazenda{flex-wrap:wrap}.nv-semfazenda button{width:100%}}
 .es-ficha{display:block;color:var(--muted);font-size:.78rem;margin-top:2px}
 .ch-est{color:var(--orange);font-size:.72rem;font-weight:600}
+/* Plano de manutenção (secador, moega, silos) */
+.pm-equip{margin-bottom:12px}
+.pm-tarefa{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.pm-tarefa:last-of-type{border-bottom:0}.pm-txt strong{display:block;font-size:.92rem}.pm-txt small{display:block;color:var(--muted);font-size:.8rem;margin:2px 0 6px}
+.pm-txt .maq-rev{margin:0}.pm-avulsa .pm-txt small{color:var(--purple)}
+@media(max-width:760px){.pm-tarefa{grid-template-columns:1fr}.pm-tarefa .row-actions{justify-content:flex-start}}
+.status.purple{background:var(--purple)}
