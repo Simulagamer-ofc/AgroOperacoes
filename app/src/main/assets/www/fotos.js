@@ -57,11 +57,20 @@ function canvasReduzido(img, lado) {
   c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); return c;
 }
 // Foto do celular (3–8 MB) → foto de ~150–250 KB (lado maior 1600 px) + miniatura de ~15 KB para listas e relatórios
-async function reduzirFoto(arquivo) {
+// Carimbo: linhas de texto gravadas na própria foto (data, hora, local, quem) — comprovação da operação
+function carimbarFoto(c, linhas) {
+  if (!linhas?.length) return;
+  const g = c.getContext('2d'), fs = Math.max(16, Math.round(c.width / 34)), pad = Math.round(fs * 0.6), alt = linhas.length * fs * 1.3 + pad * 2;
+  g.fillStyle = 'rgba(0,0,0,0.58)'; g.fillRect(0, c.height - alt, c.width, alt);
+  g.fillStyle = '#fff'; g.font = `600 ${fs}px sans-serif`; g.textBaseline = 'top';
+  linhas.forEach((l, i) => g.fillText(String(l), pad, c.height - alt + pad + i * fs * 1.3, c.width - pad * 2));
+}
+async function reduzirFoto(arquivo, carimbo) {
   const url = URL.createObjectURL(arquivo);
   try {
     const img = await new Promise((ok, erro) => { const i = new Image(); i.onload = () => ok(i); i.onerror = () => erro(new Error('Imagem inválida')); i.src = url; });
-    const grande = canvasReduzido(img, FOTO_LADO), cheia = await codificarFoto(grande, FOTO_QUALIDADES, FOTO_ALVO);
+    const grande = canvasReduzido(img, FOTO_LADO); carimbarFoto(grande, carimbo);
+    const cheia = await codificarFoto(grande, FOTO_QUALIDADES, FOTO_ALVO);
     const mini = await codificarFoto(canvasReduzido(grande, MINI_LADO), [MINI_QUALIDADE]);
     return {...cheia, mini: mini.tipo === cheia.tipo ? mini.blob : null};
   } finally { URL.revokeObjectURL(url); }
@@ -169,17 +178,19 @@ addEventListener('DOMContentLoaded', () => setTimeout(() => { enviarFotosPendent
 // ---------- Campo de fotos dentro dos formulários ----------
 // As fotos novas ficam aqui até o registro ser salvo (aí entram na lista “fotos” do registro)
 const fotosDoForm = new Map(); // recordId → [{id, em}]
-function campoFotos(colecao, recordId, atuais = []) {
+// Campo de comprovação: só foto tirada na hora (não da galeria) e com carimbo gravado (recordId → função que devolve as linhas)
+const carimbosFoto = new Map();
+function campoFotos(colecao, recordId, atuais = [], opc = {}) {
   if (!fotosDoForm.has(recordId)) fotosDoForm.set(recordId, []);
   atuais = [...atuais, ...fotosDoForm.get(recordId).filter(f => !atuais.some(a => a.id === f.id))];
-  return `<div class="field full fotos-campo" data-fotos="${esc(colecao)}|${esc(recordId)}"><label>Fotos <small>(opcional, até ${FOTOS_MAX})</small></label>
+  return `<div class="field full fotos-campo${opc.soCamera ? ' fotos-comprova' : ''}" data-fotos="${esc(colecao)}|${esc(recordId)}"${opc.soCamera ? ' data-so-camera="1"' : ''}><label>${esc(opc.rotulo || 'Fotos')} <small>(${opc.obrigatoria ? 'obrigatória' : 'opcional'}, até ${FOTOS_MAX})</small></label>${opc.dica ? `<span class="hint">${esc(opc.dica)}</span>` : ''}
     <div class="fotos-lista">${atuais.map(f => `<span class="foto-mini" data-foto-id="${esc(f.id)}"></span>`).join('')}</div>
-    <label class="foto-add secondary"><input type="file" accept="image/*" capture="environment" hidden data-foto-input> 📷 Adicionar foto</label></div>`;
+    <label class="foto-add secondary"><input type="file" accept="image/*" capture="environment" hidden data-foto-input> 📷 ${opc.soCamera ? 'Tirar foto' : 'Adicionar foto'}</label></div>`;
 }
 // Encaixa o campo de fotos num formulário já aberto (antes dos botões)
-function anexarCampoFotos(colecao, recordId, atuais = []) {
+function anexarCampoFotos(colecao, recordId, atuais = [], opc = {}) {
   const form = $('form', dialog); if (!form) return;
-  (form.querySelector('.form') || form).insertAdjacentHTML('beforeend', campoFotos(colecao, recordId, atuais));
+  (form.querySelector('.form') || form).insertAdjacentHTML('beforeend', campoFotos(colecao, recordId, atuais, opc));
   ativarCamposFotos(dialog);
 }
 function ativarCamposFotos(raiz = document) { raiz.querySelectorAll('.fotos-campo').forEach(box => { const [c, id] = box.dataset.fotos.split('|'); carregarMiniaturas(box, c, id); }); }
@@ -189,11 +200,14 @@ document.addEventListener('change', async e => {
   const box = e.target.closest('.fotos-campo'), [colecao, recordId] = box.dataset.fotos.split('|');
   const arq = e.target.files?.[0]; e.target.value = ''; if (!arq) return;
   if (box.querySelectorAll('.foto-mini').length >= FOTOS_MAX) { showToast(`No máximo ${FOTOS_MAX} fotos por registro`, true); return; }
+  // Comprovação: foto antiga (da galeria) não vale — tem que ser tirada agora
+  if (box.dataset.soCamera && arq.lastModified && Date.now() - arq.lastModified > 10 * 60000) { showToast('Para comprovar, tire a foto agora pela câmera (esta foto é de antes).', true); return; }
+  const carimbo = box.dataset.soCamera ? carimbosFoto.get(recordId)?.() : null;
   try {
-    const red = await reduzirFoto(arq), id = uid();
+    const red = await reduzirFoto(arq, carimbo), id = uid();
     await guardarFotoLocal({id, colecao, recordId, blob: red.blob, mini: red.mini, tipo: red.tipo, ext: red.ext, fazendaId: nv?.fazenda?.id || null, enviada: false, miniEnviada: !red.mini, criadaEm: Date.now()});
     if (!fotosDoForm.has(recordId)) fotosDoForm.set(recordId, []);
-    fotosDoForm.get(recordId).push({id, em: new Date().toISOString(), por: nv?.sessao?.usuario || '', ext: red.ext, ...(red.mini ? {mini: true} : {})});
+    fotosDoForm.get(recordId).push({id, em: new Date().toISOString(), por: nv?.sessao?.usuario || '', ext: red.ext, ...(red.mini ? {mini: true} : {}), ...(carimbo ? {carimbo: true} : {})});
     $('.fotos-lista', box).insertAdjacentHTML('beforeend', `<span class="foto-mini nova" data-foto-id="${esc(id)}"></span>`);
     carregarMiniaturas(box, colecao, recordId);
   } catch (err) { showToast(err.message || 'Não foi possível usar esta foto', true); }
