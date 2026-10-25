@@ -174,7 +174,8 @@ function iniKpis() {
   let quarto;
   if (iniVeFin() && typeof lancamentosCusto === 'function') {
     const v = somaValor(lancamentosCusto(t.slice(0, 8) + '01', t));
-    quarto = kpi('financeiro', 'Gastos do mês', 'R$ ' + num(v, 0), v ? `até ${fmtDate(t).slice(0, 5)}` : 'nenhum gasto lançado', 'financeiro', 'so-pc');
+    const ver = iniVerValores(), olho = iniBotaoOlho(ver);
+    quarto = `<div class="card ini-kpi so-pc ini-kpi-fin" role="link" tabindex="0" data-act="nav" data-id="financeiro"><span class="ini-tile-ic" aria-hidden="true">${iconeLinha('financeiro', 22)}</span><span><small>Gastos do mês</small><b>${ver ? iniValorCurto(v) : 'R$ •••••'}</b><em>${v ? `até ${fmtDate(t).slice(0, 5)}` : 'nenhum gasto lançado'}</em></span>${olho}</div>`;
   } else {
     const mm = db.chuvas.filter(c => c.date >= daysAgo(6)).reduce((x, c) => x + (Number(c.mm) || 0), 0);
     quarto = kpi('chuva', 'Chuva em 7 dias', num(mm) + ' mm', 'registrada na fazenda', 'chuva', 'so-pc');
@@ -199,13 +200,21 @@ function iniAgenda() {
 }
 
 // Gastos do mês por categoria (computador; só para quem vê o financeiro)
+// Valores de gastos com “olho” (como nos apps de banco): mostrar ou esconder; a escolha fica guardada neste aparelho
+const INI_VER_VALORES = 'agro-ver-gastos';
+const iniVerValores = () => safeStorage.get(INI_VER_VALORES) === '1';
+const iniBotaoOlho = ver => `<button type="button" class="ini-olho" data-act="ini-olho" aria-pressed="${ver}" aria-label="${ver ? 'Esconder valores' : 'Mostrar valores'}" title="${ver ? 'Esconder valores' : 'Mostrar valores'}"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>${ver ? '' : '<path d="M4 20 20 4"/>'}</svg></button>`;
+// Valor que cabe no cartão: R$ 13,0 mil em vez de “R$ 13....”
+const iniValorCurto = v => v >= 1e6 ? `R$ ${num(Math.round(v / 1e5) / 10)} mi` : v >= 10000 ? `R$ ${num(Math.round(v / 1000))} mil` : `R$ ${num(v, 0)}`;
+ACTIONS['ini-olho'] = () => { safeStorage.set(INI_VER_VALORES, iniVerValores() ? '0' : '1'); render(); };
 function iniGastos() {
   if (!iniVeFin() || typeof lancamentosCusto !== 'function') return '';
+  const ver = iniVerValores();
   const t = today(), lanc = lancamentosCusto(t.slice(0, 8) + '01', t), grupos = agrupar(lanc, x => x.category || 'Outros');
   const linhas = grupos.length > 4 ? [...grupos.slice(0, 3), ['Outras', grupos.slice(3).reduce((s, [, v]) => s + v, 0)]] : grupos, max = Math.max(1, ...linhas.map(([, v]) => v));
   const curto = v => v >= 1000 ? `R$ ${num(v / 1000, v >= 10000 ? 0 : 1)} mil` : `R$ ${num(v, 0)}`;
-  return `<section class="card ini-card ini-gastos so-pc"><div class="ini-tit-linha"><h3 class="ini-tit">${iconeLinha('financeiro', 18)} Gastos por categoria</h3><button type="button" class="link" data-act="nav" data-id="financeiro">Financeiro ›</button></div>
-    ${linhas.length ? `<div class="ini-barras" role="img" aria-label="Gastos do mês por categoria">${linhas.map(([n, v]) => `<div class="ini-barra-col" title="${esc(n)}: R$ ${num(v, 2)}"><b>${curto(v)}</b><span style="height:${Math.max(4, v / max * 100)}%"></span><small>${esc(n)}</small></div>`).join('')}</div><small class="ini-nota">Mês atual • total R$ ${num(somaValor(lanc), 0)}</small>`
+  return `<section class="card ini-card ini-gastos so-pc"><div class="ini-tit-linha"><h3 class="ini-tit">${iconeLinha('financeiro', 18)} Gastos por categoria</h3><span class="ini-tit-acoes">${linhas.length ? iniBotaoOlho(ver) : ''}<button type="button" class="link" data-act="nav" data-id="financeiro">Financeiro ›</button></span></div>
+    ${linhas.length ? `<div class="ini-barras" role="img" aria-label="Gastos do mês por categoria">${linhas.map(([n, v]) => `<div class="ini-barra-col" title="${esc(n)}${ver ? `: R$ ${num(v, 2)}` : ''}"><b>${ver ? curto(v) : '•••'}</b><span style="height:${Math.max(4, v / max * 100)}%"></span><small>${esc(n)}</small></div>`).join('')}</div><small class="ini-nota">Mês atual • total ${ver ? 'R$ ' + num(somaValor(lanc), 0) : 'R$ •••••'}</small>`
       : iniVazio('📊', 'Nenhum gasto neste mês', 'Combustível, manutenção e insumos lançados aparecem aqui por categoria.')}</section>`;
 }
 
