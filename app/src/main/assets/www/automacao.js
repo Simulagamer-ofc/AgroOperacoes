@@ -131,30 +131,51 @@ alerts = function () {
 
 // ---------- Operações: iniciar e concluir já registram o horímetro e a área ----------
 const pulverizacao = o => /pulveriz|aplica|defensiv|fungic|herbic|inseticid|dessec/i.test(o?.type || '');
+// Máquina com horímetro (motor próprio): trator, colheitadeira, pulverizador, plantadeira, caminhão — ou que já tenha horas lançadas
+const temHorimetro = m => !!m && m.type !== 'Implemento' && (TIPOS_COM_HORIMETRO.includes(m.type) || Number(m.hours) > 0);
+// Lê e confere o horímetro digitado; atualiza a máquina quando subiu. Devolve erro (texto) ou ''.
+function aplicarHorimetro(m, valor, minimo, nota, o) {
+  const h = Number(valor);
+  if (minimo != null && h < Number(minimo)) return `O horímetro não pode ser menor que ${num(minimo)} h`;
+  const salto = conferirSalto(m, h); if (salto) return salto;
+  if (h > Number(m.hours || 0)) { db.hourLogs.push({id: uid(), machineId: m.id, date: today(), hours: h, previous: Number(m.hours || 0), notes: nota, opId: o.id}); m.hours = h; }
+  return '';
+}
 function iniciarOperacao(id) {
   const o = find('operations', id); if (!o) return;
-  const comecar = () => {
-    const m = o.machineId ? find('machines', o.machineId) : null;
-    o.status = 'Em andamento'; o.startedAt = new Date().toISOString(); if (!o.time) o.time = nowTime();
-    if (m && Number(m.hours) > 0) o.horimetroIni = Number(m.hours);
-    if (typeof confAoIniciar === 'function') confAoIniciar(o);
-    save(); showToast('Operação iniciada'); render();
+  const abrir = () => {
+    const m = o.machineId ? find('machines', o.machineId) : null, comHor = temHorimetro(m);
+    const fields = [];
+    if (comHor) fields.push({k: 'horimetro', label: `Horímetro inicial — ${m.name} (h)`, type: 'number', min: 0, required: true, full: true, hint: `Digite o que o painel está marcando agora. Último registrado: ${num(m.hours)} h.`});
+    openForm({title: `Iniciar: ${o.type}`, sub: [opPlace(o), m?.name].filter(Boolean).join(' • '), submit: 'Iniciar operação', values: {}, fields,
+      onSubmit: v => {
+        if (comHor && (v.horimetro === '' || v.horimetro == null)) return `Informe o horímetro inicial do ${m.name}`;
+        if (comHor && Number(v.horimetro) < Number(m.hours || 0)) return `O horímetro está menor que o último registrado do ${m.name} (${num(m.hours)} h). Confira o painel.`;
+        const faltaFoto = typeof confValidarInicio === 'function' ? confValidarInicio(o) : ''; if (faltaFoto) return faltaFoto;
+        if (comHor) { const e = aplicarHorimetro(m, v.horimetro, null, `Início: ${o.type}`, o); if (e) return e; o.horimetroIni = Number(v.horimetro); }
+        o.status = 'Em andamento'; o.startedAt = new Date().toISOString(); if (!o.time) o.time = nowTime();
+        if (typeof confAoIniciar === 'function') confAoIniciar(o);
+        save(); showToast('Operação iniciada');
+      }});
+    if (typeof confAoAbrirInicio === 'function') confAoAbrirInicio(o);
   };
   const aviso = o.machineId && pulverizacao(o) && typeof avisoPulverizador === 'function' ? avisoPulverizador(o.machineId) : '';
-  if (aviso) return confirmDialog(`${machineName(o.machineId)}: ${aviso}. Iniciar a pulverização mesmo assim?`, comecar, 'Iniciar mesmo assim');
-  comecar();
+  if (aviso) return confirmDialog(`${machineName(o.machineId)}: ${aviso}. Iniciar a pulverização mesmo assim?`, abrir, 'Iniciar mesmo assim');
+  abrir();
 }
 function concluirOperacao(id) {
   const o = find('operations', id); if (!o) return;
   const m = o.machineId ? find('machines', o.machineId) : null, f = o.fieldId ? find('fields', o.fieldId) : null;
   const fields = [];
-  if (m) fields.push({k: 'horimetro', label: `Horímetro final — ${m.name} (h)`, type: 'number', min: 0, full: true, hint: `Atual: ${num(m.hours)} h${o.horimetroIni ? ` • no início: ${num(o.horimetroIni)} h` : ''}. Atualiza a máquina, as revisões e o consumo.`});
+  const comHor = temHorimetro(m);
+  if (m && comHor) fields.push({k: 'horimetro', label: `Horímetro final — ${m.name} (h)`, type: 'number', min: 0, required: true, full: true, hint: `Digite o que o painel está marcando agora.${o.horimetroIni != null ? ` No início: ${num(o.horimetroIni)} h.` : ` Último registrado: ${num(m.hours)} h.`} Atualiza a máquina, as revisões e o consumo.`});
   if (opTemArea(o)) fields.push({k: 'area', label: 'Área trabalhada (ha)', type: 'number', min: 0, hint: f && Number(f.area) > 0 ? `Talhão ${f.name}: ${num(f.area)} ha` : ''});
   if (OP_COM_KG.includes(o.type)) fields.push({k: 'kg', label: 'Quantidade de sementes (kg)', type: 'number', min: 0, hint: 'Para calcular o rendimento em kg/h.'});
   fields.push({k: 'notes', label: 'Observações', type: 'textarea'});
   openForm({title: `Concluir: ${o.type}`, sub: [opPlace(o), m?.name].filter(Boolean).join(' • '), submit: 'Concluir operação',
-    values: {horimetro: m ? m.hours : '', area: o.area || (f ? f.area : ''), kg: o.kg || '', notes: o.notes || ''}, fields,
+    values: {horimetro: '', area: o.area || (f ? f.area : ''), kg: o.kg || '', notes: o.notes || ''}, fields,
     onSubmit: v => {
+      if (comHor && (v.horimetro === '' || v.horimetro == null)) return `Informe o horímetro final do ${m.name}`;
       const faltaComprovar = typeof confValidarConclusao === 'function' ? confValidarConclusao(o) : ''; if (faltaComprovar) return faltaComprovar;
       if (m && v.horimetro !== '' && Number(v.horimetro) < Number(o.horimetroIni || 0)) return `O horímetro final não pode ser menor que o do início (${num(o.horimetroIni)} h)`;
       if (m && v.horimetro !== '') { const salto = conferirSalto(m, v.horimetro); if (salto) return salto; }
