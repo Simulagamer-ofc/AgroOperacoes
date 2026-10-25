@@ -6,6 +6,7 @@ from playwright.sync_api import sync_playwright
 BASE='https://gfvtudfdhooavcchdpnm.supabase.co'
 F1={'id':'11111111-1111-1111-1111-111111111111','name':'Fazenda Zamadei','join_code':'AAA'}
 F2={'id':'22222222-2222-2222-2222-222222222222','name':'Fazenda Dois','join_code':'BBB'}
+F3={'id':'33333333-3333-3333-3333-333333333333','name':'Fazenda Excluída'}  # existiu, foi excluída da nuvem
 S={'seq':0,'rec':{},'push':[]}  # rec[(farm,store,id)]={data,deleted,seq}
 def corpo(route):
     try: return json.loads(route.request.post_data or 'null')
@@ -28,6 +29,7 @@ def api(route):
         return resp(route, [{'user_id':'u1','nome':'Edson','login':'edsonhsr@hotmail.com','farm_id':F1['id']}])
     if p=='/rest/v1/rpc/push_records':
         b=corpo(route); S['push'].append((b['p_farm'], len(b['p_rows'])))
+        if b['p_farm']==F3['id']: return resp(route, {'code':'P0001','message':'Sem permissao nesta fazenda.'}, 400)
         for r in b['p_rows']:
             S['seq']+=1; S['rec'][(b['p_farm'],r['store'],r['id'])]={'data':r.get('data',{}),'deleted':r.get('deleted',False),'seq':S['seq']}
         return resp(route, [])
@@ -110,6 +112,19 @@ with sync_playwright() as p:
     A.evaluate("ACTIONS['nv-trocar']()"); confirmar(A)
     A.evaluate("()=>{ nvFazendas=[%s,%s]; ACTIONS['nv-usar']('%s'); }" % (json.dumps(F1),json.dumps(F2),F1['id'])); A.wait_for_timeout(2000)
     check(sorted(A.evaluate("db.fields.map(f=>f.name)"))==['A1 editado','C1 (celular)'], 'Ao voltar à Zamadei: recebeu o que mudou enquanto estava fora '+str(A.evaluate("db.fields.map(f=>f.name)")))
-    print('pushes:', S['push']); print('erros JS:', eA+eB+eC+eD)
+    # Aparelho E: guardou dados de uma fazenda que foi excluída da nuvem (servidor recusa: "Sem permissao nesta fazenda.")
+    cofre={'db':{'version':1,'settings':{},'fields':[{'id':'ee1','name':'E1 órfão','area':3,'_mod':int(time.time()*1000)}],'_removidos':[]},'base':{},'cursor':0,'nome':F3['name']}
+    ctxE,E,eE=abrir(b, NV_ADMIN); E.evaluate("c=>localStorage.setItem('agro-cofre-%s', c)" % F3['id'], json.dumps(cofre))
+    antes=len([x for x in S['push'] if x[0]==F3['id']]); sync(E); E.wait_for_timeout(800)
+    check(E.evaluate('nvFaltamEnviar()')==0 and E.evaluate('nvCofresOrfaos().length')==1, 'Fazenda excluída: dados separados como "sem acesso" (não contam como pendência que trava)')
+    sync(E); sync(E); depois=len([x for x in S['push'] if x[0]==F3['id']])
+    check(depois-antes==1, f'Fazenda excluída: não fica tentando enviar sem parar ({depois-antes} tentativa)')
+    E.evaluate("go('cadastros')"); E.wait_for_timeout(800)
+    check(E.locator('.nv-orfao').count()==1 and 'Fazenda Excluída' in E.locator('.nv-orfao').inner_text(), 'Cadastros mostra os dados da fazenda sem acesso com Baixar cópia / Descartar')
+    E.evaluate("nvSairDe(true)"); E.wait_for_timeout(1500)
+    check('fazenda sem acesso' in E.locator('.modal.open').inner_text().lower() and E.locator('.modal.open [data-seguir]').count()==1, 'Sair e apagar: explica a fazenda sem acesso (não culpa a internet) e deixa seguir')
+    E.locator('.modal.open [data-seguir]').click(); E.wait_for_timeout(1500)
+    check(E.evaluate("nv.sessao")is None and E.evaluate("nvChavesCofres().length")==0, 'Sair e apagar: concluído, dados removidos do aparelho')
+    print('pushes:', S['push']); print('erros JS:', eA+eB+eC+eD+eE)
     print('RESULTADO:', 'TUDO OK' if ok else 'HÁ FALHAS')
     import sys; sys.exit(0 if ok else 1)

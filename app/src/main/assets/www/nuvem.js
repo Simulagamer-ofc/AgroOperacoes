@@ -85,8 +85,22 @@ const nvChavesCofres = () => { const l = []; try { for (let i = 0; i < localStor
 const nvLerCofre = id => nvLer(NV_COFRE + id, null);
 function nvPendentesCofres() {
   let n = 0;
-  for (const k of nvChavesCofres()) { const id = k.slice(NV_COFRE.length); if (id === nv.dadosDe) continue; const c = nvLer(k, null); if (c?.db) n += nvPendentes(c.db, c.base || {}).length; }
+  for (const k of nvChavesCofres()) { const id = k.slice(NV_COFRE.length); if (id === nv.dadosDe) continue; const c = nvLer(k, null); if (c?.db && !c.orfao) n += nvPendentes(c.db, c.base || {}).length; }
   return n;
+}
+// Cofre “órfão”: dados guardados de uma fazenda que não existe mais na nuvem (ou à qual o usuário perdeu o acesso).
+// O servidor recusa o envio; em vez de tentar sem parar e travar a saída, o app separa e deixa baixar uma cópia ou descartar.
+const NV_ORFAO_RETENTAR = 6 * 3600000;
+function nvCofresOrfaos() {
+  const l = [];
+  for (const k of nvChavesCofres()) { const id = k.slice(NV_COFRE.length); if (id === nv.dadosDe) continue; const c = nvLer(k, null); if (c?.db && c.orfao) { const n = nvPendentes(c.db, c.base || {}).length; if (n) l.push({k, id, nome: c.nome || 'fazenda sem nome', n}); } }
+  return l;
+}
+const nvTextoOrfaos = os => os.map(o => `${o.n} ${o.n === 1 ? 'alteração' : 'alterações'} de “${o.nome}”`).join(', ');
+function nvBaixarOrfao(k) {
+  const c = nvLer(k, null); if (!c?.db) return;
+  const nome = String(c.nome || 'fazenda').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+  downloadFile(`mercaplant-dados-${nome}-${today()}.json`, 'application/json', JSON.stringify(c.db, null, 1));
 }
 // Guarda os dados da fazenda aberta no cofre dela; false se o aparelho não tiver espaço
 function nvGuardarCofre() {
@@ -117,6 +131,7 @@ async function nvEnviarCofres() {
   for (const k of nvChavesCofres()) {
     const id = k.slice(NV_COFRE.length); if (id === nv.dadosDe) continue;
     const c = nvLer(k, null); if (!c?.db) continue;
+    if (c.orfao && Date.now() - c.orfao.em < NV_ORFAO_RETENTAR) continue; // fazenda sem acesso: tenta de novo só de tempos em tempos
     c.base ||= {};
     const itens = nvPendentes(c.db, c.base); if (!itens.length) continue;
     try {
@@ -125,9 +140,14 @@ async function nvEnviarCofres() {
         const rej = await nvHttp('/rest/v1/rpc/push_records', {method: 'POST', body: {p_farm: id, p_rows: lote.map(it => ({store: it.c, id: it.id, data: it.data, deleted: it.deleted}))}}) || [];
         const recusa = new Set((Array.isArray(rej) ? rej : []).map(r => nvChave(r.store, r.id)));
         for (const it of lote) { const kk = nvChave(it.c, it.id); if (recusa.has(kk)) recusados++; else enviados++; if (it.deleted) delete c.base[kk]; else c.base[kk] = it.base; }
+        if (c.orfao) delete c.orfao; // voltou a aceitar (acesso restabelecido)
         safeStorage.set(k, JSON.stringify(c));
       }
-    } catch (err) { if (err.rede || err.sessao) throw err; nvErroCofres = `“${c.nome || 'outra fazenda'}”: ${err.message}`; }
+    } catch (err) {
+      if (err.rede || err.sessao) throw err;
+      if (/permiss|n[aã]o existe|not found/i.test(err.message)) { c.orfao = {em: Date.now(), msg: err.message}; safeStorage.set(k, JSON.stringify(c)); continue; }
+      nvErroCofres = `“${c.nome || 'outra fazenda'}”: ${err.message}`;
+    }
   }
   if (recusados) showToast(`${recusados} ${recusados === 1 ? 'alteração de outra fazenda não foi aceita' : 'alterações de outra fazenda não foram aceitas'} pelo seu nível de acesso.`, true);
   return enviados;
@@ -627,16 +647,27 @@ function nvSair() {
   $('[data-sair-apagar]', dialog).onclick = () => { closeModal(); nvSairDe(true); };
   modal.classList.add('open');
 }
-async function nvSairDe(apagar) {
-  if (nvVinculado() && navigator.onLine !== false) { showToast('Enviando os dados para a nuvem…'); await nvSincronizar(); }
-  const faltam = nvFaltamEnviar();
+async function nvSairDe(apagar, orfaosOk = false) {
+  if ((nvVinculado() || (nv.sessao && nvPendentesCofres())) && navigator.onLine !== false) { showToast('Enviando os dados para a nuvem…'); await nvSincronizar(); }
+  const faltam = nvFaltamEnviar(), orfaos = apagar && !orfaosOk ? nvCofresOrfaos() : [], nOrf = orfaos.reduce((t, o) => t + o.n, 0);
+  // Dados de fazenda que não existe mais (ou sem acesso): não há como enviar — o usuário decide (baixar cópia e/ou apagar)
+  if (!faltam && orfaos.length) {
+    dialog.innerHTML = `<h3>Dados de uma fazenda sem acesso</h3><p>Este aparelho guarda ${esc(nvTextoOrfaos(orfaos))} que não ${nOrf === 1 ? 'pode ser enviada' : 'podem ser enviadas'}: a fazenda não existe mais na nuvem ou o seu usuário não tem mais acesso a ela.</p>
+      <p class="nota">Se quiser guardar, baixe uma cópia antes. Ao continuar, esses dados são apagados deste aparelho.</p>
+      <div class="actions" style="flex-wrap:wrap"><button class="secondary" data-close>Cancelar</button><button class="secondary" data-baixar>Baixar cópia</button><button class="danger" data-seguir>Apagar e sair</button></div>`;
+    $('[data-close]', dialog).onclick = closeModal;
+    $('[data-baixar]', dialog).onclick = () => orfaos.forEach(o => nvBaixarOrfao(o.k));
+    $('[data-seguir]', dialog).onclick = () => { closeModal(); nvSairDe(apagar, true); };
+    modal.classList.add('open');
+    return;
+  }
   if (faltam) {
     const qtd = `${faltam} ${faltam === 1 ? 'alteração ainda não foi enviada' : 'alterações ainda não foram enviadas'}`;
     dialog.innerHTML = `<h3>Dados ainda não enviados</h3><p>${qtd} para a nuvem (sem internet ou servidor fora do ar).</p>
       <p class="nota">${apagar ? 'Os dados só podem ser apagados deste aparelho depois de enviados. Conecte à internet e tente de novo.' : 'Se sair agora, elas ficam guardadas neste aparelho e são enviadas automaticamente no próximo login com internet.'}</p>
       <div class="actions" style="flex-wrap:wrap"><button class="secondary" data-close>Cancelar</button>${apagar ? '' : '<button class="secondary" data-sair>Sair mesmo assim</button>'}<button class="primary" data-tentar>Tentar enviar de novo</button></div>`;
     $('[data-close]', dialog).onclick = closeModal;
-    $('[data-tentar]', dialog).onclick = () => { closeModal(); nvSairDe(apagar); };
+    $('[data-tentar]', dialog).onclick = () => { closeModal(); nvSairDe(apagar, orfaosOk); };
     const s = $('[data-sair]', dialog); if (s) s.onclick = () => { closeModal(); nvFinalizarSaida(false); };
     modal.classList.add('open');
     return;
@@ -981,7 +1012,8 @@ const nvMudarNivel = (id, papel) => nvComOcupado(async () => {
 function nvTextoStatus() {
   const outras = nvPendentesCofres(), deOutras = outras ? ` • ${outras} de outras fazendas aguardando envio` : '';
   const pend = nvVinculado() ? nvPendentes().length : 0, aguardando0 = pend ? ` • ${pend} ${pend === 1 ? 'alteração aguardando envio' : 'alterações aguardando envio'}` : '';
-  const aguardando = aguardando0 + deOutras + (nvErroCofres ? ` • ⚠ ${nvErroCofres}` : '');
+  const orf = nvCofresOrfaos(), nOrf = orf.reduce((t, o) => t + o.n, 0), txtOrf = orf.length ? ` • ⚠ ${nvTextoOrfaos(orf)} não ${nOrf === 1 ? 'pode ser enviada' : 'podem ser enviadas'} (fazenda excluída ou sem acesso)` : '';
+  const aguardando = aguardando0 + deOutras + (nvErroCofres ? ` • ⚠ ${nvErroCofres}` : '') + txtOrf;
   if (nvStatus === 'sincronizando') return 'Sincronizando…';
   if (nvStatus === 'erro') return '⚠ ' + nvErro + aguardando;
   if (nvStatus === 'offline' || navigator.onLine === false) return 'Sem internet: as alterações ficam guardadas e sobem sozinhas quando o sinal voltar' + aguardando;
@@ -992,13 +1024,14 @@ function nvMostrar() {
   $$('[data-act^="nv-"], [data-nv-nivel]').forEach(b => { b.disabled = nvOcupado; });
 }
 
+const htmlOrfaos = () => nvCofresOrfaos().map(o => `<div class="nv-orfao"><span>⚠ ${esc(nvTextoOrfaos([o]))}: a fazenda não existe mais na nuvem ou você não tem acesso a ela.</span><span class="btn-row"><button class="secondary" data-act="nv-orfao-baixar" data-id="${esc(o.k)}">Baixar cópia</button><button class="danger" data-act="nv-orfao-descartar" data-id="${esc(o.k)}">Descartar</button></span></div>`).join('');
 function cartaoNuvem() {
   const titulo = '<h3>Nuvem da equipe</h3>';
-  if (!nvVinculado()) return nv.sysadm && nv.sessao ? cartaoConta() + cartaoSistema() : '';
+  if (!nvVinculado()) { const orf = nv.sessao ? htmlOrfaos() : ''; return (orf ? `<article class="card panel"><h3>Dados guardados neste aparelho</h3>${orf}</article>` : '') + (nv.sysadm && nv.sessao ? cartaoConta() + cartaoSistema() : ''); }
   const papel = nvPapel();
   return `<article class="card panel">${titulo}
     <p>Fazenda <b>${esc(nv.fazenda.name)}</b> • ${esc(nvMostrarLogin(nv.sessao.email))} • nível <b>${NV_NIVEIS[papel] || papel}</b></p>
-    <p class="nota" id="nvStatus">${esc(nvTextoStatus())}</p>
+    <p class="nota" id="nvStatus">${esc(nvTextoStatus())}</p>${htmlOrfaos()}
     <div class="btn-row" style="margin-top:10px">${papel === 'member' ? '' : btn('Trocar de fazenda', 'nv-trocar', '', 'secondary')}${btn('Sair da conta', 'nv-sair', '', 'secondary')}</div>
     ${papel === 'member' ? '<p class="nota">Como Usuário comum, você lança os registros do dia a dia e edita só o que você lançou. Exclusões e o financeiro ficam com o supervisor e o ADM.</p>' : '<p class="nota">Quando o mesmo registro é alterado em dois aparelhos sem internet, vale a alteração mais recente; lançamentos de estoque dos dois lados são somados ao saldo.</p>'}</article>
     ${cartaoConta()}
@@ -1060,6 +1093,8 @@ function nvAntesDeTrocar() {
   return false;
 }
 Object.assign(ACTIONS, {
+  'nv-orfao-baixar': k => nvBaixarOrfao(k),
+  'nv-orfao-descartar': k => confirmDialog('Descartar os dados guardados desta fazenda neste aparelho? Eles não podem ser enviados para a nuvem. Se quiser guardar, baixe uma cópia antes.', () => { safeStorage.del(k); showToast('Dados descartados deste aparelho'); render(); }, 'Descartar'),
   'nv-entrar': nvEntrar, 'nv-sair': nvSair, 'nv-nova': nvCriarFazenda,
   'nv-usar': id => { const f = (nvFazendas || []).find(x => x.id === id); if (f) nvVincular(f); },
   'nv-trocar': () => confirmDialog(`Trocar de fazenda? Os dados de “${nv.fazenda?.name}” ficam guardados neste aparelho${nvFaltamEnviar() ? ' e o que ainda não subiu é enviado para ela assim que houver internet' : ''}.`, () => { if (!nvFecharDados()) return; nvEsquecerFazenda(); nvTodas = null; nvSalvar(); nvPortao(); render(); if (nv.sysadm) go('cadastros'); }, 'Trocar'),
