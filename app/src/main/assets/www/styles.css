@@ -1135,3 +1135,4 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
   .cd-medidas{grid-template-columns:1fr}.cd-local{display:none}
 }
 .clima-topo>*,.clima-destaque>*,.cd-semana,.cd-medida>div{min-width:0}
+.nv-orfao{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;padding:10px 12px;margin:8px 0;border-radius:10px;background:rgba(224,90,90,.1);color:var(--text);font-size:.88rem}
