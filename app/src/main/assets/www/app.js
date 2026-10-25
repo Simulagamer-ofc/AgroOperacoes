@@ -1141,7 +1141,7 @@ function render(anchor = pendingAnchor) {
   if (h2 && igual(h2.textContent) === igual($('#viewTitle').textContent)) h2.classList.add('repetido');
   // Linha pequena acima do título (padrão das prévias): o grupo do menu da tela — ex.: “Grãos e sementes”
   if (h2) { let g = $('.sidebar .nav [data-route].active'); while (g && !g.classList.contains('nav-grupo')) g = g.previousElementSibling;
-    const txt = g?.textContent.replace(/[▾▸▼►]/g, '').trim(); if (txt) h2.insertAdjacentHTML('beforebegin', `<span class="eyebrow">${esc(txt.charAt(0) + txt.slice(1).toLowerCase())}</span>`); }
+    const ext = view.querySelector('.view-head')?.dataset.eyebrow, txt = ext || g?.textContent.replace(/[▾▸▼►]/g, '').trim(); if (txt) h2.insertAdjacentHTML('beforebegin', `<span class="eyebrow">${esc(ext || txt.charAt(0) + txt.slice(1).toLowerCase())}</span>`); }
 }
 const semAcentoApp = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 // Menus "⋯ Mais": fecham ao tocar fora ou ao escolher uma opção
