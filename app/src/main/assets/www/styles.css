@@ -1069,3 +1069,32 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 :root.modo-campo .sidebar .hex-icone .glifo{stroke:#000}
 :root[data-theme="light"]:not(.modo-campo) :is(.atencao,.clima-t,.clima-max,.txt-laranja,small.nao,.chip.sit-orange,.chip.orange,.conf-selo.orange,.conf-al.orange){color:#b45309}
 :root[data-theme="light"]:not(.modo-campo) .clima-min{color:#15803d}
+
+/* =================== Etapa 1 do padrão das prévias: base visual do tema Claro (padrão) =================== */
+.eyebrow{display:none}
+.sidebar-paisagem{display:none}
+:root[data-theme="light"]:not(.modo-campo){--bg:#f4f7f6;--line:#e3e8e6}
+:root[data-theme="light"] .eyebrow{display:block;font-size:.95rem;color:var(--muted);margin:0 0 2px;font-weight:500}
+:root[data-theme="light"] .content .card,:root[data-theme="light"] .content .panel{border:1px solid var(--line);border-radius:16px;box-shadow:0 1px 3px rgba(16,42,60,.05)}
+:root[data-theme="light"] .content button.secondary,:root[data-theme="light"] .dialog button.secondary,:root[data-theme="light"] .view-head .btns button:not(.primary){background:#fff;border:1px solid var(--line);color:var(--text)}
+:root[data-theme="light"] .content button.secondary:hover,:root[data-theme="light"] .view-head .btns button:not(.primary):hover{border-color:var(--blue);color:var(--blue)}
+:root[data-theme="light"] .topbar .search input{background:var(--bg);border-color:transparent}
+:root[data-theme="light"] .mobile-nav{background:#fff;border-top:1px solid var(--line);box-shadow:0 -2px 10px rgba(16,42,60,.05)}
+:root[data-theme="light"] .mobile-nav button{color:var(--muted)}
+:root[data-theme="light"] .mobile-nav button.active{color:var(--green);font-weight:700}
+/* Rodapé do menu com a paisagem (só no Claro) */
+:root[data-theme="light"]:not(.modo-campo) .sidebar-paisagem{display:block;margin:22px -14px 0;position:relative;color:var(--muted);font-size:.85rem;line-height:1.35}
+.sidebar-paisagem svg{display:block;width:100%;height:84px}
+.sidebar-paisagem p{margin:8px 16px 4px;max-width:170px}
+.app:not(.nx-home) .sidebar-paisagem + .sidebar-foot,.sidebar-paisagem + .sidebar-foot{margin-top:10px}
+@media(min-width:761px){
+  /* Título da tela no conteúdo, como nas prévias: linha pequena + título grande + descrição (a barra do topo fica só com busca e avisos) */
+  :root[data-theme="light"] .app:not(.nx-home) .topbar > div:has(#viewTitle){display:none}
+  :root[data-theme="light"] .app:not(.nx-home) .topbar{min-height:64px}
+  :root[data-theme="light"] .view-head h2.repetido{display:block}
+  :root[data-theme="light"] .view-head h2{font-size:1.9rem;letter-spacing:-.01em;margin:0 0 6px;color:#0f1d2b}
+  :root[data-theme="light"] .view-head p{font-size:1rem}
+}
+@media(max-width:760px){:root[data-theme="light"] .eyebrow:has(+ h2.repetido){display:none}}
+:root[data-theme="light"]:not(.modo-campo) .filters button.active{background:var(--green);border-color:var(--green);color:#fff}
+:root[data-theme="light"] .filters button:not(.active){background:#fff}
