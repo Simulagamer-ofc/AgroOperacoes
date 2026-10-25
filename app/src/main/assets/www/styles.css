@@ -1208,3 +1208,13 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 .cfg-foco{animation:cfgFoco 1.6s ease}
 @keyframes cfgFoco{0%,40%{box-shadow:0 0 0 3px var(--green)}100%{box-shadow:none}}
 @media(max-width:760px){.cfg-menu{grid-template-columns:1fr}}
+/* Olho dos valores de gastos (tela inicial) */
+.ini-olho{flex:none;width:38px;height:38px;display:grid;place-items:center;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--muted);cursor:pointer;padding:0;margin-left:auto}
+.ini-olho svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ini-olho:hover{color:var(--green);border-color:var(--green)}
+.ini-kpi-fin{cursor:pointer}
+.ini-tit-acoes{display:flex;align-items:center;gap:10px}.ini-tit-acoes .ini-olho{width:32px;height:32px}
+.ini-kpi-fin{position:relative}
+.ini-kpi-fin .ini-olho{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:8px}
+.ini-kpi-fin b{font-size:clamp(1.1rem,1.45vw,1.65rem)!important;overflow:visible!important;text-overflow:clip!important;white-space:nowrap}
+.ini-kpi-fin>span:nth-of-type(2){min-width:0;padding-right:26px}
