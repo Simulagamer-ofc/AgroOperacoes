@@ -565,7 +565,7 @@ function fluxoGraos(atual) {
     ['moega', 'Moega', hoje.length ? `${hoje.length} ${hoje.length === 1 ? 'carga' : 'cargas'} hoje` : 'Nenhuma carga hoje', [hoje.length ? kgT(hoje.reduce((a, r) => a + (r.calc?.pesoFinal || 0), 0)) + ' recebidas' : '', patio ? `${patio} no pátio aguardando tara` : ''].filter(Boolean).join(' • ')],
     ['secador', 'Secador', abertas.length ? `Secando ${abertas.map(l => { const u = ultLeit(l); return nomeProd(l.produto, l.produtoNome).toLowerCase() + (numOuU(u?.umidade) != null ? ' a ' + n1(u.umidade) + '%' : ''); }).join(', ')}` : 'Parado', espera.length ? `${espera.length} ${espera.length === 1 ? 'carga' : 'cargas'} da moega esperando (${kgT(kgEsp)})` : 'Nenhuma carga esperando'],
     ['silos', 'Silos', silos.length ? `${kgT(saldo)} armazenadas` : 'Nenhum silo cadastrado', cheio ? 'Silo acima da capacidade' : cap ? `${n0(saldo / cap * 100)}% da capacidade` : '']];
-  return `<nav class="fluxo-graos" aria-label="Etapas do grão">${etapas.map(([a, nome, linha1, linha2], k) => `${k ? '<span class="fluxo-seta" aria-hidden="true">→</span>' : ''}<button class="fluxo-etapa ${a === atual ? 'atual' : ''} ${a === 'silos' && cheio ? 'alerta' : ''}" data-act="nav" data-id="graos/${a}"${a === atual ? ' aria-current="page"' : ''}><small>${k + 1}. ${nome}</small><b>${esc(linha1)}</b>${linha2 ? `<span>${esc(linha2)}</span>` : ''}</button>`).join('')}</nav>`;
+  return `<nav class="fluxo-graos" aria-label="Etapas do grão">${etapas.map(([a, nome, linha1, linha2], k) => `${k ? '<span class="fluxo-seta" aria-hidden="true">→</span>' : ''}<button class="fluxo-etapa ${a === atual ? 'atual' : ''} ${a === 'silos' && cheio ? 'alerta' : ''}" data-act="nav" data-id="graos/${a}"${a === atual ? ' aria-current="page"' : ''}>${window.iconeMenu ? `<span class="fluxo-ic">${window.iconeMenu('graos/' + a, 38)}</span>` : ''}<small>${k + 1}. ${nome}</small><b>${esc(linha1)}</b>${linha2 ? `<span>${esc(linha2)}</span>` : ''}</button>`).join('')}</nav>`;
 }
 VIEWS.graos = arg => {
   carregarRegrasGraos();
@@ -593,12 +593,40 @@ function telaPainelGraos() {
   const abertas = db.lotesSecagem.filter(l => l.status === 'Em andamento'), espera = cargasEsperando();
   const silos = equipDoTipo('Silo/Armazém');
   return `<section class="kpis graos-kpis">
-      <article class="card kpi"><div class="label">Recebido hoje</div><div class="value">${kgT(soma(hoje))}</div><div class="hint">${hoje.length} ${hoje.length === 1 ? 'carga' : 'cargas'} • ${sacas(soma(hoje))}</div></article>
+      <article class="card kpi kpi-destaque"><div class="label">Recebido hoje</div><div class="value">${kgT(soma(hoje))}</div><div class="hint">${hoje.length} ${hoje.length === 1 ? 'carga' : 'cargas'} • ${sacas(soma(hoje))}</div>${sf ? `<span class="kpi-safra">Safra ${esc(sf)}</span>` : ''}</article>
       <article class="card kpi"><div class="label">Recebido ${sf ? 'na safra ' + esc(sf) : 'no total'}</div><div class="value">${kgT(soma(safra))}</div><div class="hint">${sacas(soma(safra))} líquidas e limpas</div></article>
       <article class="card kpi"><div class="label">Esperando secagem</div><div class="value">${kgT(espera.reduce((s, r) => s + (r.calc?.liquido || 0), 0))}</div><div class="hint">${espera.length} ${espera.length === 1 ? 'carga' : 'cargas'}</div></article>
       <article class="card kpi"><div class="label">Nos silos</div><div class="value">${kgT(silos.reduce((s, m) => s + saldoSilo(m).saldo, 0))}</div><div class="hint">${silos.length} ${silos.length === 1 ? 'silo' : 'silos'}</div></article></section>
+    ${blocoAguardandoAcao()}
     <div class="section-title"><h3>Secagem agora</h3></div>${abertas.length ? abertas.map(cartaoLote).join('') : `<section class="card panel"><p class="nota" style="margin:0">Nenhuma secagem em andamento.${espera.length ? ` ${espera.length} ${espera.length === 1 ? 'carga espera' : 'cargas esperam'} o secador.` : ''}</p>${espera.length ? `<div class="btn-row" style="margin-top:10px">${btn('Iniciar secagem', 'gr-secar')}</div>` : ''}</section>`}
     <div class="section-title"><h3>Silos</h3><button data-act="nav" data-id="graos/silos">Ver silos</button></div>${silos.length ? `<section class="silos-grade">${silos.map(cartaoSilo).join('')}</section>` : semEquip('Silo/Armazém')}`;
+}
+// “Aguardando ação” (padrão das prévias): o que precisa de alguém agora na unidade de grãos, do mais urgente ao menos
+function acoesGraos() {
+  const l = [], hora = (d, t) => d === today() ? (t || '') : fmtDate(d || today()).slice(0, 5);
+  noPatio().forEach(p => l.push({nivel: 1, ic: 'graos/moega', tit: `Caminhão ${p.placa || ''}`.trim(), sub: 'No pátio aguardando a pesagem de saída (tara)', quando: hora(p.date, p.time), rota: 'graos/moega'}));
+  const esp = cargasEsperando(); if (esp.length) l.push({nivel: 1, ic: 'graos/secador', tit: `${esp.length} ${esp.length === 1 ? 'carga espera' : 'cargas esperam'} o secador`, sub: `${kgT(esp.reduce((a, r) => a + (r.calc?.liquido || 0), 0))} úmidas na moega`, quando: '', rota: 'graos/secador'});
+  db.lotesSecagem.filter(x => x.status === 'Em andamento').forEach(x => {
+    const ult = (x.leituras || []).at(-1), fora = ult?.aval?.find(a => a.status === 'FORA_DO_PADRAO'), sem = ult ? horasEntre(ult.em, agoraISO()) : horasEntre(x.inicio, agoraISO());
+    if (fora) l.push({nivel: 0, ic: 'graos/secador', tit: nomeEquip(x.secadorId), sub: 'Temperatura fora da referência', quando: ult?.em ? hhmmISO(ult.em) : '', rota: 'graos/lote/' + x.id});
+    else if (sem > 2) l.push({nivel: 1, ic: 'graos/secador', tit: nomeEquip(x.secadorId), sub: `Sem leitura há ${um1(sem)} h`, quando: '', rota: 'graos/lote/' + x.id});
+  });
+  equipDoTipo('Silo/Armazém').forEach(m => {
+    const sd = saldoSilo(m), tm = termometriaSilo(m.id);
+    if (sd.ocupacao != null && sd.ocupacao >= 90) l.push({nivel: sd.ocupacao > 100 ? 0 : 1, ic: 'graos/silos', tit: m.name, sub: sd.ocupacao > 100 ? 'Acima da capacidade' : `Atingiu ${n0(sd.ocupacao)}% da capacidade`, quando: '', rota: 'graos/silos'});
+    if (tm?.subindo.length) l.push({nivel: 0, ic: 'graos/silos', tit: m.name, sub: `Temperatura subindo: ${tm.subindo.map(c => `cabo ${c.cabo} +${n1(c.dif)} °C`).join(', ')}`, quando: tm.ult?.time || '', rota: 'graos/silos'});
+  });
+  if (typeof pmSituacao === 'function') equipDoTipo('Secador').concat(equipDoTipo('Moega'), equipDoTipo('Silo/Armazém')).forEach(m => (m.plano || []).forEach(t => {
+    const st = pmSituacao(m, t); if (st.nivel === 'vencida' && !st.aberta) l.push({nivel: 1, ic: 'maquinas', tit: m.name, sub: `Manutenção vencida: ${t.nome}`, quando: '', rota: m.type === 'Moega' ? 'graos/moega' : m.type === 'Secador' ? 'graos/secador' : 'graos/silos'});
+  }));
+  return l.sort((a, b) => a.nivel - b.nivel);
+}
+const hhmmISO = iso => { const d = new Date(iso); return isNaN(d) ? '' : `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; };
+function blocoAguardandoAcao() {
+  const l = acoesGraos();
+  return `<section class="card panel acao-lista"><div class="section-title" style="margin:0 0 6px"><h3>Aguardando ação</h3>${l.length ? `<small class="nota">${l.length} ${l.length === 1 ? 'item' : 'itens'}</small>` : ''}</div>
+    ${l.length ? l.slice(0, 8).map(x => `<button type="button" class="acao-item ${x.nivel === 0 ? 'urgente' : ''}" data-act="nav" data-id="${esc(x.rota)}"><span class="acao-ic">${window.iconeMenu ? window.iconeMenu(x.ic, 34) : ''}</span><span class="acao-txt"><b>${esc(x.tit)}</b><small>${esc(x.sub)}</small></span>${x.quando ? `<small class="acao-hora">${esc(x.quando)}</small>` : ''}<span class="acao-seta" aria-hidden="true">›</span></button>`).join('')
+      : '<p class="nota" style="margin:0">✓ Nada esperando: pátio, secador e silos em dia.</p>'}</section>`;
 }
 function cartaoLote(l) {
   const c = calcSecagem(l), ult = (l.leituras || []).at(-1), fora = ult?.aval?.find(a => a.status === 'FORA_DO_PADRAO');

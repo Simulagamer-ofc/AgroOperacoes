@@ -1136,3 +1136,20 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 }
 .clima-topo>*,.clima-destaque>*,.cd-semana,.cd-medida>div{min-width:0}
 .nv-orfao{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;padding:10px 12px;margin:8px 0;border-radius:10px;background:rgba(224,90,90,.1);color:var(--text);font-size:.88rem}
+/* =================== Grãos no padrão das prévias =================== */
+.fluxo-etapa .fluxo-ic{display:block;margin-bottom:6px}
+@media(min-width:761px){.fluxo-etapa{display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;text-align:left}.fluxo-etapa .fluxo-ic{grid-row:1/4;margin:0}}
+.kpi-destaque{position:relative;background:linear-gradient(135deg,color-mix(in srgb,var(--green) 16%,var(--panel)),var(--panel));border-color:color-mix(in srgb,var(--green) 35%,var(--line))!important}
+.kpi-destaque .value{color:var(--green);font-size:2.1rem}
+.kpi-safra{display:inline-block;margin-top:8px;font-size:.75rem;font-weight:700;color:var(--green);background:color-mix(in srgb,var(--green) 12%,transparent);padding:4px 9px;border-radius:999px}
+.acao-lista{margin:14px 0}
+.acao-item{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:12px;align-items:center;width:100%;text-align:left;padding:11px 4px;border:0;border-top:1px solid var(--line);background:transparent;color:var(--text);font:inherit;cursor:pointer}
+.acao-item:first-of-type{border-top:0}.acao-item b{display:block}.acao-item small{display:block;color:var(--muted)}.acao-hora{font-size:.8rem}.acao-seta{font-size:1.4rem;color:var(--muted)}
+.acao-item.urgente b{color:var(--red)}
+.acao-item:hover{background:color-mix(in srgb,var(--blue) 6%,transparent)}
+/* Ícones hexagonais dentro do conteúdo no tema Claro: desenho escuro (o branco some no fundo claro) */
+:root[data-theme="light"] .content .hex-icone .glifo{stroke:#1d3a30}
+:root[data-theme="light"] .content .hex-icone .hex{fill:rgba(31,157,99,.08);stroke:#1f9d63}
+:root[data-theme="light"] .content .hex-icone.azul .hex{fill:rgba(37,119,214,.08);stroke:#2577d6}
+:root[data-theme="light"] .content .hex-icone{filter:none}
+.acao-lista .section-title{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
