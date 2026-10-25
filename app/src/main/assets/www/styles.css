@@ -1153,3 +1153,18 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 :root[data-theme="light"] .content .hex-icone.azul .hex{fill:rgba(37,119,214,.08);stroke:#2577d6}
 :root[data-theme="light"] .content .hex-icone{filter:none}
 .acao-lista .section-title{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+/* =================== Estoque no padrão das prévias =================== */
+.es-repor{display:flex;gap:14px;align-items:center;width:100%;text-align:left;border-radius:16px;padding:16px 18px;margin:0 0 14px;cursor:pointer;font:inherit;border:1px solid #f6d3a6;background:#fff1df;color:#5a3305}
+.es-repor.baixo{border-color:#f5c09e;background:#ffe9da}
+.es-repor strong{display:block;font-size:1.05rem;color:#c2410c}.es-repor small{display:block;margin-top:3px;opacity:.85}.es-repor-ic{font-size:28px}
+:root[data-theme="dark"] .es-repor{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.35);color:var(--text)}:root[data-theme="dark"] .es-repor strong{color:#f5b843}
+.es-cat-ic{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:color-mix(in srgb,var(--green) 11%,transparent);color:var(--green)}
+.es-topo>div:not(.es-topo-dir){flex:1;min-width:0}
+.es-cat-ic .ic-linha{stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.es-movs{margin:14px 0}
+.es-leg{display:flex;gap:16px;font-size:.84rem;color:var(--muted);margin-bottom:8px}.es-leg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.es-leg .ent,.es-par .ent{background:var(--green)}.es-leg .sai,.es-par .sai{background:var(--blue)}
+.es-barras{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:end;height:150px;border-bottom:1px solid var(--line);padding-bottom:4px}
+.es-col{display:grid;justify-items:center;gap:6px}.es-col small{color:var(--muted);font-size:.75rem}
+.es-par{display:flex;gap:5px;align-items:flex-end;height:124px}.es-par span{width:16px;border-radius:5px 5px 0 0;min-height:2px}
+.es-tot{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.es-tot div{background:var(--bg);border-radius:12px;padding:12px 14px}.es-tot small{display:block;color:var(--muted)}.es-tot b{font-size:1.35rem}.es-tot b.ent{color:var(--green)}.es-tot b.sai{color:var(--blue)}

@@ -44,10 +44,30 @@ function lotesVencendo() {
   return db.stock.flatMap(s => lotesDoItem(s.id).filter(l => l.validade && diasAte(l.validade) <= AVISO_VALIDADE_DIAS).map(l => ({s, ...l, dias: diasAte(l.validade)})));
 }
 
+// Ícone de linha pela categoria do item (padrão das prévias)
+const ICONE_CAT_EST = {'Combustível': 'combustivel', 'Lubrificante': 'combustivel', 'Defensivo': 'frasco', 'Fertilizante': 'espiga', 'Corretivo': 'espiga', 'Semente': 'sementes', 'Peças': 'engrenagem', 'Peça': 'engrenagem'};
+const iconeCatEst = c => typeof iconeLinha === 'function' ? iconeLinha(ICONE_CAT_EST[c] || (/semente/i.test(c || '') ? 'sementes' : /pe[çc]a/i.test(c || '') ? 'engrenagem' : 'estoque'), 22) : '';
+// Faixa “itens para repor” no topo (padrão das prévias): abaixo do mínimo ou perto dele
+function estAvisoRepor(baixos, pertos) {
+  const n = baixos.length + pertos.length; if (!n) return '';
+  return `<button type="button" class="es-repor ${baixos.length ? 'baixo' : ''}" data-act="${typeof abrirListaCompras === 'function' ? 'compras' : 'est-cat'}" data-id=""><span class="es-repor-ic" aria-hidden="true">⚠️</span><span><strong>${n} ${n === 1 ? 'item para repor' : 'itens para repor'}</strong><small>${esc([...baixos, ...pertos].slice(0, 4).map(s => s.name).join(', '))}${n > 4 ? '…' : ''} • toque para ver a lista de compras</small></span><span class="cd-seta" aria-hidden="true">›</span></button>`;
+}
+// Entradas e saídas dos últimos 30 dias, em valor (R$), por semana
+function estGraficoMovs() {
+  const fim = today(), ini = addDias(fim, -29), movs = db.movements.filter(m => m.date >= ini && m.date <= fim && ['Entrada', 'Saída'].includes(m.kind));
+  if (!movs.length) return '';
+  const grupos = [0, 1, 2, 3, 4].map(k => { const a = addDias(ini, k * 6), b = k === 4 ? fim : addDias(ini, k * 6 + 5); const ms = movs.filter(m => m.date >= a && m.date <= b), soma = kind => ms.filter(m => m.kind === kind).reduce((t, m) => t + (Number(m.value) || 0), 0); return {a, b, ent: soma('Entrada'), sai: soma('Saída')}; });
+  const max = Math.max(1, ...grupos.flatMap(g => [g.ent, g.sai])), H = 120, totE = grupos.reduce((t, g) => t + g.ent, 0), totS = grupos.reduce((t, g) => t + g.sai, 0);
+  const curto = v => v >= 1e6 ? num(v / 1e6, 1) + ' mi' : v >= 1e3 ? num(v / 1e3, 0) + ' mil' : num(v, 0);
+  return `<article class="card panel es-movs"><div class="section-title" style="margin:0 0 10px"><h3>Entradas e saídas</h3><small class="nota">últimos 30 dias, em R$</small></div>
+    <div class="es-leg"><span><i class="ent"></i>Entradas</span><span><i class="sai"></i>Saídas</span></div>
+    <div class="es-barras" role="img" aria-label="Entradas ${brl(totE)} e saídas ${brl(totS)} nos últimos 30 dias">${grupos.map(g => `<div class="es-col"><div class="es-par"><span class="ent" style="height:${Math.round(g.ent / max * H)}px" title="Entradas ${brl(g.ent)}"></span><span class="sai" style="height:${Math.round(g.sai / max * H)}px" title="Saídas ${brl(g.sai)}"></span></div><small>${fmtDate(g.a).slice(0, 5)}</small></div>`).join('')}</div>
+    <div class="es-tot"><div><small>Total de entradas</small><b class="ent">R$ ${curto(totE)}</b></div><div><small>Total de saídas</small><b class="sai">R$ ${curto(totS)}</b></div></div></article>`;
+}
 function cartaoItem(s) {
   const n = nivelEstoque(s), cm = custoMedio(s), v = valorItem(s);
   return `<article class="card es-item" id="item-${esc(s.id)}">
-    <div class="es-topo"><div><strong>${esc(s.name)}</strong><small>${esc([s.category, s.classe, s.location].filter(Boolean).join(' • ') || 'Sem categoria')}</small>${(() => { const d = [s.principioAtivo, s.cultivar, typeof textoEmbalagem === 'function' ? textoEmbalagem(s) : '', s.carencia !== '' && s.carencia != null ? `carência ${num(s.carencia)} d` : '', s.germinacao ? `germ. ${num(s.germinacao)}%` : ''].filter(Boolean); return d.length ? `<small class="es-ficha">${esc(d.join(' • '))}</small>` : ''; })()}</div>
+    <div class="es-topo"><span class="es-cat-ic">${iconeCatEst(s.category)}</span><div><strong>${esc(s.name)}</strong><small>${esc([s.category, s.classe, s.location].filter(Boolean).join(' • ') || 'Sem categoria')}</small>${(() => { const d = [s.principioAtivo, s.cultivar, typeof textoEmbalagem === 'function' ? textoEmbalagem(s) : '', s.carencia !== '' && s.carencia != null ? `carência ${num(s.carencia)} d` : '', s.germinacao ? `germ. ${num(s.germinacao)}%` : ''].filter(Boolean); return d.length ? `<small class="es-ficha">${esc(d.join(' • '))}</small>` : ''; })()}</div>
       <div class="es-topo-dir">${chip(n.rotulo, n.cor)}<details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">
         <button data-act="nav" data-id="estoque/${esc(s.id)}">Extrato e lotes</button><button data-act="st-ajuste" data-id="${esc(s.id)}">⇄ Ajuste de inventário</button><button data-act="st-edit" data-id="${esc(s.id)}">Editar item</button><button class="del" data-act="st-del" data-id="${esc(s.id)}">Excluir</button></div></details></div></div>
     <div class="es-saldo"><b>${num(s.qty)}</b><span>${esc(s.unit)}</span></div>
@@ -87,13 +107,14 @@ VIEWS.estoque = arg => {
   const nomes = l => l.map(s => s.name).join(', ');
   return head('Estoque e insumos', `${db.stock.length} itens • valores pelo custo médio das entradas`, (typeof listaCompras === 'function' ? btn('Lista de compras', 'compras', '', 'secondary') : '') + btn('Importar NF-e (XML)', 'nfe-abrir', '', 'secondary') + btn('Inventário', 'nav', 'estoque/inventario', 'secondary') + btn('Movimentar', 'mov-new', '', 'secondary') + btn('+ Novo item', 'st-new')) +
     (() => { const v = lotesVencendo(); return v.length ? `<div class="es-validade-aviso">⚠ ${v.length} ${v.length === 1 ? 'lote vencido ou vencendo' : 'lotes vencidos ou vencendo'} em até ${AVISO_VALIDADE_DIAS} dias: ${esc(v.slice(0, 4).map(x => `${x.s.name} (lote ${x.lote}, ${x.dias < 0 ? 'vencido' : fmtDate(x.validade)})`).join('; '))}</div>` : ''; })() +
-    `<section class="es-kpis">
+    estAvisoRepor(baixos, pertos) + `<section class="es-kpis">
       <article class="card kpi"><div class="label">Valor em estoque</div><div class="value">${brl(total)}</div><div class="hint">${semCusto ? `${semCusto} ${semCusto === 1 ? 'item' : 'itens'} sem custo registrado` : 'custo médio × saldo'}</div></article>
       <article class="card kpi ${baixos.length ? 'alerta' : ''}"><div class="label">Abaixo do mínimo</div><div class="value">${baixos.length ? '! ' : ''}${baixos.length}</div><div class="hint">${esc(nomes(baixos) || 'nenhum item')}</div></article>
       <article class="card kpi ${pertos.length ? 'aviso' : ''}"><div class="label">Perto do mínimo</div><div class="value">${pertos.length}</div><div class="hint">${esc(nomes(pertos) || 'até 50% acima do mínimo')}</div></article>
       <article class="card kpi"><div class="label">Saídas no mês</div><div class="value">${brl(valorSaidas)}</div><div class="hint">${saidasMes.length} ${saidasMes.length === 1 ? 'saída' : 'saídas'}${saidasSemCusto ? ` • ${saidasSemCusto} sem custo` : ''}</div></article>
     </section>
     ${typeof painelEstoque === 'function' ? painelEstoque() : ''}
+    ${estGraficoMovs()}
     <div class="cat-busca"><span aria-hidden="true">⌕</span><input id="estQ" type="search" value="${esc(estBusca)}" placeholder="Buscar item ou local" aria-label="Buscar no estoque"></div>
     <div class="filters" role="group" aria-label="Categoria"><button class="${!estCat ? 'active' : ''}" data-act="est-cat" data-id="">Todos (${db.stock.length})</button>${cats.map(c => `<button class="${estCat === c ? 'active' : ''}" data-act="est-cat" data-id="${esc(c)}">${esc(c)} (${db.stock.filter(s => (s.category || 'Outro') === c).length})</button>`).join('')}</div>
     <div id="esGrade">${gradeItens()}</div>
