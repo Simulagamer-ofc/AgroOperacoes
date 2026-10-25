@@ -341,8 +341,8 @@ body{background:var(--bg)}
   .hero .primary.hero-cta{right:14px;bottom:14px;min-width:0;height:46px;font-size:1rem;padding:0 16px}
   /* Primeiro uso: cartão “Carregar dados de exemplo” logo abaixo da faixa */
   #view:has([data-act=seed]){display:flex;flex-direction:column}
-  #view:has([data-act=seed])>*{order:2}#view:has([data-act=seed])>.hero{order:0}
-  #view:has([data-act=seed])>section:has([data-act=seed]){order:1;margin:0 0 14px!important}
+  #view:has(>.hero):has([data-act=seed])>*{order:2}#view:has(>.hero):has([data-act=seed])>.hero{order:0}
+  #view:has(>.hero):has([data-act=seed])>section:has([data-act=seed]){order:1;margin:0 0 14px!important}
   #view:has([data-act=seed])>.kpis.nexus{margin-bottom:0}
   #view:has([data-act=seed]) .empty{padding:20px 16px}
   /* Formulários longos: espaçamento menor */
@@ -1136,3 +1136,75 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 }
 .clima-topo>*,.clima-destaque>*,.cd-semana,.cd-medida>div{min-width:0}
 .nv-orfao{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between;padding:10px 12px;margin:8px 0;border-radius:10px;background:rgba(224,90,90,.1);color:var(--text);font-size:.88rem}
+/* =================== Grãos no padrão das prévias =================== */
+.fluxo-etapa .fluxo-ic{display:block;margin-bottom:6px}
+@media(min-width:761px){.fluxo-etapa{display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center;text-align:left}.fluxo-etapa .fluxo-ic{grid-row:1/4;margin:0}}
+.kpi-destaque{position:relative;background:linear-gradient(135deg,color-mix(in srgb,var(--green) 16%,var(--panel)),var(--panel));border-color:color-mix(in srgb,var(--green) 35%,var(--line))!important}
+.kpi-destaque .value{color:var(--green);font-size:2.1rem}
+.kpi-safra{display:inline-block;margin-top:8px;font-size:.75rem;font-weight:700;color:var(--green);background:color-mix(in srgb,var(--green) 12%,transparent);padding:4px 9px;border-radius:999px}
+.acao-lista{margin:14px 0}
+.acao-item{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:12px;align-items:center;width:100%;text-align:left;padding:11px 4px;border:0;border-top:1px solid var(--line);background:transparent;color:var(--text);font:inherit;cursor:pointer}
+.acao-item:first-of-type{border-top:0}.acao-item b{display:block}.acao-item small{display:block;color:var(--muted)}.acao-hora{font-size:.8rem}.acao-seta{font-size:1.4rem;color:var(--muted)}
+.acao-item.urgente b{color:var(--red)}
+.acao-item:hover{background:color-mix(in srgb,var(--blue) 6%,transparent)}
+/* Ícones hexagonais dentro do conteúdo no tema Claro: desenho escuro (o branco some no fundo claro) */
+:root[data-theme="light"] .content .hex-icone .glifo{stroke:#1d3a30}
+:root[data-theme="light"] .content .hex-icone .hex{fill:rgba(31,157,99,.08);stroke:#1f9d63}
+:root[data-theme="light"] .content .hex-icone.azul .hex{fill:rgba(37,119,214,.08);stroke:#2577d6}
+:root[data-theme="light"] .content .hex-icone{filter:none}
+.acao-lista .section-title{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+/* =================== Estoque no padrão das prévias =================== */
+.es-repor{display:flex;gap:14px;align-items:center;width:100%;text-align:left;border-radius:16px;padding:16px 18px;margin:0 0 14px;cursor:pointer;font:inherit;border:1px solid #f6d3a6;background:#fff1df;color:#5a3305}
+.es-repor.baixo{border-color:#f5c09e;background:#ffe9da}
+.es-repor strong{display:block;font-size:1.05rem;color:#c2410c}.es-repor small{display:block;margin-top:3px;opacity:.85}.es-repor-ic{font-size:28px}
+:root[data-theme="dark"] .es-repor{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.35);color:var(--text)}:root[data-theme="dark"] .es-repor strong{color:#f5b843}
+.es-cat-ic{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:color-mix(in srgb,var(--green) 11%,transparent);color:var(--green)}
+.es-topo>div:not(.es-topo-dir){flex:1;min-width:0}
+.es-cat-ic .ic-linha{stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.es-movs{margin:14px 0}
+.es-leg{display:flex;gap:16px;font-size:.84rem;color:var(--muted);margin-bottom:8px}.es-leg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.es-leg .ent,.es-par .ent{background:var(--green)}.es-leg .sai,.es-par .sai{background:var(--blue)}
+.es-barras{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:end;height:150px;border-bottom:1px solid var(--line);padding-bottom:4px}
+.es-col{display:grid;justify-items:center;gap:6px}.es-col small{color:var(--muted);font-size:.75rem}
+.es-par{display:flex;gap:5px;align-items:flex-end;height:124px}.es-par span{width:16px;border-radius:5px 5px 0 0;min-height:2px}
+.es-tot{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.es-tot div{background:var(--bg);border-radius:12px;padding:12px 14px}.es-tot small{display:block;color:var(--muted)}.es-tot b{font-size:1.35rem}.es-tot b.ent{color:var(--green)}.es-tot b.sai{color:var(--blue)}
+/* =================== Financeiro no padrão das prévias =================== */
+.fin-mes{display:grid;gap:14px}
+.fin-mes-nav{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.fin-mes-nav strong{min-width:190px;text-align:center;font-size:1.08rem;padding:9px 14px;border-radius:12px;background:var(--panel);border:1px solid var(--line)}
+.fin-mes-nav button.secondary{width:42px;height:42px;padding:0;font-size:1.3rem}
+.fin-mes-tot{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fin-tot{padding:18px;display:grid;gap:2px}.fin-tot b{font-size:1.9rem;letter-spacing:-.01em}.fin-tot small{color:var(--muted)}
+.fin-tot-ic{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;margin-bottom:6px}
+.fin-tot.pagar{background:color-mix(in srgb,var(--red) 9%,var(--panel))}.fin-tot.pagar b{color:var(--red)}.fin-tot.pagar .fin-tot-ic{background:var(--red)}
+.fin-tot.receber{background:color-mix(in srgb,var(--green) 10%,var(--panel))}.fin-tot.receber b{color:var(--green)}.fin-tot.receber .fin-tot-ic{background:var(--green)}
+.fin-linha{display:grid;grid-template-columns:52px minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.fin-linha:first-of-type{border-top:0}.fin-data{color:var(--muted);font-size:.88rem}
+.fin-desc strong{display:block}.fin-desc small{display:block;color:var(--muted)}
+.fin-val{display:grid;justify-items:end;gap:4px}.fin-val b.pagar{color:var(--red)}.fin-val b.receber{color:var(--green)}
+@media(max-width:760px){.fin-linha{grid-template-columns:44px minmax(0,1fr) auto}.fin-linha .row-actions{grid-column:2/-1}.fin-mes-nav strong{min-width:0;flex:1}.fin-tot b{font-size:1.45rem}}
+/* =================== Aferição no padrão das prévias =================== */
+.af-cats{display:grid;gap:12px;margin-bottom:6px}
+.af-cat{padding:0;overflow:hidden}
+.af-cat>summary{display:block;padding:16px 18px;cursor:pointer;list-style:none}.af-cat-cab{display:flex;gap:14px;align-items:center}
+.af-cat>summary::-webkit-details-marker{display:none}
+.af-cat[open]>summary{background:color-mix(in srgb,var(--green) 8%,var(--panel));border-bottom:1px solid var(--line)}
+.af-cat-ic{font-size:30px;width:46px;text-align:center}
+.af-cat-tit{flex:1;min-width:0}.af-cat-tit strong{display:block;font-size:1.12rem}.af-cat-tit small{display:block;color:var(--muted)}
+.af-cat-seta::after{content:'⌄';font-size:1.5rem;color:var(--muted)}.af-cat[open] .af-cat-seta::after{content:'⌃'}
+.af-cat-meta{display:flex;flex-wrap:wrap;gap:12px 32px;align-items:center;margin:12px 0 0 60px;padding-top:12px;border-top:1px solid var(--line)}
+.af-cat-meta small{display:block;color:var(--muted);font-size:.84rem}.af-cat-meta b{font-size:1.05rem}
+.af-cat:not([open]) .af-cat-corpo{display:none}
+.af-cat-corpo{padding:0 18px 18px}.af-cat-corpo .insp-cartao{margin:0;box-shadow:none}
+.af-cat-meta>span{display:block}.af-cat-corpo{padding-top:16px!important}
+@media(max-width:760px){.af-cat-meta{margin-left:0}}
+/* =================== Configurações no padrão das prévias =================== */
+.cfg-menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:18px}
+.cfg-item{display:flex;gap:14px;align-items:center;text-align:left;padding:16px 18px;cursor:pointer;font:inherit;color:var(--text)}
+.cfg-item strong{display:block;font-size:1.02rem}.cfg-item small{display:block;color:var(--muted);margin-top:2px}.cfg-item>span:nth-of-type(1){flex:1;min-width:0}
+.cfg-ic{flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;color:var(--text)}
+.cfg-seta{font-size:1.5rem;color:var(--muted)}
+.cfg-item:hover{border-color:var(--green)!important}
+.cfg-item.perigo{background:color-mix(in srgb,var(--red) 7%,var(--panel));border-color:color-mix(in srgb,var(--red) 35%,var(--line))!important}.cfg-item.perigo strong,.cfg-item.perigo .cfg-ic{color:var(--red)}.cfg-item.perigo small{color:color-mix(in srgb,var(--red) 75%,var(--muted))}
+.cfg-foco{animation:cfgFoco 1.6s ease}
+@keyframes cfgFoco{0%,40%{box-shadow:0 0 0 3px var(--green)}100%{box-shadow:none}}
+@media(max-width:760px){.cfg-menu{grid-template-columns:1fr}}
