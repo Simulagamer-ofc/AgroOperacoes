@@ -1030,3 +1030,29 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 .conf-ajustes{margin-top:14px}.conf-ajustes summary{cursor:pointer}.conf-tipos{display:flex;flex-wrap:wrap;gap:6px}.conf-tipos .chip{border:0;cursor:pointer;font:inherit;font-size:.78rem}
 .conf-gps{margin:0 0 6px}.conf-gps.conf-ruim{color:var(--red)}
 @media(max-width:760px){.conf-linha{grid-template-columns:1fr;gap:3px}}
+
+/* =================== Padrão visual aprovado nas prévias (Edson, out/2026) =================== */
+/* Superfícies claras, marca verde, ações azuis. Só aparência: nenhuma mecânica muda. */
+[data-theme="light"]{--bg:#f4f7f6;--line:#e5e9e7}
+:root[data-theme="light"] .topbar{background:#fff;border-bottom:1px solid var(--line)}
+:root[data-theme="light"] .app.nx-home .topbar{background:#fff}
+:root[data-theme="light"] .card{box-shadow:0 1px 2px rgba(16,42,60,.05)}
+/* Menu lateral branco com item ativo verde, como nas prévias */
+:root[data-theme="light"] .sidebar{background:#fff;border-right:1px solid var(--line)}
+:root[data-theme="light"] .brand.nexus .marca{color:#122a24}
+:root[data-theme="light"] .brand.nexus .versao,:root[data-theme="light"] .brand.nexus #farmName{color:var(--muted)}
+:root[data-theme="light"] .sidebar .nav button{color:var(--muted)}
+:root[data-theme="light"] .sidebar .nav button:hover{background:var(--bg);color:var(--text)}
+:root[data-theme="light"] .sidebar .nav button.active{background:color-mix(in srgb,var(--green) 14%,#fff);color:var(--green);box-shadow:none;font-weight:700}
+:root[data-theme="light"] .app.nx-home .nav button.active{color:var(--green)}
+:root[data-theme="light"] .menu-trilho,:root[data-theme="light"] .foot-btn{background:var(--panel);border:1px solid var(--line);color:var(--text)}
+:root[data-theme="light"] .menu-trilho:hover,:root[data-theme="light"] .foot-btn:hover{background:var(--bg)}
+:root[data-theme="light"] .foot-btn.sair{color:#c23434;border-color:#eecaca;background:#fdf4f4}
+/* Modo Campo reafirmado por último: mantém o alto contraste dele */
+:root.modo-campo{--bg:#ffffff}
+:root.modo-campo .sidebar{background:#f1f4f7;color:#000}
+:root.modo-campo .sidebar .nav button{color:#000}
+:root.modo-campo .sidebar .nav button.active{background:#dfe8f1;color:#000;box-shadow:inset 4px 0 #0a7a3e}
+:root.modo-campo .brand.nexus .marca{color:#000}
+:root.modo-campo .menu-trilho,:root.modo-campo .foot-btn{background:#fff;border:2px solid #7d8794;color:#000}
+:root.modo-campo .topbar{background:#fff;border-bottom:1px solid #7d8794}
