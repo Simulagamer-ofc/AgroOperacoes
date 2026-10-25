@@ -1182,3 +1182,18 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 .fin-desc strong{display:block}.fin-desc small{display:block;color:var(--muted)}
 .fin-val{display:grid;justify-items:end;gap:4px}.fin-val b.pagar{color:var(--red)}.fin-val b.receber{color:var(--green)}
 @media(max-width:760px){.fin-linha{grid-template-columns:44px minmax(0,1fr) auto}.fin-linha .row-actions{grid-column:2/-1}.fin-mes-nav strong{min-width:0;flex:1}.fin-tot b{font-size:1.45rem}}
+/* =================== Aferição no padrão das prévias =================== */
+.af-cats{display:grid;gap:12px;margin-bottom:6px}
+.af-cat{padding:0;overflow:hidden}
+.af-cat>summary{display:block;padding:16px 18px;cursor:pointer;list-style:none}.af-cat-cab{display:flex;gap:14px;align-items:center}
+.af-cat>summary::-webkit-details-marker{display:none}
+.af-cat[open]>summary{background:color-mix(in srgb,var(--green) 8%,var(--panel));border-bottom:1px solid var(--line)}
+.af-cat-ic{font-size:30px;width:46px;text-align:center}
+.af-cat-tit{flex:1;min-width:0}.af-cat-tit strong{display:block;font-size:1.12rem}.af-cat-tit small{display:block;color:var(--muted)}
+.af-cat-seta::after{content:'⌄';font-size:1.5rem;color:var(--muted)}.af-cat[open] .af-cat-seta::after{content:'⌃'}
+.af-cat-meta{display:flex;flex-wrap:wrap;gap:12px 32px;align-items:center;margin:12px 0 0 60px;padding-top:12px;border-top:1px solid var(--line)}
+.af-cat-meta small{display:block;color:var(--muted);font-size:.84rem}.af-cat-meta b{font-size:1.05rem}
+.af-cat:not([open]) .af-cat-corpo{display:none}
+.af-cat-corpo{padding:0 18px 18px}.af-cat-corpo .insp-cartao{margin:0;box-shadow:none}
+.af-cat-meta>span{display:block}.af-cat-corpo{padding-top:16px!important}
+@media(max-width:760px){.af-cat-meta{margin-left:0}}

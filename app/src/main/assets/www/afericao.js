@@ -223,7 +223,7 @@ VIEWS.afericao = arg => {
   const comIntervalo = db.machines.filter(temCalendario);
   const maqsComAf = [...new Set(db.afericoes.map(a => a.maquina?.id).filter(Boolean))].map(id => find('machines', id)).filter(Boolean);
   return head('Aferição e calibragem', 'Escolha o que vai aferir. O resultado só é concluído com referência técnica validada. Funciona sem internet.') +
-    `<section class="af-tipos">${Object.keys(TIPOS).map(k => cartaoTipo(k, false, 'af-nova-tipo')).join('')}</section>` + (typeof cartaoInspecao === 'function' ? cartaoInspecao() : '') +
+    categoriasAfericao() +
     (comIntervalo.length ? `<div class="section-title"><h3>Calendário de aferição</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Máquina</th><th>Última aferição</th><th>Próxima</th><th></th></tr></thead><tbody>${comIntervalo.map(m => { const r = situacaoReaferir(m); return `<tr><td><strong>${esc(m.name)}</strong><br><small style="color:var(--muted)">${esc(r.motivo || '')}</small></td><td>${r.ultima ? fmtDate(r.ultima.data) + ' ' + statusChip(r.ultima.resultado.status) : 'nunca aferida'}</td><td>${r.vencida ? chip(r.dias === null ? 'Aferir agora' : `Atrasada ${-r.dias} d`, 'red') : r.dias <= 7 ? chip(`Em ${r.dias} d`, 'orange') : fmtDate(r.proxima)}</td><td>${mini('◎ Aferir', 'af-nova', m.id)}</td></tr>`; }).join('')}</tbody></table></div></section>` : '') +
     `<div class="section-title"><h3>Registros (${lista.length})</h3></div>${maqsComAf.length > 1 || afMaqFiltro ? `<div class="filters"><button class="${!afMaqFiltro ? 'active' : ''}" data-act="af-maq" data-id="">Todas as máquinas</button>${maqsComAf.map(m => `<button class="${afMaqFiltro === m.id ? 'active' : ''}" data-act="af-maq" data-id="${esc(m.id)}">${esc(m.name)}</button>`).join('')}</div>` : ''}<section class="card list">${lista.length ? lista.map(a => {
       const p = principal(a.resultado);
@@ -231,6 +231,24 @@ VIEWS.afericao = arg => {
     }).join('') : empty('Nenhuma aferição registrada', 'Toque no que você vai aferir, acima, para começar.')}</section>`;
 };
 
+// Aferição por categoria (padrão das prévias): cartões que abrem e fecham, com a última aferição e a situação
+const CAT_AF = [
+  ['pulv', '💧', 'Pulverização', 'Barras, bicos, pressão e vazão', ['bicos', 'taxa', 'sensor']],
+  ['plantio', '🌱', 'Plantio e adubação', 'Dosadores, distribuição e profundidade', ['longitudinal', 'dose', 'transversal']],
+  ['colheita', '🌾', 'Colheita', 'Plataforma, perdas e limpeza', ['perdas']],
+  ['inspecao', '📋', 'Inspeção do pulverizador', 'Itens de segurança e condições gerais (ISO 16122-2)', ['inspecao']]];
+let afCatAberta = null;
+function categoriasAfericao() {
+  const abertaPadrao = afCatAberta ?? 'pulv';
+  return `<section class="af-cats">${CAT_AF.map(([id, ic, tit, sub, tipos]) => {
+    if (id === 'inspecao' && !(typeof cartaoInspecao === 'function' && cartaoInspecao())) return '';
+    const ult = db.afericoes.filter(a => tipos.includes(a.tipo)).sort((a, b) => (b.data + (b.hora || '')).localeCompare(a.data + (a.hora || '')))[0];
+    const corpo = id === 'inspecao' ? cartaoInspecao() : `<div class="af-tipos">${tipos.filter(k => TIPOS[k]).map(k => cartaoTipo(k, false, 'af-nova-tipo')).join('')}</div>`;
+    return `<details class="card af-cat" ${id === abertaPadrao ? 'open' : ''} data-cat="${id}"><summary><span class="af-cat-cab"><span class="af-cat-ic" aria-hidden="true">${ic}</span><span class="af-cat-tit"><strong>${esc(tit)}</strong><small>${esc(sub)}</small></span><span class="af-cat-seta" aria-hidden="true"></span></span>
+      <span class="af-cat-meta"><span><small>📅 ${id === 'inspecao' ? 'Última inspeção' : 'Última aferição'}</small><b>${ult ? fmtDate(ult.data) : 'nenhuma'}</b></span><span><small>✓ Situação</small>${ult ? chipAfericao(ult) : chip('Sem registro', 'gray')}</span></span></summary>
+      <div class="af-cat-corpo">${ult ? `<p class="nota" style="margin:0 0 10px"><button class="link" data-act="nav" data-id="afericao/${esc(ult.id)}">Ver a última ${id === 'inspecao' ? 'inspeção' : 'aferição'} (${esc(tituloAfericao(ult))} — ${esc(ult.maquina?.name || 'equipamento')})</button></p>` : ''}${corpo}</div></details>`;
+  }).join('')}</section>`;
+}
 const PASSOS = ['O que aferir', 'Medição', 'Resultado'];
 const tituloAfericao = a => a.tipo === 'inspecao' ? 'Inspeção periódica (ISO 16122)' : TIPOS[a.tipo]?.titulo || a.tipo;
 const chipAfericao = a => a.tipo === 'inspecao' ? chip(a.resultado?.status === 'OK' ? 'Aprovado' : 'Reprovado', a.resultado?.status === 'OK' ? 'green' : 'red') : statusChip(a.resultado?.status);
@@ -427,6 +445,7 @@ function passoWizard() {
 
 let limitesBico = null; // limites da regra validada PULV-BICO-CAT-01, lidos do banco (prévia enquanto digita)
 VIEWS.afericao.after = () => {
+  $$('.af-cat').forEach(d => d.addEventListener('toggle', () => { if (d.open) { afCatAberta = d.dataset.cat; $$('.af-cat').forEach(o => { if (o !== d) o.open = false; }); } }));
   const maq = $('#wz_machineId');
   if (maq) maq.onchange = () => {
     coletarWizard();
