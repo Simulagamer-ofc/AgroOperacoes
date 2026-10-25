@@ -1056,3 +1056,16 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 :root.modo-campo .brand.nexus .marca{color:#000}
 :root.modo-campo .menu-trilho,:root.modo-campo .foot-btn{background:#fff;border:2px solid #7d8794;color:#000}
 :root.modo-campo .topbar{background:#fff;border-bottom:1px solid #7d8794}
+/* Ajuste do padrão claro: o menu lateral branco precisa de texto e ícones escuros (o menu escuro usa tons claros) */
+:root[data-theme="light"] .app.nx-home .sidebar,:root[data-theme="light"] .sidebar{--muted:#5a6b78}
+:root[data-theme="light"] .sidebar .nav-grupo{color:#7a8894}
+:root[data-theme="light"] .sidebar .hex-icone .glifo{stroke:#1d3a30}
+:root[data-theme="light"] .sidebar .hex-icone .hex{fill:rgba(31,157,99,.08);stroke:#1f9d63}
+:root[data-theme="light"] .sidebar .hex-icone.azul .hex{fill:rgba(37,119,214,.08);stroke:#2577d6}
+:root[data-theme="light"] .sidebar .hex-icone.verde,:root[data-theme="light"] .sidebar .hex-icone.azul{filter:none}
+:root[data-theme="light"] .sidebar .nav button.active .hex-icone.verde .hex{fill:rgba(31,157,99,.2)}
+:root[data-theme="light"] .sidebar .nav button.active .hex-icone.azul .hex{fill:rgba(37,119,214,.2)}
+:root[data-theme="light"] .sidebar .nav button.active .hex-icone .glifo{stroke:#0f5e3a}
+:root.modo-campo .sidebar .hex-icone .glifo{stroke:#000}
+:root[data-theme="light"]:not(.modo-campo) :is(.atencao,.clima-t,.clima-max,.txt-laranja,small.nao,.chip.sit-orange,.chip.orange,.conf-selo.orange,.conf-al.orange){color:#b45309}
+:root[data-theme="light"]:not(.modo-campo) .clima-min{color:#15803d}
