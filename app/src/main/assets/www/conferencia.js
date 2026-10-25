@@ -4,7 +4,7 @@
 // fotos tiradas na hora com carimbo (data, hora, local, quem) e a situação “A conferir” → Aprovar ou Pedir correção.
 // Vale para o que o usuário comum (operador) conclui; o que o ADM/supervisor conclui não precisa de conferência.
 const CONF_FOTO_PADRAO = ['Plantio', 'Aplicação', 'Limpeza de secador', 'Limpeza de moega', 'Limpeza de silo', 'Tratamento de sementes'];
-const confAjustes = () => { const c = db.settings.conferencia || {}; return {exigir: c.exigir !== false, fotos: Array.isArray(c.fotos) ? c.fotos : CONF_FOTO_PADRAO}; };
+const confAjustes = () => { const c = db.settings.conferencia || {}; return {exigir: c.exigir !== false, fotos: Array.isArray(c.fotos) ? c.fotos : CONF_FOTO_PADRAO, fotoInicio: c.fotoInicio !== false}; };
 const confOperador = () => typeof nvComum === 'function' && nvComum(); // usuário comum ligado a uma fazenda
 const confGestor = () => !confOperador();
 const confUsuario = () => (typeof nv !== 'undefined' && nv?.sessao?.usuario) || '';
@@ -65,37 +65,54 @@ const confMapa = g => g && !g.erro ? `https://www.google.com/maps?q=${g.lat},${g
 const confHoraLocal = iso => { if (!iso) return ''; const d = new Date(iso); if (isNaN(d)) return ''; const p = n => String(n).padStart(2, '0'); return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`; };
 
 // ---------- Ganchos do iniciar / concluir / editar ----------
-function confAoIniciar(o) {
-  o.iniciadaPor = confUsuario() || o.iniciadaPor || '';
-  delete o.gpsIni;
-  confPosicao().then(g => { const r = find('operations', o.id); if (!r) return; r.gpsIni = g; save(); });
-}
-// Ao abrir “Concluir”: lê o GPS e põe o campo de fotos de comprovação (com carimbo)
-function confAoAbrirConclusao(o) {
+// Fotos de cada etapa: as do início ficam marcadas (etapa: 'inicio'); as da conclusão não
+const confFotosEtapa = (o, etapa) => (o.fotos || []).filter(f => etapa === 'inicio' ? f.etapa === 'inicio' : f.etapa !== 'inicio');
+const confQtdFotos = (o, etapa) => confFotosEtapa(o, etapa).length + ((typeof fotosDoForm !== 'undefined' && fotosDoForm.get(o.id)?.length) || 0);
+const confFotoInicioObrig = () => confAjustes().fotoInicio;
+// Abre a etapa (iniciar ou concluir): lê o GPS na hora e põe o campo de fotos tiradas pela câmera, com carimbo
+function confAbrirEtapa(o, etapa) {
   const form = $('form', dialog); if (!form) return;
-  const obrig = confOperador() && confPrecisaFoto(o);
+  const ini = etapa === 'inicio', obrig = ini ? confFotoInicioObrig() : confOperador() && confPrecisaFoto(o);
   const status = Object.assign(document.createElement('p'), {className: 'nota conf-gps', textContent: '📍 Lendo a localização…'});
   (form.querySelector('.form') || form).prepend(status);
   confGpsTemp.delete(o.id);
   confPosicao().then(g => {
     confGpsTemp.set(o.id, g);
     const s = confSeloGps(o, g);
-    status.textContent = g.erro ? `⚠ ${g.erro}: a operação fica marcada “sem localização”.` : `📍 Localização registrada${g.prec ? ` (± ${num(g.prec)} m)` : ""}${s && o.fieldId && !/registrado/.test(s.txt) ? ' — ' + s.txt : ''}.`;
+    status.textContent = g.erro ? `⚠ ${g.erro}: a operação fica marcada “sem localização”.` : `📍 Localização registrada${g.prec ? ` (± ${num(g.prec)} m)` : ''}${s && o.fieldId && !/registrado/.test(s.txt) ? ' — ' + s.txt : ''}.`;
     status.classList.toggle('conf-ruim', !!(g.erro || s?.fora));
   });
   if (typeof anexarCampoFotos === 'function') {
     carimbosFoto.set(o.id, () => {
       const g = confGpsTemp.get(o.id), quem = confUsuario() ? (nv?.nomes?.[confUsuario()] || nv?.sessao?.email || '') : '';
-      return [`${confHoraLocal(new Date().toISOString())} • ${o.type} — ${opPlace(o)}`,
-        [g && !g.erro ? `${g.lat}, ${g.lon} (± ${g.prec} m)` : 'sem GPS', quem || o.operator || ''].filter(Boolean).join(' • ') + ' • MercaPlant'];
+      const h = $('#f_horimetro', dialog)?.value;
+      return [`${confHoraLocal(new Date().toISOString())} • ${ini ? 'INÍCIO' : 'CONCLUSÃO'} • ${o.type} — ${opPlace(o)}`,
+        [g && !g.erro ? `${g.lat}, ${g.lon} (± ${g.prec} m)` : 'sem GPS', h ? `horímetro ${h} h` : '', quem || o.operator || ''].filter(Boolean).join(' • ') + ' • MercaPlant'];
     });
-    anexarCampoFotos('operations', o.id, o.fotos || [], {soCamera: true, obrigatoria: obrig, rotulo: 'Fotos de comprovação', dica: 'Tire a foto agora pela câmera: ela sai com data, hora, local e nome gravados.'});
+    anexarCampoFotos('operations', o.id, confFotosEtapa(o, etapa), {soCamera: true, obrigatoria: obrig, rotulo: ini ? 'Foto do início' : 'Fotos de comprovação',
+      dica: ini ? 'Tire agora pela câmera: de preferência o painel com o horímetro e a máquina no local. Sai com data, hora, local e nome gravados.' : 'Tire a foto agora pela câmera: ela sai com data, hora, local e nome gravados.'});
   }
 }
-const confQtdFotos = o => (o.fotos?.length || 0) + ((typeof fotosDoForm !== 'undefined' && fotosDoForm.get(o.id)?.length) || 0);
-function confValidarConclusao(o) {
-  if (confOperador() && confPrecisaFoto(o) && !confQtdFotos(o)) return `Tire pelo menos uma foto de comprovação (${o.type.toLowerCase()} exige foto).`;
+const confAoAbrirInicio = o => confAbrirEtapa(o, 'inicio');
+const confAoAbrirConclusao = o => confAbrirEtapa(o, 'fim');
+function confValidarInicio(o) {
+  if (confFotoInicioObrig() && !confQtdFotos(o, 'inicio')) return 'Tire a foto do início (de preferência do painel com o horímetro).';
   return '';
+}
+function confValidarConclusao(o) {
+  if (confOperador() && confPrecisaFoto(o) && !confQtdFotos(o, 'fim')) return `Tire pelo menos uma foto de comprovação (${o.type.toLowerCase()} exige foto).`;
+  return '';
+}
+// Salvou o início: fotos marcadas como do início, GPS e quem iniciou
+function confAoIniciar(o) {
+  const antes = new Set((o.fotos || []).map(f => f.id));
+  if (typeof fotosAoSalvar === 'function') fotosAoSalvar('operations', o.id);
+  (o.fotos || []).forEach(f => { if (!antes.has(f.id)) f.etapa = 'inicio'; });
+  carimbosFoto?.delete?.(o.id);
+  o.iniciadaPor = confUsuario() || o.iniciadaPor || ''; o.viaIniciar = true;
+  const g = confGpsTemp.get(o.id); confGpsTemp.delete(o.id);
+  if (g) o.gpsIni = g;
+  else { delete o.gpsIni; confPosicao(8000).then(p => { const r = find('operations', o.id); if (r) { r.gpsIni = p; save(); } }); }
 }
 function confAoConcluir(o) {
   if (typeof fotosAoSalvar === 'function') fotosAoSalvar('operations', o.id);
@@ -127,7 +144,8 @@ function confAlertas(o) {
   if (sIni?.fora) out.push(['red', `Iniciada ${sIni.txt}`]);
   if (o.viaConcluir && (!o.gpsFim || o.gpsFim.erro)) out.push(['orange', 'Sem localização na conclusão']);
   if (o.conferencia && !o.viaConcluir && o.status === 'Concluída') out.push(['orange', 'Concluída pela edição, sem localização nem fotos de comprovação']);
-  if (o.conferencia && confPrecisaFoto(o) && !o.fotos?.length) out.push(['red', 'Sem foto de comprovação']);
+  if (o.conferencia && confPrecisaFoto(o) && !confFotosEtapa(o, 'fim').length) out.push(['red', 'Sem foto de comprovação na conclusão']);
+  if (o.viaIniciar && !confFotosEtapa(o, 'inicio').length) out.push(['orange', 'Sem foto do início']);
   const ini = Date.parse(o.startedAt), fim = Date.parse(o.finishedAt), relogio = ini && fim && fim > ini ? (fim - ini) / 3600000 : null;
   if (relogio != null && Number(o.horas) > relogio + 0.5) out.push(['red', `Horímetro marcou ${um1(o.horas)} h, mas entre iniciar e concluir passaram só ${um1(relogio)} h`]);
   if (relogio != null && relogio < 0.1 && Number(o.area) > 0 && opTemArea(o)) out.push(['orange', `Concluída ${Math.max(1, Math.round(relogio * 60))} min depois de iniciar, com ${num(o.area)} ha`]);
@@ -178,7 +196,7 @@ function confCartao(o) {
     ${confLinhaGps('Conclusão', o, o.gpsFim, o.finishedAt)}
     ${numeros ? `<div class="conf-linha"><span>Números</span><div>${esc(numeros)}</div></div>` : ''}
     ${o.notes ? `<div class="conf-linha"><span>Observações</span><div>${esc(o.notes)}</div></div>` : ''}
-    <div class="conf-linha"><span>Fotos</span><div>${o.fotos?.length ? galeriaFotos('operations', o) : '<span class="nota">Nenhuma foto</span>'}</div></div>
+    ${[['inicio', 'Fotos do início'], ['fim', 'Fotos da conclusão']].map(([e, r]) => { const fs = confFotosEtapa(o, e); return `<div class="conf-linha"><span>${r}</span><div>${fs.length ? galeriaFotos('operations', {id: o.id, fotos: fs}) : '<span class="nota">Nenhuma foto</span>'}</div></div>`; }).join('')}
     ${o.status === 'Concluída' ? `<div class="conf-alertas">${al.length ? al.map(([c, t]) => `<div class="conf-al ${c}">${c === 'red' ? '⚠' : '!'} ${esc(t)}</div>`).join('') : '<div class="conf-al green">✓ Nada fora do normal: local, horário e números conferem.</div>'}</div>` : ''}
     ${o.conferencia && sit !== 'pendente' ? `<p class="nota">${sit === 'aprovada' ? 'Aprovada' : 'Correção pedida'} por ${esc(confNome(o.conferencia.por))} em ${esc(confHoraLocal(o.conferencia.em))}${o.conferencia.obs ? `: “${esc(o.conferencia.obs)}”` : ''}</p>` : ''}
     ${(o.conferenciaHist || []).map(h => `<p class="nota">Antes: correção pedida em ${esc(confHoraLocal(h.em))}${h.obs ? `: “${esc(h.obs)}”` : ''}</p>`).join('')}
@@ -188,8 +206,9 @@ function confCartao(o) {
 }
 function confPainelAjustes() {
   const a = confAjustes();
-  return `<details class="card panel conf-ajustes"><summary><strong>Regras da conferência</strong> <span class="nota">${a.exigir ? 'ligada' : 'desligada'} • foto obrigatória em ${a.fotos.length} ${a.fotos.length === 1 ? 'tipo' : 'tipos'}</span></summary>
+  return `<details class="card panel conf-ajustes"><summary><strong>Regras da conferência</strong> <span class="nota">${a.exigir ? 'ligada' : 'desligada'} • foto ao iniciar ${confFotoInicioObrig() ? 'obrigatória' : 'opcional'} • ao concluir em ${a.fotos.length} ${a.fotos.length === 1 ? 'tipo' : 'tipos'}</span></summary>
     <div class="conf-linha"><span>Conferir o que o operador conclui</span><div><button class="${a.exigir ? 'primary' : 'secondary'}" data-act="conf-exigir">${a.exigir ? 'Ligado' : 'Desligado'}</button></div></div>
+    <div class="conf-linha"><span>Foto obrigatória ao iniciar</span><div><button class="${confFotoInicioObrig() ? 'primary' : 'secondary'}" data-act="conf-foto-inicio">${confFotoInicioObrig() ? 'Ligado' : 'Desligado'}</button></div></div>
     <p class="nota">Foto de comprovação obrigatória ao concluir (toque para ligar ou desligar):</p>
     <div class="conf-tipos">${OP_TYPES.map(t => `<button class="chip ${a.fotos.includes(t) ? 'green' : 'gray'}" data-act="conf-foto" data-id="${esc(t)}">${a.fotos.includes(t) ? '📷 ' : ''}${esc(t)}</button>`).join('')}</div>
   </details>`;
@@ -257,6 +276,7 @@ Object.assign(ACTIONS, {
         o.status = 'Em andamento'; save(); showToast('Correção pedida ao operador');
       }});
   },
+  'conf-foto-inicio': () => { if (!confGestor()) return; db.settings.conferencia = {...confAjustes(), fotoInicio: !confFotoInicioObrig()}; save(); render(); },
   'conf-exigir': () => { if (!confGestor()) return; const c = db.settings.conferencia = {...confAjustes()}; c.exigir = !c.exigir; save(); render(); },
   'conf-foto': t => {
     if (!confGestor()) return;
