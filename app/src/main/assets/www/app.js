@@ -154,7 +154,7 @@ function showToast(message, erro = false) {
 save(); // grava migrações do banco (agora o aviso de armazenamento cheio já pode ser exibido)
 // Temas: Noturno, Claro, Campo (claro de alto contraste, para ler no sol) e Automático (Campo de dia, Noturno à noite)
 const TEMAS = [['dark', 'Noturno'], ['light', 'Claro'], ['campo', 'Campo — alto contraste para sol forte'], ['auto', 'Automático — Campo de dia, Noturno à noite']];
-let temaEscolhido = TEMAS.some(([t]) => t === safeStorage.get('agro-theme')) ? safeStorage.get('agro-theme') : 'dark';
+let temaEscolhido = TEMAS.some(([t]) => t === safeStorage.get('agro-theme')) ? safeStorage.get('agro-theme') : 'light'; // padrão: Claro (o escuro fica como opção)
 const temaAtual = () => temaEscolhido === 'auto' ? (new Date().getHours() >= 6 && new Date().getHours() < 18 ? 'campo' : 'dark') : temaEscolhido;
 const ICONE_SOL = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M5.3 18.7l1.5-1.5M17.2 6.8l1.5-1.5"/></svg>';
 const ICONE_LUA = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>';
@@ -165,7 +165,7 @@ function iconeTema() {
   b.innerHTML = {dark: ICONE_LUA, light: ICONE_SOL, campo: ICONE_CAMPO, auto: ICONE_AUTO}[temaEscolhido];
   b.title = `Tema: ${nome}. Toque para trocar.`; b.setAttribute('aria-label', b.title);
 }
-function aplicarTema() { const t = temaAtual(); root.dataset.theme = t === 'campo' ? 'light' : t; root.classList.toggle('modo-campo', t === 'campo'); iconeTema(); }
+function aplicarTema() { const t = temaAtual(); root.dataset.theme = t === 'campo' ? 'light' : t; root.classList.toggle('modo-campo', t === 'campo'); iconeTema(); document.querySelector('meta[name=theme-color]')?.setAttribute('content', t === 'dark' ? '#0a2134' : '#ffffff'); }
 $('#themeBtn').onclick = () => {
   const i = TEMAS.findIndex(([t]) => t === temaEscolhido); temaEscolhido = TEMAS[(i + 1) % TEMAS.length][0];
   safeStorage.set('agro-theme', temaEscolhido); aplicarTema(); showToast('Tema: ' + TEMAS.find(([t]) => t === temaEscolhido)[1]);
@@ -1139,6 +1139,9 @@ function render(anchor = pendingAnchor) {
   try { VIEWS[name].after?.(anchor); } catch (err) { falhaInesperada(err); }
   const h2 = view.querySelector('.view-head h2'), igual = t => semAcentoApp(t).replace(/[^a-z]/g, '');
   if (h2 && igual(h2.textContent) === igual($('#viewTitle').textContent)) h2.classList.add('repetido');
+  // Linha pequena acima do título (padrão das prévias): o grupo do menu da tela — ex.: “Grãos e sementes”
+  if (h2) { let g = $('.sidebar .nav [data-route].active'); while (g && !g.classList.contains('nav-grupo')) g = g.previousElementSibling;
+    const txt = g?.textContent.replace(/[▾▸▼►]/g, '').trim(); if (txt) h2.insertAdjacentHTML('beforebegin', `<span class="eyebrow">${esc(txt.charAt(0) + txt.slice(1).toLowerCase())}</span>`); }
 }
 const semAcentoApp = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 // Menus "⋯ Mais": fecham ao tocar fora ou ao escolher uma opção
