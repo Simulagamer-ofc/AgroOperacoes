@@ -88,21 +88,64 @@ if (VIEWS.inicio) {
   VIEWS.inicio.after = (...a) => { depoisSemAlertas?.(...a); completarAlertasInicio(); };
 }
 
-// ---------- Tela MercaClima ----------
+// ---------- Tela MercaClima (padrão das prévias): agora, janela de aplicação, 7 dias, umidade e vento; depois mapa e detalhes ----------
+const TEXTO_ICONE = {'⛈️': 'Trovoada', '🌧️': 'Chuva', '🌦️': 'Pancadas de chuva', '☁️': 'Nublado', '⛅': 'Parcialmente nublado', '🌤️': 'Poucas nuvens', '☀️': 'Ensolarado', '🌙': 'Céu limpo'};
+function climaAgora(dados) {
+  const h = dados.hourly, agora = new Date(), hr = agora.getHours();
+  let i = h.time.indexOf(`${today()}T${String(hr).padStart(2, '0')}:00`); if (i < 0) i = Math.max(0, h.time.findIndex(t => t.startsWith(today())));
+  const noite = hr < 6 || hr >= 19;
+  const icone = iconeTempo({prob: h.precipitation_probability?.[i] ?? 0, mm: h.precipitation?.[i] || 0, nuvens: h.cloud_cover?.[i] ?? 50, trov: h.trovoada?.[i] || 0, noite});
+  return {t: h.temperature_2m[i], ur: h.relative_humidity_2m[i], v: h.wind_speed_10m[i], raj: h.wind_gusts_10m?.[i], icone, texto: TEXTO_ICONE[icone] || ''};
+}
+const horasJanela = j => j.janelas.map(([x, y]) => `${hh(x)}–${hh(y)}`).join(', ');
+function climaDestaque() {
+  const c = lerClima(); if (!c?.dados?.daily || !c.dados.hourly) return '';
+  const d = c.dados.daily, i0 = Math.max(0, d.time.indexOf(today())), a = climaAgora(c.dados), nDias = Math.min(7, d.time.length - i0);
+  const jan = janelasDoDia(c.dados, d.time[i0]), jan1 = d.time[i0 + 1] ? janelasDoDia(c.dados, d.time[i0 + 1]) : null;
+  const [jTit, jTxt, jDia, jCls] = jan.janelas.length ? ['Janela favorável para aplicação hoje', `${horasJanela(jan)} • vento, umidade e Delta T dentro da faixa ideal`, 0, 'ok']
+    : jan1?.janelas.length ? ['Janela favorável para aplicação amanhã', `${horasJanela(jan1)} • hoje sem janela boa${jan.principal ? ` (${jan.principal})` : ''}`, 1, 'ok']
+    : ['Sem janela boa para aplicação hoje e amanhã', jan.principal ? `Principalmente ${jan.principal}. Confira as condições no campo antes de aplicar.` : 'Confira as condições no campo antes de aplicar.', 0, 'nao'];
+  const sel = Math.min(Math.max(0, climaDiaSel), Math.max(0, nDias - 1));
+  const nomeD = k => { const dt = new Date(d.time[i0 + k] + 'T12:00:00'); return k === 0 ? 'Hoje' : DIA_SEMANA[dt.getDay()].replace(/^./, x => x.toUpperCase()); };
+  const urOk = a.ur >= 50, vOk = a.v >= 3 && a.v <= 10 && (a.raj ?? a.v) < 20;
+  const medida = (ic, rot, val, pct, ok, ideal, extra) => `<article class="card cd-medida"><span class="cd-m-ic" aria-hidden="true">${ic}</span><div><small>${rot}</small><b>${val}</b>
+    <div class="cd-barra"><span class="${ok ? 'ok' : 'nao'}" style="width:${Math.max(3, Math.min(100, pct))}%"></span></div><small class="cd-ideal">${ideal}${extra ? ' • ' + extra : ''}</small></div></article>`;
+  return `<section class="clima-destaque">
+    <article class="card cd-agora"><span class="cd-icone" aria-hidden="true">${a.icone}</span>
+      <div><div class="cd-temp">${Math.round(a.t)} °C</div><div class="cd-cond">${esc(a.texto)}</div><small class="cd-sub">Agora • atualizado ${hhmm(new Date(c.em))}</small></div>
+      <div class="cd-lado"><div><small>Máx. hoje</small><b>${Math.round(d.temperature_2m_max[i0])} °C</b></div><div><small>Mín. hoje</small><b>${Math.round(d.temperature_2m_min[i0])} °C</b></div><div><small>Chuva hoje</small><b>${num(Math.round((d.precipitation_sum[i0] || 0) * 10) / 10)} mm • ${Math.round(d.precipitation_probability_max[i0] || 0)}%</b></div></div></article>
+    <button type="button" class="cd-janela ${jCls}" data-act="clima-dia" data-id="${jDia}"><span class="cd-j-ic" aria-hidden="true">${jCls === 'ok' ? '⚠️' : '⛔'}</span><span><strong>${esc(jTit)}</strong><small>${esc(jTxt)}</small></span><span class="cd-seta" aria-hidden="true">›</span></button>
+    <article class="card cd-semana"><h3>Previsão para os próximos ${nDias} dias</h3>
+      <div class="cd-dias" role="group" aria-label="Toque em um dia para ver os detalhes e o mapa daquele dia">${d.time.slice(i0, i0 + nDias).map((t, k) => { const i = i0 + k; return `<button type="button" class="cd-dia ${k === sel ? 'sel' : ''}" data-act="clima-dia" data-id="${k}" aria-pressed="${k === sel}"><b>${nomeD(k)}</b><small>${fmtDate(t).slice(0, 5)}</small><span class="cd-d-ic" aria-hidden="true">${iconeDia(c.dados, i)}</span><b class="cd-max">${Math.round(d.temperature_2m_max[i])}°</b><span class="cd-min">${Math.round(d.temperature_2m_min[i])}°</span><small class="cd-prob">💧 ${Math.round(d.precipitation_probability_max[i] || 0)}%</small></button>`; }).join('')}</div></article>
+    <div class="cd-medidas">
+      ${medida('💧', 'Umidade do ar', `${Math.round(a.ur)} %`, a.ur, urOk, 'Ideal para aplicação: acima de 50%', urOk ? 'boa agora' : 'baixa agora')}
+      ${medida('🌬️', 'Vento', `${Math.round(a.v)} km/h`, a.v / 30 * 100, vOk, 'Ideal para aplicação: 3 a 10 km/h', a.raj != null ? `rajadas de ${Math.round(a.raj)} km/h` : '')}
+    </div>
+  </section>`;
+}
 VIEWS.clima = () => {
   safeStorage.set('agro-clima-aberto', '1'); // previsão sempre aberta nesta tela
   const loc = typeof localDaFazenda === 'function' ? localDaFazenda() : null;
-  const topo = head('MercaClima', 'Previsão, mapa do tempo, alertas para as operações e chuvas da fazenda', btn('+ Registrar chuva', 'ch-new') + btn('Atualizar previsão', 'clima-atualizar', '', 'secondary'));
+  const local = loc ? `<span class="cd-local" title="${esc(loc.origem || '')}"><span aria-hidden="true">📍</span><span><b>${esc(db.settings.farm || 'Fazenda')}</b><small>${esc(loc.origem || 'local da fazenda')}</small></span></span>` : '';
+  const topo = head('Clima da fazenda', 'Previsão, mapa do tempo, alertas para as operações e chuvas da fazenda', local + btn('+ Registrar chuva', 'ch-new') + btn('Atualizar previsão', 'clima-atualizar', '', 'secondary')).replace('<section class="view-head">', '<section class="view-head" data-eyebrow="MercaClima">');
   if (!loc) return topo + cartaoClimaCompleto();
   const rs = riscosClima(), chuvas = db.chuvas.slice().sort(byDateDesc), soma = dias => chuvas.filter(x => x.date >= daysAgo(dias)).reduce((t, x) => t + (Number(x.mm) || 0), 0);
-  return topo + `<section class="clima-tela">
-    <div class="clima-col-mapa">${painelMapaHTML(false).replace('mt-painel', 'mt-painel mt-tela')}</div>
+  return topo + `<section class="clima-topo">
+    <div class="clima-col-dest">${climaDestaque()}</div>
     <div class="clima-col-prev">
       <section class="card panel"><h3 style="margin:0 0 8px">Alertas para as operações</h3><div id="climaRiscos">${rs.length ? htmlRiscos(rs) : '<p class="nota" style="margin:0">Nenhuma condição de tempo atrapalhando as operações programadas.</p>'}</div></section>
-      ${cartaoClimaCompleto()}
       <section class="card panel"><div class="section-title" style="margin:0 0 8px"><h3>Chuva registrada</h3><button data-act="nav" data-id="chuva">Ver todas</button></div>
         <div class="lote-nums"><span><small>Últimos 7 dias</small><b>${num(soma(7))} mm</b></span><span><small>Últimos 30 dias</small><b>${num(soma(30))} mm</b></span><span><small>Último registro</small><b>${chuvas[0] ? `${num(chuvas[0].mm)} mm` : '—'}</b><small>${chuvas[0] ? fmtDate(chuvas[0].date) : 'nenhum'}</small></span></div></section>
-    </div></section>`;
+    </div></section>
+    <section class="clima-tela">
+    <div class="clima-col-mapa">${painelMapaHTML(false).replace('mt-painel', 'mt-painel mt-tela')}</div>
+    <div class="clima-col-prev"><h3 class="cd-det-tit">Detalhes do dia</h3>${cartaoClimaCompleto()}</div></section>`;
+};
+// Dia escolhido: marca também nos cartões dos 7 dias
+const climaDiaSemDestaque = ACTIONS['clima-dia'];
+ACTIONS['clima-dia'] = k => {
+  climaDiaSemDestaque?.(k);
+  document.querySelectorAll('.cd-dia').forEach(b => { const on = b.dataset.id === String(Number(k) || 0); b.classList.toggle('sel', on); b.setAttribute('aria-pressed', on); });
 };
 TITLES.clima = 'MercaClima';
 VIEWS.clima.after = async () => {

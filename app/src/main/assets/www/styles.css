@@ -1098,3 +1098,40 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 @media(max-width:760px){:root[data-theme="light"] .eyebrow:has(+ h2.repetido){display:none}}
 :root[data-theme="light"]:not(.modo-campo) .filters button.active{background:var(--green);border-color:var(--green);color:#fff}
 :root[data-theme="light"] .filters button:not(.active){background:#fff}
+/* =================== MercaClima no padrão das prévias =================== */
+.clima-topo{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:14px;align-items:start;margin-bottom:14px}
+.clima-topo .clima-col-prev{display:grid;gap:14px}
+.clima-destaque{display:grid;gap:14px}
+.cd-agora{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:20px;align-items:center;padding:22px 24px}
+.cd-icone{font-size:78px;line-height:1}
+.cd-temp{font-size:3.3rem;font-weight:800;line-height:1;letter-spacing:-.02em}
+.cd-cond{font-size:1.25rem;font-weight:600;margin-top:6px}
+.cd-sub{color:var(--muted)}
+.cd-lado{border-left:1px solid var(--line);padding-left:20px;display:grid;gap:10px;min-width:150px}
+.cd-lado small,.cd-medida small{display:block;color:var(--muted);font-size:.84rem}.cd-lado b{font-size:1.1rem}
+.cd-janela{display:flex;gap:14px;align-items:center;width:100%;text-align:left;border-radius:16px;padding:16px 18px;cursor:pointer;font:inherit;border:1px solid #f1d98a;background:#fdf3d1;color:#3a2e05}
+.cd-janela strong{display:block;font-size:1.02rem}.cd-janela small{display:block;margin-top:3px;opacity:.85}
+.cd-janela.nao{background:#fde8e6;border-color:#f3c3be;color:#5c1a14}
+.cd-j-ic{font-size:30px}.cd-seta{margin-left:auto;font-size:1.6rem;opacity:.7}
+.cd-semana{padding:18px}.cd-semana h3{margin:0 0 12px;font-size:1.05rem}
+.cd-dias{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.cd-dia{display:grid;justify-items:center;gap:3px;padding:12px 4px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);cursor:pointer;font:inherit}
+.cd-dia small{color:var(--muted);font-size:.78rem}.cd-d-ic{font-size:28px;line-height:1.2}.cd-max{font-size:1.05rem}.cd-min{color:var(--muted)}
+.cd-dia.sel{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green);background:color-mix(in srgb,var(--green) 9%,var(--panel))}
+.cd-medidas{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cd-medida{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;padding:18px;align-items:start}
+.cd-m-ic{font-size:30px}.cd-medida b{display:block;font-size:1.7rem;margin:2px 0 8px}
+.cd-barra{height:8px;background:var(--bg);border-radius:9px;overflow:hidden;margin-bottom:6px}.cd-barra span{display:block;height:100%;border-radius:9px;background:var(--green)}.cd-barra span.nao{background:var(--orange)}
+.cd-local{display:inline-flex;gap:8px;align-items:center;margin-right:6px;line-height:1.2}.cd-local b{display:block;font-size:.92rem}.cd-local small{display:block;color:var(--muted);font-size:.78rem}
+.cd-det-tit{margin:0 0 -4px;font-size:1.05rem}
+.clima-tela .clima-dias{display:none}
+:root[data-theme="dark"] .cd-janela{background:rgba(245,184,67,.13);border-color:rgba(245,184,67,.35);color:var(--text)}
+:root[data-theme="dark"] .cd-janela.nao{background:rgba(224,90,90,.13);border-color:rgba(224,90,90,.35)}
+@media(max-width:900px){.clima-topo{grid-template-columns:1fr}}
+@media(max-width:760px){
+  .cd-agora{grid-template-columns:auto minmax(0,1fr);padding:18px}.cd-icone{font-size:60px}.cd-temp{font-size:2.6rem}
+  .cd-lado{grid-column:1/-1;border-left:0;border-top:1px solid var(--line);padding:12px 0 0;grid-template-columns:repeat(3,1fr)}
+  .cd-dias{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px}.cd-dia{min-width:72px;scroll-snap-align:start}
+  .cd-medidas{grid-template-columns:1fr}.cd-local{display:none}
+}
+.clima-topo>*,.clima-destaque>*,.cd-semana,.cd-medida>div{min-width:0}
