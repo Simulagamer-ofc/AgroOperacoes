@@ -341,8 +341,8 @@ body{background:var(--bg)}
   .hero .primary.hero-cta{right:14px;bottom:14px;min-width:0;height:46px;font-size:1rem;padding:0 16px}
   /* Primeiro uso: cartão “Carregar dados de exemplo” logo abaixo da faixa */
   #view:has([data-act=seed]){display:flex;flex-direction:column}
-  #view:has([data-act=seed])>*{order:2}#view:has([data-act=seed])>.hero{order:0}
-  #view:has([data-act=seed])>section:has([data-act=seed]){order:1;margin:0 0 14px!important}
+  #view:has(>.hero):has([data-act=seed])>*{order:2}#view:has(>.hero):has([data-act=seed])>.hero{order:0}
+  #view:has(>.hero):has([data-act=seed])>section:has([data-act=seed]){order:1;margin:0 0 14px!important}
   #view:has([data-act=seed])>.kpis.nexus{margin-bottom:0}
   #view:has([data-act=seed]) .empty{padding:20px 16px}
   /* Formulários longos: espaçamento menor */
@@ -1197,3 +1197,14 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 .af-cat-corpo{padding:0 18px 18px}.af-cat-corpo .insp-cartao{margin:0;box-shadow:none}
 .af-cat-meta>span{display:block}.af-cat-corpo{padding-top:16px!important}
 @media(max-width:760px){.af-cat-meta{margin-left:0}}
+/* =================== Configurações no padrão das prévias =================== */
+.cfg-menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:18px}
+.cfg-item{display:flex;gap:14px;align-items:center;text-align:left;padding:16px 18px;cursor:pointer;font:inherit;color:var(--text)}
+.cfg-item strong{display:block;font-size:1.02rem}.cfg-item small{display:block;color:var(--muted);margin-top:2px}.cfg-item>span:nth-of-type(1){flex:1;min-width:0}
+.cfg-ic{flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;color:var(--text)}
+.cfg-seta{font-size:1.5rem;color:var(--muted)}
+.cfg-item:hover{border-color:var(--green)!important}
+.cfg-item.perigo{background:color-mix(in srgb,var(--red) 7%,var(--panel));border-color:color-mix(in srgb,var(--red) 35%,var(--line))!important}.cfg-item.perigo strong,.cfg-item.perigo .cfg-ic{color:var(--red)}.cfg-item.perigo small{color:color-mix(in srgb,var(--red) 75%,var(--muted))}
+.cfg-foco{animation:cfgFoco 1.6s ease}
+@keyframes cfgFoco{0%,40%{box-shadow:0 0 0 3px var(--green)}100%{box-shadow:none}}
+@media(max-width:760px){.cfg-menu{grid-template-columns:1fr}}

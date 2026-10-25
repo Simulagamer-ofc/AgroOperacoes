@@ -918,7 +918,7 @@ VIEWS.relatorios = () => {
 const backupVisivel = () => typeof nvVinculado !== 'function' || !nvVinculado() || !!nv.sysadm || nvPapel() === 'admin';
 VIEWS.cadastros = () => {
   const counts = [['Operações', 'operations'], ['Máquinas', 'machines'], ['Registros de horímetro', 'hourLogs'], ['Manutenções', 'maintenances'], ['Talhões', 'fields'], ['Lotes', 'lots'], ['Itens de estoque', 'stock'], ['Movimentações', 'movements'], ['Gastos', 'expenses'], ['Ordens de beneficiamento', 'ubs'], ['Abastecimentos', 'fuel'], ['Contas a pagar e receber', 'contas'], ['Colheitas', 'colheitas'], ['Vendas', 'vendas'], ['Chuvas', 'chuvas'], ['Monitoramentos de pragas', 'monitoramentos'], ['Aplicações', 'aplicacoes'], ['Equipe', 'equipe'], ['Apontamentos de trabalho', 'apontamentos']];
-  return head('Cadastros', 'Dados da propriedade, conta na nuvem e alertas.') +
+  return head('Cadastros', 'Ajuste o app de acordo com a sua operação: propriedade, usuários, alertas, sincronização e backup.').replace('<section class="view-head">', '<section class="view-head" data-eyebrow="Configurações">') +
     `<section class="settings">
       <article class="card panel"><h3>Propriedade</h3><p>Nome exibido no aplicativo e nos arquivos exportados.</p>
         <form id="settingsForm"><div class="form"><div class="field full"><label for="s_farm">Fazenda / unidade</label><input id="s_farm" value="${esc(db.settings.farm)}" placeholder="Ex.: Fazenda Boa Vista"></div><div class="field full"><label for="s_owner">Responsável</label><input id="s_owner" value="${esc(db.settings.owner)}" placeholder="Nome do responsável"></div><div class="field"><label for="s_rt">Responsável técnico (agrônomo)</label><input id="s_rt" value="${esc(db.settings.respTecnico || '')}" placeholder="Sai nos relatórios impressos"></div><div class="field"><label for="s_rtreg">CREA / CFTA</label><input id="s_rtreg" value="${esc(db.settings.respRegistro || '')}" placeholder="Ex.: CREA-MG 123456/D"></div></div><div class="actions"><button class="primary" type="submit">Salvar</button></div></form>
@@ -932,7 +932,31 @@ VIEWS.cadastros = () => {
         <div class="btn-row">${btn('Carregar exemplos', 'seed', '', 'secondary')}<button class="danger" data-act="wipe">Apagar todos os dados</button></div></article>
     </section>`;
 };
+// Configurações no padrão das prévias: lista de atalhos (Propriedade, Usuários, Preferências, Sincronização, Backup, Apagar dados)
+// que levam a cada seção da tela; as seções continuam todas abaixo
+const CFG_ICONE = {
+  propriedade: '<path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5.5h4V20"/>',
+  usuarios: '<circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5c.7-3.4 2.9-5.2 5.5-5.2s4.8 1.8 5.5 5.2"/><circle cx="16.8" cy="9.5" r="2.5"/><path d="M15.5 14.4c2.4.2 4.2 1.9 4.8 4.6"/>',
+  preferencias: '<path d="M4 7h10M18 7h2M4 12h4M12 12h8M4 17h12M20 17h0"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="17" r="2"/>',
+  sincronizacao: '<path d="M7 18a4.5 4.5 0 0 1 .7-9 5.8 5.8 0 0 1 11 1.9A3.6 3.6 0 0 1 18.2 18z"/>',
+  backup: '<ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8V6M5 12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8"/>',
+  apagar: '<path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v6M14 11v6"/>',
+  registros: '<path d="M6.5 3h8l4.5 4.5V21h-12.5z"/><path d="M14.5 3v4.5H19M9.5 12.5h6M9.5 16.5h6"/>'};
+const CFG_ITENS = [['propriedade', 'Propriedade', 'Dados da fazenda e responsáveis', /^Propriedade/],
+  ['usuarios', 'Usuários e acesso', 'Conta, fazendas e quem pode acessar', /Nuvem da equipe|Minha conta|Sua conta|Conta|Admin do sistema|Usuários/],
+  ['preferencias', 'Preferências', 'Avisos e alertas', /Alerta|Aviso/], ['sincronizacao', 'Sincronização', 'Envio automático e dados na nuvem', /Sincroniza/],
+  ['backup', 'Backup e restauração', 'Proteja seus dados', /^Backup/], ['registros', 'Registros no aparelho', 'Quantidade de dados guardados aqui', /Registros no dispositivo/],
+  ['apagar', 'Apagar dados', 'Exemplos e limpeza deste aparelho', /limpeza/i]];
+function montarMenuConfig() {
+  const v = $('#view'), head = v?.querySelector('.view-head'); if (!v || !head || v.querySelector('.cfg-menu')) return;
+  const cards = $$('.card', v).filter(c => c.querySelector(':scope > h3'));
+  const itens = CFG_ITENS.map(([id, tit, sub, re]) => { const c = cards.find(x => !x.dataset.cfg && re.test(x.querySelector(':scope > h3').textContent.trim())); if (!c) return null; c.dataset.cfg = id; c.id = 'cfg-' + id; return [id, tit, sub]; }).filter(Boolean);
+  if (!itens.length) return;
+  head.insertAdjacentHTML('afterend', `<nav class="cfg-menu" aria-label="Configurações">${itens.map(([id, tit, sub]) => `<button type="button" class="card cfg-item ${id === 'apagar' ? 'perigo' : ''}" data-cfg="${id}"><svg class="cfg-ic" viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">${CFG_ICONE[id] || ''}</svg><span><strong>${esc(tit)}</strong><small>${esc(sub)}</small></span><span class="cfg-seta" aria-hidden="true">›</span></button>`).join('')}</nav>`);
+  $$('[data-cfg]', v).forEach(b => { b.onclick = () => { const c = document.getElementById('cfg-' + b.dataset.cfg); if (!c) return; c.scrollIntoView({behavior: 'smooth', block: 'start'}); c.classList.remove('cfg-foco'); void c.offsetWidth; c.classList.add('cfg-foco'); }; });
+}
 VIEWS.cadastros.after = () => {
+  setTimeout(montarMenuConfig, 0);
   $('#settingsForm').onsubmit = e => { e.preventDefault(); db.settings.farm = $('#s_farm').value.trim(); db.settings.owner = $('#s_owner').value.trim(); db.settings.respTecnico = $('#s_rt').value.trim(); db.settings.respRegistro = $('#s_rtreg').value.trim(); save(); applySettings(); showToast('Dados da propriedade salvos'); };
   $('#restoreInput').onchange = e => { const file = e.target.files[0]; if (file) file.text().then(restoreBackup).catch(() => showToast('Não foi possível ler o arquivo')); e.target.value = ''; };
 };
