@@ -1218,3 +1218,8 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 .ini-kpi-fin .ini-olho{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:8px}
 .ini-kpi-fin b{font-size:clamp(1.1rem,1.45vw,1.65rem)!important;overflow:visible!important;text-overflow:clip!important;white-space:nowrap}
 .ini-kpi-fin>span:nth-of-type(2){min-width:0;padding-right:26px}
+/* MercaClima: detalhes do dia na coluna da direita e mapa na largura toda (sem vazio no tablet/PC) */
+.clima-tela.cd-detalhes{display:grid;gap:8px;grid-template-columns:1fr}
+.clima-mapa-largo{margin-top:14px}.clima-mapa-largo .mt-painel{margin:0}
+.clima-mapa-largo .mt-tela .mt-mapa{height:min(58vh,520px)}
+.clima-mapa-largo .mt-alerta{display:none!important}

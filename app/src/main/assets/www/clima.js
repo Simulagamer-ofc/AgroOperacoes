@@ -131,15 +131,13 @@ VIEWS.clima = () => {
   if (!loc) return topo + cartaoClimaCompleto();
   const rs = riscosClima(), chuvas = db.chuvas.slice().sort(byDateDesc), soma = dias => chuvas.filter(x => x.date >= daysAgo(dias)).reduce((t, x) => t + (Number(x.mm) || 0), 0);
   return topo + `<section class="clima-topo">
-    <div class="clima-col-dest">${climaDestaque()}</div>
+    <div class="clima-col-dest">${climaDestaque()}<section class="clima-mapa-largo">${painelMapaHTML(false).replace('mt-painel', 'mt-painel mt-tela')}</section></div>
     <div class="clima-col-prev">
       <section class="card panel"><h3 style="margin:0 0 8px">Alertas para as operações</h3><div id="climaRiscos">${rs.length ? htmlRiscos(rs) : '<p class="nota" style="margin:0">Nenhuma condição de tempo atrapalhando as operações programadas.</p>'}</div></section>
       <section class="card panel"><div class="section-title" style="margin:0 0 8px"><h3>Chuva registrada</h3><button data-act="nav" data-id="chuva">Ver todas</button></div>
         <div class="lote-nums"><span><small>Últimos 7 dias</small><b>${num(soma(7))} mm</b></span><span><small>Últimos 30 dias</small><b>${num(soma(30))} mm</b></span><span><small>Último registro</small><b>${chuvas[0] ? `${num(chuvas[0].mm)} mm` : '—'}</b><small>${chuvas[0] ? fmtDate(chuvas[0].date) : 'nenhum'}</small></span></div></section>
-    </div></section>
-    <section class="clima-tela">
-    <div class="clima-col-mapa">${painelMapaHTML(false).replace('mt-painel', 'mt-painel mt-tela')}</div>
-    <div class="clima-col-prev"><h3 class="cd-det-tit">Detalhes do dia</h3>${cartaoClimaCompleto()}</div></section>`;
+      <div class="clima-tela cd-detalhes"><h3 class="cd-det-tit">Detalhes do dia</h3>${cartaoClimaCompleto()}</div>
+    </div></section>`;
 };
 // Dia escolhido: marca também nos cartões dos 7 dias
 const climaDiaSemDestaque = ACTIONS['clima-dia'];
