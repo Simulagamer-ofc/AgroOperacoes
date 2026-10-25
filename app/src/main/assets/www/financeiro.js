@@ -6,7 +6,7 @@
 
 const CAT_RECEITA = ['Venda de grãos', 'Venda de sementes', 'Serviços prestados', 'Arrendamento recebido', 'Outras receitas'];
 const CAT_PAGAR = [...CAT_GASTO, 'Financiamento / parcela', 'Impostos e taxas'];
-let finAba = 'pagar', finFiltro = 'abertas';
+let finAba = 'mes', finFiltro = 'abertas', finMes = '';
 
 const contaVencida = c => c.status !== 'paga' && c.vencimento < today();
 const valorAberto = c => c.status === 'paga' ? 0 : Number(c.valor) || 0;
@@ -129,15 +129,37 @@ function graficoFluxo(lista) {
     <ul class="fx-leg"><li><i class="ent"></i>Entradas</li><li><i class="sai"></i>Saídas</li><li><i class="prev-amostra"></i>Tom apagado = previsto (em aberto)</li></ul>`;
 }
 
+// “Contas do mês” (padrão das prévias): mês escolhido, totais A pagar / A receber e a lista do mês
+const NOME_MES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+function painelMesFin() {
+  const m = finMes || today().slice(0, 7), [a, mm] = m.split('-').map(Number), t = today();
+  const doMes = db.contas.filter(c => String(c.status === 'paga' ? (c.vencimento || c.pagoEm) : c.vencimento).startsWith(m)).sort((x, y) => String(x.vencimento).localeCompare(String(y.vencimento)));
+  const tot = tipo => { const l = doMes.filter(c => c.tipo === tipo); return {n: l.length, v: l.reduce((s, c) => s + (c.status === 'paga' ? Number(c.valorPago) || 0 : Number(c.valor) || 0), 0), pagas: l.filter(c => c.status === 'paga').length}; };
+  const p = tot('pagar'), r = tot('receber');
+  const linha = c => {
+    const pagar = c.tipo === 'pagar', venc = contaVencida(c);
+    const sit = c.status === 'paga' ? chip(pagar ? 'Paga' : 'Recebida', 'gray') : venc ? chip('Vencida', 'red') : chip(pagar ? 'A pagar' : 'A receber', pagar ? 'red' : 'green');
+    return `<div class="fin-linha"><span class="fin-data">${fmtDate(c.vencimento).slice(0, 5)}</span><div class="fin-desc"><strong>${esc(c.descricao)}${c.parcela ? ` <small>(${esc(c.parcela)})</small>` : ''}</strong><small>${esc([c.parceiro, c.categoria].filter(Boolean).join(' • ') || (pagar ? 'Fornecedor' : 'Cliente'))}</small></div>
+      <div class="fin-val"><b class="${pagar ? 'pagar' : 'receber'}">${brl2(c.status === 'paga' ? c.valorPago : c.valor)}</b>${sit}</div>
+      <div class="row-actions">${c.status === 'paga' ? mini('Desfazer baixa', 'fin-estornar', c.id) : mini(pagar ? 'Pagar' : 'Receber', 'fin-baixar', c.id)}${mini('Editar', 'fin-edit', c.id)}</div></div>`;
+  };
+  return `<section class="fin-mes">
+    <div class="fin-mes-nav"><button type="button" class="secondary" data-act="fin-mes" data-id="-1" aria-label="Mês anterior">‹</button><strong>📅 ${NOME_MES[mm - 1]} ${a}</strong><button type="button" class="secondary" data-act="fin-mes" data-id="1" aria-label="Próximo mês">›</button>${m !== t.slice(0, 7) ? `<button type="button" class="link" data-act="fin-mes" data-id="0">voltar para o mês atual</button>` : ''}</div>
+    <div class="fin-mes-tot"><article class="card fin-tot pagar"><span class="fin-tot-ic" aria-hidden="true">↑</span><small>A pagar</small><b>${brl2(p.v)}</b><small>${p.n} ${p.n === 1 ? 'conta' : 'contas'}${p.pagas ? ` • ${p.pagas} ${p.pagas === 1 ? 'paga' : 'pagas'}` : ''}</small></article>
+      <article class="card fin-tot receber"><span class="fin-tot-ic" aria-hidden="true">↓</span><small>A receber</small><b>${brl2(r.v)}</b><small>${r.n} ${r.n === 1 ? 'conta' : 'contas'}${r.pagas ? ` • ${r.pagas} ${r.pagas === 1 ? 'recebida' : 'recebidas'}` : ''}</small></article></div>
+    <section class="card panel"><div class="section-title" style="margin:0 0 6px"><h3>Contas do mês</h3><small class="nota">${doMes.length} ${doMes.length === 1 ? 'conta' : 'contas'}</small></div>
+      ${doMes.length ? doMes.map(linha).join('') : empty('Nenhuma conta neste mês', 'Lance boletos, parcelas e vendas a prazo em “+ A pagar” e “+ A receber”.')}</section></section>`;
+}
 VIEWS.financeiro = () => {
   const t = today(), em7 = addDias(t, 7), em30 = addDias(t, 30);
   const pagarAbertas = db.contas.filter(c => c.tipo === 'pagar' && c.status !== 'paga'), receberAbertas = db.contas.filter(c => c.tipo === 'receber' && c.status !== 'paga');
   const venc = db.contas.filter(contaVencida);
   const soma = l => l.reduce((s, c) => s + valorAberto(c), 0);
   const fx = fluxoMensal(), mesAtual = fx.lista[2];
-  const abas = [['pagar', `A pagar (${pagarAbertas.length})`], ['receber', `A receber (${receberAbertas.length})`], ['fluxo', 'Fluxo de caixa'], ...(typeof painelCustos === 'function' ? [['custos', 'Custos e gráficos']] : [])];
+  const abas = [['mes', 'Contas do mês'], ['pagar', `A pagar (${pagarAbertas.length})`], ['receber', `A receber (${receberAbertas.length})`], ['fluxo', 'Fluxo de caixa'], ...(typeof painelCustos === 'function' ? [['custos', 'Custos e gráficos']] : [])];
   let corpo;
-  if (finAba === 'custos' && typeof painelCustos === 'function') corpo = painelCustos();
+  if (finAba === 'mes') corpo = painelMesFin();
+  else if (finAba === 'custos' && typeof painelCustos === 'function') corpo = painelCustos();
   else if (finAba === 'fluxo') {
     corpo = `<section class="card panel viz-root"><div class="section-title" style="margin:0 0 8px"><h3>Entradas e saídas por mês</h3>${btn(db.settings.saldoInicial != null && db.settings.saldoInicial !== '' ? 'Saldo inicial: ' + brl2(db.settings.saldoInicial) : 'Informar saldo inicial', 'fin-saldo', '', 'secondary')}</div>
       ${graficoFluxo(fx.lista)}
@@ -173,6 +195,7 @@ Object.assign(ACTIONS, {
   'fin-del': id => { const c = find('contas', id); if (!c) return; confirmDialog(`Excluir “${c.descricao}${c.parcela ? ' ' + c.parcela : ''}”?${c.gastoGeradoId ? ' O gasto gerado no pagamento também será excluído.' : ''}`, () => { if (c.gastoGeradoId) db.expenses = db.expenses.filter(g => g.id !== c.gastoGeradoId); remove('contas', id); showToast('Excluído'); }); },
   'fin-aba': id => { finAba = id; finFiltro = 'abertas'; render(); },
   'fin-filtro': id => { finFiltro = id; render(); },
+  'fin-mes': d => { const k = Number(d) || 0; if (!k) { finMes = ''; return render(); } const [a, m] = (finMes || today().slice(0, 7)).split('-').map(Number), dt = new Date(a, m - 1 + k, 1); finMes = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}`; render(); },
   'fin-saldo': () => openForm({title: 'Saldo inicial do caixa', sub: 'Saldo das contas da fazenda antes do primeiro mês do fluxo. Deixe em branco para não mostrar saldo.', values: {saldo: db.settings.saldoInicial ?? ''}, fields: [{k: 'saldo', label: 'Saldo (R$)', type: 'number'}],
     onSubmit: v => { db.settings.saldoInicial = v.saldo; save(); }})
 });
