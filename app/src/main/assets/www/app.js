@@ -467,7 +467,7 @@ function linhaManutencao(mt, semNome = 'Máquina removida') {
   const prog = mt.status === 'Programada', d = prog && mt.dataPrevista ? diasEntre(today(), mt.dataPrevista) : null;
   const color = mt.status === 'Concluída' ? 'gray' : mt.status === 'Em execução' ? 'blue' : prog ? (d != null && d < 0 ? 'red' : 'purple') : 'orange';
   const quando = prog ? `programada para ${fmtDate(mt.dataPrevista)}${d != null ? (d < 0 ? ` (atrasada ${-d} d)` : d === 0 ? ' (hoje)' : ` (em ${d} d)`) : ''}` : 'aberta ' + fmtDate(mt.date);
-  return `<div class="row"><span class="status ${color === 'gray' ? 'green' : color}"></span><div><strong>${esc(mt.kind)} — ${esc(machineName(mt.machineId) || semNome)}</strong><small>${esc([mt.description, quando, mt.doneDate ? 'concluída ' + fmtDate(mt.doneDate) : '', mt.cost ? 'R$ ' + num(mt.cost, 2) : '', mt.fotos?.length ? '📷 ' + mt.fotos.length : ''].filter(Boolean).join(' • '))}</small></div><div class="row-actions">${chip(mt.status, color)}${prog ? mini('▶ Iniciar', 'mt-iniciar', mt.id) : mt.status !== 'Concluída' ? mini('✓ Concluir', 'mt-done', mt.id, 'ok') : ''}${mini('Editar', 'mt-edit', mt.id)}${mini('Excluir', 'mt-del', mt.id, 'del')}</div></div>`;
+  return `<div class="row"><span class="status ${color === 'gray' ? 'green' : color}"></span><div><strong>${esc(mt.kind)} — ${esc(machineName(mt.machineId) || semNome)}</strong><small>${esc([mt.description, quando, mt.doneDate ? 'concluída ' + fmtDate(mt.doneDate) : '', mt.cost ? 'R$ ' + num(mt.cost, 2) : '', mt.fotos?.length ? '📷 ' + mt.fotos.length : ''].filter(Boolean).join(' • '))}</small></div><div class="row-actions">${chip(mt.status, color)}${prog ? mini('▶ Iniciar', 'mt-iniciar', mt.id) : mt.status !== 'Concluída' ? mini('☑ Checklist' + (typeof mcProgresso === 'function' && mt.checklist?.length ? ` ${mcProgresso(mt).feitos}/${mt.checklist.length}` : ''), 'mt-done', mt.id, 'ok') : mt.checklist?.length ? mini('Ver checklist', 'nav', 'ordem/' + mt.id) : ''}${mini('Editar', 'mt-edit', mt.id)}${mini('Excluir', 'mt-del', mt.id, 'del')}</div></div>`;
 }
 function maintenanceForm(mt = {}) {
   if (!db.machines.length) { showToast('Cadastre uma máquina primeiro'); return machineForm(); }
@@ -481,8 +481,11 @@ function maintenanceForm(mt = {}) {
       {k: 'kind', label: 'Tipo', type: 'select', options: ['Preventiva', 'Corretiva'], required: true},
       {k: 'date', label: 'Data de abertura', type: 'date', required: true},
       {k: 'description', label: 'Serviço', placeholder: 'Ex.: Troca de óleo e filtros', full: true, required: true},
+      {k: 'sintoma', label: 'O que aconteceu (defeito / sintoma)', type: 'textarea', mostrarSe: ['kind', 'Corretiva'], placeholder: 'Ex.: barulho no rolamento da roda dianteira; perdeu força; vazamento no hidráulico'},
+      {k: 'causa', label: 'Causa provável', mostrarSe: ['kind', 'Corretiva'], placeholder: 'Ex.: rolamento gasto, mangueira rompida'},
+      {k: 'parada', label: 'A máquina ficou parada?', type: 'select', options: ['Não', 'Sim'], mostrarSe: ['kind', 'Corretiva'], hint: 'Sim: o app conta o tempo parado até concluir.'},
       {k: 'cost', label: 'Custo (R$)', type: 'number', min: 0},
-      {k: 'status', label: 'Situação', type: 'select', options: ['Programada', 'Aberta', 'Em execução', 'Concluída'], required: true},
+      {k: 'status', label: 'Situação', type: 'select', options: ['Programada', 'Aberta', 'Em execução', 'Concluída'], required: true, hint: mt.id && mt.status !== 'Concluída' ? 'Para concluir, use o checklist da ordem.' : 'Concluída: só para registrar uma manutenção que já foi feita (sem checklist).'},
       {k: 'dataPrevista', label: 'Data prevista', type: 'date', mostrarSe: ['status', 'Programada'], hint: 'O app avisa 7 dias antes e no dia.'},
       {k: 'notes', label: 'Peças e observações', type: 'textarea'}
     ],
@@ -490,11 +493,17 @@ function maintenanceForm(mt = {}) {
       if (v.status === 'Programada' && !v.dataPrevista) return 'Informe a data prevista da manutenção programada';
       if (v.status === 'Programada' && v.dataPrevista < today() && !mt.id) return 'A data prevista já passou: escolha uma data a partir de hoje ou abra a manutenção agora';
       if (v.status !== 'Programada') v.dataPrevista = mt.dataPrevista || '';
+      if (v.kind === 'Corretiva' && !String(v.sintoma || '').trim()) return 'Corretiva: descreva o que aconteceu (defeito ou sintoma)';
+      // Ordem aberta só conclui pelo checklist (itens obrigatórios e teste de funcionamento)
+      if (mt.id && v.status === 'Concluída' && mt.status !== 'Concluída' && typeof mcAbrirOrdem === 'function') return 'Para concluir esta ordem, abra o checklist (botão ☑ Checklist) e marque os itens obrigatórios e o teste de funcionamento.';
+      if (v.kind !== 'Corretiva') { v.sintoma = ''; v.causa = ''; v.parada = ''; }
       const item = {...mt, ...v, id: idMt};
-      if (v.status === 'Concluída' && mt.status !== 'Concluída') finishMaintenance(item, false);
+      if (v.status === 'Concluída' && mt.status !== 'Concluída') { item.semChecklist = true; finishMaintenance(item, false); }
+      if (typeof mcAoSalvarOrdem === 'function') mcAoSalvarOrdem(item, mt);
       upsert('maintenances', item);
       if (typeof fotosAoSalvar === 'function') fotosAoSalvar('maintenances', idMt);
       showToast('Manutenção salva');
+      if (typeof mcAbrirOrdem === 'function' && ['Aberta', 'Em execução'].includes(item.status)) setTimeout(() => mcAbrirOrdem(item.id), 0);
     }
   });
   if (typeof anexarCampoFotos === 'function') anexarCampoFotos('maintenances', idMt, mt.fotos || []);

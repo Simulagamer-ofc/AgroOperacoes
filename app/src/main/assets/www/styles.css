@@ -1237,3 +1237,21 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
   .cd-largo #hojeClima #climaCorpo>.clima-periodos,.cd-largo #hojeClima #climaCorpo>.clima-sel-tit{grid-column:1;grid-row:span 6}
 }
 .clima-mapa-largo .mt-tela .mt-mapa{height:min(72vh,680px)!important}
+/* =================== Ordem de manutenção com checklist =================== */
+.mc-info .mc-chips{display:flex;gap:8px;margin-bottom:10px}
+.mc-nums{display:flex;flex-wrap:wrap;gap:14px 30px}.mc-nums small{display:block;color:var(--muted);font-size:.8rem}.mc-nums b{font-size:1.05rem}
+.mc-corretiva{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 24px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}.mc-corretiva small{color:var(--muted)}.mc-corretiva p{margin:2px 0 0}
+.mc-lista{margin-top:14px}
+.mc-barra{height:8px;background:var(--bg);border-radius:9px;overflow:hidden;margin-bottom:8px}.mc-barra span{display:block;height:100%;background:var(--green);border-radius:9px;transition:width .2s}
+.mc-item{padding:12px 0;border-top:1px solid var(--line);display:grid;gap:8px}
+.mc-item:first-of-type{border-top:0}
+.mc-nome{display:flex;justify-content:space-between;gap:10px;align-items:center}.mc-obrig{color:var(--red)}
+.mc-item.feito .mc-nome strong{color:var(--muted)}.mc-item.problema .mc-nome strong{color:var(--red)}
+.mc-estados{display:flex;flex-wrap:wrap;gap:6px}
+.mc-e{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:999px;padding:7px 12px;font:inherit;font-size:.86rem;cursor:pointer;min-height:38px}
+.mc-e.on.ok,.mc-e.on.trocado,.mc-e.on.ajustado{background:var(--green);border-color:var(--green);color:#fff}
+.mc-e.on.problema{background:var(--red);border-color:var(--red);color:#fff}.mc-e.on.na{background:var(--muted);border-color:var(--muted);color:#fff}
+.mc-obs{width:100%}
+.mc-peca{display:grid;grid-template-columns:minmax(0,1fr) 90px auto;gap:8px;align-items:center}
+@media(max-width:760px){.mc-e{flex:1 1 auto;text-align:center;padding:7px 8px}}
+.mc-obs,.mc-peca select,.mc-peca input{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--panel);color:var(--text);font:inherit;min-height:42px;width:100%}
