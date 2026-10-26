@@ -4,7 +4,9 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.69.2-beta1` — **MercaClima sem espaço vazio no tablet e no computador.** A coluna da esquerda tem o tempo agora, a janela de aplicação, os 7 dias, umidade e vento e logo abaixo o **mapa**; a da direita tem os alertas, a chuva registrada e os **detalhes do dia**. As duas colunas descem juntas (antes sobrava um vazio grande ao lado). No celular, tudo em uma coluna.
+`0.69.3-beta1` — **MercaClima com o mapa ocupando toda a parte de baixo.** Em cima: tempo agora, janela de aplicação, 7 dias, umidade e vento à esquerda; alertas e chuva registrada à direita (o cartão de chuva acompanha a altura e mostra os últimos registros). No meio, **Detalhes do dia** em faixa larga. Embaixo, o **mapa do tempo na largura toda**, mais alto.
+
+Anterior: `0.69.2-beta1` — **MercaClima sem espaço vazio no tablet e no computador.** A coluna da esquerda tem o tempo agora, a janela de aplicação, os 7 dias, umidade e vento e logo abaixo o **mapa**; a da direita tem os alertas, a chuva registrada e os **detalhes do dia**. As duas colunas descem juntas (antes sobrava um vazio grande ao lado). No celular, tudo em uma coluna.
 
 Anterior: `0.69.1-beta1` — **Olho para mostrar ou esconder os gastos na tela inicial.** Os cartões **Gastos do mês** e **Gastos por categoria** ganharam um botão de olho, como nos apps de banco: fechado mostra “R$ •••••”, aberto mostra os valores. A escolha fica guardada no aparelho (começa escondido). O valor do mês aparece resumido (ex.: R$ 13 mil) para caber inteiro no cartão.
 
