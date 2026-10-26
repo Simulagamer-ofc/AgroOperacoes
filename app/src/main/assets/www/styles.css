@@ -1223,3 +1223,17 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 .clima-mapa-largo{margin-top:14px}.clima-mapa-largo .mt-painel{margin:0}
 .clima-mapa-largo .mt-tela .mt-mapa{height:min(58vh,520px)}
 .clima-mapa-largo .mt-alerta{display:none!important}
+/* MercaClima: mapa embaixo ocupando a largura toda; coluna da direita acompanha a altura da esquerda */
+.clima-topo{align-items:stretch}
+.clima-topo .clima-col-prev{display:flex;flex-direction:column;gap:14px}
+.cd-chuva-card{flex:1}
+.cd-chuvas{margin-top:12px;border-top:1px solid var(--line);padding-top:8px}
+.cd-chuva{display:grid;grid-template-columns:auto 1fr auto;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:.9rem}
+.cd-chuva:last-child{border-bottom:0}.cd-chuva span:first-child{color:var(--muted)}
+.cd-largo{margin:0 0 14px}
+@media(min-width:901px){
+  .cd-largo #hojeClima #climaCorpo{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:4px 22px;align-items:start}
+  .cd-largo #hojeClima #climaCorpo>*{grid-column:2}
+  .cd-largo #hojeClima #climaCorpo>.clima-periodos,.cd-largo #hojeClima #climaCorpo>.clima-sel-tit{grid-column:1;grid-row:span 6}
+}
+.clima-mapa-largo .mt-tela .mt-mapa{height:min(72vh,680px)!important}
