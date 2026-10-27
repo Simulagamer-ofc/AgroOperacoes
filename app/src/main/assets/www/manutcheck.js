@@ -89,7 +89,7 @@ VIEWS.ordem = id => {
   const acao = mt.status === 'Programada' ? btn('▶ Iniciar', 'mt-iniciar', mt.id) : mt.status === 'Aberta' ? btn('▶ Iniciar manutenção', 'mc-iniciar', mt.id) + btn('✓ Concluir', 'mc-concluir', mt.id, 'secondary') : mt.status === 'Em execução' ? btn('✓ Concluir manutenção', 'mc-concluir', mt.id) : '';
   const custoPecas = '';
   return head(`${mt.description || 'Ordem de manutenção'}`, `${m?.name || 'Máquina removida'} • aberta em ${fmtDate(mt.date)}`, btn('← Máquinas', 'nav', m?.type === 'Implemento' ? 'implementos' : 'maquinas', 'secondary') + btn('Editar', 'mt-edit', mt.id, 'secondary') + (mt.checklist?.length || mt.maoObra?.length ? btn('PDF', 'mc-pdf', mt.id, 'secondary') + btn('Enviar', 'mc-enviar', mt.id, 'secondary') : '') + acao).replace('<section class="view-head">', '<section class="view-head" data-eyebrow="Ordem de manutenção">') +
-    `<section class="card panel mc-info"><div class="mc-chips">${chipTipo}${chip(mt.status, mt.status === 'Concluída' ? 'gray' : mt.status === 'Em execução' ? 'blue' : mt.status === 'Programada' ? 'purple' : 'orange')}</div>
+    `<section class="card panel mc-info"><div class="mc-chips">${chipTipo}${mcPendentes(mt).length ? chip('valor a informar', 'orange') : ''}${chip(mt.status, mt.status === 'Concluída' ? 'gray' : mt.status === 'Em execução' ? 'blue' : mt.status === 'Programada' ? 'purple' : 'orange')}</div>
       <div class="mc-nums"><div><small>Máquina</small><b>${esc(m?.name || '—')}</b><small>${esc([m?.type, m && Number(m.hours) > 0 ? num(m.hours) + ' h' : ''].filter(Boolean).join(' • '))}</small></div>
         ${mt.inicioEm ? `<div><small>Início</small><b>${esc(mcDH(mt.inicioEm))}</b><small>${mt.doneDate ? 'concluída ' + fmtDate(mt.doneDate) : 'em andamento'}</small></div>` : ''}${parada}
         <div><small>Custo total da manutenção</small><b>${mcCustoTotal(mt) > 0 ? 'R$ ' + num(mcCustoTotal(mt), 2) : '—'}</b><small>peças, mão de obra e serviços</small></div></div>
@@ -125,9 +125,10 @@ VIEWS.ordem.after = () => {
 
 // ---------- Mão de obra, serviços e custos ----------
 function mcCartaoCustos(mt) {
-  const mo = mt.maoObra || [], linha = x => `<div class="mc-mo"><span><b>${esc(x.tipo === 'servico' ? x.servico : x.nome)}</b><small>${x.tipo === 'servico' ? [x.nome ? (x.quem === 'terceiro' ? 'feito por ' + esc(x.nome) + ' (de fora)' : 'feito por ' + esc(x.nome)) : 'por serviço', x.doc ? esc(x.doc) : ''].filter(Boolean).join(' • ') : x.tipo === 'terceiro' ? `${x.qtd ? `${num(x.qtd)} h × R$ ${num(x.valorHora, 2)} • ` : ''}de fora${x.doc ? ' • ' + esc(x.doc) : ''}` : `${num(x.qtd)} ${x.unidade === 'dia' ? (Number(x.qtd) > 1 ? 'diárias' : 'diária') : 'h'}${x.fixo ? ' • fixo (salário em Financeiro)' : ''}`}</small></span><b>${Number(x.valor) > 0 ? 'R$ ' + num(x.valor, 2) : '—'}</b>${mini('×', 'mc-mo-del', mt.id + '|' + x.id, 'del')}</div>`;
+  const mo = mt.maoObra || [], linha = x => `<div class="mc-mo"><span><b>${esc(x.tipo === 'servico' ? x.servico : x.nome)}</b><small>${x.tipo === 'servico' ? [x.nome ? (x.quem === 'terceiro' ? 'feito por ' + esc(x.nome) + ' (de fora)' : 'feito por ' + esc(x.nome)) : 'por serviço', x.doc ? esc(x.doc) : ''].filter(Boolean).join(' • ') : x.tipo === 'terceiro' ? `${x.qtd ? `${num(x.qtd)} h × R$ ${num(x.valorHora, 2)} • ` : ''}de fora${x.doc ? ' • ' + esc(x.doc) : ''}` : `${num(x.qtd)} ${x.unidade === 'dia' ? (Number(x.qtd) > 1 ? 'diárias' : 'diária') : 'h'}${x.fixo ? ' • fixo (salário em Financeiro)' : ''}`}</small></span>${x.pendente ? `<span class="mc-pend">${mini('Informar valor', 'mc-mo-valor', mt.id + '|' + x.id, 'ok')}</span>` : `<b>${Number(x.valor) > 0 ? 'R$ ' + num(x.valor, 2) : '—'}</b>`}${mini('×', 'mc-mo-del', mt.id + '|' + x.id, 'del')}</div>`;
   const outros = Number(mt.custoOutros ?? (mo.length ? 0 : mt.cost)) || 0, eq = mcEquipeValor(mt), ter = mcTerceiros(mt), pe = Number(mt.custoPecas) || 0;
   return `<section class="card panel mc-custos"><div class="section-title" style="margin:0 0 8px"><h3>Mão de obra e custos</h3><span class="btn-row">${btn('Tabela de serviços', 'mc-servicos', '', 'secondary')}${btn('+ Mão de obra / serviço', 'mc-mo-add', mt.id, 'secondary')}</span></div>
+    ${mcPendentes(mt).length ? `<p class="mc-aviso-pend">⚠ ${mcPendentes(mt).length === 1 ? '1 serviço com valor a informar' : mcPendentes(mt).length + ' serviços com valor a informar'}: preencha para concluir a ordem.</p>` : ''}
     ${mo.length ? mo.map(linha).join('') : '<p class="nota" style="margin:0 0 8px">Lance cada serviço feito (troca de óleo, embreagem, solda…) com o preço da tabela, ou as horas da equipe.</p>'}
     <div class="mc-tot">
       <div><small>Mão de obra (serviços e de fora)</small><b>R$ ${num(ter, 2)}</b><small>entra no custo da ordem</small></div>
@@ -139,17 +140,23 @@ function mcCartaoCustos(mt) {
 }
 // Tabela de serviços de manutenção (preço por tipo de serviço) — vale para a fazenda toda, sincroniza na nuvem
 const mcServicos = () => (db.servicosManut || []).filter(x => !x.inativo).sort((a, b) => String(a.nome).localeCompare(String(b.nome), 'pt-BR'));
+// Serviços comuns já na lista (sem preço): o primeiro valor digitado vira o preço sugerido das próximas vezes
+const MC_SERV_COMUNS = ['Troca de óleo e filtros', 'Revisão geral', 'Embreagem', 'Freios', 'Solda', 'Rolamentos', 'Correias', 'Parte elétrica', 'Hidráulico (mangueiras e cilindros)', 'Pneus (troca ou conserto)', 'Arrefecimento (radiador)', 'Injeção / bomba injetora', 'Lubrificação geral'];
+const mcNorm = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+const mcComunsLivres = () => { const ja = new Set((db.servicosManut || []).map(x => mcNorm(x.nome))); return MC_SERV_COMUNS.filter(n => !ja.has(mcNorm(n))); };
+const mcPendentes = mt => (mt.maoObra || []).filter(x => x.pendente);
 function mcMaoObraForm(id) {
   const mt = find('maintenances', id); if (!mt) return; mcGuardarCampos(mt);
   const m = find('machines', mt.machineId), servs = mcServicos();
   const pessoas = () => db.equipe.map(p => ({value: p.id, label: `${p.nome} — ${p.tipo}${p.funcao ? ' (' + p.funcao + ')' : ''}`}));
-  openForm({title: 'Mão de obra ou serviço', sub: `${mt.description || 'Ordem'} — ${m?.name || ''}`, values: {cobranca: 'Por serviço', servico: servs[0]?.id || '__novo', valor: servs[0]?.valor ?? '', quem: '-', pessoa: db.equipe[0]?.id || 'terceiro', date: today(), guardar: 'Sim'},
+  const comuns = mcComunsLivres();
+  openForm({title: 'Mão de obra ou serviço', sub: `${mt.description || 'Ordem'} — ${m?.name || ''}`, values: {cobranca: 'Por serviço', servico: servs[0]?.id || (comuns[0] ? '__c:' + comuns[0] : '__novo'), valor: servs[0]?.valor ?? '', quem: '-', pessoa: db.equipe[0]?.id || 'terceiro', date: today(), guardar: 'Sim'},
     fields: [
       {k: 'cobranca', label: 'Como é cobrado', type: 'select', options: ['Por serviço', 'Por hora'], required: true, full: true},
-      {k: 'servico', label: 'Serviço', type: 'select', required: true, full: true, mostrarSe: ['cobranca', 'Por serviço'], options: () => [...servs.map(x => ({value: x.id, label: `${x.nome}${Number(x.valor) > 0 ? ' — R$ ' + num(x.valor, 2) : ''}`})), {value: '__novo', label: '+ Outro serviço (digitar)'}]},
+      {k: 'servico', label: 'Serviço', type: 'select', required: true, full: true, mostrarSe: ['cobranca', 'Por serviço'], options: () => [...servs.map(x => ({value: x.id, label: `${x.nome}${Number(x.valor) > 0 ? ' — R$ ' + num(x.valor, 2) : ''}`})), ...comuns.map(n => ({value: '__c:' + n, label: `${n} (sem preço ainda)`})), {value: '__novo', label: '+ Outro serviço (digitar)'}]},
       {k: 'servicoNome', label: 'Nome do serviço', full: true, placeholder: 'Ex.: Troca de óleo e filtros, Troca da embreagem', mostrarSe: [['cobranca', 'Por serviço'], ['servico', '__novo']]},
       {k: 'guardar', label: 'Guardar na tabela de serviços (com o preço)?', type: 'select', options: ['Sim', 'Não'], mostrarSe: [['cobranca', 'Por serviço'], ['servico', '__novo']]},
-      {k: 'valor', label: 'Valor do serviço (R$)', type: 'number', min: 0, mostrarSe: ['cobranca', 'Por serviço'], hint: 'Vem da tabela; dá para mudar só nesta ordem.'},
+      {k: 'valor', label: 'Valor do serviço (R$)', type: 'number', min: 0, mostrarSe: ['cobranca', 'Por serviço'], hint: 'Vem da tabela; dá para mudar só nesta ordem. Ainda não sabe? Deixe em branco: fica “valor a informar” e precisa ser preenchido para concluir.'},
       {k: 'quem', label: 'Quem fez', type: 'select', required: true, full: true, mostrarSe: ['cobranca', 'Por serviço'], options: () => [{value: '-', label: 'Não informar'}, {value: 'terceiro', label: 'Mecânico ou oficina de fora'}, ...pessoas()]},
       {k: 'nome', label: 'Nome do mecânico ou da oficina', full: true, mostrarSe: [['cobranca', 'Por serviço'], ['quem', 'terceiro']]},
       {k: 'pessoa', label: 'Quem fez', type: 'select', required: true, full: true, mostrarSe: ['cobranca', 'Por hora'], options: () => [...pessoas(), {value: 'terceiro', label: 'Mecânico ou oficina de fora'}]},
@@ -162,14 +169,16 @@ function mcMaoObraForm(id) {
     onSubmit: v => {
       mt.maoObra = mt.maoObra || []; if (mt.custoOutros == null) mt.custoOutros = mcOutros(mt);
       if (v.cobranca === 'Por serviço') {
-        let sv = v.servico !== '__novo' ? find('servicosManut', v.servico) : null;
-        const nomeServ = sv ? sv.nome : String(v.servicoNome || '').trim();
+        const comum = String(v.servico).startsWith('__c:') ? v.servico.slice(4) : '';
+        let sv = v.servico !== '__novo' && !comum ? find('servicosManut', v.servico) : null;
+        const nomeServ = sv ? sv.nome : comum || String(v.servicoNome || '').trim();
         if (!nomeServ) return 'Informe o nome do serviço';
-        if (!(v.valor > 0)) return 'Informe o valor do serviço';
-        if (!sv && v.guardar === 'Sim') { sv = {id: uid(), nome: nomeServ, valor: v.valor}; upsert('servicosManut', sv); }
+        const temValor = v.valor > 0;
+        // Serviço comum ou novo (com “guardar”): entra na tabela com o valor digitado, que vira o preço sugerido
+        if (!sv && temValor && (comum || v.guardar === 'Sim')) { sv = {id: uid(), nome: nomeServ, valor: v.valor}; upsert('servicosManut', sv); }
         const p = v.quem && !['terceiro', '-'].includes(v.quem) ? find('equipe', v.quem) : null;
         if (v.quem === 'terceiro' && !String(v.nome || '').trim()) return 'Informe o nome do mecânico ou da oficina';
-        mt.maoObra.push({id: uid(), tipo: 'servico', servico: nomeServ, servicoId: sv?.id || '', valor: v.valor, quem: v.quem === 'terceiro' ? 'terceiro' : p ? 'equipe' : '', nome: v.quem === 'terceiro' ? v.nome.trim() : p?.nome || '', pessoaId: p?.id || '', doc: v.doc || '', date: v.date});
+        mt.maoObra.push({id: uid(), tipo: 'servico', servico: nomeServ, servicoId: sv?.id || '', valor: temValor ? v.valor : '', pendente: !temValor, guardarPreco: !sv && (comum || v.guardar === 'Sim') ? true : undefined, quem: v.quem === 'terceiro' ? 'terceiro' : p ? 'equipe' : '', nome: v.quem === 'terceiro' ? v.nome.trim() : p?.nome || '', pessoaId: p?.id || '', doc: v.doc || '', date: v.date});
       } else if (v.pessoa === 'terceiro') {
         // Mecânico ou oficina de fora cobrando por hora: horas × valor da hora entram no custo da ordem
         if (!String(v.nomeHora || '').trim()) return 'Informe o nome do mecânico ou da oficina';
@@ -190,7 +199,7 @@ function mcMaoObraForm(id) {
     }});
   // Escolheu o serviço: o valor vem da tabela
   const sel = $('#f_servico', dialog), val = $('#f_valor', dialog);
-  if (sel && val) sel.addEventListener('change', () => { const x = find('servicosManut', sel.value); if (x && Number(x.valor) > 0) val.value = String(x.valor).replace('.', ','); else if (sel.value === '__novo') val.value = ''; });
+  if (sel && val) sel.addEventListener('change', () => { const x = find('servicosManut', sel.value); val.value = x && Number(x.valor) > 0 ? String(x.valor).replace('.', ',') : ''; });
 }
 // Tabela de serviços: lista com preço, editar, tirar e incluir
 function mcTabelaServicos() {
@@ -207,6 +216,17 @@ function mcTabelaServicos() {
 function mcServicoForm(x = {}) {
   openForm({title: x.id ? 'Editar serviço' : 'Novo serviço', values: x, fields: [{k: 'nome', label: 'Serviço', required: true, full: true, placeholder: 'Ex.: Troca de óleo e filtros'}, {k: 'valor', label: 'Preço (R$)', type: 'number', min: 0, required: true}],
     onSubmit: v => { if (!(v.valor > 0)) return 'Informe o preço'; upsert('servicosManut', {...x, ...v, id: x.id || uid(), inativo: false}); setTimeout(mcTabelaServicos, 0); }});
+}
+function mcMaoObraValor(chave) {
+  const [mid, eid] = String(chave).split('|'), mt = find('maintenances', mid), x = mt?.maoObra?.find(y => y.id === eid); if (!x) return;
+  openForm({title: 'Valor do serviço', sub: x.servico || x.nome, values: {valor: x.valor || ''}, fields: [{k: 'valor', label: 'Valor (R$)', type: 'number', min: 0, required: true}],
+    onSubmit: v => {
+      if (!(v.valor > 0)) return 'Informe o valor';
+      x.valor = v.valor; x.pendente = false;
+      // Primeiro preço de um serviço comum/novo: vira o preço sugerido na tabela
+      if (x.guardarPreco && !x.servicoId) { const sv = {id: uid(), nome: x.servico, valor: v.valor}; upsert('servicosManut', sv); x.servicoId = sv.id; delete x.guardarPreco; }
+      mcRecalcular(mt); upsert('maintenances', mt); showToast('Valor informado');
+    }});
 }
 function mcMaoObraExcluir(chave) {
   const [mid, eid] = String(chave).split('|'), mt = find('maintenances', mid), x = mt?.maoObra?.find(y => y.id === eid); if (!x) return;
@@ -240,7 +260,7 @@ function mcRelatorio(id, enviar) {
   }
   const pecas = (mt.checklist || []).filter(it => it.movId), movs = pecas.map(it => db.movements.find(x => x.id === it.movId)).filter(Boolean);
   if (movs.length) { P.secao('Peças do estoque', 'baixadas na conclusão'); P.tabela([{t: 'Peça', w: 2.6}, {t: 'Quantidade', w: 1, dir: true}, {t: 'Valor', w: 1.2, dir: true}], movs.map(x => { const s = find('stock', x.itemId); return [s?.name || 'item removido', `${num(x.qty)} ${s?.unit || ''}`, Number(x.value) > 0 ? brl2(x.value) : '-']; })); }
-  if (mt.maoObra?.length) { P.secao('Mão de obra e serviços'); P.tabela([{t: 'Serviço', w: 2.2}, {t: 'Quem fez', w: 1.8}, {t: 'Horas / dias', w: .9, dir: true}, {t: 'Valor', w: 1.1, dir: true}], mt.maoObra.map(x => [x.tipo === 'servico' ? x.servico + (x.doc ? ` (${x.doc})` : '') : x.tipo === 'terceiro' ? (x.qtd ? `Por hora (R$ ${num(x.valorHora, 2)}/h)` : 'Serviço de terceiro') + (x.doc ? ` (${x.doc})` : '') : 'Horas da equipe' + (x.fixo ? ' (fixo)' : ''), x.nome ? x.nome + (x.quem === 'terceiro' || x.tipo === 'terceiro' ? ' (de fora)' : '') : '-', x.qtd ? `${num(x.qtd)} ${x.unidade === 'dia' ? 'dia(s)' : 'h'}` : '-', Number(x.valor) > 0 ? brl2(x.valor) : '-'])); }
+  if (mt.maoObra?.length) { P.secao('Mão de obra e serviços'); P.tabela([{t: 'Serviço', w: 2.2}, {t: 'Quem fez', w: 1.8}, {t: 'Horas / dias', w: .9, dir: true}, {t: 'Valor', w: 1.1, dir: true}], mt.maoObra.map(x => [x.tipo === 'servico' ? x.servico + (x.doc ? ` (${x.doc})` : '') : x.tipo === 'terceiro' ? (x.qtd ? `Por hora (R$ ${num(x.valorHora, 2)}/h)` : 'Serviço de terceiro') + (x.doc ? ` (${x.doc})` : '') : 'Horas da equipe' + (x.fixo ? ' (fixo)' : ''), x.nome ? x.nome + (x.quem === 'terceiro' || x.tipo === 'terceiro' ? ' (de fora)' : '') : '-', x.qtd ? `${num(x.qtd)} ${x.unidade === 'dia' ? 'dia(s)' : 'h'}` : '-', x.pendente ? 'a informar' : Number(x.valor) > 0 ? brl2(x.valor) : '-'])); }
   P.secao('Custos');
   P.ficha([['Serviços (mão de obra)', brl2(mcTerceiros(mt))], ['Horas da equipe', brl2(mcEquipeValor(mt))], ['Peças do estoque', brl2(mt.custoPecas)], ['Outros custos', brl2(mt.custoOutros ?? (mt.maoObra?.length ? 0 : mt.cost))], ['Total da manutenção', brl2(mcCustoTotal(mt))]]);
   P.nota('Peças do estoque e mão de obra da equipe aparecem aqui para o custo total, mas são lançadas como gasto na compra e no apontamento (não se somam duas vezes).');
@@ -254,11 +274,12 @@ function mcRelatorio(id, enviar) {
 // ---------- Ações ----------
 function mcValidar(mt) {
   const l = mt.checklist || [];
-  if (!l.length) return '';
+  if (!l.length) return mcPendentes(mt).length ? `Informe o valor de “${mcPendentes(mt)[0].servico}” (mão de obra) antes de concluir` : '';
   const faltam = l.filter(it => it.obrig && !mcMarcado(it));
   if (faltam.length) return `Marque os itens obrigatórios: ${faltam.map(it => it.item).slice(0, 4).join(', ')}${faltam.length > 4 ? '…' : ''}`;
   const teste = l.find(it => it.item === MC_TESTE);
   if (teste && teste.estado !== 'ok') return 'O teste de funcionamento precisa estar OK para concluir. Se ainda há problema, mantenha a ordem aberta.';
+  const pend = mcPendentes(mt); if (pend.length) return `Informe o valor de “${pend[0].servico || pend[0].nome}” (mão de obra) antes de concluir`;
   const semObs = l.find(it => it.estado === 'problema' && !it.obs);
   if (semObs) return `Descreva o problema em “${semObs.item}”`;
   for (const it of l.filter(x => x.estado === 'trocado' && x.pecaId)) {
@@ -291,7 +312,7 @@ Object.assign(ACTIONS, {
   'mt-iniciar': id => { mtIniciarSemChecklist?.(id); const mt = find('maintenances', id); if (mt) { mcAoSalvarOrdem(mt, {}, false); upsert('maintenances', mt); mcAbrirOrdem(id); } },
   'mc-iniciar': id => { const mt = find('maintenances', id); if (!mt) return; mcGuardarCampos(mt); mt.status = 'Em execução'; mt.inicioEm = mt.inicioEm || new Date().toISOString(); upsert('maintenances', mt); showToast('Manutenção em execução'); render(); },
   'mc-concluir': mcConcluir,
-  'mc-mo-add': mcMaoObraForm, 'mc-mo-del': mcMaoObraExcluir, 'mc-servicos': mcTabelaServicos,
+  'mc-mo-add': mcMaoObraForm, 'mc-mo-del': mcMaoObraExcluir, 'mc-mo-valor': mcMaoObraValor, 'mc-servicos': mcTabelaServicos,
   'mc-pdf': id => mcRelatorio(id, false), 'mc-enviar': id => mcRelatorio(id, true),
   'mc-estado': chave => {
     const [mid, iid, e] = String(chave).split('|'), mt = find('maintenances', mid); if (!mt) return;
