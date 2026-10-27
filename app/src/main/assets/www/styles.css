@@ -1262,3 +1262,6 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 .mc-tot{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px}
 .mc-tot>div{background:var(--bg);border-radius:12px;padding:10px 12px}.mc-tot small{display:block;color:var(--muted);font-size:.8rem}.mc-tot b{font-size:1.08rem}
 .mc-tot-total{background:color-mix(in srgb,var(--green) 12%,var(--panel))!important;grid-column:1/-1}.mc-tot-total b{font-size:1.35rem;color:var(--green)}
+.mc-serv-lista{display:grid;gap:6px;margin:8px 0 12px;max-height:55vh;overflow:auto}
+.mc-serv{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.mc-custos .section-title{flex-wrap:wrap;gap:8px}
