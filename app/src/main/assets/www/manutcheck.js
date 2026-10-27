@@ -125,12 +125,12 @@ VIEWS.ordem.after = () => {
 
 // ---------- Mão de obra, serviços e custos ----------
 function mcCartaoCustos(mt) {
-  const mo = mt.maoObra || [], linha = x => `<div class="mc-mo"><span><b>${esc(x.tipo === 'servico' ? x.servico : x.nome)}</b><small>${x.tipo === 'servico' ? [x.nome ? (x.quem === 'terceiro' ? 'feito por ' + esc(x.nome) + ' (de fora)' : 'feito por ' + esc(x.nome)) : 'por serviço', x.doc ? esc(x.doc) : ''].filter(Boolean).join(' • ') : x.tipo === 'terceiro' ? `serviço de terceiro${x.doc ? ' • ' + esc(x.doc) : ''}` : `${num(x.qtd)} ${x.unidade === 'dia' ? (Number(x.qtd) > 1 ? 'diárias' : 'diária') : 'h'}${x.fixo ? ' • fixo (salário em Financeiro)' : ''}`}</small></span><b>${Number(x.valor) > 0 ? 'R$ ' + num(x.valor, 2) : '—'}</b>${mini('×', 'mc-mo-del', mt.id + '|' + x.id, 'del')}</div>`;
+  const mo = mt.maoObra || [], linha = x => `<div class="mc-mo"><span><b>${esc(x.tipo === 'servico' ? x.servico : x.nome)}</b><small>${x.tipo === 'servico' ? [x.nome ? (x.quem === 'terceiro' ? 'feito por ' + esc(x.nome) + ' (de fora)' : 'feito por ' + esc(x.nome)) : 'por serviço', x.doc ? esc(x.doc) : ''].filter(Boolean).join(' • ') : x.tipo === 'terceiro' ? `${x.qtd ? `${num(x.qtd)} h × R$ ${num(x.valorHora, 2)} • ` : ''}de fora${x.doc ? ' • ' + esc(x.doc) : ''}` : `${num(x.qtd)} ${x.unidade === 'dia' ? (Number(x.qtd) > 1 ? 'diárias' : 'diária') : 'h'}${x.fixo ? ' • fixo (salário em Financeiro)' : ''}`}</small></span><b>${Number(x.valor) > 0 ? 'R$ ' + num(x.valor, 2) : '—'}</b>${mini('×', 'mc-mo-del', mt.id + '|' + x.id, 'del')}</div>`;
   const outros = Number(mt.custoOutros ?? (mo.length ? 0 : mt.cost)) || 0, eq = mcEquipeValor(mt), ter = mcTerceiros(mt), pe = Number(mt.custoPecas) || 0;
   return `<section class="card panel mc-custos"><div class="section-title" style="margin:0 0 8px"><h3>Mão de obra e custos</h3><span class="btn-row">${btn('Tabela de serviços', 'mc-servicos', '', 'secondary')}${btn('+ Mão de obra / serviço', 'mc-mo-add', mt.id, 'secondary')}</span></div>
     ${mo.length ? mo.map(linha).join('') : '<p class="nota" style="margin:0 0 8px">Lance cada serviço feito (troca de óleo, embreagem, solda…) com o preço da tabela, ou as horas da equipe.</p>'}
     <div class="mc-tot">
-      <div><small>Serviços (mão de obra)</small><b>R$ ${num(ter, 2)}</b><small>por serviço e de terceiros</small></div>
+      <div><small>Mão de obra (serviços e de fora)</small><b>R$ ${num(ter, 2)}</b><small>entra no custo da ordem</small></div>
       <div><small>Horas da equipe</small><b>R$ ${num(eq, 2)}</b><small>${mcEquipeHoras(mt) ? num(mcEquipeHoras(mt)) + ' h • ' : ''}lançada em Mão de obra</small></div>
       <div><small>Peças do estoque</small><b>R$ ${num(pe, 2)}</b><small>lançadas na compra</small></div>
       <div><small>Outros custos</small><b>R$ ${num(outros, 2)}</b><small>em Editar</small></div>
@@ -143,7 +143,7 @@ function mcMaoObraForm(id) {
   const mt = find('maintenances', id); if (!mt) return; mcGuardarCampos(mt);
   const m = find('machines', mt.machineId), servs = mcServicos();
   const pessoas = () => db.equipe.map(p => ({value: p.id, label: `${p.nome} — ${p.tipo}${p.funcao ? ' (' + p.funcao + ')' : ''}`}));
-  openForm({title: 'Mão de obra ou serviço', sub: `${mt.description || 'Ordem'} — ${m?.name || ''}`, values: {cobranca: 'Por serviço', servico: servs[0]?.id || '__novo', valor: servs[0]?.valor ?? '', quem: '-', date: today(), guardar: 'Sim'},
+  openForm({title: 'Mão de obra ou serviço', sub: `${mt.description || 'Ordem'} — ${m?.name || ''}`, values: {cobranca: 'Por serviço', servico: servs[0]?.id || '__novo', valor: servs[0]?.valor ?? '', quem: '-', pessoa: db.equipe[0]?.id || 'terceiro', date: today(), guardar: 'Sim'},
     fields: [
       {k: 'cobranca', label: 'Como é cobrado', type: 'select', options: ['Por serviço', 'Por hora'], required: true, full: true},
       {k: 'servico', label: 'Serviço', type: 'select', required: true, full: true, mostrarSe: ['cobranca', 'Por serviço'], options: () => [...servs.map(x => ({value: x.id, label: `${x.nome}${Number(x.valor) > 0 ? ' — R$ ' + num(x.valor, 2) : ''}`})), {value: '__novo', label: '+ Outro serviço (digitar)'}]},
@@ -152,8 +152,11 @@ function mcMaoObraForm(id) {
       {k: 'valor', label: 'Valor do serviço (R$)', type: 'number', min: 0, mostrarSe: ['cobranca', 'Por serviço'], hint: 'Vem da tabela; dá para mudar só nesta ordem.'},
       {k: 'quem', label: 'Quem fez', type: 'select', required: true, full: true, mostrarSe: ['cobranca', 'Por serviço'], options: () => [{value: '-', label: 'Não informar'}, {value: 'terceiro', label: 'Mecânico ou oficina de fora'}, ...pessoas()]},
       {k: 'nome', label: 'Nome do mecânico ou da oficina', full: true, mostrarSe: [['cobranca', 'Por serviço'], ['quem', 'terceiro']]},
-      {k: 'pessoa', label: 'Quem fez', type: 'select', full: true, mostrarSe: ['cobranca', 'Por hora'], options: pessoas},
+      {k: 'pessoa', label: 'Quem fez', type: 'select', required: true, full: true, mostrarSe: ['cobranca', 'Por hora'], options: () => [...pessoas(), {value: 'terceiro', label: 'Mecânico ou oficina de fora'}]},
+      {k: 'nomeHora', label: 'Nome do mecânico ou da oficina', full: true, mostrarSe: [['cobranca', 'Por hora'], ['pessoa', 'terceiro']]},
       {k: 'qtd', label: 'Horas trabalhadas (diarista: dias)', type: 'number', min: 0, mostrarSe: ['cobranca', 'Por hora']},
+      {k: 'valorHora', label: 'Valor da hora (R$)', type: 'number', min: 0, mostrarSe: [['cobranca', 'Por hora'], ['pessoa', 'terceiro']]},
+      {k: 'docHora', label: 'Nota ou recibo', mostrarSe: [['cobranca', 'Por hora'], ['pessoa', 'terceiro']]},
       {k: 'doc', label: 'Nota ou recibo', mostrarSe: ['cobranca', 'Por serviço']},
       {k: 'date', label: 'Data', type: 'date', required: true}],
     onSubmit: v => {
@@ -167,6 +170,12 @@ function mcMaoObraForm(id) {
         const p = v.quem && !['terceiro', '-'].includes(v.quem) ? find('equipe', v.quem) : null;
         if (v.quem === 'terceiro' && !String(v.nome || '').trim()) return 'Informe o nome do mecânico ou da oficina';
         mt.maoObra.push({id: uid(), tipo: 'servico', servico: nomeServ, servicoId: sv?.id || '', valor: v.valor, quem: v.quem === 'terceiro' ? 'terceiro' : p ? 'equipe' : '', nome: v.quem === 'terceiro' ? v.nome.trim() : p?.nome || '', pessoaId: p?.id || '', doc: v.doc || '', date: v.date});
+      } else if (v.pessoa === 'terceiro') {
+        // Mecânico ou oficina de fora cobrando por hora: horas × valor da hora entram no custo da ordem
+        if (!String(v.nomeHora || '').trim()) return 'Informe o nome do mecânico ou da oficina';
+        if (!(v.qtd > 0)) return 'Informe as horas trabalhadas';
+        if (!(v.valorHora > 0)) return 'Informe o valor da hora';
+        mt.maoObra.push({id: uid(), tipo: 'terceiro', nome: v.nomeHora.trim(), qtd: v.qtd, unidade: 'h', valorHora: v.valorHora, valor: Math.round(v.qtd * v.valorHora * 100) / 100, doc: v.docHora || '', date: v.date});
       } else {
         const p = find('equipe', v.pessoa); if (!p) return db.equipe.length ? 'Escolha quem fez' : 'Cadastre a equipe em Mão de obra para lançar por hora';
         if (!(v.qtd > 0)) return 'Informe as horas trabalhadas';
@@ -231,7 +240,7 @@ function mcRelatorio(id, enviar) {
   }
   const pecas = (mt.checklist || []).filter(it => it.movId), movs = pecas.map(it => db.movements.find(x => x.id === it.movId)).filter(Boolean);
   if (movs.length) { P.secao('Peças do estoque', 'baixadas na conclusão'); P.tabela([{t: 'Peça', w: 2.6}, {t: 'Quantidade', w: 1, dir: true}, {t: 'Valor', w: 1.2, dir: true}], movs.map(x => { const s = find('stock', x.itemId); return [s?.name || 'item removido', `${num(x.qty)} ${s?.unit || ''}`, Number(x.value) > 0 ? brl2(x.value) : '-']; })); }
-  if (mt.maoObra?.length) { P.secao('Mão de obra e serviços'); P.tabela([{t: 'Serviço', w: 2.2}, {t: 'Quem fez', w: 1.8}, {t: 'Horas / dias', w: .9, dir: true}, {t: 'Valor', w: 1.1, dir: true}], mt.maoObra.map(x => [x.tipo === 'servico' ? x.servico + (x.doc ? ` (${x.doc})` : '') : x.tipo === 'terceiro' ? 'Serviço de terceiro' + (x.doc ? ` (${x.doc})` : '') : 'Horas da equipe' + (x.fixo ? ' (fixo)' : ''), x.nome ? x.nome + (x.quem === 'terceiro' || x.tipo === 'terceiro' ? ' (de fora)' : '') : '-', x.tipo === 'equipe' ? `${num(x.qtd)} ${x.unidade === 'dia' ? 'dia(s)' : 'h'}` : '-', Number(x.valor) > 0 ? brl2(x.valor) : '-'])); }
+  if (mt.maoObra?.length) { P.secao('Mão de obra e serviços'); P.tabela([{t: 'Serviço', w: 2.2}, {t: 'Quem fez', w: 1.8}, {t: 'Horas / dias', w: .9, dir: true}, {t: 'Valor', w: 1.1, dir: true}], mt.maoObra.map(x => [x.tipo === 'servico' ? x.servico + (x.doc ? ` (${x.doc})` : '') : x.tipo === 'terceiro' ? (x.qtd ? `Por hora (R$ ${num(x.valorHora, 2)}/h)` : 'Serviço de terceiro') + (x.doc ? ` (${x.doc})` : '') : 'Horas da equipe' + (x.fixo ? ' (fixo)' : ''), x.nome ? x.nome + (x.quem === 'terceiro' || x.tipo === 'terceiro' ? ' (de fora)' : '') : '-', x.qtd ? `${num(x.qtd)} ${x.unidade === 'dia' ? 'dia(s)' : 'h'}` : '-', Number(x.valor) > 0 ? brl2(x.valor) : '-'])); }
   P.secao('Custos');
   P.ficha([['Serviços (mão de obra)', brl2(mcTerceiros(mt))], ['Horas da equipe', brl2(mcEquipeValor(mt))], ['Peças do estoque', brl2(mt.custoPecas)], ['Outros custos', brl2(mt.custoOutros ?? (mt.maoObra?.length ? 0 : mt.cost))], ['Total da manutenção', brl2(mcCustoTotal(mt))]]);
   P.nota('Peças do estoque e mão de obra da equipe aparecem aqui para o custo total, mas são lançadas como gasto na compra e no apontamento (não se somam duas vezes).');
