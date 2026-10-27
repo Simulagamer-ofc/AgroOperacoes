@@ -14,7 +14,7 @@ function grupoResumo(d, de, ate) {
   const concl = ops.filter(o => o.status === 'Concluída');
   const areaTrab = concl.filter(o => opTemArea(o)).reduce((s, o) => s + (Number(o.area) || 0), 0);
   const atrasadas = (d.operations || []).filter(o => o.status === 'Programada' && o.date && o.date < ate).length;
-  const abertas = new Set((d.maintenances || []).filter(m => m.status !== 'Concluída').map(m => m.machineId));
+  const abertas = new Set((d.maintenances || []).filter(m => !['Concluída', 'Recusada'].includes(m.status) && (m.status !== 'Aguardando autorização' || m.parada === 'Sim')).map(m => m.machineId));
   const maquinas = (d.machines || []).filter(m => m.state !== 'Inativa');
   const revisoes = maquinas.filter(m => Number(m.nextService) > 0 && Number(m.nextService) - (Number(m.hours) || 0) <= SERVICE_WARN_HOURS).length;
   const estoqueBaixo = (d.stock || []).filter(s => Number(s.min) > 0 && Number(s.qty) <= Number(s.min)).length;

@@ -24,7 +24,7 @@ const safeStorage = {
 
 // ---------- Banco de dados local ----------
 const DB_KEY = 'agro-db-v1';
-const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs', 'fuel', 'contas', 'colheitas', 'vendas', 'chuvas', 'monitoramentos', 'aplicacoes', 'equipe', 'apontamentos', 'romaneios', 'lotesSecagem', 'movSilo', 'termometrias', 'checklistsGraos', 'referenciasFazenda', 'orcamentos', 'pesagens', 'avaliacoes', 'servicosManut'];
+const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs', 'fuel', 'contas', 'colheitas', 'vendas', 'chuvas', 'monitoramentos', 'aplicacoes', 'equipe', 'apontamentos', 'romaneios', 'lotesSecagem', 'movSilo', 'termometrias', 'checklistsGraos', 'referenciasFazenda', 'orcamentos', 'pesagens', 'avaliacoes', 'servicosManut', 'checklistsMaq'];
 const emptyDb = () => ({version: 1, settings: {farm: '', owner: ''}, ...Object.fromEntries(COLLECTIONS.map(c => [c, []]))});
 // Completa um banco vindo de fora (armazenamento, backup, sincronização): todas as coleções como listas e configurações completas
 function normalizarDb(data) {
@@ -115,11 +115,14 @@ const SERVICE_WARN_HOURS = 25;
 const fieldName = id => find('fields', id)?.name || '';
 const machineName = id => find('machines', id)?.name || '';
 const opPlace = op => fieldName(op.fieldId) || op.place || 'Local não informado';
-// Em aberto = aberta ou em execução (a programada para uma data futura não deixa a máquina “em manutenção”)
-const openMaintenances = machineId => db.maintenances.filter(m => m.status !== 'Concluída' && m.status !== 'Programada' && (!machineId || m.machineId === machineId));
+// Em aberto = aberta, em execução ou a conferir (a programada para uma data futura não deixa a máquina “em manutenção”;
+// o pedido aguardando autorização e o recusado também não — o pedido só conta quando a máquina ficou parada)
+const MANUT_FORA_ABERTA = ['Concluída', 'Programada', 'Aguardando autorização', 'Recusada'];
+const openMaintenances = machineId => db.maintenances.filter(m => !MANUT_FORA_ABERTA.includes(m.status) && (!machineId || m.machineId === machineId));
+const pedidoParado = machineId => db.maintenances.some(m => m.status === 'Aguardando autorização' && m.parada === 'Sim' && m.machineId === machineId);
 const manutProgramadas = machineId => db.maintenances.filter(m => m.status === 'Programada' && (!machineId || m.machineId === machineId));
 const isInactive = m => m.state === 'Inativa';
-const machineStatus = m => openMaintenances(m.id).length ? 'Em manutenção' : (isInactive(m) ? 'Inativa' : 'Disponível');
+const machineStatus = m => openMaintenances(m.id).length || pedidoParado(m.id) ? 'Em manutenção' : (isInactive(m) ? 'Inativa' : 'Disponível');
 const hoursToService = m => (Number(m.nextService) || 0) - (Number(m.hours) || 0);
 const stockLow = s => Number(s.min) > 0 && Number(s.qty) <= Number(s.min);
 
@@ -461,15 +464,18 @@ function hourForm(machineId) {
 }
 
 // Ordem da lista: em aberto, programadas (pela data), concluídas (mais recentes primeiro)
-const pesoManut = mt => mt.status === 'Concluída' ? 2 : mt.status === 'Programada' ? 1 : 0;
+const pesoManut = mt => mt.status === 'Concluída' || mt.status === 'Recusada' ? 2 : mt.status === 'Programada' ? 1 : 0;
 const ordemManut = (a, b) => pesoManut(a) - pesoManut(b) || (a.status === 'Programada' ? String(a.dataPrevista || '').localeCompare(String(b.dataPrevista || '')) : String(b.date || '').localeCompare(String(a.date || '')));
 function linhaManutencao(mt, semNome = 'Máquina removida') {
   const prog = mt.status === 'Programada', d = prog && mt.dataPrevista ? diasEntre(today(), mt.dataPrevista) : null;
-  const color = mt.status === 'Concluída' ? 'gray' : mt.status === 'Em execução' ? 'blue' : prog ? (d != null && d < 0 ? 'red' : 'purple') : 'orange';
+  const pedido = mt.status === 'Aguardando autorização', recusada = mt.status === 'Recusada', vePreco = typeof mcpVeValores !== 'function' || mcpVeValores(), gestor = typeof mcpGestor !== 'function' || mcpGestor();
+  const color = mt.status === 'Concluída' || recusada ? 'gray' : mt.status === 'Em execução' ? 'blue' : mt.status === 'A conferir' ? 'purple' : pedido ? 'red' : prog ? (d != null && d < 0 ? 'red' : 'purple') : 'orange';
   const quando = prog ? `programada para ${fmtDate(mt.dataPrevista)}${d != null ? (d < 0 ? ` (atrasada ${-d} d)` : d === 0 ? ' (hoje)' : ` (em ${d} d)`) : ''}` : 'aberta ' + fmtDate(mt.date);
-  return `<div class="row"><span class="status ${color === 'gray' ? 'green' : color}"></span><div><strong>${esc(mt.kind)} — ${esc(machineName(mt.machineId) || semNome)}</strong><small>${esc([mt.description, quando, mt.doneDate ? 'concluída ' + fmtDate(mt.doneDate) : '', mt.cost ? 'R$ ' + num(mt.cost, 2) : '', mt.fotos?.length ? '📷 ' + mt.fotos.length : ''].filter(Boolean).join(' • '))}</small></div><div class="row-actions">${chip(mt.status, color)}${prog ? mini('▶ Iniciar', 'mt-iniciar', mt.id) : mt.status !== 'Concluída' ? mini('☑ Checklist' + (typeof mcProgresso === 'function' && mt.checklist?.length ? ` ${mcProgresso(mt).feitos}/${mt.checklist.length}` : ''), 'mt-done', mt.id, 'ok') : mt.checklist?.length ? mini('Ver checklist', 'nav', 'ordem/' + mt.id) : ''}${mini('Editar', 'mt-edit', mt.id)}${mini('Excluir', 'mt-del', mt.id, 'del')}</div></div>`;
+  return `<div class="row"><span class="status ${color === 'gray' ? 'green' : color}"></span><div><strong>${esc(mt.kind)} — ${esc(machineName(mt.machineId) || semNome)}</strong><small>${esc([mt.description, quando, mt.doneDate ? 'concluída ' + fmtDate(mt.doneDate) : '', mt.cost && vePreco ? 'R$ ' + num(mt.cost, 2) : '', mt.fotos?.length ? '📷 ' + mt.fotos.length : ''].filter(Boolean).join(' • '))}</small></div><div class="row-actions">${chip(mt.status, color)}${pedido || recusada ? mini(pedido ? 'Ver pedido' : 'Ver', 'nav', 'ordem/' + mt.id, pedido && gestor ? 'ok' : '') : prog ? mini('▶ Iniciar', 'mt-iniciar', mt.id) : mt.status !== 'Concluída' ? mini('☑ Checklist' + (typeof mcProgresso === 'function' && mt.checklist?.length ? ` ${mcProgresso(mt).feitos}/${mt.checklist.length}` : ''), 'mt-done', mt.id, 'ok') : mt.checklist?.length ? mini('Ver checklist', 'nav', 'ordem/' + mt.id) : ''}${gestor ? mini('Editar', 'mt-edit', mt.id) : ''}${mini('Excluir', 'mt-del', mt.id, 'del')}</div></div>`;
 }
 function maintenanceForm(mt = {}) {
+  // Usuário comum não abre nem edita a ordem: informa o problema pelo checklist da máquina (quem autoriza abre a ordem)
+  if (typeof mcpSoChecklist === 'function' && mcpSoChecklist(mt)) return;
   if (!db.machines.length) { showToast('Cadastre uma máquina primeiro'); return machineForm(); }
   const idMt = mt.id || uid(); // id já na abertura, para as fotos
   openForm({
@@ -791,7 +797,7 @@ VIEWS.operacoes = () => {
 VIEWS.maquinas = () => {
   const ms = db.machines.filter(m => m.type !== 'Implemento').sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''))); // implementos: aba própria
   const mts = db.maintenances.filter(mt => find('machines', mt.machineId)?.type !== 'Implemento').sort(ordemManut);
-  return head('Máquinas e manutenção', 'Horímetro, revisões programadas e ordens de manutenção.', btn('Registrar horímetro', 'hour-new', '', 'secondary') + btn('Abrir manutenção', 'mt-new', '', 'secondary') + btn('+ Nova máquina', 'mc-new')) +
+  return head('Máquinas e manutenção', 'Horímetro, revisões programadas e ordens de manutenção.', btn('Registrar horímetro', 'hour-new', '', 'secondary') + btn('☑ Checklists', 'nav', 'checklists', 'secondary') + (typeof mcpGestor !== 'function' || mcpGestor() ? btn('Abrir manutenção', 'mt-new', '', 'secondary') : btn('☑ Fazer checklist', 'mcp-novo', '', 'secondary')) + btn('+ Nova máquina', 'mc-new')) +
     (ms.length ? `<section class="cards">${ms.map(m => {
       const st = machineStatus(m), left = hoursToService(m), temRev = Number(m.nextService) > 0;
       const color = st === 'Em manutenção' ? 'orange' : st === 'Inativa' ? 'gray' : 'green';
@@ -808,7 +814,7 @@ VIEWS.maquinas = () => {
         <div class="maq-horas"><span class="big">${num(m.hours)} h</span><small>último registro ${fmtDate(db.hourLogs.filter(h => h.machineId === m.id).sort(byDateDesc)[0]?.date)}</small></div>
         <div class="maq-rev ${corRev}"><small>${textoRev}</small>${temRev ? `<div class="progress"><span style="width:${pct}%"></span></div>` : ''}</div>
         ${extras.length ? `<div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>` : ''}
-        <div class="maq-acoes">${isInactive(m) ? '' : mini('◷ Horímetro', 'hour-new', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}
+        <div class="maq-acoes">${isInactive(m) ? '' : mini('◷ Horímetro', 'hour-new', m.id) + mini('☑ Checklist', 'mcp-novo', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}
           <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">
             ${isInactive(m) ? '' : mini('⛽ Abastecimento', 'cb-new', m.id)}${mini('◎ Aferição e calibragem', 'af-nova', m.id)}${mini('Histórico de aferições', 'af-maq', m.id)}${mini('⚙ Configuração para aferição', 'mc-config', m.id)}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
           </div></details></div></article>`;

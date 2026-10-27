@@ -71,8 +71,9 @@
     const api = {
       doc, texto, COR,
       nota(msg) { fonte(9); cor(COR.suave); doc.splitTextToSize(texto(msg), LARG).forEach(l => { garantir(5); doc.text(l, M, y); y += 4.4; }); y += 1.5; },
-      secao(tit, sub) {
-        secaoAtual = tit; garantir(26); y += 4;
+      // reserva: espaço extra (mm) que o conteúdo logo abaixo precisa, para o título não ficar sozinho no fim da página
+      secao(tit, sub, reserva = 0) {
+        secaoAtual = tit; garantir(26 + reserva); y += 4;
         cor(COR.verde, 'fill'); doc.rect(M, y - 4.2, 1.4, 5.6, 'F');
         fonte(12.5, true); cor(COR.texto); escrever(tit, M + 4, y);
         if (sub) { fonte(8.5); cor(COR.suave); escrever(sub, A4.l - M, y, {align: 'right'}); }
@@ -80,6 +81,22 @@
       },
       espaco(mm) { y += mm; },
       nada(msg) { fonte(9.5); cor(COR.suave); escrever(msg, M + 4, y + 1); y += 8; },
+      // Fotos em grade (3 por linha): lista de {src: dataURL JPEG, w, h, legenda}
+      fotos(lista) {
+        const gap = 4, col = 3, lw = (LARG - gap * (col - 1)) / col, maxH = 62;
+        for (let i = 0; i < lista.length; i += col) {
+          const linha = lista.slice(i, i + col).map(f => { const k = Math.min(lw / f.w, maxH / f.h); return {...f, dw: f.w * k, dh: f.h * k}; });
+          const alt = Math.max(...linha.map(f => f.dh)) + 7;
+          garantir(alt);
+          linha.forEach((f, j) => {
+            const x = M + j * (lw + gap) + (lw - f.dw) / 2;
+            try { doc.addImage(f.src, 'JPEG', x, y, f.dw, f.dh); } catch { /* foto ilegível: fica só a legenda */ }
+            if (f.legenda) { fonte(7.5); cor(COR.suave); escrever(f.legenda, M + j * (lw + gap) + lw / 2, y + f.dh + 4, {align: 'center'}); }
+          });
+          y += alt;
+        }
+        y += 2;
+      },
       // Cartões de resumo (até 3 por linha): [rótulo, valor, dica, cor]
       cartoes(lista) {
         const porLinha = 3, gap = 4, w = (LARG - gap * (porLinha - 1)) / porLinha, h = 22;

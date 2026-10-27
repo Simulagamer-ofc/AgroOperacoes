@@ -1268,3 +1268,37 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 .mc-aviso-pend{margin:0 0 8px;padding:9px 12px;border-radius:10px;background:color-mix(in srgb,var(--orange) 14%,transparent);color:#b45309;font-size:.9rem}
 :root[data-theme="dark"] .mc-aviso-pend{color:var(--orange)}
 .mc-pend button{border:1px solid var(--orange);background:color-mix(in srgb,var(--orange) 14%,var(--panel));color:#b45309;border-radius:999px;padding:7px 14px;font:inherit;font-weight:600;cursor:pointer}:root[data-theme="dark"] .mc-pend button{color:var(--orange)}
+/* Checklist da máquina e pedido de manutenção (manutpedido.js) */
+.mcp-chk{border:1px solid var(--line);border-radius:14px;padding:12px;background:color-mix(in srgb,var(--bg) 55%,var(--panel))}
+.mcp-topo{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}.mcp-topo small{display:block;color:var(--muted);font-size:.82rem}
+.mcp-item{display:grid;gap:6px;padding:9px 0;border-top:1px solid var(--line)}
+.mcp-nome{font-weight:600}.mcp-item.ok .mcp-nome{color:var(--muted)}.mcp-item.defeito .mcp-nome{color:var(--red)}
+.mcp-bts{display:flex;flex-wrap:wrap;gap:6px}
+.mcp-e{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:999px;padding:6px 12px;font:inherit;font-size:.86rem;cursor:pointer;min-height:38px}
+.mcp-e.on.ok{background:var(--green);border-color:var(--green);color:#fff}.mcp-e.on.defeito{background:var(--red);border-color:var(--red);color:#fff}.mcp-e.on.na{background:var(--muted);border-color:var(--muted);color:#fff}
+.mcp-obs,.mcp-nome-livre,.mcp-chk select,.mcp-chk input[data-chk-hor]{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--panel);color:var(--text);font:inherit;min-height:42px;width:100%}
+.mcp-ja{margin:4px 0 8px;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--orange) 12%,transparent);font-size:.86rem}
+.mcp-def{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);display:grid;gap:10px}
+@media(max-width:760px){.mcp-e{flex:1 1 auto;text-align:center;padding:6px 8px}}
+.mcp-pedido,.mcp-comps{margin-top:14px}
+.mcp-aviso{margin:0 0 10px;padding:9px 12px;border-radius:10px;background:color-mix(in srgb,var(--orange) 14%,transparent);font-size:.9rem}
+.mcp-aviso.recusa{background:color-mix(in srgb,var(--red) 12%,transparent)}
+.mcp-ok{margin:0 0 10px;padding:9px 12px;border-radius:10px;background:color-mix(in srgb,var(--green) 12%,transparent);font-size:.9rem}
+.mcp-def-item{padding:9px 0;border-top:1px solid var(--line)}.mcp-def-item strong{color:var(--red);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.mcp-relato{padding:4px 0 0 18px}.mcp-relato small{display:block;color:var(--muted);font-size:.8rem}
+.mcp-comp{padding:10px 12px;border:1px solid var(--line);border-radius:12px;margin-top:8px;display:grid;gap:6px}
+.mcp-comp.pend{border-color:var(--red)}.mcp-comp-topo{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap}
+.mcp-linha{border-top:1px solid var(--line)}.mcp-linha:first-child{border-top:0}
+.mcp-linha>summary{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 4px;cursor:pointer;list-style:none}
+.mcp-linha>summary::-webkit-details-marker{display:none}.mcp-linha>summary small{display:block;color:var(--muted);font-size:.82rem}
+.mcp-linha-corpo{padding:0 4px 12px 24px;display:grid;gap:4px}
+.mcp-li small{display:block;color:var(--muted);padding-left:18px}.mcp-li.defeito span{color:var(--red);font-weight:600}.mcp-li.ok span{color:var(--muted)}
+.mcp-aj{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.mcp-aj small{display:block;color:var(--muted)}
+.mcp-aj:first-of-type{border-top:0}
+.mcp-fotos{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.mcp-fotos .fotos-galeria{display:contents}
+.mcp-def[hidden]{display:none}
+.mcp-pedido .section-title,.mcp-comps .section-title{flex-wrap:wrap;gap:4px 10px}
+.mcp-seg{display:flex;flex-wrap:wrap;gap:6px}.mcp-seg button{padding:8px 12px;min-height:38px}
+.mcp-prazo-sel{border:1px solid var(--line);border-radius:10px;padding:7px 10px;background:var(--panel);color:var(--text);font:inherit;font-size:.88rem;min-height:38px;max-width:100%}
+.mcp-maq .row-actions{flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:760px){.mcp-aj{flex-direction:column;align-items:stretch}.mcp-maq{grid-template-columns:auto minmax(0,1fr)}.mcp-maq .row-actions{grid-column:1/-1;justify-content:flex-start}}

@@ -35,7 +35,7 @@ function usoImplemento(m) {
   const mts = db.maintenances.filter(x => x.machineId === m.id), custo = mts.reduce((s, x) => s + (Number(x.cost) || 0), 0);
   const haT = ha(ops);
   return {haTotal: haT, haDesde: ha(desde), ultRev, dias, haPorHora: horas ? ha(comHoras) / horas : null, ultimaOp: ops.sort(byDateDesc)[0] || null,
-    custo, custoHa: custo > 0 && haT > 0 ? custo / haT : null, abertas: mts.filter(x => x.status !== 'Concluída' && x.status !== 'Programada').length};
+    custo, custoHa: custo > 0 && haT > 0 ? custo / haT : null, abertas: mts.filter(x => !MANUT_FORA_ABERTA.includes(x.status)).length};
 }
 // Situação da revisão: {nivel: ok|perto|vencida, texto, pct}
 function revisaoImplemento(m) {
@@ -92,7 +92,7 @@ VIEWS.implementos = () => {
       <div class="maq-horas"><span class="big">${num(u.haTotal)} ha</span><small>trabalhados no total</small></div>
       <div class="maq-rev ${r.nivel === 'vencida' ? 'rev-vencida' : r.nivel === 'perto' ? 'rev-alerta' : r.nivel === 'ok' ? 'rev-ok' : ''}"><small>${esc(r.texto)}</small>${r.nivel !== 'sem' ? `<div class="progress"><span style="width:${Math.round(r.pct * 100)}%"></span></div>` : ''}</div>
       <div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>
-      <div class="maq-acoes">${mini('⚙ Manutenção', 'mt-new', m.id)}${['Plantadeira', 'Semeadora', 'Pulverizador de arrasto', 'Distribuidor de adubo/calcário'].includes(m.tipoImpl) ? mini('◎ Aferição', 'af-nova', m.id) : ''}
+      <div class="maq-acoes">${isInactive(m) ? '' : mini('☑ Checklist', 'mcp-novo', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}${['Plantadeira', 'Semeadora', 'Pulverizador de arrasto', 'Distribuidor de adubo/calcário'].includes(m.tipoImpl) ? mini('◎ Aferição', 'af-nova', m.id) : ''}
         <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">${mini('Editar', 'im-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}</div></details></div></article>`;
   }).join('')}</section>` + ordensImplementos(lista);
 };
