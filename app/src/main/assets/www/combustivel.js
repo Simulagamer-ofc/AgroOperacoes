@@ -23,6 +23,8 @@ function intervalosConsumo(machineId) {
   }
   return out;
 }
+// Consumo para mostrar: máquina em L/h; veículo (odômetro) em km/L. lh = litros por unidade do medidor.
+const consumoTxt = (m, lh) => !(lh > 0) ? '—' : porKm(m) ? `${um1(1 / lh)} km/L` : `${um1(lh)} L/h`;
 function resumoConsumo(machineId) {
   const ints = intervalosConsumo(machineId);
   if (!ints.length) return null;
@@ -47,7 +49,7 @@ function abastecimentoForm(machineId) {
       {k: 'machineId', label: 'Máquina', type: 'select', options: machineOptions, labelAusente: maquinaAusente, required: true, full: true},
       {k: 'date', label: 'Data', type: 'date', required: true},
       {k: 'liters', label: 'Litros abastecidos', type: 'number', min: 0, required: true},
-      {k: 'hours', label: 'Horímetro no abastecimento (h)', type: 'number', min: 0, required: true, hint: m0 ? `Último horímetro: ${num(m0.hours)} h` : ''},
+      {k: 'hours', label: m0 && porKm(m0) ? 'Odômetro no abastecimento (km)' : 'Horímetro no abastecimento (h)', type: 'number', min: 0, required: true, hint: m0 ? `Último registro: ${num(m0.hours)} ${unidMed(m0)}` : ''},
       {k: 'cheio', label: 'Tanque cheio?', type: 'select', options: ['Sim', 'Não'], required: true},
       {k: 'origem', label: 'Origem do combustível', type: 'select', options: [{value: 'estoque', label: 'Tanque da fazenda (sai do estoque)'}, {value: 'posto', label: 'Posto / compra direta'}], required: true},
       {k: 'itemId', label: 'Item do estoque (tanque da fazenda)', mostrarSe: ['origem', 'estoque'], type: 'select', options: () => diesel.map(s => ({value: s.id, label: `${s.name} — ${num(s.qty)} ${s.unit}`})), full: true},
@@ -60,7 +62,7 @@ function abastecimentoForm(machineId) {
       const m = find('machines', v.machineId); if (!m) return 'Selecione a máquina';
       if (!(v.liters > 0)) return 'Informe os litros abastecidos';
       const anterior = db.fuel.filter(f => f.machineId === m.id && Number(f.hours) > 0).sort((a, b) => Number(b.hours) - Number(a.hours))[0];
-      if (anterior && Number(v.hours) < Number(anterior.hours)) return `Horímetro menor que o do último abastecimento (${num(anterior.hours)} h)`;
+      if (anterior && Number(v.hours) < Number(anterior.hours)) return `${NomeMed(m)} menor que o do último abastecimento (${num(anterior.hours)} ${unidMed(m)})`;
       const salto = typeof conferirSalto === 'function' ? conferirSalto(m, v.hours, v.date) : ''; if (salto) return salto;
       const dup = typeof conferirRepetido === 'function' ? conferirRepetido('fuel', f => f.machineId === m.id && f.date === v.date && Number(f.liters) === Number(v.liters), `já existe um abastecimento de ${num(v.liters)} L de ${m.name} em ${fmtDate(v.date)}`) : ''; if (dup) return dup;
       const reg = {id: uid(), machineId: m.id, date: v.date, liters: v.liters, hours: v.hours, cheio: v.cheio, origem: v.origem, operator: v.operator, notes: v.notes};
@@ -80,9 +82,13 @@ function abastecimentoForm(machineId) {
       if (Number(v.hours) > Number(m.hours || 0)) { const hl = {id: uid(), machineId: m.id, date: v.date, hours: v.hours, previous: Number(m.hours || 0), notes: 'Abastecimento', fuelId: reg.id}; db.hourLogs.push(hl); m.hours = v.hours; reg.hourLogId = hl.id; }
       db.fuel.push(reg); save();
       const r = resumoConsumo(m.id);
-      showToast(r && r.ultimo.ate.id === reg.id ? `${m.name}: ${um1(r.ultimo.lh)} L/h desde o último tanque cheio` : `Abastecimento de ${m.name} salvo`);
+      showToast(r && r.ultimo.ate.id === reg.id ? `${m.name}: ${consumoTxt(m, r.ultimo.lh)} desde o último tanque cheio` : `Abastecimento de ${m.name} salvo`);
     }
   });
+  // Rótulo da leitura conforme a máquina escolhida (horímetro ou odômetro)
+  const sel = $('#f_machineId', dialog), rotular = () => { const m = find('machines', sel?.value), f = $('#f_hours', dialog)?.closest('.field'); if (!f || !m) return;
+    f.querySelector('label').textContent = `${porKm(m) ? 'Odômetro no abastecimento (km)' : 'Horímetro no abastecimento (h)'} *`; const h = f.querySelector('.hint'); if (h) h.textContent = `Último registro: ${num(m.hours)} ${unidMed(m)}`; };
+  sel?.addEventListener('change', rotular); rotular();
 }
 
 // Custo do abastecimento: valor pago (posto) ou custo médio do item na saída do estoque.
@@ -108,7 +114,7 @@ VIEWS.combustivel = () => {
   const dicaCusto = [semPosto && plural(semPosto, 'compra no posto sem valor informado', 'compras no posto sem valor informado'), semCusto && plural(semCusto, 'saída do tanque com item sem custo médio', 'saídas do tanque com item sem custo médio'), estimados && plural(estimados, 'estimado pelo custo médio atual', 'estimados pelo custo médio atual')].filter(Boolean).join(' • ');
   const maquinas = db.machines.map(m => ({m, r: resumoConsumo(m.id), l: lista.filter(f => f.machineId === m.id).reduce((s, f) => s + Number(f.liters || 0), 0)})).filter(x => x.r || x.l);
   const avisos = maquinas.filter(x => x.r?.acima);
-  const linha = f => `<tr><td>${fmtDate(f.date)}</td><td><strong>${esc(machineName(f.machineId) || 'Máquina removida')}</strong>${f.operator ? `<br><small style="color:var(--muted)">${esc(f.operator)}</small>` : ''}</td><td class="num">${num(f.liters)} L</td><td class="num">${num(f.hours)} h</td><td>${f.cheio === 'Sim' ? chip('Tanque cheio', 'blue') : chip('Parcial', 'gray')}</td><td>${f.origem === 'estoque' ? 'Estoque' : 'Posto'}</td><td class="num">${(c => c.v > 0 ? `R$ ${num(c.v, 2)}${c.est ? '<br><small>estimado</small>' : ''}` : '—')(custos.get(f.id))}</td><td>${mini('Excluir', 'cb-del', f.id, 'del')}</td></tr>`;
+  const linha = f => `<tr><td>${fmtDate(f.date)}</td><td><strong>${esc(machineName(f.machineId) || 'Máquina removida')}</strong>${f.operator ? `<br><small style="color:var(--muted)">${esc(f.operator)}</small>` : ''}</td><td class="num">${num(f.liters)} L</td><td class="num">${num(f.hours)} ${unidMed(find('machines', f.machineId))}</td><td>${f.cheio === 'Sim' ? chip('Tanque cheio', 'blue') : chip('Parcial', 'gray')}</td><td>${f.origem === 'estoque' ? 'Estoque' : 'Posto'}</td><td class="num">${(c => c.v > 0 ? `R$ ${num(c.v, 2)}${c.est ? '<br><small>estimado</small>' : ''}` : '—')(custos.get(f.id))}</td><td>${mini('Excluir', 'cb-del', f.id, 'del')}</td></tr>`;
   return head('Combustível', 'Abastecimentos por máquina e consumo pelo método do tanque cheio', btn('+ Abastecimento', 'cb-new')) +
     `<div class="filters">${PERIODOS_COMB.map(([k, r]) => `<button class="${k === combPeriodo ? 'active' : ''}" data-act="cb-periodo" data-id="${k}">${r}</button>`).join('')}</div>
     <section class="es-kpis">
@@ -118,8 +124,8 @@ VIEWS.combustivel = () => {
       <article class="card kpi"><div class="label">Máquinas com consumo medido</div><div class="value">${maquinas.filter(x => x.r).length}</div><div class="hint">precisam de 2 tanques cheios</div></article>
     </section>
     <div class="section-title"><h3>Consumo por máquina</h3></div>
-    <section class="card panel">${maquinas.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Máquina</th><th class="num">Último intervalo</th><th class="num">Média da máquina</th><th class="num">L/ha</th><th class="num">Litros no período</th><th></th></tr></thead><tbody>${maquinas.map(({m, r, l}) => `<tr><td><strong>${esc(m.name)}</strong></td><td class="num">${r ? `${um1(r.ultimo.lh)} L/h<br><small>${num(r.ultimo.litros)} L em ${um1(r.ultimo.horas)} h</small>` : '—'}</td><td class="num">${r ? um1(r.mediaGeral) + ' L/h' : '—'}</td><td class="num">${r?.lha != null ? um1(r.lha) : '—'}</td><td class="num">${num(l)} L</td><td>${r?.acima ? chip('acima do normal', 'orange') : r ? chip('normal', 'green') : chip('medindo', 'gray')}</td></tr>`).join('')}</tbody></table></div>
-      <p class="nota">Consumo = litros colocados desde o último tanque cheio ÷ horas do horímetro entre os dois. L/ha usa a área das operações concluídas da máquina no intervalo. “Acima do normal” compara o último intervalo com a média anterior da própria máquina (aviso operacional, mais de 20%).</p>` : empty('Nenhum abastecimento', 'Registre os abastecimentos com o horímetro e marque quando completar o tanque.', {act: 'cb-new', label: '+ Abastecimento'})}</section>
+    <section class="card panel">${maquinas.length ? `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Máquina</th><th class="num">Último intervalo</th><th class="num">Média da máquina</th><th class="num">L/ha</th><th class="num">Litros no período</th><th></th></tr></thead><tbody>${maquinas.map(({m, r, l}) => `<tr><td><strong>${esc(m.name)}</strong></td><td class="num">${r ? `${consumoTxt(m, r.ultimo.lh)}<br><small>${num(r.ultimo.litros)} L em ${um1(r.ultimo.horas)} ${unidMed(m)}</small>` : '—'}</td><td class="num">${r ? consumoTxt(m, r.mediaGeral) : '—'}</td><td class="num">${r?.lha != null ? um1(r.lha) : '—'}</td><td class="num">${num(l)} L</td><td>${r?.acima ? chip('acima do normal', 'orange') : r ? chip('normal', 'green') : chip('medindo', 'gray')}</td></tr>`).join('')}</tbody></table></div>
+      <p class="nota">Consumo = litros colocados desde o último tanque cheio ÷ horas do horímetro entre os dois (máquina, L/h); veículo: km do odômetro ÷ litros (km/L). L/ha usa a área das operações concluídas da máquina no intervalo. “Acima do normal” compara o último intervalo com a média anterior da própria máquina (aviso operacional, mais de 20%).</p>` : empty('Nenhum abastecimento', 'Registre os abastecimentos com o horímetro e marque quando completar o tanque.', {act: 'cb-new', label: '+ Abastecimento'})}</section>
     ${lista.length ? `<div class="section-title"><h3>Abastecimentos</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Data</th><th>Máquina</th><th class="num">Litros</th><th class="num">Horímetro</th><th>Tanque</th><th>Origem</th><th class="num">Valor</th><th></th></tr></thead><tbody>${lista.map(linha).join('')}</tbody></table></div></section>` : ''}`;
 };
 
@@ -146,6 +152,6 @@ Object.assign(ACTIONS, {
 const alertasSemCombustivel = alerts;
 alerts = function () {
   const lista = alertasSemCombustivel();
-  db.machines.filter(m => !isInactive(m)).forEach(m => { const r = resumoConsumo(m.id); if (r?.acima) lista.push({color: 'orange', icon: '⛽', title: `Consumo acima do normal: ${m.name}`, text: `${um1(r.ultimo.lh)} L/h no último intervalo; média anterior ${um1(r.mediaAnterior)} L/h.`, route: 'combustivel'}); });
+  db.machines.filter(m => !isInactive(m)).forEach(m => { const r = resumoConsumo(m.id); if (r?.acima) lista.push({color: 'orange', icon: '⛽', title: `Consumo acima do normal: ${m.name}`, text: `${consumoTxt(m, r.ultimo.lh)} no último intervalo; média anterior ${consumoTxt(m, r.mediaAnterior)}.`, route: 'combustivel'}); });
   return lista;
 };

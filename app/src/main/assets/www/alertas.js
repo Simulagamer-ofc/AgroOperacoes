@@ -51,10 +51,12 @@ function calcularAlertas(cfg = alertaCfg(), agora = Date.now()) {
   });
   if (cfg.revisao) db.machines.filter(m => !isInactive(m) && Number(m.nextService) > 0).forEach(m => {
     const falta = hoursToService(m), pr = typeof previsaoRevisao === 'function' ? previsaoRevisao(m) : null;
-    if (!(falta <= SERVICE_WARN_HOURS || pr?.dias <= 7)) return;
+    // (funções de app.js; os testes carregam este arquivo sozinho)
+    if (!(falta <= (typeof avisoRevisao === 'function' ? avisoRevisao(m) : SERVICE_WARN_HOURS) || pr?.dias <= 7)) return;
+    const u = typeof unidMed === 'function' ? unidMed(m) : 'h';
     add({id: `revisao-${m.id}-${m.nextService}`, tipo: 'revisao', rota: 'maquinas',
-      titulo: falta <= 0 ? `⚙ Revisão vencida: ${m.name}` : `⚙ Revisão em ${num(falta)} h: ${m.name}`,
-      texto: `Horímetro em ${num(m.hours)} h; revisão programada para ${num(m.nextService)} h.${pr?.data && falta > 0 ? ` Pelo ritmo de uso, por volta de ${fmtDate(pr.data)}.` : ''}`}, horaBoa(agora));
+      titulo: falta <= 0 ? `⚙ Revisão vencida: ${m.name}` : `⚙ Revisão em ${num(falta)} ${u}: ${m.name}`,
+      texto: `${u === 'km' ? 'Odômetro' : 'Horímetro'} em ${num(m.hours)} ${u}; revisão programada para ${num(m.nextService)} ${u}.${pr?.data && falta > 0 ? ` Pelo ritmo de uso, por volta de ${fmtDate(pr.data)}.` : ''}`}, horaBoa(agora));
   });
   if (cfg.estoque) db.stock.forEach(s => {
     const p = typeof previsaoEstoque === 'function' ? previsaoEstoque(s) : null;

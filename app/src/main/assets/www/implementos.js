@@ -3,15 +3,15 @@
    Ficam na mesma lista de máquinas (tipo “Implemento”), então aferição, catálogo e manutenção continuam valendo.
    Implemento não tem horímetro: a revisão é por hectares trabalhados (somados das operações) e/ou por dias. */
 
-const TIPOS_IMPL = ['Plantadeira', 'Semeadora', 'Pulverizador de arrasto', 'Distribuidor de adubo/calcário', 'Grade', 'Subsolador', 'Escarificador', 'Rolo-faca', 'Plataforma de colheita', 'Carreta graneleira', 'Outro'];
+const TIPOS_IMPL = ['Plantadeira', 'Semeadora', 'Pulverizador de arrasto', 'Distribuidor de adubo/calcário', 'Grade', 'Arado', 'Subsolador', 'Escarificador', 'Enxada rotativa', 'Cultivador', 'Rolo-faca', 'Lâmina / plaina', 'Terraceador', 'Roçadeira', 'Plataforma de colheita', 'Carreta graneleira', 'Transbordo', 'Carreta / reboque', 'Carreta pipa / tanque', 'Vagão forrageiro / misturador', 'Ensiladeira', 'Enfardadeira', 'Segadeira', 'Ancinho enleirador', 'Outro'];
 // Quais implementos servem para cada tipo de operação (os demais tipos mostram todos)
 const IMPL_DA_OP = {
   'Plantio': ['Plantadeira', 'Semeadora'],
   'Aplicação': ['Pulverizador de arrasto'],
   'Adubação': ['Distribuidor de adubo/calcário', 'Plantadeira', 'Semeadora'],
-  'Preparo de solo': ['Grade', 'Subsolador', 'Escarificador', 'Rolo-faca'],
-  'Colheita': ['Plataforma de colheita', 'Carreta graneleira'],
-  'Transporte': ['Carreta graneleira']
+  'Preparo de solo': ['Grade', 'Arado', 'Subsolador', 'Escarificador', 'Enxada rotativa', 'Cultivador', 'Rolo-faca', 'Lâmina / plaina', 'Terraceador', 'Roçadeira'],
+  'Colheita': ['Plataforma de colheita', 'Carreta graneleira', 'Transbordo', 'Ensiladeira', 'Enfardadeira', 'Segadeira', 'Ancinho enleirador'],
+  'Transporte': ['Carreta graneleira', 'Transbordo', 'Carreta / reboque', 'Carreta pipa / tanque', 'Vagão forrageiro / misturador']
 };
 const ehImplemento = m => m?.type === 'Implemento';
 const implementos = () => db.machines.filter(ehImplemento);
@@ -60,7 +60,7 @@ function implementForm(m = {}) {
       {k: 'largura', label: 'Largura de trabalho (m)', type: 'number', min: 0, step: '0.1', hint: 'Usada para estimar o rendimento (ha/h).'},
       {k: 'linhas', label: 'Número de linhas', type: 'number', min: 0, mostrarSe: ['tipoImpl', ['Plantadeira', 'Semeadora']]},
       {k: 'espacamento', label: 'Espaçamento entre linhas (cm)', type: 'number', min: 0, mostrarSe: ['tipoImpl', ['Plantadeira', 'Semeadora']]},
-      {k: 'capacidade', label: 'Capacidade do tanque / caixa', placeholder: 'Ex.: 3.000 L ou 8 t', mostrarSe: ['tipoImpl', ['Pulverizador de arrasto', 'Distribuidor de adubo/calcário', 'Carreta graneleira', 'Plantadeira', 'Semeadora']]},
+      {k: 'capacidade', label: 'Capacidade do tanque / caixa', placeholder: 'Ex.: 3.000 L ou 8 t', mostrarSe: ['tipoImpl', ['Pulverizador de arrasto', 'Distribuidor de adubo/calcário', 'Carreta graneleira', 'Transbordo', 'Carreta pipa / tanque', 'Vagão forrageiro / misturador', 'Plantadeira', 'Semeadora']]},
       {k: 'tratorId', label: 'Trator que costuma puxar', type: 'select', options: tratores, labelAusente: maquinaAusente, mais: true},
       {k: 'revisaoHa', label: 'Revisão a cada (ha)', type: 'number', min: 0, hint: 'Ex.: troca de discos ou lubrificação geral. Vazio = sem controle por área.'},
       {k: 'revisaoDias', label: 'Revisão a cada (dias)', type: 'number', min: 0, hint: 'Opcional, para o que vence pelo tempo (ex.: antes de cada safra).', mais: true},

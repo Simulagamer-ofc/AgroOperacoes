@@ -96,9 +96,11 @@ const pedirConfirmacao = (chave, msg) => { if (confirmado === chave) { confirmad
 function conferirSalto(m, novo, data = today()) {
   const atual = Number(m.hours) || 0, sobe = Number(novo) - atual; if (!(sobe > 0) || !(atual > 0)) return '';
   const ult = db.hourLogs.filter(h => h.machineId === m.id).sort((a, b) => (b.date || '').localeCompare(a.date || ''))[0];
-  if (!ult?.date) return sobe > 500 ? pedirConfirmacao(`salto|${m.id}|${novo}`, `Atenção: o horímetro de ${m.name} subiria ${num(sobe)} h de uma vez. Confira se não houve erro de digitação`) : '';
+  // Odômetro: até 1.500 km por dia; horímetro: até 24 h por dia
+  const km = typeof porKm === 'function' && porKm(m), u = km ? 'km' : 'h', nome = km ? 'o odômetro' : 'o horímetro', porDia = km ? 1500 : 24;
+  if (!ult?.date) return sobe > (km ? 5000 : 500) ? pedirConfirmacao(`salto|${m.id}|${novo}`, `Atenção: ${nome} de ${m.name} subiria ${num(sobe)} ${u} de uma vez. Confira se não houve erro de digitação`) : '';
   const dias = Math.max(1, diasEntreAuto(ult.date, data));
-  return sobe > 24 * dias ? pedirConfirmacao(`salto|${m.id}|${novo}`, `Atenção: o horímetro de ${m.name} subiria ${num(sobe)} h em ${dias} ${dias === 1 ? 'dia' : 'dias'} (mais de 24 h por dia). Confira se não houve erro de digitação`) : '';
+  return sobe > porDia * dias ? pedirConfirmacao(`salto|${m.id}|${novo}`, `Atenção: ${nome} de ${m.name} subiria ${num(sobe)} ${u} em ${dias} ${dias === 1 ? 'dia' : 'dias'} (mais de ${num(porDia)} ${u} por dia). Confira se não houve erro de digitação`) : '';
 }
 function conferirRepetido(colecao, igual, descricao) {
   return db[colecao].some(igual) ? pedirConfirmacao(`dup|${colecao}|${descricao}`, `Atenção: ${descricao}`) : '';
@@ -132,11 +134,12 @@ alerts = function () {
 // ---------- Operações: iniciar e concluir já registram o horímetro e a área ----------
 const pulverizacao = o => /pulveriz|aplica|defensiv|fungic|herbic|inseticid|dessec/i.test(o?.type || '');
 // Máquina com horímetro (motor próprio): trator, colheitadeira, pulverizador, plantadeira, caminhão — ou que já tenha horas lançadas
-const temHorimetro = m => !!m && m.type !== 'Implemento' && (TIPOS_COM_HORIMETRO.includes(m.type) || Number(m.hours) > 0);
+// Máquina ou veículo com medidor de uso (horímetro ou odômetro), pelo cadastro — ou que já tenha leitura lançada
+const temHorimetro = m => !!m && temMedidor(m);
 // Lê e confere o horímetro digitado; atualiza a máquina quando subiu. Devolve erro (texto) ou ''.
 function aplicarHorimetro(m, valor, minimo, nota, o) {
   const h = Number(valor);
-  if (minimo != null && h < Number(minimo)) return `O horímetro não pode ser menor que ${num(minimo)} h`;
+  if (minimo != null && h < Number(minimo)) return `${NomeMed(m)} não pode ser menor que ${num(minimo)} ${unidMed(m)}`;
   const salto = conferirSalto(m, h); if (salto) return salto;
   if (h > Number(m.hours || 0)) { db.hourLogs.push({id: uid(), machineId: m.id, date: today(), hours: h, previous: Number(m.hours || 0), notes: nota, opId: o.id}); m.hours = h; }
   return '';
@@ -146,11 +149,11 @@ function iniciarOperacao(id) {
   const abrir = () => {
     const m = o.machineId ? find('machines', o.machineId) : null, comHor = temHorimetro(m);
     const fields = [];
-    if (comHor) fields.push({k: 'horimetro', label: `Horímetro inicial — ${m.name} (h)`, type: 'number', min: 0, required: true, full: true, hint: `Digite o que o painel está marcando agora. Último registrado: ${num(m.hours)} h.`});
+    if (comHor) fields.push({k: 'horimetro', label: `${NomeMed(m)} inicial — ${m.name} (${unidMed(m)})`, type: 'number', min: 0, required: true, full: true, hint: `Digite o que o painel está marcando agora. Último registrado: ${num(m.hours)} ${unidMed(m)}.`});
     openForm({title: `Iniciar: ${o.type}`, sub: [opPlace(o), m?.name].filter(Boolean).join(' • '), submit: 'Iniciar operação', values: {}, fields,
       onSubmit: v => {
-        if (comHor && (v.horimetro === '' || v.horimetro == null)) return `Informe o horímetro inicial do ${m.name}`;
-        if (comHor && Number(v.horimetro) < Number(m.hours || 0)) return `O horímetro está menor que o último registrado do ${m.name} (${num(m.hours)} h). Confira o painel.`;
+        if (comHor && (v.horimetro === '' || v.horimetro == null)) return `Informe ${nomeMed(m) === 'odômetro' ? 'o odômetro' : 'o horímetro'} inicial do ${m.name}`;
+        if (comHor && Number(v.horimetro) < Number(m.hours || 0)) return `${NomeMed(m)} está menor que o último registrado do ${m.name} (${num(m.hours)} ${unidMed(m)}). Confira o painel.`;
         // Checklist da máquina (quando ligado): defeito vira pedido; máquina que não pode trabalhar não começa a operação
         const faltaChk = typeof mcpValidarInicio === 'function' ? mcpValidarInicio(o) : ''; if (faltaChk) return faltaChk;
         if (typeof mcpParadaNoInicio === 'function' && mcpParadaNoInicio(o)) { mcpAoIniciar(o, comHor ? v.horimetro : ''); save(); setTimeout(() => showToast(`Operação não iniciada: ${m.name} ficou parada com o defeito informado. O pedido de manutenção foi enviado.`, true), 50); return; }
@@ -173,22 +176,24 @@ function concluirOperacao(id) {
   const m = o.machineId ? find('machines', o.machineId) : null, f = o.fieldId ? find('fields', o.fieldId) : null;
   const fields = [];
   const comHor = temHorimetro(m);
-  if (m && comHor) fields.push({k: 'horimetro', label: `Horímetro final — ${m.name} (h)`, type: 'number', min: 0, required: true, full: true, hint: `Digite o que o painel está marcando agora.${o.horimetroIni != null ? ` No início: ${num(o.horimetroIni)} h.` : ` Último registrado: ${num(m.hours)} h.`} Atualiza a máquina, as revisões e o consumo.`});
+  const uM = m ? unidMed(m) : 'h';
+  if (m && comHor) fields.push({k: 'horimetro', label: `${NomeMed(m)} final — ${m.name} (${uM})`, type: 'number', min: 0, required: true, full: true, hint: `Digite o que o painel está marcando agora.${o.horimetroIni != null ? ` No início: ${num(o.horimetroIni)} ${uM}.` : ` Último registrado: ${num(m.hours)} ${uM}.`} Atualiza a máquina, as revisões e o consumo.`});
   if (opTemArea(o)) fields.push({k: 'area', label: 'Área trabalhada (ha)', type: 'number', min: 0, hint: f && Number(f.area) > 0 ? `Talhão ${f.name}: ${num(f.area)} ha` : ''});
   if (OP_COM_KG.includes(o.type)) fields.push({k: 'kg', label: 'Quantidade de sementes (kg)', type: 'number', min: 0, hint: 'Para calcular o rendimento em kg/h.'});
   fields.push({k: 'notes', label: 'Observações', type: 'textarea'});
   openForm({title: `Concluir: ${o.type}`, sub: [opPlace(o), m?.name].filter(Boolean).join(' • '), submit: 'Concluir operação',
     values: {horimetro: '', area: o.area || (f ? f.area : ''), kg: o.kg || '', notes: o.notes || ''}, fields,
     onSubmit: v => {
-      if (comHor && (v.horimetro === '' || v.horimetro == null)) return `Informe o horímetro final do ${m.name}`;
+      if (comHor && (v.horimetro === '' || v.horimetro == null)) return `Informe ${porKm(m) ? 'o odômetro' : 'o horímetro'} final do ${m.name}`;
       const faltaComprovar = typeof confValidarConclusao === 'function' ? confValidarConclusao(o) : ''; if (faltaComprovar) return faltaComprovar;
-      if (m && v.horimetro !== '' && Number(v.horimetro) < Number(o.horimetroIni || 0)) return `O horímetro final não pode ser menor que o do início (${num(o.horimetroIni)} h)`;
+      if (m && v.horimetro !== '' && Number(v.horimetro) < Number(o.horimetroIni || 0)) return `${NomeMed(m)} final não pode ser menor que o do início (${num(o.horimetroIni)} ${uM})`;
       if (m && v.horimetro !== '') { const salto = conferirSalto(m, v.horimetro); if (salto) return salto; }
       if (m && v.horimetro !== '' && Number(v.horimetro) > Number(m.hours || 0)) {
         db.hourLogs.push({id: uid(), machineId: m.id, date: today(), hours: Number(v.horimetro), previous: Number(m.hours || 0), notes: `Operação: ${o.type}`, opId: o.id});
         m.hours = Number(v.horimetro);
       }
-      if (m && v.horimetro !== '') { o.horimetroFim = Number(v.horimetro); if (o.horimetroIni) o.horas = Math.round((o.horimetroFim - o.horimetroIni) * 10) / 10; }
+      // Veículo (odômetro): guarda os km rodados; máquina (horímetro): as horas trabalhadas
+      if (m && v.horimetro !== '') { o.horimetroFim = Number(v.horimetro); if (o.horimetroIni) { const d = Math.round((o.horimetroFim - o.horimetroIni) * 10) / 10; if (porKm(m)) { o.km = d; delete o.horas; } else o.horas = d; } }
       if (opTemArea(o) && v.area !== '' && v.area != null) o.area = Number(v.area);
       if (OP_COM_KG.includes(o.type) && v.kg !== '' && v.kg != null) o.kg = Number(v.kg);
       o.notes = v.notes; o.status = 'Concluída'; o.finishedAt = new Date().toISOString();
@@ -197,7 +202,7 @@ function concluirOperacao(id) {
       const ft = o.type === 'Plantio' && o.fieldId ? find('fields', o.fieldId) : null;
       if (ft && (!ft.plantingDate || diasEntreAuto(ft.plantingDate, o.date || today()) > 150)) { ft.plantingDate = o.date || today(); setTimeout(() => showToast(`Plantio de ${ft.name} registrado em ${fmtDate(ft.plantingDate)}`), 2900); }
       save();
-      showToast(`Operação concluída${o.horas > 0 ? ` — ${um1(o.horas)} h` : ''}${o.horas > 0 && o.area > 0 && opTemArea(o) ? `, ${um1(o.area / o.horas)} ha/h` : o.horas > 0 && o.kg > 0 ? `, ${num(o.kg / o.horas)} kg/h` : ''}`);
+      showToast(`Operação concluída${o.km > 0 ? ` — ${num(o.km)} km rodados` : ''}${o.horas > 0 ? ` — ${um1(o.horas)} h` : ''}${o.horas > 0 && o.area > 0 && opTemArea(o) ? `, ${um1(o.area / o.horas)} ha/h` : o.horas > 0 && o.kg > 0 ? `, ${num(o.kg / o.horas)} kg/h` : ''}`);
     }});
   if (typeof confAoAbrirConclusao === 'function') confAoAbrirConclusao(o);
 }
@@ -631,7 +636,7 @@ Object.assign(ACTIONS, {
   'compras': () => abrirListaCompras(),
   'mip-talhao': id => monitoramentoForm({fieldId: id}),
   'resumo-semana': () => dialogoTexto('Resumo da semana', 'Confira e compartilhe com o dono ou o grupo da fazenda.', resumoSemana()),
-  'rev-abrir': id => { const m = find('machines', id); if (!m) return; maintenanceForm({machineId: id, kind: 'Preventiva', description: `Revisão de ${num(m.nextService)} h`}); }
+  'rev-abrir': id => { const m = find('machines', id); if (!m) return; maintenanceForm({machineId: id, kind: 'Preventiva', description: Number(m.nextService) > 0 ? `Revisão de ${num(m.nextService)} ${unidMed(m)}` : `Revisão de ${m.revMeses} meses`}); }
 });
 document.addEventListener('change', e => {
   const id = e.target.dataset?.safraIni || e.target.dataset?.safraFim; if (!id) return;

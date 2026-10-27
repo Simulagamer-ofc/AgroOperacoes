@@ -16,7 +16,7 @@ function grupoResumo(d, de, ate) {
   const atrasadas = (d.operations || []).filter(o => o.status === 'Programada' && o.date && o.date < ate).length;
   const abertas = new Set((d.maintenances || []).filter(m => !['Concluída', 'Recusada'].includes(m.status) && (m.status !== 'Aguardando autorização' || m.parada === 'Sim')).map(m => m.machineId));
   const maquinas = (d.machines || []).filter(m => m.state !== 'Inativa');
-  const revisoes = maquinas.filter(m => Number(m.nextService) > 0 && Number(m.nextService) - (Number(m.hours) || 0) <= SERVICE_WARN_HOURS).length;
+  const revisoes = maquinas.filter(m => Number(m.nextService) > 0 && Number(m.nextService) - (Number(m.hours) || 0) <= (typeof avisoRevisao === 'function' ? avisoRevisao(m) : SERVICE_WARN_HOURS)).length;
   const estoqueBaixo = (d.stock || []).filter(s => Number(s.min) > 0 && Number(s.qty) <= Number(s.min)).length;
   const porLocal = {}; (d.chuvas || []).filter(c => no(c.date)).forEach(c => { const k = c.fieldId || ''; porLocal[k] = (porLocal[k] || 0) + (Number(c.mm) || 0); });
   const locais = Object.values(porLocal), chuva = locais.length ? locais.reduce((s, x) => s + x, 0) / locais.length : null;

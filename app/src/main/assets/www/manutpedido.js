@@ -25,6 +25,21 @@ const MC_INSPECAO = {
   'Beneficiamento': ['Peneiras', 'Correias e rolamentos', 'Motores', 'Limpeza das máquinas'],
   'Outro': ['Estado geral', 'Vazamentos', 'Ruído ou vibração diferente']
 };
+{
+  const leve = ['Nível do óleo do motor', 'Água do radiador', 'Pneus e estepe', 'Freios', 'Luzes e setas', 'Limpador e para-brisa', 'Documentos no veículo'];
+  const pesada = ['Nível do óleo do motor', 'Nível do óleo hidráulico', 'Vazamentos', 'Pinos e articulações (graxa)', 'Dentes, lâmina ou concha', 'Pneus ou esteira', 'Luzes, alarmes e sinal de ré', 'Extintor'];
+  Object.assign(MC_INSPECAO, {'Caminhonete': leve, 'Carro': leve, 'Van/Ônibus': [...leve, 'Cintos de segurança'],
+    'Moto': ['Pneus', 'Freios', 'Corrente', 'Luzes', 'Nível do óleo'],
+    'Quadriciclo/UTV': ['Pneus', 'Freios', 'Nível do óleo', 'Luzes', 'Vazamentos'],
+    'Pá carregadeira': pesada, 'Retroescavadeira': pesada, 'Escavadeira': pesada, 'Motoniveladora': pesada, 'Trator de esteira': pesada, 'Minicarregadeira': pesada, 'Manipulador telescópico': pesada, 'Empilhadeira': [...pesada.filter(i => !/Dentes/.test(i)), 'Garfos e corrente de elevação'],
+    'Distribuidor autopropelido': ['Nível do óleo do motor', 'Vazamentos', 'Esteira e discos', 'Pneus', 'Luzes e alarmes do painel'],
+    'Colhedora de forragem': ['Nível do óleo do motor', 'Facas e contra-faca', 'Correias', 'Vazamentos', 'Radiador limpo', 'Luzes e alarmes do painel'],
+    'Drone de pulverização': ['Hélices sem trinca', 'Braços travados', 'Baterias carregadas e sem estufar', 'Bomba e bicos', 'Tanque e filtro', 'GPS e bússola', 'Rádio / controle'],
+    'Avião agrícola': ['Inspeção pré-voo conforme o manual', 'Combustível e óleo', 'Sistema de aplicação', 'Bicos'],
+    'Gerador': ['Nível do óleo', 'Combustível', 'Bateria', 'Vazamentos', 'Painel'],
+    'Motobomba / irrigação': ['Nível do óleo', 'Vazamentos e gaxetas', 'Mangueiras', 'Ruído ou vibração diferente'],
+    'Pivô central': ['Pneus', 'Vazamentos', 'Aspersores', 'Painel', 'Alinhamento das torres']});
+}
 const MCP_ESTADOS = [['ok', '✓ OK'], ['defeito', '⚠ Defeito'], ['na', '— N/A']];
 const mcpGestor = () => !(typeof nvComum === 'function' && nvComum());
 const mcpVeValores = () => mcpGestor() || (typeof nvVeFinanceiro === 'function' && nvVeFinanceiro());
@@ -132,7 +147,7 @@ function mcpLerCampos() {
 function mcpChkLista() {
   const c = mcpChk, def = c.itens.filter(i => i.estado === 'defeito').length, marc = c.itens.filter(i => i.estado).length, m = find('machines', c.machineId);
   return `<div class="mcp-topo"><div><b>Itens para conferir</b><small>${marc} de ${c.itens.length} marcados${def ? ` • <span class="txt-red">${def} com defeito</span>` : ''}</small></div><button type="button" class="secondary" data-chk="tudo">✓ Tudo OK</button></div>
-    ${c.comHor ? `<div class="field full"><label>Horímetro agora — ${esc(m.name)} (h)</label><input data-chk-hor inputmode="decimal" autocomplete="off" value="${esc(c.horimetro)}" placeholder="Último registrado: ${esc(num(m.hours))} h"></div>` : ''}
+    ${c.comHor ? `<div class="field full"><label>${NomeMed(m)} agora — ${esc(m.name)} (${unidMed(m)})</label><input data-chk-hor inputmode="decimal" autocomplete="off" value="${esc(c.horimetro)}" placeholder="Último registrado: ${esc(num(m.hours))} ${unidMed(m)}"></div>` : ''}
     ${c.ja.length ? `<p class="mcp-ja">Já informado nesta máquina: ${esc(c.ja.join(', '))}. Se for o mesmo defeito, ele não gera outro pedido.</p>` : ''}
     ${c.itens.map((it, i) => `<div class="mcp-item ${it.estado}">
       ${it.livre ? `<input class="mcp-nome-livre" data-chk-nome="${i}" value="${esc(it.item)}" placeholder="Qual item? Ex.: Mangueira do cilindro">` : `<span class="mcp-nome">${esc(it.item)}</span>`}
@@ -175,8 +190,8 @@ function mcpChkValidar() {
   if (def && !mcpGestor() && !(fotosDoForm.get(c.id)?.length)) return 'Tire uma foto do defeito pela câmera';
   if (c.comHor) {
     const h = numeroBR(c.horimetro);
-    if (c.horimetro === '' || !(h >= 0)) return `Informe o horímetro do ${m.name}`;
-    if (h < Number(m.hours || 0)) return `O horímetro está menor que o último registrado do ${m.name} (${num(m.hours)} h). Confira o painel.`;
+    if (c.horimetro === '' || !(h >= 0)) return `Informe ${porKm(m) ? 'o odômetro' : 'o horímetro'} do ${m.name}`;
+    if (h < Number(m.hours || 0)) return `${NomeMed(m)} está menor que o último registrado do ${m.name} (${num(m.hours)} ${unidMed(m)}). Confira o painel.`;
     const salto = typeof conferirSalto === 'function' ? conferirSalto(m, h) : ''; if (salto) return salto;
   }
   return '';
@@ -420,7 +435,7 @@ async function mcpPdfChecklist(id, enviar) {
   P.secao(nomeM, [m?.type, m?.model].filter(Boolean).join(' - '));
   P.cartoes([['Resultado', defs.length ? `${defs.length} ${defs.length === 1 ? 'defeito' : 'defeitos'}` : 'Tudo OK', defs.length ? (r.podeTrabalhar === 'Não' ? 'máquina parada' : 'pode trabalhar') : 'nenhum defeito', defs.length ? C.laranja : C.verde],
     ['Itens conferidos', String((r.itens || []).length), `${(r.itens || []).filter(i => i.estado === 'ok').length} OK`, C.azul],
-    ['Horímetro', r.horimetro !== '' && r.horimetro != null ? `${num(r.horimetro)} h` : '-', 'na hora do checklist', C.verde]]);
+    [m && porKm(m) ? 'Odômetro' : 'Horímetro', r.horimetro !== '' && r.horimetro != null ? `${num(r.horimetro)} ${unidMed(m)}` : '-', 'na hora do checklist', C.verde]]);
   P.ficha([['Máquina', [nomeM, m?.type, m?.model].filter(Boolean).join(' - ')], ['Data e hora', `${fmtDate(r.data)} ${r.hora || ''}`], ['Feito por', r.por || ''], ['Quando', mcpOrigem(r)],
     ['Operação', o ? [o.type, typeof opPlace === 'function' ? opPlace(o) : ''].filter(Boolean).join(' - ') : ''], ['A máquina pode trabalhar?', r.podeTrabalhar || ''],
     ['Pedido de manutenção', mt ? `${mt.description || 'Ordem de manutenção'} - ${mt.status}` : defs.length ? '' : 'não foi necessário']]);
@@ -460,8 +475,8 @@ function mcpPdfPeriodo(maq, de, ate, enviar) {
       comDef.flatMap(r => mcpDefeitos(r).map(i => [`${fmtDate(r.data)} ${r.hora || ''}`, machineName(r.machineId), i.item, i.obs || '', r.por || ''])));
   }
   P.secao('Todos os checklists', `${lista.length} no período`);
-  if (lista.length) P.tabela([{t: 'Data', w: 1.1}, {t: 'Máquina', w: 1.7}, {t: 'Quando', w: 1.5}, {t: 'Horímetro', w: .9, dir: true}, {t: 'Resultado', w: 1.1}, {t: 'Por', w: 1.4}],
-    lista.map(r => [`${fmtDate(r.data)} ${r.hora || ''}`, machineName(r.machineId), mcpOrigem(r), r.horimetro !== '' && r.horimetro != null ? `${num(r.horimetro)} h` : '-', mcpDefeitos(r).length ? `${mcpDefeitos(r).length} defeito(s)` : 'Tudo OK', r.por || '']));
+  if (lista.length) P.tabela([{t: 'Data', w: 1.1}, {t: 'Máquina', w: 1.7}, {t: 'Quando', w: 1.5}, {t: 'Horas / km', w: .9, dir: true}, {t: 'Resultado', w: 1.1}, {t: 'Por', w: 1.4}],
+    lista.map(r => [`${fmtDate(r.data)} ${r.hora || ''}`, machineName(r.machineId), mcpOrigem(r), r.horimetro !== '' && r.horimetro != null ? `${num(r.horimetro)} ${unidMed(find('machines', r.machineId))}` : '-', mcpDefeitos(r).length ? `${mcpDefeitos(r).length} defeito(s)` : 'Tudo OK', r.por || '']));
   else P.nada('Nenhum checklist neste período.');
   P.nota('Cada checklist tem as fotos e os detalhes no MercaPlant (Máquinas → Checklists). Para o PDF de um checklist com as fotos, abra o checklist e toque em PDF.');
   P.assinaturas([[db.settings.owner || 'Responsável pela propriedade', 'Responsável']]);
@@ -484,7 +499,7 @@ VIEWS.checklists = () => {
   const aguardando = db.maintenances.filter(x => x.status === MCP_AGUARDA), comp = db.maintenances.filter(x => mcpCompPendentes(x).length), conf = db.maintenances.filter(x => x.status === MCP_CONFERIR);
   const fila = [...aguardando.map(x => [x, 'red', 'Aguardando autorização']), ...comp.map(x => [x, 'red', 'Complemento aguardando']), ...conf.map(x => [x, 'purple', 'A conferir'])];
   const linha = r => { const m = find('machines', r.machineId), defs = mcpDefeitos(r), mt = r.pedidoId ? find('maintenances', r.pedidoId) : null;
-    return `<details class="mcp-linha"><summary><span class="status ${defs.length ? 'red' : 'green'}"></span><div><strong>${esc(m?.name || 'Máquina removida')}</strong><small>${esc(fmtDate(r.data))} ${esc(r.hora || '')} • ${esc(r.por || '')} • ${r.origem === 'operacao' ? 'ao iniciar operação' : r.origem === 'complemento' ? 'complemento' : 'avulso'}${r.horimetro !== '' && r.horimetro != null ? ` • ${num(r.horimetro)} h` : ''}${r.fotos?.length ? ` • 📷 ${r.fotos.length}` : ''}</small></div>${defs.length ? chip(defs.length === 1 ? '1 defeito' : defs.length + ' defeitos', 'red') : chip('Tudo OK', 'green')}</summary>
+    return `<details class="mcp-linha"><summary><span class="status ${defs.length ? 'red' : 'green'}"></span><div><strong>${esc(m?.name || 'Máquina removida')}</strong><small>${esc(fmtDate(r.data))} ${esc(r.hora || '')} • ${esc(r.por || '')} • ${r.origem === 'operacao' ? 'ao iniciar operação' : r.origem === 'complemento' ? 'complemento' : 'avulso'}${r.horimetro !== '' && r.horimetro != null ? ` • ${num(r.horimetro)} ${unidMed(m)}` : ''}${r.fotos?.length ? ` • 📷 ${r.fotos.length}` : ''}</small></div>${defs.length ? chip(defs.length === 1 ? '1 defeito' : defs.length + ' defeitos', 'red') : chip('Tudo OK', 'green')}</summary>
       <div class="mcp-linha-corpo">${(r.itens || []).map(i => `<div class="mcp-li ${i.estado}"><span>${i.estado === 'ok' ? '✓' : i.estado === 'defeito' ? '⚠' : '—'} ${esc(i.item)}</span>${i.obs ? `<small>${esc(i.obs)}</small>` : ''}</div>`).join('')}
         ${r.podeTrabalhar ? `<p class="nota">Pode trabalhar: ${esc(r.podeTrabalhar)}</p>` : ''}${typeof galeriaFotos === 'function' ? galeriaFotos(MCP_COL, r) : ''}
         <div class="row-actions" style="justify-content:flex-start">${mini('PDF', 'mcp-pdf', r.id)}${mini('Enviar', 'mcp-enviar', r.id)}${mt ? mini(`Ver ordem (${mt.status})`, 'nav', 'ordem/' + mt.id) : ''}</div></div></details>`; };
