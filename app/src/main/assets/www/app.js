@@ -797,7 +797,7 @@ VIEWS.operacoes = () => {
 VIEWS.maquinas = () => {
   const ms = db.machines.filter(m => m.type !== 'Implemento').sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''))); // implementos: aba própria
   const mts = db.maintenances.filter(mt => find('machines', mt.machineId)?.type !== 'Implemento').sort(ordemManut);
-  return head('Máquinas e manutenção', 'Horímetro, revisões programadas e ordens de manutenção.', btn('Registrar horímetro', 'hour-new', '', 'secondary') + btn('☑ Checklists', 'nav', 'checklists', 'secondary') + (typeof mcpGestor !== 'function' || mcpGestor() ? btn('Abrir manutenção', 'mt-new', '', 'secondary') : btn('☑ Fazer checklist', 'mcp-novo', '', 'secondary')) + btn('+ Nova máquina', 'mc-new')) +
+  return head('Máquinas e manutenção', 'Horímetro, revisões programadas e ordens de manutenção.', btn('Registrar horímetro', 'hour-new', '', 'secondary') + btn('☑ Checklists', 'nav', 'checklists', 'secondary') + (typeof mcpGestor !== 'function' || mcpGestor() ? btn('📊 Indicadores', 'nav', 'manutind', 'secondary') + btn('Abrir manutenção', 'mt-new', '', 'secondary') : btn('☑ Fazer checklist', 'mcp-novo', '', 'secondary')) + btn('+ Nova máquina', 'mc-new')) +
     (ms.length ? `<section class="cards">${ms.map(m => {
       const st = machineStatus(m), left = hoursToService(m), temRev = Number(m.nextService) > 0;
       const color = st === 'Em manutenção' ? 'orange' : st === 'Inativa' ? 'gray' : 'green';
@@ -816,7 +816,7 @@ VIEWS.maquinas = () => {
         ${extras.length ? `<div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>` : ''}
         <div class="maq-acoes">${isInactive(m) ? '' : mini('◷ Horímetro', 'hour-new', m.id) + mini('☑ Checklist', 'mcp-novo', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}
           <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">
-            ${isInactive(m) ? '' : mini('⛽ Abastecimento', 'cb-new', m.id)}${mini('◎ Aferição e calibragem', 'af-nova', m.id)}${mini('Histórico de aferições', 'af-maq', m.id)}${mini('⚙ Configuração para aferição', 'mc-config', m.id)}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
+            ${isInactive(m) ? '' : mini('⛽ Abastecimento', 'cb-new', m.id)}${typeof mcpGestor !== 'function' || mcpGestor() ? mini('📊 Indicadores de manutenção', 'nav', 'manutind/' + m.id) : ''}${mini('◎ Aferição e calibragem', 'af-nova', m.id)}${mini('Histórico de aferições', 'af-maq', m.id)}${mini('⚙ Configuração para aferição', 'mc-config', m.id)}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
           </div></details></div></article>`;
     }).join('')}</section>` : `<section class="card">${empty('Nenhuma máquina cadastrada', 'Cadastre tratores, colheitadeiras e implementos para controlar horímetro e revisões.', {act: 'mc-new', label: '+ Nova máquina'})}</section>`) +
     `<div class="section-title"><h3>Ordens de manutenção</h3></div><section class="card list">${mts.length ? mts.map(mt => linhaManutencao(mt, 'Máquina removida')).join('') : empty('Nenhuma manutenção registrada', 'Abra uma ordem de manutenção para acompanhar custo e revisões.', {act: 'mt-new', label: '+ Abrir manutenção'})}</section>`;

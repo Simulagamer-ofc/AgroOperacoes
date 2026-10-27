@@ -24,8 +24,12 @@ const MC_MODELOS = {
 };
 const MC_CORRETIVA = [['Diagnóstico do defeito', 1], ['Conserto / troca da peça com defeito', 1], ['Limpeza e reaperto da área do conserto', 0]];
 const MC_IMPL = {'Plantadeira': 'Plantadeira', 'Semeadora': 'Plantadeira', 'Pulverizador de arrasto': 'Pulverizador'};
+// Tipo do modelo de checklist de uma máquina (implemento: plantadeira, pulverizador de arrasto ou implemento)
+const mcChaveTipo = m => !m ? 'Outro' : m.type === 'Implemento' ? (MC_IMPL[m.tipoImpl] || 'Implemento') : (MC_MODELOS[m.type] ? m.type : 'Outro');
 function mcModelo(m, kind) {
   if (kind === 'Corretiva') return MC_CORRETIVA;
+  // Modelo editado pelo ADM / supervisor (vale para a fazenda toda)
+  const proprio = typeof mciRevisao === 'function' ? mciRevisao(mcChaveTipo(m)) : null; if (proprio?.length) return proprio;
   if (!m) return MC_MODELOS.Outro;
   if (m.type === 'Implemento') return MC_MODELOS[MC_IMPL[m.tipoImpl]] || MC_MODELOS.Implemento;
   return MC_MODELOS[m.type] || MC_MODELOS.Outro;
