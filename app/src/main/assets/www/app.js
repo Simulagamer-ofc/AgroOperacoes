@@ -411,7 +411,10 @@ function operationForm(op = {}) {
       if (OP_COM_KG.includes(v.type) && !v.place && !v.machineId) return 'Informe o local ou a máquina';
       const lib = v.type === 'Colheita' && v.fieldId && typeof liberacaoColheita === 'function' ? liberacaoColheita(v.fieldId) : null;
       if (lib && v.date < lib.libera && avisoColheitaOk !== v.fieldId + v.date) { avisoColheitaOk = v.fieldId + v.date; return `Atenção: ${fieldName(v.fieldId)} está na carência de ${lib.a.produto} (aplicado em ${fmtDate(lib.a.date)}); a colheita só está liberada a partir de ${fmtDate(lib.libera)}. Toque em salvar de novo para registrar mesmo assim.`; }
-      upsert('operations', {...op, ...v, id: op.id || uid(), createdAt: op.createdAt || new Date().toISOString()});
+      const item = {...op, ...v, id: op.id || uid(), createdAt: op.createdAt || new Date().toISOString()};
+      // Produtos da operação (aplicação, adubação, plantio, tratamento de sementes)
+      const errProd = typeof prodAoSalvarOp === 'function' ? prodAoSalvarOp(item, op) : ''; if (errProd) return errProd;
+      upsert('operations', item);
       showToast('Operação salva no dispositivo');
     }
   });
@@ -451,6 +454,7 @@ function operationForm(op = {}) {
     const notas = $('#f_notes', dialog); if (notas) notas.placeholder = c.notas;
   };
   if (tipo) { tipo.addEventListener('change', mostrar); $('#f_fieldId', dialog)?.addEventListener('change', mostrar); mostrar(); }
+  if (typeof prodAoAbrirOp === 'function') prodAoAbrirOp(op);
 }
 
 function machineForm(m = {}) {
@@ -464,6 +468,7 @@ function machineForm(m = {}) {
       {k: 'type', label: 'Tipo', type: 'select', options: GRUPOS_TIPO_MAQ.flatMap(([g, l]) => l.map(t => ({value: t, label: t, grupo: g}))).concat(m.type === 'Implemento' ? [{value: 'Implemento', label: 'Implemento'}] : []), required: true, hint: 'Plantadeira, grade, pulverizador de arrasto e outros implementos: cadastre em Máquinas → Implementos.'},
       {k: 'carroceria', label: 'Carroceria / uso', type: 'select', options: CARROCERIAS, mostrarSe: ['type', 'Caminhão']},
       {k: 'model', label: 'Marca / modelo'},
+      {k: 'tanqueL', label: 'Capacidade do tanque de calda (L)', type: 'number', min: 0, mostrarSe: ['type', ['Pulverizador', 'Drone de pulverização', 'Avião agrícola']], hint: 'Para o app calcular quantos tanques e quanto de cada produto vai por tanque.'},
       {k: 'placa', label: 'Placa', placeholder: 'Ex.: ABC1D23', mostrarSe: ['medidor', 'km']},
       {k: 'medidor', label: 'Medidor de uso', type: 'select', options: Object.entries(rotMed).map(([value, label]) => ({value, label})), required: true, hint: 'O app escolhe pelo tipo: veículo conta km, máquina conta horas. Pode trocar (ex.: caminhão com tomada de força revisado por horas).'},
       {k: 'hours', label: 'Leitura atual', type: 'number', min: 0, mostrarSe: ['medidor', '!nenhum']},
@@ -833,7 +838,7 @@ function operationRow(o, actions = true) {
   const horas = Number(o.km) > 0 ? `${num(o.km)} km` : Number(o.horas) > 0 ? `${um1(o.horas)} h${Number(o.area) > 0 && opTemArea(o) ? ` (${um1(o.area / o.horas)} ha/h)` : Number(o.kg) > 0 ? ` (${num(o.kg / o.horas)} kg/h)` : ''}` : '';
   const por = typeof quemLancou === 'function' ? quemLancou(o) : '';
   const prev = typeof duracaoPrevista === 'function' ? duracaoPrevista(o) : null, custo = typeof custoOperacao === 'function' ? custoOperacao(o) : null;
-  const parts = [fmtDate(o.date) + (o.time ? ' ' + o.time : ''), [machineName(o.machineId), machineName(o.implementoId)].filter(Boolean).join(' + '), o.area && opTemArea(o) ? `${num(o.area)} ha` : '', Number(o.kg) > 0 ? `${num(o.kg)} kg` : '', horas, prev ? `previsto ~${um1(prev.horas)} h` : '', custo ? `máquina ≈ R$ ${num(custo, 0)}` : '', o.operator, o.notes, por ? 'lançado por ' + por : ''].filter(Boolean);
+  const parts = [fmtDate(o.date) + (o.time ? ' ' + o.time : ''), [machineName(o.machineId), machineName(o.implementoId)].filter(Boolean).join(' + '), o.area && opTemArea(o) ? `${num(o.area)} ha` : '', Number(o.kg) > 0 ? `${num(o.kg)} kg` : '', o.produtos?.length && typeof prodResumo === 'function' ? '🧪 ' + prodResumo(o) : '', horas, prev ? `previsto ~${um1(prev.horas)} h` : '', custo ? `máquina ≈ R$ ${num(custo, 0)}` : '', o.operator, o.notes, por ? 'lançado por ' + por : ''].filter(Boolean);
   const acts = !actions ? chip(o.status, color) : `<div class="row-actions">${chip(o.status, color)}${o.status === 'Programada' ? mini('▶ Iniciar', 'op-start', o.id) : ''}${o.status === 'Em andamento' ? mini('✓ Concluir', 'op-done', o.id, 'ok') : ''}${mini('Editar', 'op-edit', o.id)}${mini('Excluir', 'op-del', o.id, 'del')}</div>`;
   return `<div class="row"><span class="status ${color === 'gray' ? 'green' : color}"></span><div><strong>${esc(o.type)} — ${esc(opPlace(o))}</strong><small>${esc(parts.join(' • '))}</small></div>${acts}</div>`;
 }
