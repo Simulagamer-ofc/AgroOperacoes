@@ -42,7 +42,17 @@ function mcGerar(mt) {
 const mcMarcado = it => !!it.estado;
 const mcProgresso = mt => { const l = mt.checklist || []; return {feitos: l.filter(mcMarcado).length, total: l.length, faltam: l.filter(it => it.obrig && !mcMarcado(it))}; };
 // Chamado ao salvar a ordem no formulário: gera o checklist (ou refaz, se mudou o tipo/máquina e nada foi marcado ainda)
-function mcAoSalvarOrdem(item, antes) {
+// Custo da ordem (o que entra em Gastos → Manutenção): serviço de terceiros + outros custos.
+// Mão de obra da equipe entra em Mão de obra (pelo apontamento) e peças do estoque já foram lançadas na compra: aparecem na ordem, sem duplicar.
+const mcTerceiros = mt => (mt.maoObra || []).filter(x => x.tipo === 'terceiro').reduce((t, x) => t + (Number(x.valor) || 0), 0);
+const mcEquipeValor = mt => (mt.maoObra || []).filter(x => x.tipo === 'equipe').reduce((t, x) => t + (Number(x.valor) || 0), 0);
+const mcEquipeHoras = mt => (mt.maoObra || []).filter(x => x.tipo === 'equipe' && x.unidade !== 'dia').reduce((t, x) => t + (Number(x.qtd) || 0), 0);
+const mcOutros = mt => mt.custoOutros != null && mt.custoOutros !== '' ? Number(mt.custoOutros) || 0 : (mt.maoObra?.length ? 0 : Number(mt.cost) || 0);
+function mcRecalcular(mt) { if (mt.custoOutros == null) mt.custoOutros = mcOutros(mt); const c = Math.round((mcTerceiros(mt) + (Number(mt.custoOutros) || 0)) * 100) / 100; mt.cost = c > 0 ? c : ''; }
+const mcCustoTotal = mt => (Number(mt.cost) || 0) + mcEquipeValor(mt) + (Number(mt.custoPecas) || 0);
+function mcAoSalvarOrdem(item, antes, doForm = true) {
+  // No formulário o campo de custo é “Outros custos”; o custo da ordem soma também os serviços de terceiros
+  if (doForm) { item.custoOutros = item.cost === '' || item.cost == null ? '' : Number(item.cost); mcRecalcular(item); }
   if (item.status === 'Concluída' || item.status === 'Programada') return;
   const nada = !(item.checklist || []).some(mcMarcado), mudou = antes.kind !== item.kind || antes.machineId !== item.machineId;
   if (!item.checklist?.length || (mudou && nada)) item.checklist = mcGerar(item);
@@ -77,12 +87,12 @@ VIEWS.ordem = id => {
   const prev = mt.kind !== 'Corretiva', chipTipo = chip(mt.kind || 'Preventiva', prev ? 'green' : 'orange');
   const parada = mt.paradaDesde ? `<div><small>Máquina parada</small><b class="${aberta ? 'txt-red' : ''}">${aberta ? 'há ' : ''}${mcTempo(mcHoras(mt.paradaDesde, mt.paradaFim))}</b><small>desde ${esc(mcDH(mt.paradaDesde))}${mt.paradaFim ? ' até ' + esc(mcDH(mt.paradaFim)) : ''}</small></div>` : '';
   const acao = mt.status === 'Programada' ? btn('▶ Iniciar', 'mt-iniciar', mt.id) : mt.status === 'Aberta' ? btn('▶ Iniciar manutenção', 'mc-iniciar', mt.id) + btn('✓ Concluir', 'mc-concluir', mt.id, 'secondary') : mt.status === 'Em execução' ? btn('✓ Concluir manutenção', 'mc-concluir', mt.id) : '';
-  const custoPecas = Number(mt.custoPecas) > 0 ? `<div><small>Peças do estoque</small><b>R$ ${num(mt.custoPecas, 2)}</b><small>já lançadas na compra</small></div>` : '';
-  return head(`${mt.description || 'Ordem de manutenção'}`, `${m?.name || 'Máquina removida'} • aberta em ${fmtDate(mt.date)}`, btn('← Máquinas', 'nav', m?.type === 'Implemento' ? 'implementos' : 'maquinas', 'secondary') + btn('Editar', 'mt-edit', mt.id, 'secondary') + acao).replace('<section class="view-head">', '<section class="view-head" data-eyebrow="Ordem de manutenção">') +
+  const custoPecas = '';
+  return head(`${mt.description || 'Ordem de manutenção'}`, `${m?.name || 'Máquina removida'} • aberta em ${fmtDate(mt.date)}`, btn('← Máquinas', 'nav', m?.type === 'Implemento' ? 'implementos' : 'maquinas', 'secondary') + btn('Editar', 'mt-edit', mt.id, 'secondary') + (mt.checklist?.length || mt.maoObra?.length ? btn('PDF', 'mc-pdf', mt.id, 'secondary') + btn('Enviar', 'mc-enviar', mt.id, 'secondary') : '') + acao).replace('<section class="view-head">', '<section class="view-head" data-eyebrow="Ordem de manutenção">') +
     `<section class="card panel mc-info"><div class="mc-chips">${chipTipo}${chip(mt.status, mt.status === 'Concluída' ? 'gray' : mt.status === 'Em execução' ? 'blue' : mt.status === 'Programada' ? 'purple' : 'orange')}</div>
       <div class="mc-nums"><div><small>Máquina</small><b>${esc(m?.name || '—')}</b><small>${esc([m?.type, m && Number(m.hours) > 0 ? num(m.hours) + ' h' : ''].filter(Boolean).join(' • '))}</small></div>
         ${mt.inicioEm ? `<div><small>Início</small><b>${esc(mcDH(mt.inicioEm))}</b><small>${mt.doneDate ? 'concluída ' + fmtDate(mt.doneDate) : 'em andamento'}</small></div>` : ''}${parada}
-        <div><small>Custo do serviço</small><b>${Number(mt.cost) > 0 ? 'R$ ' + num(mt.cost, 2) : '—'}</b><small>mão de obra e terceiros</small></div>${custoPecas}</div>
+        <div><small>Custo total da manutenção</small><b>${mcCustoTotal(mt) > 0 ? 'R$ ' + num(mcCustoTotal(mt), 2) : '—'}</b><small>peças, mão de obra e serviços</small></div></div>
       ${mt.kind === 'Corretiva' ? `<div class="mc-corretiva"><div><small>O que aconteceu</small><p>${esc(mt.sintoma || '—')}</p></div>${mt.causa ? `<div><small>Causa provável</small><p>${esc(mt.causa)}</p></div>` : ''}</div>` : ''}
       ${mt.semChecklist ? '<p class="nota" style="margin:8px 0 0">Registrada como já feita, sem checklist.</p>' : ''}</section>
     ${mt.checklist?.length ? `<section class="card panel mc-lista"><div class="section-title" style="margin:0 0 8px"><h3>Checklist ${prev ? 'da revisão' : 'do conserto'}</h3><small class="nota">${p.feitos} de ${p.total} itens${p.faltam.length && aberta ? ` • faltam ${p.faltam.length} obrigatórios` : ''}</small></div>
@@ -90,6 +100,7 @@ VIEWS.ordem = id => {
       ${mt.checklist.map(it => mcLinhaItem(mt, it, aberta)).join('')}
       ${aberta ? `<div class="btn-row" style="margin-top:10px">${btn('+ Item', 'mc-add', mt.id, 'secondary')}</div><p class="nota">* obrigatório. O teste de funcionamento precisa estar OK para concluir. Peça trocada pode sair do estoque: a baixa acontece ao concluir.</p>` : ''}</section>`
       : mt.status === 'Programada' ? `<section class="card">${empty('Manutenção programada', `Para ${fmtDate(mt.dataPrevista)}. Ao iniciar, o checklist aparece aqui.`)}</section>` : ''}
+    ${mcCartaoCustos(mt)}
     <section class="card panel"><h3 style="margin:0 0 6px">Fotos (antes e depois)</h3>${typeof campoFotos === 'function' ? campoFotos('maintenances', mt.id, mt.fotos || [], {rotulo: 'Fotos da manutenção', dica: 'Tire uma foto antes de começar e outra depois do serviço feito.'}) : ''}</section>`;
 };
 TITLES.ordem = 'Ordem de manutenção';
@@ -111,6 +122,93 @@ VIEWS.ordem.after = () => {
     const t = setInterval(() => { n++; if ((fotosDoForm.get(mt.id)?.length || 0) > antes || n > 40) { clearInterval(t); fotosAoSalvar('maintenances', mt.id); } }, 250);
   }));
 };
+
+// ---------- Mão de obra, serviços e custos ----------
+function mcCartaoCustos(mt) {
+  const mo = mt.maoObra || [], linha = x => `<div class="mc-mo"><span><b>${esc(x.nome)}</b><small>${x.tipo === 'terceiro' ? `serviço de terceiro${x.doc ? ' • ' + esc(x.doc) : ''}` : `${num(x.qtd)} ${x.unidade === 'dia' ? (Number(x.qtd) > 1 ? 'diárias' : 'diária') : 'h'}${x.fixo ? ' • fixo (salário em Financeiro)' : ''}`}</small></span><b>${Number(x.valor) > 0 ? 'R$ ' + num(x.valor, 2) : '—'}</b>${mini('×', 'mc-mo-del', mt.id + '|' + x.id, 'del')}</div>`;
+  const outros = Number(mt.custoOutros ?? (mo.length ? 0 : mt.cost)) || 0, eq = mcEquipeValor(mt), ter = mcTerceiros(mt), pe = Number(mt.custoPecas) || 0;
+  return `<section class="card panel mc-custos"><div class="section-title" style="margin:0 0 8px"><h3>Mão de obra e custos</h3>${btn('+ Mão de obra / serviço', 'mc-mo-add', mt.id, 'secondary')}</div>
+    ${mo.length ? mo.map(linha).join('') : '<p class="nota" style="margin:0 0 8px">Lance quem trabalhou (horas da equipe) e serviços de mecânico ou oficina de fora.</p>'}
+    <div class="mc-tot">
+      <div><small>Serviço de terceiros</small><b>R$ ${num(ter, 2)}</b></div>
+      <div><small>Mão de obra da equipe</small><b>R$ ${num(eq, 2)}</b><small>${mcEquipeHoras(mt) ? num(mcEquipeHoras(mt)) + ' h • ' : ''}lançada em Mão de obra</small></div>
+      <div><small>Peças do estoque</small><b>R$ ${num(pe, 2)}</b><small>lançadas na compra</small></div>
+      <div><small>Outros custos</small><b>R$ ${num(outros, 2)}</b><small>em Editar</small></div>
+      <div class="mc-tot-total"><small>Total da manutenção</small><b>R$ ${num(mcCustoTotal(mt), 2)}</b><small>gasto desta ordem: R$ ${num(Number(mt.cost) || 0, 2)} (terceiros + outros)</small></div>
+    </div></section>`;
+}
+function mcMaoObraForm(id) {
+  const mt = find('maintenances', id); if (!mt) return; mcGuardarCampos(mt);
+  const m = find('machines', mt.machineId);
+  openForm({title: 'Mão de obra ou serviço', sub: `${mt.description || 'Ordem'} — ${m?.name || ''}`, values: {quem: db.equipe[0]?.id || 'terceiro', date: today()},
+    fields: [
+      {k: 'quem', label: 'Quem fez', type: 'select', required: true, full: true, options: () => [...db.equipe.map(p => ({value: p.id, label: `${p.nome} — ${p.tipo}${p.funcao ? ' (' + p.funcao + ')' : ''}`})), {value: 'terceiro', label: 'Mecânico ou oficina de fora (terceiro)'}]},
+      {k: 'qtd', label: 'Horas trabalhadas (diarista: dias)', type: 'number', min: 0, mostrarSe: ['quem', '!terceiro']},
+      {k: 'nome', label: 'Nome do mecânico ou da oficina', mostrarSe: ['quem', 'terceiro'], full: true},
+      {k: 'valor', label: 'Valor do serviço (R$)', type: 'number', min: 0, mostrarSe: ['quem', 'terceiro']},
+      {k: 'doc', label: 'Nota ou recibo', mostrarSe: ['quem', 'terceiro']},
+      {k: 'date', label: 'Data', type: 'date', required: true}],
+    onSubmit: v => {
+      mt.maoObra = mt.maoObra || []; if (mt.custoOutros == null) mt.custoOutros = mcOutros(mt);
+      if (v.quem === 'terceiro') {
+        if (!String(v.nome || '').trim()) return 'Informe o nome do mecânico ou da oficina';
+        if (!(v.valor > 0)) return 'Informe o valor do serviço';
+        mt.maoObra.push({id: uid(), tipo: 'terceiro', nome: v.nome.trim(), valor: v.valor, doc: v.doc || '', date: v.date});
+      } else {
+        const p = find('equipe', v.quem); if (!p) return 'Escolha quem fez';
+        if (!(v.qtd > 0)) return 'Informe as horas trabalhadas';
+        const fixo = p.tipo === 'Fixo (mensal)', dia = p.tipo === 'Diarista', valor = !fixo && Number(p.valor) > 0 ? Math.round(v.qtd * Number(p.valor) * 100) / 100 : 0;
+        // Igual ao apontamento de Mão de obra: diarista e por hora geram o gasto; fixo registra só as horas (o salário já está em Financeiro)
+        const ap = {id: uid(), pessoaId: p.id, date: v.date, quantidade: v.qtd, atividade: `Manutenção — ${m?.name || ''}: ${mt.description || mt.kind}`, tipo: p.tipo, valor, maintenanceId: mt.id};
+        if (valor) { const g = {id: uid(), date: v.date, category: 'Mão de obra', description: `${p.nome} — ${num(v.qtd)} ${dia ? (v.qtd > 1 ? 'diárias' : 'diária') : 'h'} • manutenção ${m?.name || ''}`, value: valor, machineId: mt.machineId, maintenanceId: mt.id}; db.expenses.push(g); ap.gastoId = g.id; }
+        db.apontamentos.push(ap);
+        mt.maoObra.push({id: uid(), tipo: 'equipe', pessoaId: p.id, nome: p.nome, qtd: v.qtd, unidade: dia ? 'dia' : 'h', valor, fixo, apontamentoId: ap.id, gastoId: ap.gastoId || '', date: v.date});
+      }
+      mcRecalcular(mt); upsert('maintenances', mt); showToast('Lançado na ordem');
+    }});
+}
+function mcMaoObraExcluir(chave) {
+  const [mid, eid] = String(chave).split('|'), mt = find('maintenances', mid), x = mt?.maoObra?.find(y => y.id === eid); if (!x) return;
+  confirmDialog(`Tirar “${x.nome}” desta ordem?${x.gastoId ? ' O gasto de mão de obra lançado junto também sai.' : ''}`, () => {
+    mt.maoObra = mt.maoObra.filter(y => y.id !== eid);
+    if (x.apontamentoId) db.apontamentos = db.apontamentos.filter(a => a.id !== x.apontamentoId);
+    if (x.gastoId) db.expenses = db.expenses.filter(g => g.id !== x.gastoId);
+    mcRecalcular(mt); upsert('maintenances', mt);
+  }, 'Tirar');
+}
+// ---------- Relatório da ordem (PDF) ----------
+function mcRelatorio(id, enviar) {
+  const mt = find('maintenances', id); if (!mt) return;
+  if (typeof window.pdfMercaPlant !== 'function') { showToast('Gerador de PDF indisponível', true); return; }
+  mcGuardarCampos(mt);
+  const m = find('machines', mt.machineId), nomeM = m?.name || 'Máquina removida', p = mcProgresso(mt), brl2 = v => `R$ ${num(Number(v) || 0, 2)}`;
+  const P = window.pdfMercaPlant({titulo: 'Ordem de manutenção', linha2: `${nomeM} - ${fmtDate(mt.date)}`, continuacao: `Ordem de manutenção · ${nomeM}`});
+  const C = P.COR;
+  P.secao(mt.description || 'Ordem de manutenção', `${mt.kind || 'Preventiva'} • ${mt.status}`);
+  P.cartoes([['Tipo', mt.kind || 'Preventiva', mt.status, mt.kind === 'Corretiva' ? C.laranja : C.verde], ['Checklist', p.total ? `${p.feitos} de ${p.total}` : '-', p.faltam.length && mt.status !== 'Concluída' ? `faltam ${p.faltam.length} obrigatórios` : 'itens marcados', C.azul],
+    ['Custo total', brl2(mcCustoTotal(mt)), 'peças, mão de obra e serviços', C.laranja]]);
+  P.ficha([['Máquina', [nomeM, m?.type, m?.model].filter(Boolean).join(' - ')], ['Abertura', fmtDate(mt.date)], ['Início', mt.inicioEm ? mcDH(mt.inicioEm) : ''], ['Conclusão', mt.doneDate ? fmtDate(mt.doneDate) : 'em aberto'],
+    ['Horímetro na conclusão', Number(mt.doneHours) > 0 ? `${num(mt.doneHours)} h` : ''], ['Máquina parada', mt.paradaDesde ? `${mcTempo(mcHoras(mt.paradaDesde, mt.paradaFim))} (desde ${mcDH(mt.paradaDesde)}${mt.paradaFim ? ' até ' + mcDH(mt.paradaFim) : ''})` : ''],
+    ['O que aconteceu', mt.sintoma || ''], ['Causa provável', mt.causa || ''], ['Observações', mt.notes || '']]);
+  if (mt.checklist?.length) {
+    P.secao('Checklist', `${p.feitos} de ${p.total} itens`);
+    P.tabela([{t: 'Item', w: 2.6}, {t: 'Situação', w: 1.1}, {t: 'Observação / peça', w: 2.6}], mt.checklist.map(it => {
+      const s = it.pecaId ? find('stock', it.pecaId) : null;
+      return [(it.obrig ? '* ' : '') + it.item, ((MC_ESTADOS.find(([e]) => e === it.estado) || [])[1] || 'não marcado').replace(/^[^A-Za-zÀ-ú]+/, ''), [it.obs, s ? `${s.name}: ${num(it.pecaQtd)} ${s.unit}` : ''].filter(Boolean).join(' - ')];
+    }));
+  }
+  const pecas = (mt.checklist || []).filter(it => it.movId), movs = pecas.map(it => db.movements.find(x => x.id === it.movId)).filter(Boolean);
+  if (movs.length) { P.secao('Peças do estoque', 'baixadas na conclusão'); P.tabela([{t: 'Peça', w: 2.6}, {t: 'Quantidade', w: 1, dir: true}, {t: 'Valor', w: 1.2, dir: true}], movs.map(x => { const s = find('stock', x.itemId); return [s?.name || 'item removido', `${num(x.qty)} ${s?.unit || ''}`, Number(x.value) > 0 ? brl2(x.value) : '-']; })); }
+  if (mt.maoObra?.length) { P.secao('Mão de obra e serviços'); P.tabela([{t: 'Quem', w: 2.4}, {t: 'Tipo', w: 1.4}, {t: 'Horas / dias', w: 1, dir: true}, {t: 'Valor', w: 1.1, dir: true}], mt.maoObra.map(x => [x.nome, x.tipo === 'terceiro' ? 'Terceiro' + (x.doc ? ` (${x.doc})` : '') : x.fixo ? 'Equipe (fixo)' : 'Equipe', x.tipo === 'terceiro' ? '-' : `${num(x.qtd)} ${x.unidade === 'dia' ? 'dia(s)' : 'h'}`, Number(x.valor) > 0 ? brl2(x.valor) : '-'])); }
+  P.secao('Custos');
+  P.ficha([['Serviço de terceiros', brl2(mcTerceiros(mt))], ['Mão de obra da equipe', brl2(mcEquipeValor(mt))], ['Peças do estoque', brl2(mt.custoPecas)], ['Outros custos', brl2(mt.custoOutros ?? (mt.maoObra?.length ? 0 : mt.cost))], ['Total da manutenção', brl2(mcCustoTotal(mt))]]);
+  P.nota('Peças do estoque e mão de obra da equipe aparecem aqui para o custo total, mas são lançadas como gasto na compra e no apontamento (não se somam duas vezes).');
+  if (mt.fotos?.length) P.nota(`${mt.fotos.length} ${mt.fotos.length === 1 ? 'foto guardada' : 'fotos guardadas'} no MercaPlant, nesta ordem.`);
+  const exec = (mt.maoObra || []).map(x => x.nome).filter(Boolean)[0];
+  P.assinaturas([[exec || 'Mecânico / responsável pelo serviço', 'Executado por'], [db.settings.owner || 'Responsável pela propriedade', 'Conferido por']]);
+  const doc = P.finalizar(), slug = String(nomeM).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+  window.entregarPdf(doc, `mercaplant-ordem-${slug}-${mt.date}.pdf`, enviar === true, `Ordem de manutenção - ${nomeM} - ${mt.description || ''}`);
+}
 
 // ---------- Ações ----------
 function mcValidar(mt) {
@@ -149,9 +247,11 @@ const mtDoneSemChecklist = ACTIONS['mt-done'], mtIniciarSemChecklist = ACTIONS['
 Object.assign(ACTIONS, {
   // Concluir pela lista abre o checklist da ordem (concluir exige o checklist)
   'mt-done': id => { const mt = find('maintenances', id); if (!mt) return; mcAbrirOrdem(id); showToast('Preencha o checklist e toque em Concluir'); },
-  'mt-iniciar': id => { mtIniciarSemChecklist?.(id); const mt = find('maintenances', id); if (mt) { mcAoSalvarOrdem(mt, {}); upsert('maintenances', mt); mcAbrirOrdem(id); } },
+  'mt-iniciar': id => { mtIniciarSemChecklist?.(id); const mt = find('maintenances', id); if (mt) { mcAoSalvarOrdem(mt, {}, false); upsert('maintenances', mt); mcAbrirOrdem(id); } },
   'mc-iniciar': id => { const mt = find('maintenances', id); if (!mt) return; mcGuardarCampos(mt); mt.status = 'Em execução'; mt.inicioEm = mt.inicioEm || new Date().toISOString(); upsert('maintenances', mt); showToast('Manutenção em execução'); render(); },
   'mc-concluir': mcConcluir,
+  'mc-mo-add': mcMaoObraForm, 'mc-mo-del': mcMaoObraExcluir,
+  'mc-pdf': id => mcRelatorio(id, false), 'mc-enviar': id => mcRelatorio(id, true),
   'mc-estado': chave => {
     const [mid, iid, e] = String(chave).split('|'), mt = find('maintenances', mid); if (!mt) return;
     mcGuardarCampos(mt);
