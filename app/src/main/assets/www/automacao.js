@@ -162,10 +162,12 @@ function iniciarOperacao(id) {
         if (typeof mcpAoIniciar === 'function') mcpAoIniciar(o, comHor ? v.horimetro : '');
         o.status = 'Em andamento'; o.startedAt = new Date().toISOString(); if (!o.time) o.time = nowTime();
         if (typeof confAoIniciar === 'function') confAoIniciar(o);
+        if (typeof prodAoIniciar === 'function') prodAoIniciar(o);
         save(); showToast('Operação iniciada');
       }});
     if (typeof confAoAbrirInicio === 'function') confAoAbrirInicio(o);
     if (typeof mcpAoAbrirInicio === 'function') mcpAoAbrirInicio(o);
+    if (typeof prodAoAbrirInicio === 'function') prodAoAbrirInicio(o);
   };
   const aviso = o.machineId && pulverizacao(o) && typeof avisoPulverizador === 'function' ? avisoPulverizador(o.machineId) : '';
   if (aviso) return confirmDialog(`${machineName(o.machineId)}: ${aviso}. Iniciar a pulverização mesmo assim?`, abrir, 'Iniciar mesmo assim');
@@ -186,6 +188,7 @@ function concluirOperacao(id) {
     onSubmit: v => {
       if (comHor && (v.horimetro === '' || v.horimetro == null)) return `Informe ${porKm(m) ? 'o odômetro' : 'o horímetro'} final do ${m.name}`;
       const faltaComprovar = typeof confValidarConclusao === 'function' ? confValidarConclusao(o) : ''; if (faltaComprovar) return faltaComprovar;
+      const faltaProd = typeof prodValidarConclusao === 'function' ? prodValidarConclusao(o) : ''; if (faltaProd) return faltaProd;
       if (m && v.horimetro !== '' && Number(v.horimetro) < Number(o.horimetroIni || 0)) return `${NomeMed(m)} final não pode ser menor que o do início (${num(o.horimetroIni)} ${uM})`;
       if (m && v.horimetro !== '') { const salto = conferirSalto(m, v.horimetro); if (salto) return salto; }
       if (m && v.horimetro !== '' && Number(v.horimetro) > Number(m.hours || 0)) {
@@ -198,6 +201,7 @@ function concluirOperacao(id) {
       if (OP_COM_KG.includes(o.type) && v.kg !== '' && v.kg != null) o.kg = Number(v.kg);
       o.notes = v.notes; o.status = 'Concluída'; o.finishedAt = new Date().toISOString();
       if (typeof confAoConcluir === 'function') confAoConcluir(o);
+      if (typeof prodAoConcluir === 'function') prodAoConcluir(o);
       // Plantio concluído: a data de plantio do talhão é preenchida sozinha (nova safra quando a anterior tem mais de 150 dias)
       const ft = o.type === 'Plantio' && o.fieldId ? find('fields', o.fieldId) : null;
       if (ft && (!ft.plantingDate || diasEntreAuto(ft.plantingDate, o.date || today()) > 150)) { ft.plantingDate = o.date || today(); setTimeout(() => showToast(`Plantio de ${ft.name} registrado em ${fmtDate(ft.plantingDate)}`), 2900); }
@@ -205,6 +209,7 @@ function concluirOperacao(id) {
       showToast(`Operação concluída${o.km > 0 ? ` — ${num(o.km)} km rodados` : ''}${o.horas > 0 ? ` — ${um1(o.horas)} h` : ''}${o.horas > 0 && o.area > 0 && opTemArea(o) ? `, ${um1(o.area / o.horas)} ha/h` : o.horas > 0 && o.kg > 0 ? `, ${num(o.kg / o.horas)} kg/h` : ''}`);
     }});
   if (typeof confAoAbrirConclusao === 'function') confAoAbrirConclusao(o);
+  if (typeof prodAoAbrirConclusao === 'function') prodAoAbrirConclusao(o);
 }
 Object.assign(ACTIONS, {'op-start': iniciarOperacao, 'op-done': concluirOperacao});
 

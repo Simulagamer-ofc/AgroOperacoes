@@ -1330,3 +1330,20 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
   .mci-tabela tr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 10px;padding:12px 14px;border-bottom:1px solid var(--line)}.mci-tabela tr:last-child{border-bottom:0}
   .mci-tabela td{border:0!important;padding:0}.mci-tabela td:first-child{grid-column:1/-2}.mci-tabela td:last-child{grid-column:3;grid-row:1;justify-self:end}
   .mci-tabela td[data-l]::before{content:attr(data-l);display:block;color:var(--muted);font-size:.72rem}.mci-tabela td[data-l="Mais repetido"]{grid-column:span 2}}
+/* Produtos na operação (produtos.js) */
+.prod-bloco{border:1px solid var(--line);border-radius:14px;padding:12px;background:color-mix(in srgb,var(--bg) 55%,var(--panel));display:grid;gap:8px}
+.prod-topo{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}.prod-topo small{color:var(--muted);font-size:.82rem}
+.prod-it{display:grid;gap:6px;padding:8px 0;border-top:1px solid var(--line)}
+.prod-l1{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px}.prod-l2{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.prod-bloco select,.prod-bloco input:not([type=checkbox]){border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--panel);color:var(--text);font:inherit;min-height:42px;min-width:0}
+.prod-l2 input{width:110px}.prod-l2 select{width:auto}.prod-nome{width:100%}
+.prod-tot{font-size:.9rem;font-weight:600}
+.prod-x{border:1px solid var(--line);background:var(--panel);color:var(--red);border-radius:10px;min-width:42px;min-height:42px;cursor:pointer;font:inherit}
+.prod-calda label,.prod-rec label{display:grid;gap:4px;font-size:.86rem;color:var(--muted)}.prod-calda input{max-width:160px}
+.prod-rec{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.prod-plano{margin:6px 0 0;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--blue) 10%,transparent);font-size:.9rem}
+.prod-info ul{margin:4px 0;padding-left:18px}.prod-info li{margin:2px 0}
+.prod-clima{margin:4px 0 0;padding:8px 10px;border-radius:10px;font-size:.9rem}.prod-clima small{display:block;color:var(--muted);font-size:.8rem}
+.prod-clima.ok{background:color-mix(in srgb,var(--green) 12%,transparent)}.prod-clima.ruim{background:color-mix(in srgb,var(--orange) 16%,transparent)}
+.prod-check{display:flex;gap:8px;align-items:center;font-weight:600}.prod-check input{width:20px;height:20px;accent-color:var(--green)}
+@media(max-width:760px){.prod-rec{grid-template-columns:1fr}}
