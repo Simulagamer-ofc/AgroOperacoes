@@ -151,13 +151,18 @@ function iniciarOperacao(id) {
       onSubmit: v => {
         if (comHor && (v.horimetro === '' || v.horimetro == null)) return `Informe o horímetro inicial do ${m.name}`;
         if (comHor && Number(v.horimetro) < Number(m.hours || 0)) return `O horímetro está menor que o último registrado do ${m.name} (${num(m.hours)} h). Confira o painel.`;
+        // Checklist da máquina (quando ligado): defeito vira pedido; máquina que não pode trabalhar não começa a operação
+        const faltaChk = typeof mcpValidarInicio === 'function' ? mcpValidarInicio(o) : ''; if (faltaChk) return faltaChk;
+        if (typeof mcpParadaNoInicio === 'function' && mcpParadaNoInicio(o)) { mcpAoIniciar(o, comHor ? v.horimetro : ''); save(); setTimeout(() => showToast(`Operação não iniciada: ${m.name} ficou parada com o defeito informado. O pedido de manutenção foi enviado.`, true), 50); return; }
         const faltaFoto = typeof confValidarInicio === 'function' ? confValidarInicio(o) : ''; if (faltaFoto) return faltaFoto;
         if (comHor) { const e = aplicarHorimetro(m, v.horimetro, null, `Início: ${o.type}`, o); if (e) return e; o.horimetroIni = Number(v.horimetro); }
+        if (typeof mcpAoIniciar === 'function') mcpAoIniciar(o, comHor ? v.horimetro : '');
         o.status = 'Em andamento'; o.startedAt = new Date().toISOString(); if (!o.time) o.time = nowTime();
         if (typeof confAoIniciar === 'function') confAoIniciar(o);
         save(); showToast('Operação iniciada');
       }});
     if (typeof confAoAbrirInicio === 'function') confAoAbrirInicio(o);
+    if (typeof mcpAoAbrirInicio === 'function') mcpAoAbrirInicio(o);
   };
   const aviso = o.machineId && pulverizacao(o) && typeof avisoPulverizador === 'function' ? avisoPulverizador(o.machineId) : '';
   if (aviso) return confirmDialog(`${machineName(o.machineId)}: ${aviso}. Iniciar a pulverização mesmo assim?`, abrir, 'Iniciar mesmo assim');
