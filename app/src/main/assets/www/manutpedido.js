@@ -29,6 +29,7 @@ const MCP_ESTADOS = [['ok', '✓ OK'], ['defeito', '⚠ Defeito'], ['na', '— N
 const mcpGestor = () => !(typeof nvComum === 'function' && nvComum());
 const mcpVeValores = () => mcpGestor() || (typeof nvVeFinanceiro === 'function' && nvVeFinanceiro());
 function mcpItensDe(m) {
+  const proprio = typeof mciInspecao === 'function' ? mciInspecao(mcChaveTipo(m)) : null; if (proprio?.length) return proprio;
   if (!m) return MC_INSPECAO.Outro;
   if (m.type === 'Implemento') return MC_INSPECAO[MC_IMPL[m.tipoImpl]] || MC_INSPECAO.Implemento;
   return MC_INSPECAO[m.type] || MC_INSPECAO.Outro;
@@ -380,7 +381,7 @@ function mcpGravarAjustes(a) {
   upsert(MCP_COL, {...atual, ...a, tipo: 'config', por: quemUsa(), em: mcpAgora()});
 }
 const mcpPrazoDe = m => { const a = mcpAjustes(), v = a.prazos[m.id]; return v != null && v !== '' ? Number(v) : a.prazo; };
-const mcpUltimoDe = id => (db[MCP_COL] || []).filter(r => r.machineId === id && r.origem !== 'complemento').reduce((u, r) => !u || String(r.em) > String(u.em) ? r : u, null);
+const mcpUltimoDe = id => (db[MCP_COL] || []).filter(r => r.machineId === id && r.origem !== 'complemento' && r.tipo !== 'config').reduce((u, r) => !u || String(r.em) > String(u.em) ? r : u, null);
 const mcpDias = (a, b) => Math.round((new Date(b + 'T12:00:00') - new Date(a + 'T12:00:00')) / 864e5);
 // Situação de uma máquina: prazo (dias), último checklist e se está vencido. prazoMin: prazo usado quando a máquina não tem prazo
 function mcpSituacao(m, prazoMin = 0) {
@@ -492,7 +493,7 @@ VIEWS.checklists = () => {
     return `<div class="row mcp-maq"><span class="status ${emManut ? 'orange' : s.cor}"></span><div><strong>${esc(m.name)}</strong><small>${esc([m.type, s.p ? mcpTextoPrazo(s.p).toLowerCase() : 'sem prazo', s.u ? `último ${fmtDate(s.u.data)} por ${s.u.por || '—'}` : ''].filter(Boolean).join(' • '))}</small></div>
       <div class="row-actions">${gestor ? `<select class="mcp-prazo-sel" data-mcp-prazo="${esc(m.id)}" aria-label="Prazo do checklist de ${esc(m.name)}">${mcpOpcoesPrazo(v == null ? '' : v, aj.prazo)}</select>` : ''}${emManut ? chip('em manutenção', 'orange') : s.p ? chip(s.txt, s.cor) : ''}${mini('☑ Fazer', 'mcp-novo', m.id, s.venc && !emManut ? 'ok' : '')}</div></div>`; };
   const venc = mcpVencidas().length;
-  return head('Checklists das máquinas', 'Inspeção antes de trabalhar. Defeito marcado vira pedido de manutenção, sem duplicar.', btn('← Máquinas', 'nav', 'maquinas', 'secondary') + btn('PDF do período', 'mcp-relatorio', '', 'secondary') + btn('☑ Fazer checklist', 'mcp-novo')) +
+  return head('Checklists das máquinas', 'Inspeção antes de trabalhar. Defeito marcado vira pedido de manutenção, sem duplicar.', btn('← Máquinas', 'nav', 'maquinas', 'secondary') + (gestor ? btn('Editar itens', 'nav', 'modeloschk', 'secondary') : '') + btn('PDF do período', 'mcp-relatorio', '', 'secondary') + btn('☑ Fazer checklist', 'mcp-novo')) +
     (gestor && fila.length ? `<div class="section-title"><h3>Para você decidir</h3></div><section class="card list">${fila.map(([x, cor, t]) => `<div class="row"><span class="status ${cor}"></span><div><strong>${esc(machineName(x.machineId) || 'Máquina removida')}</strong><small>${esc([x.description, x.parada === 'Sim' ? 'máquina parada' : ''].filter(Boolean).join(' • '))}</small></div><div class="row-actions">${chip(t, cor)}${mini('Abrir', 'nav', 'ordem/' + x.id, 'ok')}</div></div>`).join('')}</section>` : '') +
     (gestor ? `<section class="card panel mcp-ajustes"><h3 style="margin:0 0 4px">Quando o checklist deve ser feito</h3><p class="nota" style="margin:0 0 6px">Vale para a fazenda toda e chega aos aparelhos de todos. Só o ADM e o supervisor mudam.</p>
       <div class="mcp-aj"><div><b>Prazo padrão</b><small>De quanto em quanto tempo cada máquina precisa de um checklist. Vencido: aparece o aviso para todos.</small></div><select class="mcp-prazo-sel" data-mcp-prazo="*" aria-label="Prazo padrão">${mcpOpcoesPrazo(aj.prazo, null)}</select></div>

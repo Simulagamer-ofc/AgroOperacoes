@@ -1302,3 +1302,31 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 .mcp-prazo-sel{border:1px solid var(--line);border-radius:10px;padding:7px 10px;background:var(--panel);color:var(--text);font:inherit;font-size:.88rem;min-height:38px;max-width:100%}
 .mcp-maq .row-actions{flex-wrap:wrap;justify-content:flex-end}
 @media(max-width:760px){.mcp-aj{flex-direction:column;align-items:stretch}.mcp-maq{grid-template-columns:auto minmax(0,1fr)}.mcp-maq .row-actions{grid-column:1/-1;justify-content:flex-start}}
+/* Indicadores de manutenção e editor dos checklists (manutind.js) */
+.mci-per{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}.mci-per button{padding:8px 14px;min-height:38px}
+.mci-kpis{margin-bottom:14px}
+.mci-split{display:flex;height:8px;border-radius:9px;overflow:hidden;margin-top:10px;background:var(--bg)}.mci-split .prev{background:var(--green)}.mci-split .corr{background:var(--orange)}
+.mci-duas{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin-bottom:14px}
+.mci-leg{display:flex;gap:12px;font-size:.8rem;color:var(--muted)}.mci-leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.mci-leg .prev,.mci-pilha .prev{background:var(--green)}.mci-leg .corr,.mci-pilha .corr{background:var(--orange)}
+.mci-barras{display:grid;gap:6px;align-items:end;height:150px;border-bottom:1px solid var(--line);padding-bottom:4px}
+.mci-col{display:grid;justify-items:center;gap:5px;height:100%;grid-template-rows:1fr auto}.mci-col small{color:var(--muted);font-size:.72rem}
+.mci-pilha{display:flex;flex-direction:column;justify-content:flex-end;width:min(26px,80%);height:100%}.mci-pilha span{display:block;min-height:3px}.mci-pilha span:first-child{border-radius:5px 5px 0 0}
+.mci-rep{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--line)}.mci-rep:first-of-type{border-top:0}.mci-rep small{display:block;color:var(--muted);font-size:.8rem}
+.mci-mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.mci-mini>div{background:var(--bg);border-radius:12px;padding:10px 12px}.mci-mini small{display:block;color:var(--muted);font-size:.8rem}.mci-mini b{font-size:1.25rem}
+.mci-tabela-box{overflow-x:auto}.mci-tabela{width:100%;border-collapse:collapse;font-size:.9rem}.mci-tabela th{text-align:left;color:var(--muted);font-weight:600;font-size:.8rem;padding:10px 12px;border-bottom:1px solid var(--line)}
+.mci-tabela td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}.mci-tabela td small{display:block;color:var(--muted);font-size:.78rem}.mci-tabela tr:last-child td{border-bottom:0}
+.mci-tipo{display:grid;gap:6px;margin-bottom:10px}.mci-tipo label{font-weight:600}.mci-tipo select{max-width:320px}
+.mci-tipo select,.mci-it input{border:1px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--panel);color:var(--text);font:inherit;min-height:42px}
+.mci-itens{display:grid;gap:6px}
+.mci-it{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto auto auto;gap:6px;align-items:center}
+.mci-it:not(:has(.mci-ob)){grid-template-columns:auto minmax(0,1fr) auto auto auto}
+.mci-n{color:var(--muted);font-size:.8rem;min-width:1.4em;text-align:right}
+.mci-ic,.mci-ob{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:10px;min-height:40px;min-width:40px;font:inherit;cursor:pointer}
+.mci-ic:disabled{opacity:.35;cursor:default}.mci-ic.del{color:var(--red)}
+.mci-ob{padding:0 10px;font-size:.84rem;white-space:nowrap}.mci-ob.on{border-color:var(--orange);color:#b45309;background:color-mix(in srgb,var(--orange) 12%,var(--panel))}:root[data-theme="dark"] .mci-ob.on{color:var(--orange)}
+@media(max-width:760px){.mci-it,.mci-it:not(:has(.mci-ob)){grid-template-columns:auto minmax(0,1fr) auto auto auto}.mci-it .mci-ob{grid-column:2/-1;justify-self:start;order:9}.mci-kpis{grid-template-columns:1fr 1fr}}
+@media(max-width:760px){.mci-tabela thead{display:none}.mci-tabela,.mci-tabela tbody{display:block}
+  .mci-tabela tr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 10px;padding:12px 14px;border-bottom:1px solid var(--line)}.mci-tabela tr:last-child{border-bottom:0}
+  .mci-tabela td{border:0!important;padding:0}.mci-tabela td:first-child{grid-column:1/-2}.mci-tabela td:last-child{grid-column:3;grid-row:1;justify-self:end}
+  .mci-tabela td[data-l]::before{content:attr(data-l);display:block;color:var(--muted);font-size:.72rem}.mci-tabela td[data-l="Mais repetido"]{grid-column:span 2}}
