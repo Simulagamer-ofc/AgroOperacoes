@@ -70,7 +70,9 @@ function nvPendentes(d = db, base = nvBase) {
   for (const c of COLLECTIONS) for (const r of d[c] || []) {
     if (!r?.id) continue;
     const b = nvBaseDe(c, r);
-    if (base[nvChave(c, r.id)]?.[0] !== b[0]) itens.push({c, id: r.id, data: JSON.parse(JSON.stringify(r)), deleted: false, base: b});
+    const bk = base[nvChave(c, r.id)];
+    // Estoque: vai junto o saldo que o servidor tinha (o servidor soma só a diferença lançada neste aparelho)
+    if (bk?.[0] !== b[0]) itens.push({c, id: r.id, data: JSON.parse(JSON.stringify(r)), deleted: false, base: b, ...(c === 'stock' && bk && bk.length > 1 ? {saldoBase: Number(bk[1]) || 0} : {})});
   }
   for (const [k, e] of nvExclusoes(d)) if (base[k] && !presentes[e.c]?.has(e.id)) itens.push({c: e.c, id: e.id, data: {_mod: e.at}, deleted: true, base: null});
   return itens;
@@ -280,7 +282,7 @@ async function nvEnviar() {
   const itens = nvPendentes();
   let recusados = 0;
   for (let i = 0; i < itens.length; i += NV_LOTE_ENVIO) {
-    const lote = itens.slice(i, i + NV_LOTE_ENVIO), linhas = lote.map(it => ({store: it.c, id: it.id, data: it.data, deleted: it.deleted}));
+    const lote = itens.slice(i, i + NV_LOTE_ENVIO), linhas = lote.map(it => ({store: it.c, id: it.id, data: it.saldoBase != null ? {...it.data, _saldoBase: it.saldoBase} : it.data, deleted: it.deleted}));
     let rej = [];
     if (!nvSemFuncaoEnvio) {
       try { rej = await nvHttp('/rest/v1/rpc/push_records', {method: 'POST', body: {p_farm: nv.fazenda.id, p_rows: linhas}}) || []; }
