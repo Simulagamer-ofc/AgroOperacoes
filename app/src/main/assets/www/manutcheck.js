@@ -22,6 +22,22 @@ const MC_MODELOS = {
   'Beneficiamento': [['Limpeza das máquinas', 1], ['Peneiras', 0], ['Correias e rolamentos', 1], ['Motores', 0]],
   'Outro': [['Inspeção geral', 1], ['Lubrificação', 0], ['Limpeza', 0]]
 };
+// Revisão dos tipos novos (veículos, máquinas de obra, aplicação aérea e equipamentos)
+{
+  const leve = [['Óleo do motor', 1], ['Filtro de óleo', 1], ['Filtro de ar', 1], ['Filtro de combustível', 0], ['Filtro de cabine', 0], ['Freios (pastilhas, discos e fluido)', 1], ['Pneus e rodízio', 0], ['Suspensão e direção', 0], ['Arrefecimento', 0], ['Bateria', 0], ['Luzes', 0]];
+  const pesada = [['Óleo do motor', 1], ['Filtros (óleo, combustível e ar)', 1], ['Óleo e filtro do hidráulico', 1], ['Graxa nos pinos e articulações', 1], ['Dentes, lâmina ou concha (desgaste)', 0], ['Pneus ou esteira', 0], ['Transmissão e diferenciais', 0], ['Arrefecimento', 0], ['Luzes, alarmes e sinal de ré', 0]];
+  Object.assign(MC_MODELOS, {'Caminhonete': leve, 'Carro': leve, 'Van/Ônibus': leve,
+    'Moto': [['Óleo do motor', 1], ['Filtro de ar', 0], ['Corrente e relação', 1], ['Freios', 1], ['Pneus', 1], ['Velas', 0], ['Luzes', 0]],
+    'Quadriciclo/UTV': [['Óleo do motor', 1], ['Filtro de ar', 1], ['Correia (CVT)', 0], ['Freios', 1], ['Pneus', 0], ['Suspensão', 0], ['Graxa nos pontos de lubrificação', 0]],
+    'Pá carregadeira': pesada, 'Retroescavadeira': pesada, 'Escavadeira': pesada, 'Motoniveladora': pesada, 'Trator de esteira': pesada, 'Minicarregadeira': pesada, 'Manipulador telescópico': pesada, 'Empilhadeira': pesada,
+    'Distribuidor autopropelido': [['Óleo do motor', 1], ['Filtros (óleo, combustível e ar)', 1], ['Esteira e discos do distribuidor', 1], ['Hidráulico', 0], ['Pneus', 0], ['Graxa nos pontos de lubrificação', 0]],
+    'Colhedora de forragem': [['Óleo do motor', 1], ['Filtros (óleo, combustível e ar)', 1], ['Facas do picador (afiar)', 1], ['Contra-faca', 1], ['Correias', 0], ['Plataforma / espigadeira', 0], ['Graxa nos pontos de lubrificação', 0]],
+    'Drone de pulverização': [['Hélices', 1], ['Braços e travas', 1], ['Baterias (ciclos e estado)', 1], ['Bomba e bicos', 1], ['Filtros', 0], ['Calibração da bússola e do GPS', 0], ['Atualização do sistema', 0]],
+    'Avião agrícola': [['Inspeção conforme o manual do fabricante e a ANAC', 1], ['Motor e hélice', 1], ['Sistema de aplicação (bomba, barras e bicos)', 1], ['Filtros', 0], ['Calibração do equipamento de aplicação', 0]],
+    'Gerador': [['Óleo do motor', 1], ['Filtros', 1], ['Bateria', 0], ['Arrefecimento', 0], ['Teste com carga', 0]],
+    'Motobomba / irrigação': [['Óleo do motor', 1], ['Gaxetas e selos', 1], ['Filtros', 0], ['Rotor', 0], ['Mangueiras e conexões', 0]],
+    'Pivô central': [['Óleo dos redutores', 1], ['Aspersores e emissores', 1], ['Motorredutores', 0], ['Pneus e rodas', 0], ['Painel e parte elétrica', 0], ['Estrutura e juntas', 0], ['Alinhamento das torres', 0]]});
+}
 const MC_CORRETIVA = [['Diagnóstico do defeito', 1], ['Conserto / troca da peça com defeito', 1], ['Limpeza e reaperto da área do conserto', 0]];
 const MC_IMPL = {'Plantadeira': 'Plantadeira', 'Semeadora': 'Plantadeira', 'Pulverizador de arrasto': 'Pulverizador'};
 // Tipo do modelo de checklist de uma máquina (implemento: plantadeira, pulverizador de arrasto ou implemento)

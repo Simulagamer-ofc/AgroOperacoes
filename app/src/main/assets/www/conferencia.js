@@ -187,7 +187,7 @@ function confCartao(o) {
   const sit = confSituacao(o), al = o.status === 'Concluída' ? confAlertas(o) : [];
   const ini = Date.parse(o.startedAt), fim = Date.parse(o.finishedAt), relogio = ini && fim && fim > ini ? (fim - ini) / 3600000 : null;
   const quem = [o.operator, o.concluidaPor ? 'concluída por ' + confNome(o.concluidaPor) : ''].filter(Boolean).join(' • ');
-  const numeros = [relogio != null ? `${um1(relogio)} h no relógio` : '', Number(o.horas) > 0 ? `${um1(o.horas)} h no horímetro${o.horimetroIni != null && o.horimetroFim != null ? ` (${num(o.horimetroIni)} → ${num(o.horimetroFim)})` : ''}` : '',
+  const numeros = [relogio != null ? `${um1(relogio)} h no relógio` : '', Number(o.horas) > 0 ? `${um1(o.horas)} h no horímetro${o.horimetroIni != null && o.horimetroFim != null ? ` (${num(o.horimetroIni)} → ${num(o.horimetroFim)})` : ''}` : '', Number(o.km) > 0 ? `${num(o.km)} km no odômetro (${num(o.horimetroIni)} → ${num(o.horimetroFim)})` : '',
     Number(o.area) > 0 && opTemArea(o) ? `${num(o.area)} ha${Number(o.horas) > 0 ? ` • ${um1(o.area / o.horas)} ha/h` : ''}` : '', Number(o.kg) > 0 ? `${num(o.kg)} kg` : ''].filter(Boolean).join(' • ');
   const chipSit = sit === 'pendente' ? chip('A conferir', 'orange') : sit === 'aprovada' ? chip('✓ Conferida', 'green') : sit === 'correcao' ? chip('↩ Correção pedida', 'red') : chip(o.status, STATUS_COLOR[o.status]);
   return `<article class="card panel conf-cartao" id="conf-${esc(o.id)}">

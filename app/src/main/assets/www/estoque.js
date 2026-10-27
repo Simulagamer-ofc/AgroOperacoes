@@ -39,7 +39,7 @@ function lotesDoItem(itemId) {
   if (s && excesso > 1e-9) baixar(excesso);
   return Object.values(lotes).filter(l => l.saldo > 1e-9).sort((a, b) => (a.validade || '9999').localeCompare(b.validade || '9999'));
 }
-const diasAte = d => Math.round((new Date(d + 'T12:00:00') - new Date(today() + 'T12:00:00')) / 864e5);
+// diasAte(d): em app.js
 function lotesVencendo() {
   return db.stock.flatMap(s => lotesDoItem(s.id).filter(l => l.validade && diasAte(l.validade) <= AVISO_VALIDADE_DIAS).map(l => ({s, ...l, dias: diasAte(l.validade)})));
 }

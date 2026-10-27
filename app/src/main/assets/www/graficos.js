@@ -48,7 +48,7 @@ function graficoArea(ini, fim) {
 // 2) Horas trabalhadas por máquina (lançamentos de horímetro do período)
 function graficoHoras(ini, fim) {
   const porMaq = {};
-  db.hourLogs.filter(h => h.date >= ini && h.date <= fim).forEach(h => {
+  db.hourLogs.filter(h => h.date >= ini && h.date <= fim && !(typeof porKm === 'function' && porKm(find('machines', h.machineId)))).forEach(h => {
     const d = Number(h.hours) - Number(h.previous || 0);
     if (d > 0) porMaq[h.machineId] = (porMaq[h.machineId] || 0) + d;
   });
@@ -173,7 +173,7 @@ const opPeriodoAberto = () => safeStorage.get('agro-op-periodo-aberto') === '1';
 function painelOperacoes() {
   const {ini, fim} = periodoPainel(), ops = operacoesPainel(ini, fim);
   const conc = ops.filter(o => o.status === 'Concluída'), ha = conc.filter(o => Number(o.area) > 0 && (typeof opTemArea !== 'function' || opTemArea(o))).reduce((s, o) => s + Number(o.area), 0);
-  const horas = db.hourLogs.filter(h => h.date >= ini && h.date <= fim).reduce((s, h) => s + Math.max(0, Number(h.hours) - Number(h.previous || 0)), 0);
+  const horas = db.hourLogs.filter(h => h.date >= ini && h.date <= fim && !(typeof porKm === 'function' && porKm(find('machines', h.machineId)))).reduce((s, h) => s + Math.max(0, Number(h.hours) - Number(h.previous || 0)), 0);
   const aberto = opPeriodoAberto();
   const resumo = ops.length ? [`${ops.length} ${ops.length === 1 ? 'operação' : 'operações'}`, `${conc.length} ${conc.length === 1 ? 'concluída' : 'concluídas'}`, ha ? `${num(ha)} ha` : '', horas ? `${num(horas)} h de máquina` : ''].filter(Boolean).join(' • ') : 'Nenhuma operação com data no período';
   return `<article class="card panel op-periodo ${aberto ? 'aberto' : ''}" id="opPeriodo">
