@@ -1347,3 +1347,4 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 .prod-clima.ok{background:color-mix(in srgb,var(--green) 12%,transparent)}.prod-clima.ruim{background:color-mix(in srgb,var(--orange) 16%,transparent)}
 .prod-check{display:flex;gap:8px;align-items:center;font-weight:600}.prod-check input{width:20px;height:20px;accent-color:var(--green)}
 @media(max-width:760px){.prod-rec{grid-template-columns:1fr}}
+.prod-car-rot{font-size:.86rem;font-weight:600}

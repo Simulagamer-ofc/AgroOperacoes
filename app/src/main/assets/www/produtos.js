@@ -83,7 +83,7 @@ function prodLinha(p, i, base) {
     ${!p.itemId && p.nome != null ? `<input class="prod-nome" data-prod-nome="${i}" value="${esc(p.nome || '')}" placeholder="Nome do produto">` : ''}
     <div class="prod-l2"><input data-prod-dose="${i}" inputmode="decimal" value="${esc(p.dose === '' || p.dose == null ? '' : String(p.dose).replace('.', ','))}" placeholder="Dose" aria-label="Dose"><select data-prod-un="${i}" aria-label="Unidade da dose">${doses.map(u => `<option ${u === p.unDose ? 'selected' : ''}>${u}</option>`).join('')}</select>
       <span class="prod-tot">${tot ? `= ${prodFmt(tot.q, tot.u)}${tot.est != null && tot.unEst !== tot.u ? ` (${prodFmt(tot.est, tot.unEst)})` : ''}${s && tot.est != null && tot.est > Number(s.qty || 0) ? ' <b class="txt-red">saldo insuficiente</b>' : ''}` : ''}</span></div>
-    ${precisaCar ? `<div class="prod-l2"><input data-prod-car="${i}" inputmode="numeric" value="${esc(p.carencia ?? '')}" placeholder="Carência (dias, da bula)" aria-label="Carência em dias"><small class="nota">sem carência no cadastro do produto</small></div>` : ''}
+    ${precisaCar ? `<div class="prod-l2"><span class="prod-car-rot">Carência (dias, da bula)</span><input data-prod-car="${i}" inputmode="numeric" value="${esc(p.carencia ?? '')}" placeholder="dias" aria-label="Carência em dias"><small class="nota">o produto não tem carência no cadastro</small></div>` : ''}
   </div>`;
 }
 function prodBlocoHtml(o, base) {
