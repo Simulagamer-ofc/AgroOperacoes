@@ -1255,3 +1255,16 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 .mc-peca{display:grid;grid-template-columns:minmax(0,1fr) 90px auto;gap:8px;align-items:center}
 @media(max-width:760px){.mc-e{flex:1 1 auto;text-align:center;padding:7px 8px}}
 .mc-obs,.mc-peca select,.mc-peca input{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--panel);color:var(--text);font:inherit;min-height:42px;width:100%}
+/* Ordem de manutenção: mão de obra e custos */
+.mc-custos{margin-top:14px}
+.mc-mo{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
+.mc-mo small{display:block;color:var(--muted)}
+.mc-tot{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px}
+.mc-tot>div{background:var(--bg);border-radius:12px;padding:10px 12px}.mc-tot small{display:block;color:var(--muted);font-size:.8rem}.mc-tot b{font-size:1.08rem}
+.mc-tot-total{background:color-mix(in srgb,var(--green) 12%,var(--panel))!important;grid-column:1/-1}.mc-tot-total b{font-size:1.35rem;color:var(--green)}
+.mc-serv-lista{display:grid;gap:6px;margin:8px 0 12px;max-height:55vh;overflow:auto}
+.mc-serv{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.mc-custos .section-title{flex-wrap:wrap;gap:8px}
+.mc-aviso-pend{margin:0 0 8px;padding:9px 12px;border-radius:10px;background:color-mix(in srgb,var(--orange) 14%,transparent);color:#b45309;font-size:.9rem}
+:root[data-theme="dark"] .mc-aviso-pend{color:var(--orange)}
+.mc-pend button{border:1px solid var(--orange);background:color-mix(in srgb,var(--orange) 14%,var(--panel));color:#b45309;border-radius:999px;padding:7px 14px;font:inherit;font-weight:600;cursor:pointer}:root[data-theme="dark"] .mc-pend button{color:var(--orange)}

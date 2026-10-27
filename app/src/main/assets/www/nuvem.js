@@ -96,7 +96,18 @@ function nvCofresOrfaos() {
   for (const k of nvChavesCofres()) { const id = k.slice(NV_COFRE.length); if (id === nv.dadosDe) continue; const c = nvLer(k, null); if (c?.db && c.orfao) { const n = nvPendentes(c.db, c.base || {}).length; if (n) l.push({k, id, nome: c.nome || 'fazenda sem nome', n}); } }
   return l;
 }
-const nvTextoOrfaos = os => os.map(o => `${o.n} ${o.n === 1 ? 'alteração' : 'alterações'} de “${o.nome}”`).join(', ');
+// Coleções que o servidor recusava até a 0.71 (faltavam na lista de coleções aceitas): o que foi recusado ficou marcado
+// como já conhecido e não subiria mais. Uma vez por aparelho, esquece essa marca para reenviar — nesta fazenda e nos cofres.
+const NV_REENVIAR = ['pesagens', 'avaliacoes'];
+function nvReenviarRecusadas() {
+  if (nv.reenvio071) return;
+  const limpar = base => { for (const k of Object.keys(base || {})) if (NV_REENVIAR.includes(k.split('|')[0])) delete base[k]; };
+  limpar(nvBase);
+  for (const k of nvChavesCofres()) { const c = nvLer(k, null); if (c?.base) { limpar(c.base); safeStorage.set(k, JSON.stringify(c)); } }
+  nv.reenvio071 = 1; nvSalvar();
+}
+try { nvReenviarRecusadas(); } catch (e) {}
+const nvTextoOrfaos = os =>os.map(o => `${o.n} ${o.n === 1 ? 'alteração' : 'alterações'} de “${o.nome}”`).join(', ');
 function nvBaixarOrfao(k) {
   const c = nvLer(k, null); if (!c?.db) return;
   const nome = String(c.nome || 'fazenda').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/gi, '-').toLowerCase();

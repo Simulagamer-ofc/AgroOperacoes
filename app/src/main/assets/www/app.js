@@ -24,7 +24,7 @@ const safeStorage = {
 
 // ---------- Banco de dados local ----------
 const DB_KEY = 'agro-db-v1';
-const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs', 'fuel', 'contas', 'colheitas', 'vendas', 'chuvas', 'monitoramentos', 'aplicacoes', 'equipe', 'apontamentos', 'romaneios', 'lotesSecagem', 'movSilo', 'termometrias', 'checklistsGraos', 'referenciasFazenda', 'orcamentos', 'pesagens', 'avaliacoes'];
+const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs', 'fuel', 'contas', 'colheitas', 'vendas', 'chuvas', 'monitoramentos', 'aplicacoes', 'equipe', 'apontamentos', 'romaneios', 'lotesSecagem', 'movSilo', 'termometrias', 'checklistsGraos', 'referenciasFazenda', 'orcamentos', 'pesagens', 'avaliacoes', 'servicosManut'];
 const emptyDb = () => ({version: 1, settings: {farm: '', owner: ''}, ...Object.fromEntries(COLLECTIONS.map(c => [c, []]))});
 // Completa um banco vindo de fora (armazenamento, backup, sincronização): todas as coleções como listas e configurações completas
 function normalizarDb(data) {
@@ -474,7 +474,7 @@ function maintenanceForm(mt = {}) {
   const idMt = mt.id || uid(); // id já na abertura, para as fotos
   openForm({
     title: mt.id ? 'Editar manutenção' : 'Abrir manutenção',
-    values: {date: today(), kind: 'Preventiva', status: 'Aberta', ...mt},
+    values: {date: today(), kind: 'Preventiva', status: 'Aberta', ...mt, ...(mt.custoOutros != null ? {cost: mt.custoOutros} : {})},
     sub: 'Para deixar marcada para um dia, escolha a situação “Programada” e a data prevista.',
     fields: [
       {k: 'machineId', label: 'Máquina', type: 'select', options: () => db.machines.map(m => ({value: m.id, label: m.name})), required: true, full: true},
@@ -484,7 +484,7 @@ function maintenanceForm(mt = {}) {
       {k: 'sintoma', label: 'O que aconteceu (defeito / sintoma)', type: 'textarea', mostrarSe: ['kind', 'Corretiva'], placeholder: 'Ex.: barulho no rolamento da roda dianteira; perdeu força; vazamento no hidráulico'},
       {k: 'causa', label: 'Causa provável', mostrarSe: ['kind', 'Corretiva'], placeholder: 'Ex.: rolamento gasto, mangueira rompida'},
       {k: 'parada', label: 'A máquina ficou parada?', type: 'select', options: ['Não', 'Sim'], mostrarSe: ['kind', 'Corretiva'], hint: 'Sim: o app conta o tempo parado até concluir.'},
-      {k: 'cost', label: 'Custo (R$)', type: 'number', min: 0},
+      {k: 'cost', label: 'Outros custos (R$)', type: 'number', min: 0, hint: 'Peças compradas fora do estoque e outras despesas. Mão de obra e serviço de terceiros: na tela da ordem.'},
       {k: 'status', label: 'Situação', type: 'select', options: ['Programada', 'Aberta', 'Em execução', 'Concluída'], required: true, hint: mt.id && mt.status !== 'Concluída' ? 'Para concluir, use o checklist da ordem.' : 'Concluída: só para registrar uma manutenção que já foi feita (sem checklist).'},
       {k: 'dataPrevista', label: 'Data prevista', type: 'date', mostrarSe: ['status', 'Programada'], hint: 'O app avisa 7 dias antes e no dia.'},
       {k: 'notes', label: 'Peças e observações', type: 'textarea'}
