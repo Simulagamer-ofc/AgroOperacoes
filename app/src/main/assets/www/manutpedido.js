@@ -28,7 +28,6 @@ const MC_INSPECAO = {
 const MCP_ESTADOS = [['ok', '✓ OK'], ['defeito', '⚠ Defeito'], ['na', '— N/A']];
 const mcpGestor = () => !(typeof nvComum === 'function' && nvComum());
 const mcpVeValores = () => mcpGestor() || (typeof nvVeFinanceiro === 'function' && nvVeFinanceiro());
-const mcpAjustes = () => { const c = db.settings.checklistMaq || {}; return {aoIniciar: c.aoIniciar !== false, semanal: !!c.semanal}; };
 function mcpItensDe(m) {
   if (!m) return MC_INSPECAO.Outro;
   if (m.type === 'Implemento') return MC_INSPECAO[MC_IMPL[m.tipoImpl]] || MC_INSPECAO.Implemento;
@@ -227,7 +226,9 @@ function mcpChecklistForm(machineId) {
 function mcpAoAbrirInicio(o) {
   mcpChk = null;
   const m = o.machineId ? find('machines', o.machineId) : null;
-  if (!m || !mcpAjustes().aoIniciar) return;
+  // Frequência definida pelo ADM / supervisor: sempre, só quando o checklist da máquina está vencido, ou nunca
+  const aj = m ? mcpAjustes() : null;
+  if (!m || aj.inicio === 'nunca' || (aj.inicio === 'vencido' && !mcpSituacao(m, 1).venc)) return;
   mcpChk = mcpNovoChk(m.id, false); mcpChk.opId = o.id;
   const form = $('form', dialog); if (!form) return;
   const alvo = form.querySelector('.fotos-campo');
@@ -363,30 +364,151 @@ function mcpSoChecklist(mt = {}) {
 
 // Lançar serviços, valores e itens extras: só quem autoriza
 ['mc-mo-add', 'mc-mo-del', 'mc-mo-valor', 'mc-servicos', 'mc-add'].forEach(act => { const fn = ACTIONS[act]; if (fn) ACTIONS[act] = id => mcpSoGestor() && fn(id); });
+
+// ---------- Frequência do checklist (definida por ADM / supervisor, vale para a fazenda toda) ----------
+// Fica num registro da própria coleção (sincroniza para os aparelhos dos operadores)
+const MCP_CFG = 'config-checklist';
+const MCP_PRAZOS = [[0, 'Sem prazo'], [1, 'Todo dia'], [2, 'A cada 2 dias'], [3, 'A cada 3 dias'], [7, 'Toda semana'], [15, 'A cada 15 dias'], [30, 'Todo mês']];
+const MCP_INICIO = [['sempre', 'Sempre'], ['vencido', 'Só se vencido'], ['nunca', 'Não pedir']];
+const mcpTextoPrazo = p => (MCP_PRAZOS.find(([d]) => d === p) || [0, `A cada ${p} dias`])[1];
+function mcpAjustes() {
+  const c = find(MCP_COL, MCP_CFG) || {};
+  return {inicio: MCP_INICIO.some(([k]) => k === c.inicio) ? c.inicio : 'sempre', prazo: Number(c.prazo) || 0, prazos: {...(c.prazos || {})}};
+}
+function mcpGravarAjustes(a) {
+  const atual = find(MCP_COL, MCP_CFG) || {id: MCP_CFG, tipo: 'config'};
+  upsert(MCP_COL, {...atual, ...a, tipo: 'config', por: quemUsa(), em: mcpAgora()});
+}
+const mcpPrazoDe = m => { const a = mcpAjustes(), v = a.prazos[m.id]; return v != null && v !== '' ? Number(v) : a.prazo; };
+const mcpUltimoDe = id => (db[MCP_COL] || []).filter(r => r.machineId === id && r.origem !== 'complemento').reduce((u, r) => !u || String(r.em) > String(u.em) ? r : u, null);
+const mcpDias = (a, b) => Math.round((new Date(b + 'T12:00:00') - new Date(a + 'T12:00:00')) / 864e5);
+// Situação de uma máquina: prazo (dias), último checklist e se está vencido. prazoMin: prazo usado quando a máquina não tem prazo
+function mcpSituacao(m, prazoMin = 0) {
+  const p = mcpPrazoDe(m) || prazoMin, u = mcpUltimoDe(m.id);
+  if (!p) return {p, u, venc: false, cor: u ? 'gray' : 'gray', txt: u ? `último ${fmtDate(u.data)}` : 'nenhum ainda'};
+  if (!u) return {p, u, venc: true, cor: 'red', txt: 'nunca feito'};
+  const d = mcpDias(u.data, today()), falta = p - d;
+  return {p, u, venc: falta <= 0, cor: falta <= 0 ? 'red' : falta === 1 && p > 1 ? 'orange' : 'green',
+    txt: falta <= 0 ? (p === 1 ? 'não feito hoje' : `vencido há ${-falta + 1} ${-falta + 1 === 1 ? 'dia' : 'dias'}`) : p === 1 ? 'feito hoje' : falta === 1 ? 'vence amanhã' : `em dia (vence em ${falta} dias)`};
+}
+const mcpMaquinasAtivas = () => db.machines.filter(m => !isInactive(m)).sort((a, b) => String(a.name).localeCompare(String(b.name), 'pt-BR'));
+const mcpVencidas = () => mcpMaquinasAtivas().filter(m => machineStatus(m) !== 'Em manutenção' && mcpSituacao(m).venc);
+
+// ---------- PDF ----------
+// Foto do registro → JPEG para o PDF (o PDF não aceita WebP); null se a foto não está neste aparelho
+async function mcpFotoJpeg(colecao, recordId, fotoId) {
+  try {
+    const u = typeof urlDaFoto === 'function' ? await urlDaFoto(colecao, recordId, fotoId, true) : null; if (!u) return null;
+    const img = await new Promise((ok, erro) => { const i = new Image(); i.onload = () => ok(i); i.onerror = erro; i.src = u; });
+    const lado = 900, k = Math.min(1, lado / Math.max(img.width, img.height)), c = document.createElement('canvas');
+    c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    return {src: c.toDataURL('image/jpeg', .82), w: c.width, h: c.height};
+  } catch { return null; }
+}
+const mcpOrigem = r => r.origem === 'operacao' ? 'Ao iniciar a operação' : r.origem === 'complemento' ? 'Durante a manutenção (complemento)' : 'Avulso';
+const mcpSlug = t => String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+async function mcpPdfChecklist(id, enviar) {
+  const r = find(MCP_COL, id); if (!r) return;
+  if (typeof window.pdfMercaPlant !== 'function') { showToast('Gerador de PDF indisponível', true); return; }
+  showToast('Gerando o PDF…');
+  const m = find('machines', r.machineId), nomeM = m?.name || 'Máquina removida', defs = mcpDefeitos(r), mt = r.pedidoId ? find('maintenances', r.pedidoId) : null, o = r.opId ? find('operations', r.opId) : null;
+  const fotos = []; for (const f of r.fotos || []) { const j = await mcpFotoJpeg(MCP_COL, r.id, f.id); if (j) fotos.push({...j, legenda: mcDH(f.em)}); }
+  const P = window.pdfMercaPlant({titulo: 'Checklist da máquina', linha2: `${nomeM} - ${fmtDate(r.data)} ${r.hora || ''}`.trim(), continuacao: `Checklist · ${nomeM}`});
+  const C = P.COR;
+  P.secao(nomeM, [m?.type, m?.model].filter(Boolean).join(' - '));
+  P.cartoes([['Resultado', defs.length ? `${defs.length} ${defs.length === 1 ? 'defeito' : 'defeitos'}` : 'Tudo OK', defs.length ? (r.podeTrabalhar === 'Não' ? 'máquina parada' : 'pode trabalhar') : 'nenhum defeito', defs.length ? C.laranja : C.verde],
+    ['Itens conferidos', String((r.itens || []).length), `${(r.itens || []).filter(i => i.estado === 'ok').length} OK`, C.azul],
+    ['Horímetro', r.horimetro !== '' && r.horimetro != null ? `${num(r.horimetro)} h` : '-', 'na hora do checklist', C.verde]]);
+  P.ficha([['Máquina', [nomeM, m?.type, m?.model].filter(Boolean).join(' - ')], ['Data e hora', `${fmtDate(r.data)} ${r.hora || ''}`], ['Feito por', r.por || ''], ['Quando', mcpOrigem(r)],
+    ['Operação', o ? [o.type, typeof opPlace === 'function' ? opPlace(o) : ''].filter(Boolean).join(' - ') : ''], ['A máquina pode trabalhar?', r.podeTrabalhar || ''],
+    ['Pedido de manutenção', mt ? `${mt.description || 'Ordem de manutenção'} - ${mt.status}` : defs.length ? '' : 'não foi necessário']]);
+  P.secao('Itens', `${(r.itens || []).length} itens`);
+  P.tabela([{t: 'Item', w: 2.6}, {t: 'Situação', w: 1}, {t: 'Observação', w: 2.6}], (r.itens || []).map(i => [i.item, i.estado === 'ok' ? 'OK' : i.estado === 'defeito' ? 'Defeito' : 'N/A', i.obs || '']));
+  if (fotos.length) { P.secao('Fotos', 'tiradas pela câmera na hora, com data e local', 50); P.fotos(fotos); }
+  else if (r.fotos?.length) P.nota(`${r.fotos.length} ${r.fotos.length === 1 ? 'foto guardada' : 'fotos guardadas'} no MercaPlant (ainda não disponível neste aparelho).`);
+  P.assinaturas([[r.por || 'Operador', 'Feito por'], [db.settings.owner || 'Responsável pela propriedade', 'Conferido por']]);
+  window.entregarPdf(P.finalizar(), `mercaplant-checklist-${mcpSlug(nomeM)}-${r.data}.pdf`, enviar === true, `Checklist da máquina - ${nomeM} - ${fmtDate(r.data)}`);
+}
+function mcpRelatorioForm() {
+  const ms = mcpMaquinasAtivas();
+  openForm({title: 'Relatório de checklists (PDF)', sub: 'Resumo por máquina, defeitos encontrados e todos os checklists do período.', submit: 'Gerar PDF',
+    values: {maq: '', de: typeof daysAgo === 'function' ? daysAgo(30) : today(), ate: today(), entregar: 'Baixar'},
+    fields: [{k: 'maq', label: 'Máquina', type: 'select', options: [{value: '*', label: 'Todas as máquinas'}, ...ms.map(m => ({value: m.id, label: m.name}))], required: true, full: true},
+      {k: 'de', label: 'De', type: 'date', required: true}, {k: 'ate', label: 'Até', type: 'date', required: true},
+      {k: 'entregar', label: 'Depois de gerar', type: 'select', options: ['Baixar', 'Enviar (WhatsApp, e-mail…)'], required: true, full: true}],
+    onSubmit: v => { if (v.de > v.ate) return 'A data inicial é depois da final'; setTimeout(() => mcpPdfPeriodo(v.maq === '*' ? '' : v.maq, v.de, v.ate, v.entregar !== 'Baixar'), 0); }});
+}
+function mcpPdfPeriodo(maq, de, ate, enviar) {
+  if (typeof window.pdfMercaPlant !== 'function') { showToast('Gerador de PDF indisponível', true); return; }
+  const lista = (db[MCP_COL] || []).filter(r => r.tipo !== 'config' && r.machineId && (!maq || r.machineId === maq) && r.data >= de && r.data <= ate).sort((a, b) => String(a.em).localeCompare(String(b.em)));
+  const nomeM = maq ? machineName(maq) || 'Máquina removida' : 'Todas as máquinas', periodo = `${fmtDate(de)} a ${fmtDate(ate)}`;
+  const comDef = lista.filter(r => mcpDefeitos(r).length), pedidos = new Set(comDef.map(r => r.pedidoId).filter(Boolean));
+  const P = window.pdfMercaPlant({titulo: 'Relatório de checklists das máquinas', linha2: `${nomeM} - ${periodo}`, continuacao: `Checklists · ${periodo}`});
+  const C = P.COR;
+  P.secao('Resumo', periodo);
+  P.cartoes([['Checklists feitos', String(lista.length), `${new Set(lista.map(r => r.machineId)).size} máquinas`, C.azul], ['Com defeito', String(comDef.length), `${lista.length ? Math.round(comDef.length / lista.length * 100) : 0}% dos checklists`, comDef.length ? C.laranja : C.verde],
+    ['Pedidos de manutenção', String(pedidos.size), 'gerados ou juntados', C.laranja]]);
+  const ms = maq ? [find('machines', maq)].filter(Boolean) : mcpMaquinasAtivas();
+  P.secao('Por máquina', 'prazo definido para o checklist e situação hoje');
+  P.tabela([{t: 'Máquina', w: 2.2}, {t: 'Prazo', w: 1.3}, {t: 'No período', w: 1, dir: true}, {t: 'Com defeito', w: 1, dir: true}, {t: 'Situação hoje', w: 1.8}],
+    ms.map(m => { const s = mcpSituacao(m), d = lista.filter(r => r.machineId === m.id); return [m.name, mcpTextoPrazo(s.p), String(d.length), String(d.filter(r => mcpDefeitos(r).length).length), s.txt]; }));
+  if (comDef.length) {
+    P.secao('Defeitos encontrados', `${comDef.reduce((t, r) => t + mcpDefeitos(r).length, 0)} itens`);
+    P.tabela([{t: 'Data', w: 1}, {t: 'Máquina', w: 1.6}, {t: 'Item', w: 2}, {t: 'Observação', w: 2.4}, {t: 'Por', w: 1.3}],
+      comDef.flatMap(r => mcpDefeitos(r).map(i => [`${fmtDate(r.data)} ${r.hora || ''}`, machineName(r.machineId), i.item, i.obs || '', r.por || ''])));
+  }
+  P.secao('Todos os checklists', `${lista.length} no período`);
+  if (lista.length) P.tabela([{t: 'Data', w: 1.1}, {t: 'Máquina', w: 1.7}, {t: 'Quando', w: 1.5}, {t: 'Horímetro', w: .9, dir: true}, {t: 'Resultado', w: 1.1}, {t: 'Por', w: 1.4}],
+    lista.map(r => [`${fmtDate(r.data)} ${r.hora || ''}`, machineName(r.machineId), mcpOrigem(r), r.horimetro !== '' && r.horimetro != null ? `${num(r.horimetro)} h` : '-', mcpDefeitos(r).length ? `${mcpDefeitos(r).length} defeito(s)` : 'Tudo OK', r.por || '']));
+  else P.nada('Nenhum checklist neste período.');
+  P.nota('Cada checklist tem as fotos e os detalhes no MercaPlant (Máquinas → Checklists). Para o PDF de um checklist com as fotos, abra o checklist e toque em PDF.');
+  P.assinaturas([[db.settings.owner || 'Responsável pela propriedade', 'Responsável']]);
+  window.entregarPdf(P.finalizar(), `mercaplant-checklists-${mcpSlug(nomeM)}-${de}-a-${ate}.pdf`, enviar, `Checklists das máquinas - ${nomeM} - ${periodo}`);
+}
+
 Object.assign(ACTIONS, {
   'mcp-novo': id => mcpChecklistForm(id), 'mcp-autorizar': mcpAutorizar, 'mcp-recusar': mcpRecusar,
   'mcp-comp-sim': k => mcpCompDecidir(k, true), 'mcp-comp-nao': k => mcpCompDecidir(k, false), 'mcp-comp-pedir': mcpPedirComplemento,
   'mcp-conferir': mcpEnviarConferencia, 'mcp-devolver': mcpDevolver, 'mcp-juntar': mcpJuntar,
-  'mcp-aj': k => { if (!mcpSoGestor()) return; const a = mcpAjustes(); db.settings.checklistMaq = {...a, [k]: !a[k]}; save(); render(); }
+  'mcp-inicio': k => { if (!mcpSoGestor()) return; mcpGravarAjustes({inicio: k}); showToast('Ajuste salvo para a fazenda toda'); render(); },
+  'mcp-pdf': id => mcpPdfChecklist(id, false), 'mcp-enviar': id => mcpPdfChecklist(id, true), 'mcp-relatorio': mcpRelatorioForm
 });
 
 // ---------- Tela: checklists das máquinas ----------
+const mcpOpcoesPrazo = (atual, padrao) => `${padrao != null ? `<option value="" ${atual === '' ? 'selected' : ''}>Padrão da fazenda (${esc(mcpTextoPrazo(padrao))})</option>` : ''}${MCP_PRAZOS.map(([d, t]) => `<option value="${d}" ${String(atual) === String(d) ? 'selected' : ''}>${esc(t)}</option>`).join('')}`;
 VIEWS.checklists = () => {
-  const gestor = mcpGestor(), lista = (db[MCP_COL] || []).slice().sort((a, b) => String(b.em).localeCompare(String(a.em))), aj = mcpAjustes();
+  const gestor = mcpGestor(), aj = mcpAjustes();
+  const lista = (db[MCP_COL] || []).filter(r => r.tipo !== 'config' && r.machineId).sort((a, b) => String(b.em).localeCompare(String(a.em)));
   const aguardando = db.maintenances.filter(x => x.status === MCP_AGUARDA), comp = db.maintenances.filter(x => mcpCompPendentes(x).length), conf = db.maintenances.filter(x => x.status === MCP_CONFERIR);
   const fila = [...aguardando.map(x => [x, 'red', 'Aguardando autorização']), ...comp.map(x => [x, 'red', 'Complemento aguardando']), ...conf.map(x => [x, 'purple', 'A conferir'])];
   const linha = r => { const m = find('machines', r.machineId), defs = mcpDefeitos(r), mt = r.pedidoId ? find('maintenances', r.pedidoId) : null;
     return `<details class="mcp-linha"><summary><span class="status ${defs.length ? 'red' : 'green'}"></span><div><strong>${esc(m?.name || 'Máquina removida')}</strong><small>${esc(fmtDate(r.data))} ${esc(r.hora || '')} • ${esc(r.por || '')} • ${r.origem === 'operacao' ? 'ao iniciar operação' : r.origem === 'complemento' ? 'complemento' : 'avulso'}${r.horimetro !== '' && r.horimetro != null ? ` • ${num(r.horimetro)} h` : ''}${r.fotos?.length ? ` • 📷 ${r.fotos.length}` : ''}</small></div>${defs.length ? chip(defs.length === 1 ? '1 defeito' : defs.length + ' defeitos', 'red') : chip('Tudo OK', 'green')}</summary>
       <div class="mcp-linha-corpo">${(r.itens || []).map(i => `<div class="mcp-li ${i.estado}"><span>${i.estado === 'ok' ? '✓' : i.estado === 'defeito' ? '⚠' : '—'} ${esc(i.item)}</span>${i.obs ? `<small>${esc(i.obs)}</small>` : ''}</div>`).join('')}
         ${r.podeTrabalhar ? `<p class="nota">Pode trabalhar: ${esc(r.podeTrabalhar)}</p>` : ''}${typeof galeriaFotos === 'function' ? galeriaFotos(MCP_COL, r) : ''}
-        ${mt ? `<div class="row-actions" style="justify-content:flex-start">${mini(`Ver ordem (${mt.status})`, 'nav', 'ordem/' + mt.id)}</div>` : ''}</div></details>`; };
-  return head('Checklists das máquinas', 'Inspeção antes de trabalhar. Defeito marcado vira pedido de manutenção, sem duplicar.', btn('← Máquinas', 'nav', 'maquinas', 'secondary') + btn('☑ Fazer checklist', 'mcp-novo')) +
+        <div class="row-actions" style="justify-content:flex-start">${mini('PDF', 'mcp-pdf', r.id)}${mini('Enviar', 'mcp-enviar', r.id)}${mt ? mini(`Ver ordem (${mt.status})`, 'nav', 'ordem/' + mt.id) : ''}</div></div></details>`; };
+  const maqs = mcpMaquinasAtivas();
+  const linhaMaq = m => { const s = mcpSituacao(m), emManut = machineStatus(m) === 'Em manutenção', v = aj.prazos[m.id];
+    return `<div class="row mcp-maq"><span class="status ${emManut ? 'orange' : s.cor}"></span><div><strong>${esc(m.name)}</strong><small>${esc([m.type, s.p ? mcpTextoPrazo(s.p).toLowerCase() : 'sem prazo', s.u ? `último ${fmtDate(s.u.data)} por ${s.u.por || '—'}` : ''].filter(Boolean).join(' • '))}</small></div>
+      <div class="row-actions">${gestor ? `<select class="mcp-prazo-sel" data-mcp-prazo="${esc(m.id)}" aria-label="Prazo do checklist de ${esc(m.name)}">${mcpOpcoesPrazo(v == null ? '' : v, aj.prazo)}</select>` : ''}${emManut ? chip('em manutenção', 'orange') : s.p ? chip(s.txt, s.cor) : ''}${mini('☑ Fazer', 'mcp-novo', m.id, s.venc && !emManut ? 'ok' : '')}</div></div>`; };
+  const venc = mcpVencidas().length;
+  return head('Checklists das máquinas', 'Inspeção antes de trabalhar. Defeito marcado vira pedido de manutenção, sem duplicar.', btn('← Máquinas', 'nav', 'maquinas', 'secondary') + btn('PDF do período', 'mcp-relatorio', '', 'secondary') + btn('☑ Fazer checklist', 'mcp-novo')) +
     (gestor && fila.length ? `<div class="section-title"><h3>Para você decidir</h3></div><section class="card list">${fila.map(([x, cor, t]) => `<div class="row"><span class="status ${cor}"></span><div><strong>${esc(machineName(x.machineId) || 'Máquina removida')}</strong><small>${esc([x.description, x.parada === 'Sim' ? 'máquina parada' : ''].filter(Boolean).join(' • '))}</small></div><div class="row-actions">${chip(t, cor)}${mini('Abrir', 'nav', 'ordem/' + x.id, 'ok')}</div></div>`).join('')}</section>` : '') +
+    (gestor ? `<section class="card panel mcp-ajustes"><h3 style="margin:0 0 4px">Quando o checklist deve ser feito</h3><p class="nota" style="margin:0 0 6px">Vale para a fazenda toda e chega aos aparelhos de todos. Só o ADM e o supervisor mudam.</p>
+      <div class="mcp-aj"><div><b>Prazo padrão</b><small>De quanto em quanto tempo cada máquina precisa de um checklist. Vencido: aparece o aviso para todos.</small></div><select class="mcp-prazo-sel" data-mcp-prazo="*" aria-label="Prazo padrão">${mcpOpcoesPrazo(aj.prazo, null)}</select></div>
+      <div class="mcp-aj"><div><b>Ao iniciar uma operação</b><small>${aj.inicio === 'vencido' ? `Pede o checklist só quando o da máquina está vencido${aj.prazo ? '' : ' (máquina sem prazo: uma vez por dia)'}.` : aj.inicio === 'nunca' ? 'Não pede o checklist ao iniciar (continua o prazo e o aviso).' : 'Pede o checklist em toda operação, antes de começar.'}</small></div><div class="mcp-seg" role="group" aria-label="Checklist ao iniciar uma operação">${MCP_INICIO.map(([k, t]) => btn(t, 'mcp-inicio', k, aj.inicio === k ? 'primary' : 'secondary')).join('')}</div></div>
+      <p class="nota" style="margin:8px 0 0">Prazo diferente para uma máquina (ex.: secador todo dia, implemento toda semana): escolha na lista abaixo.</p></section>` : '') +
+    `<div class="section-title"><h3>Máquinas</h3><small class="nota">${venc ? `${venc} com checklist vencido` : 'checklists em dia'}</small></div><section class="card list">${maqs.length ? maqs.map(linhaMaq).join('') : empty('Nenhuma máquina ativa', '')}</section>` +
     `<div class="section-title"><h3>Últimos checklists</h3><small class="nota">${lista.length}</small></div>` +
-    (lista.length ? `<section class="card list mcp-lista">${lista.slice(0, 80).map(linha).join('')}</section>` : `<section class="card">${empty('Nenhum checklist ainda', 'Faça o checklist da máquina antes de trabalhar. Também aparece ao iniciar uma operação.', {act: 'mcp-novo', label: '☑ Fazer checklist'})}</section>`) +
-    (gestor ? `<section class="card panel"><h3 style="margin:0 0 8px">Ajustes</h3>
-      <div class="mcp-aj"><div><b>Checklist ao iniciar uma operação</b><small>Antes de começar, quem vai trabalhar marca o checklist da máquina.</small></div>${btn(aj.aoIniciar ? 'Ligado' : 'Desligado', 'mcp-aj', 'aoIniciar', aj.aoIniciar ? 'primary' : 'secondary')}</div>
-      <div class="mcp-aj"><div><b>Lembrete semanal</b><small>Avisa quando uma máquina ativa passou 7 dias sem checklist.</small></div>${btn(aj.semanal ? 'Ligado' : 'Desligado', 'mcp-aj', 'semanal', aj.semanal ? 'primary' : 'secondary')}</div></section>` : '');
+    (lista.length ? `<section class="card list mcp-lista">${lista.slice(0, 80).map(linha).join('')}</section>` : `<section class="card">${empty('Nenhum checklist ainda', 'Faça o checklist da máquina antes de trabalhar. Também aparece ao iniciar uma operação.', {act: 'mcp-novo', label: '☑ Fazer checklist'})}</section>`);
+};
+VIEWS.checklists.after = () => {
+  $$('[data-mcp-prazo]').forEach(sel => sel.addEventListener('change', () => {
+    if (!mcpSoGestor()) return;
+    const a = mcpAjustes(), k = sel.dataset.mcpPrazo;
+    if (k === '*') a.prazo = Number(sel.value) || 0; else if (sel.value === '') delete a.prazos[k]; else a.prazos[k] = Number(sel.value);
+    mcpGravarAjustes(a); showToast('Prazo salvo para a fazenda toda'); render();
+  }));
 };
 TITLES.checklists = 'Checklists das máquinas';
 if (typeof GRUPO_DA_ROTA === 'object') GRUPO_DA_ROTA.checklists = 'maquinas';
@@ -400,10 +522,8 @@ alerts = function () {
     db.maintenances.filter(x => mcpCompPendentes(x).length).forEach(x => l.unshift({color: 'orange', icon: '⚙', title: `Complemento aguardando autorização: ${machineName(x.machineId) || 'máquina'}`, text: mcpCompPendentes(x).flatMap(r => mcpItensLevados(r).map(i => i.item)).join(', ') + '.', route: 'ordem/' + x.id}));
     db.maintenances.filter(x => x.status === MCP_CONFERIR).forEach(x => l.push({color: 'purple', icon: '⚙', title: `Manutenção para conferir: ${machineName(x.machineId) || 'máquina'}`, text: `${x.description || ''} — terminada por ${x.execucao?.por || 'operador'}.`, route: 'ordem/' + x.id}));
   }
-  if (mcpAjustes().semanal) {
-    const lim = new Date(Date.now() - 7 * 864e5).toISOString(), feitos = new Set((db[MCP_COL] || []).filter(r => String(r.em) >= lim).map(r => r.machineId));
-    const faltam = db.machines.filter(m => !isInactive(m) && !feitos.has(m.id));
-    if (faltam.length) l.push({color: 'orange', icon: '☑', title: `Checklist da semana pendente: ${faltam.length === 1 ? faltam[0].name : faltam.length + ' máquinas'}`, text: `${faltam.slice(0, 5).map(m => m.name).join(', ')}${faltam.length > 5 ? '…' : ''} — sem checklist nos últimos 7 dias.`, route: 'checklists', acao: faltam.length === 1 ? {act: 'mcp-novo', id: faltam[0].id, label: 'Fazer checklist'} : null});
-  }
+  // Checklist vencido (pelo prazo definido): aviso para todos — o operador vê e faz
+  const venc = mcpVencidas();
+  if (venc.length) l.push({color: 'orange', icon: '☑', title: `Checklist vencido: ${venc.length === 1 ? venc[0].name : venc.length + ' máquinas'}`, text: `${venc.slice(0, 5).map(m => `${m.name} (${mcpSituacao(m).txt})`).join(', ')}${venc.length > 5 ? '…' : ''}.`, route: 'checklists', acao: venc.length === 1 ? {act: 'mcp-novo', id: venc[0].id, label: 'Fazer checklist'} : null});
   return l;
 };
