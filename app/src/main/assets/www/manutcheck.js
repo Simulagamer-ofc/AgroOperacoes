@@ -40,7 +40,34 @@ const MC_MODELOS = {
     'Pivô central': [['Óleo dos redutores', 1], ['Aspersores e emissores', 1], ['Motorredutores', 0], ['Pneus e rodas', 0], ['Painel e parte elétrica', 0], ['Estrutura e juntas', 0], ['Alinhamento das torres', 0]]});
 }
 const MC_CORRETIVA = [['Diagnóstico do defeito', 1], ['Conserto / troca da peça com defeito', 1], ['Limpeza e reaperto da área do conserto', 0]];
-const MC_IMPL = {'Plantadeira': 'Plantadeira', 'Semeadora': 'Plantadeira', 'Pulverizador de arrasto': 'Pulverizador'};
+// Revisão dos tipos das categorias novas (colheita, florestal, unidade de grãos, pecuária, irrigação e ferramentas)
+{
+  const M = MC_MODELOS, pesada = M['Pá carregadeira'];
+  const colhedora = [['Óleo do motor', 1], ['Filtros (óleo, combustível e ar)', 1], ['Correias e correntes', 1], ['Facas, rolos ou hastes de colheita (desgaste)', 1], ['Hidráulico', 0], ['Rolamentos e mancais', 0], ['Limpeza do radiador e do motor', 1], ['Graxa nos pontos de lubrificação', 0]];
+  const florestal = [...pesada.filter(([i]) => !/Dentes/.test(i)), ['Cabeçote / garra (sabre, corrente, facas)', 1], ['Grua e cilindros', 0]];
+  const motorPequeno = [['Óleo do motor', 1], ['Filtro de ar', 1], ['Vela', 0], ['Lâminas / corrente / fio (afiar ou trocar)', 1], ['Correias', 0], ['Limpeza geral', 0]];
+  const eletrico = [['Motores e rolamentos', 1], ['Correias, correntes e polias', 0], ['Parte elétrica e painel', 0], ['Limpeza', 1]];
+  Object.assign(M, {'Microtrator / tobata': [['Óleo do motor', 1], ['Filtro de ar', 1], ['Óleo da transmissão', 0], ['Correias', 0], ['Enxadas / lâminas', 0], ['Graxa nos pontos de lubrificação', 0]],
+    'Colhedora de cana': colhedora, 'Colhedora de café': colhedora, 'Colhedora de algodão': colhedora,
+    'Rolo compactador': pesada, 'Harvester': florestal, 'Forwarder': florestal, 'Skidder': florestal, 'Feller buncher': florestal,
+    'Picador de madeira': [['Facas e contra-faca (afiar)', 1], ['Rolamentos', 1], ['Correias', 0], ['Óleo do motor (se tiver)', 0], ['Graxa nos pontos de lubrificação', 0]],
+    'Pré-limpeza': [['Peneiras', 1], ['Ventilador e aspiração', 0], ...eletrico], 'Elevador / transportador': [['Canecas, correia ou corrente', 1], ['Roscas e calhas', 0], ...eletrico],
+    'Tombador': [['Cilindros e óleo hidráulico', 1], ['Estrutura e pinos', 1], ['Travas de segurança', 1], ['Painel e parte elétrica', 0]],
+    'Balança': [['Aferição / calibração (Inmetro)', 1], ['Células de carga e cabos', 1], ['Plataforma e fosso limpos', 0], ['Indicador / painel', 0]],
+    'Termometria / aeração': [['Cabos e sensores de temperatura', 1], ['Ventiladores e motores', 1], ['Painel e parte elétrica', 0]],
+    'Ordenhadeira': [['Teteiras e mangueiras (troca)', 1], ['Bomba de vácuo e óleo', 1], ['Pulsadores', 1], ['Limpeza do sistema (CIP)', 1], ['Regulador de vácuo', 0]],
+    'Resfriador de leite': [['Compressor e gás', 1], ['Condensador limpo', 1], ['Agitador', 0], ['Termostato / temperatura', 1], ['Vedação da tampa', 0]],
+    'Fábrica de ração': [['Moinho: martelos e peneiras', 1], ['Misturador', 1], ...eletrico],
+    'Vagão misturador autopropelido': [['Óleo do motor', 1], ['Filtros (óleo, combustível e ar)', 1], ['Facas e roscas do misturador', 1], ['Balança', 0], ['Hidráulico', 0], ['Pneus', 0]],
+    'Carretel de irrigação': [['Mangueira (PE)', 1], ['Turbina e redutor', 1], ['Canhão / aspersor', 0], ['Pneus e chassi', 0]],
+    'Compressor': [['Óleo do compressor', 1], ['Filtro de ar', 1], ['Dreno do reservatório', 1], ['Correias', 0], ['Válvula de segurança', 0]],
+    'Cortador de grama': [...motorPequeno, ['Pneus', 0], ['Bateria', 0]], 'Roçadeira costal': motorPequeno, 'Motosserra': motorPequeno,
+    'Lavadora de alta pressão': [['Óleo da bomba', 1], ['Mangueira e pistola', 1], ['Bicos', 0], ['Filtro de água', 0]],
+    'Máquina de solda': [['Cabos e garras', 1], ['Ventilação', 0], ['Parte elétrica', 0]]});
+}
+// Implemento: modelo pelo uso (plantio, pulverização) ou o geral
+const MC_IMPL = {'Plantadeira': 'Plantadeira', 'Semeadora': 'Plantadeira', 'Plantadora de cana': 'Plantadeira', 'Plantadora de batata / mandioca': 'Plantadeira', 'Transplantadora de mudas': 'Plantadeira',
+  'Pulverizador de arrasto': 'Pulverizador', 'Pulverizador montado (3 pontos)': 'Pulverizador', 'Atomizador / turbo (pomar e café)': 'Pulverizador'};
 // Tipo do modelo de checklist de uma máquina (implemento: plantadeira, pulverizador de arrasto ou implemento)
 const mcChaveTipo = m => !m ? 'Outro' : m.type === 'Implemento' ? (MC_IMPL[m.tipoImpl] || 'Implemento') : (MC_MODELOS[m.type] ? m.type : 'Outro');
 function mcModelo(m, kind) {
