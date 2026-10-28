@@ -109,17 +109,24 @@ const STATUS_COLOR = {'Programada': 'blue', 'Em andamento': 'green', 'Concluída
 // Tipos de máquina e veículo, em grupos (o campo Tipo mostra os grupos). Implemento tem cadastro próprio.
 const GRUPOS_TIPO_MAQ = [
   ['Veículos', ['Caminhonete', 'Carro', 'Moto', 'Quadriciclo/UTV', 'Caminhão', 'Van/Ônibus']],
-  ['Máquinas de campo', ['Trator', 'Colheitadeira', 'Pulverizador', 'Plantadeira', 'Distribuidor autopropelido', 'Colhedora de forragem', 'Drone de pulverização', 'Avião agrícola']],
-  ['Construção e movimentação', ['Pá carregadeira', 'Retroescavadeira', 'Escavadeira', 'Motoniveladora', 'Trator de esteira', 'Minicarregadeira', 'Manipulador telescópico', 'Empilhadeira']],
-  ['Unidade de grãos', ['Secador', 'Moega', 'Silo/Armazém', 'Beneficiamento']],
-  ['Equipamentos', ['Preparador de calda', 'Gerador', 'Motobomba / irrigação', 'Pivô central']],
+  ['Máquinas de campo', ['Trator', 'Microtrator / tobata', 'Pulverizador', 'Plantadeira', 'Distribuidor autopropelido', 'Drone de pulverização', 'Avião agrícola']],
+  ['Colheita', ['Colheitadeira', 'Colhedora de forragem', 'Colhedora de cana', 'Colhedora de café', 'Colhedora de algodão']],
+  ['Construção e movimentação', ['Pá carregadeira', 'Retroescavadeira', 'Escavadeira', 'Motoniveladora', 'Trator de esteira', 'Rolo compactador', 'Minicarregadeira', 'Manipulador telescópico', 'Empilhadeira']],
+  ['Florestal', ['Harvester', 'Forwarder', 'Skidder', 'Feller buncher', 'Picador de madeira']],
+  ['Unidade de grãos', ['Secador', 'Moega', 'Silo/Armazém', 'Beneficiamento', 'Pré-limpeza', 'Elevador / transportador', 'Tombador', 'Balança', 'Termometria / aeração']],
+  ['Pecuária e leite', ['Ordenhadeira', 'Resfriador de leite', 'Fábrica de ração', 'Vagão misturador autopropelido']],
+  ['Irrigação e energia', ['Pivô central', 'Carretel de irrigação', 'Motobomba / irrigação', 'Gerador', 'Compressor']],
+  ['Equipamentos e ferramentas', ['Preparador de calda', 'Cortador de grama', 'Roçadeira costal', 'Motosserra', 'Lavadora de alta pressão', 'Máquina de solda']],
   ['Outros', ['Outro']]];
+// Categoria de um tipo (para agrupar e filtrar as telas)
+const grupoDoTipoMaq = t => GRUPOS_TIPO_MAQ.find(([, l]) => l.includes(t))?.[0] || 'Outros';
 const MACHINE_TYPES = [...GRUPOS_TIPO_MAQ.flatMap(([, l]) => l), 'Implemento'];
 const CARROCERIAS = ['Graneleiro', 'Caçamba', 'Pipa / tanque', 'Comboio de abastecimento', 'Baú', 'Prancha', 'Boiadeiro', 'Outra'];
 // Medidor de uso: veículo de estrada conta km (odômetro); máquina conta horas (horímetro); unidade de grãos e implemento, nenhum.
 // O cadastro sugere pelo tipo e pode ser trocado (ex.: caminhão com tomada de força revisado por horas).
 const TIPOS_KM = ['Caminhonete', 'Carro', 'Moto', 'Caminhão', 'Van/Ônibus'];
-const TIPOS_SEM_MEDIDOR = ['Secador', 'Moega', 'Silo/Armazém', 'Beneficiamento', 'Outro', 'Implemento', 'Preparador de calda'];
+const TIPOS_SEM_MEDIDOR = ['Secador', 'Moega', 'Silo/Armazém', 'Beneficiamento', 'Pré-limpeza', 'Elevador / transportador', 'Tombador', 'Balança', 'Termometria / aeração',
+  'Ordenhadeira', 'Resfriador de leite', 'Fábrica de ração', 'Carretel de irrigação', 'Roçadeira costal', 'Motosserra', 'Lavadora de alta pressão', 'Máquina de solda', 'Outro', 'Implemento', 'Preparador de calda'];
 const medidorPadrao = t => TIPOS_KM.includes(t) ? 'km' : TIPOS_SEM_MEDIDOR.includes(t) ? 'nenhum' : 'horas';
 // Cadastro antigo (sem o campo): quem já tinha horas lançadas continua no horímetro
 const medidorDe = m => !m || m.type === 'Implemento' ? 'nenhum' : ['horas', 'km', 'nenhum'].includes(m.medidor) ? m.medidor : Number(m.hours) > 0 ? 'horas' : medidorPadrao(m.type);
@@ -352,9 +359,10 @@ const TIPOS_GRAOS_EQUIP = ['Secador', 'Moega', 'Silo/Armazém'];
 const rotuloMaquina = m => temMedidor(m) ? `${m.name} (${num(m.hours)} ${unidMed(m)})` : m.name;
 const OP_QUALQUER_MAQ = ['Manutenção', 'Outra'];
 // Máquinas que servem para cada operação de campo (tipo “Outro” sempre aparece)
-const MAQ_DA_OP = {'Plantio': ['Trator', 'Plantadeira'], 'Aplicação': ['Trator', 'Pulverizador', 'Drone de pulverização', 'Avião agrícola'], 'Adubação': ['Trator', 'Plantadeira', 'Distribuidor autopropelido', 'Drone de pulverização', 'Avião agrícola'], 'Preparo de solo': ['Trator', 'Trator de esteira', 'Motoniveladora', 'Pá carregadeira'], 'Colheita': ['Colheitadeira', 'Colhedora de forragem', 'Trator', 'Caminhão'], 'Transporte': ['Caminhão', 'Trator', 'Caminhonete', 'Van/Ônibus', 'Pá carregadeira'], 'Beneficiamento de sementes': ['Beneficiamento'], 'Tratamento de sementes': ['Beneficiamento']};
+const MAQ_DA_OP = {'Plantio': ['Trator', 'Microtrator / tobata', 'Plantadeira'], 'Aplicação': ['Trator', 'Microtrator / tobata', 'Pulverizador', 'Drone de pulverização', 'Avião agrícola'], 'Adubação': ['Trator', 'Microtrator / tobata', 'Plantadeira', 'Distribuidor autopropelido', 'Drone de pulverização', 'Avião agrícola'], 'Preparo de solo': ['Trator', 'Microtrator / tobata', 'Trator de esteira', 'Motoniveladora', 'Pá carregadeira', 'Escavadeira', 'Rolo compactador'], 'Colheita': ['Colheitadeira', 'Colhedora de forragem', 'Colhedora de cana', 'Colhedora de café', 'Colhedora de algodão', 'Harvester', 'Forwarder', 'Trator', 'Caminhão'], 'Transporte': ['Caminhão', 'Trator', 'Caminhonete', 'Van/Ônibus', 'Quadriciclo/UTV', 'Pá carregadeira', 'Forwarder', 'Skidder'], 'Beneficiamento de sementes': ['Beneficiamento', 'Pré-limpeza'], 'Tratamento de sementes': ['Beneficiamento']};
 const maqServe = (tipoOp, tm) => typeof tipoOp !== 'string' || OP_QUALQUER_MAQ.includes(tipoOp) ? true : EQUIP_DA_OP[tipoOp] ? EQUIP_DA_OP[tipoOp].includes(tm) : MAQ_DA_OP[tipoOp] ? MAQ_DA_OP[tipoOp].includes(tm) || tm === 'Outro' : !TIPOS_GRAOS_EQUIP.includes(tm);
-const machineOptions = (tipoOp, manter) => db.machines.filter(m => m.type !== 'Implemento' && ((!isInactive(m) && maqServe(tipoOp, m.type)) || (manter && m.id === manter))).map(m => ({value: m.id, label: rotuloMaquina(m)}));
+const machineOptions = (tipoOp, manter) => db.machines.filter(m => m.type !== 'Implemento' && ((!isInactive(m) && maqServe(tipoOp, m.type)) || (manter && m.id === manter)))
+  .sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'pt-BR', {numeric: true})).map(m => ({value: m.id, label: rotuloMaquina(m)}));
 // Campos do formulário de operação conforme o tipo: só aparece o que vale para aquela operação.
 // talhao: 'sim' | 'origem' (opcional, de onde veio o grão) | 'nao'; local: rótulo ou '' (sem local); maquina: rótulo ou '' ; obrig: máquina obrigatória
 const OP_LAVOURA = ['Plantio', 'Aplicação', 'Adubação', 'Colheita', 'Preparo de solo'];
@@ -365,7 +373,7 @@ function camposDaOp(t) {
     return {talhao: ['Secagem', 'Recebimento de grãos'].includes(t) ? 'origem' : 'nao', local: '', maquina: nome, obrig: true, implemento: false, area: false, kg: false,
       notas: t === 'Secagem' ? 'Ex.: umidade de entrada e saída, lenha usada…' : t === 'Recebimento de grãos' ? 'Ex.: cargas recebidas, placa, observações…' : 'Ex.: pó e palha retirados, fosso, dutos, sem focos de insetos…'};
   }
-  if (OP_LAVOURA.includes(t)) return {talhao: 'sim', local: 'Local (sem talhão)', maquina: {'Aplicação': 'Pulverizador, drone ou trator', 'Plantio': 'Trator / plantadeira', 'Adubação': 'Trator / distribuidor', 'Colheita': 'Colheitadeira', 'Preparo de solo': 'Trator'}[t] || 'Máquina', implemento: true, area: true, kg: t === 'Plantio',
+  if (OP_LAVOURA.includes(t)) return {talhao: 'sim', local: 'Local (sem talhão)', maquina: {'Aplicação': 'Pulverizador, drone ou trator', 'Plantio': 'Trator / plantadeira', 'Adubação': 'Trator / distribuidor', 'Colheita': 'Colheitadeira / colhedora', 'Preparo de solo': 'Trator'}[t] || 'Máquina', implemento: true, area: true, kg: t === 'Plantio',
     notas: t === 'Plantio' ? 'Ex.: cultivar, população, espaçamento, adubo de base…' : t === 'Colheita' ? 'Ex.: umidade, perdas, destino das cargas…' : t === 'Preparo de solo' ? 'Ex.: profundidade, condição do solo…' : 'Ex.: produto, dose, vazão, condições do tempo…'};
   if (t === 'Transporte') return {talhao: 'origem', local: 'Origem / destino', maquina: 'Caminhão / trator', implemento: true, area: false, kg: false, notas: 'Ex.: o que foi levado, quantidade, destino…'};
   if (OP_COM_KG.includes(t)) return {talhao: 'nao', local: 'Local', maquina: 'Máquina / equipamento', implemento: false, area: false, kg: true, notas: t === 'Tratamento de sementes' ? 'Ex.: produtos e doses do tratamento, lote…' : 'Ex.: lote, peneira, descarte…'};
@@ -894,35 +902,38 @@ VIEWS.operacoes = () => {
 };
 
 VIEWS.maquinas = () => {
-  const ms = db.machines.filter(m => m.type !== 'Implemento').sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''))); // implementos: aba própria
+  const ms = db.machines.filter(m => m.type !== 'Implemento').sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'pt-BR', {numeric: true})); // implementos: aba própria
   const mts = db.maintenances.filter(mt => find('machines', mt.machineId)?.type !== 'Implemento').sort(ordemManut);
   return head('Máquinas e manutenção', 'Horímetro e km, revisões programadas e ordens de manutenção.', btn('Registrar horímetro / km', 'hour-new', '', 'secondary') + (typeof rmqPendentes === 'function' && (typeof mcpGestor !== 'function' || mcpGestor()) && rmqPendentes().length ? btn(`⚠ Revisar cadastro (${rmqPendentes().length})`, 'nav', 'revisarmaq', 'secondary') : '') + btn('☑ Checklists', 'nav', 'checklists', 'secondary') + (typeof mcpGestor !== 'function' || mcpGestor() ? btn('📊 Indicadores', 'nav', 'manutind', 'secondary') + btn('Abrir manutenção', 'mt-new', '', 'secondary') : btn('☑ Fazer checklist', 'mcp-novo', '', 'secondary')) + btn('+ Nova máquina', 'mc-new')) +
-    (ms.length ? `<section class="cards">${ms.map(m => {
-      const st = machineStatus(m), left = hoursToService(m), temRev = Number(m.nextService) > 0;
-      const color = st === 'Em manutenção' ? 'orange' : st === 'Inativa' ? 'gray' : 'green';
-      // Barra até a próxima revisão: horas desde a última revisão ÷ intervalo
-      const intervalo = Number(m.interval) || 250, pct = temRev ? Math.max(0, Math.min(100, 100 - left / intervalo * 100)) : 0;
-      const corRev = !temRev ? '' : left <= 0 ? 'rev-vencida' : left <= SERVICE_WARN_HOURS ? 'rev-alerta' : 'rev-ok';
-      const pr = temRev && left > 0 && typeof previsaoRevisao === 'function' ? previsaoRevisao(m) : null;
-      const u = unidMed(m), rt = revisaoTempo(m), docs = docsMaquina(m);
-      const textoRev = !temRev ? (rt ? `Revisão pelo tempo: ${rt.dias < 0 ? `vencida há ${-rt.dias} dias` : `vence em ${fmtDate(rt.vence)}`}` : 'Sem revisão programada') : left <= 0 ? `! Revisão vencida há ${num(-left)} ${u}` : `Revisão em ${num(left)} ${u} (${num(m.nextService)} ${u})${pr?.data ? ` — por volta de ${fmtDate(pr.data)}` : ''}${rt ? (rt.dias < 0 ? ' • ! vencida pelo tempo' : ` ou em ${fmtDate(rt.vence)}`) : ''}`;
-      const af = db.afericoes.filter(a => a.maquina?.id === m.id).sort((a, b) => String((b.data || '') + (b.hora || '')).localeCompare((a.data || '') + (a.hora || '')))[0];
-      const cfgN = m.config ? Object.keys(m.config).length : 0;
-      const ch = typeof custoHoraMaquina === 'function' && (typeof nvVeFinanceiro !== 'function' || nvVeFinanceiro()) ? custoHoraMaquina(m.id) : null;
-      const extras = [m.placa || m.carroceria ? esc([m.placa ? `Placa ${m.placa}` : '', m.carroceria].filter(Boolean).join(' • ')) : '', ...docs.map(d => `${d.dias < 0 ? '⚠ ' : d.dias <= 30 ? '! ' : ''}${esc(d.nome)}: ${d.dias < 0 ? 'vencido em' : 'vence em'} ${fmtDate(d.vence)}`),
-        m.type === 'Preparador de calda' ? (n => n ? `Usado em ${n} ${n === 1 ? 'aplicação' : 'aplicações'} nos últimos 30 dias` : '')(db.operations.filter(o => o.preparadorId === m.id && (o.date || '') >= daysAgo(30)).length) : '',
-        ch ? `Custo: R$ ${num(ch.porHora, 2)}/${u} (combustível + manutenção, ${num(ch.horas)} ${u} em 12 meses)` : '', cfgN ? `Configuração para aferição: ${cfgN} ${cfgN === 1 ? 'parâmetro' : 'parâmetros'}` : '', m.catalogo ? `Catálogo: ${esc(m.catalogo.marca)} ${esc(m.catalogo.nome)}` : '', af ? `Última aferição: ${fmtDate(af.data)} — ${esc({OK: 'dentro da referência', ATENCAO: 'atenção', FORA_DO_PADRAO: 'fora da referência', SEM_REFERENCIA: 'não avaliada', DADOS_INSUFICIENTES: 'dados insuficientes'}[af.resultado.status] || '')}` : '', typeof textoReaferir === 'function' ? textoReaferir(m) : ''].filter(Boolean);
-      return `<article class="card item-card maq-card"><header><div><h4>${esc(m.name)}</h4><div class="meta">${esc([m.type, m.model].filter(Boolean).join(' • '))}</div></div>${chip(st, color)}</header>
-        <div class="maq-horas">${temMedidor(m) ? `<span class="big">${num(m.hours)} ${u}</span><small>último registro ${fmtDate(db.hourLogs.filter(h => h.machineId === m.id).sort(byDateDesc)[0]?.date)}</small>` : '<small>Sem medidor de uso</small>'}</div>
-        <div class="maq-rev ${corRev}"><small>${textoRev}</small>${temRev ? `<div class="progress"><span style="width:${pct}%"></span></div>` : ''}</div>
-        ${extras.length ? `<div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>` : ''}
-        <div class="maq-acoes">${isInactive(m) ? '' : (temMedidor(m) ? mini(porKm(m) ? '◷ Odômetro' : '◷ Horímetro', 'hour-new', m.id) : '') + mini('☑ Checklist', 'mcp-novo', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}
-          <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">
-            ${isInactive(m) ? '' : mini('⛽ Abastecimento', 'cb-new', m.id)}${typeof mcpGestor !== 'function' || mcpGestor() ? mini('📊 Indicadores de manutenção', 'nav', 'manutind/' + m.id) : ''}${mini('◎ Aferição e calibragem', 'af-nova', m.id)}${mini('Histórico de aferições', 'af-maq', m.id)}${mini('⚙ Configuração para aferição', 'mc-config', m.id)}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
-          </div></details></div></article>`;
-    }).join('')}</section>` : `<section class="card">${empty('Nenhuma máquina cadastrada', 'Cadastre tratores, colheitadeiras e implementos para controlar horímetro e revisões.', {act: 'mc-new', label: '+ Nova máquina'})}</section>`) +
+    (ms.length ? (typeof catmLista === 'function' ? catmLista('maquinas', ms, {nome: 'máquina', grupos: GRUPOS_TIPO_MAQ.map(([g]) => g), grupoDe: m => grupoDoTipoMaq(m.type), cartao: cartaoMaquina, atencao: catmAtencaoMaq, texto: catmTextoMaq})
+      : `<section class="cards">${ms.map(cartaoMaquina).join('')}</section>`) : `<section class="card">${empty('Nenhuma máquina cadastrada', 'Cadastre tratores, colheitadeiras e implementos para controlar horímetro e revisões.', {act: 'mc-new', label: '+ Nova máquina'})}</section>`) +
     `<div class="section-title"><h3>Ordens de manutenção</h3></div><section class="card list">${mts.length ? mts.map(mt => linhaManutencao(mt, 'Máquina removida')).join('') : empty('Nenhuma manutenção registrada', 'Abra uma ordem de manutenção para acompanhar custo e revisões.', {act: 'mt-new', label: '+ Abrir manutenção'})}</section>`;
 };
+// Cartão de uma máquina na tela Máquinas
+function cartaoMaquina(m) {
+  const st = machineStatus(m), left = hoursToService(m), temRev = Number(m.nextService) > 0;
+  const color = st === 'Em manutenção' ? 'orange' : st === 'Inativa' ? 'gray' : 'green';
+  // Barra até a próxima revisão: horas desde a última revisão ÷ intervalo
+  const intervalo = Number(m.interval) || 250, pct = temRev ? Math.max(0, Math.min(100, 100 - left / intervalo * 100)) : 0;
+  const corRev = !temRev ? '' : left <= 0 ? 'rev-vencida' : left <= SERVICE_WARN_HOURS ? 'rev-alerta' : 'rev-ok';
+  const pr = temRev && left > 0 && typeof previsaoRevisao === 'function' ? previsaoRevisao(m) : null;
+  const u = unidMed(m), rt = revisaoTempo(m), docs = docsMaquina(m);
+  const textoRev = !temRev ? (rt ? `Revisão pelo tempo: ${rt.dias < 0 ? `vencida há ${-rt.dias} dias` : `vence em ${fmtDate(rt.vence)}`}` : 'Sem revisão programada') : left <= 0 ? `! Revisão vencida há ${num(-left)} ${u}` : `Revisão em ${num(left)} ${u} (${num(m.nextService)} ${u})${pr?.data ? ` — por volta de ${fmtDate(pr.data)}` : ''}${rt ? (rt.dias < 0 ? ' • ! vencida pelo tempo' : ` ou em ${fmtDate(rt.vence)}`) : ''}`;
+  const af = db.afericoes.filter(a => a.maquina?.id === m.id).sort((a, b) => String((b.data || '') + (b.hora || '')).localeCompare((a.data || '') + (a.hora || '')))[0];
+  const cfgN = m.config ? Object.keys(m.config).length : 0;
+  const ch = typeof custoHoraMaquina === 'function' && (typeof nvVeFinanceiro !== 'function' || nvVeFinanceiro()) ? custoHoraMaquina(m.id) : null;
+  const extras = [m.placa || m.carroceria ? esc([m.placa ? `Placa ${m.placa}` : '', m.carroceria].filter(Boolean).join(' • ')) : '', ...docs.map(d => `${d.dias < 0 ? '⚠ ' : d.dias <= 30 ? '! ' : ''}${esc(d.nome)}: ${d.dias < 0 ? 'vencido em' : 'vence em'} ${fmtDate(d.vence)}`),
+    m.type === 'Preparador de calda' ? (n => n ? `Usado em ${n} ${n === 1 ? 'aplicação' : 'aplicações'} nos últimos 30 dias` : '')(db.operations.filter(o => o.preparadorId === m.id && (o.date || '') >= daysAgo(30)).length) : '',
+    ch ? `Custo: R$ ${num(ch.porHora, 2)}/${u} (combustível + manutenção, ${num(ch.horas)} ${u} em 12 meses)` : '', cfgN ? `Configuração para aferição: ${cfgN} ${cfgN === 1 ? 'parâmetro' : 'parâmetros'}` : '', m.catalogo ? `Catálogo: ${esc(m.catalogo.marca)} ${esc(m.catalogo.nome)}` : '', af ? `Última aferição: ${fmtDate(af.data)} — ${esc({OK: 'dentro da referência', ATENCAO: 'atenção', FORA_DO_PADRAO: 'fora da referência', SEM_REFERENCIA: 'não avaliada', DADOS_INSUFICIENTES: 'dados insuficientes'}[af.resultado.status] || '')}` : '', typeof textoReaferir === 'function' ? textoReaferir(m) : ''].filter(Boolean);
+  return `<article class="card item-card maq-card"><header><div><h4>${esc(m.name)}</h4><div class="meta">${esc([m.type, m.model].filter(Boolean).join(' • '))}</div></div>${chip(st, color)}</header>
+    <div class="maq-horas">${temMedidor(m) ? `<span class="big">${num(m.hours)} ${u}</span><small>último registro ${fmtDate(db.hourLogs.filter(h => h.machineId === m.id).sort(byDateDesc)[0]?.date)}</small>` : '<small>Sem medidor de uso</small>'}</div>
+    <div class="maq-rev ${corRev}"><small>${textoRev}</small>${temRev ? `<div class="progress"><span style="width:${pct}%"></span></div>` : ''}</div>
+    ${extras.length ? `<div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>` : ''}
+    <div class="maq-acoes">${isInactive(m) ? '' : (temMedidor(m) ? mini(porKm(m) ? '◷ Odômetro' : '◷ Horímetro', 'hour-new', m.id) : '') + mini('☑ Checklist', 'mcp-novo', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}
+      <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">
+        ${isInactive(m) ? '' : mini('⛽ Abastecimento', 'cb-new', m.id)}${typeof mcpGestor !== 'function' || mcpGestor() ? mini('📊 Indicadores de manutenção', 'nav', 'manutind/' + m.id) : ''}${mini('◎ Aferição e calibragem', 'af-nova', m.id)}${mini('Histórico de aferições', 'af-maq', m.id)}${mini('⚙ Configuração para aferição', 'mc-config', m.id)}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id)}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
+      </div></details></div></article>`;
+}
 
 VIEWS.talhoes = () => {
   const fs = db.fields.slice().sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'pt-BR', {numeric: true}));

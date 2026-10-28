@@ -1363,3 +1363,26 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 
 /* Janela de formulário: a altura segue a área visível do navegador (no Chrome do tablet, 100vh inclui a barra de endereço e escondia os botões) */
 @media (max-height:700px){.modal{padding:8px}.dialog{max-height:calc(100dvh - 16px)}}
+/* Máquinas e implementos por categoria: busca, filtro e seções que recolhem */
+.catm-barra{display:flex;flex-direction:column;gap:10px;margin:0 0 16px}
+.catm-busca{position:relative}
+.catm-busca input{width:100%;min-height:46px;padding:10px 14px 10px 40px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);font-size:1rem}
+.catm-busca::before{content:'';position:absolute;left:14px;top:50%;width:13px;height:13px;margin-top:-9px;border:2px solid var(--muted);border-radius:50%;pointer-events:none}
+.catm-busca::after{content:'';position:absolute;left:27px;top:50%;width:7px;height:2px;margin-top:5px;background:var(--muted);transform:rotate(45deg);pointer-events:none}
+.catm-achados{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.82rem;pointer-events:none}
+.catm-busca:has(.catm-achados:not([hidden])) input{padding-right:118px}
+.catm-chips{margin:0;gap:7px}
+.catm-chips button{white-space:nowrap}
+@media (max-width:600px){.catm-chips button{padding:6px 11px;font-size:.8rem;min-height:40px}}
+.catm-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--orange);margin-left:6px;vertical-align:middle}
+.catm-grupo{margin:0 0 10px}
+.catm-grupo>summary{list-style:none;display:flex;align-items:center;gap:9px;cursor:pointer;min-height:46px;padding:6px 4px;border-bottom:1px solid var(--line);font-weight:700;user-select:none}
+.catm-grupo>summary::-webkit-details-marker{display:none}
+.catm-grupo>summary::before{content:'';width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .15s;margin:0 4px 0 2px}
+.catm-grupo[open]>summary::before{transform:rotate(45deg)}
+.catm-tit{font-size:1.02rem}
+.catm-n{background:var(--line);color:var(--muted);border-radius:999px;padding:1px 9px;font-size:.78rem;font-weight:600}
+.catm-at{color:var(--orange);font-size:.8rem;font-weight:600;margin-left:auto}
+.catm-grupo>.cards{margin-top:12px}
+.catm-grupo[data-catm-grupo="Inativas"] .catm-tit{color:var(--muted)}
+.catm-grupo[hidden],[data-catm-item][hidden],.catm-nada[hidden],.catm-achados[hidden]{display:none!important}

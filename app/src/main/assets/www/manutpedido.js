@@ -41,6 +41,23 @@ const MC_INSPECAO = {
     'Pivô central': ['Pneus', 'Vazamentos', 'Aspersores', 'Painel', 'Alinhamento das torres'],
     'Preparador de calda': ['Tanque limpo e tampa', 'Agitador funcionando', 'Bomba sem vazamento', 'Filtros e peneira limpos', 'Mangueiras e registros', 'Medidor de vazão', 'Indutor de produtos']});
 }
+// Inspeção dos tipos das categorias novas
+{
+  const I = MC_INSPECAO, pesada = I['Pá carregadeira'];
+  const colhedora = ['Nível do óleo do motor', 'Radiador limpo', 'Correias e correntes', 'Facas / rolos / hastes', 'Vazamentos', 'Pneus ou esteira', 'Luzes e alarmes do painel', 'Extintor'];
+  const florestal = [...pesada.filter(i => !/Dentes/.test(i)), 'Cabeçote / garra', 'Corrente e sabre'];
+  const motorPequeno = ['Nível do óleo', 'Combustível', 'Lâmina / corrente / fio', 'Proteções no lugar', 'Ruído ou vibração diferente'];
+  Object.assign(I, {'Microtrator / tobata': ['Nível do óleo', 'Filtro de ar', 'Enxadas / lâminas', 'Pneus', 'Vazamentos'],
+    'Colhedora de cana': colhedora, 'Colhedora de café': colhedora, 'Colhedora de algodão': colhedora, 'Rolo compactador': pesada,
+    'Harvester': florestal, 'Forwarder': florestal, 'Skidder': florestal, 'Feller buncher': florestal, 'Picador de madeira': ['Facas', 'Proteções no lugar', 'Correias', 'Vazamentos'],
+    'Pré-limpeza': ['Peneiras', 'Correias e rolamentos', 'Motores', 'Limpeza'], 'Elevador / transportador': ['Canecas, correia ou corrente', 'Roscas e calhas', 'Motores', 'Ruído ou vibração diferente'],
+    'Tombador': ['Vazamento no hidráulico', 'Travas de segurança', 'Estrutura e pinos'], 'Balança': ['Zero da balança', 'Plataforma limpa', 'Indicador / painel'],
+    'Termometria / aeração': ['Leituras de temperatura', 'Ventiladores', 'Painel'], 'Ordenhadeira': ['Teteiras e mangueiras', 'Vácuo', 'Pulsadores', 'Limpeza feita'],
+    'Resfriador de leite': ['Temperatura do leite', 'Agitador', 'Tampa e vedação', 'Limpeza feita'], 'Fábrica de ração': ['Moinho e peneiras', 'Misturador', 'Motores', 'Limpeza'],
+    'Vagão misturador autopropelido': ['Nível do óleo do motor', 'Facas e roscas', 'Balança', 'Vazamentos', 'Pneus'], 'Carretel de irrigação': ['Mangueira sem vazamento', 'Turbina', 'Canhão / aspersor', 'Pneus'],
+    'Compressor': ['Nível do óleo', 'Dreno do reservatório', 'Correias', 'Vazamentos de ar'], 'Cortador de grama': [...motorPequeno, 'Pneus'], 'Roçadeira costal': motorPequeno, 'Motosserra': [...motorPequeno, 'Freio da corrente'],
+    'Lavadora de alta pressão': ['Óleo da bomba', 'Mangueira e pistola', 'Vazamentos'], 'Máquina de solda': ['Cabos e garras', 'Parte elétrica']});
+}
 const MCP_ESTADOS = [['ok', '✓ OK'], ['defeito', '⚠ Defeito'], ['na', '— N/A']];
 const mcpGestor = () => !(typeof nvComum === 'function' && nvComum());
 const mcpVeValores = () => mcpGestor() || (typeof nvVeFinanceiro === 'function' && nvVeFinanceiro());

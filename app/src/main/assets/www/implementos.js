@@ -3,16 +3,33 @@
    Ficam na mesma lista de máquinas (tipo “Implemento”), então aferição, catálogo e manutenção continuam valendo.
    Implemento não tem horímetro: a revisão é por hectares trabalhados (somados das operações) e/ou por dias. */
 
-const TIPOS_IMPL = ['Plantadeira', 'Semeadora', 'Pulverizador de arrasto', 'Distribuidor de adubo/calcário', 'Grade', 'Arado', 'Subsolador', 'Escarificador', 'Enxada rotativa', 'Cultivador', 'Rolo-faca', 'Lâmina / plaina', 'Terraceador', 'Roçadeira', 'Plataforma de colheita', 'Carreta graneleira', 'Transbordo', 'Carreta / reboque', 'Carreta pipa / tanque', 'Vagão forrageiro / misturador', 'Ensiladeira', 'Enfardadeira', 'Segadeira', 'Ancinho enleirador', 'Outro'];
+// Tipos de implemento em grupos, pelo uso (o campo Tipo e a tela mostram os grupos)
+const GRUPOS_TIPO_IMPL = [
+  ['Plantio', ['Plantadeira', 'Semeadora', 'Plantadora de cana', 'Plantadora de batata / mandioca', 'Transplantadora de mudas']],
+  ['Pulverização', ['Pulverizador de arrasto', 'Pulverizador montado (3 pontos)', 'Atomizador / turbo (pomar e café)']],
+  ['Adubação e correção', ['Distribuidor de adubo/calcário', 'Distribuidor de esterco / chorume']],
+  ['Preparo de solo', ['Grade', 'Arado', 'Subsolador', 'Escarificador', 'Enxada rotativa', 'Cultivador', 'Sulcador', 'Encanteirador', 'Rolo-faca', 'Lâmina / plaina', 'Terraceador', 'Valetadeira']],
+  ['Roçada e manejo', ['Roçadeira', 'Triturador / mulcher', 'Destocador']],
+  ['Colheita', ['Plataforma de colheita', 'Plataforma de milho', 'Recolhedora (café, amendoim, feijão)', 'Arrancador (amendoim, batata, mandioca)']],
+  ['Feno e silagem', ['Ensiladeira', 'Segadeira', 'Ancinho enleirador', 'Enfardadeira', 'Embutidora de silo bolsa', 'Extratora de silo bolsa']],
+  ['Transporte', ['Carreta graneleira', 'Transbordo', 'Carreta / reboque', 'Carreta pipa / tanque', 'Carreta de abastecimento (comboio)']],
+  ['Pecuária', ['Vagão forrageiro / misturador', 'Distribuidor de ração / trato']],
+  ['Acessórios do trator', ['Carregador frontal / concha', 'Garfo / pinça de fardos', 'Guincho / grua']],
+  ['Outros', ['Outro']]];
+const TIPOS_IMPL = GRUPOS_TIPO_IMPL.flatMap(([, l]) => l);
+const grupoDoTipoImpl = t => GRUPOS_TIPO_IMPL.find(([, l]) => l.includes(t))?.[0] || 'Outros';
+const opcoesTipoImpl = () => GRUPOS_TIPO_IMPL.flatMap(([g, l]) => l.map(t => ({value: t, label: t, grupo: g})));
 // Quais implementos servem para cada tipo de operação (os demais tipos mostram todos)
 const IMPL_DA_OP = {
-  'Plantio': ['Plantadeira', 'Semeadora'],
-  'Aplicação': ['Pulverizador de arrasto'],
-  'Adubação': ['Distribuidor de adubo/calcário', 'Plantadeira', 'Semeadora'],
-  'Preparo de solo': ['Grade', 'Arado', 'Subsolador', 'Escarificador', 'Enxada rotativa', 'Cultivador', 'Rolo-faca', 'Lâmina / plaina', 'Terraceador', 'Roçadeira'],
-  'Colheita': ['Plataforma de colheita', 'Carreta graneleira', 'Transbordo', 'Ensiladeira', 'Enfardadeira', 'Segadeira', 'Ancinho enleirador'],
-  'Transporte': ['Carreta graneleira', 'Transbordo', 'Carreta / reboque', 'Carreta pipa / tanque', 'Vagão forrageiro / misturador']
+  'Plantio': ['Plantadeira', 'Semeadora', 'Plantadora de cana', 'Plantadora de batata / mandioca', 'Transplantadora de mudas', 'Sulcador'],
+  'Aplicação': ['Pulverizador de arrasto', 'Pulverizador montado (3 pontos)', 'Atomizador / turbo (pomar e café)'],
+  'Adubação': ['Distribuidor de adubo/calcário', 'Distribuidor de esterco / chorume', 'Plantadeira', 'Semeadora'],
+  'Preparo de solo': ['Grade', 'Arado', 'Subsolador', 'Escarificador', 'Enxada rotativa', 'Cultivador', 'Sulcador', 'Encanteirador', 'Rolo-faca', 'Lâmina / plaina', 'Terraceador', 'Valetadeira', 'Roçadeira', 'Triturador / mulcher', 'Destocador'],
+  'Colheita': ['Plataforma de colheita', 'Plataforma de milho', 'Recolhedora (café, amendoim, feijão)', 'Arrancador (amendoim, batata, mandioca)', 'Carreta graneleira', 'Transbordo', 'Ensiladeira', 'Enfardadeira', 'Segadeira', 'Ancinho enleirador', 'Embutidora de silo bolsa'],
+  'Transporte': ['Carreta graneleira', 'Transbordo', 'Carreta / reboque', 'Carreta pipa / tanque', 'Carreta de abastecimento (comboio)', 'Vagão forrageiro / misturador', 'Carregador frontal / concha', 'Garfo / pinça de fardos']
 };
+// Implementos com aferição (dosagem de semente, adubo ou calda)
+const IMPL_AFERICAO = ['Plantadeira', 'Semeadora', 'Pulverizador de arrasto', 'Pulverizador montado (3 pontos)', 'Distribuidor de adubo/calcário'];
 const ehImplemento = m => m?.type === 'Implemento';
 const implementos = () => db.machines.filter(ehImplemento);
 function implementoOptions(tipoOp) {
@@ -48,19 +65,21 @@ function revisaoImplemento(m) {
 }
 
 function implementForm(m = {}) {
-  const tratores = () => db.machines.filter(x => !ehImplemento(x) && !isInactive(x) && ['Trator', 'Colheitadeira', 'Outro'].includes(x.type)).map(x => ({value: x.id, label: x.name}));
+  // Quem puxa ou carrega o implemento: máquinas de campo, colheita, obra e florestal, além de caminhão, caminhonete e UTV
+  const puxa = t => ['Máquinas de campo', 'Colheita', 'Construção e movimentação', 'Florestal'].includes(grupoDoTipoMaq(t)) || ['Caminhão', 'Caminhonete', 'Quadriciclo/UTV', 'Outro'].includes(t);
+  const tratores = () => db.machines.filter(x => !ehImplemento(x) && !isInactive(x) && (puxa(x.type) || x.id === m.tratorId)).sort((a, b) => String(a.name).localeCompare(String(b.name), 'pt-BR', {numeric: true})).map(x => ({value: x.id, label: x.name}));
   openForm({
     title: m.id ? 'Editar implemento' : 'Novo implemento',
     sub: 'Implemento não tem horímetro: a revisão é contada pelos hectares das operações em que ele foi usado.',
     values: {state: 'Ativa', tipoImpl: 'Plantadeira', ...m},
     fields: [
       {k: 'name', label: 'Identificação', required: true, placeholder: 'Ex.: Plantadeira 13 linhas', full: true},
-      {k: 'tipoImpl', label: 'Tipo', type: 'select', options: TIPOS_IMPL, required: true},
+      {k: 'tipoImpl', label: 'Tipo', type: 'select', options: opcoesTipoImpl().concat(m.tipoImpl && !TIPOS_IMPL.includes(m.tipoImpl) ? [{value: m.tipoImpl, label: m.tipoImpl}] : []), required: true},
       {k: 'model', label: 'Marca / modelo', placeholder: 'Ex.: Stara Absoluta'},
       {k: 'largura', label: 'Largura de trabalho (m)', type: 'number', min: 0, step: '0.1', hint: 'Usada para estimar o rendimento (ha/h).'},
-      {k: 'linhas', label: 'Número de linhas', type: 'number', min: 0, mostrarSe: ['tipoImpl', ['Plantadeira', 'Semeadora']]},
-      {k: 'espacamento', label: 'Espaçamento entre linhas (cm)', type: 'number', min: 0, mostrarSe: ['tipoImpl', ['Plantadeira', 'Semeadora']]},
-      {k: 'capacidade', label: 'Capacidade do tanque / caixa', placeholder: 'Ex.: 3.000 L ou 8 t', mostrarSe: ['tipoImpl', ['Pulverizador de arrasto', 'Distribuidor de adubo/calcário', 'Carreta graneleira', 'Transbordo', 'Carreta pipa / tanque', 'Vagão forrageiro / misturador', 'Plantadeira', 'Semeadora']]},
+      {k: 'linhas', label: 'Número de linhas', type: 'number', min: 0, mostrarSe: ['tipoImpl', ['Plantadeira', 'Semeadora', 'Plantadora de cana', 'Plantadora de batata / mandioca', 'Transplantadora de mudas']]},
+      {k: 'espacamento', label: 'Espaçamento entre linhas (cm)', type: 'number', min: 0, mostrarSe: ['tipoImpl', ['Plantadeira', 'Semeadora', 'Plantadora de cana', 'Plantadora de batata / mandioca', 'Transplantadora de mudas']]},
+      {k: 'capacidade', label: 'Capacidade do tanque / caixa', placeholder: 'Ex.: 3.000 L ou 8 t', mostrarSe: ['tipoImpl', ['Pulverizador de arrasto', 'Pulverizador montado (3 pontos)', 'Atomizador / turbo (pomar e café)', 'Distribuidor de adubo/calcário', 'Distribuidor de esterco / chorume', 'Carreta graneleira', 'Transbordo', 'Carreta pipa / tanque', 'Carreta de abastecimento (comboio)', 'Vagão forrageiro / misturador', 'Distribuidor de ração / trato', 'Plantadeira', 'Semeadora']]},
       {k: 'tratorId', label: 'Trator que costuma puxar', type: 'select', options: tratores, labelAusente: maquinaAusente, mais: true},
       {k: 'revisaoHa', label: 'Revisão a cada (ha)', type: 'number', min: 0, hint: 'Ex.: troca de discos ou lubrificação geral. Vazio = sem controle por área.'},
       {k: 'revisaoDias', label: 'Revisão a cada (dias)', type: 'number', min: 0, hint: 'Opcional, para o que vence pelo tempo (ex.: antes de cada safra).', mais: true},
@@ -73,6 +92,16 @@ function implementForm(m = {}) {
       showToast('Implemento salvo');
     }
   });
+  // Novo implemento: o tipo vem pelo nome e pelo modelo (ex.: “Distribuidor Kuhn Accura” → distribuidor de adubo/calcário)
+  const form = $('form', dialog); if (m.id || !form || typeof rmqSugestao !== 'function') return;
+  const el = k => form.elements[k]; let manual = false;
+  el('tipoImpl').addEventListener('change', () => { manual = true; });
+  const identificar = () => {
+    if (manual) return;
+    const s = rmqSugestao({name: el('name').value, model: el('model').value, type: 'Implemento', tipoImpl: 'Outro'});
+    if (s.tipo === 'Implemento' && s.tipoImpl && s.tipoImpl !== 'Outro' && TIPOS_IMPL.includes(s.tipoImpl) && el('tipoImpl').value !== s.tipoImpl) { el('tipoImpl').value = s.tipoImpl; form.dispatchEvent(new Event('change')); }
+  };
+  el('name').addEventListener('input', identificar); el('model').addEventListener('input', identificar);
 }
 // Editar um implemento abre o formulário dele; o cadastro de máquina não oferece mais “Implemento”
 const machineFormSemImpl = machineForm;
@@ -83,19 +112,22 @@ VIEWS.implementos = () => {
   const lista = implementos().sort((a, b) => String(a.name).localeCompare(String(b.name), 'pt-BR', {numeric: true}));
   const topo = head('Máquinas e manutenção', 'Implementos: plantadeiras, grades, pulverizadores de arrasto e outros — revisão por hectare trabalhado.', btn('Abrir manutenção', 'mt-new', '', 'secondary') + btn('+ Novo implemento', 'im-new'));
   if (!lista.length) return topo + `<section class="card">${empty('Nenhum implemento cadastrado', 'Cadastre plantadeiras, grades, pulverizadores de arrasto, distribuidores e carretas. Na operação, você escolhe o trator e o implemento.', {act: 'im-new', label: '+ Novo implemento'})}</section>`;
-  return topo + `<section class="cards">${lista.map(m => {
-    const r = revisaoImplemento(m), u = r.u, st = machineStatus(m), cor = st === 'Em manutenção' ? 'orange' : st === 'Inativa' ? 'gray' : 'green';
-    const ficha = [m.tipoImpl, m.model, Number(m.largura) > 0 ? `${num(m.largura, 1)} m` : '', Number(m.linhas) > 0 ? `${num(m.linhas)} linhas${Number(m.espacamento) > 0 ? ` a ${num(m.espacamento)} cm` : ''}` : '', m.capacidade].filter(Boolean).join(' • ');
-    const custoTxt = u.custo > 0 ? `Manutenção: R$ ${num(u.custo, 2)}${u.custoHa ? ` • R$ ${num(u.custoHa, 2)}/ha` : ''}` : 'Manutenção: nenhum custo lançado';
-    const extras = [custoTxt, u.abertas ? `<b style="color:var(--orange)">${u.abertas} ${u.abertas === 1 ? 'manutenção aberta' : 'manutenções abertas'}</b>` : '', u.haPorHora ? `Rendimento: ${um1(u.haPorHora)} ha/h` : (Number(m.largura) > 0 ? `Rende ~${um1(m.largura * 7 * 0.7 / 10)} ha/h a 7 km/h (estimativa)` : ''), m.tratorId ? `Trator: ${esc(machineName(m.tratorId))}` : '', u.ultimaOp ? `Último uso: ${esc(u.ultimaOp.type)} — ${esc(opPlace(u.ultimaOp))} em ${fmtDate(u.ultimaOp.date)}` : 'Ainda não usado em operações', u.ultRev ? `Última revisão: ${fmtDate(u.ultRev)}` : ''].filter(Boolean);
-    return `<article class="card item-card maq-card"><header><div><h4>${esc(m.name)}</h4><div class="meta">${esc(ficha || 'Implemento')}</div></div>${chip(st, cor)}</header>
-      <div class="maq-horas"><span class="big">${num(u.haTotal)} ha</span><small>trabalhados no total</small></div>
-      <div class="maq-rev ${r.nivel === 'vencida' ? 'rev-vencida' : r.nivel === 'perto' ? 'rev-alerta' : r.nivel === 'ok' ? 'rev-ok' : ''}"><small>${esc(r.texto)}</small>${r.nivel !== 'sem' ? `<div class="progress"><span style="width:${Math.round(r.pct * 100)}%"></span></div>` : ''}</div>
-      <div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>
-      <div class="maq-acoes">${isInactive(m) ? '' : mini('☑ Checklist', 'mcp-novo', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}${['Plantadeira', 'Semeadora', 'Pulverizador de arrasto', 'Distribuidor de adubo/calcário'].includes(m.tipoImpl) ? mini('◎ Aferição', 'af-nova', m.id) : ''}
-        <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">${typeof mcpGestor !== 'function' || mcpGestor() ? mini('📊 Indicadores de manutenção', 'nav', 'manutind/' + m.id) : ''}${mini('Editar', 'im-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}</div></details></div></article>`;
-  }).join('')}</section>` + ordensImplementos(lista);
+  return topo + (typeof catmLista === 'function' ? catmLista('implementos', lista, {nome: 'implemento', grupos: GRUPOS_TIPO_IMPL.map(([g]) => g), grupoDe: m => grupoDoTipoImpl(m.tipoImpl || 'Outro'), cartao: cartaoImplemento, atencao: catmAtencaoImpl, texto: catmTextoMaq})
+    : `<section class="cards">${lista.map(cartaoImplemento).join('')}</section>`) + ordensImplementos(lista);
 };
+// Cartão de um implemento na tela Implementos
+function cartaoImplemento(m) {
+  const r = revisaoImplemento(m), u = r.u, st = machineStatus(m), cor = st === 'Em manutenção' ? 'orange' : st === 'Inativa' ? 'gray' : 'green';
+  const ficha = [m.tipoImpl, m.model, Number(m.largura) > 0 ? `${num(m.largura, 1)} m` : '', Number(m.linhas) > 0 ? `${num(m.linhas)} linhas${Number(m.espacamento) > 0 ? ` a ${num(m.espacamento)} cm` : ''}` : '', m.capacidade].filter(Boolean).join(' • ');
+  const custoTxt = u.custo > 0 ? `Manutenção: R$ ${num(u.custo, 2)}${u.custoHa ? ` • R$ ${num(u.custoHa, 2)}/ha` : ''}` : 'Manutenção: nenhum custo lançado';
+  const extras = [custoTxt, u.abertas ? `<b style="color:var(--orange)">${u.abertas} ${u.abertas === 1 ? 'manutenção aberta' : 'manutenções abertas'}</b>` : '', u.haPorHora ? `Rendimento: ${um1(u.haPorHora)} ha/h` : (Number(m.largura) > 0 ? `Rende ~${um1(m.largura * 7 * 0.7 / 10)} ha/h a 7 km/h (estimativa)` : ''), m.tratorId ? `Trator: ${esc(machineName(m.tratorId))}` : '', u.ultimaOp ? `Último uso: ${esc(u.ultimaOp.type)} — ${esc(opPlace(u.ultimaOp))} em ${fmtDate(u.ultimaOp.date)}` : 'Ainda não usado em operações', u.ultRev ? `Última revisão: ${fmtDate(u.ultRev)}` : ''].filter(Boolean);
+  return `<article class="card item-card maq-card"><header><div><h4>${esc(m.name)}</h4><div class="meta">${esc(ficha || 'Implemento')}</div></div>${chip(st, cor)}</header>
+    <div class="maq-horas"><span class="big">${num(u.haTotal)} ha</span><small>trabalhados no total</small></div>
+    <div class="maq-rev ${r.nivel === 'vencida' ? 'rev-vencida' : r.nivel === 'perto' ? 'rev-alerta' : r.nivel === 'ok' ? 'rev-ok' : ''}"><small>${esc(r.texto)}</small>${r.nivel !== 'sem' ? `<div class="progress"><span style="width:${Math.round(r.pct * 100)}%"></span></div>` : ''}</div>
+    <div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>
+    <div class="maq-acoes">${isInactive(m) ? '' : mini('☑ Checklist', 'mcp-novo', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}${IMPL_AFERICAO.includes(m.tipoImpl) ? mini('◎ Aferição', 'af-nova', m.id) : ''}
+      <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">${typeof mcpGestor !== 'function' || mcpGestor() ? mini('📊 Indicadores de manutenção', 'nav', 'manutind/' + m.id) : ''}${mini('Editar', 'im-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}</div></details></div></article>`;
+}
 // Ordens de manutenção só dos implementos (as das máquinas ficam na aba Máquinas)
 function ordensImplementos(lista) {
   const ids = new Set(lista.map(m => m.id));
