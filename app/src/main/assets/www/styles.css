@@ -22,7 +22,7 @@ main{min-width:0}.topbar{height:72px;background:var(--panel);border-bottom:1px s
 table.tbl{width:100%;border-collapse:collapse;font-size:.88rem}.tbl th,.tbl td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}.tbl th{color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em}.tbl td.num,.tbl th.num{text-align:right}.tbl-wrap{overflow-x:auto}
 .timeline{display:grid;gap:0;padding:4px 0}.tl-item{display:grid;grid-template-columns:22px 1fr;gap:10px;position:relative;padding-bottom:16px}.tl-item:before{content:'';position:absolute;left:10px;top:20px;bottom:0;width:2px;background:var(--line)}.tl-item:last-child:before{display:none}.tl-dot{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:.7rem}.tl-item small{display:block;color:var(--muted)}
 .settings{display:grid;gap:16px;grid-template-columns:1fr 1fr}.settings .panel p{color:var(--muted);margin:0 0 14px;font-size:.9rem}.btn-row{display:flex;gap:8px;flex-wrap:wrap}.danger{border:1px solid var(--red);background:transparent;color:var(--red);padding:10px 14px;border-radius:9px}
-.field .hint{font-size:.76rem;color:var(--muted)}.dialog{max-height:calc(100vh - 36px);overflow-y:auto}.dialog .sub{color:var(--muted);margin:-10px 0 16px;font-size:.88rem}
+.field .hint{font-size:.76rem;color:var(--muted)}.dialog{max-height:calc(100vh - 36px);max-height:calc(100dvh - 36px);overflow-y:auto;overscroll-behavior:contain}.dialog .sub{color:var(--muted);margin:-10px 0 16px;font-size:.88rem}
 .bar{height:10px;background:var(--bg);border-radius:9px;overflow:hidden;min-width:80px}.bar span{display:block;height:100%;background:var(--blue);border-radius:9px}
 .alert.clickable{cursor:pointer}.alert.clickable:hover{border-color:#80aee8}
 .mobile-nav button.active{color:var(--green)}
@@ -1360,3 +1360,6 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 .rmq-campos select,.rmq-campos input{border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:var(--panel);color:var(--text);font:inherit;min-height:42px}
 .rmq-campos label[hidden]{display:none}.rmq-campos label{min-width:0}.rmq-campos select,.rmq-campos input{width:100%;min-width:0}
 .maq-identificado{color:var(--blue);font-weight:600}
+
+/* Janela de formulário: a altura segue a área visível do navegador (no Chrome do tablet, 100vh inclui a barra de endereço e escondia os botões) */
+@media (max-height:700px){.modal{padding:8px}.dialog{max-height:calc(100dvh - 16px)}}
