@@ -36,6 +36,7 @@ const MC_MODELOS = {
     'Avião agrícola': [['Inspeção conforme o manual do fabricante e a ANAC', 1], ['Motor e hélice', 1], ['Sistema de aplicação (bomba, barras e bicos)', 1], ['Filtros', 0], ['Calibração do equipamento de aplicação', 0]],
     'Gerador': [['Óleo do motor', 1], ['Filtros', 1], ['Bateria', 0], ['Arrefecimento', 0], ['Teste com carga', 0]],
     'Motobomba / irrigação': [['Óleo do motor', 1], ['Gaxetas e selos', 1], ['Filtros', 0], ['Rotor', 0], ['Mangueiras e conexões', 0]],
+    'Preparador de calda': [['Tanque e tampa', 1], ['Agitador / misturador', 1], ['Bomba', 1], ['Filtros e peneira', 1], ['Mangueiras e registros', 0], ['Medidor de vazão', 0], ['Indutor de produtos', 0], ['Limpeza completa (tríplice lavagem)', 1]],
     'Pivô central': [['Óleo dos redutores', 1], ['Aspersores e emissores', 1], ['Motorredutores', 0], ['Pneus e rodas', 0], ['Painel e parte elétrica', 0], ['Estrutura e juntas', 0], ['Alinhamento das torres', 0]]});
 }
 const MC_CORRETIVA = [['Diagnóstico do defeito', 1], ['Conserto / troca da peça com defeito', 1], ['Limpeza e reaperto da área do conserto', 0]];

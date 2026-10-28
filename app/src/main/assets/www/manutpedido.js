@@ -38,7 +38,8 @@ const MC_INSPECAO = {
     'Avião agrícola': ['Inspeção pré-voo conforme o manual', 'Combustível e óleo', 'Sistema de aplicação', 'Bicos'],
     'Gerador': ['Nível do óleo', 'Combustível', 'Bateria', 'Vazamentos', 'Painel'],
     'Motobomba / irrigação': ['Nível do óleo', 'Vazamentos e gaxetas', 'Mangueiras', 'Ruído ou vibração diferente'],
-    'Pivô central': ['Pneus', 'Vazamentos', 'Aspersores', 'Painel', 'Alinhamento das torres']});
+    'Pivô central': ['Pneus', 'Vazamentos', 'Aspersores', 'Painel', 'Alinhamento das torres'],
+    'Preparador de calda': ['Tanque limpo e tampa', 'Agitador funcionando', 'Bomba sem vazamento', 'Filtros e peneira limpos', 'Mangueiras e registros', 'Medidor de vazão', 'Indutor de produtos']});
 }
 const MCP_ESTADOS = [['ok', '✓ OK'], ['defeito', '⚠ Defeito'], ['na', '— N/A']];
 const mcpGestor = () => !(typeof nvComum === 'function' && nvComum());

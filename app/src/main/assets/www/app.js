@@ -112,14 +112,14 @@ const GRUPOS_TIPO_MAQ = [
   ['Máquinas de campo', ['Trator', 'Colheitadeira', 'Pulverizador', 'Plantadeira', 'Distribuidor autopropelido', 'Colhedora de forragem', 'Drone de pulverização', 'Avião agrícola']],
   ['Construção e movimentação', ['Pá carregadeira', 'Retroescavadeira', 'Escavadeira', 'Motoniveladora', 'Trator de esteira', 'Minicarregadeira', 'Manipulador telescópico', 'Empilhadeira']],
   ['Unidade de grãos', ['Secador', 'Moega', 'Silo/Armazém', 'Beneficiamento']],
-  ['Equipamentos', ['Gerador', 'Motobomba / irrigação', 'Pivô central']],
+  ['Equipamentos', ['Preparador de calda', 'Gerador', 'Motobomba / irrigação', 'Pivô central']],
   ['Outros', ['Outro']]];
 const MACHINE_TYPES = [...GRUPOS_TIPO_MAQ.flatMap(([, l]) => l), 'Implemento'];
 const CARROCERIAS = ['Graneleiro', 'Caçamba', 'Pipa / tanque', 'Comboio de abastecimento', 'Baú', 'Prancha', 'Boiadeiro', 'Outra'];
 // Medidor de uso: veículo de estrada conta km (odômetro); máquina conta horas (horímetro); unidade de grãos e implemento, nenhum.
 // O cadastro sugere pelo tipo e pode ser trocado (ex.: caminhão com tomada de força revisado por horas).
 const TIPOS_KM = ['Caminhonete', 'Carro', 'Moto', 'Caminhão', 'Van/Ônibus'];
-const TIPOS_SEM_MEDIDOR = ['Secador', 'Moega', 'Silo/Armazém', 'Beneficiamento', 'Outro', 'Implemento'];
+const TIPOS_SEM_MEDIDOR = ['Secador', 'Moega', 'Silo/Armazém', 'Beneficiamento', 'Outro', 'Implemento', 'Preparador de calda'];
 const medidorPadrao = t => TIPOS_KM.includes(t) ? 'km' : TIPOS_SEM_MEDIDOR.includes(t) ? 'nenhum' : 'horas';
 // Cadastro antigo (sem o campo): quem já tinha horas lançadas continua no horímetro
 const medidorDe = m => !m || m.type === 'Implemento' ? 'nenhum' : ['horas', 'km', 'nenhum'].includes(m.medidor) ? m.medidor : Number(m.hours) > 0 ? 'horas' : medidorPadrao(m.type);
@@ -474,7 +474,7 @@ function machineForm(m = {}) {
       {k: 'type', label: 'Tipo', type: 'select', options: GRUPOS_TIPO_MAQ.flatMap(([g, l]) => l.map(t => ({value: t, label: t, grupo: g}))).concat(m.type === 'Implemento' ? [{value: 'Implemento', label: 'Implemento'}] : []), required: true, hint: 'Plantadeira, grade, pulverizador de arrasto e outros implementos: cadastre em Máquinas → Implementos.'},
       {k: 'carroceria', label: 'Carroceria / uso', type: 'select', options: CARROCERIAS, mostrarSe: ['type', 'Caminhão']},
       {k: 'model', label: 'Marca / modelo'},
-      {k: 'tanqueL', label: 'Capacidade do tanque de calda (L)', type: 'number', min: 0, mostrarSe: ['type', ['Pulverizador', 'Drone de pulverização', 'Avião agrícola']], hint: 'Para o app calcular quantos tanques e quanto de cada produto vai por tanque.'},
+      {k: 'tanqueL', label: 'Capacidade do tanque de calda (L)', type: 'number', min: 0, mostrarSe: ['type', ['Pulverizador', 'Drone de pulverização', 'Avião agrícola', 'Preparador de calda']], hint: 'Para o app calcular quantos tanques e quanto de cada produto vai por tanque.'},
       {k: 'placa', label: 'Placa', placeholder: 'Ex.: ABC1D23', mostrarSe: ['medidor', 'km']},
       {k: 'medidor', label: 'Medidor de uso', type: 'select', options: Object.entries(rotMed).map(([value, label]) => ({value, label})), required: true, hint: 'O app escolhe pelo tipo: veículo conta km, máquina conta horas. Pode trocar (ex.: caminhão com tomada de força revisado por horas).'},
       {k: 'hours', label: 'Leitura atual', type: 'number', min: 0, mostrarSe: ['medidor', '!nenhum']},
@@ -910,6 +910,7 @@ VIEWS.maquinas = () => {
       const cfgN = m.config ? Object.keys(m.config).length : 0;
       const ch = typeof custoHoraMaquina === 'function' && (typeof nvVeFinanceiro !== 'function' || nvVeFinanceiro()) ? custoHoraMaquina(m.id) : null;
       const extras = [m.placa || m.carroceria ? esc([m.placa ? `Placa ${m.placa}` : '', m.carroceria].filter(Boolean).join(' • ')) : '', ...docs.map(d => `${d.dias < 0 ? '⚠ ' : d.dias <= 30 ? '! ' : ''}${esc(d.nome)}: ${d.dias < 0 ? 'vencido em' : 'vence em'} ${fmtDate(d.vence)}`),
+        m.type === 'Preparador de calda' ? (n => n ? `Usado em ${n} ${n === 1 ? 'aplicação' : 'aplicações'} nos últimos 30 dias` : '')(db.operations.filter(o => o.preparadorId === m.id && (o.date || '') >= daysAgo(30)).length) : '',
         ch ? `Custo: R$ ${num(ch.porHora, 2)}/${u} (combustível + manutenção, ${num(ch.horas)} ${u} em 12 meses)` : '', cfgN ? `Configuração para aferição: ${cfgN} ${cfgN === 1 ? 'parâmetro' : 'parâmetros'}` : '', m.catalogo ? `Catálogo: ${esc(m.catalogo.marca)} ${esc(m.catalogo.nome)}` : '', af ? `Última aferição: ${fmtDate(af.data)} — ${esc({OK: 'dentro da referência', ATENCAO: 'atenção', FORA_DO_PADRAO: 'fora da referência', SEM_REFERENCIA: 'não avaliada', DADOS_INSUFICIENTES: 'dados insuficientes'}[af.resultado.status] || '')}` : '', typeof textoReaferir === 'function' ? textoReaferir(m) : ''].filter(Boolean);
       return `<article class="card item-card maq-card"><header><div><h4>${esc(m.name)}</h4><div class="meta">${esc([m.type, m.model].filter(Boolean).join(' • '))}</div></div>${chip(st, color)}</header>
         <div class="maq-horas">${temMedidor(m) ? `<span class="big">${num(m.hours)} ${u}</span><small>último registro ${fmtDate(db.hourLogs.filter(h => h.machineId === m.id).sort(byDateDesc)[0]?.date)}</small>` : '<small>Sem medidor de uso</small>'}</div>

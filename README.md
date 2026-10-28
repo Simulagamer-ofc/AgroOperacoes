@@ -4,7 +4,9 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.77.2-beta1` — **Correção:** no tablet (Chrome), formulário comprido escondia os botões Salvar/Cancelar embaixo da barra do navegador e não dava para rolar até eles. A janela agora usa a altura visível da tela.
+`0.78.0-beta1` — **Preparador de calda.** Tipo novo em Equipamentos (sem medidor; revisão por tempo, ou horas se tiver horímetro), com a capacidade do tanque, checklist (tanque, agitador, bomba, filtros e peneira, mangueiras, medidor de vazão, indutor) e revisão próprios (inclui a limpeza completa — tríplice lavagem). Na aplicação, campo opcional **Preparador de calda** usado; o cartão do equipamento mostra quantas aplicações usaram ele em 30 dias. O cadastro e o Revisar cadastro reconhecem pelo nome (preparador de calda, Speed Mix, misturador…), inclusive quando foi cadastrado como implemento.
+
+Anterior: `0.77.2-beta1` — **Correção:** no tablet (Chrome), formulário comprido escondia os botões Salvar/Cancelar embaixo da barra do navegador e não dava para rolar até eles. A janela agora usa a altura visível da tela.
 
 Anterior: `0.77.1-beta1` — **Revisar cadastro das máquinas.** Máquinas cadastradas antes dos tipos novos (como “Outro”) e veículos que ficaram no horímetro aparecem em **Máquinas → Revisar cadastro** (com aviso para o ADM e o supervisor): o app sugere o tipo e o medidor pelo nome e pelo modelo (caminhonete, moto e caminhão em km; empilhadeira e gerador em horas; balança sem medidor; semeadeira vira implemento) e, ao **Aplicar**, pede a leitura de agora — ao passar para km, o **odômetro atual** (a troca não conta como km rodados) e a revisão passa para 10.000 km. **Está certo assim** mantém como está. No **cadastro de máquina nova**, o app também identifica pelo nome e pelo modelo (ex.: “Caminhonete F350”, “Hilux”, “Moto CG 160”, “Scania”, “Gerador”, “Balança”) e já escolhe o tipo e o medidor — km ou horas —, mostrando “Identificado pelo nome”; tipo ou medidor escolhido à mão vale; implemento é avisado para cadastrar em Implementos.
 
