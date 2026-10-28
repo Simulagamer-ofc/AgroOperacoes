@@ -365,7 +365,7 @@ function camposDaOp(t) {
     return {talhao: ['Secagem', 'Recebimento de grãos'].includes(t) ? 'origem' : 'nao', local: '', maquina: nome, obrig: true, implemento: false, area: false, kg: false,
       notas: t === 'Secagem' ? 'Ex.: umidade de entrada e saída, lenha usada…' : t === 'Recebimento de grãos' ? 'Ex.: cargas recebidas, placa, observações…' : 'Ex.: pó e palha retirados, fosso, dutos, sem focos de insetos…'};
   }
-  if (OP_LAVOURA.includes(t)) return {talhao: 'sim', local: 'Local (sem talhão)', maquina: 'Máquina', implemento: true, area: true, kg: t === 'Plantio',
+  if (OP_LAVOURA.includes(t)) return {talhao: 'sim', local: 'Local (sem talhão)', maquina: {'Aplicação': 'Pulverizador, drone ou trator', 'Plantio': 'Trator / plantadeira', 'Adubação': 'Trator / distribuidor', 'Colheita': 'Colheitadeira', 'Preparo de solo': 'Trator'}[t] || 'Máquina', implemento: true, area: true, kg: t === 'Plantio',
     notas: t === 'Plantio' ? 'Ex.: cultivar, população, espaçamento, adubo de base…' : t === 'Colheita' ? 'Ex.: umidade, perdas, destino das cargas…' : t === 'Preparo de solo' ? 'Ex.: profundidade, condição do solo…' : 'Ex.: produto, dose, vazão, condições do tempo…'};
   if (t === 'Transporte') return {talhao: 'origem', local: 'Origem / destino', maquina: 'Caminhão / trator', implemento: true, area: false, kg: false, notas: 'Ex.: o que foi levado, quantidade, destino…'};
   if (OP_COM_KG.includes(t)) return {talhao: 'nao', local: 'Local', maquina: 'Máquina / equipamento', implemento: false, area: false, kg: true, notas: t === 'Tratamento de sementes' ? 'Ex.: produtos e doses do tratamento, lote…' : 'Ex.: lote, peneira, descarte…'};
@@ -382,12 +382,12 @@ function operationForm(op = {}) {
   const travada = typeof confTravada === 'function' ? confTravada(op) : ''; if (travada) { showToast(travada, true); return; }
   // Registro antigo "Limpeza de secador/silo": abre já no tipo separado, pelo equipamento gravado
   if (op.type === OP_LIMPEZA_ANTIGA) { const tq = find('machines', op.machineId)?.type; op = {...op, type: tq === 'Moega' ? 'Limpeza de moega' : tq === 'Silo/Armazém' ? 'Limpeza de silo' : 'Limpeza de secador'}; }
-  const tipoIni = op.type || 'Plantio';
+  const tipoIni = op.type || null; // operação nova: o tipo vem vazio e o resto só aparece depois de escolher
   openForm({
     title: op.id ? 'Editar operação' : 'Nova operação',
     values: {date: today(), time: nowTime(), status: 'Programada', ...op},
     fields: [
-      {k: 'type', label: 'Tipo de operação', type: 'select', options: OP_TYPES, required: true, full: true},
+      {k: 'type', label: 'Tipo de operação', type: 'select', options: [...(op.type ? [] : [{value: '', label: 'Escolha o tipo…'}]), ...OP_TYPES], required: true, full: true},
       {k: 'machineId', label: 'Máquina', type: 'select', options: () => machineOptions(tipoIni, op.machineId), labelAusente: maquinaAusente},
       {k: 'fieldId', label: 'Talhão', type: 'select', options: fieldOptions, hint: db.fields.length ? '' : 'Cadastre talhões para selecioná-los aqui'},
       {k: 'place', label: 'Local (sem talhão)', placeholder: 'Ex.: Unidade de beneficiamento'},
@@ -428,8 +428,14 @@ function operationForm(op = {}) {
   const rotulo = (k, txt, obrig) => { const l = campo(k)?.querySelector('label'); if (l) l.textContent = txt + (obrig ? ' *' : ''); };
   const dica = (k, txt) => { const f = campo(k); if (!f) return; let h = f.querySelector('.hint'); if (!h) { h = Object.assign(document.createElement('span'), {className: 'hint'}); f.append(h); } h.textContent = txt; };
   const tipo = $('#f_type', dialog);
+  // Sem tipo escolhido: só o campo do tipo. Escolhido: só os campos que valem para ele (mais data, situação, operador e observações)
+  const COMUNS = ['date', 'time', 'status', 'operator'];
   const mostrar = () => {
-    const t = tipo.value, c = camposDaOp(t), temTalhao = !!$('#f_fieldId', dialog).value;
+    const t = tipo.value, semTipo = !t;
+    $$('.form > .field, .form-mais', $('form', dialog)).forEach(el => { if (!el.contains(tipo)) el.classList.toggle('sem-tipo', semTipo); });
+    if (semTipo) return;
+    COMUNS.forEach(k => { const f = campo(k); if (f) f.hidden = false; });
+    const c = camposDaOp(t), temTalhao = !!$('#f_fieldId', dialog).value;
     campo('fieldId').hidden = c.talhao === 'nao';
     rotulo('fieldId', c.talhao === 'origem' ? 'Talhão de origem (opcional)' : 'Talhão');
     campo('place').hidden = !c.local || (c.talhao === 'sim' && temTalhao);

@@ -1352,3 +1352,4 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 .prod-novo{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.prod-novo input{flex:1 1 200px}.prod-novo small{flex-basis:100%}
 .prod-reg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}.prod-reg label{display:grid;gap:4px;font-size:.86rem;color:var(--muted)}
 .prod-aviso{margin:0;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--orange) 16%,transparent);font-size:.88rem}
+.sem-tipo{display:none!important}
