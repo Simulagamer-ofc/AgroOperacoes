@@ -507,12 +507,30 @@ function machineForm(m = {}) {
   const el = k => form.elements[k], rot = (k, t) => { const l = el(k)?.closest('.field')?.querySelector('label'); if (l) l.textContent = t; };
   const rotulos = () => { const km = el('medidor').value === 'km', u = km ? 'km' : 'h';
     rot('hours', `${km ? 'Odômetro' : 'Horímetro'} atual (${u}) *`); rot('interval', `Revisão a cada (${u})`); rot('nextService', `Próxima revisão em (${u})`); };
-  el('type').addEventListener('change', () => {
-    const novo = medidorPadrao(el('type').value), antes = el('medidor').value; el('medidor').value = novo;
+  const aplicarMedidor = novo => {
+    const antes = el('medidor').value; el('medidor').value = novo;
     const iv = el('interval'); if (novo !== antes && (iv.value === '' || iv.value === '250' || iv.value === '10000')) iv.value = novo === 'km' ? '10000' : novo === 'horas' ? '250' : '';
     form.dispatchEvent(new Event('change')); rotulos();
-  });
-  el('medidor').addEventListener('change', rotulos); rotulos();
+  };
+  // Escolha à mão vale: depois dela o app não troca mais o tipo nem o medidor pelo nome
+  let tipoManual = !!m.id && m.type !== 'Outro', medManual = !!m.medidor;
+  el('type').addEventListener('change', () => { tipoManual = true; // (a troca pelo nome não dispara este evento)
+    aplicarMedidor(medidorPadrao(el('type').value)); });
+  el('medidor').addEventListener('change', () => { medManual = true; rotulos(); }); rotulos();
+  // Identifica pelo nome e pelo modelo (caminhonete, moto, Hilux, Scania, gerador, balança…) o tipo e o medidor
+  const dica = Object.assign(document.createElement('span'), {className: 'hint maq-identificado'}); el('model').closest('.field').append(dica);
+  const identificar = () => {
+    if (typeof rmqSugestao !== 'function') return;
+    const nome = el('name').value, modelo = el('model').value; if (!(nome + modelo).trim()) { dica.textContent = ''; return; }
+    const achou = RMQ_SUGESTOES.some(([re]) => re.test(`${nome} ${modelo}`)), s = rmqSugestao({name: nome, model: modelo, type: 'Outro', hours: 0});
+    if (!achou) { dica.textContent = ''; return; }
+    if (s.tipo === 'Implemento') { dica.textContent = `Parece um implemento (${s.tipoImpl.toLowerCase()}): sem motor, cadastre em Máquinas → Implementos.`; return; }
+    const texto = `Identificado pelo nome: ${s.tipo === 'Outro' ? 'outro equipamento' : s.tipo.toLowerCase()} → ${s.medidor === 'km' ? 'km (odômetro)' : s.medidor === 'horas' ? 'horas (horímetro)' : 'sem medidor'}`;
+    if (!tipoManual && el('type').value !== s.tipo) { el('type').value = s.tipo; aplicarMedidor(medidorPadrao(s.tipo)); }
+    if (!medManual && el('type').value === s.tipo && el('medidor').value !== s.medidor) aplicarMedidor(s.medidor);
+    dica.textContent = el('type').value === s.tipo ? texto : `${texto} (você escolheu ${el('type').value}: vale a sua escolha)`;
+  };
+  if (!m.id) { el('name').addEventListener('input', identificar); el('model').addEventListener('input', identificar); }
 }
 
 function hourForm(machineId) {
@@ -878,7 +896,7 @@ VIEWS.operacoes = () => {
 VIEWS.maquinas = () => {
   const ms = db.machines.filter(m => m.type !== 'Implemento').sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''))); // implementos: aba própria
   const mts = db.maintenances.filter(mt => find('machines', mt.machineId)?.type !== 'Implemento').sort(ordemManut);
-  return head('Máquinas e manutenção', 'Horímetro e km, revisões programadas e ordens de manutenção.', btn('Registrar horímetro / km', 'hour-new', '', 'secondary') + btn('☑ Checklists', 'nav', 'checklists', 'secondary') + (typeof mcpGestor !== 'function' || mcpGestor() ? btn('📊 Indicadores', 'nav', 'manutind', 'secondary') + btn('Abrir manutenção', 'mt-new', '', 'secondary') : btn('☑ Fazer checklist', 'mcp-novo', '', 'secondary')) + btn('+ Nova máquina', 'mc-new')) +
+  return head('Máquinas e manutenção', 'Horímetro e km, revisões programadas e ordens de manutenção.', btn('Registrar horímetro / km', 'hour-new', '', 'secondary') + (typeof rmqPendentes === 'function' && (typeof mcpGestor !== 'function' || mcpGestor()) && rmqPendentes().length ? btn(`⚠ Revisar cadastro (${rmqPendentes().length})`, 'nav', 'revisarmaq', 'secondary') : '') + btn('☑ Checklists', 'nav', 'checklists', 'secondary') + (typeof mcpGestor !== 'function' || mcpGestor() ? btn('📊 Indicadores', 'nav', 'manutind', 'secondary') + btn('Abrir manutenção', 'mt-new', '', 'secondary') : btn('☑ Fazer checklist', 'mcp-novo', '', 'secondary')) + btn('+ Nova máquina', 'mc-new')) +
     (ms.length ? `<section class="cards">${ms.map(m => {
       const st = machineStatus(m), left = hoursToService(m), temRev = Number(m.nextService) > 0;
       const color = st === 'Em manutenção' ? 'orange' : st === 'Inativa' ? 'gray' : 'green';
