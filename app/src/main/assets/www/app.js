@@ -878,7 +878,7 @@ VIEWS.operacoes = () => {
 VIEWS.maquinas = () => {
   const ms = db.machines.filter(m => m.type !== 'Implemento').sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''))); // implementos: aba própria
   const mts = db.maintenances.filter(mt => find('machines', mt.machineId)?.type !== 'Implemento').sort(ordemManut);
-  return head('Máquinas e manutenção', 'Horímetro e km, revisões programadas e ordens de manutenção.', btn('Registrar horímetro / km', 'hour-new', '', 'secondary') + btn('☑ Checklists', 'nav', 'checklists', 'secondary') + (typeof mcpGestor !== 'function' || mcpGestor() ? btn('📊 Indicadores', 'nav', 'manutind', 'secondary') + btn('Abrir manutenção', 'mt-new', '', 'secondary') : btn('☑ Fazer checklist', 'mcp-novo', '', 'secondary')) + btn('+ Nova máquina', 'mc-new')) +
+  return head('Máquinas e manutenção', 'Horímetro e km, revisões programadas e ordens de manutenção.', btn('Registrar horímetro / km', 'hour-new', '', 'secondary') + (typeof rmqPendentes === 'function' && (typeof mcpGestor !== 'function' || mcpGestor()) && rmqPendentes().length ? btn(`⚠ Revisar cadastro (${rmqPendentes().length})`, 'nav', 'revisarmaq', 'secondary') : '') + btn('☑ Checklists', 'nav', 'checklists', 'secondary') + (typeof mcpGestor !== 'function' || mcpGestor() ? btn('📊 Indicadores', 'nav', 'manutind', 'secondary') + btn('Abrir manutenção', 'mt-new', '', 'secondary') : btn('☑ Fazer checklist', 'mcp-novo', '', 'secondary')) + btn('+ Nova máquina', 'mc-new')) +
     (ms.length ? `<section class="cards">${ms.map(m => {
       const st = machineStatus(m), left = hoursToService(m), temRev = Number(m.nextService) > 0;
       const color = st === 'Em manutenção' ? 'orange' : st === 'Inativa' ? 'gray' : 'green';
