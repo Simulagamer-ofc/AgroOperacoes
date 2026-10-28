@@ -55,6 +55,8 @@ function prodPlanoCalda(o, area = prodArea(o)) {
   const volume = calda * area, haTanque = tanque ? tanque / calda : null;
   return {calda, area, volume, tanque, tanques: tanque ? Math.ceil(volume / tanque - 1e-9) : null, haTanque};
 }
+// Preparadores de calda cadastrados (equipamento que prepara a calda antes de abastecer)
+const prodPreparadores = () => db.machines.filter(m => m.type === 'Preparador de calda' && !isInactive(m));
 const prodResumo = o => (o.produtos || []).map(p => `${prodNome(p)}${Number(p.dose) > 0 ? ` ${num(p.dose)} ${p.unDose}` : ''}`).join(' + ');
 
 // ---------- Clima na hora (da previsão guardada) ----------
@@ -117,6 +119,7 @@ function prodBlocoHtml(o, base) {
     ${r.itens.map((p, i) => prodLinha(p, i, base)).join('')}
     <button type="button" class="link" data-prod-add>+ Produto</button>
     ${comVel || r.tipo === 'Aplicação' ? `<div class="prod-reg">${comVel ? `<label>Velocidade (km/h)<input data-prod-vel inputmode="decimal" value="${esc(prodTxtNum(r.velocidade))}" placeholder="Ex.: 12"></label>` : ''}
+      ${r.tipo === 'Aplicação' && prodPreparadores().length ? `<label>Preparador de calda<select data-prod-prep><option value="">— não usado —</option>${prodPreparadores().map(m => `<option value="${esc(m.id)}" ${m.id === r.preparadorId ? 'selected' : ''}>${esc(m.name)}${Number(m.tanqueL) > 0 ? ` (${num(m.tanqueL)} L)` : ''}</option>`).join('')}</select></label>` : ''}
       ${r.tipo === 'Aplicação' ? `<label>Volume de calda (L/ha)<input data-prod-calda inputmode="decimal" value="${esc(prodTxtNum(r.calda))}" placeholder="Ex.: 100"></label><label>Pressão (bar)<input data-prod-pres inputmode="decimal" value="${esc(prodTxtNum(r.pressao))}" placeholder="Ex.: 3"></label><label>Ponta / bico<input data-prod-ponta value="${esc(r.ponta || '')}" placeholder="Ex.: leque 110015"></label>` : ''}</div>` : ''}
     ${avisos.length ? `<p class="prod-aviso">⚠ ${esc(avisos.join(' • '))}</p>` : ''}
     ${plano ? `<p class="prod-plano">${plano.tanques ? `<b>${plano.tanques} ${plano.tanques === 1 ? 'tanque' : 'tanques'}</b> de ${num(tanque)} L (${num(Math.round(plano.haTanque * 10) / 10)} ha por tanque) • ` : ''}${num(Math.round(plano.volume))} L de calda${porTanque.length ? `<br>Por tanque cheio: ${esc(porTanque.join(' • '))}` : ''}${!tanque ? '<br><small>Cadastre a capacidade do tanque do pulverizador para ver os tanques.</small>' : ''}</p>` : ''}
@@ -136,6 +139,7 @@ function prodLer() {
   if ($('[data-prod-vel]', dialog)) prodRasc.velocidade = prodNum(val('[data-prod-vel]'));
   if ($('[data-prod-pres]', dialog)) prodRasc.pressao = prodNum(val('[data-prod-pres]'));
   if ($('[data-prod-ponta]', dialog)) prodRasc.ponta = val('[data-prod-ponta]');
+  if ($('[data-prod-prep]', dialog)) prodRasc.preparadorId = $('[data-prod-prep]', dialog).value;
   if ($('[data-prod-rec]', dialog)) prodRasc.receituario = val('[data-prod-rec]');
   if ($('[data-prod-resp]', dialog)) prodRasc.respTecnico = val('[data-prod-resp]');
 }
@@ -195,7 +199,7 @@ const prodGuardar = o => {
   const r = prodRasc;
   o.produtos = r.itens.filter(p => p.itemId || p.nome).map(p => ({itemId: p.itemId || '', ...(p.itemId ? {} : {nome: p.nome}), dose: p.dose, unDose: p.unDose, ...(p.carencia !== undefined && p.carencia !== '' ? {carencia: p.carencia} : {})}));
   if (['Aplicação', 'Adubação', 'Plantio'].includes(r.tipo)) o.velocidade = r.velocidade ?? '';
-  if (r.tipo === 'Aplicação') Object.assign(o, {calda: r.calda, pressao: r.pressao ?? '', ponta: r.ponta || '', receituario: r.receituario || '', respTecnico: r.respTecnico || ''});
+  if (r.tipo === 'Aplicação') Object.assign(o, {calda: r.calda, pressao: r.pressao ?? '', ponta: r.ponta || '', preparadorId: r.preparadorId || '', receituario: r.receituario || '', respTecnico: r.respTecnico || ''});
 };
 // Baixa no estoque pela quantidade usada informada; aplicação gera a carência. O saldo pode ficar negativo (o ADM é avisado).
 function prodBaixar(o, base) {
@@ -234,7 +238,7 @@ function prodAoAbrirOp(op) {
     $('[data-prod-bloco]', dialog)?.remove();
     const t = tipoSel.value; if (!OP_COM_PRODUTO.includes(t)) { prodRasc = null; return; }
     if (travado) { form.querySelector('.form').insertAdjacentHTML('beforeend', `<div class="field full prod-bloco" data-prod-bloco><b>Produtos</b><p class="nota" style="margin:4px 0 0">${esc(prodResumo(op) || '—')}. Já baixados do estoque: para corrigir, ajuste no Estoque.</p></div>`); prodRasc = null; return; }
-    if (!prodRasc || prodRasc.tipo !== t) prodRasc = {tipo: t, modo: 'plano', itens: (op.type === t ? op.produtos || [] : []).map(p => ({...p})), calda: op.calda ?? '', velocidade: op.velocidade ?? '', pressao: op.pressao ?? '', ponta: op.ponta || '', receituario: op.receituario || '', respTecnico: op.respTecnico || ''};
+    if (!prodRasc || prodRasc.tipo !== t) prodRasc = {tipo: t, modo: 'plano', itens: (op.type === t ? op.produtos || [] : []).map(p => ({...p})), calda: op.calda ?? '', velocidade: op.velocidade ?? '', pressao: op.pressao ?? '', ponta: op.ponta || '', preparadorId: op.preparadorId || '', receituario: op.receituario || '', respTecnico: op.respTecnico || ''};
     prodRasc.concluir = form.elements.status?.value === 'Concluída' && op.status !== 'Concluída';
     if (!prodRasc.itens.length) prodRasc.itens.push(prodLinhaNova());
     prodContexto = {o: () => ({...op, type: t, fieldId: form.elements.fieldId?.value, machineId: form.elements.machineId?.value, implementoId: form.elements.implementoId?.value, area: numeroBR(form.elements.area?.value || '') || ''}),
@@ -271,7 +275,7 @@ function prodAoAbrirInicio(o) {
     return `<li><b>${esc(prodNome(p))}</b>${Number(p.dose) > 0 ? ` — ${num(p.dose)} ${esc(p.unDose)}` : ''}${tq ? ` • por tanque: ${prodFmt(tq.q, tq.u)}` : ''}${t ? ` • total: ${prodFmt(t.q, t.u)}` : ''}</li>`; }).join('');
   if (!linhas && !c) return;
   form.querySelector('.form').insertAdjacentHTML('afterbegin', `<div class="field full prod-bloco prod-info">
-    ${linhas ? `<b>${o.type === 'Aplicação' ? 'Calda' : 'Produtos'}</b><ul>${linhas}</ul>${plano?.tanques ? `<p class="prod-plano"><b>${plano.tanques} ${plano.tanques === 1 ? 'tanque' : 'tanques'}</b> de ${num(plano.tanque)} L • ${num(plano.calda)} L/ha • ${num(Math.round(plano.haTanque * 10) / 10)} ha por tanque</p>` : ''}${[Number(o.velocidade) > 0 ? `velocidade ${num(o.velocidade, 1)} km/h` : '', Number(o.pressao) > 0 ? `pressão ${num(o.pressao, 1)} bar` : '', o.ponta ? `ponta ${o.ponta}` : ''].filter(Boolean).length ? `<p class="nota" style="margin:4px 0">Regulagem: ${esc([Number(o.velocidade) > 0 ? `velocidade ${num(o.velocidade, 1)} km/h` : '', Number(o.pressao) > 0 ? `pressão ${num(o.pressao, 1)} bar` : '', o.ponta ? `ponta ${o.ponta}` : ''].filter(Boolean).join(' • '))}</p>` : ''}${o.receituario ? `<small class="nota">Receituário nº ${esc(o.receituario)}${o.respTecnico ? ` — ${esc(o.respTecnico)}` : ''}</small>` : ''}` : ''}
+    ${linhas ? `<b>${o.type === 'Aplicação' ? 'Calda' : 'Produtos'}</b><ul>${linhas}</ul>${plano?.tanques ? `<p class="prod-plano"><b>${plano.tanques} ${plano.tanques === 1 ? 'tanque' : 'tanques'}</b> de ${num(plano.tanque)} L • ${num(plano.calda)} L/ha • ${num(Math.round(plano.haTanque * 10) / 10)} ha por tanque</p>` : ''}${o.preparadorId && find('machines', o.preparadorId) ? `<p class="nota" style="margin:4px 0">Calda preparada no ${esc(find('machines', o.preparadorId).name)}</p>` : ''}${[Number(o.velocidade) > 0 ? `velocidade ${num(o.velocidade, 1)} km/h` : '', Number(o.pressao) > 0 ? `pressão ${num(o.pressao, 1)} bar` : '', o.ponta ? `ponta ${o.ponta}` : ''].filter(Boolean).length ? `<p class="nota" style="margin:4px 0">Regulagem: ${esc([Number(o.velocidade) > 0 ? `velocidade ${num(o.velocidade, 1)} km/h` : '', Number(o.pressao) > 0 ? `pressão ${num(o.pressao, 1)} bar` : '', o.ponta ? `ponta ${o.ponta}` : ''].filter(Boolean).join(' • '))}</p>` : ''}${o.receituario ? `<small class="nota">Receituário nº ${esc(o.receituario)}${o.respTecnico ? ` — ${esc(o.respTecnico)}` : ''}</small>` : ''}` : ''}
     ${c ? `<p class="prod-clima ${c.ok ? 'ok' : 'ruim'}">${c.ok ? '✓ Bom para pulverizar agora' : `⚠ Atenção: ${esc(c.motivos.join(', '))}`}<small>${esc(prodClimaTxt(c))} (previsão)</small></p>` : ''}</div>`);
 }
 function prodAoIniciar(o) { if (o.type === 'Aplicação') { const c = prodClimaAgora(); if (c) o.climaIni = c; } }
@@ -280,7 +284,7 @@ function prodAoIniciar(o) { if (o.type === 'Aplicação') { const c = prodClimaA
 function prodAoAbrirConclusao(o) {
   prodRasc = null; prodContexto = null;
   const form = $('form', dialog); if (!form || !OP_COM_PRODUTO.includes(o.type) || o.produtosBaixados) return;
-  prodRasc = {tipo: o.type, modo: 'conclusao', itens: (o.produtos || []).map(p => ({...p})), calda: o.calda ?? '', velocidade: o.velocidade ?? '', pressao: o.pressao ?? '', ponta: o.ponta || '', receituario: o.receituario || '', respTecnico: o.respTecnico || ''};
+  prodRasc = {tipo: o.type, modo: 'conclusao', itens: (o.produtos || []).map(p => ({...p})), calda: o.calda ?? '', velocidade: o.velocidade ?? '', pressao: o.pressao ?? '', ponta: o.ponta || '', preparadorId: o.preparadorId || '', receituario: o.receituario || '', respTecnico: o.respTecnico || ''};
   if (!prodRasc.itens.length) prodRasc.itens.push(prodLinhaNova());
   prodContexto = {o: () => ({...o, area: numeroBR(form.elements.area?.value || '') || o.area}), base: () => prodPorSemente(o.type) ? numeroBR(form.elements.kg?.value || '') || Number(o.kg) || 0 : numeroBR(form.elements.area?.value || '') || prodArea(o)};
   const alvo = form.elements.notes?.closest('.field'), c = o.type === 'Aplicação' ? prodClimaAgora() : null;

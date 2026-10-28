@@ -6,6 +6,7 @@
 
 // Sugestão pelo nome e modelo: [expressão, tipo] — “Implemento:<tipo>” vira implemento; “Outro:nenhum” fica sem medidor
 const RMQ_SUGESTOES = [
+  [/preparador de calda|speed ?mix|misturador de calda|central de calda|pr[eé].?mistur|indutor de calda/i, 'Preparador de calda'],
   [/caminhonete|pick.?up|hilux|\bs-?10\b|ranger|amarok|\bf-?(250|350|1000|4000)\b|l200|frontier|strada|saveiro|\btoro\b|montana|oroch|maverick|ram\b/i, 'Caminhonete'],
   [/\bmoto\b|motocicleta|\bcg\b|\bbiz\b|\bbros\b|\bxre\b|titan|\bfan\b|\bpop\b|yamaha|honda (start|cg)/i, 'Moto'],
   [/\bcarro\b|\bgol\b|\buno\b|onix|palio|corolla|hb20|\bkwid\b|sandero|argo/i, 'Carro'],
@@ -29,8 +30,11 @@ function rmqSugestao(m) {
   return {tipo, medidor: tipo === 'Outro' ? (Number(m.hours) > 1 ? 'horas' : 'nenhum') : medidorPadrao(tipo)};
 }
 // O que precisa conferir: tipo “Outro” ainda não revisado, ou veículo de estrada que ficou no horímetro sem escolha
-const rmqPendentes = () => db.machines.filter(m => m.type !== 'Implemento' && !isInactive(m) && !m.revisadoTipo
-  && (m.type === 'Outro' || (!m.medidor && TIPOS_KM.includes(m.type) && medidorDe(m) !== 'km')));
+// ou implemento que, pelo nome, é máquina ou equipamento (ex.: preparador de calda cadastrado como implemento)
+const rmqCasou = m => RMQ_SUGESTOES.some(([re]) => re.test(`${m.name || ''} ${m.model || ''}`));
+const rmqPendentes = () => db.machines.filter(m => !isInactive(m) && !m.revisadoTipo && (m.type === 'Implemento'
+  ? rmqCasou(m) && rmqSugestao(m).tipo !== 'Implemento'
+  : m.type === 'Outro' || (!m.medidor && TIPOS_KM.includes(m.type) && medidorDe(m) !== 'km')));
 const rmqGestor = () => typeof mcpGestor !== 'function' || mcpGestor();
 
 VIEWS.revisarmaq = () => {
@@ -74,6 +78,7 @@ Object.assign(ACTIONS, {
     const antes = {type: m.type, medidor: medidorDe(m), hours: m.hours};
     if (tipo.startsWith('Implemento:')) Object.assign(m, {type: 'Implemento', tipoImpl: tipo.slice(11), medidor: 'nenhum', interval: '', nextService: ''});
     else {
+      if (m.type === 'Implemento') { delete m.tipoImpl; delete m.revisaoHa; delete m.revisaoDias; } // deixa de ser implemento
       m.type = tipo; m.medidor = med;
       if (med === 'nenhum') { m.interval = ''; m.nextService = ''; }
       else {
