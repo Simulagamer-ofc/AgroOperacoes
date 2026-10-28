@@ -1359,3 +1359,4 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 .rmq-campos{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}.rmq-campos label{display:grid;gap:4px;font-size:.84rem;color:var(--muted)}
 .rmq-campos select,.rmq-campos input{border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:var(--panel);color:var(--text);font:inherit;min-height:42px}
 .rmq-campos label[hidden]{display:none}.rmq-campos label{min-width:0}.rmq-campos select,.rmq-campos input{width:100%;min-width:0}
+.maq-identificado{color:var(--blue);font-weight:600}
