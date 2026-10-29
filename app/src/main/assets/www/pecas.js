@@ -2,11 +2,12 @@
 /* MercaPlant — Catálogo de peças das máquinas.
    Cada peça: código do fabricante, nome, marca, sistema (filtros, motor, hidráulico…), códigos equivalentes
    (outras marcas), em quais modelos ou máquinas serve, quantas vão na máquina, intervalo de troca, item do estoque
-   (saldo) e fornecedores com código, preço e data. Vale por modelo: cadastrada para “John Deere 7230J”, serve para
+   (saldo) e fornecedores com o código de cada um. Sem preço: o catálogo é para achar a peça certa. Vale por modelo: cadastrada para “John Deere 7230J”, serve para
    todos os 7230J da fazenda.
    • Peças da máquina (pelo cartão ou pela ordem): as do catálogo e as que já saíram nas ordens e ainda não estão nele.
    • Pedido ao fornecedor: junta as peças, separa por fornecedor e manda por WhatsApp ou e-mail para cotação.
-   • Importar planilha do fornecedor (CSV ou Excel): código, descrição, marca, preço e aplicação.
+   • Importar planilha do fornecedor (CSV ou Excel): código, descrição, marca e aplicação.
+   • Código igual a outra peça (o fornecedor usa o mesmo código para peças diferentes): ficam separadas, com aviso.
    • Catálogo oficial do fabricante (John Deere, Caterpillar, AGCO) abre no site da marca, para consultar e copiar o código. */
 
 const SISTEMAS_PECA = ['Filtros', 'Motor', 'Lubrificantes e fluidos', 'Transmissão', 'Hidráulico', 'Elétrico', 'Freios e direção', 'Rodagem e pneus', 'Correias e correntes', 'Rolamentos',
@@ -21,9 +22,7 @@ const PC_SISTEMA_NOME = [[/bico injetor|bomba injetora/i, 'Motor'], [/filtro|ele
   [/peneira|saca.?palha|rotor|c[oô]ncavo|batedor|caracol/i, 'Colheita'], [/vidro|banco|retrovisor|palheta|ar.?condicionado/i, 'Cabine']];
 const pcSistemaPeloNome = n => PC_SISTEMA_NOME.find(([re]) => re.test(n || ''))?.[1] || 'Outro';
 const pcGestor = () => typeof mcpGestor !== 'function' || mcpGestor();
-const pcVeValor = () => typeof mcpVeValores !== 'function' || mcpVeValores();
 const pcNorm = s => semAcentoApp(s).replace(/[^a-z0-9]+/g, '');
-const pcBrl = v => 'R$ ' + num(v, 2);
 
 // Modelos da frota: máquinas e implementos com o mesmo modelo ficam juntos; sem modelo, a máquina sozinha
 function pcModelos() {
@@ -38,10 +37,9 @@ function pcModelos() {
 const pcServe = (p, m) => !!m && ((p.aplica?.maquinas || []).includes(m.id) || (!!m.model && (p.aplica?.modelos || []).includes(pcNorm(m.model))));
 const pcDaMaquina = m => db.pecas.filter(p => pcServe(p, m));
 const pcEstoque = p => p?.itemId ? find('stock', p.itemId) : null;
-const pcMelhor = p => (p.fornecedores || []).filter(f => Number(f.preco) > 0).sort((a, b) => a.preco - b.preco)[0] || null;
-const pcAplicaTexto = p => {
+const pcAplicaTexto = (p, semQtd) => {
   const mods = pcModelos().filter(g => g.chave.startsWith('mod:') ? (p.aplica?.modelos || []).includes(g.chave.slice(4)) : (p.aplica?.maquinas || []).includes(g.chave.slice(4)));
-  return mods.map(g => g.rotulo + (g.maquinas.length > 1 ? ` (${g.maquinas.length})` : ''));
+  return mods.map(g => g.rotulo + (!semQtd && g.maquinas.length > 1 ? ` (${g.maquinas.length})` : ''));
 };
 // Saldo do estoque: sem, abaixo do mínimo, ok
 function pcSituacao(p) {
@@ -64,12 +62,14 @@ const pcBotaoFabricante = m => { const l = pcLinkFabricante(m); return l ? `<a c
 
 // ---------------- Lista ----------------
 function pcCartao(p) {
-  const sit = pcSituacao(p), ap = pcAplicaTexto(p), mel = pcMelhor(p), forn = mel ? find('fornecedores', mel.fornecedorId) : null, g = pcGestor();
+  const sit = pcSituacao(p), ap = pcAplicaTexto(p), g = pcGestor();
   const extras = [
     ap.length ? `Serve em: ${esc(ap.slice(0, 3).join(', '))}${ap.length > 3 ? ` e mais ${ap.length - 3}` : ''}` : (p.aplicacaoTexto ? `Aplicação: ${esc(p.aplicacaoTexto)}` : '<span class="pc-aviso">Sem máquina vinculada</span>'),
     (p.equivalentes || []).length ? `Equivalentes: ${(p.equivalentes || []).map(e => `<span class="pc-cod">${esc([e.marca, e.codigo].filter(Boolean).join(' '))}</span>`).join(' ')}` : '',
     [Number(p.qtd) > 0 ? `${num(p.qtd)} por máquina` : '', Number(p.trocaCada) > 0 ? `troca a cada ${num(p.trocaCada)} ${p.trocaUnid === 'dias' ? 'dias' : p.trocaUnid === 'km' ? 'km' : 'h'}` : ''].filter(Boolean).join(' • '),
-    mel && pcVeValor() ? `Menor preço: <b>${pcBrl(mel.preco)}</b>${forn ? ` — ${esc(forn.nome)}` : ''}${mel.data ? ` (${fmtDate(mel.data)})` : ''}${(p.fornecedores || []).length > 1 ? ` • ${p.fornecedores.length} fornecedores` : ''}` : ((p.fornecedores || []).length ? `Fornecedor: ${esc((p.fornecedores || []).map(f => find('fornecedores', f.fornecedorId)?.nome).filter(Boolean).join(', '))}` : '')
+    (p.fornecedores || []).length ? `Fornecedor: ${(p.fornecedores || []).map(f => esc([find('fornecedores', f.fornecedorId)?.nome, f.codigo && f.codigo !== p.codigo ? `(cód. ${f.codigo})` : ''].filter(Boolean).join(' '))).join(', ')}` : '',
+    p.origem?.titulo ? `Catálogo ${esc(p.origem.titulo)}: ${esc(p.origem.grupo || '')}${p.origem.rep ? ` • nº ${esc(p.origem.rep)}` : ''}${p.origem.pag ? ` • desenho pág. ${p.origem.pag}` : ''}` : '',
+    p.codigoRepetido ? '<span class="pc-aviso">⚠ Código igual a outra peça no fornecedor — confirme antes de comprar</span>' : ''
   ].filter(Boolean);
   return `<article class="card item-card pc-card"><header><div><h4><span class="pc-cod">${esc(p.codigo || 's/ código')}</span> ${esc(p.nome)}</h4><div class="meta">${esc([p.marca, p.sistema].filter(Boolean).join(' • '))}</div></div>${chip(sit.texto, sit.cor)}</header>
     <div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>
@@ -118,7 +118,7 @@ function pceLer() {
   pce.aplica = {modelos: [...(ant.modelos || []).filter(x => !presentes.has('mod:' + x)), ...marc.filter(v => v.startsWith('mod:')).map(v => v.slice(4))],
     maquinas: [...(ant.maquinas || []).filter(x => !presentes.has('maq:' + x)), ...marc.filter(v => v.startsWith('maq:')).map(v => v.slice(4))]};
   pce.equivalentes = $$('[data-pce-eq]', f).map(r => ({marca: $('[data-k="marca"]', r).value.trim(), codigo: $('[data-k="codigo"]', r).value.trim().toUpperCase()}));
-  pce.fornecedores = $$('[data-pce-fo]', f).map(r => ({fornecedorId: $('[data-k="fornecedorId"]', r).value, codigo: $('[data-k="codigo"]', r).value.trim().toUpperCase(), preco: numeroBR($('[data-k="preco"]', r).value) ?? '', data: $('[data-k="data"]', r).value}));
+  pce.fornecedores = $$('[data-pce-fo]', f).map(r => ({fornecedorId: $('[data-k="fornecedorId"]', r).value, codigo: $('[data-k="codigo"]', r).value.trim().toUpperCase()}));
 }
 VIEWS.peca = arg => {
   if (!pcGestor()) return head('Peça', 'Só para o ADM e o supervisor.', btn('← Peças', 'nav', 'pecas', 'secondary')) + `<section class="card">${empty('Sem acesso', 'Seu nível de acesso é Usuário comum.')}</section>`;
@@ -128,7 +128,7 @@ VIEWS.peca = arg => {
     if (id !== 'novo' && !p) return empty('Peça não encontrada', 'Ela pode ter sido excluída.');
     pce = p ? {...JSON.parse(JSON.stringify(p)), _volta: 'pecas'} : pceNovo(maqId, itemId); pce._arg = arg;
   }
-  const p = pce, vePreco = pcVeValor();
+  const p = pce;
   const opt = (v, l, sel) => `<option value="${esc(v)}" ${String(v) === String(sel) ? 'selected' : ''}>${esc(l)}</option>`;
   const mods = pcModelos();
   const marcado = gr => gr.chave.startsWith('mod:') ? (p.aplica?.modelos || []).includes(gr.chave.slice(4)) : (p.aplica?.maquinas || []).includes(gr.chave.slice(4));
@@ -152,7 +152,7 @@ VIEWS.peca = arg => {
       <button type="button" class="secondary" data-act="pce-eq-add">+ Código equivalente</button></section>
     <section class="card panel"><h3 class="pce-tit">Estoque</h3><div class="form"><div class="field full"><label for="pce_item">Item do estoque (saldo e baixa nas ordens)</label><select id="pce_item" name="itemId"><option value="">— não controlar no estoque —</option><option value="__novo">+ Criar no estoque (categoria Peças)</option>${pecasEst.map(s => opt(s.id, `${s.name}${s.category ? ' — ' + s.category : ''} (${num(s.qty)} ${s.unit || ''})`, p.itemId)).join('')}</select></div></div></section>
     <section class="card panel"><h3 class="pce-tit">Fornecedores</h3>
-      ${(p.fornecedores || []).map((f, i) => `<div class="pce-linha forn" data-pce-fo><select data-k="fornecedorId" aria-label="Fornecedor"><option value="">Fornecedor…</option>${forns.map(x => opt(x.id, x.nome, f.fornecedorId)).join('')}</select><input data-k="codigo" class="pc-cod-in" value="${esc(f.codigo || '')}" placeholder="Código no fornecedor" aria-label="Código no fornecedor">${vePreco ? `<input data-k="preco" inputmode="decimal" value="${esc(f.preco !== '' && f.preco != null ? String(f.preco).replace('.', ',') : '')}" placeholder="Preço (R$)" aria-label="Preço">` : `<input data-k="preco" type="hidden" value="${esc(String(f.preco ?? ''))}">`}<input data-k="data" type="date" value="${esc(f.data || today())}" aria-label="Data do preço"><button type="button" class="link del" data-act="pce-fo-del" data-id="${i}" aria-label="Tirar">✕</button></div>`).join('')}
+      ${(p.fornecedores || []).map((f, i) => `<div class="pce-linha forn" data-pce-fo><select data-k="fornecedorId" aria-label="Fornecedor"><option value="">Fornecedor…</option>${forns.map(x => opt(x.id, x.nome, f.fornecedorId)).join('')}</select><input data-k="codigo" class="pc-cod-in" value="${esc(f.codigo || '')}" placeholder="Código no fornecedor" aria-label="Código no fornecedor"><button type="button" class="link del" data-act="pce-fo-del" data-id="${i}" aria-label="Tirar">✕</button></div>`).join('')}
       <div class="btn-row"><button type="button" class="secondary" data-act="pce-fo-add">+ Fornecedor nesta peça</button><button type="button" class="link" data-act="pce-fo-novo">Cadastrar fornecedor novo</button></div></section>
     <section class="card panel"><div class="form"><div class="field full"><label for="pce_obs">Observações</label><textarea id="pce_obs" name="obs" rows="2" placeholder="Ex.: usar com o kit de vedação; conferir o número de série">${esc(p.obs || '')}</textarea></div></div>
       <div class="actions"><button type="button" class="secondary" data-act="pce-cancelar">Cancelar</button><button type="button" class="primary" data-act="pce-salvar">Salvar peça</button></div></section></form>`;
@@ -169,17 +169,19 @@ const pceVolta = () => { const v = pce?._volta || 'pecas'; pce = null; go(v); };
 Object.assign(ACTIONS, {
   'pce-eq-add': () => { if (!pce) return; pceLer(); pce.equivalentes.push({marca: '', codigo: ''}); render(); setTimeout(() => $$('[data-pce-eq] [data-k="marca"]').at(-1)?.focus(), 0); },
   'pce-eq-del': i => { if (!pce) return; pceLer(); pce.equivalentes.splice(Number(i), 1); render(); },
-  'pce-fo-add': () => { if (!pce) return; pceLer(); pce.fornecedores.push({fornecedorId: db.fornecedores.length === 1 ? db.fornecedores[0].id : '', codigo: '', preco: '', data: today()}); render(); },
+  'pce-fo-add': () => { if (!pce) return; pceLer(); pce.fornecedores.push({fornecedorId: db.fornecedores.length === 1 ? db.fornecedores[0].id : '', codigo: ''}); render(); },
   'pce-fo-del': i => { if (!pce) return; pceLer(); pce.fornecedores.splice(Number(i), 1); render(); },
-  'pce-fo-novo': () => { if (!pce) return; pceLer(); fornecedorForm({}, f => { pce.fornecedores.push({fornecedorId: f.id, codigo: '', preco: '', data: today()}); }); },
+  'pce-fo-novo': () => { if (!pce) return; pceLer(); fornecedorForm({}, f => { pce.fornecedores.push({fornecedorId: f.id, codigo: ''}); }); },
   'pce-cancelar': () => pceVolta(),
   'pce-salvar': () => {
     if (!pcGestor() || !pce) return;
     pceLer(); const p = pce;
     if (!p.nome) { showToast('Informe o nome da peça', true); $('#pce_nome')?.focus(); return; }
-    const cod = pcNorm(p.codigo);
-    const igual = cod && db.pecas.find(x => x.id !== p.id && (pcNorm(x.codigo) === cod));
-    if (igual) { showToast(`O código ${p.codigo} já está no catálogo: ${igual.nome}. Edite aquela peça.`, true); return; }
+    const cod = pcNorm(p.codigo), mesmoCod = cod ? db.pecas.filter(x => x.id !== p.id && pcNorm(x.codigo) === cod) : [];
+    const igual = mesmoCod.find(x => pcNorm(x.nome) === pcNorm(p.nome));
+    if (igual) { showToast(`${p.codigo} — ${igual.nome} já está no catálogo. Edite aquela peça.`, true); return; }
+    // Mesmo código e nome diferente: o fornecedor usa o código em mais de uma peça — fica separada, com aviso nas duas
+    if (mesmoCod.length) { p.codigoRepetido = true; mesmoCod.forEach(x => { if (!x.codigoRepetido) { x.codigoRepetido = true; upsert('pecas', x); } }); p._aviso = `Atenção: o código ${p.codigo} também está em ${mesmoCod[0].nome}. As duas ficam com aviso para confirmar.`; }
     if (p.fornecedores.some(f => !f.fornecedorId)) { showToast('Escolha o fornecedor de cada linha (ou tire a linha)', true); return; }
     p.equivalentes = p.equivalentes.filter(e => e.codigo);
     const q = numeroBR(p.qtd), t = numeroBR(p.trocaCada);
@@ -188,9 +190,9 @@ Object.assign(ACTIONS, {
       const s = {id: uid(), name: p.nome, category: 'Peças', unit: 'un', qty: 0, min: '', codigo: p.codigo, fornecedor: find('fornecedores', p.fornecedores[0]?.fornecedorId)?.nome || ''};
       db.stock.push(s); p.itemId = s.id;
     }
-    const {_arg, _volta, ...dados} = p;
+    const {_arg, _volta, _aviso, ...dados} = p;
     const novo = !dados.id; if (novo) { dados.id = uid(); dados.criadoEm = new Date().toISOString(); }
-    upsert('pecas', dados); showToast(novo ? 'Peça cadastrada no catálogo' : 'Peça salva'); pceVolta();
+    upsert('pecas', dados); showToast(_aviso || (novo ? 'Peça cadastrada no catálogo' : 'Peça salva')); pceVolta();
   },
   'pc-del': id => { const p = find('pecas', id); if (!p) return; confirmDialog(`Excluir ${p.codigo || p.nome} do catálogo? O item do estoque continua.`, () => { remove('pecas', id); pcPedidoSalvar(pcPedido().filter(x => x.pecaId !== id)); showToast('Peça excluída do catálogo'); }); }
 });
@@ -220,10 +222,10 @@ TITLES.fornecedores = 'Máquinas e manutenção';
 Object.assign(ACTIONS, {
   'fo-novo': () => fornecedorForm(), 'fo-editar': id => fornecedorForm(find('fornecedores', id)),
   'fo-del': id => { const f = find('fornecedores', id); if (!f) return; const n = db.pecas.filter(p => (p.fornecedores || []).some(x => x.fornecedorId === id)).length;
-    confirmDialog(`Excluir ${f.nome}?${n ? ` Sai também o preço dele em ${n} ${n === 1 ? 'peça' : 'peças'}.` : ''}`, () => { db.pecas.forEach(p => { if ((p.fornecedores || []).some(x => x.fornecedorId === id)) { p.fornecedores = p.fornecedores.filter(x => x.fornecedorId !== id); upsert('pecas', p); } }); remove('fornecedores', id); }); }
+    confirmDialog(`Excluir ${f.nome}?${n ? ` Sai também das ${n} ${n === 1 ? 'peça' : 'peças'} em que ele aparece.` : ''}`, () => { db.pecas.forEach(p => { if ((p.fornecedores || []).some(x => x.fornecedorId === id)) { p.fornecedores = p.fornecedores.filter(x => x.fornecedorId !== id); upsert('pecas', p); } }); remove('fornecedores', id); }); }
 });
 
-// ---------------- Pedido de cotação ----------------
+// ---------------- Pedido de peças (lista para o fornecedor; sem preço no sistema) ----------------
 // Lista de compra deste aparelho: [{pecaId, qtd, fornecedorId}]
 const PC_PEDIDO = 'mp-pedido-pecas';
 function pcPedido() { try { return JSON.parse(localStorage.getItem(PC_PEDIDO) || '[]').filter(x => find('pecas', x.pecaId)); } catch { return pcPedidoMem; } }
@@ -233,36 +235,36 @@ function pcPedir(id, qtd) {
   const p = find('pecas', id); if (!p) return;
   const l = pcPedido(), ja = l.find(x => x.pecaId === id);
   if (ja) ja.qtd = Number(ja.qtd || 0) + (qtd || 1);
-  else l.push({pecaId: id, qtd: qtd || Math.max(1, Number(p.qtd) || 1), fornecedorId: pcMelhor(p)?.fornecedorId || p.fornecedores?.[0]?.fornecedorId || ''});
+  else l.push({pecaId: id, qtd: qtd || Math.max(1, Number(p.qtd) || 1), fornecedorId: p.fornecedores?.[0]?.fornecedorId || ''});
   pcPedidoSalvar(l);
 }
 // Abaixo do mínimo ou zerado e que não está no pedido
 const pcFaltando = () => { const no = new Set(pcPedido().map(x => x.pecaId)); return db.pecas.filter(p => !no.has(p.id) && ['zero', 'baixo'].includes(pcSituacao(p).nivel)); };
 function pcMensagem(forn, linhas) {
   const faz = db.settings.farm || 'nossa fazenda', quem = db.settings.owner || '';
-  return `Olá${forn ? ', ' + forn.nome : ''}! Gostaria de uma cotação de peças para a ${faz}:\n` +
+  return `Olá${forn ? ', ' + forn.nome : ''}! Preciso destas peças para a ${faz}:\n` +
     linhas.map(({p, l}) => { const fo = (p.fornecedores || []).find(x => x.fornecedorId === l.fornecedorId); const eq = (p.equivalentes || []).slice(0, 2).map(e => [e.marca, e.codigo].filter(Boolean).join(' ')).join(', ');
-      return `• ${num(l.qtd)} un — ${p.codigo || 's/ código'}${fo?.codigo && fo.codigo !== p.codigo ? ` (seu código ${fo.codigo})` : ''} — ${p.nome}${p.marca ? ' ' + p.marca : ''}${eq ? ` [equivalente: ${eq}]` : ''}`; }).join('\n') +
-    `\n\nPor favor, informe preço, prazo e disponibilidade.${quem ? `\nObrigado, ${quem}.` : ' Obrigado.'}`;
+      const maq = pcAplicaTexto(p, true).slice(0, 2).join(', ') || p.origem?.titulo || '';
+      return `• ${num(l.qtd)} un — ${p.codigo || 's/ código'}${fo?.codigo && fo.codigo !== p.codigo ? ` (seu código ${fo.codigo})` : ''} — ${p.nome}${p.marca ? ' ' + p.marca : ''}${maq ? ` — para ${maq}` : ''}${p.origem?.grupo ? ` (${p.origem.grupo}${p.origem.rep ? `, nº ${p.origem.rep}` : ''})` : ''}${eq ? ` [equivalente: ${eq}]` : ''}${p.codigoRepetido ? ' [confirmar: código igual a outra peça]' : ''}`; }).join('\n') +
+    `\n\nPor favor, confirme se tem e o prazo de entrega.${quem ? `\nObrigado, ${quem}.` : ' Obrigado.'}`;
 }
 const pcFone = s => { let d = String(s || '').replace(/\D/g, ''); if (d.length >= 10 && d.length <= 11) d = '55' + d; return d; };
 VIEWS.pedidopecas = () => {
   if (!pcGestor()) return head('Pedido de peças', 'Só para o ADM e o supervisor.', btn('← Peças', 'nav', 'pecas', 'secondary')) + `<section class="card">${empty('Sem acesso', 'Seu nível de acesso é Usuário comum.')}</section>`;
-  const l = pcPedido(), falt = pcFaltando(), vePreco = pcVeValor();
+  const l = pcPedido(), falt = pcFaltando();
   const grupos = new Map(); l.forEach(x => { const k = x.fornecedorId || ''; if (!grupos.has(k)) grupos.set(k, []); grupos.get(k).push({l: x, p: find('pecas', x.pecaId)}); });
   const sugest = falt.length ? `<section class="card panel pc-falta"><div><strong>${falt.length} ${falt.length === 1 ? 'peça está' : 'peças estão'} sem saldo ou abaixo do mínimo</strong><small>${esc(falt.slice(0, 4).map(p => p.codigo || p.nome).join(', '))}${falt.length > 4 ? '…' : ''}</small></div>${btn('Incluir no pedido', 'pcp-faltando', '', 'secondary')}</section>` : '';
   const linha = ({l: x, p}) => { const fo = (p.fornecedores || []).find(f => f.fornecedorId === x.fornecedorId);
-    return `<div class="pcp-linha" data-pcp="${esc(p.id)}"><input data-pcp-qtd inputmode="decimal" value="${esc(String(x.qtd).replace('.', ','))}" aria-label="Quantidade de ${esc(p.nome)}"><div><strong><span class="pc-cod">${esc(p.codigo || 's/ código')}</span> ${esc(p.nome)}</strong><small>${esc(pcAplicaTexto(p).slice(0, 2).join(', ') || p.marca || '')}${vePreco && fo?.preco ? ` • ${pcBrl(fo.preco)} un (${fmtDate(fo.data)})` : ''}</small></div>
-      <select data-pcp-forn aria-label="Fornecedor"><option value="">Sem fornecedor</option>${db.fornecedores.map(f => `<option value="${esc(f.id)}" ${f.id === x.fornecedorId ? 'selected' : ''}>${esc(f.nome)}${(p.fornecedores || []).some(y => y.fornecedorId === f.id && y.preco) && vePreco ? ' — ' + pcBrl(p.fornecedores.find(y => y.fornecedorId === f.id).preco) : ''}</option>`).join('')}</select><button type="button" class="link del" data-act="pcp-tirar" data-id="${esc(p.id)}" aria-label="Tirar do pedido">✕</button></div>`; };
+    return `<div class="pcp-linha" data-pcp="${esc(p.id)}"><input data-pcp-qtd inputmode="decimal" value="${esc(String(x.qtd).replace('.', ','))}" aria-label="Quantidade de ${esc(p.nome)}"><div><strong><span class="pc-cod">${esc(p.codigo || 's/ código')}</span> ${esc(p.nome)}</strong><small>${esc(pcAplicaTexto(p).slice(0, 2).join(', ') || p.origem?.titulo || p.marca || '')}${fo?.codigo && fo.codigo !== p.codigo ? ` • cód. no fornecedor ${esc(fo.codigo)}` : ''}${p.codigoRepetido ? ' • <span class="pc-aviso">⚠ confirmar código</span>' : ''}</small></div>
+      <select data-pcp-forn aria-label="Fornecedor"><option value="">Sem fornecedor</option>${db.fornecedores.map(f => `<option value="${esc(f.id)}" ${f.id === x.fornecedorId ? 'selected' : ''}>${esc(f.nome)}</option>`).join('')}</select><button type="button" class="link del" data-act="pcp-tirar" data-id="${esc(p.id)}" aria-label="Tirar do pedido">✕</button></div>`; };
   const grupo = ([fid, ls]) => {
     const f = fid ? find('fornecedores', fid) : null, msg = pcMensagem(f, ls), fone = pcFone(f?.whatsapp);
-    const total = vePreco ? ls.reduce((s, {l: x, p}) => s + (Number((p.fornecedores || []).find(y => y.fornecedorId === x.fornecedorId)?.preco) || 0) * (Number(x.qtd) || 0), 0) : 0;
-    return `<section class="card panel pcp-grupo"><header class="pcp-cab"><div><h3>${esc(f?.nome || 'Sem fornecedor escolhido')}</h3><small>${esc([f?.cidade, f?.whatsapp, f?.email].filter(Boolean).join(' • ') || (f ? '' : 'Escolha o fornecedor de cada peça, ou copie a lista'))}</small></div>${total ? `<b class="pcp-total">≈ ${pcBrl(total)}</b>` : ''}</header>
+    return `<section class="card panel pcp-grupo"><header class="pcp-cab"><div><h3>${esc(f?.nome || 'Sem fornecedor escolhido')}</h3><small>${esc([f?.cidade, f?.whatsapp, f?.email].filter(Boolean).join(' • ') || (f ? '' : 'Escolha o fornecedor de cada peça, ou copie a lista'))}</small></div></header>
       ${ls.map(linha).join('')}
       <details class="pcp-msg"><summary>Ver a mensagem</summary><pre>${esc(msg)}</pre></details>
-      <div class="btn-row">${fone ? `<a class="btn primary" href="https://wa.me/${fone}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">WhatsApp</a>` : ''}${f?.email ? `<a class="btn secondary" href="mailto:${esc(f.email)}?subject=${encodeURIComponent('Cotação de peças — ' + (db.settings.farm || 'fazenda'))}&body=${encodeURIComponent(msg)}">E-mail</a>` : ''}<button class="secondary" data-act="pcp-copiar" data-id="${esc(fid)}">Copiar</button></div></section>`;
+      <div class="btn-row">${fone ? `<a class="btn primary" href="https://wa.me/${fone}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">WhatsApp</a>` : ''}${f?.email ? `<a class="btn secondary" href="mailto:${esc(f.email)}?subject=${encodeURIComponent('Pedido de peças — ' + (db.settings.farm || 'fazenda'))}&body=${encodeURIComponent(msg)}">E-mail</a>` : ''}<button class="secondary" data-act="pcp-copiar" data-id="${esc(fid)}">Copiar</button></div></section>`;
   };
-  return head('Pedido de peças', 'Junte as peças, confira as quantidades e mande para cada fornecedor pedir preço e prazo.', btn('← Peças', 'nav', 'pecas', 'secondary') + (l.length ? btn('Limpar pedido', 'pcp-limpar', '', 'secondary') : '')) + sugest +
+  return head('Pedido de peças', 'Junte as peças, confira as quantidades e mande para cada fornecedor com os códigos certos.', btn('← Peças', 'nav', 'pecas', 'secondary') + (l.length ? btn('Limpar pedido', 'pcp-limpar', '', 'secondary') : '')) + sugest +
     (l.length ? [...grupos.entries()].sort(([a], [b]) => (a === '') - (b === '')).map(grupo).join('') : `<section class="card">${empty('Pedido vazio', 'Toque em “🛒 Pedir” nas peças do catálogo, ou inclua as que estão abaixo do mínimo no estoque.', {act: 'nav', id: 'pecas', label: '← Catálogo de peças'})}</section>`);
 };
 TITLES.pedidopecas = 'Máquinas e manutenção';
@@ -309,7 +311,7 @@ async function pcLerXlsx(buf) {
     return Array.from(out, x => String(x ?? '').trim()); });
 }
 const PC_CAMPOS = [['codigo', 'Código *', /^(c[oó]d(igo)?|ref(er[eê]ncia)?|part ?n(o|umber)|sku|item)/i], ['nome', 'Descrição *', /^(descri|produto|nome|item desc)/i], ['marca', 'Marca', /^(marca|fabricante|brand)/i],
-  ['preco', 'Preço', /(pre[cç]o|valor|unit|r\$)/i], ['aplicacao', 'Aplicação / modelo', /(aplica|modelo|m[aá]quina|equip)/i], ['equivalente', 'Código equivalente', /(equival|similar|original|oem|cruzad)/i]];
+  ['aplicacao', 'Aplicação / modelo', /(aplica|modelo|m[aá]quina|equip)/i], ['equivalente', 'Código equivalente', /(equival|similar|original|oem|cruzad)/i]];
 let pci = null; // {arquivo, linhas, cab, mapa, fornecedorId, filtro}
 function pciCabecalho(linhas) {
   for (let i = 0; i < Math.min(10, linhas.length); i++) {
@@ -318,25 +320,24 @@ function pciCabecalho(linhas) {
   }
   return 0;
 }
-const pciPreco = s => { const t = String(s || '').replace(/R\$|\s/g, ''); const n = numeroBR(t); return n > 0 ? Math.round(n * 100) / 100 : ''; };
 const pciFiltradas = () => !pci ? [] : pci.linhas.slice(pci.cab + 1).filter(l => l.some(c => c) && (!pci.filtro || semAcentoApp(l.join(' ')).includes(semAcentoApp(pci.filtro))));
 const pciValor = (l, k) => pci.mapa[k] === '' || pci.mapa[k] == null ? '' : String(l[Number(pci.mapa[k])] ?? '').trim();
 VIEWS.importarpecas = () => {
   if (!pcGestor()) return head('Importar planilha', 'Só para o ADM e o supervisor.', btn('← Peças', 'nav', 'pecas', 'secondary')) + `<section class="card">${empty('Sem acesso', 'Seu nível de acesso é Usuário comum.')}</section>`;
-  const topo = head('Importar planilha de peças', 'Tabela de produtos do fornecedor (Excel ou CSV): código, descrição, marca, preço e aplicação.', btn('← Peças', 'nav', 'pecas', 'secondary'));
+  const topo = head('Importar planilha de peças', 'Tabela de produtos do fornecedor (Excel ou CSV): código, descrição, marca e aplicação. Preço não entra.', btn('← Peças', 'nav', 'pecas', 'secondary'));
   if (!pci) return topo + `<section class="card panel tmi-escolher"><label class="tmi-arquivo"><input type="file" data-pci-arquivo accept=".xlsx,.csv,.txt"><span class="primary">Escolher planilha</span></label>
-    <p class="nota">Peça ao fornecedor a tabela de produtos em Excel (.xlsx) ou CSV. Na próxima tela você diz qual coluna é o código, a descrição e o preço, e escolhe só as linhas que interessam (ex.: “filtro”, “7230”). Código que já está no catálogo só ganha o preço deste fornecedor.</p></section>`;
+    <p class="nota">Peça ao fornecedor a tabela de produtos em Excel (.xlsx) ou CSV. Na próxima tela você diz qual coluna é o código e a descrição, e escolhe só as linhas que interessam (ex.: “filtro”, “7230”). Peça que já está no catálogo (mesmo código e mesma descrição) não é duplicada; o mesmo código com outra descrição entra separado, com aviso para confirmar.</p></section>`;
   const cab = pci.linhas[pci.cab] || [], ncol = Math.max(...pci.linhas.slice(0, 50).map(l => l.length));
   const nomeCol = i => cab[i] ? `${String.fromCharCode(65 + (i % 26))} — ${cab[i]}` : `Coluna ${String.fromCharCode(65 + (i % 26))}`;
   const fl = pciFiltradas(), lim = fl.length > 3000, prev = fl.slice(0, 8);
-  const existe = new Set(db.pecas.map(p => pcNorm(p.codigo)).filter(Boolean)), novos = fl.slice(0, 3000).filter(l => pciValor(l, 'codigo') && !existe.has(pcNorm(pciValor(l, 'codigo')))).length;
+  const existe = new Set(db.pecas.map(p => pcNorm(p.codigo) + '|' + pcNorm(p.nome))), novos = fl.slice(0, 3000).filter(l => pciValor(l, 'codigo') && !existe.has(pcNorm(pciValor(l, 'codigo')) + '|' + pcNorm(pciValor(l, 'nome')))).length;
   return topo + `<section class="card panel"><p class="nota" style="margin-top:0"><b>${esc(pci.arquivo)}</b>: ${pci.linhas.length - pci.cab - 1} linhas.</p>
     <div class="form pci-mapa">${PC_CAMPOS.map(([k, rot]) => `<div class="field"><label>${esc(rot)}</label><select data-pci-col="${k}"><option value="">— não usar —</option>${Array.from({length: ncol}, (_, i) => `<option value="${i}" ${String(pci.mapa[k]) === String(i) ? 'selected' : ''}>${esc(nomeCol(i))}</option>`).join('')}</select></div>`).join('')}
-      <div class="field"><label>Fornecedor dos preços</label><select data-pci-forn><option value="">— sem fornecedor —</option>${db.fornecedores.map(f => `<option value="${esc(f.id)}" ${f.id === pci.fornecedorId ? 'selected' : ''}>${esc(f.nome)}</option>`).join('')}</select><button type="button" class="link" data-act="pci-forn-novo">Cadastrar fornecedor novo</button></div>
+      <div class="field"><label>Fornecedor</label><select data-pci-forn><option value="">— sem fornecedor —</option>${db.fornecedores.map(f => `<option value="${esc(f.id)}" ${f.id === pci.fornecedorId ? 'selected' : ''}>${esc(f.nome)}</option>`).join('')}</select><button type="button" class="link" data-act="pci-forn-novo">Cadastrar fornecedor novo</button></div>
       <div class="field"><label for="pci_filtro">Só as linhas que contêm</label><input id="pci_filtro" data-pci-filtro value="${esc(pci.filtro || '')}" placeholder="Ex.: filtro, 7230, TeeJet (vazio = todas)"></div></div></section>
-    <section class="card panel"><h3 class="pce-tit">Prévia (${fl.length} ${fl.length === 1 ? 'linha' : 'linhas'}${lim ? ' — entram as 3.000 primeiras' : ''})</h3><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Código</th><th>Descrição</th><th>Marca</th><th class="num">Preço</th><th>Aplicação</th></tr></thead><tbody>
-      ${prev.map(l => `<tr><td><span class="pc-cod">${esc(pciValor(l, 'codigo'))}</span></td><td>${esc(pciValor(l, 'nome'))}</td><td>${esc(pciValor(l, 'marca'))}</td><td class="num">${pciPreco(pciValor(l, 'preco')) ? pcBrl(pciPreco(pciValor(l, 'preco'))) : ''}</td><td>${esc(pciValor(l, 'aplicacao'))}</td></tr>`).join('') || '<tr><td colspan="5">Nenhuma linha com esse filtro.</td></tr>'}</tbody></table></div>
-      <p class="nota">${novos} ${novos === 1 ? 'peça nova' : 'peças novas'} e ${Math.min(fl.length, 3000) - novos} já no catálogo (recebem o preço). A aplicação que bater com o modelo de uma máquina da fazenda já fica vinculada.</p>
+    <section class="card panel"><h3 class="pce-tit">Prévia (${fl.length} ${fl.length === 1 ? 'linha' : 'linhas'}${lim ? ' — entram as 3.000 primeiras' : ''})</h3><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Código</th><th>Descrição</th><th>Marca</th><th>Aplicação</th></tr></thead><tbody>
+      ${prev.map(l => `<tr><td><span class="pc-cod">${esc(pciValor(l, 'codigo'))}</span></td><td>${esc(pciValor(l, 'nome'))}</td><td>${esc(pciValor(l, 'marca'))}</td><td>${esc(pciValor(l, 'aplicacao'))}</td></tr>`).join('') || '<tr><td colspan="4">Nenhuma linha com esse filtro.</td></tr>'}</tbody></table></div>
+      <p class="nota">${novos} ${novos === 1 ? 'peça nova' : 'peças novas'} e ${Math.min(fl.length, 3000) - novos} já no catálogo. A aplicação que bater com o modelo de uma máquina da fazenda já fica vinculada.</p>
       <div class="btn-row">${btn('Escolher outra planilha', 'pci-outra', '', 'secondary')}${btn(`Importar ${Math.min(fl.length, 3000)}`, 'pci-importar')}</div></section>`;
 };
 TITLES.importarpecas = 'Máquinas e manutenção';
@@ -362,27 +363,31 @@ Object.assign(ACTIONS, {
   'pci-importar': () => {
     if (!pci || !pcGestor()) return;
     if (pci.mapa.codigo === '' || pci.mapa.nome === '') { showToast('Diga qual coluna é o código e qual é a descrição', true); return; }
-    const linhas = pciFiltradas().slice(0, 3000), mods = pcModelos().filter(g => g.chave.startsWith('mod:') && g.chave.length > 7), hoje = today();
-    const porCod = new Map(); db.pecas.forEach(p => { if (p.codigo) porCod.set(pcNorm(p.codigo), p); (p.equivalentes || []).forEach(e => { if (e.codigo && !porCod.has(pcNorm(e.codigo))) porCod.set(pcNorm(e.codigo), p); }); });
-    let novas = 0, precos = 0;
+    const linhas = pciFiltradas().slice(0, 3000), mods = pcModelos().filter(g => g.chave.startsWith('mod:') && g.chave.length > 7);
+    // Código → peças com esse código (ou equivalente). Mesmo código e mesma descrição = a mesma peça; descrição diferente = outra peça, com aviso
+    const porCod = new Map(), por = (k, p) => { if (!k) return; if (!porCod.has(k)) porCod.set(k, []); if (!porCod.get(k).includes(p)) porCod.get(k).push(p); };
+    db.pecas.forEach(p => { por(pcNorm(p.codigo), p); (p.equivalentes || []).forEach(e => por(pcNorm(e.codigo), p)); });
+    let novas = 0, repetidas = 0;
     linhas.forEach(l => {
       const codigo = pciValor(l, 'codigo').toUpperCase(), nome = pciValor(l, 'nome'); if (!codigo || !nome) return;
-      const preco = pciPreco(pciValor(l, 'preco')), aplic = pciValor(l, 'aplicacao'), equiv = pciValor(l, 'equivalente').toUpperCase();
-      let p = porCod.get(pcNorm(codigo)) || (equiv && porCod.get(pcNorm(equiv)));
+      const aplic = pciValor(l, 'aplicacao'), equiv = pciValor(l, 'equivalente').toUpperCase();
+      const cands = [...(porCod.get(pcNorm(codigo)) || []), ...(equiv ? porCod.get(pcNorm(equiv)) || [] : [])];
+      let p = cands.find(x => pcNorm(x.nome) === pcNorm(nome));
       if (!p) {
         const ap = pcNorm(aplic), modelos = ap ? mods.filter(g => ap.includes(g.chave.slice(4))).map(g => g.chave.slice(4)) : [];
         p = {id: uid(), codigo, nome, marca: pciValor(l, 'marca'), sistema: pcSistemaPeloNome(nome), equivalentes: equiv && pcNorm(equiv) !== pcNorm(codigo) ? [{marca: '', codigo: equiv}] : [], aplica: {modelos, maquinas: []}, aplicacaoTexto: aplic.slice(0, 200), qtd: '', trocaCada: '', trocaUnid: 'h', itemId: '', fornecedores: [], obs: '', criadoEm: new Date().toISOString()};
-        db.pecas.push(p); porCod.set(pcNorm(codigo), p); novas++;
+        const mesmo = porCod.get(pcNorm(codigo)) || [];
+        if (mesmo.length) { p.codigoRepetido = true; mesmo.forEach(x => { x.codigoRepetido = true; }); repetidas++; }
+        db.pecas.push(p); por(pcNorm(codigo), p); novas++;
       }
       if (pci.fornecedorId) {
         p.fornecedores = p.fornecedores || [];
         const f = p.fornecedores.find(x => x.fornecedorId === pci.fornecedorId);
-        if (f) Object.assign(f, {codigo, preco: preco || f.preco, data: preco ? hoje : f.data}); else p.fornecedores.push({fornecedorId: pci.fornecedorId, codigo, preco, data: hoje});
-        precos++;
+        if (f) f.codigo = codigo; else p.fornecedores.push({fornecedorId: pci.fornecedorId, codigo});
       }
     });
     save(); pci = null;
-    showToast(`${novas} ${novas === 1 ? 'peça nova' : 'peças novas'} no catálogo${precos ? ` • preço do fornecedor em ${precos}` : ''}`);
+    showToast(`${novas} ${novas === 1 ? 'peça nova' : 'peças novas'} no catálogo${repetidas ? ` • ${repetidas} com código igual a outra peça (com aviso)` : ''}`);
     go('pecas');
   }
 });

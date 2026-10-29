@@ -24,7 +24,7 @@ const safeStorage = {
 
 // ---------- Banco de dados local ----------
 const DB_KEY = 'agro-db-v1';
-const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs', 'fuel', 'contas', 'colheitas', 'vendas', 'chuvas', 'monitoramentos', 'aplicacoes', 'equipe', 'apontamentos', 'romaneios', 'lotesSecagem', 'movSilo', 'termometrias', 'checklistsGraos', 'referenciasFazenda', 'orcamentos', 'pesagens', 'avaliacoes', 'servicosManut', 'checklistsMaq', 'pecas', 'fornecedores'];
+const COLLECTIONS = ['operations', 'machines', 'hourLogs', 'maintenances', 'fields', 'lots', 'lotEvents', 'stock', 'movements', 'afericoes', 'secagem', 'expenses', 'ubs', 'fuel', 'contas', 'colheitas', 'vendas', 'chuvas', 'monitoramentos', 'aplicacoes', 'equipe', 'apontamentos', 'romaneios', 'lotesSecagem', 'movSilo', 'termometrias', 'checklistsGraos', 'referenciasFazenda', 'orcamentos', 'pesagens', 'avaliacoes', 'servicosManut', 'checklistsMaq', 'pecas', 'fornecedores', 'catalogosPecas'];
 const emptyDb = () => ({version: 1, settings: {farm: '', owner: ''}, ...Object.fromEntries(COLLECTIONS.map(c => [c, []]))});
 // Completa um banco vindo de fora (armazenamento, backup, sincronização): todas as coleções como listas e configurações completas
 function normalizarDb(data) {
@@ -937,7 +937,7 @@ function cartaoMaquina(m) {
     ${extras.length ? `<div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>` : ''}
     <div class="maq-acoes">${isInactive(m) ? '' : (temMedidor(m) ? mini(porKm(m) ? '◷ Odômetro' : '◷ Horímetro', 'hour-new', m.id) : '') + mini('☑ Checklist', 'mcp-novo', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}
       <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">
-        ${mini('🔩 Peças da máquina', 'nav', 'pecas/' + m.id)}${isInactive(m) || !usaCombustivel(m) ? '' : mini('⛽ Abastecimento', 'cb-new', m.id)}${typeof mcpGestor !== 'function' || mcpGestor() ? mini('📊 Indicadores de manutenção', 'nav', 'manutind/' + m.id) : ''}${afere ? mini('◎ Aferição e calibragem', 'af-nova', m.id) : ''}${afere || af ? mini('Histórico de aferições', 'af-maq', m.id) : ''}${afere ? mini('⚙ Configuração para aferição', 'mc-config', m.id) : ''}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${afere || m.catalogo ? mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id) : ''}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
+        ${mini('📘 Catálogo de peças', 'nav', 'pecas/' + m.id)}${isInactive(m) || !usaCombustivel(m) ? '' : mini('⛽ Abastecimento', 'cb-new', m.id)}${typeof mcpGestor !== 'function' || mcpGestor() ? mini('📊 Indicadores de manutenção', 'nav', 'manutind/' + m.id) : ''}${afere ? mini('◎ Aferição e calibragem', 'af-nova', m.id) : ''}${afere || af ? mini('Histórico de aferições', 'af-maq', m.id) : ''}${afere ? mini('⚙ Configuração para aferição', 'mc-config', m.id) : ''}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${afere || m.catalogo ? mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id) : ''}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
       </div></details></div></article>`;
 }
 
