@@ -167,11 +167,11 @@ VIEWS.peca.after = () => {
 TITLES.peca = 'Máquinas e manutenção';
 const pceVolta = () => { const v = pce?._volta || 'pecas'; pce = null; go(v); };
 Object.assign(ACTIONS, {
-  'pce-eq-add': () => { pceLer(); pce.equivalentes.push({marca: '', codigo: ''}); render(); setTimeout(() => $$('[data-pce-eq] [data-k="marca"]').at(-1)?.focus(), 0); },
-  'pce-eq-del': i => { pceLer(); pce.equivalentes.splice(Number(i), 1); render(); },
-  'pce-fo-add': () => { pceLer(); pce.fornecedores.push({fornecedorId: db.fornecedores.length === 1 ? db.fornecedores[0].id : '', codigo: '', preco: '', data: today()}); render(); },
-  'pce-fo-del': i => { pceLer(); pce.fornecedores.splice(Number(i), 1); render(); },
-  'pce-fo-novo': () => { pceLer(); fornecedorForm({}, f => { pce.fornecedores.push({fornecedorId: f.id, codigo: '', preco: '', data: today()}); }); },
+  'pce-eq-add': () => { if (!pce) return; pceLer(); pce.equivalentes.push({marca: '', codigo: ''}); render(); setTimeout(() => $$('[data-pce-eq] [data-k="marca"]').at(-1)?.focus(), 0); },
+  'pce-eq-del': i => { if (!pce) return; pceLer(); pce.equivalentes.splice(Number(i), 1); render(); },
+  'pce-fo-add': () => { if (!pce) return; pceLer(); pce.fornecedores.push({fornecedorId: db.fornecedores.length === 1 ? db.fornecedores[0].id : '', codigo: '', preco: '', data: today()}); render(); },
+  'pce-fo-del': i => { if (!pce) return; pceLer(); pce.fornecedores.splice(Number(i), 1); render(); },
+  'pce-fo-novo': () => { if (!pce) return; pceLer(); fornecedorForm({}, f => { pce.fornecedores.push({fornecedorId: f.id, codigo: '', preco: '', data: today()}); }); },
   'pce-cancelar': () => pceVolta(),
   'pce-salvar': () => {
     if (!pcGestor() || !pce) return;
