@@ -1386,3 +1386,36 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 .catm-grupo>.cards{margin-top:12px}
 .catm-grupo[data-catm-grupo="Inativas"] .catm-tit{color:var(--muted)}
 .catm-grupo[hidden],[data-catm-item][hidden],.catm-nada[hidden],.catm-achados[hidden]{display:none!important}
+/* Talhões no mapa de satélite */
+.tm-caixa{padding:0;overflow:hidden;position:relative}
+.tm-mapa{height:min(66vh,620px);min-height:320px;background:#1d2a1f}
+.tm-aviso{position:absolute;left:12px;right:12px;top:12px;z-index:500;background:rgba(20,28,36,.88);color:#fff;border-radius:10px;padding:9px 12px;font-size:.85rem}
+.tm-aviso[hidden]{display:none}
+.tm-legenda{display:flex;flex-wrap:wrap;gap:6px 14px;padding:10px 14px;font-size:.84rem;color:var(--muted)}
+.tm-leg{display:inline-flex;align-items:center;gap:6px}.tm-leg i{width:14px;height:14px;border-radius:4px;border:1px solid rgba(0,0,0,.25)}
+.leaflet-tooltip.tm-rot{background:rgba(15,23,32,.72);color:#fff;border:0;border-radius:8px;box-shadow:none;padding:3px 8px;font-size:12px;line-height:1.25;text-align:center;white-space:nowrap}
+.leaflet-tooltip.tm-rot::before{display:none}
+.leaflet-tooltip.tm-rot.fraco{background:rgba(15,23,32,.45);font-size:11px}
+.leaflet-tooltip.tm-rot.num{min-width:22px;font-weight:700}
+.tm-vert{background:#ffd400;border:3px solid #fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.6)}
+.tm-vert.prim{background:#ff8a00}
+.tm-vert.peq{border-width:2px}
+.tm-meio{background:rgba(255,255,255,.85);border:2px solid #ffd400;border-radius:50%;opacity:.9}
+.tm-desenho{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+.tm-desenho>.panel{margin:0}
+@media (max-width:900px){.tm-desenho{grid-template-columns:1fr}.tm-mapa{height:58vh}}
+.tmi-escolher{display:flex;flex-direction:column;gap:12px}
+.tmi-arquivo{align-self:flex-start;position:relative;cursor:pointer}
+.tmi-arquivo input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.tmi-arquivo span{display:inline-flex;align-items:center;min-height:46px;padding:10px 20px;border-radius:12px;background:var(--blue);color:#fff;font-weight:700}
+.tmi-fontes{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;color:var(--text)}
+.tmi-lista{max-height:min(66vh,620px);overflow:auto}
+.tmi-it{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+.tmi-it>div{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0}
+.tmi-it small{color:var(--muted)}
+.tmi-it select{width:100%;min-height:42px}
+.tmi-n{flex:0 0 26px;height:26px;border-radius:50%;background:#ffd400;color:#111;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.8rem}
+.tmi-area{display:flex;gap:8px;align-items:center;margin:12px 0;font-size:.9rem}
+@media (max-width:900px){.tmi-lista{max-height:none}}
+.tm-desenho .ctn-num{grid-template-columns:1fr 1fr}
+.tmi-lista .btn-row{position:sticky;bottom:-16px;background:var(--panel);padding:10px 0 4px;margin-bottom:0}
