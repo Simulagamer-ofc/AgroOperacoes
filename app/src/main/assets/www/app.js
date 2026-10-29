@@ -127,6 +127,10 @@ const CARROCERIAS = ['Graneleiro', 'Caçamba', 'Pipa / tanque', 'Comboio de abas
 const TIPOS_KM = ['Caminhonete', 'Carro', 'Moto', 'Caminhão', 'Van/Ônibus'];
 const TIPOS_SEM_MEDIDOR = ['Secador', 'Moega', 'Silo/Armazém', 'Beneficiamento', 'Pré-limpeza', 'Elevador / transportador', 'Tombador', 'Balança', 'Termometria / aeração',
   'Ordenhadeira', 'Resfriador de leite', 'Fábrica de ração', 'Carretel de irrigação', 'Roçadeira costal', 'Motosserra', 'Lavadora de alta pressão', 'Máquina de solda', 'Outro', 'Implemento', 'Preparador de calda'];
+// Sem combustível: unidade de grãos, elétricos e equipamentos sem motor (não aparecem no abastecimento)
+const TIPOS_SEM_COMBUSTIVEL = ['Secador', 'Moega', 'Silo/Armazém', 'Beneficiamento', 'Pré-limpeza', 'Elevador / transportador', 'Tombador', 'Balança', 'Termometria / aeração',
+  'Ordenhadeira', 'Resfriador de leite', 'Fábrica de ração', 'Pivô central', 'Carretel de irrigação', 'Preparador de calda', 'Lavadora de alta pressão', 'Máquina de solda', 'Implemento'];
+const usaCombustivel = m => !!m && !TIPOS_SEM_COMBUSTIVEL.includes(m.type);
 const medidorPadrao = t => TIPOS_KM.includes(t) ? 'km' : TIPOS_SEM_MEDIDOR.includes(t) ? 'nenhum' : 'horas';
 // Cadastro antigo (sem o campo): quem já tinha horas lançadas continua no horímetro
 const medidorDe = m => !m || m.type === 'Implemento' ? 'nenhum' : ['horas', 'km', 'nenhum'].includes(m.medidor) ? m.medidor : Number(m.hours) > 0 ? 'horas' : medidorPadrao(m.type);
@@ -933,7 +937,7 @@ function cartaoMaquina(m) {
     ${extras.length ? `<div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>` : ''}
     <div class="maq-acoes">${isInactive(m) ? '' : (temMedidor(m) ? mini(porKm(m) ? '◷ Odômetro' : '◷ Horímetro', 'hour-new', m.id) : '') + mini('☑ Checklist', 'mcp-novo', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}
       <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">
-        ${isInactive(m) ? '' : mini('⛽ Abastecimento', 'cb-new', m.id)}${typeof mcpGestor !== 'function' || mcpGestor() ? mini('📊 Indicadores de manutenção', 'nav', 'manutind/' + m.id) : ''}${afere ? mini('◎ Aferição e calibragem', 'af-nova', m.id) : ''}${afere || af ? mini('Histórico de aferições', 'af-maq', m.id) : ''}${afere ? mini('⚙ Configuração para aferição', 'mc-config', m.id) : ''}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${afere || m.catalogo ? mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id) : ''}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
+        ${isInactive(m) || !usaCombustivel(m) ? '' : mini('⛽ Abastecimento', 'cb-new', m.id)}${typeof mcpGestor !== 'function' || mcpGestor() ? mini('📊 Indicadores de manutenção', 'nav', 'manutind/' + m.id) : ''}${afere ? mini('◎ Aferição e calibragem', 'af-nova', m.id) : ''}${afere || af ? mini('Histórico de aferições', 'af-maq', m.id) : ''}${afere ? mini('⚙ Configuração para aferição', 'mc-config', m.id) : ''}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${afere || m.catalogo ? mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id) : ''}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
       </div></details></div></article>`;
 }
 

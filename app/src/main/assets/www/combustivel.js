@@ -37,7 +37,7 @@ function resumoConsumo(machineId) {
 }
 
 function abastecimentoForm(machineId) {
-  const ativas = db.machines.filter(m => !isInactive(m));
+  const ativas = db.machines.filter(m => !isInactive(m) && usaCombustivel(m));
   if (!ativas.length) { showToast('Cadastre uma máquina ativa primeiro'); return; }
   const diesel = db.stock.filter(s => s.category === 'Combustível');
   const m0 = machineId ? find('machines', machineId) : null;
@@ -46,7 +46,7 @@ function abastecimentoForm(machineId) {
     sub: 'Para medir o consumo, abasteça até completar o tanque e marque “Tanque cheio”. O consumo é calculado entre dois tanques cheios.',
     values: {machineId, date: today(), cheio: 'Sim', origem: diesel.length ? 'estoque' : 'posto', gasto: 'Sim', itemId: diesel.length === 1 ? diesel[0].id : ''},
     fields: [
-      {k: 'machineId', label: 'Máquina', type: 'select', options: machineOptions, labelAusente: maquinaAusente, required: true, full: true},
+      {k: 'machineId', label: 'Máquina', type: 'select', options: () => machineOptions().filter(o => usaCombustivel(find('machines', o.value)) || o.value === machineId), labelAusente: maquinaAusente, required: true, full: true},
       {k: 'date', label: 'Data', type: 'date', required: true},
       {k: 'liters', label: 'Litros abastecidos', type: 'number', min: 0, required: true},
       {k: 'hours', label: m0 && porKm(m0) ? 'Odômetro no abastecimento (km)' : 'Horímetro no abastecimento (h)', type: 'number', min: 0, required: true, hint: m0 ? `Último registro: ${num(m0.hours)} ${unidMed(m0)}` : ''},
