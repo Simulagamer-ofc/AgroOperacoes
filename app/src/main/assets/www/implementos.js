@@ -126,7 +126,7 @@ function cartaoImplemento(m) {
     <div class="maq-rev ${r.nivel === 'vencida' ? 'rev-vencida' : r.nivel === 'perto' ? 'rev-alerta' : r.nivel === 'ok' ? 'rev-ok' : ''}"><small>${esc(r.texto)}</small>${r.nivel !== 'sem' ? `<div class="progress"><span style="width:${Math.round(r.pct * 100)}%"></span></div>` : ''}</div>
     <div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>
     <div class="maq-acoes">${isInactive(m) ? '' : mini('☑ Checklist', 'mcp-novo', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}${IMPL_AFERICAO.includes(m.tipoImpl) && !isInactive(m) ? mini('◎ Aferição', 'af-nova', m.id) : ''}
-      <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">${typeof mcpGestor !== 'function' || mcpGestor() ? mini('📊 Indicadores de manutenção', 'nav', 'manutind/' + m.id) : ''}${mini('Editar', 'im-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}</div></details></div></article>`;
+      <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">${mini('🔩 Peças do implemento', 'nav', 'pecas/' + m.id)}${typeof mcpGestor !== 'function' || mcpGestor() ? mini('📊 Indicadores de manutenção', 'nav', 'manutind/' + m.id) : ''}${mini('Editar', 'im-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}</div></details></div></article>`;
 }
 // Ordens de manutenção só dos implementos (as das máquinas ficam na aba Máquinas)
 function ordensImplementos(lista) {

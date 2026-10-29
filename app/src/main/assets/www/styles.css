@@ -1419,3 +1419,32 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 @media (max-width:900px){.tmi-lista{max-height:none}}
 .tm-desenho .ctn-num{grid-template-columns:1fr 1fr}
 .tmi-lista .btn-row{position:sticky;bottom:-16px;background:var(--panel);padding:10px 0 4px;margin-bottom:0}
+/* Catálogo de peças */
+.pc-cod{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86em;background:var(--line);border-radius:6px;padding:1px 6px;letter-spacing:.02em;white-space:nowrap}
+.pc-card h4 .pc-cod{margin-right:4px}
+.pc-aviso{color:var(--orange)}
+a.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;min-height:44px;padding:10px 16px;border-radius:12px;font-weight:600}
+a.btn.primary{background:var(--blue);color:#fff}a.btn.secondary{background:var(--panel);color:var(--text);border:1px solid var(--line)}
+.pce .card{margin-bottom:14px}
+.pce-tit{margin:0 0 10px;font-size:1rem}.pce-tit small{font-weight:400;color:var(--muted);margin-left:6px}
+.pc-cod-in{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;text-transform:uppercase}
+.pce-mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;max-height:340px;overflow:auto;margin-bottom:12px}
+.pce-mod{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer}
+.pce-mod:has(input:checked){border-color:var(--green);background:color-mix(in srgb,var(--green) 8%,transparent)}
+.pce-mod input{margin-top:3px;width:18px;height:18px}.pce-mod span{display:flex;flex-direction:column}.pce-mod small{color:var(--muted)}
+.pce-troca{display:flex;gap:8px}.pce-troca input{flex:1;min-width:0}.pce-troca select{width:auto}
+.pce-linha{display:grid;grid-template-columns:1fr 1fr 40px;gap:8px;align-items:center;margin-bottom:8px}
+.pce-linha.forn{grid-template-columns:1.3fr 1fr .8fr .9fr 40px}
+.pce-linha input,.pce-linha select{min-height:42px;min-width:0}
+.pce-linha .del,.pcp-linha .del{color:var(--red);font-size:1.1rem;min-height:40px}
+@media (max-width:700px){.pce-linha.forn{grid-template-columns:1fr 1fr;}.pce-linha.forn select{grid-column:1/-1}.pce-linha.forn .del{justify-self:end}}
+.pc-falta{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;border-left:4px solid var(--orange)}
+.pc-falta small{display:block;color:var(--muted)}
+.pcp-grupo{margin-bottom:14px}.pcp-cab{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:8px}.pcp-cab h3{margin:0}.pcp-cab small{color:var(--muted)}
+.pcp-total{white-space:nowrap}
+.pcp-linha{display:grid;grid-template-columns:64px minmax(0,1fr) minmax(140px,220px) 40px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.pcp-linha input{min-height:42px;text-align:center}.pcp-linha strong{display:block}.pcp-linha small{color:var(--muted)}.pcp-linha select{min-height:42px}
+@media (max-width:700px){.pcp-linha{grid-template-columns:56px minmax(0,1fr) 40px}.pcp-linha select{grid-column:1/-1;grid-row:2}}
+.pcp-msg{margin:10px 0}.pcp-msg pre{white-space:pre-wrap;font-family:inherit;background:var(--bg);border-radius:10px;padding:10px;font-size:.88rem}
+.pci-mapa .link{margin-top:4px;align-self:flex-start}
+.pce-linha input,.pce-linha select,.pcp-linha input,.pcp-linha select,.pci-mapa select{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:var(--bg);color:var(--text);font:inherit}

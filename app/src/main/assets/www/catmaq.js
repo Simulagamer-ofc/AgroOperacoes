@@ -29,7 +29,7 @@ function catmLista(tela, itens, o) {
   const chipF = (g, n, at) => `<button class="${g === filtro ? 'active' : ''}" data-act="catm-filtro" data-id="${esc(tela)}|${esc(g)}">${esc(g || 'Todas')} (${n})${at ? `<span class="catm-dot" title="${at} com atenção"></span>` : ''}</button>`;
   // Barra só quando há o que filtrar (poucos cadastros dispensam)
   const barra = itens.length < 5 && grupos.length < 2 ? '' : `<section class="catm-barra" data-catm-tela="${esc(tela)}">
-    <div class="catm-busca"><input type="search" data-catm-busca="${esc(tela)}" value="${esc(busca)}" placeholder="Buscar por nome, modelo, tipo ou placa" aria-label="Buscar ${esc(o.nome)}" autocomplete="off" enterkeyhint="search">
+    <div class="catm-busca"><input type="search" data-catm-busca="${esc(tela)}" value="${esc(busca)}" placeholder="${esc(o.placeholder || 'Buscar por nome, modelo, tipo ou placa')}" aria-label="Buscar ${esc(o.nome)}" autocomplete="off" enterkeyhint="search">
       <small class="catm-achados" ${busca ? '' : 'hidden'}>${achados} ${achados === 1 ? 'encontrado' : 'encontrados'}</small></div>
     ${grupos.length > 1 ? `<div class="filters catm-chips">${chipF('', itens.length, nAt(ativos))}${grupos.map(([g, l]) => chipF(g, l.length, g === CATM_INATIVAS ? 0 : nAt(l))).join('')}</div>` : ''}</section>`;
   const secao = ([g, l]) => {
