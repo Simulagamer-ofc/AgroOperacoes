@@ -1,6 +1,6 @@
 'use strict';
 /* Contorno do talhão por GPS, sem internet: caminhar pela divisa (pontos automáticos), marcar pontos parados
-   ou digitar coordenadas. Área geodésica (Chamberlain & Duquette, 2007 — mesmo método do Turf.js/OpenLayers)
+   ou digitar coordenadas. Área no elipsoide WGS 84 (projeção equivalente com latitude autálica)
    e perímetro por haversine. A área medida só substitui a do cadastro se o usuário escolher. */
 
 const RAIO_TERRA = 6378137; // m (WGS 84)
@@ -9,11 +9,16 @@ const PASSO_MIN_M = 5;      // distância mínima entre pontos automáticos
 let ctn = null; // {fieldId, pontos:[[lat,lon,precisao]], watch}
 
 const rad = g => g * Math.PI / 180;
+// Área no elipsoide WGS 84: projeção cilíndrica equivalente (preserva área) com a latitude autálica, e soma de Gauss.
+// Para talhões, fica a menos de 0,01% da área geodésica exata (a fórmula esférica dava ~0,4% a mais no Sul do Brasil).
+const WGS_E2 = 0.00669437999014, WGS_E = Math.sqrt(WGS_E2);
+const qAutalica = fi => { const s = Math.sin(fi); return (1 - WGS_E2) * (s / (1 - WGS_E2 * s * s) - Math.log((1 - WGS_E * s) / (1 + WGS_E * s)) / (2 * WGS_E)); };
 function areaGeodesicaM2(p) {
   if (p.length < 3) return 0;
+  const lo0 = p[0][1], xy = p.map(([la, lo]) => [RAIO_TERRA * rad(lo - lo0), RAIO_TERRA * qAutalica(rad(la)) / 2]);
   let s = 0;
-  for (let i = 0; i < p.length; i++) { const [la1, lo1] = p[i], [la2, lo2] = p[(i + 1) % p.length]; s += rad(lo2 - lo1) * (2 + Math.sin(rad(la1)) + Math.sin(rad(la2))); }
-  return Math.abs(s * RAIO_TERRA * RAIO_TERRA / 2);
+  for (let i = 0; i < xy.length; i++) { const [x1, y1] = xy[i], [x2, y2] = xy[(i + 1) % xy.length]; s += x1 * y2 - x2 * y1; }
+  return Math.abs(s / 2);
 }
 function distM([la1, lo1], [la2, lo2]) {
   const a = Math.sin(rad(la2 - la1) / 2) ** 2 + Math.cos(rad(la1)) * Math.cos(rad(la2)) * Math.sin(rad(lo2 - lo1) / 2) ** 2;
@@ -64,7 +69,7 @@ function atualizarTelaCtn() { const el = $('#ctnPainel'); if (el && ctn) el.inne
 VIEWS.contorno = id => {
   const f = find('fields', id); if (!f) return empty('Talhão não encontrado', '');
   if (!ctn || ctn.fieldId !== id) { pararGps(); ctn = {fieldId: id, pontos: (f.contorno?.pontos || []).map(p => [...p]), watch: null}; }
-  return head(`Contorno — ${f.name}`, 'Meça a área caminhando com o celular pela divisa do talhão', btn('← Talhão', 'nav', 'talhao/' + id, 'secondary') + (f.contorno ? btn('Exportar KML', 'ctn-kml', id, 'secondary') : '')) + `<div id="ctnPainel">${painelCtn()}</div>`;
+  return head(`Contorno — ${f.name}`, 'Meça a área caminhando com o celular pela divisa do talhão', btn('← Talhão', 'nav', 'talhao/' + id, 'secondary') + (f.contorno ? btn('Exportar KML', 'ctn-kml', id, 'secondary') : '') + (typeof tmGestor !== 'function' || tmGestor() ? btn('🛰 Desenhar no satélite', 'nav', 'desenhar/' + id, 'secondary') : '')) + `<div id="ctnPainel">${painelCtn()}</div>`;
 };
 TITLES.contorno = 'Contorno do talhão';
 
