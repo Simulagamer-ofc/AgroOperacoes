@@ -4,7 +4,9 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`0.79.2-beta1` — **Correção:** “⛽ Abastecimento” não aparece mais em equipamento sem motor a combustível (secador, moega, silo, beneficiamento, pré-limpeza, elevador, tombador, balança, termometria, ordenhadeira, resfriador de leite, fábrica de ração, pivô, carretel, preparador de calda, lavadora e máquina de solda), nem no cartão nem na lista de máquinas do abastecimento.
+`0.79.3-beta1` — **Correção:** o calendário de aferição (e o lembrete “Aferir agora”) listava qualquer máquina com “Reaferir a cada (dias)” preenchido — secador, caminhão, empilhadeira, tratores. Agora só entram pulverizador, drone, avião, plantadeira, distribuidor e colhedoras (e implementos dessas funções); o campo “Reaferir a cada (dias)” só aparece no cadastro desses tipos. Os valores já gravados ficam guardados, só não geram mais lembrete.
+
+Anterior: `0.79.2-beta1` — **Correção:** “⛽ Abastecimento” não aparece mais em equipamento sem motor a combustível (secador, moega, silo, beneficiamento, pré-limpeza, elevador, tombador, balança, termometria, ordenhadeira, resfriador de leite, fábrica de ração, pivô, carretel, preparador de calda, lavadora e máquina de solda), nem no cartão nem na lista de máquinas do abastecimento.
 
 Anterior: `0.79.1-beta1` — **Correção:** a aferição listava todas as máquinas, inclusive caminhonete, moto, caminhão, silo, balança e máquinas de obra. Agora a aferição (escolha da máquina e os botões do cartão) vale só para quem aplica, planta, aduba, distribui ou colhe — pulverizador, drone, avião, plantadeira, distribuidor, colhedoras e trator, e os implementos dessas funções; a inspeção periódica lista só pulverizadores. Aferições antigas continuam no histórico.
 

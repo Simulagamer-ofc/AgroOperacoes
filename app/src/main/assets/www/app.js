@@ -494,7 +494,7 @@ function machineForm(m = {}) {
       {k: 'nextService', label: 'Próxima revisão em', type: 'number', min: 0, mostrarSe: ['medidor', '!nenhum'], hint: 'Vazio = leitura atual + intervalo'},
       {k: 'revMeses', label: 'Ou revisão a cada (meses)', type: 'number', min: 0, hint: 'Opcional. Vale o que vencer primeiro: o uso ou o tempo. Ex.: óleo a cada 10.000 km ou 6 meses.'},
       {k: 'state', label: 'Situação', type: 'select', options: ['Ativa', 'Inativa'], required: true},
-      {k: 'reaferirDias', label: 'Reaferir a cada (dias)', type: 'number', min: 0, hint: 'Opcional — conforme o seu procedimento de qualidade. Gera lembrete.', mais: true},
+      {k: 'reaferirDias', label: 'Reaferir a cada (dias)', type: 'number', min: 0, hint: 'Aferição de bicos, dose ou perdas — opcional, conforme o seu procedimento de qualidade. Gera lembrete.', mais: true, mostrarSe: ['type', typeof AF_TIPOS_CALENDARIO !== 'undefined' ? AF_TIPOS_CALENDARIO : ['Pulverizador', 'Plantadeira', 'Colheitadeira']]},
       {k: 'docLicenciamento', label: 'Licenciamento (CRLV) vence em', type: 'date', mostrarSe: ['medidor', 'km'], mais: true},
       {k: 'docIpva', label: 'IPVA vence em', type: 'date', mostrarSe: ['medidor', 'km'], mais: true},
       {k: 'docSeguro', label: 'Seguro vence em', type: 'date', mais: true},
