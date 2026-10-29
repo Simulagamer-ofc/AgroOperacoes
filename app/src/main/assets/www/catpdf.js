@@ -102,19 +102,25 @@ function ctpGravar(r, aplica, arquivo) {
 
 // ---------------- Na tela de peças da máquina ----------------
 const ctpEstado = {}; // por máquina: {busca, grupo}
+// Peças do catálogo que têm todas as palavras (ou o código); código exato primeiro
+function ctpAchar(cabs, busca) {
+  const termos = ctpN(busca || '').split(' ').filter(Boolean); if (!termos.length) return [];
+  const exato = pcNorm(busca || ''), achou = cabs.flatMap(c => ctpItens(c).filter(x => termos.every(t => x.txt.includes(t) || (t.length >= 4 && x.codN.includes(t)))).map(x => ({...x, c})));
+  return achou.sort((a, b) => (b.codN === exato) - (a.codN === exato));
+}
+const ctpMaquinasDo = c => db.machines.filter(m => ctpServe(c, m));
+function ctpLinha(x, comMaquina) {
+  return `<div class="ctp-it"><span class="pc-cod">${esc(x.cod)}</span><div><strong>${esc(x.desc)}</strong><small>${esc([comMaquina ? ctpMaquinasDo(x.c).map(m => m.name).join(', ') || x.c.titulo : '', x.grupo, x.rep ? `nº ${x.rep} no desenho` : '', x.desenho ? `desenho na pág. ${x.desenho}` : '', x.qt ? `qtd ${x.qt}` : '', x.obs].filter(Boolean).join(' • '))}</small></div>
+    <div class="row-actions">${mini('Copiar', 'ctp-copiar', x.cod)}${ctpGestor() ? mini('🛒 Pedir', 'ctp-pedir', `${x.c.id}|${x.i}`) : ''}</div></div>`;
+}
+function ctpListaAchados(achou, mais, chave, comMaquina) {
+  const lim = mais ? 400 : 60;
+  return `<p class="nota ctp-cont">${achou.length} ${achou.length === 1 ? 'peça encontrada' : 'peças encontradas'}${achou.length > lim ? ` — mostrando ${lim}` : ''}</p>${achou.slice(0, lim).map(x => ctpLinha(x, comMaquina)).join('') || '<p class="viz-vazio">Nada com essas palavras. Tente só uma (ex.: “rolamento”) ou o código.</p>'}${achou.length > lim ? `<button class="secondary" data-act="ctp-mais" data-id="${esc(chave)}">Mostrar mais</button>` : ''}`;
+}
 function ctpResultados(m) {
   const st = ctpEstado[m.id] || {}, cabs = ctpDaMaquina(m); if (!cabs.length) return '';
-  const termos = ctpN(st.busca || '').split(' ').filter(Boolean);
-  const todos = cabs.flatMap(c => ctpItens(c).map(x => ({...x, c})));
-  const linha = x => `<div class="ctp-it"><span class="pc-cod">${esc(x.cod)}</span><div><strong>${esc(x.desc)}</strong><small>${esc([x.grupo, x.rep ? `nº ${x.rep} no desenho` : '', x.desenho ? `desenho na pág. ${x.desenho}` : '', x.qt ? `qtd ${x.qt}` : '', x.obs].filter(Boolean).join(' • '))}${cabs.length > 1 ? ` • ${esc(x.c.titulo)}` : ''}</small></div>
-    <div class="row-actions">${mini('Copiar', 'ctp-copiar', x.cod)}${ctpGestor() ? mini('🛒 Pedir', 'ctp-pedir', `${x.c.id}|${x.i}|${m.id}`) : ''}</div></div>`;
-  if (termos.length) {
-    const achou = todos.filter(x => termos.every(t => x.txt.includes(t) || (t.length >= 4 && x.codN.includes(t.replace(/ /g, '')))));
-    // Código exato primeiro, depois pela ordem do catálogo
-    const exato = pcNorm(st.busca || ''); achou.sort((a, b) => (b.codN === exato) - (a.codN === exato));
-    const lim = st.mais ? 400 : 60;
-    return `<p class="nota ctp-cont">${achou.length} ${achou.length === 1 ? 'peça encontrada' : 'peças encontradas'}${achou.length > lim ? ` — mostrando ${lim}` : ''}</p>${achou.slice(0, lim).map(linha).join('') || '<p class="viz-vazio">Nada com essas palavras. Tente só uma (ex.: “rolamento”) ou o código.</p>'}${achou.length > lim ? `<button class="secondary" data-act="ctp-mais" data-id="${esc(m.id)}">Mostrar mais</button>` : ''}`;
-  }
+  const linha = x => ctpLinha(x, false);
+  if (ctpN(st.busca || '')) return ctpListaAchados(ctpAchar(cabs, st.busca), st.mais, m.id, false);
   if (st.grupo != null) {
     const [ci, gi] = String(st.grupo).split(':').map(Number), c = cabs[ci], g = c?.grupos?.[gi];
     if (c && g) return `<div class="ctp-voltar"><button class="link" data-act="ctp-grupo" data-id="${esc(m.id)}|">← Conjuntos</button><strong>${esc(g[0])}</strong><small>desenho na pág. ${g[1]} do PDF</small></div>${ctpItens(c).filter(x => x.gi === gi).map(x => linha({...x, c})).join('')}`;
@@ -133,8 +139,17 @@ function ctpSecao(m) {
 document.addEventListener('input', e => {
   const mid = e.target?.dataset?.ctpBusca; if (!mid) return;
   ctpEstado[mid] = {...(ctpEstado[mid] || {}), busca: e.target.value, mais: false};
-  clearTimeout(ctpEstado[mid].t); ctpEstado[mid].t = setTimeout(() => { const m = find('machines', mid), el = $('#ctpRes'); if (m && el) el.innerHTML = ctpResultados(m); }, 150);
+  clearTimeout(ctpEstado[mid].t); ctpEstado[mid].t = setTimeout(ctpAtualizar.bind(null, mid), 150);
 });
+function ctpAtualizar(mid) {
+  if (mid === '*') { const el = $('#ctpResG'); if (el) el.innerHTML = ctpResultadosGeral(); return; }
+  const m = find('machines', mid), el = $('#ctpRes'); if (m && el) el.innerHTML = ctpResultados(m);
+}
+// Busca em todos os catálogos da fazenda (aba Peças e pesquisa geral)
+function ctpResultadosGeral() {
+  const st = ctpEstado['*'] || {}; if (!ctpN(st.busca || '')) return '';
+  return ctpListaAchados(ctpAchar(ctpCabs(), st.busca), st.mais, '*', true);
+}
 // Peça do catálogo → peça da fazenda (para pedir, ligar ao estoque e ao fornecedor)
 function ctpParaPeca(c, x) {
   const ja = db.pecas.find(p => pcNorm(p.codigo) === pcNorm(x.cod) && pcNorm(p.nome) === pcNorm(x.desc));
@@ -146,7 +161,8 @@ function ctpParaPeca(c, x) {
 }
 Object.assign(ACTIONS, {
   'ctp-grupo': id => { const [mid, g] = String(id).split('|'); ctpEstado[mid] = {...(ctpEstado[mid] || {}), grupo: g === '' ? null : g, busca: ''}; render(); },
-  'ctp-mais': mid => { ctpEstado[mid] = {...(ctpEstado[mid] || {}), mais: true}; const m = find('machines', mid), el = $('#ctpRes'); if (m && el) el.innerHTML = ctpResultados(m); },
+  'ctp-mais': mid => { ctpEstado[mid] = {...(ctpEstado[mid] || {}), mais: true}; ctpAtualizar(mid); },
+  'ctp-abrir': id => { const [mid, ...q] = String(id).split('|'); ctpEstado[mid] = {busca: q.join('|')}; go('pecas/' + mid); },
   'ctp-copiar': cod => { (navigator.clipboard?.writeText(cod) || Promise.reject()).then(() => showToast(`Código ${cod} copiado`), () => showToast(`Código: ${cod}`)); },
   'ctp-pedir': id => {
     if (!ctpGestor()) return;
@@ -173,16 +189,20 @@ VIEWS.importarcatalogo = mid => {
   if (!ctpi.r) return topo + `<section class="card panel tmi-escolher"><label class="tmi-arquivo"><input type="file" data-ctp-arquivo accept="application/pdf,.pdf"><span class="primary">Escolher o PDF do catálogo</span></label>
       <p class="nota">Use o catálogo oficial de peças do fabricante (o PDF que a concessionária ou o site da marca fornece). O app guarda só a lista de peças — o PDF continua com você, para ver os desenhos.</p>
       <p class="nota">Formatos que o app já lê: <b>Kuhn</b>. Se o seu catálogo for de outra marca e o app não reconhecer, mande o PDF para incluirmos.</p>${pcBotaoFabricante(m) ? `<div class="btn-row">${pcBotaoFabricante(m)}</div>` : ''}</section>`;
-  const r = ctpi.r, mods = pcModelos(), k0 = m.model && pcNorm(m.model) ? 'mod:' + pcNorm(m.model) : 'maq:' + m.id;
-  const sel = ctpi.marcados || [k0];
+  const r = ctpi.r, sel = ctpi.marcados || ['maq:' + m.id];
+  // Vale para a máquina escolhida; outras máquinas iguais (mesmo modelo) podem ser marcadas junto
+  const ativas = db.machines.filter(x => !isInactive(x) && x.id !== m.id).sort((a, b) => String(a.name).localeCompare(String(b.name), 'pt-BR', {numeric: true}));
+  const iguais = ativas.filter(x => m.model && pcNorm(x.model) === pcNorm(m.model)), outras = ativas.filter(x => !iguais.includes(x));
+  const caixa = (x, extra) => `<label class="pce-mod"><input type="checkbox" data-ctp-mod value="maq:${esc(x.id)}" ${sel.includes('maq:' + x.id) ? 'checked' : ''}><span><b>${esc(x.name)}</b><small>${esc([x.type === 'Implemento' ? x.tipoImpl : x.type, x.model, extra].filter(Boolean).join(' • '))}</small></span></label>`;
   const casa = ctpN(r.titulo).split(' ').filter(t => t.length > 2).some(t => ctpN(`${m.model} ${m.name}`).includes(t));
   return topo + `<section class="card panel"><h3 class="pce-tit">📘 ${esc([r.fabricante, r.titulo].filter(Boolean).join(' ') || ctpi.arquivo)}</h3>
       <div class="ctn-num"><div><span>Peças</span><b>${num(r.itens.length)}</b></div><div><span>Códigos</span><b>${num(new Set(r.itens.map(x => x[0])).size)}</b></div><div><span>Conjuntos</span><b>${r.grupos.length}</b></div><div><span>Páginas</span><b>${r.paginas}</b></div></div>
       ${r.serie ? `<p class="nota">Números de série: ${esc(r.serie)}${r.docId ? ` • catálogo ${esc(r.docId)}` : ''}</p>` : ''}
       ${!casa && r.titulo ? `<p class="pc-aviso">⚠ O catálogo é do <b>${esc(r.titulo)}</b> e esta máquina está cadastrada como <b>${esc(m.model || m.name)}</b>. Confira se é o catálogo certo.</p>` : ''}
       <p class="nota">Primeiros conjuntos: ${esc(r.grupos.slice(0, 8).map(g => g[0]).join(', '))}${r.grupos.length > 8 ? '…' : ''}</p></section>
-    <section class="card panel"><h3 class="pce-tit">Serve em</h3><p class="nota">Marque o modelo: vale para todas as máquinas dele na fazenda.</p>
-      <div class="pce-mods">${mods.map(gr => `<label class="pce-mod"><input type="checkbox" data-ctp-mod value="${esc(gr.chave)}" ${sel.includes(gr.chave) ? 'checked' : ''}><span><b>${esc(gr.rotulo)}</b><small>${esc(gr.tipo)} • ${esc(gr.maquinas.map(x => x.name).join(', '))}</small></span></label>`).join('')}</div>
+    <section class="card panel"><h3 class="pce-tit">Vinculado a</h3><p class="nota">O catálogo fica nesta máquina. Se a fazenda tiver outra igual, marque também.</p>
+      <div class="pce-mods">${caixa(m, 'esta máquina')}${iguais.map(x => caixa(x, 'mesmo modelo')).join('')}</div>
+      ${outras.length ? `<details class="ctp-outras"><summary>Outras máquinas e implementos (${outras.length})</summary><div class="pce-mods">${outras.map(x => caixa(x)).join('')}</div></details>` : ''}
       <div class="actions"><button class="secondary" data-act="ctp-outro">Escolher outro PDF</button><button class="primary" data-act="ctp-salvar">Salvar catálogo</button></div></section>`;
 };
 TITLES.importarcatalogo = 'Máquinas e manutenção';
@@ -203,22 +223,59 @@ Object.assign(ACTIONS, {
   'ctp-outro': () => { if (ctpi) { ctpi.r = null; ctpi.marcados = null; } render(); },
   'ctp-salvar': () => {
     if (!ctpi?.r || !ctpGestor()) return;
-    const m = find('machines', ctpi.maqId), marc = ctpi.marcados || [m.model && pcNorm(m.model) ? 'mod:' + pcNorm(m.model) : 'maq:' + m.id];
-    if (!marc.length) { showToast('Marque em qual modelo o catálogo serve', true); return; }
+    const m = find('machines', ctpi.maqId), marc = ctpi.marcados || ['maq:' + m.id];
+    if (!marc.length) { showToast('Marque pelo menos uma máquina', true); return; }
     const aplica = {modelos: marc.filter(v => v.startsWith('mod:')).map(v => v.slice(4)), maquinas: marc.filter(v => v.startsWith('maq:')).map(v => v.slice(4))};
     const c = ctpGravar(ctpi.r, aplica, ctpi.arquivo); ctpi = null;
     showToast(`Catálogo ${c.titulo} salvo: ${num(c.total)} peças`); go('pecas/' + m.id);
   }
 });
 
+// Aba Peças: catálogos importados e o atalho para importar o de uma máquina
+function ctpLista() {
+  const cabs = ctpCabs(), g = ctpGestor();
+  const linhas = cabs.map(c => { const ms = db.machines.filter(m => ctpServe(c, m));
+    return `<div class="list-row"><div><strong>📘 ${esc([c.fabricante, c.titulo].filter(Boolean).join(' '))}</strong><small>${esc([ms.map(m => m.name).join(', ') || 'sem máquina vinculada', `${num(c.total)} peças`].join(' • '))}</small></div><div class="row-actions">${ms[0] ? mini('Abrir', 'nav', 'pecas/' + ms[0].id) : ''}</div></div>`; }).join('');
+  return `<section class="card panel ctp-lista"><div class="ctp-cab"><div><h3>📘 Catálogos dos fabricantes</h3><small>O PDF oficial de peças de cada máquina: busque a peça pelo nome e veja o código e o desenho.</small></div>${g ? btn('Importar catálogo (PDF)', 'ctp-escolher') : ''}</div>
+    ${cabs.length ? `<div class="catm-busca"><input type="search" data-ctp-busca="*" value="${esc(ctpEstado['*']?.busca || '')}" placeholder="Buscar peça em todos os catálogos: rolamento, filtro de ar… ou o código" aria-label="Buscar peça em todos os catálogos" autocomplete="off" enterkeyhint="search"></div><div class="ctp-res" id="ctpResG">${ctpResultadosGeral()}</div>` : ''}
+    ${linhas ? `<details class="ctp-cats" ${cabs.length <= 3 ? 'open' : ''}><summary>Catálogos importados (${cabs.length})</summary><div class="list">${linhas}</div></details>` : '<p class="nota" style="margin:0">Nenhum catálogo importado ainda. Toque em “Importar catálogo (PDF)” e escolha a máquina.</p>'}</section>`;
+}
+ACTIONS['ctp-escolher'] = () => {
+  if (!ctpGestor()) return;
+  const ord = typeof grupoDoTipoMaq === 'function' ? GRUPOS_TIPO_MAQ.map(([gr]) => gr) : [];
+  const ops = db.machines.filter(m => !isInactive(m)).map(m => ({value: m.id, label: `${m.name}${m.model ? ' — ' + m.model : ''}`, grupo: m.type === 'Implemento' ? 'Implementos' : (typeof grupoDoTipoMaq === 'function' ? grupoDoTipoMaq(m.type) : 'Máquinas')}))
+    .sort((a, b) => ((ord.indexOf(a.grupo) + 1 || 99) - (ord.indexOf(b.grupo) + 1 || 99)) || a.label.localeCompare(b.label, 'pt-BR', {numeric: true}));
+  if (!ops.length) { showToast('Cadastre a máquina primeiro', true); return; }
+  openForm({title: 'Importar catálogo de peças', sub: 'Escolha a máquina ou o implemento do catálogo. Depois você escolhe o PDF.', submit: 'Continuar',
+    fields: [{k: 'maq', label: 'Máquina ou implemento', type: 'select', options: ops, required: true, full: true}],
+    onSubmit: v => { setTimeout(() => go('importarcatalogo/' + v.maq), 0); }});
+};
+
 // Peças da máquina: o catálogo do fabricante vem primeiro
 {
   const pecasSemCatalogo = VIEWS.pecas;
   VIEWS.pecas = arg => {
     const html = pecasSemCatalogo(arg), m = arg ? find('machines', arg) : null;
-    if (!m) return html;
     const i = html.indexOf('</section>', html.indexOf('class="view-head"')) + '</section>'.length;
+    if (!m) return html.slice(0, i) + ctpLista() + html.slice(i);
     return html.slice(0, i) + ctpSecao(m) + `<div class="section-title"><h3>Peças da fazenda</h3><small class="nota">cadastradas, importadas de planilha ou salvas do catálogo</small></div>` + html.slice(i);
   };
 }
 if (typeof NV_ROTA_TELA === 'object') NV_ROTA_TELA.importarcatalogo = 'maquinas';
+
+// Pesquisa geral do sistema: peças dos catálogos e do cadastro de peças
+{
+  const buscaSemPecas = VIEWS.busca;
+  VIEWS.busca = q => {
+    let html = buscaSemPecas(q); const termo = decodeURIComponent(q || '').trim(); if (ctpN(termo).length < 3) return html;
+    const doCat = ctpAchar(ctpCabs(), termo).slice(0, 30);
+    const cad = db.pecas.filter(p => ctpN(`${p.codigo} ${p.nome} ${p.marca} ${(p.equivalentes || []).map(e => e.codigo).join(' ')}`).includes(ctpN(termo)) || pcNorm(p.codigo) === pcNorm(termo)).slice(0, 30);
+    if (!doCat.length && !cad.length) return html;
+    const linhaCat = x => { const m = ctpMaquinasDo(x.c)[0]; return `<div class="row clickable" data-act="${m ? 'ctp-abrir' : 'nav'}" data-id="${esc(m ? `${m.id}|${termo}` : 'pecas')}" style="cursor:pointer"><span class="status blue"></span><div><strong><span class="pc-cod">${esc(x.cod)}</span> ${esc(x.desc)}</strong><small>${esc([ctpMaquinasDo(x.c).map(y => y.name).join(', '), x.grupo, x.desenho ? `desenho pág. ${x.desenho}` : ''].filter(Boolean).join(' • '))}</small></div></div>`; };
+    const linhaCad = p => `<div class="row clickable" data-act="nav" data-id="${esc(pcGestor() ? 'peca/' + p.id : 'pecas')}" style="cursor:pointer"><span class="status blue"></span><div><strong><span class="pc-cod">${esc(p.codigo || 's/ código')}</span> ${esc(p.nome)}</strong><small>${esc(pcAplicaTexto(p).join(', ') || p.marca || '')}</small></div></div>`;
+    const bloco = `<div class="section-title"><h3>Peças (${doCat.length + cad.length})</h3></div><section class="card list">${doCat.map(linhaCat).join('')}${cad.map(linhaCad).join('')}</section>`;
+    html = html.replace(`<section class="card">${empty('Nada encontrado', 'Tente outro termo.')}</section>`, '');
+    const i = html.indexOf('</section>', html.indexOf('class="view-head"')) + '</section>'.length;
+    return html.slice(0, i) + bloco + html.slice(i);
+  };
+}
