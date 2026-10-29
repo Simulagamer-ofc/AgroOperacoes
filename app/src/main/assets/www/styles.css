@@ -1465,3 +1465,7 @@ a.btn.primary{background:var(--blue);color:#fff}a.btn.secondary{background:var(-
 .ctp-vazio{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;border-left:4px solid var(--blue);margin-bottom:18px}
 .ctp-vazio small{display:block;color:var(--muted);max-width:640px}
 .ctp-lendo{display:flex;flex-direction:column;gap:8px}.ctp-lendo small{color:var(--muted)}
+.ctp-link{padding:0;min-height:0;text-align:left;font-weight:600;color:var(--blue)}
+.ctp-lista{margin-bottom:18px}.ctp-lista .catm-busca{margin:4px 0 10px}
+.ctp-cats>summary{cursor:pointer;color:var(--muted);font-size:.9rem;margin:6px 0}
+.ctp-outras{margin-top:10px}.ctp-outras>summary{cursor:pointer;color:var(--muted);margin-bottom:8px}

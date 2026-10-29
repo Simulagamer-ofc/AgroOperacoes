@@ -37,9 +37,16 @@ function pcModelos() {
 const pcServe = (p, m) => !!m && ((p.aplica?.maquinas || []).includes(m.id) || (!!m.model && (p.aplica?.modelos || []).includes(pcNorm(m.model))));
 const pcDaMaquina = m => db.pecas.filter(p => pcServe(p, m));
 const pcEstoque = p => p?.itemId ? find('stock', p.itemId) : null;
+// Onde a peça serve: o modelo inteiro (todas as máquinas dele) ou máquinas escolhidas
 const pcAplicaTexto = (p, semQtd) => {
-  const mods = pcModelos().filter(g => g.chave.startsWith('mod:') ? (p.aplica?.modelos || []).includes(g.chave.slice(4)) : (p.aplica?.maquinas || []).includes(g.chave.slice(4)));
-  return mods.map(g => g.rotulo + (!semQtd && g.maquinas.length > 1 ? ` (${g.maquinas.length})` : ''));
+  const ap = p.aplica || {}, out = [];
+  pcModelos().forEach(g => {
+    const porModelo = g.chave.startsWith('mod:');
+    if (porModelo && (ap.modelos || []).includes(g.chave.slice(4))) { out.push(g.rotulo + (!semQtd && g.maquinas.length > 1 ? ` (${g.maquinas.length})` : '')); return; }
+    const ms = g.maquinas.filter(m => (ap.maquinas || []).includes(m.id)); if (!ms.length) return;
+    out.push(semQtd ? g.rotulo : porModelo ? `${ms.map(m => m.name).join(', ')} (${g.rotulo})` : ms.map(m => m.name).join(', '));
+  });
+  return out;
 };
 // Saldo do estoque: sem, abaixo do mínimo, ok
 function pcSituacao(p) {
@@ -91,7 +98,7 @@ VIEWS.pecas = arg => {
   const lista = (m ? pcDaMaquina(m) : db.pecas.slice()).sort((a, b) => String(a.nome).localeCompare(String(b.nome), 'pt-BR', {numeric: true}));
   const botoes = (g ? btn('Importar planilha', 'nav', 'importarpecas', 'secondary') + btn('Fornecedores', 'nav', 'fornecedores', 'secondary') + btn(`🛒 Pedido${ped ? ` (${ped})` : ''}`, 'nav', 'pedidopecas', 'secondary') : '') + (g ? btn('+ Nova peça', 'nav', 'peca/novo' + (m ? '~' + m.id : '')) : '');
   const topo = m ? head(`Peças — ${m.name}`, [m.type === 'Implemento' ? m.tipoImpl : m.type, m.model].filter(Boolean).join(' • ') || 'Peças desta máquina', btn('← Todas as peças', 'nav', 'pecas', 'secondary') + pcBotaoFabricante(m) + botoes)
-    : head('Catálogo de peças', `${db.pecas.length} ${db.pecas.length === 1 ? 'peça' : 'peças'} • por modelo de máquina, com estoque e fornecedores`, botoes);
+    : head('Catálogo de peças', `Catálogos dos fabricantes das máquinas e ${db.pecas.length} ${db.pecas.length === 1 ? 'peça cadastrada' : 'peças cadastradas'} pela fazenda`, botoes);
   const usadas = m && g ? pcUsadasForaDoCatalogo(m) : [];
   const blocoUsadas = usadas.length ? `<div class="section-title"><h3>Usadas nas ordens e fora do catálogo (${usadas.length})</h3></div><section class="card list">${usadas.map(u => `<div class="list-row"><div><strong>${esc(u.s.name)}</strong><small>${[u.s.codigo ? 'código ' + u.s.codigo : '', `${u.vezes} ${u.vezes === 1 ? 'vez' : 'vezes'}`, u.ultima ? 'última em ' + fmtDate(u.ultima) : ''].filter(Boolean).map(esc).join(' • ')}</small></div><div class="row-actions">${mini('+ Pôr no catálogo', 'nav', `peca/novo~${m.id}~${u.s.id}`)}</div></div>`).join('')}</section>` : '';
   const vazio = `<section class="card">${empty(m ? 'Nenhuma peça desta máquina no catálogo' : 'Catálogo vazio', m ? 'Cadastre as peças que esta máquina usa (filtros, correias, rolamentos…) ou consulte o catálogo do fabricante e copie o código.' : 'Cadastre as peças por modelo de máquina, ou importe a planilha de produtos do seu fornecedor (código, descrição e preço).', g ? {act: 'nav', id: 'peca/novo' + (m ? '~' + m.id : ''), label: '+ Nova peça'} : null)}</section>`;
