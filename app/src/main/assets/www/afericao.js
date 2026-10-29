@@ -204,6 +204,9 @@ const AF_TIPOS_MAQ = ['Pulverizador', 'Drone de pulverização', 'Avião agríco
 const AF_TIPOS_IMPL = ['Plantadeira', 'Semeadora', 'Plantadora de cana', 'Plantadora de batata / mandioca', 'Transplantadora de mudas', 'Pulverizador de arrasto', 'Pulverizador montado (3 pontos)', 'Atomizador / turbo (pomar e café)',
   'Distribuidor de adubo/calcário', 'Distribuidor de esterco / chorume', 'Plataforma de colheita', 'Plataforma de milho', 'Outro'];
 const afAferivel = m => !!m && (m.type === 'Implemento' ? !m.tipoImpl || AF_TIPOS_IMPL.includes(m.tipoImpl) : AF_TIPOS_MAQ.includes(m.type));
+// Calendário e lembrete de reaferição: só o que tem aferição própria (sem trator e “Outro”, que só aparecem na escolha da máquina)
+const AF_TIPOS_CALENDARIO = AF_TIPOS_MAQ.filter(t => !['Trator', 'Microtrator / tobata', 'Outro'].includes(t));
+const afCalendario = m => !!m && (m.type === 'Implemento' ? afAferivel(m) : AF_TIPOS_CALENDARIO.includes(m.type));
 // Inspeção periódica (ISO 16122): só pulverização
 const AF_PULVERIZACAO = ['Pulverizador', 'Drone de pulverização', 'Avião agrícola', 'Pulverizador de arrasto', 'Pulverizador montado (3 pontos)', 'Atomizador / turbo (pomar e café)'];
 const afPulverizacao = m => !!m && (AF_PULVERIZACAO.includes(m.type === 'Implemento' ? m.tipoImpl : m.type) || m.type === 'Outro' || (m.type === 'Implemento' && (!m.tipoImpl || m.tipoImpl === 'Outro')));
@@ -905,8 +908,8 @@ function avisoPulverizador(machineId) {
   if (r.vencida && r.dias !== null && !p.length) p.push(`a aferição está atrasada há ${-r.dias} dias`);
   return p.join('; ');
 }
-const temCalendario = m => !isInactive(m) && situacaoReaferir(m).proxima !== undefined;
-const textoReaferir = m => { const r = situacaoReaferir(m); if (r.proxima === undefined) return ''; return r.vencida ? (r.dias === null ? `! Reaferição: nunca aferida (a cada ${num(m.reaferirDias)} dias)` : `! Reaferição atrasada há ${-r.dias} dias (${r.motivo})`) : `Próxima aferição: ${fmtDate(r.proxima)}${r.dias <= 7 ? ` (em ${r.dias} d)` : ''} — ${r.motivo}`; };
+const temCalendario = m => !isInactive(m) && afCalendario(m) && situacaoReaferir(m).proxima !== undefined;
+const textoReaferir = m => { if (!afCalendario(m)) return ''; const r = situacaoReaferir(m); if (r.proxima === undefined) return ''; return r.vencida ? (r.dias === null ? `! Reaferição: nunca aferida (a cada ${num(m.reaferirDias)} dias)` : `! Reaferição atrasada há ${-r.dias} dias (${r.motivo})`) : `Próxima aferição: ${fmtDate(r.proxima)}${r.dias <= 7 ? ` (em ${r.dias} d)` : ''} — ${r.motivo}`; };
 ACTIONS['af-maq'] = id => { afMaqFiltro = id || ''; go('afericao'); };
 const alertasBase = alerts;
 alerts = function () {
