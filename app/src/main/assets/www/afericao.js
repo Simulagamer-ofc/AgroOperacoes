@@ -198,6 +198,15 @@ const TIPO_UI = {
   transversal: {icone: '↔', curto: 'Distribuidor a lanço', para: 'Uniformidade nas bandejas (CV)'},
   perdas: {icone: '🌾', curto: 'Perdas na colheita', para: 'kg/ha de grãos perdidos atrás da colhedora'}
 };
+// Quem passa por aferição: pulverização, plantio e adubação, distribuição e colheita.
+// Veículos, máquinas de obra, unidade de grãos e ferramentas ficam de fora (o trator entra: às vezes a plantadeira ou o pulverizador estão nele).
+const AF_TIPOS_MAQ = ['Pulverizador', 'Drone de pulverização', 'Avião agrícola', 'Plantadeira', 'Distribuidor autopropelido', 'Colheitadeira', 'Colhedora de forragem', 'Colhedora de cana', 'Colhedora de café', 'Colhedora de algodão', 'Trator', 'Microtrator / tobata', 'Outro'];
+const AF_TIPOS_IMPL = ['Plantadeira', 'Semeadora', 'Plantadora de cana', 'Plantadora de batata / mandioca', 'Transplantadora de mudas', 'Pulverizador de arrasto', 'Pulverizador montado (3 pontos)', 'Atomizador / turbo (pomar e café)',
+  'Distribuidor de adubo/calcário', 'Distribuidor de esterco / chorume', 'Plataforma de colheita', 'Plataforma de milho', 'Outro'];
+const afAferivel = m => !!m && (m.type === 'Implemento' ? !m.tipoImpl || AF_TIPOS_IMPL.includes(m.tipoImpl) : AF_TIPOS_MAQ.includes(m.type));
+// Inspeção periódica (ISO 16122): só pulverização
+const AF_PULVERIZACAO = ['Pulverizador', 'Drone de pulverização', 'Avião agrícola', 'Pulverizador de arrasto', 'Pulverizador montado (3 pontos)', 'Atomizador / turbo (pomar e café)'];
+const afPulverizacao = m => !!m && (AF_PULVERIZACAO.includes(m.type === 'Implemento' ? m.tipoImpl : m.type) || m.type === 'Outro' || (m.type === 'Implemento' && (!m.tipoImpl || m.tipoImpl === 'Outro')));
 // Tipo de máquina cadastrado que costuma servir a cada família (para sugerir primeiro)
 const TIPO_MAQ_FAMILIA = {pulverizador_barra: ['Pulverizador'], semeadora_precisao: ['Plantadeira'], semeadora_fluxo_continuo: ['Plantadeira'],
   adubadora_linha: ['Plantadeira', 'Implemento'], distribuidor_lanco: ['Implemento'], colhedora: ['Colheitadeira']};
@@ -363,7 +372,7 @@ function passoWizard() {
   if (w.passo === 1) {
     const fams = w.tipo ? TIPOS[w.tipo].familias : [];
     const comp = TIPO_MAQ_FAMILIA[w.familia] || fams.flatMap(f => TIPO_MAQ_FAMILIA[f] || []);
-    const ord = db.machines.slice().sort((a, b) => comp.includes(b.type) - comp.includes(a.type) || a.name.localeCompare(b.name));
+    const ord = db.machines.filter(m => (!isInactive(m) && afAferivel(m)) || m.id === w.machineId).sort((a, b) => comp.includes(b.type) - comp.includes(a.type) || a.name.localeCompare(b.name));
     const maqs = ord.map(m => [m.id, `${m.name}${m.catalogo ? ' — ' + m.catalogo.marca + ' ' + m.catalogo.nome : ''}`]);
     const resumoExtra = [w.data === today() ? 'hoje' : fmtDate(w.data), w.hora, w.responsavel, fieldName(w.fieldId)].filter(Boolean).join(' • ');
     // Escolhida a avaliação, só ela fica à vista (com “Trocar”) e a máquina aparece logo abaixo

@@ -95,7 +95,7 @@ function viewInspecao() {
   if (!insp) novaInspecao();
   if (!podeInspecionar()) return head('Inspeção periódica', '') + `<section class="card">${empty('Só para funções técnicas', 'A inspeção periódica é feita pelo agrônomo, chefe de oficina, supervisor ou ADM.', {act: 'nav', id: 'afericao', label: 'Voltar'})}</section>`;
   const ins = insp, res = resultadoInspecao(ins), g = res.grupos;
-  const pulvs = db.machines.filter(m => !isInactive(m)).sort((a, b) => (b.type === 'Pulverizador') - (a.type === 'Pulverizador') || a.name.localeCompare(b.name));
+  const pulvs = db.machines.filter(m => (!isInactive(m) && (typeof afPulverizacao !== 'function' || afPulverizacao(m))) || m.id === ins.machineId).sort((a, b) => (b.type === 'Pulverizador') - (a.type === 'Pulverizador') || a.name.localeCompare(b.name));
   const feitos = INSP_GRUPOS.length - res.faltam.length;
   const campoI = (k, label, v, attrs = '', full = false) => `<div class="field ${full ? 'full' : ''}"><label for="in_${k.replace(/\./g, '_')}">${esc(label)}</label><input id="in_${k.replace(/\./g, '_')}" data-insp="${k}" value="${esc(v ?? '')}" ${attrs}></div>`;
   const cartao = gr => {

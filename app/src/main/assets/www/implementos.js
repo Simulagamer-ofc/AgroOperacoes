@@ -29,7 +29,7 @@ const IMPL_DA_OP = {
   'Transporte': ['Carreta graneleira', 'Transbordo', 'Carreta / reboque', 'Carreta pipa / tanque', 'Carreta de abastecimento (comboio)', 'Vagão forrageiro / misturador', 'Carregador frontal / concha', 'Garfo / pinça de fardos']
 };
 // Implementos com aferição (dosagem de semente, adubo ou calda)
-const IMPL_AFERICAO = ['Plantadeira', 'Semeadora', 'Pulverizador de arrasto', 'Pulverizador montado (3 pontos)', 'Distribuidor de adubo/calcário'];
+const IMPL_AFERICAO = ['Plantadeira', 'Semeadora', 'Plantadora de cana', 'Plantadora de batata / mandioca', 'Pulverizador de arrasto', 'Pulverizador montado (3 pontos)', 'Atomizador / turbo (pomar e café)', 'Distribuidor de adubo/calcário', 'Distribuidor de esterco / chorume', 'Plataforma de colheita', 'Plataforma de milho'];
 const ehImplemento = m => m?.type === 'Implemento';
 const implementos = () => db.machines.filter(ehImplemento);
 function implementoOptions(tipoOp) {
@@ -125,7 +125,7 @@ function cartaoImplemento(m) {
     <div class="maq-horas"><span class="big">${num(u.haTotal)} ha</span><small>trabalhados no total</small></div>
     <div class="maq-rev ${r.nivel === 'vencida' ? 'rev-vencida' : r.nivel === 'perto' ? 'rev-alerta' : r.nivel === 'ok' ? 'rev-ok' : ''}"><small>${esc(r.texto)}</small>${r.nivel !== 'sem' ? `<div class="progress"><span style="width:${Math.round(r.pct * 100)}%"></span></div>` : ''}</div>
     <div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>
-    <div class="maq-acoes">${isInactive(m) ? '' : mini('☑ Checklist', 'mcp-novo', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}${IMPL_AFERICAO.includes(m.tipoImpl) ? mini('◎ Aferição', 'af-nova', m.id) : ''}
+    <div class="maq-acoes">${isInactive(m) ? '' : mini('☑ Checklist', 'mcp-novo', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}${IMPL_AFERICAO.includes(m.tipoImpl) && !isInactive(m) ? mini('◎ Aferição', 'af-nova', m.id) : ''}
       <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">${typeof mcpGestor !== 'function' || mcpGestor() ? mini('📊 Indicadores de manutenção', 'nav', 'manutind/' + m.id) : ''}${mini('Editar', 'im-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}</div></details></div></article>`;
 }
 // Ordens de manutenção só dos implementos (as das máquinas ficam na aba Máquinas)
