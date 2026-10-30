@@ -1442,6 +1442,7 @@ a.btn.primary{background:var(--blue);color:#fff}a.btn.secondary{background:var(-
 .pc-falta small{display:block;color:var(--muted)}
 .pcp-grupo{margin-bottom:14px}.pcp-cab{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:8px}.pcp-cab h3{margin:0}.pcp-cab small{color:var(--muted)}
 .pcp-total{white-space:nowrap}
+.pc-no-ped{color:var(--destaque)}
 .pcp-linha{display:grid;grid-template-columns:64px minmax(0,1fr) minmax(140px,220px) 40px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
 .pcp-linha input{min-height:42px;text-align:center}.pcp-linha strong{display:block}.pcp-linha small{color:var(--muted)}.pcp-linha select{min-height:42px}
 @media (max-width:700px){.pcp-linha{grid-template-columns:56px minmax(0,1fr) 40px}.pcp-linha select{grid-column:1/-1;grid-row:2}}
