@@ -9,7 +9,7 @@ const DOMINIO = "usuarios.nexusagro.app"; // e-mail interno de quem entra só co
 const NIVEIS = ["admin", "supervisor", "member"];
 const MAX_PENDENTES = 30; // pedidos aguardando por fazenda (evita abuso com um código vazado)
 // Telas que podem ser liberadas por função (as mesmas do app)
-const TELAS = ["operacoes", "talhoes", "chuva", "pragas", "aplicacoes", "maodeobra", "maquinas", "combustivel", "afericao", "catalogo", "pontas", "secagem", "sementes", "estoque", "financeiro", "producao", "relatorios"];
+const TELAS = ["operacoes", "talhoes", "chuva", "pragas", "aplicacoes", "maodeobra", "maquinas", "combustivel", "afericao", "catalogo", "pontas", "secagem", "sementes", "estoque", "compras", "financeiro", "producao", "relatorios"];
 // null = todas as telas; lista = só as telas válidas, sem repetir
 function lerModulos(v: unknown): string[] | null | undefined {
   if (v === null || v === undefined) return null;

@@ -5,7 +5,7 @@
    (saldo) e fornecedores com o código de cada um. Sem preço: o catálogo é para achar a peça certa. Vale por modelo: cadastrada para “John Deere 7230J”, serve para
    todos os 7230J da fazenda.
    • Peças da máquina (pelo cartão ou pela ordem): as do catálogo e as que já saíram nas ordens e ainda não estão nele.
-   • Pedido ao fornecedor: junta as peças, separa por fornecedor e manda por WhatsApp ou e-mail para cotação.
+   • Pedir compra: o 🛒 Pedir abre um pedido no setor de Compras (compras.js), que aprova, cota, pede e recebe.
    • Importar planilha do fornecedor (CSV ou Excel): código, descrição, marca e aplicação.
    • Código igual a outra peça (o fornecedor usa o mesmo código para peças diferentes): ficam separadas, com aviso.
    • Catálogo oficial do fabricante (John Deere, Caterpillar, AGCO) abre no site da marca, para consultar e copiar o código. */
@@ -69,19 +69,19 @@ const pcBotaoFabricante = m => { const l = pcLinkFabricante(m); return l ? `<a c
 
 // ---------------- Lista ----------------
 function pcCartao(p) {
-  const sit = pcSituacao(p), ap = pcAplicaTexto(p), g = pcGestor(), ped = g ? pcPedido().find(x => x.pecaId === p.id) : null;
+  const sit = pcSituacao(p), ap = pcAplicaTexto(p), g = pcGestor(), ped = typeof cprAtivoDaPeca === 'function' ? cprAtivoDaPeca(p.id) : null;
   const extras = [
     ap.length ? `Serve em: ${esc(ap.slice(0, 3).join(', '))}${ap.length > 3 ? ` e mais ${ap.length - 3}` : ''}` : (p.aplicacaoTexto ? `Aplicação: ${esc(p.aplicacaoTexto)}` : '<span class="pc-aviso">Sem máquina vinculada</span>'),
     (p.equivalentes || []).length ? `Equivalentes: ${(p.equivalentes || []).map(e => `<span class="pc-cod">${esc([e.marca, e.codigo].filter(Boolean).join(' '))}</span>`).join(' ')}` : '',
     [Number(p.qtd) > 0 ? `${num(p.qtd)} por máquina` : '', Number(p.trocaCada) > 0 ? `troca a cada ${num(p.trocaCada)} ${p.trocaUnid === 'dias' ? 'dias' : p.trocaUnid === 'km' ? 'km' : 'h'}` : ''].filter(Boolean).join(' • '),
     (p.fornecedores || []).length ? `Fornecedor: ${(p.fornecedores || []).map(f => esc([find('fornecedores', f.fornecedorId)?.nome, f.codigo && f.codigo !== p.codigo ? `(cód. ${f.codigo})` : ''].filter(Boolean).join(' '))).join(', ')}` : '',
     p.origem?.titulo ? `Catálogo ${esc(p.origem.titulo)}: ${esc(p.origem.grupo || '')}${p.origem.rep ? ` • nº ${esc(p.origem.rep)}` : ''}${p.origem.pag ? ` • desenho pág. ${p.origem.pag}` : ''}` : '',
-    ped ? `<b class="pc-no-ped">🛒 No pedido: ${num(ped.qtd)} un</b>` : '',
+    ped ? `<b class="pc-no-ped">🛒 ${esc(CPR_ST[ped.status][0])}: ${num(ped.qtd)} ${esc(cprUnid(ped))} (${cprNum(ped)}${cprAtrasado(ped) ? ', atrasado' : ''})</b>` : '',
     p.codigoRepetido ? '<span class="pc-aviso">⚠ Código igual a outra peça no fornecedor — confirme antes de comprar</span>' : ''
   ].filter(Boolean);
   return `<article class="card item-card pc-card"><header><div><h4><span class="pc-cod">${esc(p.codigo || 's/ código')}</span> ${esc(p.nome)}</h4><div class="meta">${esc([p.marca, p.sistema].filter(Boolean).join(' • '))}</div></div>${chip(sit.texto, sit.cor)}</header>
     <div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>
-    <div class="maq-acoes">${g ? (ped ? mini('✕ Tirar do pedido', 'pc-despedir', p.id) : mini('🛒 Pedir', 'pc-pedir', p.id)) + mini('Editar', 'nav', 'peca/' + p.id) : ''}${sit.s ? mini('Estoque', 'nav', 'estoque') : ''}
+    <div class="maq-acoes">${ped ? mini('🛒 Ver o pedido', 'nav', 'compra/' + ped.id) : mini('🛒 Pedir', 'cpr-pedir-peca', p.id)}${g ? mini('Editar', 'nav', 'peca/' + p.id) : ''}${sit.s ? mini('Estoque', 'nav', 'estoque') : ''}
       ${g ? `<details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">${mini('Excluir a peça', 'pc-del', p.id, 'del')}</div></details>` : ''}</div></article>`;
 }
 const pcTexto = p => [p.codigo, p.nome, p.marca, p.sistema, p.aplicacaoTexto, ...(p.equivalentes || []).map(e => `${e.marca} ${e.codigo}`), ...(p.fornecedores || []).map(f => `${f.codigo || ''} ${find('fornecedores', f.fornecedorId)?.nome || ''}`), ...pcAplicaTexto(p)].filter(Boolean).join(' ');
@@ -95,9 +95,9 @@ function pcUsadasForaDoCatalogo(m) {
   return [...cont.values()].sort((a, b) => b.vezes - a.vezes);
 }
 VIEWS.pecas = arg => {
-  const m = arg ? find('machines', arg) : null, g = pcGestor(), ped = pcPedido().length;
+  const m = arg ? find('machines', arg) : null, g = pcGestor(), ped = typeof cprAtivos === 'function' ? cprAtivos().filter(c => cprDecide() || cprMeu(c)).length : 0;
   const lista = (m ? pcDaMaquina(m) : db.pecas.slice()).sort((a, b) => String(a.nome).localeCompare(String(b.nome), 'pt-BR', {numeric: true}));
-  const botoes = (g ? btn('Importar planilha', 'nav', 'importarpecas', 'secondary') + btn('Fornecedores', 'nav', 'fornecedores', 'secondary') + btn(`🛒 Pedido${ped ? ` (${ped})` : ''}`, 'nav', 'pedidopecas', 'secondary') : '') + (g ? btn('+ Nova peça', 'nav', 'peca/novo' + (m ? '~' + m.id : '')) : '');
+  const botoes = (g ? btn('Importar planilha', 'nav', 'importarpecas', 'secondary') + btn('Fornecedores', 'nav', 'fornecedores', 'secondary') + '' : '') + btn(`🛒 Compras${ped ? ` (${ped})` : ''}`, 'nav', 'compras', 'secondary') + (g ? btn('+ Nova peça', 'nav', 'peca/novo' + (m ? '~' + m.id : '')) : '');
   const topo = m ? head(`Peças — ${m.name}`, [m.type === 'Implemento' ? m.tipoImpl : m.type, m.model].filter(Boolean).join(' • ') || 'Peças desta máquina', btn('← Todas as peças', 'nav', 'pecas', 'secondary') + pcBotaoFabricante(m) + botoes)
     : head('Catálogo de peças', `Catálogos dos fabricantes das máquinas e ${db.pecas.length} ${db.pecas.length === 1 ? 'peça cadastrada' : 'peças cadastradas'} pela fazenda`, botoes);
   const usadas = m && g ? pcUsadasForaDoCatalogo(m) : [];
@@ -202,7 +202,7 @@ Object.assign(ACTIONS, {
     const novo = !dados.id; if (novo) { dados.id = uid(); dados.criadoEm = new Date().toISOString(); }
     upsert('pecas', dados); showToast(_aviso || (novo ? 'Peça cadastrada no catálogo' : 'Peça salva')); pceVolta();
   },
-  'pc-del': id => { const p = find('pecas', id); if (!p) return; confirmDialog(`Excluir a peça ${p.codigo || p.nome} do cadastro da fazenda? O item do estoque continua.${pcPedido().some(x => x.pecaId === id) ? ' (Para só cancelar o pedido, use “Tirar do pedido”.)' : ''}`, () => { remove('pecas', id); pcPedidoSalvar(pcPedido().filter(x => x.pecaId !== id)); showToast('Peça excluída do catálogo'); }); }
+  'pc-del': id => { const p = find('pecas', id); if (!p) return; confirmDialog(`Excluir a peça ${p.codigo || p.nome} do cadastro da fazenda? O item do estoque continua.${typeof cprAtivoDaPeca === 'function' && cprAtivoDaPeca(id) ? ' Ela tem pedido de compra aberto: para cancelar só o pedido, abra o pedido em Compras.' : ''}`, () => { remove('pecas', id); showToast('Peça excluída do catálogo'); }); }
 });
 
 // ---------------- Fornecedores ----------------
@@ -233,68 +233,12 @@ Object.assign(ACTIONS, {
     confirmDialog(`Excluir ${f.nome}?${n ? ` Sai também das ${n} ${n === 1 ? 'peça' : 'peças'} em que ele aparece.` : ''}`, () => { db.pecas.forEach(p => { if ((p.fornecedores || []).some(x => x.fornecedorId === id)) { p.fornecedores = p.fornecedores.filter(x => x.fornecedorId !== id); upsert('pecas', p); } }); remove('fornecedores', id); }); }
 });
 
-// ---------------- Pedido de peças (lista para o fornecedor; sem preço no sistema) ----------------
-// Lista de compra deste aparelho: [{pecaId, qtd, fornecedorId}]
-const PC_PEDIDO = 'mp-pedido-pecas';
-function pcPedido() { try { return JSON.parse(localStorage.getItem(PC_PEDIDO) || '[]').filter(x => find('pecas', x.pecaId)); } catch { return pcPedidoMem; } }
-let pcPedidoMem = [];
-function pcPedidoSalvar(l) { pcPedidoMem = l; try { localStorage.setItem(PC_PEDIDO, JSON.stringify(l)); } catch { /* fica só na memória */ } }
-function pcPedir(id, qtd) {
-  const p = find('pecas', id); if (!p) return;
-  const l = pcPedido(), ja = l.find(x => x.pecaId === id);
-  if (ja) ja.qtd = Number(ja.qtd || 0) + (qtd || 1);
-  else l.push({pecaId: id, qtd: qtd || Math.max(1, Number(p.qtd) || 1), fornecedorId: p.fornecedores?.[0]?.fornecedorId || ''});
-  pcPedidoSalvar(l);
-}
-// Abaixo do mínimo ou zerado e que não está no pedido
-const pcFaltando = () => { const no = new Set(pcPedido().map(x => x.pecaId)); return db.pecas.filter(p => !no.has(p.id) && ['zero', 'baixo'].includes(pcSituacao(p).nivel)); };
-function pcMensagem(forn, linhas) {
-  const faz = db.settings.farm || 'nossa fazenda', quem = db.settings.owner || '';
-  return `Olá${forn ? ', ' + forn.nome : ''}! Preciso destas peças para a ${faz}:\n` +
-    linhas.map(({p, l}) => { const fo = (p.fornecedores || []).find(x => x.fornecedorId === l.fornecedorId); const eq = (p.equivalentes || []).slice(0, 2).map(e => [e.marca, e.codigo].filter(Boolean).join(' ')).join(', ');
-      const maq = pcAplicaTexto(p, true).slice(0, 2).join(', ') || p.origem?.titulo || '';
-      return `• ${num(l.qtd)} un — ${p.codigo || 's/ código'}${fo?.codigo && fo.codigo !== p.codigo ? ` (seu código ${fo.codigo})` : ''} — ${p.nome}${p.marca ? ' ' + p.marca : ''}${maq ? ` — para ${maq}` : ''}${p.origem?.grupo ? ` (${p.origem.grupo}${p.origem.rep ? `, nº ${p.origem.rep}` : ''})` : ''}${eq ? ` [equivalente: ${eq}]` : ''}${p.codigoRepetido ? ' [confirmar: código igual a outra peça]' : ''}`; }).join('\n') +
-    `\n\nPor favor, confirme se tem e o prazo de entrega.${quem ? `\nObrigado, ${quem}.` : ' Obrigado.'}`;
-}
+// ---------------- Pedido de peças → setor de Compras (compras.js) ----------------
 const pcFone = s => { let d = String(s || '').replace(/\D/g, ''); if (d.length >= 10 && d.length <= 11) d = '55' + d; return d; };
-VIEWS.pedidopecas = () => {
-  if (!pcGestor()) return head('Pedido de peças', 'Só para o ADM e o supervisor.', btn('← Peças', 'nav', 'pecas', 'secondary')) + `<section class="card">${empty('Sem acesso', 'Seu nível de acesso é Usuário comum.')}</section>`;
-  const l = pcPedido(), falt = pcFaltando();
-  const grupos = new Map(); l.forEach(x => { const k = x.fornecedorId || ''; if (!grupos.has(k)) grupos.set(k, []); grupos.get(k).push({l: x, p: find('pecas', x.pecaId)}); });
-  const sugest = falt.length ? `<section class="card panel pc-falta"><div><strong>${falt.length} ${falt.length === 1 ? 'peça está' : 'peças estão'} sem saldo ou abaixo do mínimo</strong><small>${esc(falt.slice(0, 4).map(p => p.codigo || p.nome).join(', '))}${falt.length > 4 ? '…' : ''}</small></div>${btn('Incluir no pedido', 'pcp-faltando', '', 'secondary')}</section>` : '';
-  const linha = ({l: x, p}) => { const fo = (p.fornecedores || []).find(f => f.fornecedorId === x.fornecedorId);
-    return `<div class="pcp-linha" data-pcp="${esc(p.id)}"><input data-pcp-qtd inputmode="decimal" value="${esc(String(x.qtd).replace('.', ','))}" aria-label="Quantidade de ${esc(p.nome)}"><div><strong><span class="pc-cod">${esc(p.codigo || 's/ código')}</span> ${esc(p.nome)}</strong><small>${esc(pcAplicaTexto(p).slice(0, 2).join(', ') || p.origem?.titulo || p.marca || '')}${fo?.codigo && fo.codigo !== p.codigo ? ` • cód. no fornecedor ${esc(fo.codigo)}` : ''}${p.codigoRepetido ? ' • <span class="pc-aviso">⚠ confirmar código</span>' : ''}</small></div>
-      <select data-pcp-forn aria-label="Fornecedor"><option value="">Sem fornecedor</option>${db.fornecedores.map(f => `<option value="${esc(f.id)}" ${f.id === x.fornecedorId ? 'selected' : ''}>${esc(f.nome)}</option>`).join('')}</select><button type="button" class="link del" data-act="pcp-tirar" data-id="${esc(p.id)}" aria-label="Tirar do pedido">✕</button></div>`; };
-  const grupo = ([fid, ls]) => {
-    const f = fid ? find('fornecedores', fid) : null, msg = pcMensagem(f, ls), fone = pcFone(f?.whatsapp);
-    return `<section class="card panel pcp-grupo"><header class="pcp-cab"><div><h3>${esc(f?.nome || 'Sem fornecedor escolhido')}</h3><small>${esc([f?.cidade, f?.whatsapp, f?.email].filter(Boolean).join(' • ') || (f ? '' : 'Escolha o fornecedor de cada peça, ou copie a lista'))}</small></div></header>
-      ${ls.map(linha).join('')}
-      <details class="pcp-msg"><summary>Ver a mensagem</summary><pre>${esc(msg)}</pre></details>
-      <div class="btn-row">${fone ? `<a class="btn primary" href="https://wa.me/${fone}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">WhatsApp</a>` : ''}${f?.email ? `<a class="btn secondary" href="mailto:${esc(f.email)}?subject=${encodeURIComponent('Pedido de peças — ' + (db.settings.farm || 'fazenda'))}&body=${encodeURIComponent(msg)}">E-mail</a>` : ''}<button class="secondary" data-act="pcp-copiar" data-id="${esc(fid)}">Copiar</button></div></section>`;
-  };
-  return head('Pedido de peças', 'Junte as peças, confira as quantidades e mande para cada fornecedor com os códigos certos.', btn('← Peças', 'nav', 'pecas', 'secondary') + (l.length ? btn('Limpar pedido', 'pcp-limpar', '', 'secondary') : '')) + sugest +
-    (l.length ? [...grupos.entries()].sort(([a], [b]) => (a === '') - (b === '')).map(grupo).join('') : `<section class="card">${empty('Pedido vazio', 'Toque em “🛒 Pedir” nas peças do catálogo, ou inclua as que estão abaixo do mínimo no estoque.', {act: 'nav', id: 'pecas', label: '← Catálogo de peças'})}</section>`);
-};
-TITLES.pedidopecas = 'Máquinas e manutenção';
-document.addEventListener('change', e => {
-  const r = e.target?.closest?.('[data-pcp]'); if (!r) return;
-  const l = pcPedido(), x = l.find(y => y.pecaId === r.dataset.pcp); if (!x) return;
-  if (e.target.matches('[data-pcp-qtd]')) { const q = numeroBR(e.target.value); x.qtd = q > 0 ? q : 1; }
-  if (e.target.matches('[data-pcp-forn]')) x.fornecedorId = e.target.value;
-  pcPedidoSalvar(l); render();
-});
-Object.assign(ACTIONS, {
-  'pc-pedir': id => { pcPedir(id); const n = pcPedido().length; showToast(`No pedido (${n} ${n === 1 ? 'peça' : 'peças'}) — veja em 🛒 Pedido`); render(); },
-  'pcp-faltando': () => { pcFaltando().forEach(p => { const s = pcEstoque(p), falta = Math.max(1, (Number(s?.min) || 0) - (Number(s?.qty) || 0), Number(p.qtd) || 1); pcPedir(p.id, falta); }); render(); },
-  'pc-despedir': id => { const p = find('pecas', id); pcPedidoSalvar(pcPedido().filter(x => x.pecaId !== id)); const n = pcPedido().length; showToast(`${p?.codigo || p?.nome || 'Peça'} tirada do pedido${n ? ` (ficam ${n})` : ' — pedido vazio'}`); render(); },
-  'pcp-tirar': id => { pcPedidoSalvar(pcPedido().filter(x => x.pecaId !== id)); render(); },
-  'pcp-limpar': () => confirmDialog('Limpar o pedido?', () => { pcPedidoSalvar([]); }, 'Limpar'),
-  'pcp-copiar': fid => {
-    const ls = pcPedido().filter(x => (x.fornecedorId || '') === (fid || '')).map(x => ({l: x, p: find('pecas', x.pecaId)}));
-    const msg = pcMensagem(fid ? find('fornecedores', fid) : null, ls);
-    (navigator.clipboard?.writeText(msg) || Promise.reject()).then(() => showToast('Mensagem copiada'), () => showToast('Não deu para copiar: abra “Ver a mensagem” e copie', true));
-  }
-});
+// Endereço antigo do 🛒 Pedido: abre Compras
+VIEWS.pedidopecas = () => VIEWS.compras();
+TITLES.pedidopecas = 'Compras';
+ACTIONS['pc-pedir'] = id => cprNovo({origem: 'peca', pecaId: id});
 
 // ---------------- Importar planilha do fornecedor ----------------
 // CSV do Excel brasileiro costuma vir em Windows-1252; UTF-8 quando dá

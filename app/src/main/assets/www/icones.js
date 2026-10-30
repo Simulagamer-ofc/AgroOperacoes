@@ -22,6 +22,7 @@
     'graos/silos': ['verde', '<path d="M5.5 21V8.5a3.5 3.5 0 0 1 7 0V21M12.5 21V11h6v10M3.5 21h17M5.5 13h7M5.5 17h7"/>'],
     secagem: ['verde', '<path d="M5.5 21V8.5a3.5 3.5 0 0 1 7 0V21M12.5 21V11h6v10M3.5 21h17M5.5 13h7M5.5 17h7"/>'],
     sementes: ['verde', '<ellipse cx="9" cy="10" rx="3.4" ry="5" transform="rotate(-30 9 10)"/><ellipse cx="15.5" cy="14.5" rx="3.4" ry="5" transform="rotate(-30 15.5 14.5)"/><path d="M7.6 7.6l2.8 4.8M14.1 12.1l2.8 4.8"/>'],
+    compras: ['verde', '<path d="M3 4.5h2.5l2.2 10.5h10.3l2-7.5H7"/><circle cx="9.5" cy="19" r="1.6"/><circle cx="16.5" cy="19" r="1.6"/><path d="M11 11h5"/>'],
     estoque: ['verde', '<path d="M3.5 8 12 3.5 20.5 8v8.5L12 21l-8.5-4.5z"/><path d="M3.5 8 12 12.5 20.5 8M12 12.5V21"/>'],
     financeiro: ['verde', '<circle cx="12" cy="12" r="8.5"/><path d="M14.6 9.4c-.5-1-1.5-1.6-2.6-1.6-1.5 0-2.6.8-2.6 2s1 1.7 2.6 2.1 2.6.9 2.6 2.1-1.1 2.1-2.6 2.1c-1.1 0-2.1-.6-2.6-1.6M12 6.3v1.5M12 16.2v1.5"/>'],
     producao: ['verde', '<path d="M3.5 20.5h17M6.5 17v-4M11 17v-6.5M15.5 17V12M20 17V7.5M5.5 10.5l5-4.5 4 3 5.5-5M16.5 4h3.5v3.5"/>'],
