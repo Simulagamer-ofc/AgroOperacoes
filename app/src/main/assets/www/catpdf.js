@@ -176,6 +176,7 @@ function ctpSecao(m) {
   const st = ctpEstado[m.id] || {};
   return `<section class="card panel ctp" data-ctp="${esc(m.id)}"><header class="ctp-cab"><div><h3>📘 ${cabs.map(c => esc([c.fabricante, c.titulo].filter(Boolean).join(' '))).join(' + ')}</h3><small>${cabs.map(c => `${num(c.total)} peças • ${(c.grupos || []).length} conjuntos${c.serie ? ` • série ${esc(c.serie)}` : ''} • ${esc(c.arquivo)}`).join(' | ')}</small></div>
       ${g ? `<details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">${mini('Importar outro catálogo', 'nav', 'importarcatalogo/' + m.id)}${cabs.map(c => mini(`Tirar ${c.titulo}`, 'ctp-del', c.id, 'del')).join('')}</div></details>` : ''}</header>
+    ${cabs.filter(c => !(c.fotos || []).length).map(c => `<p class="ctp-sem-des">🖼 ${esc(c.titulo)} está sem os desenhos (foi importado antes ou sem marcar “Guardar os desenhos”).${g ? ` ${mini('Importar de novo com os desenhos', 'ctp-refazer', `${m.id}|${c.id}`, 'primary')}` : ' Peça ao ADM para importar de novo com os desenhos.'}</p>`).join('')}
     <div class="catm-busca"><input type="search" data-ctp-busca="${esc(m.id)}" value="${esc(st.busca || '')}" placeholder="Buscar peça: rolamento, filtro de ar, correia… ou o código" aria-label="Buscar no catálogo do fabricante" autocomplete="off" enterkeyhint="search"></div>
     <div class="ctp-res" id="ctpRes">${ctpResultados(m)}</div></section>`;
 }
@@ -229,7 +230,9 @@ VIEWS.importarcatalogo = mid => {
   const topo = head(`Importar catálogo de peças — ${m.name}`, [m.type === 'Implemento' ? m.tipoImpl : m.type, m.model].filter(Boolean).join(' • '), volta);
   if (!ctpi || ctpi.maqId !== m.id) ctpi = {maqId: m.id};
   if (ctpi.lendo) return topo + `<section class="card panel ctp-lendo"><strong>Lendo ${esc(ctpi.arquivo)}…</strong><div class="progress"><span id="ctpBarra" style="width:${ctpi.pct || 0}%"></span></div><small id="ctpProg">${esc(ctpi.txt || 'Abrindo o arquivo')}</small><p class="nota">Catálogo grande demora um pouco (um de 400 páginas leva cerca de 1 minuto). Não feche esta tela.</p></section>`;
-  if (!ctpi.r) return topo + `<section class="card panel tmi-escolher"><label class="tmi-arquivo"><input type="file" data-ctp-arquivo accept="application/pdf,.pdf"><span class="primary">Escolher o PDF do catálogo</span></label>
+  const velho = ctpi.substituir ? db[CTP_COL].find(c => c.id === ctpi.substituir) : null;
+  const avSubst = velho ? `<p class="pc-aviso">Vai substituir o catálogo <b>${esc(velho.titulo)}</b> que já está nesta máquina (as peças que você já salvou na fazenda continuam). Escolha o mesmo PDF.</p>` : '';
+  if (!ctpi.r) return topo + `<section class="card panel tmi-escolher">${avSubst}<label class="tmi-arquivo"><input type="file" data-ctp-arquivo accept="application/pdf,.pdf"><span class="primary">Escolher o PDF do catálogo</span></label>
       <p class="nota">Use o catálogo oficial de peças do fabricante (o PDF que a concessionária ou o site da marca fornece). O app guarda a lista de peças e a imagem dos desenhos — o PDF continua com você.</p>
       <label class="tmi-area"><input type="checkbox" data-ctp-com-desenhos ${ctpi.semDesenhos ? '' : 'checked'}> Guardar os desenhos (recomendado: mostra onde fica cada peça; ocupa cerca de 20 MB na nuvem da fazenda e leva 1 a 2 minutos a mais)</label>
       <p class="nota">Formatos que o app já lê: <b>Kuhn</b>. Se o seu catálogo for de outra marca e o app não reconhecer, mande o PDF para incluirmos.</p>${pcBotaoFabricante(m) ? `<div class="btn-row">${pcBotaoFabricante(m)}</div>` : ''}</section>`;
@@ -239,7 +242,7 @@ VIEWS.importarcatalogo = mid => {
   const iguais = ativas.filter(x => m.model && pcNorm(x.model) === pcNorm(m.model)), outras = ativas.filter(x => !iguais.includes(x));
   const caixa = (x, extra) => `<label class="pce-mod"><input type="checkbox" data-ctp-mod value="maq:${esc(x.id)}" ${sel.includes('maq:' + x.id) ? 'checked' : ''}><span><b>${esc(x.name)}</b><small>${esc([x.type === 'Implemento' ? x.tipoImpl : x.type, x.model, extra].filter(Boolean).join(' • '))}</small></span></label>`;
   const casa = ctpN(r.titulo).split(' ').filter(t => t.length > 2).some(t => ctpN(`${m.model} ${m.name}`).includes(t));
-  return topo + `<section class="card panel"><h3 class="pce-tit">📘 ${esc([r.fabricante, r.titulo].filter(Boolean).join(' ') || ctpi.arquivo)}</h3>
+  return topo + `<section class="card panel">${avSubst}<h3 class="pce-tit">📘 ${esc([r.fabricante, r.titulo].filter(Boolean).join(' ') || ctpi.arquivo)}</h3>
       <div class="ctn-num"><div><span>Peças</span><b>${num(r.itens.length)}</b></div><div><span>Códigos</span><b>${num(new Set(r.itens.map(x => x[0])).size)}</b></div><div><span>Conjuntos</span><b>${r.grupos.length}</b></div><div><span>Páginas</span><b>${r.paginas}</b></div></div>
       ${r.serie ? `<p class="nota">Números de série: ${esc(r.serie)}${r.docId ? ` • catálogo ${esc(r.docId)}` : ''}</p>` : ''}
       ${!casa && r.titulo ? `<p class="pc-aviso">⚠ O catálogo é do <b>${esc(r.titulo)}</b> e esta máquina está cadastrada como <b>${esc(m.model || m.name)}</b>. Confira se é o catálogo certo.</p>` : ''}
@@ -269,13 +272,19 @@ document.addEventListener('change', async e => {
   } catch (err) { console.warn(err); ctpi.lendo = false; ctpi.r = null; render(); showToast('Não consegui abrir o PDF neste aparelho. Tente pelo computador.', true); }
 });
 Object.assign(ACTIONS, {
+  'ctp-refazer': id => {
+    const [mid, cid] = String(id).split('|'), c = db[CTP_COL].find(r => r.id === cid); if (!c || !ctpGestor()) return;
+    ctpi = {maqId: mid, substituir: cid, marcados: [...(c.aplica?.maquinas || []).map(x => 'maq:' + x), ...(c.aplica?.modelos || []).map(x => 'mod:' + x)]};
+    document.querySelector('.ctp-tela [data-fechar]')?.click(); go('importarcatalogo/' + mid);
+  },
   'ctp-outro': () => { if (ctpi) { ctpi.r = null; ctpi.marcados = null; } render(); },
   'ctp-salvar': () => {
     if (!ctpi?.r || !ctpGestor()) return;
     const m = find('machines', ctpi.maqId), marc = ctpi.marcados || ['maq:' + m.id];
     if (!marc.length) { showToast('Marque pelo menos uma máquina', true); return; }
     const aplica = {modelos: marc.filter(v => v.startsWith('mod:')).map(v => v.slice(4)), maquinas: marc.filter(v => v.startsWith('maq:')).map(v => v.slice(4))};
-    const c = ctpGravar(ctpi.r, aplica, ctpi.arquivo); ctpi = null;
+    const velho = ctpi.substituir, c = ctpGravar(ctpi.r, aplica, ctpi.arquivo); ctpi = null;
+    if (velho && velho !== c.id) { db[CTP_COL].filter(r => r.id === velho || r.cab === velho).forEach(r => remove(CTP_COL, r.id)); ctpCache.delete(velho); Object.values(ctpEstado).forEach(st => { st.grupo = null; }); }
     showToast(`Catálogo ${c.titulo} salvo: ${num(c.total)} peças`); go('pecas/' + m.id);
   }
 });
@@ -355,6 +364,8 @@ async function ctpVerDesenho(cid, idx) {
   $$('.ctp-tela-it', tela).forEach(b => b.onclick = () => { $$('.ctp-tela-it', tela).forEach(o => o.classList.toggle('on', o === b)); $('[data-aviso]', tela).innerHTML = aviso(itens[Number(b.dataset.i)]); });
   const u = typeof urlDaFoto === 'function' ? await urlDaFoto(CTP_COL, cid, `${cid}d${x.desenho}`, true).catch(() => null) : null;
   if (u) { img.src = u; img.hidden = false; $('.ctp-carregando', tela)?.remove(); aplicar(); }
+  else if (!ctpTemDesenho(c, x.desenho)) { const mq = ctpMaquinasDo(c)[0];
+    $('.ctp-carregando', tela).innerHTML = `Este catálogo foi importado sem os desenhos. Use os números da lista ao lado com o desenho da pág. ${x.desenho} do PDF.${mq && ctpGestor() ? `<br><button class="primary" data-act="ctp-refazer" data-id="${esc(mq.id + '|' + c.id)}">Importar de novo com os desenhos</button>` : ''}`; }
   else $('.ctp-carregando', tela).textContent = `Desenho ainda não disponível neste aparelho (sem internet, ou o envio de quem importou ainda não terminou). Veja na pág. ${x.desenho} do PDF.`;
 }
 ACTIONS['ctp-desenho'] = id => { const [cid, i] = String(id).split('|'); ctpVerDesenho(cid, i); };
