@@ -69,19 +69,20 @@ const pcBotaoFabricante = m => { const l = pcLinkFabricante(m); return l ? `<a c
 
 // ---------------- Lista ----------------
 function pcCartao(p) {
-  const sit = pcSituacao(p), ap = pcAplicaTexto(p), g = pcGestor();
+  const sit = pcSituacao(p), ap = pcAplicaTexto(p), g = pcGestor(), ped = g ? pcPedido().find(x => x.pecaId === p.id) : null;
   const extras = [
     ap.length ? `Serve em: ${esc(ap.slice(0, 3).join(', '))}${ap.length > 3 ? ` e mais ${ap.length - 3}` : ''}` : (p.aplicacaoTexto ? `Aplicação: ${esc(p.aplicacaoTexto)}` : '<span class="pc-aviso">Sem máquina vinculada</span>'),
     (p.equivalentes || []).length ? `Equivalentes: ${(p.equivalentes || []).map(e => `<span class="pc-cod">${esc([e.marca, e.codigo].filter(Boolean).join(' '))}</span>`).join(' ')}` : '',
     [Number(p.qtd) > 0 ? `${num(p.qtd)} por máquina` : '', Number(p.trocaCada) > 0 ? `troca a cada ${num(p.trocaCada)} ${p.trocaUnid === 'dias' ? 'dias' : p.trocaUnid === 'km' ? 'km' : 'h'}` : ''].filter(Boolean).join(' • '),
     (p.fornecedores || []).length ? `Fornecedor: ${(p.fornecedores || []).map(f => esc([find('fornecedores', f.fornecedorId)?.nome, f.codigo && f.codigo !== p.codigo ? `(cód. ${f.codigo})` : ''].filter(Boolean).join(' '))).join(', ')}` : '',
     p.origem?.titulo ? `Catálogo ${esc(p.origem.titulo)}: ${esc(p.origem.grupo || '')}${p.origem.rep ? ` • nº ${esc(p.origem.rep)}` : ''}${p.origem.pag ? ` • desenho pág. ${p.origem.pag}` : ''}` : '',
+    ped ? `<b class="pc-no-ped">🛒 No pedido: ${num(ped.qtd)} un</b>` : '',
     p.codigoRepetido ? '<span class="pc-aviso">⚠ Código igual a outra peça no fornecedor — confirme antes de comprar</span>' : ''
   ].filter(Boolean);
   return `<article class="card item-card pc-card"><header><div><h4><span class="pc-cod">${esc(p.codigo || 's/ código')}</span> ${esc(p.nome)}</h4><div class="meta">${esc([p.marca, p.sistema].filter(Boolean).join(' • '))}</div></div>${chip(sit.texto, sit.cor)}</header>
     <div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>
-    <div class="maq-acoes">${g ? mini('🛒 Pedir', 'pc-pedir', p.id) + mini('Editar', 'nav', 'peca/' + p.id) : ''}${sit.s ? mini('Estoque', 'nav', 'estoque') : ''}
-      ${g ? `<details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">${mini('Excluir do catálogo', 'pc-del', p.id, 'del')}</div></details>` : ''}</div></article>`;
+    <div class="maq-acoes">${g ? (ped ? mini('✕ Tirar do pedido', 'pc-despedir', p.id) : mini('🛒 Pedir', 'pc-pedir', p.id)) + mini('Editar', 'nav', 'peca/' + p.id) : ''}${sit.s ? mini('Estoque', 'nav', 'estoque') : ''}
+      ${g ? `<details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">${mini('Excluir a peça', 'pc-del', p.id, 'del')}</div></details>` : ''}</div></article>`;
 }
 const pcTexto = p => [p.codigo, p.nome, p.marca, p.sistema, p.aplicacaoTexto, ...(p.equivalentes || []).map(e => `${e.marca} ${e.codigo}`), ...(p.fornecedores || []).map(f => `${f.codigo || ''} ${find('fornecedores', f.fornecedorId)?.nome || ''}`), ...pcAplicaTexto(p)].filter(Boolean).join(' ');
 // Peças que saíram do estoque nas ordens desta máquina e ainda não estão no catálogo
@@ -201,7 +202,7 @@ Object.assign(ACTIONS, {
     const novo = !dados.id; if (novo) { dados.id = uid(); dados.criadoEm = new Date().toISOString(); }
     upsert('pecas', dados); showToast(_aviso || (novo ? 'Peça cadastrada no catálogo' : 'Peça salva')); pceVolta();
   },
-  'pc-del': id => { const p = find('pecas', id); if (!p) return; confirmDialog(`Excluir ${p.codigo || p.nome} do catálogo? O item do estoque continua.`, () => { remove('pecas', id); pcPedidoSalvar(pcPedido().filter(x => x.pecaId !== id)); showToast('Peça excluída do catálogo'); }); }
+  'pc-del': id => { const p = find('pecas', id); if (!p) return; confirmDialog(`Excluir a peça ${p.codigo || p.nome} do cadastro da fazenda? O item do estoque continua.${pcPedido().some(x => x.pecaId === id) ? ' (Para só cancelar o pedido, use “Tirar do pedido”.)' : ''}`, () => { remove('pecas', id); pcPedidoSalvar(pcPedido().filter(x => x.pecaId !== id)); showToast('Peça excluída do catálogo'); }); }
 });
 
 // ---------------- Fornecedores ----------------
@@ -285,6 +286,7 @@ document.addEventListener('change', e => {
 Object.assign(ACTIONS, {
   'pc-pedir': id => { pcPedir(id); const n = pcPedido().length; showToast(`No pedido (${n} ${n === 1 ? 'peça' : 'peças'}) — veja em 🛒 Pedido`); render(); },
   'pcp-faltando': () => { pcFaltando().forEach(p => { const s = pcEstoque(p), falta = Math.max(1, (Number(s?.min) || 0) - (Number(s?.qty) || 0), Number(p.qtd) || 1); pcPedir(p.id, falta); }); render(); },
+  'pc-despedir': id => { const p = find('pecas', id); pcPedidoSalvar(pcPedido().filter(x => x.pecaId !== id)); const n = pcPedido().length; showToast(`${p?.codigo || p?.nome || 'Peça'} tirada do pedido${n ? ` (ficam ${n})` : ' — pedido vazio'}`); render(); },
   'pcp-tirar': id => { pcPedidoSalvar(pcPedido().filter(x => x.pecaId !== id)); render(); },
   'pcp-limpar': () => confirmDialog('Limpar o pedido?', () => { pcPedidoSalvar([]); }, 'Limpar'),
   'pcp-copiar': fid => {
