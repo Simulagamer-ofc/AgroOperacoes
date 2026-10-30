@@ -11,8 +11,8 @@ android {
         applicationId = "com.simulagamer.agrooperacoes"
         minSdk = 26
         targetSdk = 35
-        versionCode = 137
-        versionName = "0.83.0-beta1"
+        versionCode = 138
+        versionName = "0.83.1-beta1"
     }
 
     // Assinatura fixa (opcional): com a chave nos segredos do GitHub, cada APK novo instala POR CIMA do anterior
