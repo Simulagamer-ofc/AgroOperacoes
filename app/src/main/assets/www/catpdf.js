@@ -142,7 +142,7 @@ function ctpAchar(cabs, busca) {
 const ctpMaquinasDo = c => db.machines.filter(m => ctpServe(c, m));
 function ctpLinha(x, comMaquina) {
   return `<div class="ctp-it"><span class="ctp-rep" title="Número no desenho">${esc(x.rep || '')}</span><div><strong><span class="pc-cod">${esc(x.cod)}</span> ${esc(x.desc)}</strong><small>${esc([comMaquina ? ctpMaquinasDo(x.c).map(m => m.name).join(', ') || x.c.titulo : '', comMaquina ? x.grupo : '', x.qt ? `qtd ${x.qt}` : '', x.obs].filter(Boolean).join(' • '))}</small></div>
-    <div class="row-actions">${x.desenho ? mini('📐 Desenho', 'ctp-desenho', `${x.c.id}|${x.i}`) : ''}${mini('Copiar', 'ctp-copiar', x.cod)}${ctpGestor() ? mini('🛒 Pedir', 'ctp-pedir', `${x.c.id}|${x.i}`) : ''}</div></div>`;
+    <div class="row-actions">${x.desenho ? mini('📐 Desenho', 'ctp-desenho', `${x.c.id}|${x.i}`) : ''}${mini('Copiar', 'ctp-copiar', x.cod)}${mini('🛒 Pedir', 'ctp-pedir', `${x.c.id}|${x.i}`)}</div></div>`;
 }
 // Miniatura do desenho do conjunto (carrega depois de mostrar a tela)
 const ctpTemDesenho = (c, pag) => (c.fotos || []).some(f => f.pag === pag);
@@ -209,10 +209,9 @@ Object.assign(ACTIONS, {
   'ctp-abrir': id => { const [mid, ...q] = String(id).split('|'); ctpEstado[mid] = {busca: q.join('|')}; go('pecas/' + mid); },
   'ctp-copiar': cod => { (navigator.clipboard?.writeText(cod) || Promise.reject()).then(() => showToast(`Código ${cod} copiado`), () => showToast(`Código: ${cod}`)); },
   'ctp-pedir': id => {
-    if (!ctpGestor()) return;
     const [cid, i] = String(id).split('|'), c = db[CTP_COL].find(r => r.id === cid), x = c && ctpItens(c)[Number(i)]; if (!x) return;
-    const p = ctpParaPeca(c, x); pcPedir(p.id, Number(x.qt) > 0 ? Number(x.qt) : 1);
-    const n = pcPedido().length; showToast(`${x.cod} no pedido (${n} ${n === 1 ? 'peça' : 'peças'}) — veja em 🛒 Pedido`);
+    const p = ctpParaPeca(c, x), mq = ctpMaquinasDo(c), rt = parseRoute(), naTela = rt.name === 'pecas' && rt.arg ? find('machines', rt.arg) : null;
+    cprNovo({origem: 'catalogo', pecaId: p.id, qtd: Number(x.qt) > 0 ? Number(x.qt) : 1, maquinaId: naTela?.id || (mq.length === 1 ? mq[0].id : '')});
   },
   'ctp-del': id => {
     const c = db[CTP_COL].find(r => r.id === id); if (!c || !ctpGestor()) return;

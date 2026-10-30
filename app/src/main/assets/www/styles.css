@@ -1499,3 +1499,35 @@ a.btn.primary{background:var(--blue);color:#fff}a.btn.secondary{background:var(-
 .ctp-tela-it>span:not(.ctp-rep){display:flex;flex-direction:column;align-items:flex-start}.ctp-tela-it small{color:var(--muted)}
 .ctp-tela-it.on{background:#fff6cc;color:#111}.ctp-tela-it.on small{color:#555}
 @media (min-width:1000px){.ctp-tela{grid-template-columns:minmax(0,1fr) 340px;grid-template-rows:auto auto minmax(0,1fr)}.ctp-tela>header,.ctp-tela>.ctp-aviso{grid-column:1/-1}.ctp-tela-lista{max-height:none;border-top:0;border-left:1px solid var(--line)}}
+/* Compras (0.84) */
+.cpr-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.cpr-kpi{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--text);font:inherit;text-align:left;cursor:pointer;box-shadow:var(--shadow)}
+.cpr-kpi b{font-size:1.5rem;line-height:1.1}.cpr-kpi span{color:var(--muted);font-size:.84rem}.cpr-kpi small{color:var(--red);font-weight:600;font-size:.78rem}
+.cpr-kpi.on{outline:2px solid var(--blue);outline-offset:-1px}.cpr-kpi.laranja b{color:#c27c06}.cpr-kpi.vermelho b{color:var(--red)}
+:root[data-theme="dark"] .cpr-kpi.laranja b{color:var(--orange)}
+.cpr-aviso{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;border-left:4px solid var(--orange);margin-bottom:10px}.cpr-aviso small{display:block;color:var(--muted)}
+.cpr-filtros{margin:4px 0 10px;flex-wrap:wrap}
+.cpr-barra{position:sticky;top:8px;z-index:5;display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;margin:0 0 10px;border-radius:12px;background:var(--panel);border:1px solid var(--blue);box-shadow:var(--shadow)}
+.cpr-barra span{font-weight:700;margin-right:auto}.cpr-dica{margin:0 0 10px}
+.cpr-forn{margin:0 0 12px}.cpr-forn summary{cursor:pointer;color:var(--muted);padding:6px 0}
+.cpr-lista{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
+.cpr-card header{align-items:flex-start}.cpr-tit{flex:1;min-width:0}.cpr-tit h4{overflow-wrap:anywhere}.cpr-tit h4 .pc-cod{margin-right:2px}
+.cpr-chips{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.cpr-chips .chip{white-space:nowrap}
+.cpr-sel{display:flex;align-items:center;padding-top:2px}.cpr-sel input{width:22px;height:22px;accent-color:var(--blue)}
+.cpr-info{display:flex;flex-direction:column;gap:3px}.cpr-atraso{color:var(--red)}
+.cpr-parada{border-left:4px solid var(--red)}
+.cpr-acoes>button.primary{background:var(--blue);border-color:var(--blue);color:#fff}.cpr-acoes .del,.menu-lista .del{color:var(--red)}
+.cpr-envios{display:grid;gap:10px;margin:8px 0 4px}.cpr-envio{border:1px solid var(--line);border-radius:12px;padding:10px 12px}.cpr-envio>small{display:block;color:var(--muted);margin-bottom:6px}
+.cpr-envio pre{white-space:pre-wrap;font-size:.82rem;background:var(--bg);padding:8px;border-radius:8px;max-height:220px;overflow:auto}
+.cpr-forns{display:grid;gap:6px;max-height:50vh;overflow:auto;margin:6px 0}
+.cpr-trilha{display:flex;gap:4px;list-style:none;padding:0;margin:12px 0;flex-wrap:wrap}
+.cpr-trilha li{flex:1;min-width:92px;padding:6px 8px;border-radius:8px;background:var(--bg);color:var(--muted);font-size:.78rem;text-align:center}
+.cpr-trilha li.feito{background:rgba(24,166,106,.14);color:var(--green)}.cpr-trilha li.agora{background:var(--blue);color:#fff;font-weight:700}
+.cpr-det .cpr-chips{justify-content:flex-start}
+.cpr-ordem{margin-bottom:14px}.cpr-ordem .list{margin-top:8px}
+@media(max-width:760px){.cpr-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.cpr-kpis .cpr-kpi:last-child{grid-column:1/-1}.cpr-lista{grid-template-columns:minmax(0,1fr)}.cpr-card header{flex-wrap:wrap}.cpr-chips{justify-content:flex-start;width:100%}}
+.cpr-card[hidden],.cpr-nada[hidden],.cpr-barra[hidden]{display:none}
+@media(max-width:760px){.cpr-lista{margin-bottom:76px}}
+.cpr-lst .list-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.cpr-lst .list-row:last-child{border:0}
+.cpr-lst .list-row>div{display:flex;flex-direction:column;gap:2px;min-width:0}.cpr-lst small{color:var(--muted)}.cpr-lst a{color:var(--blue)}
+.cpr-ordem .cpr-lst{padding:0}.cpr-forn .cpr-lst{padding:0 4px}

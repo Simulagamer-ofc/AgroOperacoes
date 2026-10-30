@@ -422,14 +422,14 @@ const NV_TELAS = [
   ['operacoes', 'Operações do dia'], ['talhoes', 'Talhões'], ['chuva', 'Chuvas'], ['pragas', 'Pragas e doenças (MIP)'],
   ['aplicacoes', 'Aplicações e carência'], ['maodeobra', 'Mão de obra'], ['maquinas', 'Máquinas e manutenção'], ['combustivel', 'Combustível'],
   ['afericao', 'Aferição e calibragem'], ['catalogo', 'Catálogo de máquinas'], ['pontas', 'Catálogo de pontas'], ['secagem', 'Moega, secador e silos'],
-  ['sementes', 'Sementes, lotes e beneficiamento'], ['estoque', 'Estoque e insumos'], ['financeiro', 'Financeiro (gastos, contas, LCDPR)'],
+  ['sementes', 'Sementes, lotes e beneficiamento'], ['estoque', 'Estoque e insumos'], ['compras', 'Compras (aprovar, cotar, pedir e receber)'], ['financeiro', 'Financeiro (gastos, contas, LCDPR)'],
   ['producao', 'Produção e margem'], ['relatorios', 'Relatórios']];
 const NV_TODAS_TELAS = NV_TELAS.map(([k]) => k);
 // Funções de uma fazenda de grãos e sementes: telas e nível sugerido (o ADM pode acrescentar telas)
 const NV_FUNCOES = [
   ['diretor', 'Diretor / Proprietário', 'Gestão', 'admin', null],
   ['gerente', 'Gerente de fazenda', 'Gestão', 'supervisor', null],
-  ['administrativo', 'Administrativo / Financeiro', 'Gestão', 'member', ['financeiro', 'producao', 'estoque', 'relatorios']],
+  ['administrativo', 'Administrativo / Financeiro', 'Gestão', 'member', ['financeiro', 'producao', 'estoque', 'compras', 'relatorios']],
   ['agronomo', 'Agrônomo / Técnico agrícola', 'Gestão', 'supervisor', ['talhoes', 'operacoes', 'pragas', 'aplicacoes', 'chuva', 'sementes', 'relatorios']],
   ['encarregado', 'Encarregado / Líder de campo', 'Campo', 'supervisor', ['operacoes', 'talhoes', 'chuva', 'maodeobra', 'aplicacoes']],
   ['operador', 'Operador de máquinas / Tratorista', 'Campo', 'member', ['operacoes', 'maquinas', 'combustivel']],
@@ -441,7 +441,8 @@ const NV_FUNCOES = [
   ['ubs', 'Responsável UBS / Beneficiamento', 'Grãos e sementes', 'supervisor', ['secagem', 'sementes']],
   ['secador', 'Operador de secador / Armazém', 'Grãos e sementes', 'member', ['secagem']],
   ['classificador', 'Classificador / Laboratório', 'Grãos e sementes', 'member', ['sementes']],
-  ['almoxarife', 'Almoxarife', 'Suprimentos', 'member', ['estoque']],
+  ['almoxarife', 'Almoxarife', 'Suprimentos', 'member', ['estoque', 'compras']],
+  ['comprador', 'Comprador', 'Suprimentos', 'member', ['compras', 'estoque']],
   ['personalizado', 'Personalizado', 'Outra', 'member', []]];
 const nvFuncao = id => NV_FUNCOES.find(f => f[0] === id);
 const nvNomeFuncao = id => nvFuncao(id)?.[1] || '';
