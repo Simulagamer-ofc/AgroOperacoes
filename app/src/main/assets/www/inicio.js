@@ -45,7 +45,7 @@ function painelOperacoesDia() {
   const atrasadas = ops.filter(o => o.status === 'Programada' && o.date && o.date < t).sort(porData);
   const hoje = ops.filter(o => o.status === 'Programada' && o.date === t).sort(porData);
   const proximas = ops.filter(o => o.status === 'Programada' && o.date > t && o.date <= fimJanela).sort(porData);
-  const concluidasHoje = ops.filter(o => o.status === 'Concluída' && (String(o.finishedAt || '').slice(0, 10) === t || (!o.finishedAt && o.date === t))).length;
+  const concluidasHoje = ops.filter(o => o.status === 'Concluída' && ((o.finishedAt && isoDate(new Date(o.finishedAt))) === t || (!o.finishedAt && o.date === t))).length;
   const grupo = (titulo, lista, tipo, extra = '') => lista.length ? `<h4 class="ini-grupo ${tipo}">${titulo} <span>${lista.length}</span></h4>${lista.map(o => iniLinhaOp(o, tipo)).join('')}${extra}` : '';
   const prox = proximas.slice(0, INI_MAX_PROXIMAS), sobra = proximas.length - prox.length;
   const nada = !andamento.length && !atrasadas.length && !hoje.length && !proximas.length;

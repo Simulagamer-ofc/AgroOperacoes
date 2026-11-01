@@ -28,7 +28,9 @@ const cprDecide = () => !(typeof nvComum === 'function' && nvComum()) || (typeof
 const cprMeu = c => !c.porId || !cprEuId() || c.porId === cprEuId();
 const cprNum = c => '#' + String(c.id).slice(-4).toUpperCase();
 const cprPeca = c => c?.pecaId ? find('pecas', c.pecaId) : null;
-const cprItemEst = c => c?.itemId ? find('stock', c.itemId) : (cprPeca(c)?.itemId ? find('stock', cprPeca(c).itemId) : null);
+// Item do estoque do pedido: o do pedido, o da peça ou (peça ainda sem vínculo) o item criado num recebimento anterior com o mesmo código
+const cprItemEst = c => { if (c?.itemId) return find('stock', c.itemId); const p = cprPeca(c); if (!p) return null; if (p.itemId) return find('stock', p.itemId);
+  const cod = typeof pcNorm === 'function' && p.codigo ? pcNorm(p.codigo) : ''; return cod ? db.stock.find(s => s.codigo && pcNorm(s.codigo) === cod && s.category === 'Peças') || null : null; };
 const cprDesc = c => c.descricao || cprPeca(c)?.nome || cprItemEst(c)?.name || 'Item';
 const cprCod = c => c.codigo || cprPeca(c)?.codigo || cprItemEst(c)?.codigo || '';
 const cprUnid = c => c.unid || cprItemEst(c)?.unit || 'un';
@@ -338,7 +340,7 @@ function cprReceber(c) {
       if (v.estoque === 'novo') {
         item = {id: uid(), name: cprDesc(c), category: 'Peças', unit: cprUnid(c), qty: 0, min: '', codigo: cprCod(c), fornecedor: cprForn(c.fornecedorId)?.nome || ''};
         db.stock.push(item); c.itemId = item.id;
-        if (p && !p.itemId) { p.itemId = item.id; upsert('pecas', p); }
+        if (p && !p.itemId && !(typeof nvComum === 'function' && nvComum())) { p.itemId = item.id; upsert('pecas', p); }
       }
       if (item && v.estoque !== 'nao') {
         const valor = Number(v.valor) > 0 ? Number(v.valor) : 0, mov = aplicarMovimento(item, 'Entrada', Number(v.qtd), valor);

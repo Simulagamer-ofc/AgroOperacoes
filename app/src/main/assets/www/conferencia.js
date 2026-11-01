@@ -217,7 +217,7 @@ VIEWS.conferencia = arg => {
   const um = arg && find('operations', arg);
   if (um) return head('Conferência', `${um.type} — ${opPlace(um)}`, btn('← Conferência', 'nav', 'conferencia', 'secondary') + btn('Operações', 'nav', 'operacoes', 'secondary')) + confCartao(um);
   const pend = confPendentes(), desde = addDias(today(), -30);
-  const conferidas = db.operations.filter(o => ['aprovada', 'correcao'].includes(confSituacao(o)) && String(o.conferencia.em || '').slice(0, 10) >= desde).sort((a, b) => String(b.conferencia.em).localeCompare(String(a.conferencia.em)));
+  const conferidas = db.operations.filter(o => ['aprovada', 'correcao'].includes(confSituacao(o)) && (o.conferencia.em ? isoDate(new Date(o.conferencia.em)) : '') >= desde).sort((a, b) => String(b.conferencia.em).localeCompare(String(a.conferencia.em)));
   const lista = confFiltro === 'pendentes' ? pend : conferidas;
   return head('Conferência das operações', 'Confira de longe: local, horário, números e fotos do que o operador concluiu.', btn('Operações', 'nav', 'operacoes', 'secondary')) +
     (confGestor() ? confPainelAjustes() : '') +
