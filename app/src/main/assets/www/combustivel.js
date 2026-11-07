@@ -41,7 +41,7 @@ function abastecimentoForm(machineId) {
   if (!ativas.length) { showToast('Cadastre uma máquina ativa primeiro'); return; }
   const diesel = db.stock.filter(s => s.category === 'Combustível');
   const m0 = machineId ? find('machines', machineId) : null;
-  openForm({
+  openForm({form: 'abastecimento',
     title: `Abastecimento${m0 ? ' — ' + m0.name : ''}`,
     sub: 'Para medir o consumo, abasteça até completar o tanque e marque “Tanque cheio”. O consumo é calculado entre dois tanques cheios.',
     values: {machineId, date: today(), cheio: 'Sim', origem: diesel.length ? 'estoque' : 'posto', gasto: 'Sim', itemId: diesel.length === 1 ? diesel[0].id : ''},

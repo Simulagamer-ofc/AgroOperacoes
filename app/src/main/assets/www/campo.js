@@ -27,7 +27,7 @@ function chuvaEstimada(data, hora, fieldId) {
 const fmtDiaHoraChuva = iso => `${fmtDate(iso.slice(0, 10)).slice(0, 5)} ${iso.slice(11, 13)}h`;
 function chuvaForm(valores = {}) {
   const manual = valores.mm != null && valores.mm !== '';
-  openForm({title: 'Registrar chuva', sub: 'Leitura do pluviômetro (mm). Sem talhão = pluviômetro da sede.', values: {date: today(), hora: valores.notes ? '' : nowTime(), ...valores},
+  openForm({form: 'chuva', title: 'Registrar chuva', sub: 'Leitura do pluviômetro (mm). Sem talhão = pluviômetro da sede.', values: {date: today(), hora: valores.notes ? '' : nowTime(), ...valores},
     fields: [{k: 'date', label: 'Data da leitura', type: 'date', required: true}, {k: 'hora', label: 'Hora da leitura', type: 'time', hint: 'Já vem com a hora de agora; ajuste se leu o pluviômetro antes.'},
       {k: 'mm', label: 'Chuva (mm)', type: 'number', min: 0, required: true, hint: ' '},
       {k: 'fieldId', label: 'Talhão / pluviômetro', type: 'select', options: fieldOptions}, {k: 'notes', label: 'Observações', type: 'textarea'}],
@@ -98,7 +98,7 @@ VIEWS.chuva = () => {
   const media = (de, ate) => { const l = db.chuvas.filter(c => c.date >= de && c.date <= ate), n = new Set(l.map(c => c.fieldId || '')).size; return {mm: n ? soma(l) / n : 0, n}; };
   const plu = n => `${n} ${n === 1 ? 'pluviômetro' : 'pluviômetros'} com leitura`;
   const m30 = media(ini30, t), mAno = media(anoIni, t);
-  return head('Chuvas', 'Pluviometria por talhão ou da sede', btn('← MercaClima', 'nav', 'clima', 'secondary') + (db.chuvas.length ? btn('Compartilhar resumo', 'ch-resumo', '', 'secondary') : '') + btn('+ Chuva', 'ch-new')) +
+  return head('Chuvas', 'Pluviometria por talhão ou da sede', btn('← MercaClima', 'nav', 'clima', 'secondary') + (db.chuvas.length ? btn('Compartilhar resumo', 'ch-resumo', '', 'secondary') : '') + (db.fields.length ? btn('Vários pluviômetros', 'ch-varios', '', 'secondary') : '') + btn('+ Chuva', 'ch-new')) +
     (db.chuvas.length ? `<section class="es-kpis">
       <article class="card kpi"><div class="label">Últimos 30 dias</div><div class="value">${um1(m30.mm)} mm</div><div class="hint">${m30.n > 1 ? 'média entre ' + plu(m30.n) : m30.n ? plu(1) : 'sem leitura no período'}</div></article>
       <article class="card kpi"><div class="label">No ano</div><div class="value">${um1(mAno.mm)} mm</div><div class="hint">desde 01/01${mAno.n > 1 ? ' • média entre ' + plu(mAno.n) : ''}</div></article>
@@ -115,7 +115,7 @@ VIEWS.chuva = () => {
 function monitoramentoForm(m = {}) {
   if (!db.fields.length) { showToast('Cadastre o talhão primeiro'); return fieldForm(); }
   const idMon = m.id || uid(); // id já na abertura: as fotos tiradas antes de salvar ficam ligadas a ele
-  openForm({title: m.id ? 'Editar monitoramento' : 'Registrar monitoramento', sub: 'Média dos pontos amostrados. O nível de ação vem da recomendação técnica (opcional).',
+  openForm({form: 'mip', editando: !!m.id, title: m.id ? 'Editar monitoramento' : 'Registrar monitoramento', sub: 'Média dos pontos amostrados. O nível de ação vem da recomendação técnica (opcional).',
     values: {date: today(), tipo: 'Praga', ...m},
     fields: [{k: 'fieldId', label: 'Talhão', type: 'select', options: fieldOptions, required: true, full: true}, {k: 'date', label: 'Data', type: 'date', required: true},
       {k: 'tipo', label: 'Tipo', type: 'select', options: ['Praga', 'Doença', 'Planta daninha', 'Inimigo natural'], required: true},
@@ -150,7 +150,7 @@ function aplicacaoForm() {
   if (!db.fields.length) { showToast('Cadastre o talhão primeiro'); return fieldForm(); }
   avisoPulvConfirmado = '';
   const pulvs = db.machines.filter(m => !isInactive(m)).sort((a, b) => (b.type === 'Pulverizador') - (a.type === 'Pulverizador') || a.name.localeCompare(b.name)).map(m => ({value: m.id, label: m.name}));
-  openForm({title: 'Registrar aplicação de defensivo', sub: 'Carência e reentrada conforme a bula/receituário. A quantidade total pode sair do estoque.', values: {date: today(), baixar: 'Sim'},
+  openForm({form: 'aplicacao', title: 'Registrar aplicação de defensivo', sub: 'Carência e reentrada conforme a bula/receituário. A quantidade total pode sair do estoque.', values: {date: today(), baixar: 'Sim'},
     fields: [{k: 'fieldId', label: 'Talhão', type: 'select', options: fieldOptions, required: true, full: true}, {k: 'date', label: 'Data da aplicação', type: 'date', required: true},
       {k: 'itemId', label: 'Produto do estoque', type: 'select', full: true, options: () => db.stock.map(s => ({value: s.id, label: `${s.name} — ${num(s.qty)} ${s.unit}`}))},
       {k: 'produto', label: 'Nome do produto', placeholder: 'Se não estiver no estoque', mostrarSe: ['itemId', '']}, {k: 'dose', label: 'Dose aplicada', placeholder: 'Ex.: 1,5 L/ha'},

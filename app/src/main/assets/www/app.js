@@ -298,7 +298,15 @@ function numeroBR(str) {
  * onSubmit(values) → retorna string de erro para manter aberto, ou nada para fechar.
  */
 // Campos: mais: true → ficam em “Mais opções” (recolhido); mostrarSe: [campo, valor ou lista] → só aparece quando o outro campo tem esse valor
-function openForm({title, sub, fields, values = {}, submit = 'Salvar no dispositivo', onSubmit, maisRotulo = 'Mais opções'}) {
+// Ganchos dos formulários (agil.js): FORM_PRE ajusta campos e valores antes de abrir; FORM_POS age no formulário aberto
+const FORM_PRE = [], FORM_POS = [];
+const normSug = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+function openForm(cfg) {
+  cfg.values = cfg.values || {};
+  FORM_PRE.forEach(h => { try { h(cfg); } catch (e) { console.warn(e); } });
+  const {title, sub, fields, values, submit = 'Salvar no dispositivo', onSubmit, maisRotulo = 'Mais opções'} = cfg;
+  // Sugestões (lista ao digitar): nomes já usados ou cadastrados; com canon, o que bate (sem acento/maiúscula) é gravado igual ao da lista
+  const sugDe = f => f.sugestoes ? [...new Set((typeof f.sugestoes === 'function' ? f.sugestoes() : f.sugestoes).map(x => String(x || '').trim()).filter(Boolean))] : [];
   const input = f => {
     const v = values[f.k] ?? f.default ?? '';
     const common = `name="${f.k}" id="f_${f.k}" ${f.required ? 'required' : ''}`;
@@ -314,7 +322,8 @@ function openForm({title, sub, fields, values = {}, submit = 'Salvar no disposit
     if (f.type === 'textarea') return `<textarea ${common} rows="3" placeholder="${esc(f.placeholder || '')}">${esc(v)}</textarea>`;
     // Números como texto (o campo numérico do navegador lê "1.250" como 1,25 e "1250,50" como 125050): lidos por numeroBR
     if (f.type === 'number') return `<input ${common} type="text" inputmode="decimal" autocomplete="off" value="${esc(typeof v === 'number' ? String(v).replace('.', ',') : v)}" placeholder="${esc(f.placeholder || '')}">`;
-    return `<input ${common} type="${f.type || 'text'}" value="${esc(v)}" ${f.min != null ? `min="${f.min}"` : ''} placeholder="${esc(f.placeholder || '')}">`;
+    const sug = sugDe(f);
+    return `<input ${common} type="${f.type || 'text'}" value="${esc(v)}" ${f.min != null ? `min="${f.min}"` : ''} placeholder="${esc(f.placeholder || '')}"${sug.length ? ` list="dl_${f.k}" autocomplete="off"` : ''}>${sug.length ? `<datalist id="dl_${f.k}">${sug.map(x => `<option value="${esc(x)}">`).join('')}</datalist>` : ''}`;
   };
   const campo = f => `<div class="field ${f.full || f.type === 'textarea' ? 'full' : ''}"${f.mostrarSe ? ` data-se="${esc((typeof f.mostrarSe[0] === 'string' ? [f.mostrarSe] : f.mostrarSe).map(([c, v]) => c + '=' + [].concat(v).join('|')).join(';'))}"` : ''}><label for="f_${f.k}">${esc(f.label)}${f.required ? ' *' : ''}</label>${input(f)}${f.hint ? `<span class="hint">${esc(f.hint)}</span>` : ''}</div>`;
   const mais = fields.filter(f => f.mais);
@@ -334,7 +343,7 @@ function openForm({title, sub, fields, values = {}, submit = 'Salvar no disposit
     const out = {};
     fields.forEach(f => {
       const el = form.elements[f.k], raw = el.value.trim();
-      if (f.type !== 'number') { out[f.k] = raw; return; }
+      if (f.type !== 'number') { const igual = f.canon && raw ? sugDe(f).find(x => normSug(x) === normSug(raw)) : ''; out[f.k] = igual || raw; return; }
       const n = raw === '' ? '' : numeroBR(raw);
       marcar(el, n === undefined ? (ambiguoBR(raw) ? `Valor ambíguo: escreva ${raw.replace('.', '')} ou ${raw},00` : 'Número inválido') : n !== '' && f.min != null && n < f.min ? `O valor mínimo é ${num(f.min)}` : '');
       out[f.k] = n;
@@ -345,6 +354,7 @@ function openForm({title, sub, fields, values = {}, submit = 'Salvar no disposit
     closeModal(); render();
   };
   modal.classList.add('open');
+  FORM_POS.forEach(h => { try { h(cfg, form); } catch (e) { console.warn(e); } });
   // Foca o primeiro campo só se o usuário ainda não tocou em outro (evita mandar o texto para o campo errado)
   setTimeout(() => { if (!dialog.contains(document.activeElement)) form.elements[0]?.focus(); }, 50);
 }
@@ -395,7 +405,7 @@ function operationForm(op = {}) {
   // Registro antigo "Limpeza de secador/silo": abre já no tipo separado, pelo equipamento gravado
   if (op.type === OP_LIMPEZA_ANTIGA) { const tq = find('machines', op.machineId)?.type; op = {...op, type: tq === 'Moega' ? 'Limpeza de moega' : tq === 'Silo/Armazém' ? 'Limpeza de silo' : 'Limpeza de secador'}; }
   const tipoIni = op.type || null; // operação nova: o tipo vem vazio e o resto só aparece depois de escolher
-  openForm({
+  openForm({form: 'op', editando: !!op.id,
     title: op.id ? 'Editar operação' : 'Nova operação',
     values: {date: today(), time: nowTime(), status: 'Programada', ...op},
     fields: [
@@ -423,11 +433,20 @@ function operationForm(op = {}) {
       if (OP_COM_KG.includes(v.type) && !v.place && !v.machineId) return 'Informe o local ou a máquina';
       const lib = v.type === 'Colheita' && v.fieldId && typeof liberacaoColheita === 'function' ? liberacaoColheita(v.fieldId) : null;
       if (lib && v.date < lib.libera && avisoColheitaOk !== v.fieldId + v.date) { avisoColheitaOk = v.fieldId + v.date; return `Atenção: ${fieldName(v.fieldId)} está na carência de ${lib.a.produto} (aplicado em ${fmtDate(lib.a.date)}); a colheita só está liberada a partir de ${fmtDate(lib.libera)}. Toque em salvar de novo para registrar mesmo assim.`; }
+      // Precisão: a mesma máquina (ou implemento) em duas operações em andamento conta as horas duas vezes
+      if (v.status === 'Em andamento' && op.status !== 'Em andamento' && typeof opMaquinaOcupada === 'function') { const oc = opMaquinaOcupada({...op, ...v}); if (oc) return oc; }
+      // Área maior que o talhão (5% de folga): confirma antes de gravar
+      if (v.status === 'Concluída' && typeof opAreaAcima === 'function') { const ac = opAreaAcima({...op, ...v}, v.area); if (ac) return ac; }
+      // Programar em vários talhões de uma vez: uma operação para cada talhão marcado
+      const outros = !op.id && v.status === 'Programada' && c.talhao === 'sim' && v.fieldId ? $$('[data-op-talhoes] input:checked', dialog).map(x => x.value).filter(id => id !== v.fieldId) : [];
       const item = {...op, ...v, id: op.id || uid(), createdAt: op.createdAt || new Date().toISOString()};
       // Produtos da operação (aplicação, adubação, plantio, tratamento de sementes)
       const errProd = typeof prodAoSalvarOp === 'function' ? prodAoSalvarOp(item, op) : ''; if (errProd) return errProd;
       upsert('operations', item);
-      showToast('Operação salva no dispositivo');
+      outros.forEach(fid => { const f = find('fields', fid); if (!f) return;
+        db.operations.push({...JSON.parse(JSON.stringify(item)), id: uid(), fieldId: fid, place: '', area: c.area && item.area !== '' && item.area != null && Number(f.area) > 0 ? Number(f.area) : '', createdAt: new Date().toISOString()}); });
+      if (outros.length) save();
+      showToast(outros.length ? `Operação programada em ${outros.length + 1} talhões` : 'Operação salva no dispositivo');
     }
   });
   // Mostra só os campos do tipo escolhido e troca a lista de máquinas/equipamentos (secagem: só secadores; moega; silo…)
@@ -471,6 +490,16 @@ function operationForm(op = {}) {
       const hi = campo('implementoId').querySelector('.hint'); if (hi && db.machines.some(m => m.type === 'Implemento')) hi.textContent = ''; }
     const notas = $('#f_notes', dialog); if (notas) notas.placeholder = c.notas;
   };
+  if (!op.id && db.fields.length > 1) {
+    const box = Object.assign(document.createElement('details'), {className: 'field full op-talhoes'}); box.dataset.opTalhoes = '';
+    box.innerHTML = `<summary>+ Programar também em outros talhões <small data-op-talhoes-n></small></summary><div class="op-talhoes-lista">${db.fields.slice().sort((a, b) => String(a.name).localeCompare(String(b.name), 'pt-BR', {numeric: true})).map(f => `<label class="pce-mod"><input type="checkbox" value="${esc(f.id)}"><span><b>${esc(f.name)}</b><small>${esc([f.crop, Number(f.area) > 0 ? num(f.area) + ' ha' : ''].filter(Boolean).join(' • '))}</small></span></label>`).join('')}</div><span class="hint">Cria uma operação para cada talhão marcado, com a área de cada um. Os produtos e a dose valem para todos.</span>`;
+    campo('fieldId')?.after(box);
+    const contar = () => { if (!box.isConnected) return; const n = $$('input:checked', box).filter(x => x.value !== $('#f_fieldId', dialog)?.value).length; $('[data-op-talhoes-n]', box).textContent = n ? `(${n} marcado${n > 1 ? 's' : ''})` : ''; };
+    box.addEventListener('change', contar);
+    const verTalhoes = () => { if (!box.isConnected) return; const fld = campo('fieldId'), st = $('#f_status', dialog)?.value; box.hidden = !fld || fld.hidden || !!fld.classList.contains('sem-tipo') || st !== 'Programada';
+      $$('input', box).forEach(x => { const eu = x.value === $('#f_fieldId', dialog)?.value; x.disabled = eu; x.closest('label').hidden = eu; }); contar(); };
+    ['#f_type', '#f_fieldId', '#f_status'].forEach(q => $(q, dialog)?.addEventListener('change', () => setTimeout(verTalhoes, 0))); verTalhoes();
+  }
   if (tipo) { tipo.addEventListener('change', mostrar); $('#f_fieldId', dialog)?.addEventListener('change', mostrar); mostrar(); }
   if (typeof prodAoAbrirOp === 'function') prodAoAbrirOp(op);
 }
@@ -550,7 +579,7 @@ function hourForm(machineId) {
   if (machineId && (!find('machines', machineId) || isInactive(find('machines', machineId)))) { showToast('Máquina inativa: reative-a em Editar para registrar o horímetro'); return; }
   if (!db.machines.some(m => !isInactive(m))) { showToast('Nenhuma máquina ativa'); return; }
   const m0 = machineId ? find('machines', machineId) : null;
-  openForm({
+  openForm({form: 'horimetro',
     title: m0 && porKm(m0) ? 'Registrar odômetro' : 'Registrar horímetro / odômetro',
     values: {machineId, date: today()},
     fields: [
@@ -809,7 +838,7 @@ function aplicarMovimento(s, kind, qty, value) {
 function movementForm(itemId, kind) {
   if (!db.stock.length) { showToast('Cadastre um item de estoque primeiro'); return stockForm(); }
   const s0 = find('stock', itemId), entrada = kind === 'Entrada', saida = kind === 'Saída', ajuste = kind === 'Ajuste de inventário';
-  openForm({
+  openForm({form: 'mov', kind: kind || '',
     title: entrada ? `Entrada — ${s0?.name || 'estoque'}` : saida ? `Saída — ${s0?.name || 'estoque'}` : ajuste ? `Ajuste de inventário — ${s0?.name || 'estoque'}` : 'Movimentar estoque',
     sub: entrada ? 'Compra ou recebimento. Com o valor da nota, o custo médio do item é recalculado.' : saida ? 'Consumo ou aplicação. O custo sai pelo custo médio do item, quando conhecido.' : ajuste ? `Informe o saldo contado. Saldo atual no app: ${num(s0?.qty)} ${s0?.unit || ''}. O custo médio não muda.` : '',
     values: {itemId, kind: kind || 'Saída', date: today(), gasto: 'Sim'},
@@ -908,7 +937,7 @@ VIEWS.operacoes = () => {
 VIEWS.maquinas = () => {
   const ms = db.machines.filter(m => m.type !== 'Implemento').sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'pt-BR', {numeric: true})); // implementos: aba própria
   const mts = db.maintenances.filter(mt => find('machines', mt.machineId)?.type !== 'Implemento').sort(ordemManut);
-  return head('Máquinas e manutenção', 'Horímetro e km, revisões programadas e ordens de manutenção.', btn('Registrar horímetro / km', 'hour-new', '', 'secondary') + (typeof rmqPendentes === 'function' && (typeof mcpGestor !== 'function' || mcpGestor()) && rmqPendentes().length ? btn(`⚠ Revisar cadastro (${rmqPendentes().length})`, 'nav', 'revisarmaq', 'secondary') : '') + btn('☑ Checklists', 'nav', 'checklists', 'secondary') + (typeof mcpGestor !== 'function' || mcpGestor() ? btn('📊 Indicadores', 'nav', 'manutind', 'secondary') + btn('Abrir manutenção', 'mt-new', '', 'secondary') : btn('☑ Fazer checklist', 'mcp-novo', '', 'secondary')) + btn('+ Nova máquina', 'mc-new')) +
+  return head('Máquinas e manutenção', 'Horímetro e km, revisões programadas e ordens de manutenção.', btn('📷 Ler QR', 'ag-ler-qr', '', 'secondary') + btn('Registrar horímetro / km', 'hour-new', '', 'secondary') + (typeof rmqPendentes === 'function' && (typeof mcpGestor !== 'function' || mcpGestor()) && rmqPendentes().length ? btn(`⚠ Revisar cadastro (${rmqPendentes().length})`, 'nav', 'revisarmaq', 'secondary') : '') + btn('☑ Checklists', 'nav', 'checklists', 'secondary') + (typeof mcpGestor !== 'function' || mcpGestor() ? btn('📊 Indicadores', 'nav', 'manutind', 'secondary') + btn('Abrir manutenção', 'mt-new', '', 'secondary') : btn('☑ Fazer checklist', 'mcp-novo', '', 'secondary')) + btn('+ Nova máquina', 'mc-new')) +
     (ms.length ? (typeof catmLista === 'function' ? catmLista('maquinas', ms, {nome: 'máquina', grupos: GRUPOS_TIPO_MAQ.map(([g]) => g), grupoDe: m => grupoDoTipoMaq(m.type), cartao: cartaoMaquina, atencao: catmAtencaoMaq, texto: catmTextoMaq})
       : `<section class="cards">${ms.map(cartaoMaquina).join('')}</section>`) : `<section class="card">${empty('Nenhuma máquina cadastrada', 'Cadastre tratores, colheitadeiras e implementos para controlar horímetro e revisões.', {act: 'mc-new', label: '+ Nova máquina'})}</section>`) +
     `<div class="section-title"><h3>Ordens de manutenção</h3></div><section class="card list">${mts.length ? mts.map(mt => linhaManutencao(mt, 'Máquina removida')).join('') : empty('Nenhuma manutenção registrada', 'Abra uma ordem de manutenção para acompanhar custo e revisões.', {act: 'mt-new', label: '+ Abrir manutenção'})}</section>`;
@@ -937,7 +966,7 @@ function cartaoMaquina(m) {
     ${extras.length ? `<div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>` : ''}
     <div class="maq-acoes">${isInactive(m) ? '' : (temMedidor(m) ? mini(porKm(m) ? '◷ Odômetro' : '◷ Horímetro', 'hour-new', m.id) : '') + mini('☑ Checklist', 'mcp-novo', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}
       <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">
-        ${mini('📘 Catálogo de peças', 'nav', 'pecas/' + m.id)}${isInactive(m) || !usaCombustivel(m) ? '' : mini('⛽ Abastecimento', 'cb-new', m.id)}${typeof mcpGestor !== 'function' || mcpGestor() ? mini('📊 Indicadores de manutenção', 'nav', 'manutind/' + m.id) : ''}${afere ? mini('◎ Aferição e calibragem', 'af-nova', m.id) : ''}${afere || af ? mini('Histórico de aferições', 'af-maq', m.id) : ''}${afere ? mini('⚙ Configuração para aferição', 'mc-config', m.id) : ''}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${afere || m.catalogo ? mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id) : ''}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
+        ${mini('📘 Catálogo de peças', 'nav', 'pecas/' + m.id)}${mini('🏷 Etiqueta QR', 'nav', 'etiquetasmaq/' + m.id)}${isInactive(m) || !usaCombustivel(m) ? '' : mini('⛽ Abastecimento', 'cb-new', m.id)}${typeof mcpGestor !== 'function' || mcpGestor() ? mini('📊 Indicadores de manutenção', 'nav', 'manutind/' + m.id) : ''}${afere ? mini('◎ Aferição e calibragem', 'af-nova', m.id) : ''}${afere || af ? mini('Histórico de aferições', 'af-maq', m.id) : ''}${afere ? mini('⚙ Configuração para aferição', 'mc-config', m.id) : ''}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${afere || m.catalogo ? mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id) : ''}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
       </div></details></div></article>`;
 }
 

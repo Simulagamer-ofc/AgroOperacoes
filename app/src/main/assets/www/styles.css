@@ -1542,3 +1542,16 @@ a.btn.primary{background:var(--blue);color:#fff}a.btn.secondary{background:var(-
 :root[data-theme="light"] .marca-tipos{color:var(--muted);opacity:1}:root[data-theme="light"] #mtAlerta{color:#a32626}:root[data-theme="dark"] #mtAlerta{color:#f59a9a}
 :root[data-theme="dark"] .cpr-lst a{color:#7cc0f5}
 :root.modo-campo .es-repor strong{color:#9a3a08}
+/* Agilidade (0.85) */
+.op-talhoes{border:1px dashed var(--line);border-radius:12px;padding:8px 12px}.op-talhoes summary{cursor:pointer;font-weight:600;color:var(--blue)}.op-talhoes summary small{color:var(--muted);font-weight:400}
+.op-talhoes-lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px;margin:8px 0;max-height:240px;overflow:auto}.op-talhoes-lista label[hidden]{display:none}
+.ag-gps,.ag-dica{display:block}.ag-gps .link,.ag-dica .link{padding:0;font-size:inherit}
+.ag-ultimo{display:block;width:100%;margin:0 0 10px;padding:9px 12px;border-radius:10px;border:1px dashed var(--blue);background:transparent;color:var(--blue);font:inherit;font-weight:600;text-align:left;cursor:pointer}
+.ag-acoes{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:12px}.ag-acoes .ag-acao{min-height:56px;font-size:1rem}
+.ag-etq .et-txt small{color:#555;margin-top:4px}
+.cpr-nf{display:grid;gap:10px;min-width:0}.cpr-nf>*{min-width:0}.cpr-nf-it{display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:8px 10px;align-items:end;padding:10px;border:1px solid var(--line);border-radius:12px}
+.cpr-nf-cab{grid-column:1/-1}.cpr-nf-it select,.cpr-nf-it input{width:100%;min-width:0;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);font:inherit}
+.cpr-nf .form{grid-template-columns:repeat(2,minmax(0,1fr))}.cpr-nf .form input,.cpr-nf .form select{width:100%;min-width:0}
+.cpr-nf-it label{display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:var(--muted)}.cpr-nf-cab small{display:block;color:var(--muted)}
+.cpr-nf-aviso{grid-column:1/-1;color:#9a4a06}:root[data-theme="dark"] .cpr-nf-aviso{color:var(--orange)}.cpr-nf-aviso:empty{display:none}
+@media(max-width:560px){.cpr-nf-it{grid-template-columns:minmax(0,1fr) 90px}.cpr-nf .form{grid-template-columns:minmax(0,1fr)}}

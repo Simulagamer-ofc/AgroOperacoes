@@ -227,7 +227,7 @@ VIEWS.compras = arg => {
   const resumoForn = porForn.length ? `<details class="cpr-forn"><summary>Pedidos em aberto por fornecedor (${porForn.length})</summary><div class="list cpr-lst">${porForn.map(([fid, q]) => `<div class="list-row"><div><strong>${esc(cprForn(fid)?.nome || 'Sem fornecedor')}</strong><small>${q} ${q === 1 ? 'item' : 'itens'} • ${todos.filter(c => c.status === 'pedido' && (c.fornecedorId || '') === fid && cprAtrasado(c)).length} atrasado(s)</small></div></div>`).join('')}</div></details>` : '';
   const corpo = lista.length ? `<section class="cards cpr-lista">${lista.map(c => cprCartao(c, true)).join('')}</section><section class="card cpr-nada" hidden>${empty('Nada encontrado', 'Nenhum pedido com essas palavras.')}</section>`
     : `<section class="card">${empty(filtro === 'abertos' ? 'Nenhum pedido em aberto' : 'Nada nesta etapa', 'Os pedidos chegam pelo 🛒 Pedir nas peças, no catálogo do fabricante, nas ordens de manutenção, no estoque abaixo do mínimo, ou pelo “+ Novo pedido”.', {act: 'cpr-novo', label: '+ Novo pedido'})}</section>`;
-  return head('Compras', 'Todos os pedidos da fazenda: aprovar, cotar, pedir ao fornecedor e receber.', btn('Fornecedores', 'nav', 'fornecedores', 'secondary') + novo) + kpis + avisos + filtros + busca + barra + resumoForn + corpo;
+  return head('Compras', 'Todos os pedidos da fazenda: aprovar, cotar, pedir ao fornecedor e receber.', btn('Fornecedores', 'nav', 'fornecedores', 'secondary') + (typeof lerXmlNfe === 'function' ? btn('📄 Receber pela nota (XML)', 'cpr-xml', '', 'secondary') : '') + novo) + kpis + avisos + filtros + busca + barra + resumoForn + corpo;
 };
 VIEWS.compras.after = () => { if (cprBusca) cprAplicarBusca(); };
 TITLES.compras = 'Compras';
@@ -320,6 +320,29 @@ function cprEnviar(ids) {
       setTimeout(() => cprMostrarMensagens('Mande o pedido ao fornecedor', 'Os itens estão em “Pedidos ao fornecedor”. Quando chegar, toque em “📦 Receber”.', [{forn: cprForn(v.fornecedorId), msg: cprMensagem('pedido', cprForn(v.fornecedorId), lista, v.previsao)}]), 0);
     }});
 }
+// Registra um recebimento: entrada no estoque (criando o item, se pedido), gasto opcional e etapa do pedido
+// v: {qtd, data, nf, estoque: 'sim' | 'novo' | 'nao', valor, gasto: 'Sim' | 'Não'}
+function cprRegistrarRecebimento(c, v) {
+  const s = cprItemEst(c), p = cprPeca(c);
+  const rec = {qtd: v.qtd, data: v.data, nf: v.nf || '', por: cprEu(), em: cprAgora()};
+  let item = s;
+  if (v.estoque === 'novo' && !item) {
+    item = {id: uid(), name: cprDesc(c), category: 'Peças', unit: cprUnid(c), qty: 0, min: '', codigo: cprCod(c), fornecedor: cprForn(c.fornecedorId)?.nome || ''};
+    db.stock.push(item); c.itemId = item.id;
+    if (p && !p.itemId && !(typeof nvComum === 'function' && nvComum())) { p.itemId = item.id; upsert('pecas', p); }
+  }
+  if (item && v.estoque !== 'nao') {
+    const valor = Number(v.valor) > 0 ? Number(v.valor) : 0, mov = aplicarMovimento(item, 'Entrada', Number(v.qtd), valor);
+    const reg = {id: uid(), itemId: item.id, kind: 'Entrada', qty: v.qtd, date: v.data, supplier: cprForn(c.fornecedorId)?.nome || v.fornecedorNf || '', doc: v.nf || '', notes: `Compra ${cprNum(c)}${cprMaqNome(c) ? ' — ' + cprMaqNome(c) : ''}`, compraId: c.id, ...mov};
+    db.movements.push(reg); rec.movId = reg.id;
+    if (valor && v.gasto === 'Sim') db.expenses.push({id: uid(), date: v.data, category: CAT_GASTO_DO_ITEM[item.category] || 'Insumos', description: `Compra: ${item.name} — ${num(v.qtd)} ${item.unit}`, value: valor, supplier: reg.supplier, doc: reg.doc, movementId: reg.id, ...(c.maquinaId ? {machineId: c.maquinaId} : {})});
+  }
+  c.recebidos = [...(c.recebidos || []), rec];
+  const tudo = cprFalta(c) <= 0;
+  if (tudo) Object.assign(c, {status: 'recebido', fechadoPor: cprEu(), fechadoEm: cprAgora()});
+  cprGravar(c, `${tudo ? 'Recebido' : 'Recebido em parte'}: ${num(v.qtd)} ${cprUnid(c)}${v.nf ? ` (NF ${v.nf})` : ''}${rec.movId ? ' — entrada no estoque' : ''}${v.pelaNota ? ' — pela nota (XML)' : ''}`);
+  return {tudo, item, rec};
+}
 function cprReceber(c) {
   if (!cprSoDecide() || c.status !== 'pedido') return;
   const s = cprItemEst(c), p = cprPeca(c), fin = typeof nvVeFinanceiro === 'function' ? nvVeFinanceiro() : true;
@@ -335,24 +358,8 @@ function cprReceber(c) {
     maisRotulo: 'Valor da nota (opcional)',
     onSubmit: v => {
       if (!(v.qtd > 0)) return 'Informe a quantidade recebida';
-      const rec = {qtd: v.qtd, data: v.data, nf: v.nf || '', por: cprEu(), em: cprAgora()};
-      let item = s;
-      if (v.estoque === 'novo') {
-        item = {id: uid(), name: cprDesc(c), category: 'Peças', unit: cprUnid(c), qty: 0, min: '', codigo: cprCod(c), fornecedor: cprForn(c.fornecedorId)?.nome || ''};
-        db.stock.push(item); c.itemId = item.id;
-        if (p && !p.itemId && !(typeof nvComum === 'function' && nvComum())) { p.itemId = item.id; upsert('pecas', p); }
-      }
-      if (item && v.estoque !== 'nao') {
-        const valor = Number(v.valor) > 0 ? Number(v.valor) : 0, mov = aplicarMovimento(item, 'Entrada', Number(v.qtd), valor);
-        const reg = {id: uid(), itemId: item.id, kind: 'Entrada', qty: v.qtd, date: v.data, supplier: cprForn(c.fornecedorId)?.nome || '', doc: v.nf || '', notes: `Compra ${cprNum(c)}${cprMaqNome(c) ? ' — ' + cprMaqNome(c) : ''}`, compraId: c.id, ...mov};
-        db.movements.push(reg); rec.movId = reg.id;
-        if (valor && v.gasto === 'Sim') db.expenses.push({id: uid(), date: v.data, category: CAT_GASTO_DO_ITEM[item.category] || 'Insumos', description: `Compra: ${item.name} — ${num(v.qtd)} ${item.unit}`, value: valor, supplier: reg.supplier, doc: reg.doc, movementId: reg.id, ...(c.maquinaId ? {machineId: c.maquinaId} : {})});
-      }
-      c.recebidos = [...(c.recebidos || []), rec];
-      const tudo = cprFalta(c) <= 0;
-      if (tudo) Object.assign(c, {status: 'recebido', fechadoPor: cprEu(), fechadoEm: cprAgora()});
-      cprGravar(c, `${tudo ? 'Recebido' : 'Recebido em parte'}: ${num(v.qtd)} ${cprUnid(c)}${v.nf ? ` (NF ${v.nf})` : ''}${rec.movId ? ' — entrada no estoque' : ''}`);
-      showToast(tudo ? `${cprDesc(c)} recebido${rec.movId ? ` • saldo ${num(item.qty)} ${item.unit}` : ''}` : `Recebido em parte: faltam ${num(cprFalta(c))} ${cprUnid(c)}`);
+      const r = cprRegistrarRecebimento(c, v);
+      showToast(r.tudo ? `${cprDesc(c)} recebido${r.rec.movId ? ` • saldo ${num(r.item.qty)} ${r.item.unit}` : ''}` : `Recebido em parte: faltam ${num(cprFalta(c))} ${cprUnid(c)}`);
     }});
 }
 Object.assign(ACTIONS, {
@@ -517,3 +524,77 @@ function cprMigrarPedidoLocal() {
   save(); try { localStorage.removeItem('mp-pedido-pecas'); } catch { /* sem armazenamento */ }
 }
 try { cprMigrarPedidoLocal(); } catch (e) { console.warn(e); }
+
+// ---------------- Receber pela nota fiscal (XML da NF-e) ----------------
+// Cada item da nota é ligado ao pedido pelo código (da peça, do fornecedor ou equivalente). Pelo nome só é sugerido:
+// a pessoa escolhe. A quantidade nunca passa do que falta no pedido e a unidade diferente é avisada (não há conversão).
+function cprCasarNota(nf) {
+  const abertos = db[CPR_COL].filter(c => ['pedido', 'aprovado', 'cotando'].includes(c.status) && cprFalta(c) > 0);
+  const fornNf = normNfe(nf.emitente);
+  return nf.itens.map(it => {
+    const cod = pcNorm(it.codigo), palavras = new Set(normNfe(it.nome).split(' ').filter(w => w.length > 2));
+    const cands = abertos.map(c => {
+      const p = cprPeca(c), cods = [cprCod(c), ...(p?.fornecedores || []).map(f => f.codigo), ...(p?.equivalentes || []).map(e => e.codigo)].filter(Boolean).map(pcNorm);
+      let pts = 0, por = '';
+      if (cod && cods.includes(cod)) { pts = 100; por = 'código'; }
+      else { const b = normNfe(cprDesc(c)).split(' ').filter(w => w.length > 2), comum = b.filter(w => palavras.has(w)).length; if (b.length && comum / b.length >= 0.6) { pts = 50 + comum; por = 'nome'; } }
+      if (!pts) return null;
+      if (c.status === 'pedido') pts += 10;
+      const fn = normNfe(cprForn(c.fornecedorId)?.nome || '').split(' ')[0]; if (fn && fn.length > 2 && fornNf.includes(fn)) pts += 5;
+      return {c, pts, por};
+    }).filter(Boolean).sort((a, b) => b.pts - a.pts);
+    return {it, cands};
+  });
+}
+function cprReceberNota(nf) {
+  const linhas = cprCasarNota(nf), fin = typeof nvVeFinanceiro === 'function' ? nvVeFinanceiro() : true;
+  const abertos = db[CPR_COL].filter(c => ['pedido', 'aprovado', 'cotando'].includes(c.status) && cprFalta(c) > 0);
+  const opt = (c, por) => `<option value="${esc(c.id)}">${esc(`${cprNum(c)} ${cprCod(c) ? cprCod(c) + ' ' : ''}${cprDesc(c)} — falta ${num(cprFalta(c))} ${cprUnid(c)}${por === 'nome' ? ' (pelo nome — confira)' : ''}`)}</option>`;
+  dialog.innerHTML = `<h3>Receber pela nota ${esc(nf.numero ? 'nº ' + nf.numero : '')}</h3><p class="sub">${esc(nf.emitente || 'Fornecedor')} • ${esc(fmtDate(nf.data))} • ${nf.itens.length} ${nf.itens.length === 1 ? 'item' : 'itens'}. Confira cada item: pelo código já vem ligado ao pedido; pelo nome, escolha você.</p>
+    <form novalidate class="cpr-nf">${linhas.map(({it, cands}, i) => `<section class="cpr-nf-it" data-nf="${i}"><div class="cpr-nf-cab"><span class="pc-cod">${esc(it.codigo || 's/ código')}</span> <b>${esc(it.nome)}</b><small>${num(it.qtd)} ${esc(it.unidade)}${fin && it.valor ? ` • R$ ${num(it.valor - (it.desconto || 0), 2)}` : ''}</small></div>
+        <label>Pedido<select data-nf-ped><option value="">— não é de pedido (não receber aqui)</option>${cands.length ? `<optgroup label="Parecidos">${cands.map(x => opt(x.c, x.por)).join('')}</optgroup>` : ''}${abertos.filter(c => !cands.some(x => x.c === c)).length ? `<optgroup label="Outros pedidos abertos">${abertos.filter(c => !cands.some(x => x.c === c)).map(c => opt(c)).join('')}</optgroup>` : ''}</select></label>
+        <label>Quantidade recebida<input data-nf-qtd type="text" inputmode="decimal" autocomplete="off"></label><small class="cpr-nf-aviso"></small></section>`).join('')}
+      <div class="form"><div class="field"><label for="f_nf_estoque">Dar entrada no estoque</label><select id="f_nf_estoque"><option value="sim">Sim</option><option value="nao">Não</option></select><span class="hint">Peça sem item no estoque: o item é criado.</span></div>
+        <div class="field"><label for="f_nf_data">Data do recebimento</label><input id="f_nf_data" type="date" value="${esc(today())}"></div></div>
+      <div class="actions"><button type="button" class="secondary" data-close>Cancelar</button><button type="submit" class="primary">Registrar recebimento</button></div></form>`;
+  const form = $('form', dialog);
+  $('[data-close]', dialog).onclick = closeModal;
+  const atual = (sec, mudouPedido) => {
+    const {it} = linhas[Number(sec.dataset.nf)], c = cprPega($('[data-nf-ped]', sec).value), q = $('[data-nf-qtd]', sec), av = $('.cpr-nf-aviso', sec);
+    if (!c) { q.value = ''; q.disabled = true; av.textContent = ''; return; }
+    q.disabled = false; if (mudouPedido || q.value === '') q.value = String(Math.min(it.qtd, cprFalta(c))).replace('.', ',');
+    const avisos = [];
+    if (it.qtd > cprFalta(c)) avisos.push(`A nota tem ${num(it.qtd)}, o pedido só precisa de ${num(cprFalta(c))}: confira`);
+    if (normNfe(it.unidade) && normNfe(it.unidade) !== normNfe(cprUnid(c))) avisos.push(`Unidade da nota (${it.unidade}) diferente do pedido (${cprUnid(c)}): informe na unidade do pedido`);
+    if (c.status !== 'pedido') avisos.push('Este pedido ainda não estava como pedido ao fornecedor');
+    av.textContent = avisos.join('. ');
+  };
+  $$('.cpr-nf-it', form).forEach(sec => { const auto = linhas[Number(sec.dataset.nf)].cands[0]; if (auto?.por === 'código') $('[data-nf-ped]', sec).value = auto.c.id; $('[data-nf-ped]', sec).onchange = () => atual(sec, true); atual(sec, true); });
+  form.onsubmit = e => {
+    e.preventDefault();
+    const sel = $$('.cpr-nf-it', form).map(sec => ({i: Number(sec.dataset.nf), c: cprPega($('[data-nf-ped]', sec).value), qtd: numeroBR($('[data-nf-qtd]', sec).value)})).filter(x => x.c);
+    if (!sel.length) return showToast('Ligue pelo menos um item da nota a um pedido', true);
+    const soma = new Map(); sel.forEach(x => soma.set(x.c.id, (soma.get(x.c.id) || 0) + (Number(x.qtd) || 0)));
+    for (const x of sel) {
+      if (!(x.qtd > 0)) return showToast(`Informe a quantidade de ${linhas[x.i].it.nome}`, true);
+      if (soma.get(x.c.id) > cprFalta(x.c) + 1e-9) return showToast(`${cprNum(x.c)} ${cprDesc(x.c)}: recebendo ${num(soma.get(x.c.id))}, mas faltam ${num(cprFalta(x.c))}. Confira a quantidade.`, true);
+    }
+    const data = $('#f_nf_data', form).value || today(), est = $('#f_nf_estoque', form).value;
+    let n = 0;
+    sel.forEach(x => {
+      const it = linhas[x.i].it, s = cprItemEst(x.c), valor = fin && it.qtd > 0 ? Math.round((it.valor - (it.desconto || 0)) * (x.qtd / it.qtd) * 100) / 100 : 0;
+      if (x.c.status !== 'pedido') Object.assign(x.c, {status: 'pedido', enviadoEm: x.c.enviadoEm || cprAgora()});
+      cprRegistrarRecebimento(x.c, {qtd: x.qtd, data, nf: nf.numero, estoque: est === 'nao' ? 'nao' : s ? 'sim' : cprPeca(x.c) ? 'novo' : 'nao', valor, gasto: 'Sim', pelaNota: true, fornecedorNf: nf.emitente}); n++;
+    });
+    closeModal(); render();
+    showToast(`Nota ${nf.numero || ''}: ${n} ${n === 1 ? 'item recebido' : 'itens recebidos'}${sel.length < linhas.length ? ` • ${linhas.length - sel.length} sem pedido (não recebidos aqui)` : ''}`);
+  };
+  modal.classList.add('open');
+}
+ACTIONS['cpr-xml'] = () => {
+  if (!cprSoDecide()) return;
+  const inp = Object.assign(document.createElement('input'), {type: 'file', accept: '.xml,text/xml,application/xml'});
+  inp.onchange = async () => { const f = inp.files?.[0]; if (!f) return;
+    try { const nf = lerXmlNfe(await f.text()); if (!nf.itens.length) throw new Error('Nota sem itens'); cprReceberNota(nf); } catch (e) { showToast(e.message || 'Não foi possível ler o XML', true); } };
+  inp.click();
+};
