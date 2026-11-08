@@ -20,7 +20,7 @@ const somaValor = l => l.reduce((s, x) => s + x.value, 0);
 const agrupar = (l, chave) => { const g = {}; l.forEach(x => { const k = chave(x); g[k] = (g[k] || 0) + x.value; }); return Object.entries(g).sort((a, b) => b[1] - a[1]); };
 
 function gastoForm(g = {}) {
-  openForm({
+  openForm({form: 'gasto',
     title: g.id ? 'Editar gasto' : 'Lançar gasto',
     sub: 'Informe o valor do documento (nota, recibo ou boleto). Vincule à máquina e ao talhão quando houver.',
     values: {date: today(), pagamento: 'À vista', parcelas: 2, ...g},

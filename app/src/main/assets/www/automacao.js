@@ -102,6 +102,19 @@ function conferirSalto(m, novo, data = today()) {
   const dias = Math.max(1, diasEntreAuto(ult.date, data));
   return sobe > porDia * dias ? pedirConfirmacao(`salto|${m.id}|${novo}`, `Atenção: ${nome} de ${m.name} subiria ${num(sobe)} ${u} em ${dias} ${dias === 1 ? 'dia' : 'dias'} (mais de ${num(porDia)} ${u} por dia). Confira se não houve erro de digitação`) : '';
 }
+// Mesma máquina ou implemento já em outra operação em andamento: as horas contariam duas vezes (confirma para seguir)
+function opMaquinaOcupada(o) {
+  const chk = (id, nome) => { if (!id) return ''; const x = db.operations.find(y => y.id !== o.id && y.status === 'Em andamento' && (y.machineId === id || y.implementoId === id));
+    return x ? pedirConfirmacao(`ocupada|${o.id || 'nova'}|${x.id}|${id}`, `${nome} já está em ${x.type} — ${opPlace(x)} (em andamento${x.startedAt ? ' desde ' + fmtDate(isoDate(new Date(x.startedAt))) : ''}). Conclua aquela antes; se as duas estão mesmo acontecendo agora`) : ''; };
+  return chk(o.machineId, machineName(o.machineId) || 'A máquina') || chk(o.implementoId, machineName(o.implementoId) || 'O implemento');
+}
+// Área trabalhada maior que a do talhão (5% de folga para a diferença de medição)
+function opAreaAcima(o, area) {
+  const f = o.fieldId ? find('fields', o.fieldId) : null;
+  if (!f || !(Number(f.area) > 0) || !(Number(area) > Number(f.area) * 1.05)) return '';
+  return pedirConfirmacao(`area|${o.id || 'nova'}|${area}`, `Área de ${num(area)} ha é maior que o talhão ${f.name} (${num(f.area)} ha). Confira o número`);
+}
+
 function conferirRepetido(colecao, igual, descricao) {
   return db[colecao].some(igual) ? pedirConfirmacao(`dup|${colecao}|${descricao}`, `Atenção: ${descricao}`) : '';
 }
@@ -154,6 +167,7 @@ function iniciarOperacao(id) {
       onSubmit: v => {
         if (comHor && (v.horimetro === '' || v.horimetro == null)) return `Informe ${nomeMed(m) === 'odômetro' ? 'o odômetro' : 'o horímetro'} inicial do ${m.name}`;
         if (comHor && Number(v.horimetro) < Number(m.hours || 0)) return `${NomeMed(m)} está menor que o último registrado do ${m.name} (${num(m.hours)} ${unidMed(m)}). Confira o painel.`;
+        { const oc = opMaquinaOcupada(o); if (oc) return oc; }
         // Checklist da máquina (quando ligado): defeito vira pedido; máquina que não pode trabalhar não começa a operação
         const faltaChk = typeof mcpValidarInicio === 'function' ? mcpValidarInicio(o) : ''; if (faltaChk) return faltaChk;
         if (typeof mcpParadaNoInicio === 'function' && mcpParadaNoInicio(o)) { mcpAoIniciar(o, comHor ? v.horimetro : ''); save(); setTimeout(() => showToast(`Operação não iniciada: ${m.name} ficou parada com o defeito informado. O pedido de manutenção foi enviado.`, true), 50); return; }
@@ -190,6 +204,7 @@ function concluirOperacao(id) {
       const faltaComprovar = typeof confValidarConclusao === 'function' ? confValidarConclusao(o) : ''; if (faltaComprovar) return faltaComprovar;
       const faltaProd = typeof prodValidarConclusao === 'function' ? prodValidarConclusao(o) : ''; if (faltaProd) return faltaProd;
       if (m && v.horimetro !== '' && Number(v.horimetro) < Number(o.horimetroIni || 0)) return `${NomeMed(m)} final não pode ser menor que o do início (${num(o.horimetroIni)} ${uM})`;
+      if (opTemArea(o) && v.area !== '' && v.area != null) { const ac = opAreaAcima(o, v.area); if (ac) return ac; }
       if (m && v.horimetro !== '') { const salto = conferirSalto(m, v.horimetro); if (salto) return salto; }
       if (m && v.horimetro !== '' && Number(v.horimetro) > Number(m.hours || 0)) {
         db.hourLogs.push({id: uid(), machineId: m.id, date: today(), hours: Number(v.horimetro), previous: Number(m.hours || 0), notes: `Operação: ${o.type}`, opId: o.id});
