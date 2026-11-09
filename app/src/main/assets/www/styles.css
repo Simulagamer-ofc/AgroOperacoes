@@ -1555,3 +1555,13 @@ a.btn.primary{background:var(--blue);color:#fff}a.btn.secondary{background:var(-
 .cpr-nf-it label{display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:var(--muted)}.cpr-nf-cab small{display:block;color:var(--muted)}
 .cpr-nf-aviso{grid-column:1/-1;color:#9a4a06}:root[data-theme="dark"] .cpr-nf-aviso{color:var(--orange)}.cpr-nf-aviso:empty{display:none}
 @media(max-width:560px){.cpr-nf-it{grid-template-columns:minmax(0,1fr) 90px}.cpr-nf .form{grid-template-columns:minmax(0,1fr)}}
+/* Foto da nota (0.86) */
+.nf-foto-aviso{border-left:4px solid #c08508}.nf-foto-aviso ul{margin:8px 0 6px;padding-left:20px}.nf-foto-aviso li{margin:3px 0}.nf-foto-aviso p{margin:6px 0}.nf-foto-aviso small{color:var(--muted)}
+.nfe-tab tr.nf-duvida td{background:rgba(192,133,8,.10)}
+.nfe-tab .nf-valor{display:inline-flex;align-items:center;gap:4px;margin-top:4px;font-size:.85rem}.nfe-tab .nf-valor input{width:96px}
+.nf-foto-dicas{margin:4px 0 12px;padding-left:20px;color:var(--muted);font-size:.92rem}.nf-foto-dicas li{margin:4px 0}
+.nf-foto-lendo{display:flex;align-items:center;gap:10px;padding:14px 4px;color:var(--muted)}
+.nf-foto-roda{width:22px;height:22px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--marca);animation:nfRoda .9s linear infinite;flex:none}
+@keyframes nfRoda{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.nf-foto-roda{animation-duration:3s}}
+:root[data-theme="light"] .nfe-aviso{color:#9a4a06}

@@ -94,7 +94,7 @@ function gradeItens() {
 VIEWS.estoque = arg => {
   if (arg === 'inventario') return telaInventario();
   if (arg) return extratoItem(arg);
-  if (!db.stock.length) return head('Estoque e insumos', 'Saldo, mínimo e custo de cada insumo', btn('Importar NF-e (XML)', 'nfe-abrir', '', 'secondary') + btn('+ Novo item', 'st-new')) +
+  if (!db.stock.length) return head('Estoque e insumos', 'Saldo, mínimo e custo de cada insumo', btn('📷 Foto da nota', 'nfe-foto', '', 'secondary') + btn('Importar NF-e (XML)', 'nfe-abrir', '', 'secondary') + btn('+ Novo item', 'st-new')) +
     `<section class="card">${empty('Nenhum item cadastrado', 'Cadastre defensivos, fertilizantes, sementes, combustível e peças.', {act: 'st-new', label: '+ Novo item'})}</section>`;
   const comValor = db.stock.filter(s => valorItem(s) != null), semCusto = db.stock.length - comValor.length;
   const total = comValor.reduce((t, s) => t + valorItem(s), 0);
@@ -105,7 +105,7 @@ VIEWS.estoque = arg => {
   const cats = [...new Set(db.stock.map(s => s.category || 'Outro'))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
   const movs = db.movements.slice().sort(byDateDesc).slice(0, 15);
   const nomes = l => l.map(s => s.name).join(', ');
-  return head('Estoque e insumos', `${db.stock.length} itens • valores pelo custo médio das entradas`, (typeof listaCompras === 'function' ? btn('Lista de compras', 'compras', '', 'secondary') : '') + btn('Importar NF-e (XML)', 'nfe-abrir', '', 'secondary') + btn('Inventário', 'nav', 'estoque/inventario', 'secondary') + btn('Movimentar', 'mov-new', '', 'secondary') + btn('+ Novo item', 'st-new')) +
+  return head('Estoque e insumos', `${db.stock.length} itens • valores pelo custo médio das entradas`, (typeof listaCompras === 'function' ? btn('Lista de compras', 'compras', '', 'secondary') : '') + btn('📷 Foto da nota', 'nfe-foto', '', 'secondary') + btn('Importar NF-e (XML)', 'nfe-abrir', '', 'secondary') + btn('Inventário', 'nav', 'estoque/inventario', 'secondary') + btn('Movimentar', 'mov-new', '', 'secondary') + btn('+ Novo item', 'st-new')) +
     (() => { const v = lotesVencendo(); return v.length ? `<div class="es-validade-aviso">⚠ ${v.length} ${v.length === 1 ? 'lote vencido ou vencendo' : 'lotes vencidos ou vencendo'} em até ${AVISO_VALIDADE_DIAS} dias: ${esc(v.slice(0, 4).map(x => `${x.s.name} (lote ${x.lote}, ${x.dias < 0 ? 'vencido' : fmtDate(x.validade)})`).join('; '))}</div>` : ''; })() +
     estAvisoRepor(baixos, pertos) + `<section class="es-kpis">
       <article class="card kpi"><div class="label">Valor em estoque</div><div class="value">${brl(total)}</div><div class="hint">${semCusto ? `${semCusto} ${semCusto === 1 ? 'item' : 'itens'} sem custo registrado` : 'custo médio × saldo'}</div></article>

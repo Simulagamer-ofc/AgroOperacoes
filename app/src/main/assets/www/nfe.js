@@ -44,17 +44,20 @@ function itemParecido(nome, codigo) {
 }
 
 function telaConferenciaNfe() {
-  const n = nfeLida, ja = db.expenses.some(g => g.nfeChave && g.nfeChave === n.chave);
+  // Já importada: mesma chave, ou mesmo número de NF-e do mesmo CNPJ (a foto pode não ter lido a chave)
+  const n = nfeLida, ja = db.expenses.some(g => (g.nfeChave && g.nfeChave === n.chave) || (n.numero && n.cnpj && g.doc === `NF-e ${n.numero}` && g.parceiroDoc === n.cnpj));
   const opcoes = sel => `<option value="">— escolher —</option><option value="__novo" ${sel === '__novo' ? 'selected' : ''}>+ Criar item novo</option>${db.stock.map(s => `<option value="${esc(s.id)}" ${s.id === sel ? 'selected' : ''}>${esc(s.name)} (${esc(s.unit)})</option>`).join('')}`;
   return head(`NF-e ${n.numero}${n.serie ? '-' + n.serie : ''} — ${n.emitente}`, `${fmtDate(n.data)} • total R$ ${num(n.total, 2)} • ${n.itens.length} ${n.itens.length === 1 ? 'item' : 'itens'}${n.dups.length ? ` • ${n.dups.length} ${n.dups.length === 1 ? 'duplicata' : 'duplicatas'}` : ' • sem duplicatas (à vista)'}`, btn('Cancelar', 'nfe-cancelar', '', 'secondary')) +
-    (ja ? `<div class="es-validade-aviso">⚠ Esta nota (chave ${esc(n.chave)}) já foi importada. Importar de novo duplicaria o estoque e o gasto.</div>` : '') +
+    (ja ? `<div class="es-validade-aviso">⚠ Esta nota (${/^\d{44}$/.test(n.chave) ? 'chave ' + esc(n.chave) : 'nº ' + esc(n.numero)}) já foi importada. Importar de novo duplicaria o estoque e o gasto.</div>` : '') +
+    (n.origem === 'foto' ? `<section class="card panel nf-foto-aviso"><strong>📷 Nota lida da foto: confira cada item com a nota em papel antes de dar entrada.</strong>${n.avisos?.length ? `<ul>${n.avisos.map(a => `<li>${esc(a)}</li>`).join('')}</ul>` : '<p>Todos os itens foram lidos sem dúvida e a soma bate com o total da nota.</p>'}<small>Quantidade e valor de cada item podem ser corrigidos na tabela.</small></section>` : '') +
     `<section class="card panel"><p class="nota" style="margin-top:0">Confira cada item: escolha o item do estoque (ou crie um) e a quantidade <strong>na unidade do estoque</strong>. Quando a unidade da nota for diferente, a quantidade é convertida pela embalagem do item (se cadastrada) ou fica em branco para você converter.</p>
     <div class="tbl-wrap"><table class="tbl nfe-tab"><thead><tr><th>Item da nota</th><th class="num">Nota</th><th>Item do estoque</th><th class="num">Qtd. no estoque</th><th>Lote / validade</th></tr></thead><tbody>
     ${n.itens.map((it, i) => { const s = itemParecido(it.nome, it.codigo), sel = it.sel ?? (s ? s.id : '__novo'), alvo = find('stock', sel), mesmaUn = alvo ? normNfe(alvo.unit) === normNfe(it.unidade) : true;
       // Item com embalagem cadastrada (ex.: 1 saco = 50 kg) e nota em outra unidade: já converte pela embalagem (a pessoa confere)
       const conv = alvo && !mesmaUn && Number(alvo.conteudoEmb) > 0 ? Math.round(it.qtd * Number(alvo.conteudoEmb) * 1e4) / 1e4 : null;
-      return `<tr><td><strong>${esc(it.nome)}</strong><br><small style="color:var(--muted)">cód. ${esc(it.codigo)}${it.ncm ? ' • NCM ' + esc(it.ncm) : ''}</small></td>
-      <td class="num">${num(it.qtd, 4)} ${esc(it.unidade)}<br><small>R$ ${num(it.valor - it.desconto, 2)}</small></td>
+      const foto = n.origem === 'foto';
+      return `<tr${it.duvida ? ' class="nf-duvida"' : ''}><td>${it.duvida ? '<span class="nfe-aviso">⚠ leitura duvidosa — confira</span><br>' : ''}<strong>${esc(it.nome)}</strong><br><small style="color:var(--muted)">cód. ${esc(it.codigo || '—')}${it.ncm ? ' • NCM ' + esc(it.ncm) : ''}</small></td>
+      <td class="num">${num(it.qtd, 4)} ${esc(it.unidade)}<br>${foto ? `<label class="nf-valor">R$ <input data-nfe-valor="${i}" inputmode="decimal" value="${esc(it.valorEd ?? String(Math.round((it.valor - it.desconto) * 100) / 100).replace('.', ','))}" aria-label="Valor do item ${esc(it.nome)}"></label>` : `<small>R$ ${num(it.valor - it.desconto, 2)}</small>`}</td>
       <td><select data-nfe-item="${i}">${opcoes(sel)}</select>${alvo && !mesmaUn ? (conv != null ? `<br><small class="nfe-aviso">Convertido pela embalagem: ${num(it.qtd, 4)} × ${num(alvo.conteudoEmb)} ${esc(alvo.unit)} — confira</small>` : `<br><small class="nfe-aviso">Unidade do estoque: ${esc(alvo.unit)} — converta a quantidade</small>`) : ''}</td>
       <td class="num"><input data-nfe-qtd="${i}" inputmode="decimal" value="${esc(it.qtdEst ?? (mesmaUn ? String(it.qtd).replace('.', ',') : conv != null ? String(conv).replace('.', ',') : ''))}"></td>
       <td><small>${it.lotes?.length > 1 ? it.lotes.map(l => `Lote ${esc(l.lote)} • ${num(l.qtd, 4)} ${esc(it.unidade)}${l.validade ? ' • val. ' + fmtDate(l.validade) : ''}`).join('<br>') + (it.porLote ? '<br>uma entrada por lote' : `<br><span class="nfe-aviso">⚠ Os lotes somam ${num(it.lotes.reduce((t, l) => t + l.qtd, 0), 4)} ${esc(it.unidade)} e o item ${num(it.qtd, 4)}: entra uma só vez, com o lote ${esc(it.lote)}</span>`)
@@ -86,7 +89,8 @@ function unidadeDaNota(u) {
 function confirmarNfe() {
   const n = nfeLida; if (!n) return;
   // Lê as escolhas da tela
-  n.itens.forEach((it, i) => { it.sel = $(`[data-nfe-item="${i}"]`).value; it.qtdEst = $(`[data-nfe-qtd="${i}"]`).value.trim(); });
+  n.itens.forEach((it, i) => { it.sel = $(`[data-nfe-item="${i}"]`).value; it.qtdEst = $(`[data-nfe-qtd="${i}"]`).value.trim(); const ve = $(`[data-nfe-valor="${i}"]`); if (ve) it.valorEd = ve.value.trim(); });
+  if (n.origem === 'foto') for (const it of n.itens) { const v = umNum(it.valorEd); if (v === undefined || !(v >= 0)) return showToast(`Confira o valor de “${it.nome}”`); it.valor = v; it.desconto = 0; }
   for (const it of n.itens) {
     if (!it.sel) return showToast(`Escolha o item do estoque para “${it.nome}”`);
     if (umNum(it.qtdEst) === undefined || !(umNum(it.qtdEst) > 0)) return showToast(`Informe a quantidade no estoque para “${it.nome}”`);
@@ -103,15 +107,16 @@ function confirmarNfe() {
       const ult = k === partes.length - 1, ql = ult ? qRest : Math.round(q * l.f * 1e4) / 1e4, vl = ult ? Math.round(vRest * 100) / 100 : Math.round(valor * l.f * 100) / 100;
       qRest -= ql; vRest -= vl;
       const mov = aplicarMovimento(s, 'Entrada', ql, vl);
-      db.movements.push({id: uid(), itemId: s.id, kind: 'Entrada', qty: ql, date: n.data || today(), supplier: n.emitente, doc: `NF-e ${n.numero}`, lote: l.lote || undefined, validade: l.validade || undefined, nfeChave: n.chave, gastoId, ...mov});
+      db.movements.push({id: uid(), itemId: s.id, kind: 'Entrada', qty: ql, date: n.data || today(), supplier: n.emitente, doc: `NF-e ${n.numero}`, lote: l.lote || undefined, validade: l.validade || undefined, nfeChave: n.chave, gastoId, ...(n.origem === 'foto' ? {fonte: 'foto'} : {}), ...mov});
     });
   }
-  db.expenses.push({id: gastoId, date: n.data || today(), category: cat, description: `NF-e ${n.numero} — ${n.emitente}`, value: n.total, supplier: n.emitente, parceiroDoc: n.cnpj, doc: `NF-e ${n.numero}`, nfeChave: n.chave});
+  if (n.origem === 'foto' && !(n.total > 0)) n.total = Math.round(n.itens.reduce((t, it) => t + Math.max(0, it.valor - it.desconto), 0) * 100) / 100;
+  db.expenses.push({id: gastoId, date: n.data || today(), category: cat, description: `NF-e ${n.numero} — ${n.emitente}`, value: n.total, supplier: n.emitente, parceiroDoc: n.cnpj, doc: `NF-e ${n.numero}`, nfeChave: n.chave, ...(n.origem === 'foto' ? {fonte: 'foto'} : {})});
   if (n.dups.length) n.dups.forEach((d, i) => db.contas.push({id: uid(), tipo: 'pagar', grupo: gastoId, descricao: `NF-e ${n.numero} — ${n.emitente}`, categoria: cat, parceiro: n.emitente, valor: d.valor, vencimento: d.vencimento || n.data, parcela: `${i + 1}/${n.dups.length}`, doc: d.numero, status: 'aberta', expenseId: gastoId, lancarGasto: 'Não'}));
   save(); nfeLida = null; showToast(`NF-e ${n.numero} importada: ${n.itens.length} ${n.itens.length === 1 ? 'item' : 'itens'} no estoque`); go('estoque');
 }
 
-VIEWS.nfe = () => nfeLida ? telaConferenciaNfe() : head('Importar NF-e', 'Escolha o arquivo XML da nota de compra', btn('← Estoque', 'nav', 'estoque', 'secondary')) + `<section class="card">${empty('Nenhuma nota carregada', 'Toque em “Importar NF-e (XML)” no estoque e escolha o arquivo XML enviado pelo fornecedor.', {act: 'nfe-abrir', label: 'Escolher XML'})}</section>`;
+VIEWS.nfe = () => nfeLida ? telaConferenciaNfe() : head('Importar NF-e', 'Escolha o arquivo XML da nota de compra', btn('← Estoque', 'nav', 'estoque', 'secondary')) + `<section class="card">${empty('Nenhuma nota carregada', 'Toque em “Importar NF-e (XML)” no estoque e escolha o arquivo XML enviado pelo fornecedor.', {act: 'nfe-abrir', label: 'Escolher XML'})}<div class="actions" style="justify-content:center">${btn('📷 Ler pela foto da nota', 'nfe-foto', '', 'secondary')}</div></section>`;
 TITLES.nfe = 'Importar NF-e';
 
 (() => { const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.xml,text/xml,application/xml'; inp.id = 'nfeInput'; inp.hidden = true; document.body.appendChild(inp);
@@ -121,4 +126,4 @@ Object.assign(ACTIONS, {
   'nfe-cancelar': () => { nfeLida = null; go('estoque'); },
   'nfe-confirmar': confirmarNfe
 });
-document.addEventListener('change', e => { const el = e.target.closest?.('[data-nfe-item]'); if (!el || !nfeLida) return; const i = Number(el.dataset.nfeItem); nfeLida.itens.forEach((it, j) => { it.sel = $(`[data-nfe-item="${j}"]`)?.value; it.qtdEst = $(`[data-nfe-qtd="${j}"]`)?.value.trim(); if (j === i) delete it.qtdEst; }); render(); });
+document.addEventListener('change', e => { const el = e.target.closest?.('[data-nfe-item]'); if (!el || !nfeLida) return; const i = Number(el.dataset.nfeItem); nfeLida.itens.forEach((it, j) => { it.sel = $(`[data-nfe-item="${j}"]`)?.value; it.qtdEst = $(`[data-nfe-qtd="${j}"]`)?.value.trim(); const ve = $(`[data-nfe-valor="${j}"]`); if (ve) it.valorEd = ve.value.trim(); if (j === i) delete it.qtdEst; }); render(); });
