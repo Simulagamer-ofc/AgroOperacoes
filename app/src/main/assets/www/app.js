@@ -523,7 +523,6 @@ function machineForm(m = {}) {
       {k: 'nextService', label: 'Próxima revisão em', type: 'number', min: 0, mostrarSe: ['medidor', '!nenhum'], hint: 'Vazio = leitura atual + intervalo'},
       {k: 'revMeses', label: 'Ou revisão a cada (meses)', type: 'number', min: 0, hint: 'Opcional. Vale o que vencer primeiro: o uso ou o tempo. Ex.: óleo a cada 10.000 km ou 6 meses.'},
       {k: 'state', label: 'Situação', type: 'select', options: ['Ativa', 'Inativa'], required: true},
-      {k: 'reaferirDias', label: 'Reaferir a cada (dias)', type: 'number', min: 0, hint: 'Aferição de bicos, dose ou perdas — opcional, conforme o seu procedimento de qualidade. Gera lembrete.', mais: true, mostrarSe: ['type', typeof AF_TIPOS_CALENDARIO !== 'undefined' ? AF_TIPOS_CALENDARIO : ['Pulverizador', 'Plantadeira', 'Colheitadeira']]},
       {k: 'docLicenciamento', label: 'Licenciamento (CRLV) vence em', type: 'date', mostrarSe: ['medidor', 'km'], mais: true},
       {k: 'docIpva', label: 'IPVA vence em', type: 'date', mostrarSe: ['medidor', 'km'], mais: true},
       {k: 'docSeguro', label: 'Seguro vence em', type: 'date', mais: true},
@@ -966,7 +965,7 @@ function cartaoMaquina(m) {
     ${extras.length ? `<div class="meta">${extras.map(x => `<span>${x}</span>`).join('')}</div>` : ''}
     <div class="maq-acoes">${isInactive(m) ? '' : (temMedidor(m) ? mini(porKm(m) ? '◷ Odômetro' : '◷ Horímetro', 'hour-new', m.id) : '') + mini('☑ Checklist', 'mcp-novo', m.id)}${mini('⚙ Manutenção', 'mt-new', m.id)}
       <details class="menu-mais"><summary aria-label="Mais ações" title="Mais ações">⋯</summary><div class="menu-lista">
-        ${mini('📘 Catálogo de peças', 'nav', 'pecas/' + m.id)}${mini('🏷 Etiqueta QR', 'nav', 'etiquetasmaq/' + m.id)}${isInactive(m) || !usaCombustivel(m) ? '' : mini('⛽ Abastecimento', 'cb-new', m.id)}${typeof mcpGestor !== 'function' || mcpGestor() ? mini('📊 Indicadores de manutenção', 'nav', 'manutind/' + m.id) : ''}${afere ? mini('◎ Aferição e calibragem', 'af-nova', m.id) : ''}${afere || af ? mini('Histórico de aferições', 'af-maq', m.id) : ''}${afere ? mini('⚙ Configuração para aferição', 'mc-config', m.id) : ''}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${afere || m.catalogo ? mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id) : ''}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
+        ${mini('📘 Catálogo de peças', 'nav', 'pecas/' + m.id)}${mini('🏷 Etiqueta QR', 'nav', 'etiquetasmaq/' + m.id)}${isInactive(m) || !usaCombustivel(m) ? '' : mini('⛽ Abastecimento', 'cb-new', m.id)}${typeof mcpGestor !== 'function' || mcpGestor() ? mini('📊 Indicadores de manutenção', 'nav', 'manutind/' + m.id) : ''}${afere ? mini('◎ Aferição e calibragem', 'af-nova', m.id) : ''}${afere && typeof agaGestor === 'function' && agaGestor() && !isInactive(m) ? mini('📅 Programar aferição', 'aga-nova', m.id) : ''}${afere || af ? mini('Histórico de aferições', 'af-maq', m.id) : ''}${afere ? mini('⚙ Configuração para aferição', 'mc-config', m.id) : ''}${m.catalogo ? mini('Ficha técnica', 'mc-ficha', m.id) : ''}${afere || m.catalogo ? mini(m.catalogo ? 'Trocar vínculo do catálogo' : 'Vincular ao catálogo', 'mc-cat', m.id) : ''}${mini('Editar', 'mc-edit', m.id)}${mini('Excluir', 'mc-del', m.id, 'del')}
       </div></details></div></article>`;
 }
 

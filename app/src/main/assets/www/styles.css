@@ -1555,3 +1555,24 @@ a.btn.primary{background:var(--blue);color:#fff}a.btn.secondary{background:var(-
 .cpr-nf-it label{display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:var(--muted)}.cpr-nf-cab small{display:block;color:var(--muted)}
 .cpr-nf-aviso{grid-column:1/-1;color:#9a4a06}:root[data-theme="dark"] .cpr-nf-aviso{color:var(--orange)}.cpr-nf-aviso:empty{display:none}
 @media(max-width:560px){.cpr-nf-it{grid-template-columns:minmax(0,1fr) 90px}.cpr-nf .form{grid-template-columns:minmax(0,1fr)}}
+/* Agenda de aferição (0.87) */
+.aga-lista{padding:4px 14px}
+.aga-item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line)}
+.aga-item:last-child{border-bottom:0}
+.aga-item .status{width:9px;height:38px;border-radius:8px;margin-top:2px}
+.aga-txt strong{display:block}.aga-txt small{display:block;color:var(--muted);margin-top:2px}
+.aga-txt .aga-nota{color:#9a4a06}:root[data-theme="dark"] .aga-txt .aga-nota{color:#f5b843}
+.aga-dir{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.aga-bts{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.aga-bts .menu-mais{position:relative}
+.aga-feitas{margin:6px 0 10px}.aga-feitas summary{cursor:pointer;color:var(--muted);padding:8px 0}
+.aga-sug{border-left:4px solid var(--blue);padding:12px 14px;margin-bottom:12px}
+.aga-sug-cab strong{display:block}.aga-sug-cab small{color:var(--muted)}
+.aga-sug-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.aga-sug-item strong{display:block}.aga-sug-item small{display:block;color:var(--muted);margin-top:2px}
+.aga-mais{display:block;color:var(--muted);padding-top:8px}
+@media(max-width:640px){
+  .aga-item{grid-template-columns:auto minmax(0,1fr)}
+  .aga-dir{grid-column:2;flex-direction:row;align-items:center;justify-content:space-between}
+  .aga-sug-item{grid-template-columns:1fr}.aga-sug-item .aga-bts{justify-content:flex-start}
+}
