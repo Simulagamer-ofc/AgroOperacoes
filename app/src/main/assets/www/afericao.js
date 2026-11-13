@@ -232,11 +232,10 @@ VIEWS.afericao = arg => {
   if (arg === 'nova') { if (!wz) wz = criarWizard(); return passoWizard(); }
   if (arg) return relatorio(arg);
   const lista = db.afericoes.filter(a => !afMaqFiltro || a.maquina?.id === afMaqFiltro).sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora));
-  const comIntervalo = db.machines.filter(temCalendario);
   const maqsComAf = [...new Set(db.afericoes.map(a => a.maquina?.id).filter(Boolean))].map(id => find('machines', id)).filter(Boolean);
   return head('Aferição e calibragem', 'Escolha o que vai aferir. O resultado só é concluído com referência técnica validada. Funciona sem internet.') +
-    categoriasAfericao() +
-    (comIntervalo.length ? `<div class="section-title"><h3>Calendário de aferição</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Máquina</th><th>Última aferição</th><th>Próxima</th><th></th></tr></thead><tbody>${comIntervalo.map(m => { const r = situacaoReaferir(m); return `<tr><td><strong>${esc(m.name)}</strong><br><small style="color:var(--muted)">${esc(r.motivo || '')}</small></td><td>${r.ultima ? fmtDate(r.ultima.data) + ' ' + statusChip(r.ultima.resultado.status) : 'nunca aferida'}</td><td>${r.vencida ? chip(r.dias === null ? 'Aferir agora' : `Atrasada ${-r.dias} d`, 'red') : r.dias <= 7 ? chip(`Em ${r.dias} d`, 'orange') : fmtDate(r.proxima)}</td><td>${mini('◎ Aferir', 'af-nova', m.id)}</td></tr>`; }).join('')}</tbody></table></div></section>` : '') +
+    (typeof agaPainel === 'function' ? agaPainel() : '') +
+    `<div class="section-title"><h3>Aferir agora</h3></div>` + categoriasAfericao() +
     `<div class="section-title"><h3>Registros (${lista.length})</h3></div>${maqsComAf.length > 1 || afMaqFiltro ? `<div class="filters"><button class="${!afMaqFiltro ? 'active' : ''}" data-act="af-maq" data-id="">Todas as máquinas</button>${maqsComAf.map(m => `<button class="${afMaqFiltro === m.id ? 'active' : ''}" data-act="af-maq" data-id="${esc(m.id)}">${esc(m.name)}</button>`).join('')}</div>` : ''}<section class="card list">${lista.length ? lista.map(a => {
       const p = principal(a.resultado);
       return `<div class="row clickable" data-act="nav" data-id="afericao/${esc(a.id)}" style="cursor:pointer"><span class="status ${STATUS_INFO[a.resultado.status]?.cor === 'gray' ? 'blue' : STATUS_INFO[a.resultado.status]?.cor}"></span><div><strong>${esc(tituloAfericao(a))} — ${esc(a.maquina?.name || 'equipamento não cadastrado')}</strong><small>${esc([fmtDate(a.data) + ' ' + a.hora, a.responsavel, p?.regraId ? 'regra ' + p.regraId + ' v' + p.regraVersao : a.tipo === 'inspecao' ? 'válida até ' + fmtDate(a.resultado.validade) : ''].filter(Boolean).join(' • '))}</small></div>${chipAfericao(a)}</div>`;
@@ -866,38 +865,17 @@ document.addEventListener('change', e => {
 // ---------- Integração com o restante do app ----------
 TITLES.afericao = 'Aferição e calibragem';
 TITLES.catalogo = 'Catálogo de máquinas';
-// Reaferição: intervalo em dias definido pelo usuário na máquina (procedimento próprio, não é referência técnica)
 let afMaqFiltro = '';
-// Próxima aferição: o intervalo da máquina, antecipado quando o último resultado deu fora (confirmar o ajuste em 3 dias)
-// ou quando a tendência prevê que as pontas vão passar do limite antes disso (uma semana antes da data prevista).
+// Próxima aferição da máquina: a vez mais urgente das programações do gestor (agendaaf.js).
+// O sistema não antecipa nada sozinho: resultado fora, desgaste das pontas e inspeção vencendo viram sugestões na agenda.
 function situacaoReaferir(m) {
-  const doMaq = db.afericoes.filter(a => a.maquina?.id === m.id).sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora));
-  const ultima = doMaq[0];
-  const dias = Number(m.reaferirDias);
-  let proxima = null, motivo = '';
-  if (dias > 0) {
-    if (!ultima) return {ultima, vencida: true, dias: null, proxima: null, motivo: 'nunca aferida'};
-    proxima = addDias(ultima.data, dias); motivo = `a cada ${num(dias)} dias`;
-  }
-  const antecipar = (data, porque) => { if (!proxima || data < proxima) { proxima = data; motivo = porque; } };
-  // Último resultado de cada tipo fora da referência: medir de novo depois do ajuste
-  for (const tipo of new Set(doMaq.map(a => a.tipo))) {
-    const u = doMaq.find(a => a.tipo === tipo);
-    if (['FORA_DO_PADRAO', 'ATENCAO'].includes(u.resultado?.status)) antecipar(addDias(u.data, 3), tipo === 'inspecao' ? 'corrigir e refazer a inspeção (reprovada)' : `confirmar o ajuste (${(TIPO_UI[tipo]?.curto || tipo).toLowerCase()} deu fora)`);
-    else if (tipo === 'inspecao' && u.resultado?.validade) antecipar(u.resultado.validade, 'inspeção periódica vence');
-  }
-  // Previsão de desgaste das pontas
-  const ub = doMaq.find(a => a.tipo === 'bicos');
-  if (ub && IA()) {
-    const t = IA().tendenciaBicos(historicoBicos(m.id), limiteBicos(ub.resultado)[1]);
-    if (t?.situacao === 'desgastando' && t.dataPrevista) antecipar(addDias(t.dataPrevista, -7) < ub.data ? ub.data : addDias(t.dataPrevista, -7), 'previsão de desgaste das pontas');
-  }
-  if (!proxima) return {ultima};
-  const faltam = Math.round((new Date(proxima + 'T12:00:00') - new Date(today() + 'T12:00:00')) / 864e5);
-  return {ultima, proxima, dias: faltam, vencida: faltam < 0, motivo};
+  const ps = typeof agaPendentesDe === 'function' ? agaPendentesDe(m) : [];
+  const p = ps.sort((a, b) => AGA_ORDEM[a.status] - AGA_ORDEM[b.status] || String(a.venc || '9').localeCompare(String(b.venc || '9')))[0];
+  if (!p) return {};
+  return {proxima: p.venc || '', dias: p.venc ? p.dias : null, vencida: p.status === 'atrasada', motivo: `${agaTipoTxt(p.ag.tipo).toLowerCase()}, ${agaRepTxt(p.ag, m).toLowerCase()}`, quando: p.quando, nota: p.nota};
 }
 // Situação do pulverizador antes de aplicar: aferição de bicos fora, inspeção reprovada/vencida ou aferição atrasada ('' = tudo certo)
-function avisoPulverizador(machineId) {
+function avisoPulverizador(machineId, semAtraso) {
   const m = find('machines', machineId); if (!m) return '';
   const doMaq = db.afericoes.filter(a => a.maquina?.id === m.id).sort((a, b) => (b.data + b.hora).localeCompare(a.data + a.hora));
   const bicos = doMaq.find(a => a.tipo === 'bicos'), insp = doMaq.find(a => a.tipo === 'inspecao'), p = [];
@@ -905,17 +883,16 @@ function avisoPulverizador(machineId) {
   if (insp?.resultado?.status === 'FORA_DO_PADRAO') p.push(`a inspeção periódica (${fmtDate(insp.data)}) foi reprovada`);
   else if (insp?.resultado?.validade && insp.resultado.validade < today()) p.push(`a inspeção periódica venceu em ${fmtDate(insp.resultado.validade)}`);
   const r = situacaoReaferir(m);
-  if (r.vencida && r.dias !== null && !p.length) p.push(`a aferição está atrasada há ${-r.dias} dias`);
+  if (r.vencida && !semAtraso && !p.length) p.push(`a aferição está atrasada (${r.quando})`);
   return p.join('; ');
 }
-const temCalendario = m => !isInactive(m) && afCalendario(m) && situacaoReaferir(m).proxima !== undefined;
-const textoReaferir = m => { if (!afCalendario(m)) return ''; const r = situacaoReaferir(m); if (r.proxima === undefined) return ''; return r.vencida ? (r.dias === null ? `! Reaferição: nunca aferida (a cada ${num(m.reaferirDias)} dias)` : `! Reaferição atrasada há ${-r.dias} dias (${r.motivo})`) : `Próxima aferição: ${fmtDate(r.proxima)}${r.dias <= 7 ? ` (em ${r.dias} d)` : ''} — ${r.motivo}`; };
+const temCalendario = m => !isInactive(m) && situacaoReaferir(m).proxima !== undefined;
+const textoReaferir = m => { const r = situacaoReaferir(m); if (r.proxima === undefined) return ''; return (r.vencida ? '! Aferição atrasada: ' : 'Próxima aferição: ') + `${r.quando} — ${r.motivo}${r.nota ? ` (${r.nota})` : ''}`; };
 ACTIONS['af-maq'] = id => { afMaqFiltro = id || ''; go('afericao'); };
 const alertasBase = alerts;
 alerts = function () {
   const lista = alertasBase();
   const limite = daysAgo(30);
-  db.machines.filter(temCalendario).forEach(m => { const r = situacaoReaferir(m); if (r.vencida || r.dias <= 7) lista.push({color: r.vencida ? 'red' : 'orange', icon: '◎', title: `${r.vencida ? 'Aferição atrasada' : 'Aferição próxima'}: ${m.name}`, text: textoReaferir(m).replace(/^! /, ''), route: 'afericao'}); });
   db.afericoes.filter(a => a.data >= limite && a.resultado?.status === 'FORA_DO_PADRAO').forEach(a => lista.push({color: 'red', icon: '◎', title: `${a.tipo === 'inspecao' ? 'Inspeção reprovada' : 'Aferição fora da referência'}: ${a.maquina?.name || tituloAfericao(a)}`, text: `${tituloAfericao(a)} em ${fmtDate(a.data)}.`, route: 'afericao/' + a.id}));
   return lista;
 };

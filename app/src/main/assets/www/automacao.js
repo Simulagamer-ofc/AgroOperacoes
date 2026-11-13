@@ -159,6 +159,7 @@ function aplicarHorimetro(m, valor, minimo, nota, o) {
 }
 function iniciarOperacao(id) {
   const o = find('operations', id); if (!o) return;
+  let afIgnorado = null; // aviso de aferição que o usuário decidiu ignorar (fica registrado na operação)
   const abrir = () => {
     const m = o.machineId ? find('machines', o.machineId) : null, comHor = temHorimetro(m);
     const fields = [];
@@ -175,6 +176,7 @@ function iniciarOperacao(id) {
         if (comHor) { const e = aplicarHorimetro(m, v.horimetro, null, `Início: ${o.type}`, o); if (e) return e; o.horimetroIni = Number(v.horimetro); }
         if (typeof mcpAoIniciar === 'function') mcpAoIniciar(o, comHor ? v.horimetro : '');
         o.status = 'Em andamento'; o.startedAt = new Date().toISOString(); if (!o.time) o.time = nowTime();
+        if (afIgnorado) o.afAvisoIgnorado = afIgnorado;
         if (typeof confAoIniciar === 'function') confAoIniciar(o);
         if (typeof prodAoIniciar === 'function') prodAoIniciar(o);
         save(); showToast('Operação iniciada');
@@ -183,8 +185,13 @@ function iniciarOperacao(id) {
     if (typeof mcpAoAbrirInicio === 'function') mcpAoAbrirInicio(o);
     if (typeof prodAoAbrirInicio === 'function') prodAoAbrirInicio(o);
   };
-  const aviso = o.machineId && pulverizacao(o) && typeof avisoPulverizador === 'function' ? avisoPulverizador(o.machineId) : '';
-  if (aviso) return confirmDialog(`${machineName(o.machineId)}: ${aviso}. Iniciar a pulverização mesmo assim?`, abrir, 'Iniciar mesmo assim');
+  // Aferição: pulverizador com problema e programação do gestor atrasada (ou que devia ser feita antes desta operação)
+  const ag = typeof agaAvisoOperacao === 'function' ? agaAvisoOperacao(o) : null;
+  const pulv = o.machineId && pulverizacao(o) && typeof avisoPulverizador === 'function' ? avisoPulverizador(o.machineId, !!ag) : '';
+  if (ag?.bloq && !agaGestor()) return showToast(`Operação não iniciada — ${ag.texto}. Faça a aferição ou peça ao gestor para liberar.`, true);
+  const aviso = [pulv && `${machineName(o.machineId)}: ${pulv}`, ag?.texto].filter(Boolean).join('. ');
+  // (o confirmDialog fecha o diálogo depois do "sim": o formulário de início abre logo em seguida)
+  if (aviso) return confirmDialog(`${aviso}. Iniciar mesmo assim?`, () => { afIgnorado = {texto: aviso, por: typeof agaEu === 'function' ? agaEu() : '', em: new Date().toISOString()}; setTimeout(abrir, 0); }, 'Iniciar mesmo assim');
   abrir();
 }
 function concluirOperacao(id) {
