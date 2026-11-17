@@ -39,3 +39,25 @@ test('mapa do tempo: chuva interpolada entre os pontos do bloco e, onde falta o 
   assert.equal(run("Math.round(chuvaEm(-26, -50, '2026-10-22T18:00').mm * 10) / 10"), 3); // sem bloco fino ali: usa o nível de 1,2°
   assert.equal(run("chuvaNoPonto(-28.5, -52.5, '2026-10-22T18:00').prob"), 80);
 });
+test('mapa do tempo: mapa grande — além dos blocos finos do centro, a tela toda na grade mais aberta (sem chuva cortada)', () => {
+  // Tela do computador no zoom 7: do Paraguai ao oceano (≈ 27° × 14°): 45 blocos finos; busca 9 finos + a tela toda em blocos de 12°
+  const r = JSON.parse(run('JSON.stringify(blocosParaTela(0, -36, -66, -22, -39))'));
+  assert.equal(r.cobre, true);
+  assert.equal(r.pedir.filter(([nv]) => nv === 0).length, 9);
+  assert.ok(r.pedir.filter(([nv]) => nv === 2).length > 0 && r.pedir.filter(([nv]) => nv === 2).length <= 9);
+  // Tela pequena: os blocos finos já cobrem tudo, não pede mais nada
+  const p = JSON.parse(run('JSON.stringify(blocosParaTela(0, -29.5, -53.5, -27, -51))'));
+  assert.equal(p.cobre, true); assert.equal(p.pedir.length, 4);
+});
+test('mapa do tempo: na beirada do bloco fino, completa com a grade aberta em vez de cortar', () => {
+  run(`blocosChuva.clear();
+    blocosChuva.set(chaveBloco(0, -10, -18), {em: Date.now(), horas: ['2026-10-22T18:00'], mm: Array.from({length: 25}, () => [4]), prob: Array.from({length: 25}, () => [80])});
+    blocosChuva.set(chaveBloco(2, -3, -5), {em: Date.now(), horas: ['2026-10-22T18:00'], mm: Array.from({length: 25}, () => [8]), prob: Array.from({length: 25}, () => [80])});`);
+  // dentro do bloco fino: só ele (4 mm)
+  assert.equal(run("chuvaEm(-28.5, -52.5, '2026-10-22T18:00').mm"), 4);
+  // na beirada (metade dos vizinhos fora do bloco fino): metade fino (4) + metade aberto (8) = 6, peso cheio
+  const r = run("chuvaEm(-27.0, -52.5, '2026-10-22T18:00')");
+  assert.equal(Math.round(r.mm * 10) / 10, 6); assert.equal(r.peso, 1);
+  // fora do bloco fino: só a grade aberta
+  assert.equal(run("chuvaEm(-30, -56, '2026-10-22T18:00').mm"), 8);
+});
