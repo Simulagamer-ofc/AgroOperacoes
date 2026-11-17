@@ -108,10 +108,12 @@ function confirmarNfe() {
   }
   db.expenses.push({id: gastoId, date: n.data || today(), category: cat, description: `NF-e ${n.numero} — ${n.emitente}`, value: n.total, supplier: n.emitente, parceiroDoc: n.cnpj, doc: `NF-e ${n.numero}`, nfeChave: n.chave});
   if (n.dups.length) n.dups.forEach((d, i) => db.contas.push({id: uid(), tipo: 'pagar', grupo: gastoId, descricao: `NF-e ${n.numero} — ${n.emitente}`, categoria: cat, parceiro: n.emitente, valor: d.valor, vencimento: d.vencimento || n.data, parcela: `${i + 1}/${n.dups.length}`, doc: d.numero, status: 'aberta', expenseId: gastoId, lancarGasto: 'Não'}));
-  save(); nfeLida = null; showToast(`NF-e ${n.numero} importada: ${n.itens.length} ${n.itens.length === 1 ? 'item' : 'itens'} no estoque`); go('estoque');
+  save(); nfeLida = null;
+  if (n.origem === 'sefaz' && typeof sfMarcar === 'function') sfMarcar(n.chave, 'importada', true);
+  showToast(`NF-e ${n.numero} importada: ${n.itens.length} ${n.itens.length === 1 ? 'item' : 'itens'} no estoque`); go('estoque');
 }
 
-VIEWS.nfe = () => nfeLida ? telaConferenciaNfe() : head('Importar NF-e', 'Escolha o arquivo XML da nota de compra', btn('← Estoque', 'nav', 'estoque', 'secondary')) + `<section class="card">${empty('Nenhuma nota carregada', 'Toque em “Importar NF-e (XML)” no estoque e escolha o arquivo XML enviado pelo fornecedor.', {act: 'nfe-abrir', label: 'Escolher XML'})}</section>`;
+VIEWS.nfe = () => nfeLida ? telaConferenciaNfe() : head('Importar NF-e', 'Escolha o arquivo XML da nota de compra', btn('← Estoque', 'nav', 'estoque', 'secondary')) + `<section class="card">${empty('Nenhuma nota carregada', 'Toque em “Importar NF-e (XML)” no estoque e escolha o arquivo XML enviado pelo fornecedor.', {act: 'nfe-abrir', label: 'Escolher XML'})}${typeof sfBotaoEstoque === 'function' && sfPode() ? `<div class="actions" style="justify-content:center">${btn('🧾 Ver as notas da SEFAZ', 'sf-abrir', '', 'secondary')}</div>` : ''}</section>`;
 TITLES.nfe = 'Importar NF-e';
 
 (() => { const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.xml,text/xml,application/xml'; inp.id = 'nfeInput'; inp.hidden = true; document.body.appendChild(inp);

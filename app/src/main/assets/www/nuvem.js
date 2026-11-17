@@ -449,7 +449,7 @@ const nvNomeFuncao = id => nvFuncao(id)?.[1] || '';
 // Rota → tela da lista acima (rotas fora daqui ficam sempre liberadas)
 const NV_ROTA_TELA = {operacoes: 'operacoes', talhoes: 'talhoes', talhao: 'talhoes', chuva: 'chuva', pragas: 'pragas', aplicacoes: 'aplicacoes', maodeobra: 'maodeobra',
   maquinas: 'maquinas', implementos: 'maquinas', combustivel: 'combustivel', afericao: 'afericao', catalogo: 'catalogo', pontas: 'pontas', secagem: 'secagem',
-  sementes: 'sementes', lotes: 'sementes', lote: 'sementes', ubs: 'sementes', etiqueta: 'sementes', estoque: 'estoque',
+  sementes: 'sementes', lotes: 'sementes', lote: 'sementes', ubs: 'sementes', etiqueta: 'sementes', estoque: 'estoque', notassefaz: 'estoque',
   financeiro: 'financeiro', gastos: 'financeiro', lcdpr: 'financeiro', producao: 'producao', orcamento: 'producao', relatorios: 'relatorios'};
 // Telas liberadas para esta pessoa: null = todas (ADM, Admin do sistema, ou sem função definida)
 const nvTelasLiberadas = () => !nvVinculado() || nv.sysadm || nvPapel() === 'admin' || !Array.isArray(nv.modulos) ? null : nv.modulos;

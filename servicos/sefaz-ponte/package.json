@@ -1,0 +1,10 @@
+{
+  "name": "mercaplant-sefaz-ponte",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MercaPlant — ponte para os web services da SEFAZ (NF-e) com certificado A1",
+  "main": "index.js",
+  "type": "commonjs",
+  "engines": {"node": ">=20"},
+  "scripts": {"start": "node index.js", "test": "node --test teste.js"}
+}
