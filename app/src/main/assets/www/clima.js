@@ -126,7 +126,7 @@ function climaDestaque() {
 VIEWS.clima = () => {
   safeStorage.set('agro-clima-aberto', '1'); // previsão sempre aberta nesta tela
   const loc = typeof localDaFazenda === 'function' ? localDaFazenda() : null;
-  const local = loc ? `<span class="cd-local" title="${esc(loc.origem || '')}"><span aria-hidden="true">📍</span><span><b>${esc(db.settings.farm || 'Fazenda')}</b><small>${esc(loc.origem || 'local da fazenda')}</small></span></span>` : '';
+  const local = loc ? `<button type="button" class="cd-local" data-act="nav" data-id="sede" title="Local da fazenda — toque para conferir ou mudar"><span aria-hidden="true">📍</span><span><b>${esc(db.settings.farm || 'Fazenda')}</b><small>${esc(loc.origem || 'local da fazenda')}${loc.fonte === 'aparelho-antigo' ? ' • conferir' : ''}</small></span></button>` : '';
   const topo = head('Clima da fazenda', 'Previsão, mapa do tempo, alertas para as operações e chuvas da fazenda', local + btn('+ Registrar chuva', 'ch-new') + btn('Atualizar previsão', 'clima-atualizar', '', 'secondary')).replace('<section class="view-head">', '<section class="view-head" data-eyebrow="MercaClima">');
   if (!loc) return topo + cartaoClimaCompleto();
   const rs = riscosClima(), chuvas = db.chuvas.slice().sort(byDateDesc), soma = dias => chuvas.filter(x => x.date >= daysAgo(dias)).reduce((t, x) => t + (Number(x.mm) || 0), 0);

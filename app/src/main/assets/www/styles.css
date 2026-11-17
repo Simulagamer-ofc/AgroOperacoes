@@ -1869,3 +1869,24 @@ a.btn.primary{background:var(--blue);color:#fff}a.btn.secondary{background:var(-
 .mt-ctrl{top:52px}
 .mt-pil{background:rgba(12,30,42,.78);color:#fff;border-color:rgba(255,255,255,.18)}
 .mt-pil.active{background:#1fae62;color:#fff;border-color:#1fae62}
+/* =================== Local da fazenda (sede.js) =================== */
+button.cd-local{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;padding:6px 12px;font:inherit;cursor:pointer;text-align:left}
+button.cd-local:hover{border-color:var(--green)}
+@media(max-width:760px){button.cd-local{display:inline-flex!important;width:100%;margin:0 0 6px}}
+.sede-atual{display:flex;gap:12px;align-items:center}.sede-atual b{display:block;font-size:1.05rem;font-variant-numeric:tabular-nums}.sede-atual small{display:block;color:var(--muted);font-size:.84rem;margin-top:2px}
+.sede-pino{font-size:28px}
+.sede-painel{display:grid;gap:12px}
+.sede-acoes{display:flex;gap:10px;flex-wrap:wrap}
+.sede-coord{display:flex;gap:8px;flex:1 1 300px}.sede-coord input{flex:1;min-width:0}
+.sede-mapa-caixa{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.sede-mapa{height:min(60vh,520px);min-height:300px;background:#1d2a22}
+.sede-dica{position:absolute;z-index:500;left:50%;top:12px;transform:translateX(-50%);background:rgba(12,30,42,.85);color:#fff;font-size:.85rem;font-weight:600;padding:8px 14px;border-radius:999px;white-space:nowrap;pointer-events:none}
+.sede-dica[hidden]{display:none}
+.sede-rodape{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.sede-rodape small{color:var(--muted);font-variant-numeric:tabular-nums}
+@media(max-width:760px){.sede-dica{white-space:normal;width:86%;text-align:center}.sede-rodape button{width:100%}}
+/* Pino verde da sede (o mesmo do mapa do tempo) */
+.mt-faz{position:relative}
+.mt-faz-pino{position:absolute;left:-15px;top:-38px;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:#1fae62;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.4);display:grid;place-items:center}
+.mt-faz-pino svg{transform:rotate(45deg);stroke:#fff;stroke-width:2.6;fill:none}
+.mt-faz b{position:absolute;top:2px;left:0;transform:translateX(-50%);white-space:nowrap;background:#1fae62;color:#fff;font:800 11.5px Inter,system-ui,sans-serif;padding:3px 10px;border-radius:999px;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+@media(max-width:760px){body:has(.sede-painel) #fabBtn{display:none}}

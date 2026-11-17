@@ -144,7 +144,7 @@ document.addEventListener('change', e => { if (e.target.id === 'pvTalhao') pvFil
 function pvClima(classe = '') {
   const loc = typeof localDaFazenda === 'function' ? localDaFazenda() : null, c = typeof lerClima === 'function' ? lerClima() : null;
   const linha = (ic, tit, sub, subCls = '') => `<button type="button" class="pv-clima ${classe}" data-act="nav" data-id="clima"><span class="pv-clima-ic" aria-hidden="true">${ic}</span><span class="pv-clima-txt"><strong>${tit}</strong>${sub ? `<small class="${subCls}">${esc(sub)}</small>` : ''}</span>${pvSeta()}</button>`;
-  if (!loc) return linha('📍', 'Previsão do tempo', 'Informe onde fica a fazenda para ver o clima e a hora de pulverizar');
+  if (!loc) return linha('📍', 'Previsão do tempo', 'Marque onde fica a fazenda para ver o clima e a hora de pulverizar').replace('data-id="clima"', 'data-id="sede"');
   const h = c?.dados?.hourly, d = c?.dados?.daily;
   if (!h?.time || !d?.time) return linha('⛅', 'Previsão do tempo', navigator.onLine === false ? 'Sem internet: aparece quando o sinal voltar' : 'Buscando a previsão…');
   const t = today(), hora = new Date().getHours(), i = Math.max(0, h.time.indexOf(`${t}T${String(hora).padStart(2, '0')}:00`)), i0 = Math.max(0, d.time.indexOf(t));
