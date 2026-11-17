@@ -1590,3 +1590,145 @@ a.btn.primary{background:var(--blue);color:#fff}a.btn.secondary{background:var(-
 .sf-seguro{background:var(--chip,rgba(24,166,106,.08));border-left:4px solid var(--marca);padding:10px 12px;border-radius:8px;margin:8px 0 12px;font-size:.92rem}
 @media(max-width:640px){.sf-item{grid-template-columns:1fr}.sf-dir{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between}.sf-bts{justify-content:flex-start}}
 .sf-msg{color:#c53030;margin:0}:root[data-theme="dark"] .sf-msg{color:#f07575}
+
+/* =================== Etapa 2 do padrão das prévias: Início e Operações (previas.js) =================== */
+.pv-hex{flex:none}
+:root[data-theme="light"] .content .pv-hex .hex{fill:rgba(31,157,99,.08);stroke:#1f9d63}:root[data-theme="light"] .content .pv-hex{filter:none}
+:root[data-theme="light"] .content .pv-hex.azul .hex{fill:rgba(37,119,214,.08);stroke:#2577d6}
+.pv-seta{fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+/* Selos de situação, como nas prévias */
+.pv-selo{display:inline-flex;align-items:center;white-space:nowrap;border-radius:999px;padding:3px 10px;font-size:.78rem;font-weight:600;line-height:1.35}
+.pv-selo.andamento{background:color-mix(in srgb,var(--orange) 22%,var(--panel));color:var(--text)}
+.pv-selo.programada{background:color-mix(in srgb,var(--blue) 16%,var(--panel));color:var(--blue)}
+.pv-selo.concluida{background:color-mix(in srgb,var(--green) 16%,var(--panel));color:var(--destaque)}
+.pv-selo.atrasada,.pv-selo.cancelada{background:color-mix(in srgb,var(--red) 16%,var(--panel));color:var(--red)}
+:root[data-theme="light"] .pv-selo.andamento{background:#fdf0c2;color:#7a5200}:root[data-theme="light"] .pv-selo.programada{background:#e3edfb;color:#1d5fbf}
+:root[data-theme="light"] .pv-selo.concluida{background:#dff3e7;color:#137a52}:root[data-theme="light"] .pv-selo.atrasada,:root[data-theme="light"] .pv-selo.cancelada{background:#fde6e4;color:#b83232}
+/* Botão principal grande (Iniciar, Concluir, Ver resultado) */
+.pv-acao{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px 16px;border-radius:12px;font-weight:700;font-size:1rem;position:relative}
+.pv-acao .pv-seta{position:absolute;right:14px}
+.pv-acao-ver{background:var(--panel);border:1.5px solid var(--blue);color:var(--blue)}
+:root.modo-campo .pv-acao-ver{border-color:#0a7a3e;color:#0a7a3e}
+/* Abas sublinhadas (Hoje, Em aberto, Concluídas…) */
+.pv-abas{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:4px 0 14px;overflow-x:auto;scrollbar-width:none}
+.pv-abas::-webkit-scrollbar{display:none}
+.pv-abas button{background:none;border:0;border-bottom:2.5px solid transparent;border-radius:0;color:var(--muted);font:inherit;font-weight:600;padding:10px 14px;white-space:nowrap;cursor:pointer;margin-bottom:-1px}
+.pv-abas button span{display:inline-block;min-width:20px;padding:0 6px;margin-left:4px;border-radius:999px;background:var(--bg);font-size:.75rem;color:var(--muted)}
+.pv-abas button.active{color:var(--green);border-bottom-color:var(--green)}
+.pv-abas button.active span{background:color-mix(in srgb,var(--green) 14%,var(--panel));color:var(--green)}
+:root.modo-campo .pv-abas{border:2px solid #0a7a3e;border-radius:10px;padding:3px;gap:3px}
+:root.modo-campo .pv-abas button{border:0;border-radius:7px;color:#000;margin:0}:root.modo-campo .pv-abas button.active{background:#0a7a3e;color:#fff}
+:root.modo-campo .pv-abas button.active span{background:#fff;color:#0a7a3e}
+/* Busca e talhão */
+.pv-ops-busca{display:flex;gap:10px;margin:0 0 12px;flex-wrap:wrap}
+.pv-busca{flex:1 1 220px;display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:0 12px;color:var(--muted)}
+.pv-busca input{flex:1;border:0;background:none;padding:11px 0;font:inherit;color:var(--text);outline:0;min-width:0}
+.pv-busca:focus-within{border-color:var(--blue)}
+.pv-ops-busca select{flex:0 1 220px;border-radius:12px}
+/* Lista de operações: cartões no celular */
+.pv-ops{display:grid;gap:14px;align-items:start}
+.pv-lista{padding:0;background:none;border:0!important;box-shadow:none!important;display:grid;gap:12px}
+.pv-cab,.pv-col,.pv-det{display:none}
+.pv-op{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 6px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 1px 3px rgba(16,42,60,.05)}
+.pv-op[hidden]{display:none}
+.pv-op-info{grid-column:1;display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-areas:"ic txt" "ic sit";gap:4px 12px;align-items:center;background:none;border:0;padding:0;text-align:left;font:inherit;color:inherit;cursor:default}
+.pv-op-ic{grid-area:ic;align-self:start;display:grid;place-items:center}
+.pv-op-txt{grid-area:txt;min-width:0}.pv-op-txt strong{display:block;font-size:1.06rem}.pv-op-txt small{display:block;color:var(--muted);font-size:.86rem;margin-top:1px}
+.pv-op-txt small.pv-op-quando{font-size:.8rem}
+.pv-op-sit{grid-area:sit}
+.pv-op-mais{grid-column:2;grid-row:1;align-self:start}
+.pv-op-mais summary{font-size:1.3rem;padding:2px 10px;line-height:1.2}
+.pv-op-selos{grid-column:1/-1}.pv-op-selos .conf-selos{margin:0}
+.pv-op-acao{grid-column:1/-1}.pv-op-acao:empty{display:none}
+.pv-nada{color:var(--muted);text-align:center;padding:16px}.pv-total{color:var(--muted);font-size:.8rem;padding:2px 4px}
+/* Tablet e computador: tabela à esquerda e detalhe à direita */
+@media(min-width:900px){
+  .pv-ops{grid-template-columns:minmax(0,1.85fr) minmax(300px,1fr)}
+  .pv-lista{background:var(--panel);border:1px solid var(--line)!important;border-radius:16px;gap:0;overflow:hidden}
+  .pv-cab,.pv-op-info{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1.1fr) minmax(0,1fr) 92px 128px 70px;grid-template-areas:none;gap:10px;align-items:center}
+  .pv-cab{padding:10px 16px;background:var(--bg);color:var(--muted);font-size:.78rem;font-weight:600}
+  .pv-op{display:block;border:0;border-bottom:1px solid var(--line);border-radius:0;box-shadow:none;padding:0}
+  .pv-op-info{width:100%;padding:13px 16px;cursor:pointer}
+  .pv-op-info:hover{background:color-mix(in srgb,var(--blue) 6%,transparent)}
+  .pv-op.sel .pv-op-info{background:color-mix(in srgb,var(--green) 10%,var(--panel));box-shadow:inset 3px 0 var(--green)}
+  .pv-op.sel .pv-op-txt strong{color:var(--green)}
+  .pv-op-info>.pv-op-ic{display:none}
+  .pv-op-info .pv-op-txt strong{font-size:.95rem;font-weight:600}.pv-op-info .pv-op-txt small{display:none}
+  .pv-col{display:block;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pv-c-area{text-align:right}
+  .pv-op-sit,.pv-op-txt{grid-area:auto}
+  .pv-op-mais,.pv-op-acao,.pv-op-selos{display:none}
+  .pv-total{display:block;padding:12px 16px}.pv-nada{margin:0}
+  .pv-det{display:block;position:sticky;top:84px;padding:20px}
+  .pv-det header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:14px}
+  .pv-det h3{margin:0;font-size:1.3rem}.pv-det header small{color:var(--muted)}
+  .pv-campos{margin:0 0 14px;display:grid;gap:0}
+  .pv-campos div{display:grid;grid-template-columns:120px minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+  .pv-campos dt{color:var(--muted);font-size:.86rem}.pv-campos dd{margin:0;font-weight:600;font-size:.92rem;overflow-wrap:anywhere}
+  .pv-det .conf-selos{margin:0 0 12px}
+  .pv-det-acoes{display:grid;gap:10px}.pv-det-acoes .btn-row{display:flex;gap:8px;flex-wrap:wrap}
+  .pv-det-acoes .btn-row button{flex:1;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:10px;padding:9px 10px;font:inherit;font-weight:600;cursor:pointer}
+  .pv-det-acoes .btn-row button.del{color:var(--red)}
+  .pv-det-vazio p{color:var(--muted);margin:0}
+}
+/* ---------- Início ---------- */
+.pv-clima{display:flex;align-items:center;gap:12px;width:100%;text-align:left;font:inherit;color:var(--text);cursor:pointer;margin:0}
+.pv-clima.card{padding:14px 16px;border-radius:16px}
+.pv-clima-ic{font-size:30px;line-height:1}
+.pv-clima-txt{flex:1;min-width:0}.pv-clima-txt strong{display:block;font-size:1.02rem}
+.pv-clima-txt small{display:block;color:var(--muted);font-size:.82rem;margin-top:2px}.pv-clima-txt small.nao{color:var(--muted)}
+.pv-clima .pv-seta{color:var(--muted)}
+.pv-clima-pilula{background:none;border:0;padding:4px 6px;width:auto}
+.pv-clima-pilula .pv-clima-txt small{max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv-topo-lado{display:flex;align-items:center;gap:14px}
+.pv-tit{display:flex;align-items:center;gap:8px}
+.pv-prior{display:grid;gap:12px}
+.pv-prior .ini-tit,.pv-proxima .ini-tit{margin:0}
+.pv-prior-op,.pv-prox-op{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;width:100%;background:none;border:0;padding:0;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.pv-prior-op .pv-op-txt strong{font-size:1.15rem}
+.pv-prior-op .pv-selo{align-self:start}
+.pv-prior-info{display:flex;gap:28px;padding:10px 0 2px;border-top:1px solid var(--line)}
+.pv-prior-info span{display:flex;align-items:center;gap:8px;color:var(--muted)}.pv-prior-info b{color:var(--text)}
+.pv-grande{padding:14px 16px;font-size:1.02rem}
+.pv-prox-op{background:var(--bg);border-radius:12px;padding:12px}
+.pv-prox-ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--green) 12%,var(--panel));color:var(--green)}
+.pv-prox-op .pv-seta{color:var(--muted)}
+.pv-proxima{display:grid;gap:10px}.pv-vazio-linha{margin:0;color:var(--muted)}
+.pv-kpi{grid-template-columns:auto minmax(0,1fr)!important;gap:14px!important}
+.pv-kpi b{font-size:1.8rem}.pv-kpi small{font-size:.86rem}
+.pv-kpi-ic{width:48px;height:48px;border-radius:12px;display:grid!important;place-items:center}
+.pv-kpi-ic .ic-linha{stroke-width:2}
+.pv-kpi-ic.verde{background:color-mix(in srgb,var(--green) 12%,var(--panel));color:var(--green)}.pv-kpi-ic.azul{background:color-mix(in srgb,var(--blue) 12%,var(--panel));color:var(--blue)}
+.pv-kpi-ic.laranja{background:color-mix(in srgb,var(--orange) 18%,var(--panel));color:#b86e00}.pv-kpi-ic.vermelho{background:color-mix(in srgb,var(--red) 14%,var(--panel));color:var(--red)}
+.pv-ini .ini-atencao .ini-tit{font-size:1.05rem}
+.pv-ini .pv-esq,.pv-ini .pv-dir{display:contents}
+@media(max-width:760px){.pv-ini>.ini-topo{order:1}.pv-ini>.pv-clima-cel{order:2}.pv-ini>.ini-resumo{order:3}.pv-ini .pv-prior{order:4}.pv-ini .ini-suas{order:4}.pv-ini .ini-atencao{order:5}.pv-ini .pv-proxima{order:6}.pv-ini>.ini-acesso{order:7}.pv-ini .ini-prep{order:8}.pv-ini>.ini-lancar{order:9}}
+/* Lista das operações em tela média (com o menu aberto): só operação, situação e área */
+@media(min-width:900px) and (max-width:1199px){
+  .pv-cab,.pv-op-info{grid-template-columns:minmax(0,1fr) 128px 64px!important}
+  .pv-cab span:nth-child(2),.pv-cab span:nth-child(3),.pv-cab span:nth-child(4),.pv-c-talhao,.pv-c-resp,.pv-c-data{display:none!important}
+  .pv-op-info .pv-op-txt small:first-of-type{display:block}
+}
+@media(max-width:760px){.pv-ini .pv-prior,.pv-ini .pv-proxima{padding:14px 16px}.pv-prior-info{display:none}}
+@media(min-width:761px){
+  .ini.pv-ini{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);grid-template-rows:none;
+    grid-template-areas:"topo topo" "kpis kpis" "prior atencao" "prior proxima" "tabela tabela" "acesso acesso" "prep prep" "lancar lancar"}
+  .ini.pv-ini.sem-ops{grid-template-areas:"topo topo" "suas atencao" "prep prep"}
+  .pv-ini .pv-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .pv-ini .pv-kpi .pv-kpi-ic{display:grid}
+  .pv-prior{grid-area:prior;align-self:stretch}.pv-proxima{grid-area:proxima}.pv-ini .ini-tabela{grid-area:tabela}.pv-ini .ini-tabela.so-pc{display:block!important}
+  .pv-ini .ini-gastos{grid-area:gastos}
+  .pv-ini .ini-atencao .ini-urg~.ini-urg{display:grid}
+}
+@media(min-width:1200px){
+  .ini.pv-ini,.ini.pv-ini.sem-fin,.ini.pv-ini.sem-ops{grid-template-columns:minmax(0,1.9fr) minmax(300px,1fr);grid-template-rows:none;grid-template-areas:"topo topo" "kpis kpis" "esq dir"}
+  .pv-ini .pv-esq,.pv-ini .pv-dir{display:flex;flex-direction:column;gap:16px;min-width:0}.pv-ini .pv-esq{grid-area:esq}.pv-ini .pv-dir{grid-area:dir}
+  .pv-ini .ini-gastos .ini-barras{height:150px}
+  .pv-ini .pv-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .pv-prior{display:grid;grid-template-columns:minmax(0,1fr) 260px;grid-template-areas:"tit tit" "op botao" "info botao";align-items:center}
+  .pv-prior .pv-tit{grid-area:tit}.pv-prior-op{grid-area:op}.pv-prior-info{grid-area:info;border-top:0;padding-top:0}.pv-prior .pv-grande{grid-area:botao}
+  .pv-prior .ini-vazio{grid-column:1/-1}
+}
+@media(min-width:761px){.pv-topo-lado.so-grande{display:flex!important}}
+.pv-prior-op .pv-op-ic,.pv-prior-op .pv-op-txt,.pv-prox-op .pv-op-txt,.pv-prior-op .pv-selo{grid-area:auto}
+.pv-ops-busca select{padding:10px 12px;border:1px solid var(--line);background:var(--panel);color:var(--text);font:inherit}
+@media(max-width:760px){.pv-ops-busca select{flex:1 1 100%}}
