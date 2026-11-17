@@ -27,14 +27,16 @@ function chaveSecreta() {
 
 // Envia à SEFAZ pela ponte
 async function ponte(servico: 'dist' | 'evento', ambiente: number, soap: string, cert: {pfx: string; senha: string}): Promise<string> {
-  const url = Deno.env.get('SEFAZ_PONTE_URL'), chave = Deno.env.get('SEFAZ_PONTE_CHAVE');
+  const url = (Deno.env.get('SEFAZ_PONTE_URL') || '').trim(), chave = (Deno.env.get('SEFAZ_PONTE_CHAVE') || '').trim();
   if (!url || !chave) throw Object.assign(new Error('A conexão com a SEFAZ ainda não foi ligada no servidor.'), {status: 503});
   const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 75000);
   try {
     const r = await fetch(url.replace(/\/$/, '') + '/enviar', {method: 'POST', signal: ctl.signal, headers: {'Content-Type': 'application/json', 'x-ponte-chave': chave},
       body: JSON.stringify({servico, ambiente, soap, pfx: cert.pfx, senha: cert.senha})});
     const j = await r.json().catch(() => ({}));
+    if (r.status === 401) throw Object.assign(new Error('A chave da ponte (SEFAZ_PONTE_CHAVE) não confere com a do Netlify (PONTE_CHAVE).'), {status: 502});
     if (!r.ok) throw Object.assign(new Error(j.erro || `Falha na ponte (${r.status}).`), {status: 502});
+    if (j.status === 403) throw Object.assign(new Error('A SEFAZ recusou o certificado (acesso negado). Confira se é o certificado A1 ICP-Brasil válido do CNPJ/CPF da fazenda.'), {status: 502});
     if (j.status !== 200) throw Object.assign(new Error(faultSoap(j.corpo || '') || `A SEFAZ respondeu com erro ${j.status}.`), {status: 502});
     return j.corpo as string;
   } catch (e) {
