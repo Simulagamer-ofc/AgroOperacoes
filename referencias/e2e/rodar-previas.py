@@ -1,5 +1,6 @@
 # Início e Operações no padrão das prévias (previas.js), com os dados de exemplo e servidor simulado: operação prioritária,
 # abrir a operação, busca, menu ⋮, Editar, seleção com detalhe (computador), Iniciar e filtros, no celular e no computador.
+# Etapa 3: Máquinas (⋯ Mais do cabeçalho, cartão, Mais informações), ordens com ⋮, Talhões (Ver talhão, ⋮) e abas do talhão.
 # Uso: (cd app/src/main/assets/www && python3 -m http.server 8772 &) ; python3 referencias/e2e/rodar-previas.py [porta]
 import json, sys, time, urllib.parse, os
 from playwright.sync_api import sync_playwright
@@ -18,6 +19,7 @@ def api(r):
 NV={'sessao':{'access_token':'t','refresh_token':'r','expira':int(time.time())+36000,'email':'edson@fazenda.com','usuario':'u1'},'sysadm':False,'fazenda':FAZ,'papel':'admin','cursor':0,'rejeitados':{}}
 CLIMA_JS = '''(() => {
   db.settings.local = {lat: -28.26, lon: -52.4, origem: 'teste'};
+  db.fields.find(f => f.name === 'Talhão 07').contorno = {pontos: [[-28.2600,-52.4000],[-28.2595,-52.3912],[-28.2668,-52.3890],[-28.2690,-52.3975],[-28.2652,-52.4010]], areaHa: 84.5, perimetroM: 3720, data: today()};
   db.operations.forEach((o, i) => { if (!o.operator) o.operator = ['João Silva', 'Carlos Mendes', 'Ana Paula'][i % 3]; });
   save();
   const h = {time: [], temperature_2m: [], relative_humidity_2m: [], wind_speed_10m: [], wind_gusts_10m: [], precipitation_probability: [], precipitation: [], cloud_cover: [], trovoada: []}, d = {time: [], temperature_2m_max: [], temperature_2m_min: [], precipitation_sum: [], precipitation_probability_max: [], wind_speed_10m_max: [], sunshine_duration: []};
@@ -66,6 +68,39 @@ with sync_playwright() as p:
             ev("closeModal?.()")
         for f in ['abertas','concluidas','proximas','todas']:
             ev(f"ACTIONS['op-filter']('{f}')"); pg.wait_for_timeout(150)
+        # ---- Etapa 3: Máquinas ----
+        ev("go('maquinas')"); pg.wait_for_timeout(500)
+        check(pg.locator('.pv-maq').count()==3, px+'Máquinas: 3 cartões no novo padrão')
+        pg.locator('.pv-head-mais summary').click(); pg.wait_for_timeout(150)
+        check(pg.locator('.pv-head-mais[open] [data-act="hour-new"]').is_visible(), px+'“⋯ Mais” do cabeçalho mostra Registrar horímetro')
+        pg.locator('.pv-head-mais[open] [data-act="hour-new"]').click(); pg.wait_for_timeout(400)
+        check(pg.locator('#modal.open').count()==1, px+'Registrar horímetro abre o formulário'); ev("closeModal()")
+        pg.locator('.pv-maq .pv-maq-det summary').first.click(); pg.wait_for_timeout(150)
+        check(pg.locator('.pv-maq .pv-maq-det[open] .meta').first.is_visible(), px+'“Mais informações” abre os detalhes da máquina')
+        pg.locator('.pv-maq [data-act="hour-new"]').first.click(); pg.wait_for_timeout(400)
+        check(pg.locator('#modal.open').count()==1, px+'Horímetro do cartão abre o formulário'); ev("closeModal()")
+        pg.locator('.row .pv-linha-mais summary').first.click(); pg.wait_for_timeout(150)
+        check(pg.locator('.row .pv-linha-mais[open] [data-act="mt-edit"]').is_visible(), px+'ordem de manutenção: ⋮ com Editar')
+        pg.locator('body').click(position={'x':5,'y':5})
+        # ---- Talhões ----
+        ev("go('talhoes')"); pg.wait_for_timeout(500)
+        check(pg.locator('.pv-talhao').count()==3, px+'Talhões: 3 cartões')
+        pg.locator('.pv-talhao .pv-linha-mais summary').first.click(); pg.wait_for_timeout(150)
+        check(pg.locator('.pv-talhao .pv-linha-mais[open] [data-act="fd-edit"]').is_visible(), px+'talhão: ⋮ com Editar')
+        pg.locator('.pv-talhao .pv-linha-mais[open] [data-act="fd-edit"]').click(); pg.wait_for_timeout(400)
+        check(pg.locator('#modal.open').count()==1, px+'Editar talhão abre o formulário'); ev("closeModal()")
+        pg.locator('.pv-talhao [data-act="nav"].pv-acao').first.click(); pg.wait_for_timeout(600)
+        check('talhao/' in pg.url and pg.locator('.pv-talhao-desenho').count()==1, px+'Ver talhão abre o detalhe com o desenho do contorno')
+        check(pg.locator('.pv-aba-painel[data-aba="resumo"]:not([hidden]) .pv-ult').count()==1, px+'aba Resumo com últimas atividades')
+        pg.locator('[data-act="pv-aba-talhao"][data-id="operacoes"]').click(); pg.wait_for_timeout(150)
+        check(pg.locator('.pv-aba-painel[data-aba="operacoes"]:not([hidden]) .row').count()>=1 and pg.locator('.pv-aba-painel[data-aba="resumo"]').get_attribute('hidden') is not None, px+'aba Operações troca o conteúdo')
+        pg.locator('[data-act="pv-aba-talhao"][data-id="avaliacoes"]').click(); pg.wait_for_timeout(150)
+        check(pg.locator('.pv-aba-painel[data-aba="avaliacoes"]:not([hidden]) [data-act="lav-estande"]').count()==1, px+'aba Avaliações com + Estande')
+        pg.locator('.pv-aba-painel:not([hidden]) [data-act="lav-estande"]').click(); pg.wait_for_timeout(400)
+        check(pg.locator('#modal.open').count()==1, px+'+ Estande abre o formulário'); ev("closeModal()")
+        pg.locator('[data-act="pv-aba-talhao"][data-id="resumo"]').click(); pg.wait_for_timeout(150)
+        pg.locator('.pv-ult [data-act="op-field"]').click(); pg.wait_for_timeout(400)
+        check(pg.locator('#modal.open').count()==1, px+'Registrar atividade abre a nova operação'); ev("closeModal()")
         check(not errs, px+'sem erros na página '+str(errs[:2]))
         ctx.close()
 print('TUDO OK' if ok else 'HOUVE FALHAS')
