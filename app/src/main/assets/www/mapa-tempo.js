@@ -19,7 +19,20 @@ const RADARES_DECEA = {mq: [-0.047, -51.098, 'Macapá'], tm: [-18.207, -45.461, 
   sv: [-12.903, -38.327, 'Salvador'], mn: [-3.149, -59.992, 'Manaus'], sr: [-23.602, -47.094, 'São Roque'], be: [-1.407, -48.461, 'Belém']};
 const distKm = (a, b, c, d) => { const r = Math.PI / 180, x = Math.sin((c - a) * r / 2) ** 2 + Math.cos(a * r) * Math.cos(c * r) * Math.sin((d - b) * r / 2) ** 2; return 12742 * Math.asin(Math.sqrt(x)); };
 const radaresPerto = (lat, lon, km = 420) => Object.entries(RADARES_DECEA).map(([k, [la, lo, nome]]) => ({k, nome, d: distKm(lat, lon, la, lo)})).filter(x => x.d <= km).sort((a, b) => a.d - b.d).slice(0, 4);
-let mtEstado = {quadro: 0, tocando: null, mapa: null, quadros: [], vis: {sat: true, radar: true, stsc: true, prev: true}};
+let mtEstado = {quadro: 0, tocando: null, mapa: null, quadros: [], vis: {sat: false, radar: true, stsc: true, prev: true, aneis: true}};
+// Fundo do mapa: foto de satélite (padrão) ou mapa de ruas; a escolha fica guardada neste aparelho
+const MT_FUNDO = 'agro-mapa-fundo';
+const mtFundo = () => safeStorage.get(MT_FUNDO) === 'mapa' ? 'mapa' : 'sat';
+const MT_IC = {
+  camadas: '<path d="m12 3.5 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/>',
+  mira: '<circle cx="12" cy="12" r="7"/><path d="M12 2.5v4M12 17.5v4M2.5 12h4M17.5 12h4"/><circle cx="12" cy="12" r="1.5"/>',
+  radar: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12l6-6"/><circle cx="12" cy="12" r="1"/>',
+  raio: '<path d="M13 2.5 5.5 13.5H11L10 21.5l8-11.5h-5.5z"/>',
+  nuvem: '<path d="M7 18a4.5 4.5 0 0 1 .7-9 5.8 5.8 0 0 1 11 1.9A3.6 3.6 0 0 1 18.2 18z"/>',
+  gota: '<path d="M12 3.5s6 6.8 6 10.8a6 6 0 0 1-12 0c0-4 6-10.8 6-10.8z"/>',
+  broto: '<path d="M12 21v-8.5"/><path d="M12 12.5C12 8.4 9.2 5.8 5 5.8c0 4.1 2.8 6.7 7 6.7zM12 14.5c0-3.7 2.6-6.2 6.8-6.2 0 3.7-2.6 6.2-6.8 6.2z"/>'
+};
+const mtIc = (n, t = 16) => `<svg class="ic-linha" width="${t}" height="${t}" viewBox="0 0 24 24" aria-hidden="true">${MT_IC[n]}</svg>`;
 
 function carregarLeaflet() {
   if (window.L?.map) return Promise.resolve();
@@ -105,7 +118,7 @@ function criarCamadaChuva(L) {
       const tam = map.getSize(), topo = map.containerPointToLayerPoint([0, 0]);
       L.DomUtil.setPosition(cv, topo); cv.style.width = tam.x + 'px'; cv.style.height = tam.y + 'px';
       const F = 4, W = Math.ceil(tam.x / F), H = Math.ceil(tam.y / F); cv.width = W; cv.height = H;
-      const ctx = cv.getContext('2d'); ctx.clearRect(0, 0, W, H); if (!this.iso) return;
+      const ctx = cv.getContext('2d'); ctx.clearRect(0, 0, W, H); if (!this.iso || !W || !H) return;
       const im = ctx.createImageData(W, H), lats = [], lons = [], nv = nivelDoZoom(map.getZoom());
       for (let y = 0; y < H; y++) lats.push(map.containerPointToLatLng([0, (y + 0.5) * F]).lat);
       for (let x = 0; x < W; x++) lons.push(map.containerPointToLatLng([(x + 0.5) * F, 0]).lng);
@@ -173,17 +186,30 @@ function criarCamadaSatelite(L, limitesImg) {
 
 // Painel do mapa (tela cheia ou embutido no cartão do clima do Início)
 function painelMapaHTML(compacto = false) {
-  const v = mtEstado.vis, bt = (k, rot) => `<button class="${v[k] ? 'active' : ''}" data-act="mt-camada" data-id="${k}" aria-pressed="${v[k]}">${rot}</button>`;
+  const v = mtEstado.vis, f = mtFundo();
+  const pil = (k, ic, rot) => `<button type="button" class="mt-pil ${v[k] ? 'active' : ''}" data-act="mt-camada" data-id="${k}" aria-pressed="${v[k]}">${mtIc(ic, 14)}${rot}</button>`;
+  const chave = (k, ic, rot, sub) => `<button type="button" class="mt-chave ${v[k] ? 'active' : ''}" data-act="mt-camada" data-id="${k}" aria-pressed="${v[k]}"><span class="mt-chave-ic">${mtIc(ic, 18)}</span><span><b>${rot}</b><small>${sub}</small></span><i aria-hidden="true"></i></button>`;
   return `<section class="card panel mt-painel ${compacto ? 'mt-compacto' : ''}" ${compacto ? 'id="mtCasa"' : ''}>
     ${compacto ? `<div class="section-title" style="margin:0"><h3>Radar e chuva no mapa</h3><button type="button" data-act="nav" data-id="clima">⛶ Abrir MercaClima</button></div>` : ''}
-    <p class="mt-alerta" id="mtAlerta" hidden></p>
-    <div class="filters mt-camadas" role="group" aria-label="Camadas do mapa">${bt('sat', '☁ Satélite')}${bt('radar', '📡 Radar')}${bt('stsc', '⚡ Tempestades')}${bt('prev', '🌧 Chuva prevista')}</div>
-    <div id="mapaTempo" class="mt-mapa" role="img" aria-label="Mapa do tempo em volta da fazenda"></div>
-    <div class="mt-tempo"><button type="button" class="primary mt-play" data-act="mt-play" aria-label="Animar">▶</button><input type="range" id="mtSlider" min="0" max="0" value="0" aria-label="Hora"><b id="mtHora">—</b></div>
-    <div class="mt-dias" id="mtDias"></div>
-    ${compacto ? '' : '<div class="mt-legenda" id="mtLegenda"></div>'}
+    <div class="mt-caixa">
+      <div id="mapaTempo" class="mt-mapa mt-fundo-${f}" role="img" aria-label="Mapa do tempo em volta da fazenda"></div>
+      <div class="mt-sobre mt-topo"><div class="mt-pilulas" role="group" aria-label="Camadas do mapa">${pil('radar', 'radar', 'Radar')}${pil('stsc', 'raio', 'Raios')}${pil('sat', 'nuvem', 'Nuvens')}${pil('prev', 'gota', 'Prevista')}</div>
+        <div class="mt-alerta" id="mtAlerta" hidden></div></div>
+      <div class="mt-sobre mt-ctrl"><button type="button" data-act="mt-folha" aria-label="Fundo, camadas e legenda" title="Fundo, camadas e legenda">${mtIc('camadas', 20)}</button><button type="button" data-act="mt-centro" aria-label="Centralizar na fazenda" title="Centralizar na fazenda">${mtIc('mira', 20)}</button></div>
+      <div class="mt-folha" id="mtFolha" hidden><div class="mt-folha-topo"><b>Fundo e camadas</b><button type="button" class="link" data-act="mt-folha">Pronto</button></div>
+        <div class="mt-fundos" role="group" aria-label="Fundo do mapa"><button type="button" class="${f === 'sat' ? 'active' : ''}" data-act="mt-fundo" data-id="sat" aria-pressed="${f === 'sat'}">🛰 Satélite</button><button type="button" class="${f === 'mapa' ? 'active' : ''}" data-act="mt-fundo" data-id="mapa" aria-pressed="${f === 'mapa'}">🗺 Mapa</button></div>
+        ${chave('radar', 'radar', 'Radar', 'chuva medida agora pelos radares do DECEA')}${chave('stsc', 'raio', 'Tempestades e raios', 'células de tempestade e descargas (REDEMET)')}${chave('sat', 'nuvem', 'Nuvens', 'satélite infravermelho: nuvem alta e fria fica branca')}${chave('prev', 'gota', 'Chuva prevista', 'próximas horas e dias, média dos modelos')}${chave('aneis', 'mira', 'Anéis de distância', '20, 50 e 100 km da fazenda')}
+        <div class="mt-legenda" id="mtLegenda"></div>
+        <small class="nota">Radar, nuvens e tempestades: REDEMET/DECEA — não substitui informação oficial para a aviação. Chuva prevista: média dos modelos (Open-Meteo). Imagem de satélite © Esri, Maxar; mapa © OpenStreetMap.</small></div>
+    </div>
+    <div class="mt-linha">
+      <div class="mt-tempo"><button type="button" class="primary mt-play" data-act="mt-play" aria-label="Animar">▶</button>
+        <div class="mt-tempo-dir"><div class="mt-hora"><b id="mtHora">—</b><small id="mtHoraSub"></small></div>
+          <div class="mt-trilho"><input type="range" id="mtSlider" min="0" max="0" value="0" aria-label="Hora"><div class="mt-marcas" id="mtMarcas" aria-hidden="true"></div></div></div></div>
+      <div class="mt-escala" aria-hidden="true"><span>Chuva</span><i></i><span>fraca → muito forte</span></div>
+      <div class="mt-dias" id="mtDias"></div>
+    </div>
     <p class="nota" id="mtStatus">Carregando o mapa…</p>
-    <small class="nota">Observado (radar, satélite e tempestades): REDEMET/DECEA — não substitui informação oficial para a aviação. Chuva prevista: média dos modelos (Open-Meteo). Mapa © OpenStreetMap.</small>
   </section>`;
 }
 VIEWS['clima-mapa'] = () => {
@@ -225,7 +251,7 @@ function criarCamadaTempestade(L) {
       const map = this._map, cv = this.cv; if (!map || !cv) return;
       const tam = map.getSize(); L.DomUtil.setPosition(cv, map.containerPointToLayerPoint([0, 0]));
       cv.width = tam.x; cv.height = tam.y; const ctx = cv.getContext('2d'); ctx.clearRect(0, 0, tam.x, tam.y);
-      if (!this.pontos?.length) return;
+      if (!this.pontos?.length || !tam.x || !tam.y) return; // mapa ainda sem tamanho (tela abrindo)
       const c = map.getCenter(), mpp = 40075016.686 * Math.cos(c.lat * Math.PI / 180) / Math.pow(2, map.getZoom() + 8), r = Math.max(5, 7000 / mpp);
       const b = map.getBounds().pad(0.1);
       ctx.globalCompositeOperation = 'lighter';
@@ -258,10 +284,19 @@ async function iniciarMapaTempo() {
   const avisos = [], status = () => { const s = document.getElementById('mtStatus'); if (s) s.textContent = avisos.join(' '); };
   try { await carregarLeaflet(); } catch { avisos.push('Não foi possível carregar o mapa. Confira a internet e abra de novo.'); return status(); }
   pararAnimacao();
-  const L = window.L, mapa = L.map(el, {zoomControl: true, attributionControl: true}).setView([loc.lat, loc.lon], 7);
-  mtEstado.mapa = mapa; mtEstado.quadros = [];
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 12, attribution: '© OpenStreetMap'}).addTo(mapa);
-  L.circleMarker([loc.lat, loc.lon], {radius: 7, color: '#fff', weight: 2, fillColor: '#e0443f', fillOpacity: 1}).addTo(mapa).bindTooltip(db.settings.farm || 'Fazenda');
+  const L = window.L, mapa = L.map(el, {zoomControl: false, attributionControl: true}).setView([loc.lat, loc.lon], 7);
+  L.control.zoom({position: 'bottomright'}).addTo(mapa);
+  mtEstado.mapa = mapa; mtEstado.quadros = []; mtEstado.loc = loc;
+  // Fundo: satélite com nomes das cidades e divisas por cima (rótulos acima do radar e da chuva), ou mapa de ruas
+  mapa.createPane('mtRotulos'); mapa.getPane('mtRotulos').style.zIndex = 450; mapa.getPane('mtRotulos').style.pointerEvents = 'none';
+  const fotoSat = typeof tmCamadaSatelite === 'function' ? tmCamadaSatelite(L) : null;
+  if (fotoSat) fotoSat.options.className = 'mt-fundo-sat';
+  const chaveEsri = typeof SAT_CHAVES !== 'undefined' && SAT_CHAVES.esri;
+  const rotulos = L.tileLayer(`${chaveEsri ? 'https://ibasemaps-api.arcgis.com' : 'https://server.arcgisonline.com'}/arcgis/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}${chaveEsri ? `?token=${chaveEsri}` : ''}`, {maxZoom: 20, maxNativeZoom: 13, pane: 'mtRotulos', attribution: ''});
+  mtEstado.fundos = {sat: fotoSat ? L.layerGroup([fotoSat, rotulos]) : null, mapa: L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 12, attribution: '© OpenStreetMap', className: 'mt-fundo-mapa'})};
+  (mtEstado.fundos[mtFundo()] || mtEstado.fundos.mapa).addTo(mapa);
+  // A fazenda: marcador verde com o nome
+  L.marker([loc.lat, loc.lon], {interactive: false, zIndexOffset: 1000, pane: 'mtRotulos', icon: L.divIcon({className: 'mt-faz', iconSize: [0, 0], html: `<span class="mt-faz-pino">${mtIc('broto', 16)}</span><b>${esc(db.settings.farm || (typeof nv !== 'undefined' && nv?.fazenda?.name) || 'Fazenda')}</b>`})}).addTo(mapa);
   if (navigator.onLine === false) { avisos.push('Sem internet: o mapa do tempo precisa de conexão.'); return status(); }
   const perto = radaresPerto(loc.lat, loc.lon);
   const [sat, rad, tem, grade] = await Promise.allSettled([redemet({produto: 'satelite', tipo: 'ir', anima: 9}),
@@ -274,7 +309,7 @@ async function iniciarMapaTempo() {
   if (al && tp) {
     const perto = !tp.nenhuma && tp.d <= 150;
     al.hidden = false; al.className = 'mt-alerta ' + (perto ? (tp.d <= 40 ? 'perigo' : 'atencao') : 'ok');
-    al.textContent = perto ? `⚡ Tempestade a ${Math.round(tp.d)} km ${tp.rumo} da fazenda (às ${hhmm(tp.t)})${tp.chegando === true ? ' — se aproximando' : tp.chegando === false ? ' — não está se aproximando' : ''}.` : `Nenhuma tempestade num raio de 150 km (última verificação às ${hhmm(tp.t)}).`;
+    al.innerHTML = `<span class="mt-alerta-ic">${mtIc(perto ? 'raio' : 'radar', 18)}</span><span><b>${perto ? `Tempestade a ${Math.round(tp.d)} km ${esc(tp.rumo)}` : 'Nenhuma tempestade até 150 km'}</b><small>${perto ? `${tp.chegando === true ? 'Se aproximando da fazenda' : tp.chegando === false ? 'Não está se aproximando' : 'Acompanhe pelo radar'} • às ${hhmm(tp.t)}` : `Última verificação às ${hhmm(tp.t)}`}</small></span>`;
   }
   if (!S && !R && !T.length) avisos.push('Os dados observados da REDEMET (radar, satélite e tempestades) não responderam agora. Tente de novo em alguns minutos.');
   let tempos = (S?.quadros || []).map(q => dataUTC(q.data)).filter(Boolean);
@@ -287,8 +322,13 @@ async function iniciarMapaTempo() {
   perto.forEach(r => { radOverlays[r.k] = null; });
   const stscGrupo = L.layerGroup().addTo(mapa), tempCamada = criarCamadaTempestade(L).addTo(mapa);
   // Anéis de distância em volta da fazenda (20, 50 e 100 km)
-  const aneis = L.layerGroup(); [20, 50, 100].forEach(km => { L.circle([loc.lat, loc.lon], {radius: km * 1000, color: '#e8f5fb', weight: 1, opacity: 0.55, dashArray: '4 6', fill: false, interactive: false}).addTo(aneis);
-    L.marker([loc.lat + km / 111.32, loc.lon], {interactive: false, icon: L.divIcon({className: 'mt-anel-rot', html: `${km} km`, iconSize: [44, 16], iconAnchor: [22, 8]})}).addTo(aneis); });
+  // Anéis de distância (20, 50 e 100 km): brancos com sombra escura, para aparecer no satélite e no mapa; o número fica na borda, a nordeste
+  const aneis = L.layerGroup(); [20, 50, 100].forEach(km => {
+    L.circle([loc.lat, loc.lon], {radius: km * 1000, color: '#0b1d28', weight: 3.5, opacity: 0.35, fill: false, interactive: false}).addTo(aneis);
+    L.circle([loc.lat, loc.lon], {radius: km * 1000, color: '#ffffff', weight: 1.6, opacity: 0.9, dashArray: '6 6', fill: false, interactive: false}).addTo(aneis);
+    L.marker([loc.lat + km * 0.5 / 111.32, loc.lon + km * 0.866 / (111.32 * Math.cos(loc.lat * Math.PI / 180))], {interactive: false, icon: L.divIcon({className: `mt-anel-rot km${km}`, html: `${km} km`, iconSize: [46, 18], iconAnchor: [23, 9]})}).addTo(aneis); });
+  // Afastado, o anel de 20 km fica pequeno: o número dele some para não cobrir a fazenda
+  const longe = () => el.classList.toggle('mt-longe', mapa.getZoom() < 8); mapa.on('zoomend', longe); longe();
   mtEstado.quadros = tempos.map(t => ({tipo: 'obs', t, rotulo: `${hhmm(t)}${t.getTime() === tempos.at(-1)?.getTime() ? ' (último)' : ''}`}));
   const nObs = mtEstado.quadros.length;
   // --- Previsão (chuva em blocos que acompanham o mapa) ---
@@ -322,7 +362,7 @@ async function iniciarMapaTempo() {
     });
     stscGrupo.clearLayers();
     if (satCamada?.cv) satCamada.cv.style.opacity = v.stsc && obs ? '0.5' : ''; // satélite mais claro com as tempestades
-    if (v.stsc && obs) aneis.addTo(mapa); else aneis.remove();
+    if (v.aneis) aneis.addTo(mapa); else aneis.remove();
     if (obs && v.stsc) {
       const janela = T.filter(x => x.t <= new Date(q.t.getTime() + 5 * 60000) && x.t > new Date(q.t.getTime() - 30 * 60000));
       // Mancha: pontos dos últimos 30 min, mais peso para os recentes
@@ -352,10 +392,21 @@ async function iniciarMapaTempo() {
   const dias = document.getElementById('mtDias'), atalhos = [];
   if (nObs) { atalhos.push([0, `−${Math.round((tempos.at(-1) - tempos[0]) / 60000)} min`]); atalhos.push([nObs - 1, 'agora']); }
   [...new Set(mtEstado.quadros.filter(q => q.tipo === 'prev').map(q => q.iso.slice(0, 10)))].forEach(d => atalhos.push([mtEstado.quadros.findIndex(q => q.tipo === 'prev' && q.iso.startsWith(d)), d === today() ? 'próximas horas' : d === addDias(today(), 1) ? 'amanhã' : fmtDate(d).slice(0, 5)]));
-  if (dias) dias.innerHTML = atalhos.map(([k, r]) => `<button type="button" class="chip" data-act="mt-quadro" data-id="${k}">${esc(r)}</button>`).join('');
+  if (dias) dias.innerHTML = atalhos.map(([k, r]) => `<button type="button" class="chip" data-act="mt-quadro" data-id="${k}">${esc(r.charAt(0).toUpperCase() + r.slice(1))}</button>`).join('');
+  // Marcas da régua: começo do observado, Agora e +6 h, +12 h, +24 h, +48 h da previsão
+  const max = Math.max(1, mtEstado.quadros.length - 1), marcas = [], agoraMs = Date.now();
+  if (nObs) { const m = Math.round((tempos.at(-1) - tempos[0]) / 60000); marcas.push([0, m >= 60 ? `−${Math.floor(m / 60)}h${m % 60 ? String(m % 60).padStart(2, '0') : ''}` : `−${m} min`]); marcas.push([nObs - 1, 'Agora']); }
+  [6, 12, 24, 48].forEach(hh => { const k = mtEstado.quadros.findIndex(q => q.tipo === 'prev' && new Date(q.iso).getTime() >= agoraMs + hh * 3600000 - 1800000); if (k > 0) marcas.push([k, `+${hh}h`]); });
+  const mEl = document.getElementById('mtMarcas');
+  // Marcas perto demais se atropelam: fica a mais importante (Agora no lugar do começo; depois, a primeira)
+  const lim = Math.max(0.06, 64 / (mEl?.clientWidth || 300)); // ~64 px entre uma marca e outra
+  if (marcas.length > 1 && marcas[1][1] === 'Agora' && marcas[1][0] / max < lim * 1.2) marcas.shift();
+  const visiveis = []; marcas.forEach(m => { if (!visiveis.length || (m[0] - visiveis.at(-1)[0]) / max > lim) visiveis.push(m); });
+  if (mEl) mEl.innerHTML = visiveis.map(([k, r]) => `<span data-k="${k}" style="left:${(k / max * 100).toFixed(2)}%">${esc(r)}</span>`).join('');
+  const sl = document.getElementById('mtSlider'); if (sl && nObs) sl.style.setProperty('--obs', `${((nObs - 1) / max * 100).toFixed(2)}%`);
   const leg = document.getElementById('mtLegenda');
   if (leg) leg.innerHTML = `<span><i style="background:linear-gradient(90deg,#ffd23f,#ff9f1c,#eb4034,#be143c)"></i>tempestade (mais vermelho = mais forte e mais recente)</span><span>⚡ raios nos últimos 10 min</span><span>➤ para onde a tempestade mais perto está indo</span><span>◌ 20 / 50 / 100 km da fazenda</span>` +
-    ESCALA_CHUVA.map(([min, cor, n]) => `<span><i style="background:${cor}"></i>${num(min, min < 1 ? 1 : 0)}${n ? ' ' + n : ''}</span>`).join('') + '<small>chuva prevista em mm/h • satélite: quanto mais branca a nuvem, mais alta e fria (mais chance de chuva forte)</small>';
+    ESCALA_CHUVA.map(([min, cor, n]) => `<span><i style="background:${cor}"></i>${num(min, min < 1 ? 1 : 0)}${n ? ' ' + n : ''}</span>`).join('') + '<small>chuva prevista em mm/h • nuvens: quanto mais branca, mais alta e fria (mais chance de chuva forte)</small>';
   const slider = document.getElementById('mtSlider');
   if (!mtEstado.quadros.length) { avisos.push('Nada para mostrar agora.'); return status(); }
   slider.max = mtEstado.quadros.length - 1; slider.oninput = () => { pararAnimacao(); mostrarQuadro(Number(slider.value)); };
@@ -366,8 +417,13 @@ VIEWS['clima-mapa'].after = () => iniciarMapaTempo();
 function mostrarQuadro(k) {
   const q = mtEstado.quadros[k]; if (!q) return; mtEstado.quadro = k;
   mtEstado.desenhar?.(k);
-  const h = document.getElementById('mtHora'), s = document.getElementById('mtSlider');
-  if (h) h.textContent = q.rotulo; if (s) s.value = k;
+  const h = document.getElementById('mtHora'), sub = document.getElementById('mtHoraSub'), s = document.getElementById('mtSlider');
+  const d = q.tipo === 'obs' ? q.t : new Date(q.iso), dia = isoDate(d), nomeDia = dia === today() ? 'Hoje' : dia === addDias(today(), 1) ? 'Amanhã' : (typeof DIA_SEMANA_LONGO !== 'undefined' ? DIA_SEMANA_LONGO[d.getDay()].replace(/^./, c => c.toUpperCase()) : fmtDate(dia));
+  if (h) h.textContent = `${nomeDia}, ${q.tipo === 'obs' ? hhmm(d) : String(d.getHours()).padStart(2, '0') + 'h'}`;
+  if (sub) { const min = Math.round((d - Date.now()) / 60000); sub.textContent = q.tipo === 'obs' ? (q.rotulo.includes('último') ? 'observado • o mais recente' : 'observado • radar e satélite') : `previsão • daqui a ${min < 90 ? Math.max(1, min) + ' min' : Math.round(min / 60) + ' h'}`; sub.className = q.tipo; }
+  if (s) { s.value = k; s.classList.toggle('prev', q.tipo === 'prev'); }
+  document.querySelectorAll('#mtMarcas span').forEach(m => m.classList.toggle('on', Number(m.dataset.k) === k));
+  document.querySelectorAll('#mtDias .chip').forEach(c => c.classList.toggle('active', Number(c.dataset.id) === k));
   // Caminho inverso: a barra do mapa num outro dia marca esse dia na previsão (cartões)
   if (q.tipo === 'prev') marcarDiaDaPrevisao(q.iso.slice(0, 10));
 }
@@ -407,6 +463,14 @@ Object.assign(ACTIONS, {
   'clima-mapa': () => go('clima-mapa'),
   'mt-camada': c => { mtEstado.vis[c] = !mtEstado.vis[c]; document.querySelectorAll('[data-act="mt-camada"]').forEach(b => { const on = mtEstado.vis[b.dataset.id]; b.classList.toggle('active', on); b.setAttribute('aria-pressed', on); }); mostrarQuadro(mtEstado.quadro); },
   'mt-quadro': k => { pararAnimacao(); mostrarQuadro(Number(k)); },
+  'mt-folha': () => { const f = document.getElementById('mtFolha'); if (f) f.hidden = !f.hidden; },
+  'mt-centro': () => { const l = mtEstado.loc; if (mtEstado.mapa && l) mtEstado.mapa.setView([l.lat, l.lon], 7); },
+  'mt-fundo': k => {
+    safeStorage.set(MT_FUNDO, k === 'mapa' ? 'mapa' : 'sat'); const m = mtEstado.mapa, F = mtEstado.fundos;
+    if (m && F) { Object.values(F).forEach(c => c && m.removeLayer(c)); (F[mtFundo()] || F.mapa).addTo(m); }
+    document.getElementById('mapaTempo')?.classList.remove('mt-fundo-sat', 'mt-fundo-mapa'); document.getElementById('mapaTempo')?.classList.add('mt-fundo-' + mtFundo());
+    document.querySelectorAll('[data-act="mt-fundo"]').forEach(b => { const on = b.dataset.id === mtFundo(); b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on)); });
+  },
   'mt-play': () => {
     if (mtEstado.tocando) return pararAnimacao();
     const b = document.querySelector('.mt-play'); if (b) b.textContent = '❚❚';
