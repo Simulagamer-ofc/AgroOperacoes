@@ -1732,3 +1732,63 @@ a.btn.primary{background:var(--blue);color:#fff}a.btn.secondary{background:var(-
 .pv-prior-op .pv-op-ic,.pv-prior-op .pv-op-txt,.pv-prox-op .pv-op-txt,.pv-prior-op .pv-selo{grid-area:auto}
 .pv-ops-busca select{padding:10px 12px;border:1px solid var(--line);background:var(--panel);color:var(--text);font:inherit}
 @media(max-width:760px){.pv-ops-busca select{flex:1 1 100%}}
+
+/* =================== Etapa 3 do padrão das prévias: Máquinas e Talhões (previas.js) =================== */
+/* Menu ⋮ nas linhas (Editar, Excluir, Histórico) e “⋯ Mais” no cabeçalho */
+.row-actions .pv-linha-mais{margin-left:0}
+.pv-linha-mais summary{font-size:1.2rem;padding:2px 10px}
+.pv-head-mais summary{font:inherit;font-weight:700;padding:10px 16px;border-radius:12px;background:var(--panel);min-height:44px;white-space:nowrap}
+.view-head .btns .pv-head-mais{margin-left:0}
+.pv-head-mais .menu-lista{right:0;left:auto;min-width:240px;z-index:30}
+.pv-head-mais .menu-lista button{width:100%;text-align:left;justify-content:flex-start}
+/* Cartão da máquina */
+.pv-maq header{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center}
+.pv-maq-ic{display:grid;place-items:center;width:64px;height:64px;border-radius:14px;background:color-mix(in srgb,var(--blue) 7%,var(--panel));flex:none}
+.pv-talhao .pv-maq-ic{background:color-mix(in srgb,var(--green) 8%,var(--panel))}
+.pv-maq .maq-horas .big{font-size:1.5rem}
+.pv-maq .maq-rev{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;align-items:center}
+.pv-maq .maq-rev small{grid-column:1/-1}.pv-maq .maq-rev .progress{grid-column:1;margin:0}
+.pv-maq-pct{font-size:.9rem;font-variant-numeric:tabular-nums}
+.pv-maq-det summary{cursor:pointer;color:var(--blue);font-size:.86rem;font-weight:600;padding:4px 0}
+.pv-maq-det .meta{margin-top:6px}
+.pv-maq .maq-acoes{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pv-maq .maq-acoes>button{flex:1 1 0;min-width:0;border:1.5px solid color-mix(in srgb,var(--blue) 45%,var(--line));color:var(--blue);background:var(--panel);border-radius:10px;padding:9px 8px;font-weight:600;white-space:nowrap}
+.pv-maq .maq-acoes .menu-mais{margin-left:0}
+:root.modo-campo .pv-maq .maq-acoes>button{border-color:#0a7a3e;color:#0a7a3e}
+/* Cartão do talhão */
+.pv-talhao header{display:grid!important;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center}
+.pv-talhao-nome{background:none;border:0;padding:0;font:inherit;font-weight:800;font-size:1.1rem;color:var(--text);cursor:pointer;text-align:left}
+.pv-talhao-nome:hover{color:var(--green)}
+.pv-talhao-acoes{display:flex!important;gap:8px;align-items:center;justify-content:flex-start!important;margin-top:4px}
+.pv-talhao-acoes .pv-acao{flex:1 1 auto;width:auto;padding:10px 14px;font-size:.95rem}
+.pv-talhao-acoes>button:not(.pv-acao){border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:10px 14px;font-weight:600;color:var(--text)}
+.pv-talhao-acoes .menu-mais{margin-left:0}
+/* Talhão: desenho no topo, abas e últimas atividades */
+.pv-talhao-topo{padding:0;overflow:hidden;margin-bottom:6px}
+.pv-talhao-mapa{display:block;width:100%;border:0;padding:0;background:none;cursor:pointer;position:relative}
+.pv-talhao-desenho{display:block;width:100%;height:auto;max-height:260px}
+.pv-talhao-mapa span{position:absolute;left:12px;bottom:10px;background:rgba(10,25,20,.72);color:#fff;font-size:.82rem;font-weight:600;padding:4px 10px;border-radius:999px}
+.pv-talhao-semdesenho{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 16px}
+.pv-talhao-semdesenho strong{display:block}.pv-talhao-semdesenho small{display:block;color:var(--muted);font-size:.84rem}
+.pv-aba-painel[hidden]{display:none}
+.pv-ult{display:grid;gap:10px}
+.pv-ult .ini-tit{margin:4px 0 0}
+.pv-ult-kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.pv-ult-kpis>div{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:12px}
+.pv-ult-kpis small{display:block;color:var(--muted);font-size:.78rem}.pv-ult-kpis b{display:block;font-size:1.35rem;line-height:1.2}
+.pv-ult-kpis .pv-kpi-ic{width:42px;height:42px;flex:none}
+.pv-ativ{list-style:none;margin:0;padding:0}
+.pv-ativ li{display:grid;grid-template-columns:12px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.pv-ativ li:last-child{border-bottom:0}.pv-ativ strong{display:block;font-size:.95rem}.pv-ativ small{display:block;color:var(--muted);font-size:.8rem}
+.pv-ponto{width:10px;height:10px;border-radius:50%;background:var(--muted)}
+.pv-ponto.concluida{background:var(--green)}.pv-ponto.andamento{background:var(--orange)}.pv-ponto.programada{background:var(--blue)}.pv-ponto.atrasada,.pv-ponto.cancelada{background:var(--red)}
+@media(min-width:900px){.pv-talhao-desenho{max-height:300px}}
+.pv-maq header,.pv-talhao header{grid-template-columns:auto minmax(0,1fr)!important;row-gap:6px!important}
+.pv-maq header>:last-child,.pv-talhao header>:last-child{grid-column:2;justify-self:start;justify-content:flex-start;margin:0}
+.pv-maq header>.pv-maq-ic,.pv-talhao header>.pv-maq-ic{grid-row:1/span 2}
+.pv-maq .maq-acoes>button{flex:1 1 auto;font-size:.86rem;padding:8px 10px}
+.pv-talhao-mapa{background:#2f4a2a}
+.pv-maq .maq-acoes{flex-wrap:nowrap}
+.pv-maq .maq-acoes>button{flex:1 1 0;font-size:.82rem;padding:9px 4px;overflow:hidden;text-overflow:ellipsis}
+.pv-maq,.pv-maq>*{min-width:0}
+@media(min-width:761px){.cards:has(>.pv-maq),.cards:has(>.pv-talhao){grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}}
