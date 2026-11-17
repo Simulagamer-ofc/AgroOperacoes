@@ -78,15 +78,17 @@ function pontoChuva(nv, gi, gj, iso, campo = 'mm') {
   const v = b[campo][(gi - bi * BLOCO_N) * BLOCO_N + (gj - bj * BLOCO_N)]?.[h];
   return v == null ? null : v;
 }
-// Chuva interpolada (bilinear) num lugar; usa o nível pedido e, onde ainda não chegou, um nível mais aberto
+// Chuva interpolada (bilinear) num lugar. Usa o nível pedido; onde ele não chegou (fora dos blocos finos ou na beirada
+// deles), completa com a grade mais aberta — assim a chuva não aparece cortada em quadrados na borda dos blocos
 function chuvaEm(lat, lon, iso, nv0 = 0) {
-  for (let nv = nv0; nv < NIVEIS_CHUVA.length; nv++) {
+  let mm = 0, falta = 1;
+  for (let nv = nv0; nv < NIVEIS_CHUVA.length && falta > 0.001; nv++) {
     const {p} = NIVEIS_CHUVA[nv], fi = lat / p - 0.5, fj = lon / p - 0.5, i = Math.floor(fi), j = Math.floor(fj), di = fi - i, dj = fj - j;
     let soma = 0, peso = 0;
     [[i, j, (1 - di) * (1 - dj)], [i + 1, j, di * (1 - dj)], [i, j + 1, (1 - di) * dj], [i + 1, j + 1, di * dj]].forEach(([a, b, w]) => { const v = pontoChuva(nv, a, b, iso); if (v != null) { soma += v * w; peso += w; } });
-    if (peso) return {mm: soma / peso, peso};
+    if (peso) { const usa = Math.min(falta, peso); mm += soma / peso * usa; falta -= usa; }
   }
-  return null;
+  return falta < 1 ? {mm: mm / (1 - falta), peso: 1 - falta} : null;
 }
 function chuvaNoPonto(lat, lon, iso, nv0 = 0) {
   for (let nv = nv0; nv < NIVEIS_CHUVA.length; nv++) { const {p} = NIVEIS_CHUVA[nv], gi = Math.round(lat / p - 0.5), gj = Math.round(lon / p - 0.5), mm = pontoChuva(nv, gi, gj, iso); if (mm != null) return {mm, prob: pontoChuva(nv, gi, gj, iso, 'prob')}; }
@@ -192,11 +194,22 @@ VIEWS['clima-mapa'] = () => {
 TITLES['clima-mapa'] = 'Mapa do tempo';
 // Busca os blocos da área visível (com folga). Afastado demais: só os mais perto do centro, para não pesar
 let avisoAfastado = false;
+// Blocos a buscar para a área: os mais perto do centro no nível do zoom e, se eles não cobrem a tela inteira (mapa
+// grande ou afastado), a tela toda numa grade mais aberta — a chuva aparece no mapa inteiro, sem cortes retos
+function blocosParaTela(nvZoom, s, w, n, e) {
+  const todos = blocosDaArea(nvZoom, s, w, n, e), pedir = todos.slice(0, BLOCO_MAX_TELA).map(([bi, bj]) => [nvZoom, bi, bj]);
+  let cobre = todos.length <= BLOCO_MAX_TELA;
+  for (let nv = nvZoom + 1; !cobre && nv < NIVEIS_CHUVA.length; nv++) {
+    const area = blocosDaArea(nv, s, w, n, e); if (area.length > BLOCO_MAX_TELA) continue;
+    area.forEach(([bi, bj]) => pedir.push([nv, bi, bj])); cobre = true;
+  }
+  return {pedir, cobre};
+}
 async function carregarChuvaDaTela(mapa) {
-  const b = mapa.getBounds().pad(0.1), nv = nivelDoZoom(mapa.getZoom()), todos = blocosDaArea(nv, b.getSouth(), b.getWest(), b.getNorth(), b.getEast()), lista = todos.slice(0, BLOCO_MAX_TELA);
-  avisoAfastado = todos.length > lista.length;
+  const b = mapa.getBounds().pad(0.1), {pedir, cobre} = blocosParaTela(nivelDoZoom(mapa.getZoom()), b.getSouth(), b.getWest(), b.getNorth(), b.getEast());
+  avisoAfastado = !cobre;
   const st = document.getElementById('mtStatus'); if (st) st.dataset.afastado = avisoAfastado ? '1' : '';
-  const res = await Promise.allSettled(lista.map(([bi, bj]) => buscarBloco(nv, bi, bj)));
+  const res = await Promise.allSettled(pedir.map(([nv, bi, bj]) => buscarBloco(nv, bi, bj)));
   const ok = res.find(r => r.status === 'fulfilled')?.value; if (!ok) throw new Error('previsão indisponível');
   return ok;
 }
