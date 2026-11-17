@@ -14,6 +14,7 @@ import { lerCertificado, soapDist, lerRetDist, descompactar, lerDocumento, envEv
 const cors = {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'authorization, apikey, content-type, x-client-info', 'Access-Control-Allow-Methods': 'POST, OPTIONS'};
 const resposta = (status: number, corpo: unknown) => new Response(JSON.stringify(corpo), {status, headers: {...cors, 'Content-Type': 'application/json'}});
 const erro = (status: number, message: string) => resposta(status, {message});
+const CHAVE_APP = 'sb_publishable_BxbOeMIvyAlyTkCMy3sUWg__PpRKnYK'; // chave pública do app (mesma do nuvem.js)
 const UFS = ['11', '12', '13', '14', '15', '16', '17', '21', '22', '23', '24', '25', '26', '27', '28', '29', '31', '32', '33', '35', '41', '42', '43', '50', '51', '52', '53'];
 const ESPERA_MS = 61 * 60 * 1000; // a SEFAZ pede 1 hora entre consultas sem novidade (61 min de folga)
 const LIMITE_TEMPO_MS = 100_000;   // para antes do limite da função
@@ -50,7 +51,7 @@ Deno.serve(async req => {
     const fazenda = String(b.farm_id || '');
     if (!/^[0-9a-f-]{36}$/i.test(fazenda)) return erro(400, 'Fazenda inválida.');
     const auth = req.headers.get('Authorization') || '';
-    const eu = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_ANON_KEY')!, {global: {headers: {Authorization: auth}}, auth: {persistSession: false}});
+    const eu = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_ANON_KEY') || CHAVE_APP, {global: {headers: {Authorization: auth}}, auth: {persistSession: false}});
     const adm = createClient(Deno.env.get('SUPABASE_URL')!, chaveSecreta(), {auth: {persistSession: false, autoRefreshToken: false}});
     const [{data: papel}, {data: ve}, {data: quem}] = await Promise.all([eu.rpc('farm_role', {p_farm: fazenda}), eu.rpc('ve_notas_sefaz', {p_farm: fazenda}), eu.auth.getUser()]);
     if (!ve) return erro(403, 'Sem acesso às notas desta fazenda.');
