@@ -11,6 +11,7 @@ const {execFileSync} = require('node:child_process');
 
 process.env.PONTE_CHAVE = 'k'.repeat(40);
 const {criarServidor} = require('./index.js');
+const {criarHandler} = require('./netlify/functions/ponte.js');
 
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'ponte-'));
 const ossl = (...a) => execFileSync('openssl', a, {cwd: dir, stdio: 'pipe'});
@@ -67,4 +68,18 @@ test('senha errada do certificado: mensagem clara', async () => {
   const r = await chamar({servico: 'dist', soap: '<a/>', pfx: pfx(), senha: 'errada'});
   assert.equal(r.status, 502);
   assert.match(r.json.erro, /Senha do certificado incorreta/);
+});
+
+test('função do Netlify: mesmo repasse pelo /enviar, com chave', async () => {
+  const destino = {url: `https://localhost:${sefaz.address().port}/x`, acao: 'urn:acao-teste'};
+  const h = criarHandler({destinos: {dist: {1: destino, 2: destino}}, opcoesTls: {ca: ler('ca.crt'), port: sefaz.address().port, timeout: 50000}});
+  const corpo = JSON.stringify({servico: 'dist', ambiente: 1, soap: '<soap>netlify</soap>', pfx: pfx(), senha: 'senha123'});
+  const r = await h({httpMethod: 'POST', path: '/enviar', headers: {'x-ponte-chave': 'k'.repeat(40)}, body: Buffer.from(corpo).toString('base64'), isBase64Encoded: true});
+  assert.equal(r.statusCode, 200);
+  assert.equal(JSON.parse(r.body).status, 200);
+  assert.equal(ultimoSoap, '<soap>netlify</soap>');
+  const s = await h({httpMethod: 'GET', path: '/saude', headers: {}});
+  assert.equal(s.statusCode, 200);
+  const sem = await h({httpMethod: 'POST', path: '/enviar', headers: {}, body: corpo});
+  assert.equal(sem.statusCode, 401);
 });
