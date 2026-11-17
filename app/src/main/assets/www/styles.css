@@ -1576,3 +1576,17 @@ a.btn.primary{background:var(--blue);color:#fff}a.btn.secondary{background:var(-
   .aga-dir{grid-column:2;flex-direction:row;align-items:center;justify-content:space-between}
   .aga-sug-item{grid-template-columns:1fr}.aga-sug-item .aga-bts{justify-content:flex-start}
 }
+/* Notas da SEFAZ (0.88) */
+.sf-intro ol{margin:8px 0 12px;padding-left:22px}.sf-intro li{margin:6px 0}
+.sf-ult{margin:4px 0 8px}
+.sf-lista{padding:4px 14px}
+.sf-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:start;padding:12px 0;border-bottom:1px solid var(--line)}
+.sf-item:last-child{border-bottom:0}
+.sf-txt strong{display:block}.sf-txt small{display:block;color:var(--muted);margin-top:2px}
+.sf-txt .sf-nota{color:#9a4a06}:root[data-theme="dark"] .sf-txt .sf-nota{color:#f5b843}
+.sf-dir{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.sf-valor{font-size:1.05rem}
+.sf-bts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.sf-seguro{background:var(--chip,rgba(24,166,106,.08));border-left:4px solid var(--marca);padding:10px 12px;border-radius:8px;margin:8px 0 12px;font-size:.92rem}
+@media(max-width:640px){.sf-item{grid-template-columns:1fr}.sf-dir{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between}.sf-bts{justify-content:flex-start}}
+.sf-msg{color:#c53030;margin:0}:root[data-theme="dark"] .sf-msg{color:#f07575}
