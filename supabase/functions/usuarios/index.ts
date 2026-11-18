@@ -107,6 +107,13 @@ Deno.serve(async (req) => {
       if (criadoPeloApp(u?.user?.email) && !count) await adm.auth.admin.deleteUser(alvo);
     };
 
+    // Proprietário da fazenda: sempre ADM; não pode ser desativado, removido nem rebaixado (passa a propriedade antes)
+    const { data: faz } = await adm.from("farms").select("proprietario").eq("id", fazenda).maybeSingle();
+    const ehDono = !!faz?.proprietario && faz.proprietario === alvo;
+    if (ehDono && ["status", "nivel", "remover"].includes(String(b.acao))) {
+      return erro(400, "Esta pessoa é o proprietário da fazenda: não pode ser desativada, removida nem mudar de nível. Para isso, o proprietário passa a propriedade para outro usuário antes.");
+    }
+
     switch (b.acao) {
       case "autorizar": {
         const papel = String(b.papel || "member");
