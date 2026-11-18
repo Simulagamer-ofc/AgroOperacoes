@@ -570,7 +570,7 @@ async function nvEscolherFazenda() {
 }
 
 // ---------- Pedido de acesso, senha esquecida e senha nova ----------
-const NV_SITE = 'https://simulagamer-ofc.github.io/AgroOperacoes/';
+const NV_SITE = 'https://mercaplant.com.br/';
 // Endereço para onde o link de recuperação leva (no aplicativo Android, a versão web)
 const nvEnderecoApp = () => location.protocol === 'https:' && /\./.test(location.hostname) && !/androidplatform|localhost/.test(location.hostname) ? location.origin + location.pathname : NV_SITE;
 const nvValor = id => ($('#' + id)?.value || '');
