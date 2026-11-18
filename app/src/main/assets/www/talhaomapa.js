@@ -24,7 +24,7 @@ const tmAreaHa = p => p.length > 2 ? areaGeodesicaM2(p) / 1e4 : 0;
 // Cor pela cultura (a mesma cultura, a mesma cor)
 const TM_CORES = ['#f2c94c', '#6fcf97', '#56ccf2', '#f2994a', '#bb6bd9', '#eb5757', '#27ae60', '#2d9cdb', '#f78fb3', '#9b51e0'];
 const tmCulturas = () => [...new Set(db.fields.filter(f => f.contorno?.pontos?.length > 2).map(f => (f.crop || '').trim() || 'Sem cultura'))].sort((a, b) => a === 'Sem cultura' ? 1 : b === 'Sem cultura' ? -1 : a.localeCompare(b, 'pt-BR'));
-const tmCorCultura = c => (c || '').trim() ? TM_CORES[tmCulturas().filter(x => x !== 'Sem cultura').indexOf(c.trim()) % TM_CORES.length] || '#ffffff' : '#ffffff';
+const tmCorCultura = c => typeof corCultura === 'function' ? ((c || '').trim() ? corCultura(c) : '#ffffff') : (c || '').trim() ? TM_CORES[tmCulturas().filter(x => x !== 'Sem cultura').indexOf(c.trim()) % TM_CORES.length] || '#ffffff' : '#ffffff';
 
 let tm = {mapa: null, semImagem: 0};
 function tmNovoMapa(el, opcoes = {}) {
