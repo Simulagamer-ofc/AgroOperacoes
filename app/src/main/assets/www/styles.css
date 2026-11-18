@@ -1890,3 +1890,95 @@ button.cd-local:hover{border-color:var(--green)}
 .mt-faz-pino svg{transform:rotate(45deg);stroke:#fff;stroke-width:2.6;fill:none}
 .mt-faz b{position:absolute;top:2px;left:0;transform:translateX(-50%);white-space:nowrap;background:#1fae62;color:#fff;font:800 11.5px Inter,system-ui,sans-serif;padding:3px 10px;border-radius:999px;box-shadow:0 2px 6px rgba(0,0,0,.35)}
 @media(max-width:760px){body:has(.sede-painel) #fabBtn{display:none}}
+
+/* =================== Início organizado (previas.js: i2) =================== */
+.i2{display:grid;gap:16px;max-width:1560px}
+.i2 .card{margin:0}
+.i2-cab{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:16px;align-items:center;padding:16px 20px}
+.i2-saud h2{margin:0;font-size:1.55rem;letter-spacing:-.01em}.i2-saud p{margin:4px 0 0;color:var(--muted)}
+.i2-clima .pv-clima-pilula{padding:6px 10px;border-radius:12px}.i2-clima .pv-clima-pilula:hover{background:var(--bg)}
+.i2-lancar{display:flex;align-items:center;gap:8px;padding:12px 18px;border-radius:12px;white-space:nowrap;font-weight:700}
+.i2-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.i2-kpi{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center;padding:16px 18px;text-align:left;color:var(--text);cursor:pointer;font:inherit}
+.i2-kpi b{display:block;font-size:1.85rem;line-height:1.05;font-variant-numeric:tabular-nums}.i2-kpi small{display:block;font-size:.88rem;margin-top:2px}
+.i2-kpi em{display:block;font-style:normal;color:var(--muted);font-size:.76rem;margin-top:2px}.i2-kpi em.nao{color:var(--red)}.i2-kpi em.atencao{color:var(--orange)}
+.i2-kpi .pv-kpi-ic{width:48px;height:48px}
+.i2-meio{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(320px,1fr);gap:16px;align-items:stretch}
+.i2-card{padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.i2-tit{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.i2-tit h3{margin:0;font-size:1.05rem;display:flex;align-items:center;gap:8px}.i2-tit h3 svg{color:var(--destaque)}
+.i2-tit span{display:flex;gap:16px}
+.i2-cont{min-width:26px;height:26px;border-radius:13px;display:grid!important;place-items:center;background:color-mix(in srgb,var(--orange) 20%,var(--panel));color:var(--orange);font-weight:800;font-size:.85rem;padding:0 8px}
+/* Operações */
+.i2-vazio{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px;border:1px dashed var(--line);border-radius:14px;background:var(--bg)}
+.i2-vazio strong{display:block}.i2-vazio small{display:block;color:var(--muted);margin-top:2px}
+.i2-pri{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:14px;align-items:center;padding:14px;border-radius:14px;background:color-mix(in srgb,var(--green) 7%,var(--panel));border:1px solid color-mix(in srgb,var(--green) 25%,var(--line))}
+.i2-pri-op{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;background:none;border:0;padding:0;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.i2-pri-op .pv-selo{align-self:start}
+.i2-op-txt{min-width:0}.i2-op-txt strong{display:block;font-size:1rem}.i2-op-txt small{display:block;color:var(--muted);font-size:.82rem;margin-top:1px}
+.i2-pri .i2-op-txt strong{font-size:1.1rem}.i2-rot{color:var(--green)!important;font-weight:700;text-transform:uppercase;letter-spacing:.04em;font-size:.7rem!important}
+.i2-pri-bt{padding:13px 14px}
+.i2-lista{display:grid}
+.i2-op{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}.i2-op:last-of-type{border-bottom:0}
+.i2-op-info{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;background:none;border:0;padding:0;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.i2-op-txt small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.i2-op-bt{border:1.5px solid color-mix(in srgb,var(--blue) 45%,var(--line));color:var(--blue);background:var(--panel);border-radius:10px;padding:8px 14px;font:inherit;font-weight:700;cursor:pointer}
+.i2-op-bt.ok{border-color:color-mix(in srgb,var(--green) 50%,var(--line));color:var(--green)}
+.i2-prox{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:10px;align-items:center;width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--text);text-align:left;font:inherit;cursor:pointer;margin-top:auto}
+.i2-prox svg:first-child{color:var(--blue)}.i2-prox small{display:block;color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;font-weight:700}.i2-prox b{display:block;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.i2-prox em{font-style:normal;color:var(--muted);font-size:.85rem;white-space:nowrap}
+.i2-mais{align-self:flex-start;margin-top:auto}
+/* Atenção */
+.i2-av{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--text);text-align:left;font:inherit;cursor:pointer}
+.i2-av strong{display:block;font-size:.92rem;line-height:1.3}
+.i2-av small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--muted);font-size:.8rem;margin-top:2px}
+.i2-av-ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:1.05rem;background:color-mix(in srgb,var(--orange) 18%,var(--panel));color:var(--orange)}
+.i2-av.red{border-color:color-mix(in srgb,var(--red) 40%,var(--line));background:color-mix(in srgb,var(--red) 7%,var(--panel))}.i2-av.red .i2-av-ic{background:color-mix(in srgb,var(--red) 18%,var(--panel));color:var(--red)}
+.i2-av .pv-seta,.i2-prox .pv-seta{color:var(--muted)}
+.i2-tempestade:empty{display:none}.i2-tempestade .clima-risco{margin:0;border-radius:12px}
+.i2-ok{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;padding:12px;border-radius:12px;background:color-mix(in srgb,var(--green) 9%,var(--panel));border:1px solid color-mix(in srgb,var(--green) 30%,var(--line))}
+.i2-ok[hidden]{display:none}.i2-ok strong{display:block}.i2-ok small{color:var(--muted)}.i2-ok>span:first-child{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--green) 22%,transparent);color:var(--green);font-weight:800}
+/* Registrar rápido */
+.i2-tiles{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px}
+.i2-tile{display:grid;justify-items:center;gap:8px;padding:14px 6px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--text);font:inherit;font-weight:700;font-size:.84rem;text-align:center;cursor:pointer;line-height:1.2}
+.i2-tile:hover{border-color:var(--green)}
+/* Gastos e preparar */
+.i2-fim{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}.i2-fim.um{grid-template-columns:1fr}
+.i2-fim .ini-prep .card{margin:0}
+.i2 .ini-gastos .ini-barras{height:140px}
+@media(max-width:1199px){
+  .i2-meio{grid-template-columns:1fr 1fr}
+  .i2-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .i2-pri{grid-template-columns:1fr}
+}
+@media(max-width:900px){.i2-meio,.i2-fim{grid-template-columns:1fr}}
+@media(max-width:760px){
+  .i2{gap:12px}
+  .i2-cab{grid-template-columns:1fr;gap:10px;padding:14px}
+  .i2-saud h2{font-size:1.35rem}
+  .i2-clima .pv-clima-pilula{width:100%;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+  .i2-clima .pv-clima-pilula .pv-clima-txt small{max-width:none;white-space:normal}
+  .i2-lancar{justify-content:center;width:100%}
+  .i2-kpis{grid-template-columns:1fr 1fr;gap:10px}
+  .i2-kpi{padding:12px;gap:10px}.i2-kpi b{font-size:1.5rem}.i2-kpi .pv-kpi-ic{width:40px;height:40px}
+  .i2-card{padding:14px}
+  .i2-vazio{grid-template-columns:auto minmax(0,1fr)}.i2-vazio button{grid-column:1/-1;width:100%}
+  .i2-tiles{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.i2-tile{font-size:.72rem;padding:10px 2px}
+  .i2-prox em{display:none}
+}
+body:has(.i2) .app.nx-home .content{max-width:none}
+.i2 .ini-atencao,.i2 .ini-gastos,.i2 .ini-prep,.i2 .pv-op-ic,.i2 .pv-op-txt,.i2 .pv-selo{grid-area:auto}
+.i2 .ini-gastos.i2-card{display:block}
+.i2-sub{color:var(--muted);font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:4px 0}
+.i2-tit h3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.i2-tit span button{white-space:nowrap}
+@media(max-width:1199px) and (min-width:761px){
+  .i2-cab{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"saud lancar" "clima clima"}
+  .i2-saud{grid-area:saud}.i2-lancar{grid-area:lancar}.i2-clima{grid-area:clima}
+  .i2-clima .pv-clima-pilula{width:100%;border:1px solid var(--line);background:var(--bg)}
+  .i2-kpi{grid-template-columns:1fr;gap:6px}.i2-kpi .pv-kpi-ic{width:36px;height:36px}
+}
+@media(max-width:760px){
+  .i2-tit [data-act="op-new"]{display:none}
+  .i2-lista .pv-selo{display:none}
+  .i2-pri .i2-op-txt small:not(.i2-rot){white-space:normal}
+}
