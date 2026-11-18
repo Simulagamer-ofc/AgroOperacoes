@@ -667,18 +667,18 @@ function finishMaintenance(mt, persist = true) {
 function fieldForm(f = {}) {
   openForm({
     title: f.id ? 'Editar talhão' : 'Novo talhão',
-    values: f,
+    values: f, form: 'talhao',
     fields: [
       {k: 'name', label: 'Nome / número', required: true, placeholder: 'Ex.: Talhão 07'},
       {k: 'area', label: 'Área (ha)', type: 'number', min: 0, required: true},
-      {k: 'crop', label: 'Cultura atual', placeholder: 'Ex.: Soja'},
+      {k: 'crop', label: 'Cultura atual', placeholder: 'Ex.: Soja', sugestoes: () => typeof culturasUsadas === 'function' ? culturasUsadas() : [], canon: true},
       {k: 'cultivar', label: 'Cultivar'},
-      {k: 'season', label: 'Safra', placeholder: 'Ex.: 2026/27'},
+      {k: 'season', label: 'Safra', placeholder: 'Ex.: 2026/27', sugestoes: () => typeof safrasUsadas === 'function' ? safrasUsadas() : [], hint: f.id && f.crop ? 'Ao mudar a safra, a cultura atual fica guardada no histórico do talhão.' : ''},
       {k: 'plantingDate', label: 'Data de plantio', type: 'date', hint: 'Preenchida sozinha ao concluir uma operação de plantio.'},
       {k: 'ciclo', label: 'Ciclo da cultivar (dias)', type: 'number', min: 0, hint: 'Opcional: do plantio à colheita. Gera a previsão de colheita.'},
       {k: 'notes', label: 'Observações', type: 'textarea'}
     ],
-    onSubmit: v => { upsert('fields', {...f, ...v, id: f.id || uid()}); showToast('Talhão salvo'); }
+    onSubmit: v => { const novo = {...f, ...v, id: f.id || uid()}; if (f.id && typeof culturaHistorico === 'function') novo.historico = culturaHistorico(f, novo); upsert('fields', novo); showToast('Talhão salvo'); }
   });
 }
 

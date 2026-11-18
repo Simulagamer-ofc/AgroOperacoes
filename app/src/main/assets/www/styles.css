@@ -2035,3 +2035,29 @@ body:has(.i2) .app.nx-home .content{max-width:none}
 .i2-faz-corpo>*{min-width:0}
 @media(max-width:760px){.i2-tal-nome{font-size:19px}.i2-tal-txt{font-size:14px}.i2-maq-txt{font-size:13px}}
 @media(max-width:760px){.i2-maq-fundo{transform:scale(1.2,1.15);transform-origin:0 0}.i2-maq-txt{transform:translate(1px,2px)}}
+/* Definir culturas no mapa (culturas.js) */
+.i2-faz-def{padding:0;min-height:0;font-size:.84rem;font-weight:700;white-space:nowrap}
+.i2-pt-cult{justify-self:start;padding:2px 0;min-height:0;font-size:.84rem}
+.i2-rot-seta{color:var(--muted)}
+.cu-paleta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;align-items:center}
+.cu-paleta button{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:transparent;color:var(--text);border-radius:999px;padding:5px 12px 5px 8px;font-weight:700;font-size:.8rem;min-height:0;cursor:pointer}
+.cu-paleta button i{width:12px;height:12px;border-radius:50%;display:inline-block;box-shadow:0 0 0 1px rgba(0,0,0,.15)}
+.cu-paleta button.on{border-color:var(--text);box-shadow:0 0 0 2px color-mix(in srgb,var(--text) 18%,transparent)}
+.cu-outra input{border:1.5px dashed var(--line);border-radius:999px;padding:5px 12px;font-size:.8rem;width:150px;background:transparent;color:var(--text);min-height:0}
+.cu-painel{display:grid;gap:10px}
+.cu-tit b{display:block;font-size:1.02rem}.cu-tit small{color:var(--muted);font-size:.8rem}
+.cu-campos{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cu-campos label{display:grid;gap:4px;font-size:.76rem;font-weight:700;color:var(--muted)}
+.cu-campos label small{font-weight:500}
+.cu-campos input{font-size:.88rem;padding:8px 10px;border-radius:10px;min-height:0}
+.cu-lista{display:grid;gap:6px;max-height:300px;overflow:auto}
+.cu-l{display:grid;grid-template-columns:12px minmax(0,1fr) auto;align-items:center;gap:10px;text-align:left;border:1px solid var(--line);background:transparent;color:var(--text);border-radius:12px;padding:8px 12px;cursor:pointer;min-height:0}
+.cu-l i{width:12px;height:12px;border-radius:4px}
+.cu-l b{display:block;font-size:.9rem}.cu-l small{display:block;color:var(--muted);font-size:.74rem}
+.cu-l em{font-style:normal;font-size:.8rem;color:var(--muted);white-space:nowrap}
+.cu-l em b{display:inline;color:var(--text);font-size:.8rem}
+.cu-l.mudou{border-color:#1f7a3f;background:color-mix(in srgb,#1f7a3f 8%,transparent)}
+.cu-bts{display:flex;gap:8px}.cu-bts button{flex:1 1 0;min-width:0}
+@media(max-width:760px){.cu-paleta{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-right:-16px;padding-right:16px}.cu-paleta>*{flex:0 0 auto}.cu-lista{max-height:none}}
+.cu-campos>*{min-width:0}.cu-campos input{width:100%;box-sizing:border-box}.cu-campos label{align-content:end}
+.cu-painel,.cu-lista,.cu-l{min-width:0}
