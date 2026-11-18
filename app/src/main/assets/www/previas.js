@@ -262,7 +262,7 @@ function i2Operacoes() {
     <div class="i2-pri"><button type="button" class="i2-pri-op" data-act="pv-op-abrir" data-id="${esc(pri.id)}"><span class="pv-op-ic">${pvHex(pvIconeOp(pri.type), 'verde', 52)}</span>
       <span class="i2-op-txt"><small class="i2-rot">${pri.status === 'Em andamento' ? 'Em andamento agora' : 'Prioridade'}</small><strong>${esc(pri.type)} — ${esc(opPlace(pri))}</strong><small>${esc([pvResp(pri), maq, area, pvQuando(pri)].filter(Boolean).join(' • '))}</small></span>${pri.status === 'Em andamento' ? '' : pvSelo(pri)}</button>
       ${pvAcao(pri, {iniciar: 'Iniciar operação', concluir: 'Concluir operação'}).replace('pv-acao', 'pv-acao i2-pri-bt')}</div>
-    ${resto.length ? `<div class="i2-lista">${resto.slice(0, 3).map(i2LinhaOp).join('')}${resto.length > 3 ? `<button type="button" class="link i2-mais" data-act="nav" data-id="operacoes">+ ${resto.length - 3} — ver todas</button>` : ''}</div>` : ''}</section>`;
+    ${resto.length ? `<div class="i2-lista">${resto.slice(0, 3).map(i2LinhaOp).join('')}${resto.length > 3 ? `<button type="button" class="link i2-mais" data-act="nav" data-id="operacoes">+ ${resto.length - 3} — ver todas</button>` : ''}</div>` : ''}${prox}</section>`;
 }
 // Avisos: os 3 mais importantes, curtos (o título longo da chuva vira “Chuva amanhã: 16,5 mm” + horários embaixo)
 function i2Aviso(a) {
@@ -292,7 +292,7 @@ function i2Registrar() {
   const itens = (typeof ATALHOS_REGISTRO !== 'undefined' ? ATALHOS_REGISTRO : []).filter(([act, , , r]) => ACTIONS[act] && pode(r));
   if (!itens.length) return '';
   return `<section class="card i2-card i2-reg"><div class="i2-tit"><h3>${iconeLinha('mais', 18)} Registrar rápido</h3></div>
-    <div class="i2-tiles">${itens.map(([act, ic, nome]) => `<button type="button" class="i2-tile" data-act="${act}"><span>${pvHex(ic, ['combustivel', 'horimetro', 'engrenagem'].includes(ic) ? 'azul' : 'verde', 34)}</span>${esc(nome)}</button>`).join('')}</div></section>`;
+    <div class="i2-tiles">${itens.map(([act, ic, nome]) => `<button type="button" class="i2-tile" data-act="${act}"><span>${pvHex(ic, ['combustivel', 'horimetro', 'engrenagem'].includes(ic) ? 'azul' : 'verde', 34)}</span>${esc(nome === 'Abastecimento' ? 'Abastecer' : nome)}</button>`).join('')}</div></section>`;
 }
 // Gastos só quando há gasto no mês (vazio não ocupa espaço)
 function i2Gastos() {
@@ -300,13 +300,14 @@ function i2Gastos() {
   const t = today(); if (!lancamentosCusto(t.slice(0, 8) + '01', t).length) return '';
   return iniGastos().replace('ini-gastos so-pc', 'ini-gastos i2-card');
 }
-// Início enxuto: só o que se usa no dia — cabeçalho (clima + Novo lançamento), Operações de hoje | Atenção
-// e "Prepare a fazenda" enquanto falta cadastro. Números, gastos e atalhos repetidos ficam nas telas próprias.
+// Início: cabeçalho, 4 números, Operações de hoje | Atenção e Registrar rápido; "Prepare a fazenda" enquanto
+// falta cadastro. Gastos e últimas concluídas ficam no Financeiro e em Operações.
 VIEWS.inicio = () => {
   const ops = iniPode('operacoes'), prep = iniPreparar();
   return `<div class="i2 i3 ${ops ? '' : 'sem-ops'}">
-    ${i2Cabecalho()}
+    ${i2Cabecalho()}${i2Kpis()}
     <div class="i2-meio">${ops ? i2Operacoes() : `<section class="card i2-card">${iniAtalhosFuncao()}</section>`}${i2Atencao()}</div>
+    ${i2Registrar()}
     ${prep ? `<div class="ini-prep">${prep}</div>` : ''}</div>`;
 };
 VIEWS.inicio.after = (...a) => pvInicioDepois?.(...a);

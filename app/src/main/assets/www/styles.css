@@ -1986,4 +1986,5 @@ body:has(.i2) .app.nx-home .content{max-width:none}
 .i2.i3{max-width:1240px;margin:0 auto}
 .i3 .i2-meio{align-items:start}
 .i3 .i2-ops{min-height:0}
-@media(max-width:760px){.i3 .i2-lancar{display:none}.i3 .i2-cab{grid-template-areas:"saud" "clima"}}
+@media(max-width:760px){.i3 .i2-lancar{display:none}.i3 .i2-cab{grid-template-areas:"saud" "clima"}.i3 .i2-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:760px){.i3 .i2-tile{font-size:.68rem;padding-left:2px;padding-right:2px;min-width:0;overflow:hidden;text-overflow:ellipsis}.i3 .i2-tiles{gap:6px}}
