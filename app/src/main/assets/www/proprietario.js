@@ -1,4 +1,4 @@
-/* Proprietário da fazenda (Cadastros → Proprietário)
+/* Proprietário da fazenda (Ajustes → Fazenda → Proprietário)
    • Usuário proprietário (com a nuvem): escolhe qual usuário da fazenda é o dono — sempre ADM, ninguém o desativa,
      remove ou rebaixa; só ele (ou o Admin do sistema) passa a propriedade (regras no servidor).
    • Cadastro do proprietário: nome ou razão social, CPF/CNPJ, inscrição estadual, contato e endereço.
@@ -104,7 +104,7 @@ Object.assign(ACTIONS, {
   'pr-do-usuario': () => { const u = prUsuarioDono(); if (!u) return; const login = String(u.login || ''); prEditar({nome: u.nome || '', email: login.includes('@') && !login.endsWith('@' + NV_DOMINIO) ? login : ''}); },
   'pr-dono': () => { const id = $('#pr_user')?.value; if (!id) return showToast('Escolha o usuário'); nvDefinirDono(id); }
 });
-// Cadastros: o cartão "Proprietário" logo depois de "Propriedade" e no menu de configurações
+// Ajustes: o cartão "Proprietário" logo depois de "Propriedade" (seção Fazenda)
 {
   const _cad = VIEWS.cadastros, _depois = VIEWS.cadastros.after;
   VIEWS.cadastros = (...a) => { const h = _cad(...a), c = cartaoProprietario(); if (!c) return h; const i = h.indexOf('<article class="card panel"><h3>Registros no dispositivo'); return i < 0 ? h + c : h.slice(0, i) + c + h.slice(i); };
@@ -112,11 +112,7 @@ Object.assign(ACTIONS, {
 }
 if (typeof nvCarregarUsuarios === 'function') {
   const _carregar = nvCarregarUsuarios;
-  nvCarregarUsuarios = async (...a) => { const r = await _carregar(...a); prAtualizar(); return r; };
-}
-if (typeof CFG_ITENS !== 'undefined') {
-  CFG_ICONE.proprietario = '<circle cx="12" cy="8" r="3.4"/><path d="M5 20c.8-3.8 3.6-6 7-6s6.2 2.2 7 6"/><path d="m15.6 3.6 1.1-1.4 1.1 1.4"/>';
-  CFG_ITENS.splice(1, 0, ['proprietario', 'Proprietário', 'Usuário dono e cadastro com CPF/CNPJ', /^Proprietário/]);
+  nvCarregarUsuarios = async (...a) => { const r = await _carregar(...a); prAtualizar(); if (typeof cfgAtualizarSelos === 'function') cfgAtualizarSelos(); return r; };
 }
 document.head.insertAdjacentHTML('beforeend', `<style>
   .pr-dono { display: flex; gap: 12px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px }

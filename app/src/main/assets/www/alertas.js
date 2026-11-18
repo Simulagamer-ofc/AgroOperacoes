@@ -92,7 +92,7 @@ function entregarAlertas() {
   return lista;
 }
 
-// ---------- Ligar/desligar (Cadastros e atalho no "Hoje") ----------
+// ---------- Ligar/desligar (Ajustes → Alertas e atalho no "Hoje") ----------
 function suporteAlertas() {
   if (window.AndroidBridge?.agendarAlertas) return 'apk';
   if (typeof Notification !== 'undefined' && 'serviceWorker' in navigator) return 'web';
