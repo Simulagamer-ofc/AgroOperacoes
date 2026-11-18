@@ -6,7 +6,8 @@
    operação programada sem aferição, troca de cultura, resultado fora, desgaste das pontas, inspeção vencendo)
    e o gestor decide com um toque (Programar ou Dispensar).
    As programações ficam na própria máquina (m.afAgenda), sincronizadas com a nuvem como o resto do cadastro.
-   O antigo "Reaferir a cada (dias)" vira uma programação "a cada N dias" (sem gravar nada até o gestor editar). */
+   O antigo "Reaferir a cada (dias)" (preenchido sozinho nas versões antigas) não programa mais nada (0.96): só vale o que
+   o gestor programar, escolhendo se repete ou não. */
 
 // Quem programa, adia e cancela: ADM e supervisor (ou o uso sem nuvem). O usuário comum vê a agenda e afere.
 const agaGestor = () => !(typeof nvComum === 'function' && nvComum());
@@ -34,12 +35,9 @@ const agaSomar = (d, rep, n) => rep === 'meses' ? addMeses(d, n) : addDias(d, re
 const agaAfs = (m, tipo) => db.afericoes.filter(a => a.maquina?.id === m.id && (!tipo || a.tipo === tipo)).sort((a, b) => (b.data + (b.hora || '')).localeCompare(a.data + (a.hora || '')));
 const agaCultura = o => String((o?.fieldId && find('fields', o.fieldId)?.crop) || '').trim();
 
-// Programações da máquina (+ o antigo intervalo em dias, enquanto o gestor não editar)
+// Programações da máquina: só as que o gestor fez (o antigo "reaferir a cada N dias" não conta mais)
 function agaAgendas(m) {
-  const l = Array.isArray(m.afAgenda) ? m.afAgenda : [];
-  const dias = Number(m.reaferirDias);
-  if (dias > 0 && !l.some(a => a.id === 'legado')) return [...l, {id: 'legado', tipo: '', rep: 'dias', n: dias, data: '', criadoEm: '0000-00-00', resp: '', obs: '', ativo: true, legado: true}];
-  return l;
+  return Array.isArray(m.afAgenda) ? m.afAgenda : [];
 }
 function agaRepTxt(ag, m) {
   const n = Number(ag.n) || 0;
@@ -125,9 +123,7 @@ function agaSugestoes() {
         texto: `${troca ? `Troca de cultura (${c0} → ${c1}): a regulagem muda. ` : ''}${feita ? '' : prev ? `A máquina não foi aferida desde ${P.type === 'Aplicação' ? 'a última aplicação' : `o último ${P.type.toLowerCase()}`} (${fmtDate(prev.date)}).` : 'A máquina ainda não tem aferição registrada.'}`.trim(),
         pre: {tipo: tipoPadrao, rep: 'nao', data: addDias(P.date, -2) < hoje ? hoje : addDias(P.date, -2), obs: `Antes de ${P.type.toLowerCase()} de ${fmtDate(P.date)}${troca ? ` (troca de cultura: ${c0} → ${c1})` : ''}`}});
     }
-    // Sem nenhuma programação (e sem sugestão de operação acima, que já cobre)
-    if (!ags.length && !houveOp) add({chave: 'sem', titulo: 'Nenhuma aferição programada', texto: `Programe a aferição ${tOp ? `antes de cada ${tOp.toLowerCase()}` : ''} ou com a repetição que a fazenda usa.`.replace('  ', ' '),
-      pre: {tipo: tipoPadrao, rep: tOp ? 'antes' : 'nao', n: tOp ? 2 : '', data: addDias(hoje, 7)}});
+    // (0.96) Máquina sem programação não vira sugestão: programar ou não é decisão do gestor
     // Último resultado de cada tipo fora da referência, sem aferição depois
     const doMaq = agaAfs(m, '');
     for (const tipo of new Set(doMaq.map(a => a.tipo))) {
@@ -202,22 +198,27 @@ function agaForm(machineId, agId, pre = {}) {
   const m0 = machineId ? find('machines', machineId) : null, ag = m0 && agId ? agaAgendas(m0).find(a => a.id === agId) : null;
   const v0 = ag ? {machineId: m0.id, tipo: ag.tipo, data: ag.data || '', rep: ag.rep, n: ag.rep === 'antes' ? '' : ag.n, nAntes: ag.rep === 'antes' ? ag.n : 2, resp: ag.resp || '', obs: ag.obs || '', bloquear: ag.bloquear ? 'Sim' : 'Não'}
     : {machineId: machineId || '', tipo: '', data: addDias(today(), 7), rep: 'nao', n: '', nAntes: 2, resp: '', obs: '', bloquear: 'Não', ...pre, ...(pre.rep === 'antes' ? {nAntes: pre.n ?? 2, n: ''} : {})};
+  v0.repete = v0.rep && v0.rep !== 'nao' ? 'sim' : 'nao'; v0.data2 = v0.data || addDias(today(), 7); if (v0.repete === 'nao') v0.rep = 'dias';
   if (!v0.resp && v0.machineId) v0.resp = agaOperadorDe(find('machines', v0.machineId));
   const tipoOpts = id => { const m = id && find('machines', id); return (m ? agaTiposDe(m) : ['', ...Object.keys(TIPOS), 'inspecao']).map(t => ({value: t, label: agaTipoTxt(t)})); };
   openForm({form: 'aga', editando: !!ag, title: ag ? 'Editar programação de aferição' : 'Programar aferição', sub: 'Escolha a máquina, quando e se repete. A aferição feita fecha a vez; se repetir, a próxima já fica marcada.', submit: ag ? 'Salvar' : 'Programar',
     values: v0, fields: [
       {k: 'machineId', label: 'Máquina', type: 'select', required: true, options: () => [{value: '', label: 'Escolha a máquina'}, ...maqs.map(m => ({value: m.id, label: m.name + (m.type === 'Implemento' ? ` (${m.tipoImpl || 'implemento'})` : '')}))], full: true},
       {k: 'tipo', label: 'O que aferir', type: 'select', options: () => tipoOpts(v0.machineId), full: true, hint: '“Qualquer aferição” vale para bicos, dose, perdas ou inspeção desta máquina.'},
-      {k: 'rep', label: 'Repetir', type: 'select', options: AGA_REP.map(([value, label]) => ({value, label})), required: true, full: true},
-      {k: 'data', label: 'Data', type: 'date', mostrarSe: ['rep', ['nao', 'dias', 'semanas', 'meses']], hint: 'Na repetição, é a primeira data. Depois conta a partir da aferição feita.'},
-      {k: 'n', label: 'A cada (número)', type: 'number', min: 1, mostrarSe: ['rep', ['dias', 'semanas', 'meses', 'horas']]},
-      {k: 'nAntes', label: 'Quantos dias antes da operação', type: 'number', min: 0, mostrarSe: ['rep', 'antes'], hint: 'Vale para cada plantio, aplicação ou colheita programada com esta máquina.'},
+      {k: 'repete', label: 'Vai repetir?', type: 'select', options: [{value: 'nao', label: 'Não — só esta vez'}, {value: 'sim', label: 'Sim — repetir'}], required: true, full: true,
+        hint: 'Não: depois de feita, a aferição sai da agenda. Sim: a próxima já fica marcada.'},
+      {k: 'data', label: 'Data', type: 'date', mostrarSe: ['repete', 'nao']},
+      {k: 'rep', label: 'Repetir como', type: 'select', options: AGA_REP.filter(([v]) => v !== 'nao').map(([value, label]) => ({value, label})), full: true, mostrarSe: ['repete', 'sim']},
+      {k: 'data2', label: 'Primeira data', type: 'date', mostrarSe: [['repete', 'sim'], ['rep', ['dias', 'semanas', 'meses']]], hint: 'Depois conta a partir da aferição feita.'},
+      {k: 'n', label: 'A cada (número)', type: 'number', min: 1, mostrarSe: [['repete', 'sim'], ['rep', ['dias', 'semanas', 'meses', 'horas']]]},
+      {k: 'nAntes', label: 'Quantos dias antes da operação', type: 'number', min: 0, mostrarSe: [['repete', 'sim'], ['rep', 'antes']], hint: 'Vale para cada plantio, aplicação ou colheita programada com esta máquina.'},
       {k: 'resp', label: 'Responsável', sugestoes: typeof agPessoas === 'function' ? agPessoas : [], canon: true},
       {k: 'bloquear', label: 'Se atrasar, bloquear o início da operação?', type: 'select', options: ['Não', 'Sim'], hint: 'Sim: o operador não inicia a operação com esta máquina até aferir; o gestor pode iniciar mesmo assim.', mais: true},
       {k: 'obs', label: 'Observação', type: 'textarea', full: true, mais: true}],
     onSubmit: v => {
       const m = find('machines', v.machineId); if (!m) return 'Escolha a máquina';
       if (!agaTiposDe(m).includes(v.tipo || '')) return `“${agaTipoTxt(v.tipo)}” não se aplica a ${m.name}`;
+      if (v.repete !== 'sim') v.rep = 'nao'; else { if (!v.rep || v.rep === 'nao') return 'Escolha como repetir'; v.data = v.data2; }
       const rep = v.rep, nRaw = rep === 'antes' ? v.nAntes : v.n, n = nRaw === '' || nRaw == null ? (rep === 'antes' ? 0 : NaN) : Number(nRaw);
       if (['nao', 'dias', 'semanas', 'meses'].includes(rep) && !v.data) return 'Informe a data';
       if (['dias', 'semanas', 'meses', 'horas'].includes(rep) && !(n >= 1)) return 'Informe de quanto em quanto tempo repete';

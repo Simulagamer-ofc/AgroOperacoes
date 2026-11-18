@@ -319,6 +319,7 @@ async function nvConferirFazenda() {
   }
   const f = rows[0];
   if (typeof sedeAtualizarDoServidor === 'function') sedeAtualizarDoServidor(f.id); // local da sede (clima e mapas)
+  nvCarregarProprietario().then(mudou => { if (mudou) applySettings(); });
   if (f.name !== nv.fazenda.name || f.join_code !== nv.fazenda.join_code) { nv.fazenda = {id: f.id, name: f.name, join_code: f.join_code}; applySettings(); }
   const filtro = `farm_id=eq.${encodeURIComponent(f.id)}&user_id=eq.${encodeURIComponent(nv.sessao.usuario)}`;
   const eu = await nvHttp(`/rest/v1/farm_members?select=role,funcao,modulos&${filtro}`).catch(err => { if (err.status === 400) return nvHttp(`/rest/v1/farm_members?select=role&${filtro}`); throw err; });
@@ -428,7 +429,7 @@ const NV_TELAS = [
 const NV_TODAS_TELAS = NV_TELAS.map(([k]) => k);
 // Funções de uma fazenda de grãos e sementes: telas e nível sugerido (o ADM pode acrescentar telas)
 const NV_FUNCOES = [
-  ['diretor', 'Diretor / Proprietário', 'Gestão', 'admin', null],
+  ['diretor', 'Diretor', 'Gestão', 'admin', null],
   ['gerente', 'Gerente de fazenda', 'Gestão', 'supervisor', null],
   ['administrativo', 'Administrativo / Financeiro', 'Gestão', 'member', ['financeiro', 'producao', 'estoque', 'compras', 'relatorios']],
   ['agronomo', 'Agrônomo / Técnico agrícola', 'Gestão', 'supervisor', ['talhoes', 'operacoes', 'pragas', 'aplicacoes', 'chuva', 'sementes', 'relatorios']],
@@ -536,7 +537,7 @@ function nvValidar({login, senha}, soEmail = false) {
   if (!senha) throw new NvErro('Digite a senha.');
 }
 // Desliga da fazenda (os dados do aparelho continuam marcados como sendo dela: nv.dadosDe)
-function nvEsquecerFazenda() { nv.pedidos = 0; nv.nomes = null; nv.nomesEm = 0; nv.fazenda = null; nv.papel = null; nv.funcao = null; nv.modulos = null; nvFazendas = null; nvUsuarios = null; nvStatus = 'parado'; nvErro = ''; nvAplicarPapel(); }
+function nvEsquecerFazenda() { nv.proprietario = ""; nv.pedidos = 0; nv.nomes = null; nv.nomesEm = 0; nv.fazenda = null; nv.papel = null; nv.funcao = null; nv.modulos = null; nvFazendas = null; nvUsuarios = null; nvStatus = 'parado'; nvErro = ''; nvAplicarPapel(); }
 // Apaga os dados deste aparelho (usado ao entrar numa fazenda diferente da que estava aqui)
 function nvLimparAparelho() {
   const settings = db.settings; db = emptyDb(); db.settings = settings; db._removidos = [];
@@ -763,7 +764,7 @@ function nvNomeExibido() {
 }
 function nvQuemTexto() {
   if (!nv.sessao) return '';
-  const nivel = nv.sysadm ? (nvVinculado() ? 'Admin do sistema' : '') : nvVinculado() ? (nvNomeFuncao(nv.funcao) || NV_NIVEIS[nvPapel()] || '') : '';
+  const nivel = nv.sysadm && !nvSouDono() ? (nvVinculado() ? 'Admin do sistema' : '') : nvVinculado() ? (nvSouDono() ? 'Proprietário' : nvNomeFuncao(nv.funcao) || NV_NIVEIS[nvPapel()] || '') : '';
   return [nvMostrarLogin(nv.sessao.email), nivel].filter(Boolean).join(' · ');
 }
 const applySettingsSemNuvem = applySettings;
@@ -895,16 +896,39 @@ document.head.insertAdjacentHTML('beforeend', `<style>
   .nv-codigo { font-family: ui-monospace, monospace; font-size: 1.25rem; letter-spacing: .12em; background: var(--bg); border: 1px dashed var(--line); border-radius: 8px; padding: 4px 10px }
   .nv-portao-adm summary { cursor: pointer; color: var(--muted); font-size: .88rem; padding: 6px 0 }
   .nv-portao-adm .secondary { margin-top: 8px }
+  .nv-selo-dono { display: inline-block; font-size: .7rem; font-weight: 800; color: #8a5a00; background: #ffe8a8; border-radius: 999px; padding: 2px 8px; vertical-align: middle }
+  .nv-dono-nota { border-left: 3px solid #e0a800; padding-left: 10px }
   .brand.nexus .nv-quem { color: #8fb0bf; font-size: .76rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 </style>`);
 addEventListener('DOMContentLoaded', () => { nvPortao(); if (nv.sessao && navigator.onLine !== false) nvVerSysadm().then(() => { nvPortao(); if (!nvVinculado()) render(); }); });
 
 // ---------- Usuários da fazenda (ADM) ----------
+// Proprietário da fazenda (farms.proprietario): sempre ADM, não pode ser desativado, removido nem rebaixado
+const nvSouDono = () => !!(nv.sessao && nv.proprietario && nv.proprietario === nv.sessao.usuario);
+async function nvCarregarProprietario() {
+  if (!nv.fazenda?.id) return false;
+  const r = await nvHttp(`/rest/v1/farms?select=proprietario&id=eq.${encodeURIComponent(nv.fazenda.id)}`).catch(() => null);
+  if (!Array.isArray(r) || !r.length) return false;
+  const novo = r[0].proprietario || ''; if (novo === (nv.proprietario || '')) return false;
+  nv.proprietario = novo; nvSalvar(); return true;
+}
+function nvDefinirDono(id) {
+  const u = (nvUsuarios || []).find(x => x.user_id === id); if (!u) return;
+  const atual = nv.proprietario && (nvUsuarios || []).find(x => x.user_id === nv.proprietario);
+  const txt = atual ? `Passar a propriedade de “${nv.fazenda.name}” para ${nvNomeDe(u)}? ${nvNomeDe(atual)} continua como ADM, mas deixa de ser o proprietário — só ${nvNomeDe(u)} poderá passar a propriedade de novo.`
+    : `Definir ${nvNomeDe(u)} como proprietário de “${nv.fazenda.name}”? Ele fica sempre como ADM e ninguém consegue desativá-lo, removê-lo ou mudar o nível dele. Depois, só ele passa a propriedade para outra pessoa.`;
+  confirmDialog(txt, () => nvComOcupado(async () => {
+    await nvHttp('/rest/v1/rpc/fazenda_proprietario_definir', {method: 'POST', body: {p_farm: nv.fazenda.id, p_user: id}});
+    nv.proprietario = id; nvSalvar(); applySettings();
+    showToast(`${nvNomeDe(u)} agora é o proprietário da fazenda.`); await nvCarregarUsuarios();
+  }), atual ? 'Passar a propriedade' : 'Definir proprietário');
+}
 const nvFuncaoUsuarios = corpo => nvHttp('/functions/v1/usuarios', {method: 'POST', body: {farm_id: nv.fazenda.id, ...corpo}});
 async function nvCarregarUsuarios() {
   const q = campos => nvHttp(`/rest/v1/farm_members?select=${campos}&farm_id=eq.${encodeURIComponent(nv.fazenda.id)}&order=joined_at.asc`);
   try { nvUsuarios = await q('user_id,role,nome,login,joined_at,funcao,modulos,status,ultimo_acesso,pedido_em').catch(err => { if (err.status === 400) return q('user_id,role,nome,login,joined_at,funcao,modulos'); throw err; }); }
   catch (err) { nvUsuarios = []; showToast(err.message, true); }
+  await nvCarregarProprietario();
   nv.pedidos = nvUsuarios.filter(u => u.status === 'pendente').length; nvMarcarPedidos();
   const el = $('#nvUsuarios'); if (el) el.innerHTML = nvListaUsuarios();
   $$('[data-nv-nivel]').forEach(s => { s.onchange = () => nvMudarNivel(s.dataset.nvNivel, s.value); });
@@ -935,13 +959,18 @@ function nvListaUsuarios() {
   if (pend.length) html += `<h4 class="nv-sec">Solicitações pendentes <span class="nv-badge">${pend.length}</span></h4>` + tabela(pend.map(u =>
     `<tr><td><strong>${esc(nvNomeDe(u))}</strong>${sub(`${nvMostrarLogin(u.login)} · pediu ${nvQuando(u.pedido_em || u.joined_at)}`)}</td>
       <td class="num"><div class="row-actions">${btn('Autorizar', 'nv-u-autorizar', u.user_id)}${btn('Recusar', 'nv-u-recusar', u.user_id, 'secondary')}</div></td></tr>`).join(''));
-  html += `<h4 class="nv-sec">Ativos (${ativos.length})</h4>` + tabela(ativos.map(u => {
-    const nivel = nvNivelDe(u), meu = u.user_id === eu;
+  const dono = nv.proprietario || '', possoDefinir = !dono || dono === eu || nv.sysadm;
+  html += dono ? '' : `<p class="nota nv-dono-nota">Defina quem é o <b>proprietário</b> da fazenda: ele fica sempre como ADM e ninguém consegue desativá-lo, removê-lo ou mudar o nível dele. Use “Definir como proprietário” na pessoa certa.</p>`;
+  html += `<h4 class="nv-sec">Ativos (${ativos.length})</h4>` + tabela(ativos.sort((a, b) => (b.user_id === dono) - (a.user_id === dono)).map(u => {
+    const nivel = nvNivelDe(u), meu = u.user_id === eu, ehDono = u.user_id === dono;
+    const btDono = possoDefinir && !ehDono ? btn(dono ? 'Passar a propriedade' : 'Definir como proprietário', 'nv-u-dono', u.user_id, 'secondary') : '';
+    if (ehDono) return `<tr class="nv-dono"><td><strong>${esc(nvNomeDe(u))}</strong> <span class="nv-selo-dono">Proprietário</span>${meu ? ' <small>(você)</small>' : ''}${sub([nvMostrarLogin(u.login), nvNomeFuncao(u.funcao)].filter(Boolean).join(' · '))}${'ultimo_acesso' in u ? sub('Último acesso: ' + nvQuando(u.ultimo_acesso)) : ''}</td><td><b>${NV_NIVEIS.admin}</b></td>
+      <td class="num">${meu ? '' : `<div class="row-actions">${btn('Função e telas', 'nv-u-acesso', u.user_id, 'secondary')}</div>`}</td></tr>`;
     const sel = meu ? `<b>${NV_NIVEIS[nivel] || nivel}</b>` : `<select data-nv-nivel="${esc(u.user_id)}" aria-label="Nível de ${esc(nvNomeDe(u))}">${Object.entries(NV_NIVEIS).map(([v, t]) => `<option value="${v}" ${v === nivel ? 'selected' : ''}>${t}</option>`).join('')}</select>`;
     const funcao = nvNomeFuncao(u.funcao), telas = Array.isArray(u.modulos) ? `${u.modulos.length} ${u.modulos.length === 1 ? 'tela' : 'telas'}` : 'todas as telas';
     const comUsuario = String(u.login || '').endsWith('@' + NV_DOMINIO) || !String(u.login || '').includes('@');
     return `<tr><td><strong>${esc(nvNomeDe(u))}</strong>${meu ? ' <small>(você)</small>' : ''}${sub([nvMostrarLogin(u.login), funcao, nivel === 'admin' ? '' : telas].filter(Boolean).join(' · '))}${'ultimo_acesso' in u ? sub('Último acesso: ' + nvQuando(u.ultimo_acesso)) : ''}</td><td>${sel}</td>
-      <td class="num">${meu ? '' : `<div class="row-actions">${btn('Função e telas', 'nv-u-acesso', u.user_id, 'secondary')}${comUsuario ? btn('Senha provisória', 'nv-u-senha', u.user_id, 'secondary') : ''}${btn('Desativar', 'nv-u-desativar', u.user_id, 'secondary')}${btn('Remover', 'nv-u-remover', u.user_id, 'secondary')}</div>`}</td></tr>`;
+      <td class="num">${meu ? '' : `<div class="row-actions">${btn('Função e telas', 'nv-u-acesso', u.user_id, 'secondary')}${comUsuario ? btn('Senha provisória', 'nv-u-senha', u.user_id, 'secondary') : ''}${btn('Desativar', 'nv-u-desativar', u.user_id, 'secondary')}${btn('Remover', 'nv-u-remover', u.user_id, 'secondary')}${btDono}</div>`}${meu && btDono ? `<div class="row-actions">${btDono}</div>` : ''}</td></tr>`;
   }).join(''));
   if (inativos.length) html += `<h4 class="nv-sec">Desativados (${inativos.length})</h4>` + tabela(inativos.map(u =>
     `<tr><td><strong>${esc(nvNomeDe(u))}</strong>${sub([nvMostrarLogin(u.login), nvNomeFuncao(u.funcao), 'Último acesso: ' + nvQuando(u.ultimo_acesso)].filter(Boolean).join(' · '))}</td>
@@ -1115,7 +1144,7 @@ Object.assign(ACTIONS, {
   'nv-trocar': () => confirmDialog(`Trocar de fazenda? Os dados de “${nv.fazenda?.name}” ficam guardados neste aparelho${nvFaltamEnviar() ? ' e o que ainda não subiu é enviado para ela assim que houver internet' : ''}.`, () => { if (!nvFecharDados()) return; nvEsquecerFazenda(); nvTodas = null; nvSalvar(); nvPortao(); render(); if (nv.sysadm) go('cadastros'); }, 'Trocar'),
   'nv-sys-fechar': () => confirmDialog(`Fechar “${nv.fazenda?.name}” neste aparelho? Você continua como Admin do sistema e pode entrar em outra fazenda. Os dados dela ficam guardados${nvFaltamEnviar() ? ' e o que ainda não subiu é enviado para ela assim que houver internet' : ''}.`, () => { if (!nvFecharDados()) return; nvEsquecerFazenda(); nvTodas = null; nvSalvar(); nvPortao(); render(); }, 'Fechar'),
   'nv-u-acesso': id => nvAcessoUsuario(id), 'nv-u-autorizar': id => nvAcessoUsuario(id, true), 'nv-u-recusar': nvRecusar,
-  'nv-u-senha': nvNovaSenha, 'nv-u-remover': nvRemoverUsuario,
+  'nv-u-senha': nvNovaSenha, 'nv-u-remover': nvRemoverUsuario, 'nv-u-dono': nvDefinirDono,
   'nv-u-desativar': id => nvMudarStatus(id, 'inativo'), 'nv-u-reativar': id => nvMudarStatus(id, 'ativo'),
   'nv-codigo': nvNovoCodigo, 'nv-minha-senha': nvTrocarMinhaSenha,
   'nv-verificar': async silencioso => {
