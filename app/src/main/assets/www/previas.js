@@ -256,13 +256,13 @@ function i2Operacoes() {
   const topo = `<div class="i2-tit"><h3>${iconeLinha('operacoes', 18)} Operações de hoje</h3><span><button type="button" class="link" data-act="op-new">+ Programar</button><button type="button" class="link" data-act="nav" data-id="operacoes">Ver todas ›</button></span></div>`;
   if (!pri) return `<section class="card i2-card i2-ops">${topo}
     <div class="i2-vazio"><span class="i2-vazio-ic" aria-hidden="true">${pvHex('broto', 'verde', 46)}</span><div><strong>Nada programado para hoje</strong><small>${concluidasHoje.length ? `${concluidasHoje.length} ${concluidasHoje.length === 1 ? 'operação concluída' : 'operações concluídas'} hoje. ` : ''}Programe o trabalho do dia para acompanhar o andamento aqui.</small></div>
-      <button type="button" class="primary" data-act="op-new">+ Programar operação</button></div>${i2UltimasConcluidas()}${prox}</section>`;
+      <button type="button" class="primary" data-act="op-new">+ Programar operação</button></div>${prox}</section>`;
   const maq = machineName(pri.machineId), area = Number(pri.area) > 0 ? `${num(pri.area)} ha` : '';
   return `<section class="card i2-card i2-ops">${topo}
     <div class="i2-pri"><button type="button" class="i2-pri-op" data-act="pv-op-abrir" data-id="${esc(pri.id)}"><span class="pv-op-ic">${pvHex(pvIconeOp(pri.type), 'verde', 52)}</span>
       <span class="i2-op-txt"><small class="i2-rot">${pri.status === 'Em andamento' ? 'Em andamento agora' : 'Prioridade'}</small><strong>${esc(pri.type)} — ${esc(opPlace(pri))}</strong><small>${esc([pvResp(pri), maq, area, pvQuando(pri)].filter(Boolean).join(' • '))}</small></span>${pri.status === 'Em andamento' ? '' : pvSelo(pri)}</button>
       ${pvAcao(pri, {iniciar: 'Iniciar operação', concluir: 'Concluir operação'}).replace('pv-acao', 'pv-acao i2-pri-bt')}</div>
-    ${resto.length ? `<div class="i2-lista">${resto.slice(0, 4).map(i2LinhaOp).join('')}${resto.length > 4 ? `<button type="button" class="link i2-mais" data-act="nav" data-id="operacoes">+ ${resto.length - 4} — ver todas</button>` : ''}</div>` : ''}${prox}</section>`;
+    ${resto.length ? `<div class="i2-lista">${resto.slice(0, 3).map(i2LinhaOp).join('')}${resto.length > 3 ? `<button type="button" class="link i2-mais" data-act="nav" data-id="operacoes">+ ${resto.length - 3} — ver todas</button>` : ''}</div>` : ''}</section>`;
 }
 // Avisos: os 3 mais importantes, curtos (o título longo da chuva vira “Chuva amanhã: 16,5 mm” + horários embaixo)
 function i2Aviso(a) {
@@ -300,13 +300,14 @@ function i2Gastos() {
   const t = today(); if (!lancamentosCusto(t.slice(0, 8) + '01', t).length) return '';
   return iniGastos().replace('ini-gastos so-pc', 'ini-gastos i2-card');
 }
+// Início enxuto: só o que se usa no dia — cabeçalho (clima + Novo lançamento), Operações de hoje | Atenção
+// e "Prepare a fazenda" enquanto falta cadastro. Números, gastos e atalhos repetidos ficam nas telas próprias.
 VIEWS.inicio = () => {
-  const ops = iniPode('operacoes'), gastos = i2Gastos(), prep = iniPreparar();
-  return `<div class="i2 ${ops ? '' : 'sem-ops'}">
-    ${i2Cabecalho()}${i2Kpis()}
+  const ops = iniPode('operacoes'), prep = iniPreparar();
+  return `<div class="i2 i3 ${ops ? '' : 'sem-ops'}">
+    ${i2Cabecalho()}
     <div class="i2-meio">${ops ? i2Operacoes() : `<section class="card i2-card">${iniAtalhosFuncao()}</section>`}${i2Atencao()}</div>
-    ${i2Registrar()}
-    ${gastos || prep ? `<div class="i2-fim ${gastos && prep ? '' : 'um'}">${gastos}${prep ? `<div class="ini-prep">${prep}</div>` : ''}</div>` : ''}</div>`;
+    ${prep ? `<div class="ini-prep">${prep}</div>` : ''}</div>`;
 };
 VIEWS.inicio.after = (...a) => pvInicioDepois?.(...a);
 

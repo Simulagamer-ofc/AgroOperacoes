@@ -1982,3 +1982,8 @@ body:has(.i2) .app.nx-home .content{max-width:none}
   .i2-lista .pv-selo{display:none}
   .i2-pri .i2-op-txt small:not(.i2-rot){white-space:normal}
 }
+/* Início enxuto (0.93): menos blocos, largura confortável e cartões do tamanho do conteúdo */
+.i2.i3{max-width:1240px;margin:0 auto}
+.i3 .i2-meio{align-items:start}
+.i3 .i2-ops{min-height:0}
+@media(max-width:760px){.i3 .i2-lancar{display:none}.i3 .i2-cab{grid-template-areas:"saud" "clima"}}
