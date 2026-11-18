@@ -1150,6 +1150,9 @@ function montarMenuConfig() {
   cards.forEach(c => { c.hidden = c.dataset.cfgSec !== atual; });
   // Apagar dados: zona de perigo no fim de Dados e backup
   cards.filter(c => /limpeza/i.test(c.querySelector(':scope > h3').textContent)).forEach(c => c.classList.add('cfg-perigo'));
+  // Em Dados e backup: primeiro o backup, depois a contagem de registros, e a limpeza por último
+  const tit = re => cards.find(c => re.test(c.querySelector(':scope > h3').textContent)), lim = tit(/limpeza/i), reg = tit(/^Registros no dispositivo/);
+  if (lim && reg) lim.before(reg);
 }
 VIEWS.cadastros.after = () => {
   setTimeout(montarMenuConfig, 0);
