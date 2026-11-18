@@ -43,7 +43,7 @@ with sync_playwright() as p:
         ev=pg.evaluate; ev("document.querySelectorAll('.modal.open [data-close], .modal.open [data-no]').forEach(b=>b.click())")
         ev("loadSamples()"); ev(CLIMA_JS); pg.wait_for_timeout(500)
         px=f'[{w}] '
-        check(pg.locator('.i2-pri .pv-acao').count()==1 and pg.locator('.i2-cab').count()==1 and pg.locator('.i2-kpi').count()==4 and pg.locator('.i2-aten').count()==1 and pg.locator('.i2-tile').count()>=4 and pg.locator('.ini-gastos').count()==0, px+'Início: cabeçalho, 4 números, prioritária com botão, Atenção e Registrar rápido (sem gastos)')
+        check(pg.locator('.i2-pri .pv-acao').count()==1 and pg.locator('.i2-cab').count()==1 and pg.locator('.i2-kpi').count()==4 and pg.locator('.i2-aten').count()==1 and pg.locator('.i2-tile').count()>=4 and pg.locator('.i2-faz .i2-faz-dado').count()==4 and pg.locator('.ini-gastos').count()==0, px+'Início: cabeçalho, 4 números, prioritária com botão, Atenção, Minha fazenda e Registrar rápido (sem gastos)')
         pg.locator('.i2-pri-op').click(); pg.wait_for_timeout(500)
         check('operacoes' in pg.url and pg.locator('.pv-op').count()>=1, px+'tocar na prioritária abre Operações')
         if w>=900: check(pg.locator('.pv-op.sel').count()==1 and pg.locator('.pv-det').is_visible(), px+'operação aberta fica selecionada com detalhe')

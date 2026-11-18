@@ -1988,3 +1988,33 @@ body:has(.i2) .app.nx-home .content{max-width:none}
 .i3 .i2-ops{min-height:0}
 @media(max-width:760px){.i3 .i2-lancar{display:none}.i3 .i2-cab{grid-template-areas:"saud" "clima"}.i3 .i2-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:760px){.i3 .i2-tile{font-size:.68rem;padding-left:2px;padding-right:2px;min-width:0;overflow:hidden;text-overflow:ellipsis}.i3 .i2-tiles{gap:6px}}
+/* Minha fazenda (início) */
+.i2-baixo{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(320px,1fr);gap:16px;align-items:stretch}
+.i2-baixo.um{grid-template-columns:1fr}
+.i2-baixo .i2-reg{display:flex;flex-direction:column}
+.i2-baixo:not(.um) .i2-tiles{grid-template-columns:repeat(4,minmax(0,1fr));flex:1}
+.i2-faz .i2-tit>span{display:flex;align-items:center;gap:12px}
+.i2-faz-safra{font-size:.75rem;font-weight:700;color:var(--green,#1f7a3f);background:color-mix(in srgb,var(--green,#1f7a3f) 12%,transparent);padding:3px 10px;border-radius:999px;white-space:nowrap}
+.i2-faz-corpo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:18px;align-items:center}
+.i2-faz.sem-mapa .i2-faz-corpo{grid-template-columns:1fr}
+.i2-faz-mapa{width:100%;height:auto;display:block;border-radius:12px}
+.i2-faz-tal{cursor:pointer}.i2-faz-tal:hover polygon{fill-opacity:.9}
+.i2-faz-tal text{font-size:13px;font-weight:800;fill:#fff;paint-order:stroke;stroke:rgba(0,0,0,.45);stroke-width:3px;pointer-events:none}
+.i2-faz-dados{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.i2-faz.sem-mapa .i2-faz-dados{grid-template-columns:repeat(4,minmax(0,1fr))}
+.i2-faz-dado{border:1px solid var(--line);border-radius:12px;padding:9px 12px;min-width:0}
+.i2-faz-dado small{display:block;color:var(--muted);font-size:.74rem;font-weight:600}
+.i2-faz-dado b{display:block;font-size:1.2rem;line-height:1.25}
+.i2-faz-dado em{display:block;font-style:normal;font-size:.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.i2-faz-barra{display:flex;height:10px;border-radius:999px;overflow:hidden;margin:14px 0 8px;gap:2px}
+.i2-faz-leg{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.8rem}
+.i2-faz-leg li{display:flex;align-items:center;gap:6px}.i2-faz-leg i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.i2-faz-leg small{color:var(--muted)}
+@media(max-width:1199px){.i2-baixo{grid-template-columns:1fr}.i2-baixo:not(.um) .i2-tiles{grid-template-columns:repeat(8,minmax(0,1fr))}}
+@media(max-width:900px){.i2-baixo:not(.um) .i2-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:760px){.i2-faz-corpo{grid-template-columns:1fr}.i2-faz.sem-mapa .i2-faz-dados{grid-template-columns:repeat(2,minmax(0,1fr))}.i2-faz .i2-tit{flex-wrap:wrap;gap:6px}}
+.i2-baixo{grid-template-columns:minmax(0,1.25fr) minmax(380px,1fr)}
+.i2-baixo:not(.um) .i2-tile{font-size:.76rem;min-width:0;overflow-wrap:anywhere}
+@media(max-width:1199px){.i2-baixo{grid-template-columns:1fr}}
+@media(max-width:760px){.i2-baixo:not(.um) .i2-tile{font-size:.68rem;overflow-wrap:normal}}
+@media(max-width:1199px){.i2-baixo:not(.um) .i2-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}.i2-baixo:not(.um) .i2-tile{overflow-wrap:normal}}

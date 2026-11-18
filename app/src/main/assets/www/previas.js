@@ -300,14 +300,53 @@ function i2Gastos() {
   const t = today(); if (!lancamentosCusto(t.slice(0, 8) + '01', t).length) return '';
   return iniGastos().replace('ini-gastos so-pc', 'ini-gastos i2-card');
 }
-// Início: cabeçalho, 4 números, Operações de hoje | Atenção e Registrar rápido; "Prepare a fazenda" enquanto
+// "Minha fazenda": retrato rápido da propriedade — desenho dos talhões (quando têm contorno) com a sede,
+// área, talhões, culturas da safra, quanto já foi plantado e a chuva dos últimos 30 dias.
+const I2_COR_CULT = {Soja: '#3fa45b', Milho: '#e0b23a', Trigo: '#c98a3c', Feijão: '#a0623a', Arroz: '#5fb7c9', Aveia: '#9cbf5a', Canola: '#e3d24a', 'Trigo mourisco': '#b07ab8', Sorgo: '#c45a3a', Pousio: '#9aa4ad'};
+const i2CorCult = c => I2_COR_CULT[c] || ['#4d8fd6', '#d16b8a', '#7a6fd1', '#4fb3a0'][[...String(c || '')].reduce((t, ch) => t + ch.charCodeAt(0), 0) % 4];
+function i2MapaFazenda(fs) {
+  const comC = fs.filter(f => f.contorno?.pontos?.length > 2); if (!comC.length) return '';
+  const sede = typeof localDaFazenda === 'function' ? localDaFazenda() : null, todos = comC.flatMap(f => f.contorno.pontos);
+  if (sede && Number.isFinite(sede.lat)) todos.push([sede.lat, sede.lon]);
+  const lat0 = todos.reduce((t, p) => t + p[0], 0) / todos.length, k = Math.cos(lat0 * Math.PI / 180), xy = ([la, lo]) => [lo * k, -la];
+  const P = todos.map(xy), xs = P.map(p => p[0]), ys = P.map(p => p[1]), [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+  const w = 360, h = 220, m = 26, e = Math.min((w - 2 * m) / ((x1 - x0) || 1e-4), (h - 2 * m) / ((y1 - y0) || 1e-4)), ox = (w - (x1 - x0) * e) / 2, oy = (h - (y1 - y0) * e) / 2;
+  const pt = p => { const [x, y] = xy(p); return [ox + (x - x0) * e, oy + (y - y0) * e]; };
+  const pol = comC.map(f => { const q = f.contorno.pontos.map(pt), cx = q.reduce((t, a) => t + a[0], 0) / q.length, cy = q.reduce((t, a) => t + a[1], 0) / q.length;
+    return `<g class="i2-faz-tal" data-act="nav" data-id="talhao/${esc(f.id)}"><polygon points="${q.map(a => a.map(v => v.toFixed(1)).join(',')).join(' ')}" fill="${i2CorCult(f.crop)}" fill-opacity=".72" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
+      <text x="${cx.toFixed(0)}" y="${cy.toFixed(0)}" text-anchor="middle" dominant-baseline="middle">${esc(String(f.name).replace(/^Talh[aã]o\s*/i, 'T'))}</text></g>`; }).join('');
+  const pin = sede && Number.isFinite(sede.lat) ? (([x, y]) => `<g transform="translate(${x.toFixed(0)},${y.toFixed(0)})"><circle r="11" fill="#fff" opacity=".9"/><path d="M0-6 7 0v6h-14V0z" fill="#1f7a3f"/></g>`)(pt([sede.lat, sede.lon])) : '';
+  return `<svg class="i2-faz-mapa" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Desenho dos talhões da fazenda">
+    <defs><pattern id="i2Lin" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><path d="M0 0v9" stroke="rgba(255,255,255,.06)" stroke-width="4"/></pattern></defs>
+    <rect width="${w}" height="${h}" rx="12" fill="#2c4428"/><rect width="${w}" height="${h}" rx="12" fill="url(#i2Lin)"/>${pol}${pin}</svg>`;
+}
+function i2Fazenda() {
+  if (!iniPode('talhoes')) return '';
+  const fs = db.fields.filter(f => !f.inactive && !f.inativo); if (!fs.length) return '';
+  const cont = {}; fs.forEach(f => { const sf = String(f.season || '').trim(); if (sf) cont[sf] = (cont[sf] || 0) + 1; });
+  const safra = Object.keys(cont).sort((a, b) => cont[b] - cont[a] || b.localeCompare(a))[0] || '';
+  const daSafra = safra ? fs.filter(f => String(f.season || '').trim() === safra) : fs;
+  const area = fs.reduce((t, f) => t + (Number(f.area) || 0), 0), areaSafra = daSafra.reduce((t, f) => t + (Number(f.area) || 0), 0);
+  const cult = {}; daSafra.forEach(f => { const c = f.crop || 'Sem cultura'; cult[c] = (cult[c] || 0) + (Number(f.area) || 0); });
+  const culturas = Object.entries(cult).sort((a, b) => b[1] - a[1]);
+  const plantada = daSafra.filter(f => f.plantingDate).reduce((t, f) => t + (Number(f.area) || 0), 0), pctPl = areaSafra ? Math.round(plantada / areaSafra * 100) : 0;
+  const desde = addDias(today(), -30), chuva = (db.chuvas || []).filter(c => c.date >= desde && c.date <= today() && !c.fieldId).reduce((t, c) => t + (Number(c.mm) || 0), 0);
+  const nome = db.settings.farm || (typeof nv !== 'undefined' && nv?.fazenda?.name) || 'Minha fazenda', mapa = i2MapaFazenda(fs);
+  const barra = areaSafra ? `<div class="i2-faz-barra" role="img" aria-label="Área por cultura">${culturas.map(([c, a]) => `<span style="flex:${a};background:${i2CorCult(c)}"></span>`).join('')}</div>
+    <ul class="i2-faz-leg">${culturas.map(([c, a]) => `<li><i style="background:${i2CorCult(c)}"></i>${esc(c)} <b>${num(a)} ha</b> <small>${Math.round(a / areaSafra * 100)}%</small></li>`).join('')}</ul>` : '';
+  const dado = (rot, val, sub = '') => `<div class="i2-faz-dado"><small>${esc(rot)}</small><b>${val}</b>${sub ? `<em>${esc(sub)}</em>` : ''}</div>`;
+  return `<section class="card i2-card i2-faz ${mapa ? '' : 'sem-mapa'}"><div class="i2-tit"><h3>${iconeLinha('talhoes', 18)} ${esc(nome)}</h3><span>${safra ? `<span class="i2-faz-safra">Safra ${esc(safra)}</span>` : ''}<button type="button" class="link" data-act="nav" data-id="talhoes">Ver talhões ›</button></span></div>
+    <div class="i2-faz-corpo">${mapa ? `<div class="i2-faz-desenho">${mapa}</div>` : ''}
+      <div class="i2-faz-info"><div class="i2-faz-dados">${dado('Área', `${num(area)} ha`)}${dado('Talhões', fs.length)}${dado('Plantado', `${pctPl}%`, `${num(plantada)} de ${num(areaSafra)} ha`)}${dado('Chuva 30 dias', `${num(chuva)} mm`)}</div>${barra}</div></div></section>`;
+}
+// Início: cabeçalho, 4 números, Operações de hoje | Atenção, Minha fazenda | Registrar rápido; "Prepare a fazenda" enquanto
 // falta cadastro. Gastos e últimas concluídas ficam no Financeiro e em Operações.
 VIEWS.inicio = () => {
   const ops = iniPode('operacoes'), prep = iniPreparar();
   return `<div class="i2 i3 ${ops ? '' : 'sem-ops'}">
     ${i2Cabecalho()}${i2Kpis()}
     <div class="i2-meio">${ops ? i2Operacoes() : `<section class="card i2-card">${iniAtalhosFuncao()}</section>`}${i2Atencao()}</div>
-    ${i2Registrar()}
+    ${(f => `<div class="i2-baixo ${f ? '' : 'um'}">${f}${i2Registrar()}</div>`)(i2Fazenda())}
     ${prep ? `<div class="ini-prep">${prep}</div>` : ''}</div>`;
 };
 VIEWS.inicio.after = (...a) => pvInicioDepois?.(...a);
