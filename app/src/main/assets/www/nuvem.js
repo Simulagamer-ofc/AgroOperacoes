@@ -335,7 +335,7 @@ async function nvConferirFazenda() {
   if (papel === 'admin') {
     const pend = await nvHttp(`/rest/v1/farm_members?select=user_id&farm_id=eq.${encodeURIComponent(f.id)}&status=eq.pendente`).catch(() => null);
     if (Array.isArray(pend)) {
-      if (pend.length > (nv.pedidos || 0)) { showToast(`${pend.length} ${pend.length === 1 ? 'pedido de acesso aguardando' : 'pedidos de acesso aguardando'} sua autorização (Cadastros)`); nvUsuarios = null; if (parseRoute().name === 'cadastros') nvAtualizarTela(); }
+      if (pend.length > (nv.pedidos || 0)) { showToast(`${pend.length} ${pend.length === 1 ? 'pedido de acesso aguardando' : 'pedidos de acesso aguardando'} sua autorização (Ajustes → Equipe e acesso)`); nvUsuarios = null; if (parseRoute().name === 'cadastros') nvAtualizarTela(); }
       nv.pedidos = pend.length;
     }
   } else nv.pedidos = 0;
@@ -349,7 +349,7 @@ async function nvConferirFazenda() {
 }
 // Quem lançou o registro (nome da equipe), quando não foi a própria pessoa
 const quemLancou = r => r?._por && r._por !== nv.sessao?.usuario ? nv.nomes?.[r._por] || '' : '';
-// Número de pedidos de acesso no botão de Cadastros (só para o ADM)
+// Número de pedidos de acesso no botão de Ajustes (só para o ADM)
 function nvMarcarPedidos() {
   const n = nvPapel() === 'admin' ? nv.pedidos || 0 : 0;
   document.querySelectorAll('[data-route="cadastros"]').forEach(b => {
@@ -419,7 +419,7 @@ addEventListener('pagehide', () => { if (nvVinculado() && navigator.onLine !== f
 addEventListener('DOMContentLoaded', () => nvAgendar(1500));
 
 // ---------- Funções: cada pessoa vê as telas da sua função ----------
-// Telas que podem ser liberadas (Visão geral e Cadastros ficam sempre disponíveis)
+// Telas que podem ser liberadas (Visão geral e Ajustes ficam sempre disponíveis)
 const NV_TELAS = [
   ['operacoes', 'Operações do dia'], ['talhoes', 'Talhões'], ['chuva', 'Chuvas'], ['pragas', 'Pragas e doenças (MIP)'],
   ['aplicacoes', 'Aplicações e carência'], ['maodeobra', 'Mão de obra'], ['maquinas', 'Máquinas e manutenção'], ['combustivel', 'Combustível'],
@@ -565,7 +565,7 @@ async function nvEscolherFazenda() {
   if (nv.fazenda && fazendas && !fazendas.some(f => f.id === nv.fazenda.id)) nvEsquecerFazenda();
   nvFazendas = fazendas;
   if (nv.fazenda) { nv.papel = null; nvSalvar(); showToast('Bem-vindo de volta'); nvSincronizar(true); return; }
-  if (nv.sysadm) { nvSemFazendaAberta(); showToast('Entrou como Admin do sistema. Para lançar dados, entre numa fazenda em Cadastros.'); go('cadastros'); nvAgendar(1500); return; }
+  if (nv.sysadm) { nvSemFazendaAberta(); showToast('Entrou como Admin do sistema. Para lançar dados, entre numa fazenda em Ajustes → Administração do sistema.'); go('cadastros'); nvAgendar(1500); return; }
   if (nvFazendas?.length === 1) nvVincular(nvFazendas[0]);
 }
 
@@ -740,7 +740,7 @@ function nvVincular(f) {
   // Registros lançados sem fazenda neste aparelho: pergunta se vão para esta fazenda
   const n = COLLECTIONS.reduce((s, c) => s + db[c].length, 0);
   if (!n) return ligar();
-  confirmDialog(`Este aparelho tem ${n} registros lançados sem fazenda. Eles serão enviados para “${f.name}” e juntados com os dados da equipe. Se forem só dados de exemplo, toque em “Cancelar”, apague-os em Cadastros e entre de novo. Continuar?`, () => {
+  confirmDialog(`Este aparelho tem ${n} registros lançados sem fazenda. Eles serão enviados para “${f.name}” e juntados com os dados da equipe. Se forem só dados de exemplo, toque em “Cancelar”, apague-os em Ajustes → Dados e backup e entre de novo. Continuar?`, () => {
     const soltos = {}; COLLECTIONS.forEach(c => { soltos[c] = db[c]; });
     nvAbrirCofre(f);
     COLLECTIONS.forEach(c => { const ids = new Set(db[c].map(r => r?.id)); soltos[c].forEach(r => { if (r?.id && !ids.has(r.id)) db[c].push(r); }); });
@@ -959,11 +959,11 @@ function nvListaUsuarios() {
   if (pend.length) html += `<h4 class="nv-sec">Solicitações pendentes <span class="nv-badge">${pend.length}</span></h4>` + tabela(pend.map(u =>
     `<tr><td><strong>${esc(nvNomeDe(u))}</strong>${sub(`${nvMostrarLogin(u.login)} · pediu ${nvQuando(u.pedido_em || u.joined_at)}`)}</td>
       <td class="num"><div class="row-actions">${btn('Autorizar', 'nv-u-autorizar', u.user_id)}${btn('Recusar', 'nv-u-recusar', u.user_id, 'secondary')}</div></td></tr>`).join(''));
-  const dono = nv.proprietario || '', possoDefinir = !dono || dono === eu || nv.sysadm;
-  html += dono ? '' : `<p class="nota nv-dono-nota">Defina quem é o <b>proprietário</b> da fazenda: ele fica sempre como ADM e ninguém consegue desativá-lo, removê-lo ou mudar o nível dele. Use “Definir como proprietário” na pessoa certa.</p>`;
+  const dono = nv.proprietario || '';
+  html += dono ? '' : `<p class="nota nv-dono-nota">Ainda não há <b>proprietário</b> definido. ${btn('Definir em Fazenda → Proprietário', 'cfg-sec', 'fazenda', 'secondary')}</p>`;
   html += `<h4 class="nv-sec">Ativos (${ativos.length})</h4>` + tabela(ativos.sort((a, b) => (b.user_id === dono) - (a.user_id === dono)).map(u => {
     const nivel = nvNivelDe(u), meu = u.user_id === eu, ehDono = u.user_id === dono;
-    const btDono = possoDefinir && !ehDono ? btn(dono ? 'Passar a propriedade' : 'Definir como proprietário', 'nv-u-dono', u.user_id, 'secondary') : '';
+    const btDono = '';
     if (ehDono) return `<tr class="nv-dono"><td><strong>${esc(nvNomeDe(u))}</strong> <span class="nv-selo-dono">Proprietário</span>${meu ? ' <small>(você)</small>' : ''}${sub([nvMostrarLogin(u.login), nvNomeFuncao(u.funcao)].filter(Boolean).join(' · '))}${'ultimo_acesso' in u ? sub('Último acesso: ' + nvQuando(u.ultimo_acesso)) : ''}</td><td><b>${NV_NIVEIS.admin}</b></td>
       <td class="num">${meu ? '' : `<div class="row-actions">${btn('Função e telas', 'nv-u-acesso', u.user_id, 'secondary')}</div>`}</td></tr>`;
     const sel = meu ? `<b>${NV_NIVEIS[nivel] || nivel}</b>` : `<select data-nv-nivel="${esc(u.user_id)}" aria-label="Nível de ${esc(nvNomeDe(u))}">${Object.entries(NV_NIVEIS).map(([v, t]) => `<option value="${v}" ${v === nivel ? 'selected' : ''}>${t}</option>`).join('')}</select>`;
@@ -983,7 +983,7 @@ function nvAcessoUsuario(id, autorizar = false) {
   // Autorizar: começa com a função de operador (o ADM escolhe a certa)
   if (autorizar && !u.funcao) u.funcao = 'operador', u.modulos = nvFuncao('operador')[4];
   const marcadas = new Set(Array.isArray(u.modulos) ? u.modulos : NV_TODAS_TELAS);
-  dialog.innerHTML = `<h3>${autorizar ? 'Autorizar acesso' : 'Função e telas'}</h3><p class="sub">${autorizar ? `${esc(nvNomeDe(u))} (${esc(nvMostrarLogin(u.login))}) pediu acesso a “${esc(nv.fazenda.name)}”. Escolha a função e o nível. ` : ''}${esc(nvNomeDe(u))} vê no menu só as telas marcadas. Visão geral e Cadastros ficam sempre disponíveis.</p>
+  dialog.innerHTML = `<h3>${autorizar ? 'Autorizar acesso' : 'Função e telas'}</h3><p class="sub">${autorizar ? `${esc(nvNomeDe(u))} (${esc(nvMostrarLogin(u.login))}) pediu acesso a “${esc(nv.fazenda.name)}”. Escolha a função e o nível. ` : ''}${esc(nvNomeDe(u))} vê no menu só as telas marcadas. Visão geral e Ajustes ficam sempre disponíveis.</p>
     <form novalidate><div class="form"><div class="field full"><label for="nva_funcao">Função</label><select id="nva_funcao">${NV_FUNCOES.map(([v, n, g]) => `<option value="${v}" ${v === (u.funcao || '') ? 'selected' : ''}>${esc(n)} (${esc(g)})</option>`).join('')}${u.funcao ? '' : '<option value="" selected>Sem função definida (todas as telas)</option>'}</select></div>
     ${autorizar ? `<div class="field full"><label for="nva_papel">Nível</label><select id="nva_papel">${Object.entries(NV_NIVEIS).map(([v, t]) => `<option value="${v}">${t}</option>`).join('')}</select><span class="hint">Comum lança; Supervisor também edita, exclui e vê o financeiro; ADM faz tudo.</span></div>` : ''}</div>
     <p class="nota" id="nva_todas" hidden>Esta função vê todas as telas.</p>
@@ -1052,7 +1052,7 @@ const nvMudarNivel = (id, papel) => nvComOcupado(async () => {
   await nvFuncaoUsuarios({acao: 'nivel', user_id: id, papel}); showToast(`Nível alterado para ${NV_NIVEIS[papel]}`); await nvCarregarUsuarios();
 });
 
-// ---------- Tela (Cadastros) ----------
+// ---------- Tela (Ajustes) ----------
 function nvTextoStatus() {
   const outras = nvPendentesCofres(), deOutras = outras ? ` • ${outras} de outras fazendas aguardando envio` : '';
   const pend = nvVinculado() ? nvPendentes().length : 0, aguardando0 = pend ? ` • ${pend} ${pend === 1 ? 'alteração aguardando envio' : 'alterações aguardando envio'}` : '';

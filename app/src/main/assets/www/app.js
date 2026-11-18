@@ -41,7 +41,7 @@ function loadDb() {
   try { data = JSON.parse(bruto || 'null'); } catch {
     // Dados ilegíveis: guarda uma cópia intacta antes de começar do zero (nada é sobrescrito sem cópia)
     const copia = 'agro-db-corrompido-' + Date.now();
-    avisoBanco = safeStorage.set(copia, bruto) ? `Os dados salvos neste aparelho estavam danificados. Uma cópia foi guardada (${copia}); restaure um backup em Cadastros.` : 'Os dados salvos neste aparelho estavam danificados e não puderam ser lidos. Restaure um backup em Cadastros.';
+    avisoBanco = safeStorage.set(copia, bruto) ? `Os dados salvos neste aparelho estavam danificados. Uma cópia foi guardada (${copia}); restaure um backup em Ajustes → Dados e backup.` : 'Os dados salvos neste aparelho estavam danificados e não puderam ser lidos. Restaure um backup em Ajustes → Dados e backup.';
     data = null;
   }
   if (data && typeof data !== 'object') data = null;
@@ -909,13 +909,13 @@ function operationRow(o, actions = true) {
 
 // ---------- Telas ----------
 const VIEWS = {};
-const TITLES = {inicio: 'Visão geral', operacoes: 'Operações do dia', maquinas: 'Máquinas e manutenção', talhoes: 'Talhões', sementes: 'Sementes e lotes', lotes: 'Lotes e rastreabilidade', estoque: 'Estoque e insumos', relatorios: 'Relatórios', cadastros: 'Cadastros', busca: 'Pesquisa'};
+const TITLES = {inicio: 'Visão geral', operacoes: 'Operações do dia', maquinas: 'Máquinas e manutenção', talhoes: 'Talhões', sementes: 'Sementes e lotes', lotes: 'Lotes e rastreabilidade', estoque: 'Estoque e insumos', relatorios: 'Relatórios', cadastros: 'Ajustes', busca: 'Pesquisa'};
 
 // Visão geral = painel do dia (operação). Custos ficam no Financeiro e insumos no Estoque.
 // O clima, o “Hoje” e o resumo do dia vêm de automacao.js; aqui, o primeiro uso e as operações do período.
 VIEWS.inicio = (anchor) => {
   const isEmpty = COLLECTIONS.every(c => !db[c].length);
-  return `${isEmpty ? `<section class="card" style="margin-top:18px">${empty('Nenhum dado cadastrado ainda', 'Comece cadastrando talhões, máquinas e insumos.', {act: 'nav', id: 'cadastros', label: 'Abrir cadastros e backup'})}</section>` : ''}
+  return `${isEmpty ? `<section class="card" style="margin-top:18px">${empty('Nenhum dado cadastrado ainda', 'Comece cadastrando talhões, máquinas e insumos.', {act: 'nav', id: 'cadastros', label: 'Abrir ajustes e backup'})}</section>` : ''}
     ${!isEmpty && typeof painelOperacoes === 'function' && (typeof nvPodeRota !== 'function' || nvPodeRota('operacoes')) ? painelOperacoes() : ''}`;
 };
 VIEWS.inicio.after = anchor => {
@@ -1080,12 +1080,12 @@ VIEWS.relatorios = () => {
 const backupVisivel = () => typeof nvVinculado !== 'function' || !nvVinculado() || !!nv.sysadm || nvPapel() === 'admin';
 VIEWS.cadastros = () => {
   const counts = [['Operações', 'operations'], ['Máquinas', 'machines'], ['Registros de horímetro', 'hourLogs'], ['Manutenções', 'maintenances'], ['Talhões', 'fields'], ['Lotes', 'lots'], ['Itens de estoque', 'stock'], ['Movimentações', 'movements'], ['Gastos', 'expenses'], ['Ordens de beneficiamento', 'ubs'], ['Abastecimentos', 'fuel'], ['Contas a pagar e receber', 'contas'], ['Colheitas', 'colheitas'], ['Vendas', 'vendas'], ['Chuvas', 'chuvas'], ['Monitoramentos de pragas', 'monitoramentos'], ['Aplicações', 'aplicacoes'], ['Equipe', 'equipe'], ['Apontamentos de trabalho', 'apontamentos']];
-  return head('Cadastros', 'Ajuste o app de acordo com a sua operação: propriedade, usuários, alertas, sincronização e backup.').replace('<section class="view-head">', '<section class="view-head" data-eyebrow="Configurações">') +
+  return head('Ajustes', 'Escolha a seção: fazenda, equipe, sua conta, alertas ou dados e backup.').replace('<section class="view-head">', '<section class="view-head" data-eyebrow="Configurações">') +
     `<section class="settings">
       <article class="card panel"><h3>Propriedade</h3><p>Nome exibido no aplicativo e nos arquivos exportados.</p>
         <form id="settingsForm"><div class="form"><div class="field full"><label for="s_farm">Fazenda / unidade</label><input id="s_farm" value="${esc(db.settings.farm)}" placeholder="Ex.: Fazenda Boa Vista"></div><div class="field full"><label for="s_owner">Responsável</label><input id="s_owner" value="${esc(db.settings.owner)}" placeholder="Nome do responsável"></div><div class="field"><label for="s_rt">Responsável técnico (agrônomo)</label><input id="s_rt" value="${esc(db.settings.respTecnico || '')}" placeholder="Sai nos relatórios impressos"></div><div class="field"><label for="s_rtreg">CREA / CFTA</label><input id="s_rtreg" value="${esc(db.settings.respRegistro || '')}" placeholder="Ex.: CREA-MG 123456/D"></div></div><div class="actions"><button class="primary" type="submit">Salvar</button></div></form>
       </article>
-      <article class="card panel"><h3>Registros no dispositivo</h3><table class="tbl"><tbody>${counts.map(([l, c]) => `<tr><td>${l}</td><td class="num">${db[c].length}</td></tr>`).join('')}</tbody></table></article>
+      <article class="card panel"><h3>Registros no dispositivo</h3><p>${num(counts.reduce((a, [, c]) => a + db[c].length, 0))} registros guardados neste aparelho.</p><details class="cfg-det"><summary>Ver por tipo</summary><table class="tbl"><tbody>${counts.map(([l, c]) => `<tr><td>${l}</td><td class="num">${db[c].length}</td></tr>`).join('')}</tbody></table></details></article>
       ${backupVisivel() ? `<article class="card panel"><h3>Backup</h3><p>${typeof nvVinculado === 'function' && nvVinculado() ? 'Os dados ficam na nuvem da fazenda. O backup é uma cópia extra, para o administrador guardar fora do sistema.' : 'Sem conta na nuvem, os dados ficam somente neste aparelho. Exporte um backup regularmente e guarde em local seguro (Drive, e-mail, computador).'}</p>
         <div class="btn-row">${btn('⬇ Exportar backup', 'backup')}${btn('⬆ Restaurar backup', 'restore', '', 'secondary')}</div><input type="file" id="restoreInput" accept="application/json,.json" hidden></article>` : ''}
       ${typeof cartaoSincronizacao === 'function' ? cartaoSincronizacao() : ''}
@@ -1094,28 +1094,65 @@ VIEWS.cadastros = () => {
         <div class="btn-row">${btn('Carregar exemplos', 'seed', '', 'secondary')}<button class="danger" data-act="wipe">Apagar todos os dados</button></div></article>
     </section>`;
 };
-// Configurações no padrão das prévias: lista de atalhos (Propriedade, Usuários, Preferências, Sincronização, Backup, Apagar dados)
-// que levam a cada seção da tela; as seções continuam todas abaixo
+// Configurações em seções: um menu (Fazenda, Equipe e acesso, Minha conta, Alertas, Dados e backup, Administração do sistema)
+// e só os cartões da seção escolhida. No computador o menu fica à esquerda; no celular a lista abre cada seção em tela própria.
 const CFG_ICONE = {
-  propriedade: '<path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5.5h4V20"/>',
-  usuarios: '<circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5c.7-3.4 2.9-5.2 5.5-5.2s4.8 1.8 5.5 5.2"/><circle cx="16.8" cy="9.5" r="2.5"/><path d="M15.5 14.4c2.4.2 4.2 1.9 4.8 4.6"/>',
-  preferencias: '<path d="M4 7h10M18 7h2M4 12h4M12 12h8M4 17h12M20 17h0"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="17" r="2"/>',
-  sincronizacao: '<path d="M7 18a4.5 4.5 0 0 1 .7-9 5.8 5.8 0 0 1 11 1.9A3.6 3.6 0 0 1 18.2 18z"/>',
-  backup: '<ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8V6M5 12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8"/>',
-  apagar: '<path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v6M14 11v6"/>',
-  registros: '<path d="M6.5 3h8l4.5 4.5V21h-12.5z"/><path d="M14.5 3v4.5H19M9.5 12.5h6M9.5 16.5h6"/>'};
-const CFG_ITENS = [['propriedade', 'Propriedade', 'Dados da fazenda e responsáveis', /^Propriedade/],
-  ['usuarios', 'Usuários e acesso', 'Conta, fazendas e quem pode acessar', /Nuvem da equipe|Minha conta|Sua conta|Conta|Admin do sistema|Usuários/],
-  ['preferencias', 'Preferências', 'Avisos e alertas', /Alerta|Aviso/], ['sincronizacao', 'Sincronização', 'Envio automático e dados na nuvem', /Sincroniza/],
-  ['backup', 'Backup e restauração', 'Proteja seus dados', /^Backup/], ['registros', 'Registros no aparelho', 'Quantidade de dados guardados aqui', /Registros no dispositivo/],
-  ['apagar', 'Apagar dados', 'Exemplos e limpeza deste aparelho', /limpeza/i]];
+  fazenda: '<path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5.5h4V20"/>',
+  equipe: '<circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19.5c.7-3.4 2.9-5.2 5.5-5.2s4.8 1.8 5.5 5.2"/><circle cx="16.8" cy="9.5" r="2.5"/><path d="M15.5 14.4c2.4.2 4.2 1.9 4.8 4.6"/>',
+  conta: '<circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c.9-4 3.8-6.2 7.5-6.2s6.6 2.2 7.5 6.2"/>',
+  alertas: '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2H4.5z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/>',
+  dados: '<ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8V6M5 12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8"/>',
+  sistema: '<path d="M12 3.5 19 6v5.5c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6z"/><path d="m9 12 2.2 2.2L15.5 10"/>'};
+const CFG_GRUPOS = [
+  ['fazenda', 'Fazenda', 'Nome, responsáveis e proprietário', /^(Propriedade|Proprietário)$/],
+  ['equipe', 'Equipe e acesso', 'Pedidos de acesso, nível e telas de cada pessoa', /^Usuários da fazenda$/],
+  ['conta', 'Minha conta', 'Senha, conexão com a nuvem e troca de fazenda', /^(Minha conta|Nuvem da equipe|Dados guardados neste aparelho)$/],
+  ['alertas', 'Alertas', 'Avisos de chuva, pulverização, revisão e estoque', /Alerta|Aviso/],
+  ['dados', 'Dados e backup', 'Backup, registros no aparelho e limpeza', /.*/],
+  ['sistema', 'Administração do sistema', 'Todas as fazendas e criar fazenda', /^Administração do sistema$/]];
+const cfgLargo = () => window.matchMedia('(min-width: 900px)').matches;
+function cfgPendencias() {
+  const adm = typeof nvPapel === 'function' && nvPapel() === 'admin';
+  const p = !adm ? 0 : Array.isArray(nvUsuarios) ? nvUsuarios.filter(u => nvStatusDe(u) === 'pendente').length : (nv.pedidos || 0);
+  const orf = typeof nvCofresOrfaos === 'function' && nv?.sessao ? nvCofresOrfaos().length : 0;
+  return {equipe: p, conta: orf};
+}
+// Selo de pendências (pedidos de acesso, dados sem fazenda) no menu, depois que a lista de usuários carrega
+function cfgAtualizarSelos() {
+  const pend = cfgPendencias();
+  $$('.cfg-item[data-id]').forEach(b => {
+    const n = pend[b.dataset.id] || 0; let s = b.querySelector('.nv-badge');
+    if (!n) { s?.remove(); return; }
+    if (!s) { s = Object.assign(document.createElement('span'), {className: 'nv-badge'}); b.querySelector('.cfg-seta').before(s); }
+    s.textContent = n;
+  });
+}
 function montarMenuConfig() {
-  const v = $('#view'), head = v?.querySelector('.view-head'); if (!v || !head || v.querySelector('.cfg-menu')) return;
-  const cards = $$('.card', v).filter(c => c.querySelector(':scope > h3'));
-  const itens = CFG_ITENS.map(([id, tit, sub, re]) => { const c = cards.find(x => !x.dataset.cfg && re.test(x.querySelector(':scope > h3').textContent.trim())); if (!c) return null; c.dataset.cfg = id; c.id = 'cfg-' + id; return [id, tit, sub]; }).filter(Boolean);
-  if (!itens.length) return;
-  head.insertAdjacentHTML('afterend', `<nav class="cfg-menu" aria-label="Configurações">${itens.map(([id, tit, sub]) => `<button type="button" class="card cfg-item ${id === 'apagar' ? 'perigo' : ''}" data-cfg="${id}"><svg class="cfg-ic" viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">${CFG_ICONE[id] || ''}</svg><span><strong>${esc(tit)}</strong><small>${esc(sub)}</small></span><span class="cfg-seta" aria-hidden="true">›</span></button>`).join('')}</nav>`);
-  $$('[data-cfg]', v).forEach(b => { b.onclick = () => { const c = document.getElementById('cfg-' + b.dataset.cfg); if (!c) return; c.scrollIntoView({behavior: 'smooth', block: 'start'}); c.classList.remove('cfg-foco'); void c.offsetWidth; c.classList.add('cfg-foco'); }; });
+  const v = $('#view'), head = v?.querySelector('.view-head'), sec = v?.querySelector('.settings'); if (!v || !head || !sec || v.querySelector('.cfg-nav')) return;
+  // Cada cartão vai para a primeira seção cujo título combina (o que sobrar fica em Dados e backup)
+  const cards = [...sec.children].filter(c => c.matches('.card') && c.querySelector(':scope > h3'));
+  cards.forEach(c => { const t = c.querySelector(':scope > h3').textContent.trim(); c.dataset.cfgSec = (CFG_GRUPOS.find(([id, , , re]) => id !== 'dados' && re.test(t)) || ['dados'])[0]; });
+  const grupos = CFG_GRUPOS.filter(([id]) => cards.some(c => c.dataset.cfgSec === id));
+  if (!grupos.length) return;
+  const pend = cfgPendencias(), pedido = parseRoute().arg || '';
+  let atual = grupos.some(([id]) => id === pedido) ? pedido : '';
+  // No computador sempre há uma seção aberta: primeiro o que pede atenção
+  if (!atual && cfgLargo()) atual = (pend.equipe && grupos.some(([id]) => id === 'equipe') && 'equipe') || (pend.conta && 'conta')
+    || (nv?.sysadm && typeof nvVinculado === 'function' && !nvVinculado() && grupos.some(([id]) => id === 'sistema') && 'sistema') || grupos[0][0];
+  const item = ([id, tit, sub]) => `<button type="button" class="cfg-item ${id === atual ? 'on' : ''}" data-act="cfg-sec" data-id="${id}" ${id === atual ? 'aria-current="page"' : ''}><svg class="cfg-ic" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">${CFG_ICONE[id] || ''}</svg><span><strong>${esc(tit)}</strong><small>${esc(sub)}</small></span>${pend[id] ? `<span class="nv-badge" title="${pend[id]} ${id === 'equipe' ? (pend[id] === 1 ? 'pedido de acesso' : 'pedidos de acesso') : 'aviso'}">${pend[id]}</span>` : ''}<span class="cfg-seta" aria-hidden="true">›</span></button>`;
+  const g = grupos.find(([id]) => id === atual);
+  sec.classList.add('cfg-conteudo'); sec.dataset.cfgAtual = atual;
+  head.classList.toggle('cfg-head-sec', !!atual);
+  const wrap = document.createElement('div'); wrap.className = 'cfg-wrap' + (atual ? '' : ' cfg-so-menu');
+  wrap.innerHTML = `<nav class="cfg-nav" aria-label="Seções das configurações">${grupos.map(item).join('')}</nav>`;
+  sec.before(wrap); wrap.append(sec);
+  if (g) sec.insertAdjacentHTML('afterbegin', `<div class="cfg-topo"><button type="button" class="cfg-voltar" data-act="cfg-sec" data-id="">‹ Ajustes</button><h2>${esc(g[1])}</h2><p>${esc(g[2])}</p></div>`);
+  cards.forEach(c => { c.hidden = c.dataset.cfgSec !== atual; });
+  // Apagar dados: zona de perigo no fim de Dados e backup
+  cards.filter(c => /limpeza/i.test(c.querySelector(':scope > h3').textContent)).forEach(c => c.classList.add('cfg-perigo'));
+  // Em Dados e backup: primeiro o backup, depois a contagem de registros, e a limpeza por último
+  const tit = re => cards.find(c => re.test(c.querySelector(':scope > h3').textContent)), lim = tit(/limpeza/i), reg = tit(/^Registros no dispositivo/);
+  if (lim && reg) lim.before(reg);
 }
 VIEWS.cadastros.after = () => {
   setTimeout(montarMenuConfig, 0);
@@ -1311,7 +1348,7 @@ function render(anchor = pendingAnchor) {
   const key = name === 'talhao' ? 'talhoes' : name;
   try { view.innerHTML = VIEWS[name](arg || anchor); } catch (err) {
     console.error(err);
-    view.innerHTML = `<section class="card">${empty('Não foi possível abrir esta tela', 'Seus dados salvos não foram afetados. Volte ao início e tente de novo; se continuar, faça um backup em Cadastros.', {act: 'nav', id: 'inicio', label: 'Voltar ao início'})}</section>`;
+    view.innerHTML = `<section class="card">${empty('Não foi possível abrir esta tela', 'Seus dados salvos não foram afetados. Volte ao início e tente de novo; se continuar, faça um backup em Ajustes → Dados e backup.', {act: 'nav', id: 'inicio', label: 'Voltar ao início'})}</section>`;
     return;
   }
   document.querySelector('.app').classList.toggle('nx-home', key === 'inicio');
@@ -1391,3 +1428,5 @@ if (window.AndroidBridge?.appVersion) addEventListener('load', () => {
     avisoApk(instalada);
   }).catch(() => {});
 });
+// Ajustes: abrir uma seção (no celular, vazio volta para a lista)
+ACTIONS['cfg-sec'] = id => { go(id ? 'cadastros/' + id : 'cadastros'); window.scrollTo(0, 0); };

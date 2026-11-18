@@ -1197,17 +1197,44 @@ button.conf-chip{border:0;cursor:pointer;font:inherit;font-size:.74rem;padding:3
 .af-cat-corpo{padding:0 18px 18px}.af-cat-corpo .insp-cartao{margin:0;box-shadow:none}
 .af-cat-meta>span{display:block}.af-cat-corpo{padding-top:16px!important}
 @media(max-width:760px){.af-cat-meta{margin-left:0}}
-/* =================== Configurações no padrão das prévias =================== */
-.cfg-menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:18px}
-.cfg-item{display:flex;gap:14px;align-items:center;text-align:left;padding:16px 18px;cursor:pointer;font:inherit;color:var(--text)}
-.cfg-item strong{display:block;font-size:1.02rem}.cfg-item small{display:block;color:var(--muted);margin-top:2px}.cfg-item>span:nth-of-type(1){flex:1;min-width:0}
+/* =================== Ajustes em seções (menu + só a seção escolhida) =================== */
+.cfg-wrap{display:grid;grid-template-columns:270px minmax(0,1fr);gap:20px;align-items:start}
+.cfg-nav{position:sticky;top:76px;display:flex;flex-direction:column;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px}
+.cfg-item{display:flex;gap:12px;align-items:center;text-align:left;padding:11px 12px;cursor:pointer;font:inherit;color:var(--text);background:transparent;border:0;border-radius:10px;min-height:52px;width:100%}
+.cfg-item strong{display:block;font-size:.97rem}.cfg-item small{display:block;color:var(--muted);margin-top:1px;font-size:.8rem;line-height:1.3}.cfg-item>span:nth-of-type(1){flex:1;min-width:0}
+.cfg-item:hover{background:color-mix(in srgb,var(--green) 8%,transparent)}
+.cfg-item.on{background:color-mix(in srgb,var(--green) 14%,transparent);box-shadow:inset 3px 0 0 var(--green)}.cfg-item.on strong,.cfg-item.on .cfg-ic{color:var(--green)}
+.cfg-item .nv-badge{flex:none}
 .cfg-ic{flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;color:var(--text)}
-.cfg-seta{font-size:1.5rem;color:var(--muted)}
-.cfg-item:hover{border-color:var(--green)!important}
-.cfg-item.perigo{background:color-mix(in srgb,var(--red) 7%,var(--panel));border-color:color-mix(in srgb,var(--red) 35%,var(--line))!important}.cfg-item.perigo strong,.cfg-item.perigo .cfg-ic{color:var(--red)}.cfg-item.perigo small{color:color-mix(in srgb,var(--red) 75%,var(--muted))}
-.cfg-foco{animation:cfgFoco 1.6s ease}
-@keyframes cfgFoco{0%,40%{box-shadow:0 0 0 3px var(--green)}100%{box-shadow:none}}
-@media(max-width:760px){.cfg-menu{grid-template-columns:1fr}}
+.cfg-seta{font-size:1.4rem;color:var(--muted);display:none}
+.settings.cfg-conteudo{grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));align-content:start}
+.cfg-topo{grid-column:1/-1}.cfg-topo h2{margin:0;font-size:1.3rem}.cfg-topo p{margin:2px 0 0;color:var(--muted);font-size:.9rem}
+.cfg-voltar{display:none;background:transparent;border:0;color:var(--green);font:inherit;font-weight:600;padding:6px 0;margin-bottom:6px;cursor:pointer}
+.cfg-conteudo>.card[hidden]{display:none!important}
+.cfg-perigo{border-color:color-mix(in srgb,var(--red) 40%,var(--line))!important}.cfg-perigo>h3{color:var(--red)}
+.cfg-det summary{cursor:pointer;color:var(--green);font-weight:600;padding:4px 0}.cfg-det[open] summary{margin-bottom:8px}
+@media(max-width:899px){
+  .cfg-wrap{grid-template-columns:1fr;gap:12px}
+  .cfg-nav{position:static;padding:6px}
+  .cfg-item{padding:14px 12px;min-height:64px}.cfg-item+.cfg-item{border-top:1px solid var(--line);border-radius:0}
+  .cfg-seta{display:block}
+  .cfg-wrap:not(.cfg-so-menu)>.cfg-nav{display:none}
+  .cfg-so-menu>.settings{display:none}
+  .cfg-voltar{display:inline-block}
+  .view-head.cfg-head-sec{display:none}
+  .cfg-item.on{background:transparent;box-shadow:none}.cfg-item.on strong,.cfg-item.on .cfg-ic{color:inherit}
+}
+/* Nível de cada pessoa: mesmo visual dos campos */
+.nv-usuarios select{border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--bg);color:var(--text);font:inherit;font-size:.88rem;min-height:40px}
+/* Lista de usuários: no celular cada pessoa vira um bloco (nome e nível em cima, botões embaixo) */
+@media(max-width:700px){
+  .nv-usuarios,.nv-usuarios tbody{display:block}
+  .nv-usuarios tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 10px;padding:12px 0;border-bottom:1px solid var(--line);align-items:start}
+  .nv-usuarios td{display:block;border:0!important;padding:0!important;box-shadow:none!important;position:static!important;background:transparent!important}
+  .nv-usuarios td.num{grid-column:1/-1;text-align:left}
+  .nv-usuarios td.num:empty{display:none}
+  .nv-usuarios .row-actions{justify-content:flex-start;flex-wrap:wrap}
+}
 /* Olho dos valores de gastos (tela inicial) */
 .ini-olho{flex:none;width:38px;height:38px;display:grid;place-items:center;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--muted);cursor:pointer;padding:0;margin-left:auto}
 .ini-olho svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
