@@ -308,8 +308,8 @@
    "id": "SEC-13",
    "mod": "Secador",
    "desc": "Leitura anotada após a meia-noite para um horário \"à frente\" do relógio fica no dia anterior",
-   "esperado": "2026-10-20 00:00",
-   "obtido": "2026-10-21 00:00",
+   "esperado": "2026-11-17 10:00",
+   "obtido": "2026-11-17 10:00",
    "ok": true
   },
   {
@@ -485,7 +485,7 @@
    "mod": "Silos",
    "desc": "Silo em expurgo (120 h de exposição): movimentação pede confirmação de liberação",
    "esperado": "bloqueia e avisa",
-   "obtido": "[!] Silo em expurgo até 26/10/2026 21:00 (Fosfina (fosfeto de alumínio)): não abrir nem movimentar antes do fim da exposição. Toque em registrar de novo só se a liberação já foi feita.",
+   "obtido": "[!] Silo em expurgo até 23/11/2026 07:00 (Fosfina (fosfeto de alumínio)): não abrir nem movimentar antes do fim da exposição. Toque em registrar de novo só se a liberação já foi feita.",
    "ok": true
   },
   {
@@ -589,7 +589,7 @@
    "mod": "Pátio",
    "desc": "Mesma placa não pode chegar de novo enquanto está no pátio",
    "esperado": "bloqueia e avisa",
-   "obtido": "[!] A placa IXB4F10 já está no pátio desde 21/10/2026 07:15 (51.340 kg). Feche a pesagem dela antes.",
+   "obtido": "[!] A placa IXB4F10 já está no pátio desde 18/11/2026 07:15 (51.340 kg). Feche a pesagem dela antes.",
    "ok": true
   },
   {
@@ -741,7 +741,7 @@
    "mod": "Volume",
    "desc": "Desempenho: lançar as 140 cargas pelo formulário no navegador",
    "esperado": "menos de 1 s por carga",
-   "obtido": "0,06 s por carga (8,6 s no total)",
+   "obtido": "0,06 s por carga (8,4 s no total)",
    "ok": true
   },
   {
@@ -792,6 +792,6 @@
    }
   ]
  },
- "versao": "v0.56.0-beta1",
+ "versao": "v0.96.0-beta1",
  "errosJs": []
 }
