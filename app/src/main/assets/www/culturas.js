@@ -6,6 +6,13 @@
 const CULTURAS = [['Soja', '#3fa45b'], ['Milho', '#e0b23a'], ['Trigo', '#c98a3c'], ['Aveia', '#9cbf5a'], ['Feijão', '#a0623a'], ['Canola', '#e3d24a'],
   ['Cevada', '#d6a85c'], ['Trigo mourisco', '#b07ab8'], ['Arroz', '#5fb7c9'], ['Sorgo', '#c45a3a'], ['Azevém', '#7fbf8f'], ['Nabo forrageiro', '#8f7fd1'], ['Pousio', '#9aa4ad']];
 if (typeof I2_COR_CULT !== 'undefined') CULTURAS.forEach(([c, cor]) => { I2_COR_CULT[c] = cor; });
+// Uma cor por cultura em todo o sistema (mapa do início, mapa de talhões, desenho e lista de talhões)
+const CULTURAS_EXTRA = ['#4d8fd6', '#d16b8a', '#7a6fd1', '#4fb3a0', '#c77d2e', '#5c9e3a'];
+function corCultura(c) {
+  const t = String(c || '').trim(); if (!t) return '#9aa4ad';
+  const k = culturaNorm(t), padrao = CULTURAS.find(([n]) => culturaNorm(n) === k);
+  return padrao ? padrao[1] : CULTURAS_EXTRA[[...k].reduce((s, ch) => s + ch.charCodeAt(0), 0) % CULTURAS_EXTRA.length];
+}
 const culturaNorm = t => String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
 // Lista padrão + culturas já usadas nos talhões (sem repetir grafias)
 function culturasUsadas() {

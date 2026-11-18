@@ -302,7 +302,7 @@ function i2Gastos() {
 }
 // Cores das culturas no mapa da fazenda
 const I2_COR_CULT = {Soja: '#3fa45b', Milho: '#e0b23a', Trigo: '#c98a3c', Feijão: '#a0623a', Arroz: '#5fb7c9', Aveia: '#9cbf5a', Canola: '#e3d24a', 'Trigo mourisco': '#b07ab8', Sorgo: '#c45a3a', Pousio: '#9aa4ad'};
-const i2CorCult = c => I2_COR_CULT[c] || ['#4d8fd6', '#d16b8a', '#7a6fd1', '#4fb3a0'][[...String(c || '')].reduce((t, ch) => t + ch.charCodeAt(0), 0) % 4];
+const i2CorCult = c => typeof corCultura === 'function' ? corCultura(c) : I2_COR_CULT[c] || ['#4d8fd6', '#d16b8a', '#7a6fd1', '#4fb3a0'][[...String(c || '')].reduce((t, ch) => t + ch.charCodeAt(0), 0) % 4];
 // Mapa vivo da fazenda: talhões sobre a imagem de satélite (a mesma do desenho de talhões), pintados conforme
 // o modo — Hoje, Cultura, Plantio, Pragas, Carência —, máquinas trabalhando e um resumo do talhão tocado.
 const I2_MODOS = [['hoje', 'Hoje'], ['cultura', 'Cultura'], ['plantio', 'Plantio'], ['pragas', 'Pragas'], ['carencia', 'Carência']];
@@ -340,13 +340,15 @@ function i2Pintura(f, inf, modo) {
     return inf.nivel ? {cor: '#e5484d', op: .55, txt: inf.monRecente.alvo} : {cor: '#f59e0b', op: .45, txt: inf.monRecente.alvo};
   }
   if (modo === 'carencia') return inf.carencia ? {cor: '#e5484d', op: .5, txt: `até ${fmtC(inf.carencia.libera)}`} : {cor: '#31b35a', op: .3, txt: 'Liberado'};
-  if (inf.andamento) return {cor: '#22c55e', op: .55, txt: inf.andamento.type, pulsa: true};
-  if (inf.progHoje) return {cor: '#f59e0b', op: .4, txt: inf.progHoje.type, tracejado: true};
-  if (inf.conclHoje) return {cor: '#4d8fd6', op: .4, txt: `${inf.conclHoje.type} ✓`};
-  return {cor: '#ffffff', op: .06, txt: ''};
+  // Hoje: o talhão fica sempre na cor da cultura; o que acontece hoje aparece na borda
+  const base = {cor: f.crop ? i2CorCult(f.crop) : '#ffffff', op: f.crop ? .42 : .08};
+  if (inf.andamento) return {...base, borda: '#39ff88', larg: 5, txt: inf.andamento.type, pulsa: true};
+  if (inf.progHoje) return {...base, borda: '#ffb020', larg: 4, txt: inf.progHoje.type, tracejado: true};
+  if (inf.conclHoje) return {...base, borda: '#6cb6ff', larg: 4, txt: `${inf.conclHoje.type} ✓`};
+  return {...base, borda: 'rgba(255,255,255,.85)', larg: 2, txt: f.crop || ''};
 }
 const I2_LEGENDA = {
-  hoje: [['#22c55e', 'Trabalhando agora'], ['#f59e0b', 'Programado hoje'], ['#4d8fd6', 'Concluído hoje'], ['#ffffff', 'Sem operação']],
+  hoje: [['#39ff88', 'Trabalhando agora', 'borda'], ['#ffb020', 'Programado hoje', 'tracejada'], ['#6cb6ff', 'Concluído hoje', 'borda']],
   plantio: [['#a6e36b', 'Início'], ['#31b35a', 'Desenvolvimento'], ['#178a3e', 'Final do ciclo'], ['#e7b416', 'Perto da colheita'], ['#9b7448', 'Colhido'], ['#9aa4ad', 'Não plantado']],
   pragas: [['#e5484d', 'Atingiu o nível de ação'], ['#f59e0b', 'Monitorado (15 dias)'], ['#9aa4ad', 'Sem monitoramento']],
   carencia: [['#e5484d', 'Em carência'], ['#31b35a', 'Colheita liberada']]
@@ -369,7 +371,7 @@ function i2MapaFazenda(fs, modo) {
   const infos = {}; comC.forEach(f => { infos[f.id] = i2InfoTalhao(f); });
   const pol = comC.map(f => { const q = f.contorno.pontos.map(P), c = q.reduce((t, a) => [t[0] + a[0] / q.length, t[1] + a[1] / q.length], [0, 0]), pt = i2Pintura(f, infos[f.id], modo), sel = i2TalSel === f.id;
     return `<g class="i2-tal ${pt.pulsa ? 'pulsa' : ''} ${sel ? 'sel' : ''}" data-act="i2-tal" data-id="${esc(f.id)}" role="button" aria-label="${esc(f.name)}">
-      <polygon points="${q.map(a => a.map(v => v.toFixed(1)).join(',')).join(' ')}" fill="${pt.cor}" fill-opacity="${pt.op}" stroke="${sel || pt.muda ? '#fff' : pt.cor === '#ffffff' ? 'rgba(255,255,255,.85)' : pt.cor}" stroke-width="${sel || pt.muda ? 4 : 2.5}" ${pt.tracejado ? 'stroke-dasharray="8 5"' : ''} stroke-linejoin="round"/>
+      <polygon points="${q.map(a => a.map(v => v.toFixed(1)).join(',')).join(' ')}" fill="${pt.cor}" fill-opacity="${pt.op}" stroke="${sel || pt.muda ? '#fff' : pt.borda || (pt.cor === '#ffffff' ? 'rgba(255,255,255,.85)' : pt.cor)}" stroke-width="${sel || pt.muda ? 4 : pt.larg || 2.5}" ${pt.tracejado ? 'stroke-dasharray="8 5"' : ''} stroke-linejoin="round"/>
       <text x="${c[0].toFixed(0)}" y="${(c[1] - (pt.txt ? 7 : 0)).toFixed(0)}" class="i2-tal-nome">${esc(i2Curto(f.name))}</text>${pt.txt ? `<text x="${c[0].toFixed(0)}" y="${(c[1] + 11).toFixed(0)}" class="i2-tal-txt">${esc(String(pt.txt).slice(0, 22))}</text>` : ''}</g>`; }).join('');
   // Máquinas trabalhando (ou programadas para hoje) no talhão, com quem opera
   const maq = comC.map(f => { const o = infos[f.id].andamento || infos[f.id].progHoje; if (!o || !o.machineId) return '';
@@ -412,7 +414,8 @@ function i2Fazenda() {
   const desde = addDias(today(), -30), chuva = (db.chuvas || []).filter(c => c.date >= desde && c.date <= today() && !c.fieldId).reduce((t, c) => t + (Number(c.mm) || 0), 0);
   const nome = db.settings.farm || (typeof nv !== 'undefined' && nv?.fazenda?.name) || 'Minha fazenda', mapa = i2MapaFazenda(fs, modo);
   const cult = {}; (pint ? fs : daSafra).forEach(f => { const c = (pint ? cuCulturaDe(f) : f.crop) || 'Sem cultura'; cult[c] = (cult[c] || 0) + (Number(f.area) || 0); });
-  const leg = modo === 'cultura' ? Object.entries(cult).sort((a, b) => b[1] - a[1]).map(([c, a]) => [i2CorCult(c), `${c} ${num(a)} ha`]) : I2_LEGENDA[modo] || [];
+  const legCult = Object.entries(cult).sort((a, b) => b[1] - a[1]).map(([c, a]) => [i2CorCult(c), `${c} ${num(a)} ha`]);
+  const leg = modo === 'cultura' ? legCult : modo === 'hoje' ? [...legCult.filter(([, r]) => !r.startsWith('Sem cultura')), ...I2_LEGENDA.hoje] : I2_LEGENDA[modo] || [];
   const sel = !pint && i2TalSel && fs.find(f => f.id === i2TalSel), gestor = typeof tmGestor !== 'function' || tmGestor();
   const semMapa = `<div class="i2-faz-semmapa">${pvHex('talhoes', 'verde', 44)}<div><strong>Desenhe os talhões no satélite</strong><small>Com o contorno, o mapa mostra onde cada máquina está, o plantio, as pragas e a carência.</small></div><button type="button" class="secondary" data-act="nav" data-id="talhoes">Desenhar</button></div>`;
   return `<section class="card i2-card i2-faz ${mapa ? '' : 'sem-mapa'}">
@@ -420,7 +423,7 @@ function i2Fazenda() {
     <div class="i2-faz-corpo">
       <div class="i2-faz-esq">${pint ? cuPaleta() : ''}${mapa ? `${pint ? '' : `<div class="i2-faz-modos" role="tablist">${I2_MODOS.map(([k, r]) => `<button type="button" role="tab" aria-selected="${k === modo}" class="${k === modo ? 'on' : ''}" data-act="i2-mapa-modo" data-id="${k}">${r}</button>`).join('')}</div>`}
         <div class="i2-faz-desenho">${mapa}<span class="i2-faz-cred">Imagem © Esri, Maxar</span></div>
-        <div class="i2-faz-leg">${leg.map(([c, r]) => `<span><i style="background:${c}"></i>${esc(r)}</span>`).join('')}</div>` : pint ? '' : semMapa}</div>
+        <div class="i2-faz-leg">${leg.map(([c, r, tipo]) => `<span>${tipo ? `<i class="i2-leg-borda ${tipo === 'tracejada' ? 'trac' : ''}" style="border-color:${c}"></i>` : `<i style="background:${c}"></i>`}${esc(r)}</span>`).join('')}</div>` : pint ? '' : semMapa}</div>
       <div class="i2-faz-dir">${pint ? cuPainel(fs) : sel ? i2PainelTalhao(sel) : `<div class="i2-sub">Toque num talhão</div>${i2ListaTalhoes(fs, modo)}`}</div></div></section>`;
 }
 const i2AtualizarFazenda = () => { const el = document.querySelector('.i2-faz'); if (el) el.outerHTML = i2Fazenda(); };
@@ -503,6 +506,16 @@ if (pvMaquinasBase.after) VIEWS.maquinas.after = pvMaquinasBase.after;
 
 // ---------- Talhões ----------
 // Desenho do contorno do talhão (sem internet): o polígono em verde sobre fundo de campo
+// Miniatura do talhão (contorno na cor da cultura) para a lista de talhões; sem contorno, o hexágono na cor da cultura
+function pvMiniTalhao(f, tam = 48) {
+  const ps = f?.contorno?.pontos, cor = f?.crop ? i2CorCult(f.crop) : '#4cbf68';
+  if (!ps || ps.length < 3) return `<span class="pv-tal-hex" style="--cor:${cor}">${pvHex('talhoes', 'verde', tam)}</span>`;
+  const lat0 = ps.reduce((s, p) => s + p[0], 0) / ps.length, k = Math.cos(lat0 * Math.PI / 180), xy = ps.map(([la, lo]) => [lo * k, -la]);
+  const xs = xy.map(p => p[0]), ys = xy.map(p => p[1]), [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)], m = 5;
+  const e = Math.min((tam - 2 * m) / ((x1 - x0) || 1e-9), (tam - 2 * m) / ((y1 - y0) || 1e-9)), ox = (tam - (x1 - x0) * e) / 2, oy = (tam - (y1 - y0) * e) / 2;
+  return `<svg width="${tam}" height="${tam}" viewBox="0 0 ${tam} ${tam}" aria-hidden="true"><rect width="${tam}" height="${tam}" rx="12" fill="color-mix(in srgb, ${cor} 14%, transparent)"/>
+    <polygon points="${xy.map(([x, y]) => `${(ox + (x - x0) * e).toFixed(1)},${(oy + (y - y0) * e).toFixed(1)}`).join(' ')}" fill="${cor}" fill-opacity=".75" stroke="${cor}" stroke-width="1.5" stroke-linejoin="round"/></svg>`;
+}
 function pvDesenhoTalhao(f, alto = 190) {
   const ps = f?.contorno?.pontos; if (!ps || ps.length < 3) return '';
   const lat0 = ps.reduce((s, p) => s + p[0], 0) / ps.length, k = Math.cos(lat0 * Math.PI / 180);
@@ -514,7 +527,7 @@ function pvDesenhoTalhao(f, alto = 190) {
   return `<svg class="pv-talhao-desenho" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Contorno do talhão ${esc(f.name)}">
     <defs><pattern id="pvLinhas" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><path d="M0 0v10" stroke="rgba(255,255,255,.07)" stroke-width="4"/></pattern></defs>
     <rect width="${w}" height="${h}" fill="#2f4a2a"/><rect width="${w}" height="${h}" fill="url(#pvLinhas)"/>
-    <polygon points="${pts}" fill="rgba(76,191,104,.55)" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/></svg>`;
+    <polygon points="${pts}" fill="${f.crop ? i2CorCult(f.crop) : '#4cbf68'}" fill-opacity=".6" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/></svg>`;
 }
 const pvTalhoesBase = VIEWS.talhoes;
 VIEWS.talhoes = (...a) => {
@@ -525,7 +538,7 @@ VIEWS.talhoes = (...a) => {
     art.classList.add('pv-talhao');
     const h4 = art.querySelector('header h4');
     if (h4) h4.innerHTML = `<button type="button" class="pv-talhao-nome" data-act="nav" data-id="talhao/${esc(id)}">${esc(f.name)}</button>`;
-    art.querySelector('header')?.insertAdjacentHTML('afterbegin', `<span class="pv-maq-ic">${pvHex('talhoes', 'verde', 48)}</span>`);
+    art.querySelector('header')?.insertAdjacentHTML('afterbegin', `<span class="pv-maq-ic pv-tal-mini">${pvMiniTalhao(f, 48)}</span>`);
     const acoes = art.querySelector(':scope > .row-actions');
     if (acoes) {
       const d = pvMenuVazio(); [...acoes.querySelectorAll('[data-act="fd-hist"],[data-act="fd-edit"],[data-act="fd-del"]')].forEach(b => d.lastElementChild.append(b));

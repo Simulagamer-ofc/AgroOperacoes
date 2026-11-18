@@ -2005,7 +2005,7 @@ body:has(.i2) .app.nx-home .content{max-width:none}
 .i2-tal-nome{font-size:15px;font-weight:800;fill:#fff;text-anchor:middle;paint-order:stroke;stroke:rgba(0,0,0,.6);stroke-width:3.5px;pointer-events:none}
 .i2-tal-txt{font-size:11.5px;font-weight:700;fill:#fff;text-anchor:middle;paint-order:stroke;stroke:rgba(0,0,0,.65);stroke-width:3px;pointer-events:none}
 .i2-tal.pulsa polygon{animation:i2Pulsa 1.8s ease-in-out infinite}
-@keyframes i2Pulsa{50%{fill-opacity:.25}}
+@keyframes i2Pulsa{50%{stroke-opacity:.3}}
 @media(prefers-reduced-motion:reduce){.i2-tal.pulsa polygon{animation:none}}
 .i2-maq-txt{font-size:11px;font-weight:700;fill:#fff}
 .i2-faz-leg{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.78rem;color:var(--muted);margin-top:9px}
@@ -2061,3 +2061,9 @@ body:has(.i2) .app.nx-home .content{max-width:none}
 @media(max-width:760px){.cu-paleta{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-right:-16px;padding-right:16px}.cu-paleta>*{flex:0 0 auto}.cu-lista{max-height:none}}
 .cu-campos>*{min-width:0}.cu-campos input{width:100%;box-sizing:border-box}.cu-campos label{align-content:end}
 .cu-painel,.cu-lista,.cu-l{min-width:0}
+
+/* Cor pela cultura */
+.i2-faz-leg i.i2-leg-borda{background:transparent;border:2.5px solid;border-radius:3px;width:12px;height:12px;box-sizing:border-box}
+.i2-faz-leg i.i2-leg-borda.trac{border-style:dashed}
+.pv-tal-mini svg{display:block}
+.pv-tal-hex .pv-hex .hex{stroke:var(--cor);fill:color-mix(in srgb,var(--cor) 14%,transparent)}.pv-tal-hex .pv-hex .glifo{stroke:var(--cor)}
