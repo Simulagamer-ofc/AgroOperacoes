@@ -318,6 +318,7 @@ async function nvConferirFazenda() {
     throw new NvErro(`Você não participa mais de “${nome}”.`);
   }
   const f = rows[0];
+  if (typeof sedeAtualizarDoServidor === 'function') sedeAtualizarDoServidor(f.id); // local da sede (clima e mapas)
   if (f.name !== nv.fazenda.name || f.join_code !== nv.fazenda.join_code) { nv.fazenda = {id: f.id, name: f.name, join_code: f.join_code}; applySettings(); }
   const filtro = `farm_id=eq.${encodeURIComponent(f.id)}&user_id=eq.${encodeURIComponent(nv.sessao.usuario)}`;
   const eu = await nvHttp(`/rest/v1/farm_members?select=role,funcao,modulos&${filtro}`).catch(err => { if (err.status === 400) return nvHttp(`/rest/v1/farm_members?select=role&${filtro}`); throw err; });

@@ -42,7 +42,7 @@ function tmEnquadrar(mapa, grupos) {
   const L = window.L, b = L.latLngBounds([]);
   grupos.forEach(p => p.forEach(([la, lo]) => b.extend([la, lo])));
   if (b.isValid()) mapa.fitBounds(b, {padding: [24, 24], maxZoom: 17});
-  else if (db.settings.local?.lat) mapa.setView([db.settings.local.lat, db.settings.local.lon], 15);
+  else if (typeof localDaFazenda === 'function' && localDaFazenda()) { const l = localDaFazenda(); mapa.setView([l.lat, l.lon], 15); }
   else mapa.setView([-15.8, -52], 4);
 }
 function tmMinhaPosicao(mapa, zoom = 17) {
