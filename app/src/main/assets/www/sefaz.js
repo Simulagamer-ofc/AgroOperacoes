@@ -1,9 +1,13 @@
 'use strict';
-/* Notas da SEFAZ (0.88).
-   O servidor baixa da SEFAZ as NF-e emitidas contra o CNPJ/CPF do certificado A1 da fazenda (Distribuição de DF-e),
+/* Notas da SEFAZ (0.88; A3 na 0.99).
+   O servidor baixa da SEFAZ as NF-e emitidas contra o CNPJ/CPF do certificado da fazenda (Distribuição de DF-e),
    faz a Ciência da Operação nas que chegam só em resumo (libera o XML completo) e guarda tudo na tabela nfe_recebidas.
    Aqui o app lista as notas e abre a mesma conferência do XML para dar entrada no estoque.
-   O certificado e a senha vão direto para o servidor (Vault) e nunca ficam no aparelho nem voltam para o app. */
+   Certificado A1 (arquivo): o arquivo e a senha vão direto para o servidor (Vault) e nunca voltam para o app.
+   Certificado A3 (token USB ou cartão, de qualquer marca; e-CNPJ ou e-CPF): a chave não sai do aparelho, então quem
+   conversa com a SEFAZ é o MercaPlant Conecta, no computador da fazenda onde o token está (pasta conecta/). */
+const SF_CONECTA_URL = 'https://github.com/Simulagamer-ofc/AgroOperacoes/releases/download/conecta/MercaPlantConecta.exe';
+const SF_CONECTA_PARADO_MS = 2 * 3600e3; // sem contato há mais de 2 h: avisa
 
 const SF_UFS = [['12', 'AC'], ['27', 'AL'], ['16', 'AP'], ['13', 'AM'], ['29', 'BA'], ['23', 'CE'], ['53', 'DF'], ['32', 'ES'], ['52', 'GO'], ['21', 'MA'], ['51', 'MT'], ['50', 'MS'], ['31', 'MG'],
   ['15', 'PA'], ['25', 'PB'], ['41', 'PR'], ['26', 'PE'], ['22', 'PI'], ['33', 'RJ'], ['24', 'RN'], ['43', 'RS'], ['11', 'RO'], ['14', 'RR'], ['42', 'SC'], ['35', 'SP'], ['28', 'SE'], ['17', 'TO']];
@@ -28,9 +32,11 @@ async function sfCarregar() {
   try {
     const f = encodeURIComponent(nv.fazenda.id);
     const [cfg, lista] = await Promise.all([
-      nvHttp(`/rest/v1/sefaz_config?farm_id=eq.${f}&select=doc,tipo_doc,nome,validade,uf,ambiente,prox_consulta,ult_consulta,ult_cstat,ult_motivo`),
+      nvHttp(`/rest/v1/sefaz_config?farm_id=eq.${f}&select=modo,doc,tipo_doc,nome,validade,uf,ambiente,prox_consulta,ult_consulta,ult_cstat,ult_motivo`),
       nvHttp(`/rest/v1/nfe_recebidas?farm_id=eq.${f}&select=chave,situacao,numero,emitente,cnpj_emit,valor,emissao,ciencia_em,ciencia_cstat,ciencia_motivo,importada_em,importada_por,ignorada&order=emissao.desc.nullslast&limit=500`)]);
     sfEst.cfg = Array.isArray(cfg) ? cfg[0] || null : null;
+    // A3: a situação do Conecta (último contato, computador, erro) só o servidor lê
+    if (sfEst.cfg?.modo === 'a3') { const st = await sfChamar('status').catch(() => null); if (st?.config) sfEst.cfg = st.config; }
     sfEst.lista = Array.isArray(lista) ? lista : [];
     sfEst.erro = ''; sfEst.em = Date.now();
     // Nota que já entrou pelo XML (ou em outro aparelho) fica como "entrada feita" também no servidor
@@ -52,6 +58,7 @@ async function sfBuscar(auto) {
   try {
     const r = await sfChamar('buscar');
     if (r.config) sfEst.cfg = r.config;
+    if (r.a3) { if (!auto) showToast(sfTxtConecta(r.config) + ' Ele busca as notas sozinho.'); return; }
     const partes = [];
     if (r.novas) partes.push(`${r.novas} ${r.novas === 1 ? 'nota nova' : 'notas novas'}`);
     if (r.completas) partes.push(`${r.completas} ${r.completas === 1 ? 'pronta' : 'prontas'} para conferir`);
@@ -75,16 +82,18 @@ VIEWS.notassefaz = () => {
   }
   const c = sfEst.cfg, adm = sfAdm();
   if (!c) return head('Notas da SEFAZ', 'Notas fiscais de compra emitidas contra o CNPJ da fazenda', voltar) +
-    `<section class="card sf-intro"><h3>Como funciona</h3><ol><li>O ADM cadastra uma vez o <strong>certificado digital A1</strong> da empresa ou do produtor (arquivo .pfx e senha).</li>
+    `<section class="card sf-intro"><h3>Como funciona</h3><ol><li>O ADM cadastra uma vez o <strong>certificado digital</strong> da empresa ou do produtor (e-CNPJ ou e-CPF): <strong>A1</strong> (arquivo .pfx) ou <strong>A3</strong> (token USB ou cartão, de qualquer marca).</li>
       <li>O sistema busca na SEFAZ as notas emitidas contra o CNPJ/CPF e confirma o recebimento (ciência), que libera o XML completo.</li>
       <li>Aqui aparecem as notas: toque em <strong>Conferir e dar entrada</strong> e confira os itens, como no XML.</li></ol>
-      ${adm ? `<div class="actions">${btn('⚙ Cadastrar certificado', 'sf-cert', '', 'primary')}</div>` : '<p class="sub">Peça ao ADM da fazenda para cadastrar o certificado A1.</p>'}</section>`;
+      ${adm ? `<div class="actions">${btn('⚙ Cadastrar certificado', 'sf-cert', '', 'primary')}</div>` : '<p class="sub">Peça ao ADM da fazenda para cadastrar o certificado digital.</p>'}</section>`;
+  const a3 = c.modo === 'a3';
+  if (a3 && !c.doc) return head('Notas da SEFAZ', 'Certificado A3 (token ou cartão)', voltar + (adm ? btn('⚙ Certificado', 'sf-cert', '', 'primary') : '')) + sfCartaoConecta(c, adm);
   const espera = c.prox_consulta && new Date(c.prox_consulta) > new Date();
   const venceEm = c.validade ? Math.round((new Date(c.validade) - new Date()) / 864e5) : null;
   const lista = sfEst.lista || [], porFiltro = {};
   for (const [k] of SF_FILTROS) porFiltro[k] = lista.filter(n => sfSituacao(n) === k);
   const mostrar = porFiltro[sfEst.filtro] || [];
-  const botaoBuscar = sfEst.buscando ? '<button class="primary" disabled>Buscando na SEFAZ…</button>'
+  const botaoBuscar = a3 ? '' : sfEst.buscando ? '<button class="primary" disabled>Buscando na SEFAZ…</button>'
     : espera ? `<button class="secondary" data-act="sf-buscar" title="A SEFAZ só permite consultar de novo 1 hora depois de uma consulta sem novidades">🔄 Próxima busca às ${sfHora(c.prox_consulta)}</button>` : btn('🔄 Buscar notas', 'sf-buscar', '', 'primary');
   const cartao = n => {
     const sit = sfSituacao(n), cienciaRuim = n.ciencia_cstat && !['135', '136', '573'].includes(n.ciencia_cstat);
@@ -97,8 +106,9 @@ VIEWS.notassefaz = () => {
       <small>NF-e ${esc(n.numero || '—')} • ${n.emissao ? fmtDate(sfDia(n.emissao)) : 'sem data'} • CNPJ ${esc(sfDoc(n.cnpj_emit))}</small>${nota}</div>
       <div class="sf-dir"><strong class="sf-valor">${n.valor != null ? brl(Number(n.valor)) : ''}</strong>${chip(chipTxt[0], chipTxt[1])}<div class="sf-bts">${acoes}</div></div></div>`;
   };
-  return head('Notas da SEFAZ', `${c.tipo_doc} ${sfDoc(c.doc)}${c.nome ? ' • ' + esc(c.nome) : ''}`, voltar + (adm ? btn('⚙ Certificado', 'sf-cert', '', 'secondary') : '') + botaoBuscar) +
-    (venceEm !== null && venceEm <= 30 ? `<div class="es-validade-aviso">⚠ O certificado A1 ${venceEm < 0 ? 'venceu' : `vence em ${venceEm} ${venceEm === 1 ? 'dia' : 'dias'}`} (${fmtDate(sfDia(c.validade))}). ${adm ? 'Envie o certificado renovado em “⚙ Certificado”.' : 'Avise o ADM da fazenda.'}</div>` : '') +
+  return head('Notas da SEFAZ', `${c.tipo_doc} ${sfDoc(c.doc)}${c.nome ? ' • ' + esc(c.nome) : ''}${a3 ? ' • A3' : ''}`, voltar + (adm ? btn('⚙ Certificado', 'sf-cert', '', 'secondary') : '') + botaoBuscar) +
+    (venceEm !== null && venceEm <= 30 ? `<div class="es-validade-aviso">⚠ O certificado ${a3 ? 'A3' : 'A1'} ${venceEm < 0 ? 'venceu' : `vence em ${venceEm} ${venceEm === 1 ? 'dia' : 'dias'}`} (${fmtDate(sfDia(c.validade))}). ${a3 ? 'Renove o token/cartão e escolha o certificado novo no MercaPlant Conecta.' : adm ? 'Envie o certificado renovado em “⚙ Certificado”.' : 'Avise o ADM da fazenda.'}</div>` : '') +
+    (a3 ? sfLinhaConecta(c) : '') +
     (sfEst.erro ? `<div class="es-validade-aviso">⚠ ${esc(sfEst.erro)}</div>` : '') +
     `<p class="sub sf-ult">${c.ult_consulta ? `Última consulta à SEFAZ: ${fmtDate(sfDia(c.ult_consulta))} às ${sfHora(c.ult_consulta)}${c.ult_cstat && !['137', '138'].includes(c.ult_cstat) ? ` — ${esc(c.ult_cstat)} ${esc(c.ult_motivo || '')}` : ''}.` : 'Ainda não houve consulta à SEFAZ.'} ${espera ? `A SEFAZ libera a próxima consulta às ${sfHora(c.prox_consulta)}.` : ''}</p>` +
     `<div class="filters cpr-filtros sf-filtros">${SF_FILTROS.map(([k, l]) => `<button class="${sfEst.filtro === k ? 'active' : ''}" aria-pressed="${sfEst.filtro === k}" data-act="sf-filtro" data-id="${k}">${l} (${porFiltro[k].length})</button>`).join('')}</div>` +
@@ -109,16 +119,94 @@ TITLES.notassefaz = 'Notas da SEFAZ';
 // Ao abrir a tela, busca sozinho se a SEFAZ já permite (no máximo a cada 5 minutos neste aparelho)
 function sfAutoBuscar() {
   const c = sfEst.cfg;
-  if (!c || sfEst.buscando || Date.now() - sfEst.autoEm < 300000) return;
+  if (!c || c.modo === 'a3' || sfEst.buscando || Date.now() - sfEst.autoEm < 300000) return;
   if (c.prox_consulta && new Date(c.prox_consulta) > new Date()) return;
   if (c.validade && new Date(c.validade) < new Date()) return;
   sfEst.autoEm = Date.now(); sfBuscar(true);
 }
 
-// ---------- Certificado (ADM) ----------
+// ---------- Certificado (ADM): A1 (arquivo) ou A3 (token USB ou cartão) ----------
 function sfFormCertificado() {
   if (!sfAdm()) return showToast('Só o ADM da fazenda cadastra o certificado', true);
-  const c = sfEst.cfg;
+  const c = sfEst.cfg, atual = c ? (c.modo === 'a3' ? 'a3' : 'a1') : '';
+  dialog.innerHTML = `<h3>Certificado digital da fazenda</h3>
+    <p class="sub">Funciona com e-CNPJ (empresa) e e-CPF (produtor rural). Escolha o tipo do seu certificado:</p>
+    <div class="sf-tipos">
+      <button type="button" class="sf-tipo${atual === 'a1' ? ' sel' : ''}" data-tipo="a1"><strong>A1 — arquivo</strong><small>Arquivo .pfx ou .p12 com senha. Fica guardado no servidor e as notas chegam 24 horas por dia, sem depender de computador ligado.</small></button>
+      <button type="button" class="sf-tipo${atual === 'a3' ? ' sel' : ''}" data-tipo="a3"><strong>A3 — token USB ou cartão</strong><small>Qualquer marca. Fica no computador da fazenda com o programa MercaPlant Conecta, que busca as notas enquanto o computador estiver ligado.</small></button>
+    </div>
+    <div class="actions"><button type="button" class="secondary" data-close>Fechar</button></div>`;
+  modal.classList.add('open');
+  $('[data-close]', dialog).onclick = closeModal;
+  dialog.querySelectorAll('.sf-tipo').forEach(b => b.onclick = () => b.dataset.tipo === 'a1' ? sfFormA1() : sfFormA3());
+}
+
+const sfMinAtras = iso => iso ? Math.round((Date.now() - new Date(iso)) / 60000) : null;
+function sfTxtConecta(c) {
+  const k = c?.conecta;
+  if (!k?.ligado) return 'O MercaPlant Conecta ainda não foi ligado a um computador.';
+  const min = sfMinAtras(k.visto_em);
+  return `MercaPlant Conecta no computador ${k.computador || '—'}: último contato ${min === null ? '—' : min < 2 ? 'agora' : min < 120 ? `há ${min} min` : `em ${fmtDate(sfDia(k.visto_em))} às ${sfHora(k.visto_em)}`}.`;
+}
+const sfConectaParado = c => c?.modo === 'a3' && c.conecta?.ligado && (!c.conecta.visto_em || Date.now() - new Date(c.conecta.visto_em) > SF_CONECTA_PARADO_MS);
+function sfLinhaConecta(c) {
+  const k = c.conecta || {};
+  if (!k.ligado) return `<div class="es-validade-aviso">⚠ O MercaPlant Conecta não está ligado a nenhum computador. ${sfAdm() ? 'Em “⚙ Certificado”, gere o código de ligação.' : 'Avise o ADM da fazenda.'}</div>`;
+  const erro = k.ult_erro && (!k.visto_em || new Date(k.ult_erro_em) >= new Date(k.visto_em) - 6e5) ? `<br>⚠ ${esc(k.ult_erro)}` : '';
+  return sfConectaParado(c) ? `<div class="es-validade-aviso">⚠ ${esc(sfTxtConecta(c))} Confira se o computador está ligado, com internet e com o token/cartão conectado.${erro}</div>`
+    : `<p class="sub sf-ult">🔌 ${esc(sfTxtConecta(c))} As notas são buscadas sozinhas${c.prox_consulta && new Date(c.prox_consulta) > new Date() ? `; próxima consulta à SEFAZ às ${sfHora(c.prox_consulta)}` : ''}.${erro}</p>`;
+}
+// Tela de espera do A3 antes do Conecta mandar o certificado
+function sfCartaoConecta(c, adm) {
+  const k = c.conecta || {};
+  return `<section class="card sf-intro"><h3>Falta ligar o computador do token</h3>
+    <ol><li>No computador onde o token/cartão fica, instale o programa do fabricante (se ainda não tiver) e conecte o aparelho.</li>
+      <li>Baixe e abra o <a href="${SF_CONECTA_URL}" target="_blank" rel="noopener">MercaPlant Conecta</a> (Windows 10 ou 11).</li>
+      <li>${adm ? 'Em “⚙ Certificado” → A3, toque em <strong>Gerar código</strong>' : 'Peça ao ADM o código de ligação'} e digite no Conecta. Depois escolha o certificado.</li></ol>
+    ${k.ligado ? `<p class="sub">${esc(sfTxtConecta(c))} Aguardando a escolha do certificado no Conecta.</p>` : ''}
+    ${k.ult_erro ? `<div class="es-validade-aviso">⚠ ${esc(k.ult_erro)}</div>` : ''}</section>`;
+}
+
+function sfFormA3() {
+  const c = sfEst.cfg, jaA3 = c?.modo === 'a3', k = c?.conecta || {};
+  dialog.innerHTML = `<h3>Certificado A3 — token USB ou cartão</h3>
+    <p class="sub">No A3 a chave do certificado não sai do token/cartão. Por isso a conversa com a SEFAZ é feita pelo <strong>MercaPlant Conecta</strong>, um programa no computador da fazenda onde o token fica conectado.</p>
+    ${jaA3 ? `<div class="sf-seguro">${c.doc ? `Certificado: ${esc(c.tipo_doc)} ${esc(sfDoc(c.doc))}${c.nome ? ' — ' + esc(c.nome) : ''}${c.validade ? `, válido até ${fmtDate(sfDia(c.validade))}` : ''}.<br>` : ''}${esc(sfTxtConecta(c))}
+      <div class="sf-bts sf-bts-a3">${k.ligado ? '<button type="button" class="small secondary" id="sfDesligar">Desligar computador</button>' : ''}<button type="button" class="small danger" id="sfRemover">Remover A3</button></div></div>` : ''}
+    <ol class="sf-passos"><li>Instale o programa do fabricante do token/cartão (SafeNet, GD, Watchdata, Gemalto…) e conecte o aparelho.</li>
+      <li>Baixe e abra o <a href="${SF_CONECTA_URL}" target="_blank" rel="noopener">MercaPlant Conecta para Windows</a>.</li>
+      <li>Toque em <strong>Gerar código</strong> abaixo e digite o código no Conecta (vale 15 minutos). Depois escolha o certificado.</li></ol>
+    <div class="form">
+      ${jaA3 ? '' : `<div class="field"><label for="sfUfA3">Estado da fazenda</label><select id="sfUfA3">${SF_UFS.map(([cod, uf]) => `<option value="${cod}"${cod === (c?.uf || '43') ? ' selected' : ''}>${uf}</option>`).join('')}</select></div>`}
+      <div class="field full sf-codigo" id="sfCodigo" aria-live="polite"></div>
+      <p class="sub full sf-msg" id="sfA3Msg" role="status" aria-live="polite"></p></div>
+    ${!jaA3 && c ? '<p class="sub">⚠ O certificado A1 guardado no servidor deixa de ser usado e é apagado.</p>' : ''}
+    <div class="actions"><button type="button" class="secondary" id="sfVoltarTipo">← Tipo de certificado</button><button type="button" class="primary" id="sfGerar">${k.ligado ? 'Ligar outro computador' : 'Gerar código'}</button></div>`;
+  modal.classList.add('open');
+  const msg = $('#sfA3Msg', dialog);
+  $('#sfVoltarTipo', dialog).onclick = sfFormCertificado;
+  $('#sfRemover', dialog)?.addEventListener('click', () => confirmDialog('Remover o certificado A3? O computador com o Conecta perde o acesso e o sistema para de buscar notas novas. As notas já baixadas continuam aqui.', async () => {
+    try { await sfChamar('remover'); sfEst.cfg = null; showToast('Certificado removido'); } catch (e) { showToast(e?.message || 'Não foi possível remover', true); }
+    render();
+  }, 'Remover'));
+  $('#sfDesligar', dialog)?.addEventListener('click', () => confirmDialog('Desligar o computador do MercaPlant Conecta? Ele deixa de buscar notas até ser ligado de novo com um código novo.', async () => {
+    try { const r = await sfChamar('conecta-desligar'); sfEst.cfg = r.config; showToast('Computador desligado'); } catch (e) { showToast(e?.message || 'Não foi possível desligar', true); }
+    render();
+  }, 'Desligar'));
+  $('#sfGerar', dialog).onclick = async () => {
+    const bt = $('#sfGerar', dialog); bt.disabled = true; msg.textContent = 'Gerando o código…';
+    try {
+      if (!jaA3) { const r = await sfChamar('modo-a3', {uf: $('#sfUfA3', dialog)?.value || '43'}); sfEst.cfg = r.config; }
+      const r = await sfChamar('conecta-codigo');
+      $('#sfCodigo', dialog).innerHTML = `<span>Código de ligação</span><strong>${esc(r.codigo)}</strong><small>Digite no MercaPlant Conecta até as ${sfHora(r.expira)}.</small>`;
+      msg.textContent = ''; bt.textContent = 'Gerar outro código'; bt.disabled = false;
+      render();
+    } catch (e) { msg.textContent = e?.message || 'Não foi possível gerar o código'; bt.disabled = false; }
+  };
+}
+
+function sfFormA1() {
+  const c = sfEst.cfg?.modo === 'a3' ? null : sfEst.cfg;
   dialog.innerHTML = `<h3>Certificado digital A1</h3>
     <p class="sub">${c ? `Cadastrado: ${esc(c.tipo_doc)} ${esc(sfDoc(c.doc))}${c.nome ? ' — ' + esc(c.nome) : ''}, válido até ${fmtDate(sfDia(c.validade))}. Envie outro arquivo para trocar (renovação).` : 'Use o arquivo do certificado A1 (.pfx ou .p12) da empresa ou do produtor, o mesmo que o contador ou o emissor de notas usa.'}</p>
     <div class="sf-seguro">🔒 O arquivo e a senha vão direto para o servidor, guardados criptografados. Ninguém da equipe vê, e o certificado só é usado para baixar as notas e confirmar o recebimento (ciência) na SEFAZ.</div>
@@ -127,10 +215,10 @@ function sfFormCertificado() {
       <div class="field"><label for="sfSenha">Senha do certificado</label><input type="password" id="sfSenha" autocomplete="off" required></div>
       <div class="field"><label for="sfUf">Estado da fazenda</label><select id="sfUf">${SF_UFS.map(([cod, uf]) => `<option value="${cod}"${cod === (c?.uf || '43') ? ' selected' : ''}>${uf}</option>`).join('')}</select></div>
       <p class="sub full sf-msg" id="sfCertMsg" role="status" aria-live="polite"></p></div>
-      <div class="actions">${c ? '<button type="button" class="danger" id="sfRemover">Remover certificado</button>' : ''}<button type="button" class="secondary" data-close>Cancelar</button><button type="submit" class="primary">Enviar</button></div>
+      <div class="actions">${c ? '<button type="button" class="danger" id="sfRemover">Remover certificado</button>' : ''}<button type="button" class="secondary" id="sfVoltarTipo">← Tipo de certificado</button><button type="submit" class="primary">Enviar</button></div>
     </form>`;
   modal.classList.add('open');
-  $('[data-close]', dialog).onclick = closeModal;
+  $('#sfVoltarTipo', dialog).onclick = sfFormCertificado;
   $('#sfRemover', dialog)?.addEventListener('click', () => confirmDialog('Remover o certificado? As notas já baixadas continuam aqui, mas o sistema para de buscar novas.', async () => {
     try { await sfChamar('remover'); sfEst.cfg = null; showToast('Certificado removido'); } catch (e) { showToast(e?.message || 'Não foi possível remover', true); }
     render();
@@ -184,7 +272,8 @@ alerts = function () {
     const n = sfProntas().length;
     if (n) l.push({color: 'blue', icon: '🧾', title: `${n} ${n === 1 ? 'nota da SEFAZ' : 'notas da SEFAZ'} para dar entrada`, text: 'Notas de compra emitidas para a fazenda, prontas para conferir e lançar no estoque.', route: 'notassefaz'});
     const c = sfEst.cfg, dias = c?.validade ? Math.round((new Date(c.validade) - new Date()) / 864e5) : null;
-    if (dias !== null && dias <= 30) l.push({color: dias < 0 ? 'red' : 'orange', icon: '🔒', title: `Certificado A1 ${dias < 0 ? 'vencido' : `vence em ${dias} ${dias === 1 ? 'dia' : 'dias'}`}`, text: 'Sem certificado válido o sistema não busca as notas na SEFAZ.', route: 'notassefaz'});
+    if (dias !== null && dias <= 30) l.push({color: dias < 0 ? 'red' : 'orange', icon: '🔒', title: `Certificado ${c.modo === 'a3' ? 'A3' : 'A1'} ${dias < 0 ? 'vencido' : `vence em ${dias} ${dias === 1 ? 'dia' : 'dias'}`}`, text: 'Sem certificado válido o sistema não busca as notas na SEFAZ.', route: 'notassefaz'});
+    if (sfConectaParado(c)) l.push({color: 'orange', icon: '🔌', title: 'MercaPlant Conecta parado', text: 'O computador do token/cartão não fala com o MercaPlant há mais de 2 horas: as notas não estão chegando.', route: 'notassefaz'});
   }
   return l;
 };

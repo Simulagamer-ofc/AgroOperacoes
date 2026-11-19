@@ -1617,6 +1617,18 @@ a.btn.primary{background:var(--blue);color:#fff}a.btn.secondary{background:var(-
 .sf-seguro{background:var(--chip,rgba(24,166,106,.08));border-left:4px solid var(--marca);padding:10px 12px;border-radius:8px;margin:8px 0 12px;font-size:.92rem}
 @media(max-width:640px){.sf-item{grid-template-columns:1fr}.sf-dir{flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between}.sf-bts{justify-content:flex-start}}
 .sf-msg{color:#c53030;margin:0}:root[data-theme="dark"] .sf-msg{color:#f07575}
+/* Certificado A1 ou A3 (0.99) */
+.sf-tipos{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 4px}
+.sf-tipo{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);cursor:pointer;white-space:normal;height:auto}
+.sf-tipo strong{font-size:1rem}.sf-tipo small{color:var(--muted);line-height:1.35}
+.sf-tipo:hover,.sf-tipo.sel{border-color:var(--marca);box-shadow:0 0 0 2px rgba(24,166,106,.18)}
+.sf-passos{margin:6px 0 10px;padding-left:22px}.sf-passos li{margin:5px 0}
+.sf-codigo:empty{display:none}
+.sf-bts-a3{justify-content:flex-start;margin-top:8px}
+.sf-codigo{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px;border-radius:12px;background:var(--navy);color:#fff}
+.sf-codigo span,.sf-codigo small{color:#a0c4d0;font-size:.85rem}
+.sf-codigo strong{font-size:2rem;letter-spacing:.12em;font-family:ui-monospace,Consolas,monospace;color:#58d98c}
+@media(max-width:640px){.sf-tipos{grid-template-columns:1fr}}
 
 /* =================== Etapa 2 do padrão das prévias: Início e Operações (previas.js) =================== */
 .pv-hex{flex:none}
