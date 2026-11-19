@@ -89,7 +89,8 @@ object Atualizador {
         val novo = infoArquivo(pm, apk.absolutePath) ?: return "O arquivo baixado não é um APK válido. Tente de novo."
         if (novo.packageName != ctx.packageName) return "O arquivo baixado não é do MercaPlant."
         val instalado = runCatching { infoInstalado(pm, ctx.packageName) }.getOrNull() ?: return null
-        val a = digitos(instalado), b = digitos(novo)
+        val a = digitos(instalado)
+        val b = digitos(novo)
         if (a.isEmpty() || b.isEmpty() || a == b) return null
         return "Esta versão usa a nova chave fixa do MercaPlant. Só desta vez é preciso desinstalar o app e instalar o novo " +
             "(sincronize com a nuvem antes). Depois disso, as próximas atualizações instalam por cima."
