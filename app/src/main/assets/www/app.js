@@ -1412,10 +1412,27 @@ function avisoApk(instalada) {
   let nova = null; try { nova = JSON.parse(safeStorage.get('agro-apk-nova') || 'null'); } catch { nova = null; }
   if (!nova || !versaoMaior(nova.versao, instalada) || safeStorage.get('agro-apk-dispensado') === nova.versao || document.getElementById('novaVersaoApk')) return;
   const bar = Object.assign(document.createElement('div'), {id: 'novaVersaoApk', className: 'nova-versao', role: 'status'});
-  bar.innerHTML = `<span>Nova versão do app: <b>${esc(nova.versao)}</b> (você tem ${esc(instalada)}).</span><a class="nova-versao-baixar" href="${esc(nova.url)}">Baixar</a><button type="button" class="nova-versao-fechar" aria-label="Depois">✕</button>`;
+  // App com atualizador: baixa e abre o instalador do Android (instala por cima); app antigo: link para baixar
+  const porDentro = !!window.AndroidBridge?.atualizarApp && /\.apk$/i.test(nova.url || '');
+  bar.innerHTML = `<span class="nova-versao-txt">Nova versão do app: <b>${esc(nova.versao)}</b> (você tem ${esc(instalada)}).</span>${porDentro ? '<button type="button" class="nova-versao-baixar nova-versao-atualizar">Atualizar</button>' : `<a class="nova-versao-baixar" href="${esc(nova.url)}">Baixar</a>`}<button type="button" class="nova-versao-fechar" aria-label="Depois">✕</button>`;
   bar.querySelector('.nova-versao-fechar').onclick = () => { safeStorage.set('agro-apk-dispensado', nova.versao); bar.remove(); };
+  const at = bar.querySelector('.nova-versao-atualizar');
+  if (at) at.onclick = () => { at.disabled = true; at.textContent = 'Baixando…'; window.AndroidBridge.atualizarApp(nova.url); };
+  bar.dataset.url = nova.url || '';
   document.body.append(bar);
 }
+// Andamento da atualização por dentro (chamado pelo Android)
+window.onAtualizacao = ({etapa, pct, msg} = {}) => {
+  const bar = document.getElementById('novaVersaoApk'), bt = bar?.querySelector('.nova-versao-atualizar'), txt = bar?.querySelector('.nova-versao-txt');
+  if (etapa === 'baixando') { if (bt) bt.textContent = pct >= 0 ? `Baixando ${pct}%` : 'Baixando…'; return; }
+  if (etapa === 'instalando') { if (bt) bt.textContent = 'Instalando…'; if (txt) txt.innerHTML = 'Confirme <b>Atualizar</b> na tela do Android. Seus dados continuam no app.'; return; }
+  if (etapa === 'permissao') { if (bt) bt.textContent = 'Aguardando…'; if (txt) txt.textContent = msg; return; }
+  // Troca de chave (só uma vez): precisa desinstalar; o botão vira o link para baixar o APK
+  if (etapa === 'chave' && bt) { const a = Object.assign(document.createElement('a'), {className: 'nova-versao-baixar', href: bar.dataset.url, textContent: 'Baixar'}); bt.replaceWith(a); }
+  // erro ou permissão negada: mostra o motivo e libera o botão
+  else if (bt) { bt.disabled = false; bt.textContent = 'Atualizar'; }
+  if (txt) txt.textContent = msg; else if (msg) showToast(msg, true);
+};
 if (window.AndroidBridge?.appVersion) addEventListener('load', () => {
   const instalada = window.AndroidBridge.appVersion(); if (!instalada) return;
   avisoApk(instalada);

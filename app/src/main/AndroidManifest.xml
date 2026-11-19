@@ -5,6 +5,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- Alertas da fazenda (Android 13+ pede autorização ao ligar os alertas) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Atualizar o app por dentro (o Android ainda pede a confirmação de instalar) -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

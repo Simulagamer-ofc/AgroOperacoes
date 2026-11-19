@@ -172,6 +172,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /** Atualização dentro do app: baixa o APK da versão nova e abre o instalador do Android (instala por cima). */
+        @JavascriptInterface
+        fun atualizarApp(url: String) { Atualizador.baixar(this@MainActivity, url, this@MainActivity::avisarAtualizacao) }
+
         /** Versão instalada do APK (para avisar quando houver uma mais nova). */
         @JavascriptInterface
         fun appVersion(): String = runCatching { packageManager.getPackageInfo(packageName, 0).versionName ?: "" }.getOrDefault("")
@@ -279,6 +283,18 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    /** Andamento da atualização para a página (faixa "Nova versão"). */
+    private fun avisarAtualizacao(etapa: String, pct: Int, msg: String) {
+        val js = "window.onAtualizacao && onAtualizacao(${org.json.JSONObject().put("etapa", etapa).put("pct", pct).put("msg", msg)})"
+        runOnUiThread { webView.evaluateJavascript(js, null) }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Voltou da tela "instalar apps desconhecidos": segue com a instalação
+        if (Atualizador.pendente != null) Atualizador.continuar(this, ::avisarAtualizacao)
     }
 
     override fun onNewIntent(intent: Intent) {
