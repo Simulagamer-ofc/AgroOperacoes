@@ -33,7 +33,9 @@ jobs:
           KEYSTORE_B64: ${{ secrets.MERCAPLANT_KEYSTORE_B64 }}
         run: |
           if [ -n "$KEYSTORE_B64" ]; then
-            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/mercaplant.jks"
+            # Copiado do celular pode vir com espaços, quebras de linha ou o nome do segredo junto: limpa antes
+            printf '%s' "$KEYSTORE_B64" | sed 's/MERCAPLANT_KEYSTORE_B64://' | tr -d '[:space:]' | base64 -d > "$RUNNER_TEMP/mercaplant.jks" \
+              || { echo "::error::O segredo MERCAPLANT_KEYSTORE_B64 está incompleto ou com caracteres a mais. Cole de novo o texto inteiro do arquivo chave-b64.txt."; exit 1; }
             echo "MERCAPLANT_KEYSTORE=$RUNNER_TEMP/mercaplant.jks" >> "$GITHUB_ENV"
             echo "Assinatura fixa: ativada"
           else
