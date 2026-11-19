@@ -5,18 +5,22 @@
 //   status              situação da configuração (sem o certificado)
 //   buscar              baixa as notas novas da SEFAZ (Distribuição de DF-e) respeitando as regras de uso
 //                       e faz a Ciência da Operação nas notas que chegaram só em resumo (libera o XML completo)
+//   modo-a3      (ADM)  usa certificado A3 (token ou cartão): quem fala com a SEFAZ é o MercaPlant Conecta,
+//                       no computador da fazenda (função sefaz-conecta); o servidor só prepara e processa
+//   conecta-codigo (ADM) gera o código de ligação do Conecta (vale 15 minutos)
+//   conecta-desligar (ADM) desliga o Conecta (o computador deixa de ter acesso)
 // A conexão com a SEFAZ passa pela ponte no Google Cloud Run (servicos/sefaz-ponte), porque a SEFAZ pede o
 // certificado por renegociação TLS e este servidor (Deno) não renegocia. Segredos: SEFAZ_PONTE_URL e SEFAZ_PONTE_CHAVE.
 // Publicar com verify_jwt = true.
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { lerCertificado, soapDist, lerRetDist, descompactar, lerDocumento, envEventoCiencia, soapEvento, lerRetEvento, cienciaOk, faultSoap, type Certificado } from './nucleo.ts';
+import { lerCertificado, soapDist, envEventoCiencia, soapEvento, faultSoap, type Certificado } from './nucleo.ts';
+import { processarDist, pendentesCiencia, processarEvento, contagemVazia, podeConsultar, sha256, type Config } from './processar.ts';
 
 const cors = {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'authorization, apikey, content-type, x-client-info', 'Access-Control-Allow-Methods': 'POST, OPTIONS'};
 const resposta = (status: number, corpo: unknown) => new Response(JSON.stringify(corpo), {status, headers: {...cors, 'Content-Type': 'application/json'}});
 const erro = (status: number, message: string) => resposta(status, {message});
 const CHAVE_APP = 'sb_publishable_BxbOeMIvyAlyTkCMy3sUWg__PpRKnYK'; // chave pública do app (mesma do nuvem.js)
 const UFS = ['11', '12', '13', '14', '15', '16', '17', '21', '22', '23', '24', '25', '26', '27', '28', '29', '31', '32', '33', '35', '41', '42', '43', '50', '51', '52', '53'];
-const ESPERA_MS = 61 * 60 * 1000; // a SEFAZ pede 1 hora entre consultas sem novidade (61 min de folga)
 const LIMITE_TEMPO_MS = 100_000;   // para antes do limite da função
 const MAX_CONSULTAS = 15;          // lotes de até 50 documentos por chamada
 
@@ -58,7 +62,12 @@ Deno.serve(async req => {
     const [{data: papel}, {data: ve}, {data: quem}] = await Promise.all([eu.rpc('farm_role', {p_farm: fazenda}), eu.rpc('ve_notas_sefaz', {p_farm: fazenda}), eu.auth.getUser()]);
     if (!ve) return erro(403, 'Sem acesso às notas desta fazenda.');
     const email = quem?.user?.email || '';
-    const status = async () => (await adm.from('sefaz_config').select('doc, tipo_doc, nome, validade, uf, ambiente, prox_consulta, ult_consulta, ult_cstat, ult_motivo, atualizado_em').eq('farm_id', fazenda).maybeSingle()).data;
+    const status = async () => {
+      const cfg = (await adm.from('sefaz_config').select('modo, doc, tipo_doc, nome, validade, uf, ambiente, prox_consulta, ult_consulta, ult_cstat, ult_motivo, atualizado_em').eq('farm_id', fazenda).maybeSingle()).data;
+      if (cfg?.modo !== 'a3') return cfg;
+      const c = (await adm.from('sefaz_conecta').select('token_hash, visto_em, computador, versao, ult_erro, ult_erro_em, ligado_em').eq('farm_id', fazenda).maybeSingle()).data;
+      return {...cfg, conecta: {ligado: !!c?.token_hash, visto_em: c?.visto_em || null, computador: c?.computador || null, versao: c?.versao || null, ult_erro: c?.ult_erro || null, ult_erro_em: c?.ult_erro_em || null, ligado_em: c?.ligado_em || null}};
+    };
 
     // ---------- Certificado (só o ADM) ----------
     if (b.acao === 'certificado') {
@@ -74,13 +83,44 @@ Deno.serve(async req => {
       if (eV) return erro(500, 'Não foi possível guardar o certificado.');
       const novoDoc = !ant || ant.doc !== c.doc;
       const {error: eC} = await adm.from('sefaz_config').upsert({farm_id: fazenda, doc: c.doc, tipo_doc: c.tipoDoc, nome: c.nome, validade: c.validade, uf, ambiente: Number(b.ambiente) === 2 ? 2 : 1,
-        ...(novoDoc ? {ult_nsu: '0', max_nsu: null, prox_consulta: null, ult_cstat: null, ult_motivo: null} : {}), atualizado_por: email, atualizado_em: new Date().toISOString()});
+        modo: 'a1', ...(novoDoc ? {ult_nsu: '0', max_nsu: null, prox_consulta: null, ult_cstat: null, ult_motivo: null} : {}), atualizado_por: email, atualizado_em: new Date().toISOString()});
       if (eC) return erro(500, 'Não foi possível salvar a configuração.');
+      await adm.from('sefaz_conecta').delete().eq('farm_id', fazenda); // trocou para A1: o Conecta perde o acesso
+      return resposta(200, {config: await status()});
+    }
+    // ---------- A3 (token ou cartão): o MercaPlant Conecta faz a parte do certificado ----------
+    if (b.acao === 'modo-a3') {
+      if (papel !== 'admin') return erro(403, 'Só o ADM da fazenda configura o certificado.');
+      const uf = String(b.uf || '43');
+      if (!UFS.includes(uf)) return erro(400, 'Estado inválido.');
+      const ant = await status();
+      await adm.rpc('sefaz_cert_apagar', {p_farm: fazenda}); // o A1 guardado (se havia) deixa de ser usado
+      const {error} = await adm.from('sefaz_config').upsert({farm_id: fazenda, modo: 'a3', uf, ambiente: Number(b.ambiente) === 2 ? 2 : 1,
+        ...(ant?.modo === 'a3' ? {} : {doc: null, tipo_doc: null, nome: null, validade: null}), atualizado_por: email, atualizado_em: new Date().toISOString()});
+      if (error) return erro(500, 'Não foi possível salvar a configuração.');
+      return resposta(200, {config: await status()});
+    }
+    if (b.acao === 'conecta-codigo') {
+      if (papel !== 'admin') return erro(403, 'Só o ADM da fazenda liga o MercaPlant Conecta.');
+      const cfg = await status();
+      if (cfg?.modo !== 'a3') return erro(400, 'Escolha primeiro o certificado A3 (token ou cartão).');
+      // 8 letras e números sem os que confundem (0/O, 1/I/L)
+      const letras = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789', aleat = crypto.getRandomValues(new Uint8Array(8));
+      const codigo = [...aleat].map(n => letras[n % letras.length]).join('');
+      const expira = new Date(Date.now() + 15 * 60_000).toISOString();
+      const {error} = await adm.from('sefaz_conecta').upsert({farm_id: fazenda, codigo_hash: await sha256(codigo), codigo_expira: expira, atualizado_em: new Date().toISOString()});
+      if (error) return erro(500, 'Não foi possível gerar o código.');
+      return resposta(200, {codigo: `${codigo.slice(0, 4)}-${codigo.slice(4)}`, expira});
+    }
+    if (b.acao === 'conecta-desligar') {
+      if (papel !== 'admin') return erro(403, 'Só o ADM da fazenda desliga o MercaPlant Conecta.');
+      await adm.from('sefaz_conecta').update({token_hash: null, codigo_hash: null, codigo_expira: null, atualizado_em: new Date().toISOString()}).eq('farm_id', fazenda);
       return resposta(200, {config: await status()});
     }
     if (b.acao === 'remover') {
       if (papel !== 'admin') return erro(403, 'Só o ADM da fazenda remove o certificado.');
       await adm.rpc('sefaz_cert_apagar', {p_farm: fazenda});
+      await adm.from('sefaz_conecta').delete().eq('farm_id', fazenda);
       await adm.from('sefaz_config').delete().eq('farm_id', fazenda);
       return resposta(200, {ok: true});
     }
@@ -89,70 +129,34 @@ Deno.serve(async req => {
     // ---------- Buscar notas ----------
     if (b.acao !== 'buscar') return erro(400, 'Ação inválida.');
     const {data: cfg} = await adm.from('sefaz_config').select('*').eq('farm_id', fazenda).maybeSingle();
-    if (!cfg) return erro(400, 'O ADM ainda não cadastrou o certificado A1 da fazenda.');
+    if (!cfg) return erro(400, 'O ADM ainda não cadastrou o certificado digital da fazenda.');
+    // A3: a busca é feita pelo MercaPlant Conecta no computador da fazenda (sozinho, a cada poucos minutos)
+    if (cfg.modo === 'a3') return resposta(200, {...contagemVazia(), a3: true, aguardar: cfg.prox_consulta, config: await status()});
     if (cfg.validade && new Date(cfg.validade) < new Date()) return erro(400, 'O certificado A1 venceu. O ADM precisa enviar o certificado renovado.');
     const {data: bruto} = await adm.rpc('sefaz_cert_ler', {p_farm: fazenda});
     if (!bruto) return erro(400, 'Certificado não encontrado. O ADM precisa enviar o certificado de novo.');
     const certArq = JSON.parse(bruto) as {pfx: string; senha: string};
     const cert = lerCertificado(certArq.pfx, certArq.senha);
     const amb = Number(cfg.ambiente) || 1, inicio = Date.now();
-    const res = {novas: 0, completas: 0, canceladas: 0, ciencias: 0, cienciaFalhas: [] as string[], consultas: 0, aguardar: null as string | null, motivo: ''};
+    const res = contagemVazia();
 
     // 1) Distribuição: lote a lote até alcançar o maxNSU (ou a SEFAZ dizer que não há nada)
-    if (cfg.prox_consulta && new Date(cfg.prox_consulta).getTime() > Date.now()) {
+    if (!podeConsultar(cfg)) {
       res.aguardar = cfg.prox_consulta; res.motivo = 'A SEFAZ só permite consultar de novo depois de 1 hora sem novidades.';
     } else {
-      let ult = cfg.ult_nsu || '0';
       for (let i = 0; i < MAX_CONSULTAS && Date.now() - inicio < LIMITE_TEMPO_MS; i++) {
-        const xml = await ponte('dist', amb, soapDist({tpAmb: amb, cUF: cfg.uf, doc: cfg.doc, tipoDoc: cfg.tipo_doc, ultNSU: ult}), certArq);
-        const r = lerRetDist(xml); res.consultas++;
-        const agora = new Date().toISOString();
-        if (r.cStat === '138') {
-          for (const d of r.docs) {
-            const o = lerDocumento(d.schema, await descompactar(d.b64));
-            if (!/^\d{44}$/.test(o.chave)) continue;
-            if (o.tipo === 'resumo' || o.tipo === 'completa') {
-              if (o.tpNF && o.tpNF !== '1') continue; // só notas de saída do fornecedor (entrada na fazenda)
-              const {data: ja} = await adm.from('nfe_recebidas').select('situacao').eq('farm_id', fazenda).eq('chave', o.chave).maybeSingle();
-              const situacao = ja?.situacao === 'cancelada' || o.cSit === '3' ? 'cancelada' : o.tipo === 'completa' ? 'completa' : (ja?.situacao || 'resumo');
-              await adm.from('nfe_recebidas').upsert({farm_id: fazenda, chave: o.chave, nsu: d.nsu, situacao, numero: o.numero, emitente: o.nomeEmit, cnpj_emit: o.cnpjEmit, valor: o.valor,
-                emissao: o.emissao, tp_nf: o.tpNF, ...(o.tipo === 'completa' ? {xml: o.xml} : {}), atualizado_em: agora}, {onConflict: 'farm_id,chave'});
-              if (!ja) res.novas++;
-              if (o.tipo === 'completa' && ja?.situacao !== 'completa') res.completas++;
-            } else if (o.tipo === 'evento' && o.tpEvento === '110111') { // cancelamento pelo emitente
-              const {data: up} = await adm.from('nfe_recebidas').update({situacao: 'cancelada', atualizado_em: agora}).eq('farm_id', fazenda).eq('chave', o.chave).select('chave');
-              if (up?.length) res.canceladas++;
-            }
-          }
-          ult = r.ultNSU || ult;
-          const fim = !r.maxNSU || BigInt(ult || '0') >= BigInt(r.maxNSU);
-          await adm.from('sefaz_config').update({ult_nsu: ult, max_nsu: r.maxNSU, ult_consulta: agora, ult_cstat: r.cStat, ult_motivo: r.xMotivo, prox_consulta: fim ? new Date(Date.now() + ESPERA_MS).toISOString() : null}).eq('farm_id', fazenda);
-          if (fim) { res.aguardar = new Date(Date.now() + ESPERA_MS).toISOString(); break; }
-          continue;
-        }
-        // 137 = nada novo; 656 = consumo indevido (bloqueio de 1 hora); demais = erro: em todos, espera 1 hora
-        const prox = new Date(Date.now() + ESPERA_MS).toISOString();
-        await adm.from('sefaz_config').update({ult_nsu: r.ultNSU || ult, max_nsu: r.maxNSU || cfg.max_nsu, ult_consulta: agora, ult_cstat: r.cStat, ult_motivo: r.xMotivo, prox_consulta: prox}).eq('farm_id', fazenda);
-        res.aguardar = prox;
-        if (r.cStat !== '137') res.motivo = `SEFAZ: ${r.cStat} — ${r.xMotivo || 'sem detalhes'}`;
-        break;
+        const xml = await ponte('dist', amb, soapDist({tpAmb: amb, cUF: cfg.uf, doc: cfg.doc, tipoDoc: cfg.tipo_doc, ultNSU: cfg.ult_nsu || '0'}), certArq);
+        const {continuar} = await processarDist(adm, fazenda, cfg as Config, xml, res);
+        if (!continuar) break;
       }
     }
 
     // 2) Ciência da Operação nas notas que só vieram em resumo (até 20 por lote; libera o XML completo na próxima busca)
     if (Date.now() - inicio < LIMITE_TEMPO_MS) {
-      const {data: pend} = await adm.from('nfe_recebidas').select('chave').eq('farm_id', fazenda).eq('situacao', 'resumo').is('ciencia_em', null).eq('ignorada', false).order('emissao', {ascending: false}).limit(20);
-      if (pend?.length) {
-        try {
-          const ret = lerRetEvento(await ponte('evento', amb, soapEvento(envEventoCiencia(pend.map(p => p.chave), cert, amb)), certArq));
-          const agora = new Date().toISOString();
-          for (const ev of ret.eventos) {
-            if (!/^\d{44}$/.test(ev.chave)) continue;
-            await adm.from('nfe_recebidas').update({ciencia_em: cienciaOk(ev.cStat) ? agora : null, ciencia_cstat: ev.cStat, ciencia_motivo: ev.xMotivo, atualizado_em: agora}).eq('farm_id', fazenda).eq('chave', ev.chave);
-            if (cienciaOk(ev.cStat)) res.ciencias++; else res.cienciaFalhas.push(`${ev.chave.slice(25, 34).replace(/^0+/, '')}: ${ev.cStat} ${ev.xMotivo}`);
-          }
-          if (!ret.eventos.length && ret.cStat !== '128') res.cienciaFalhas.push(`Lote: ${ret.cStat} ${ret.xMotivo}`);
-        } catch (e) { res.cienciaFalhas.push((e as Error).message); }
+      const pend = await pendentesCiencia(adm, fazenda);
+      if (pend.length) {
+        try { await processarEvento(adm, fazenda, await ponte('evento', amb, soapEvento(envEventoCiencia(pend, cert, amb)), certArq), res); }
+        catch (e) { res.cienciaFalhas.push((e as Error).message); }
       }
     }
     return resposta(200, {...res, config: await status()});
