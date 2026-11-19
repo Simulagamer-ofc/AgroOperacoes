@@ -317,7 +317,7 @@ function openForm(cfg) {
       const opt = o => `<option value="${esc(o.value)}" ${String(o.value) === String(v) ? 'selected' : ''}>${esc(o.label)}</option>`;
       // Opções com grupo: mostradas em grupos (optgroup), na ordem em que vieram
       const html = opts.some(o => o.grupo) ? opts.reduce((acc, o) => { const g = o.grupo || ''; if (!acc.length || acc.at(-1)[0] !== g) acc.push([g, []]); acc.at(-1)[1].push(o); return acc; }, []).map(([g, l]) => g ? `<optgroup label="${esc(g)}">${l.map(opt).join('')}</optgroup>` : l.map(opt).join('')).join('') : opts.map(opt).join('');
-      return `<select ${common}>${f.required ? '' : '<option value="">—</option>'}${html}</select>`;
+      return `<select ${common}>${f.required ? '' : `<option value="">${esc(f.vazio || '—')}</option>`}${html}</select>`; // vazio: rótulo da opção em branco (ex.: Sede da fazenda)
     }
     if (f.type === 'textarea') return `<textarea ${common} rows="3" placeholder="${esc(f.placeholder || '')}">${esc(v)}</textarea>`;
     // Números como texto (o campo numérico do navegador lê "1.250" como 1,25 e "1250,50" como 125050): lidos por numeroBR

@@ -2,7 +2,8 @@
 /* Campo: chuvas (pluviômetro), monitoramento de pragas (MIP), aplicações com carência e mão de obra.
    Nenhum nível de controle, carência ou dose é sugerido pelo app: vêm da recomendação técnica e da bula informadas pelo usuário. */
 
-const talhaoOuGeral = id => id ? (fieldName(id) || 'Talhão removido') : 'Sede / geral';
+const LOCAL_SEDE = 'Sede da fazenda'; // pluviômetro sem talhão
+const talhaoOuGeral = id => id ? (fieldName(id) || 'Talhão removido') : LOCAL_SEDE;
 const diasEntre = (a, b) => Math.round((new Date(b + 'T12:00:00') - new Date(a + 'T12:00:00')) / 864e5);
 
 // ---------------- Chuvas ----------------
@@ -27,10 +28,10 @@ function chuvaEstimada(data, hora, fieldId) {
 const fmtDiaHoraChuva = iso => `${fmtDate(iso.slice(0, 10)).slice(0, 5)} ${iso.slice(11, 13)}h`;
 function chuvaForm(valores = {}) {
   const manual = valores.mm != null && valores.mm !== '';
-  openForm({form: 'chuva', title: 'Registrar chuva', sub: 'Leitura do pluviômetro (mm). Sem talhão = pluviômetro da sede.', values: {date: today(), hora: valores.notes ? '' : nowTime(), ...valores},
+  openForm({form: 'chuva', title: 'Registrar chuva', sub: 'Leitura do pluviômetro (mm): na sede da fazenda ou num talhão.', values: {date: today(), hora: valores.notes ? '' : nowTime(), ...valores},
     fields: [{k: 'date', label: 'Data da leitura', type: 'date', required: true}, {k: 'hora', label: 'Hora da leitura', type: 'time', hint: 'Já vem com a hora de agora; ajuste se leu o pluviômetro antes.'},
       {k: 'mm', label: 'Chuva (mm)', type: 'number', min: 0, required: true, hint: ' '},
-      {k: 'fieldId', label: 'Talhão / pluviômetro', type: 'select', options: fieldOptions}, {k: 'notes', label: 'Observações', type: 'textarea'}],
+      {k: 'fieldId', label: 'Local do pluviômetro', type: 'select', options: fieldOptions, vazio: LOCAL_SEDE}, {k: 'notes', label: 'Observações', type: 'textarea'}],
     onSubmit: v => { if (!(v.mm >= 0)) return 'Informe os milímetros';
       if (v.mm > 400) return 'Mais de 400 mm numa leitura: confira o valor';
       if (v.date > today() || (v.date === today() && v.hora && v.hora > nowTime())) return 'A leitura não pode ser no futuro: confira a data e a hora';

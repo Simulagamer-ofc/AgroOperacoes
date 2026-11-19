@@ -134,8 +134,8 @@ function chuvaVarios() {
   const usados = new Set(db.chuvas.map(c => c.fieldId || ''));
   const ordem = l => l.sort((a, b) => String(a[1]).localeCompare(String(b[1]), 'pt-BR', {numeric: true}));
   const talhoes = db.fields.map(f => [f.id, f.name]);
-  const principais = usados.size ? [...(usados.has('') ? [['', 'Sede (sem talhão)']] : []), ...ordem(talhoes.filter(([id]) => usados.has(id)))] : [['', 'Sede (sem talhão)'], ...ordem(talhoes)];
-  const outros = usados.size ? [...(usados.has('') ? [] : [['', 'Sede (sem talhão)']]), ...ordem(talhoes.filter(([id]) => !usados.has(id)))] : [];
+  const principais = usados.size ? [...(usados.has('') ? [['', (typeof LOCAL_SEDE !== 'undefined' ? LOCAL_SEDE : 'Sede da fazenda')]] : []), ...ordem(talhoes.filter(([id]) => usados.has(id)))] : [['', (typeof LOCAL_SEDE !== 'undefined' ? LOCAL_SEDE : 'Sede da fazenda')], ...ordem(talhoes)];
+  const outros = usados.size ? [...(usados.has('') ? [] : [['', (typeof LOCAL_SEDE !== 'undefined' ? LOCAL_SEDE : 'Sede da fazenda')]]), ...ordem(talhoes.filter(([id]) => !usados.has(id)))] : [];
   const chave = id => 'mm_' + (id || 'sede');
   openForm({form: 'chuva-varios', title: 'Chuva de vários pluviômetros', sub: 'Mesma data e hora para todos. Preencha só os que tiveram leitura; em branco não é lançado.', submit: 'Registrar as leituras', maisRotulo: `Outros locais (${outros.length})`,
     values: {date: today(), hora: nowTime()},
@@ -149,7 +149,7 @@ function chuvaVarios() {
       const dups = lanc.filter(x => db.chuvas.some(c => c.date === v.date && (c.fieldId || '') === x.id && (c.hora || '') === (v.hora || '')));
       if (dups.length) { const e = pedirConfirmacao(`chv|${v.date}|${v.hora}|${dups.map(d => d.id).join(',')}`, `Já existe chuva em ${fmtDate(v.date)}${v.hora ? ' às ' + v.hora : ''} para ${dups.map(d => d.n).join(', ')}`); if (e) return e; }
       lanc.forEach(x => db.chuvas.push({id: uid(), date: v.date, hora: v.hora, mm: x.mm, fieldId: x.id, notes: '', fonte: 'pluviômetro'}));
-      save(); showToast(`${lanc.length} ${lanc.length === 1 ? 'leitura registrada' : 'leituras registradas'}: ${lanc.map(x => `${x.n.replace(' (sem talhão)', '')} ${um1(x.mm)} mm`).join(', ')}`);
+      save(); showToast(`${lanc.length} ${lanc.length === 1 ? 'leitura registrada' : 'leituras registradas'}: ${lanc.map(x => `${x.n} ${um1(x.mm)} mm`).join(', ')}`);
     }});
 }
 
