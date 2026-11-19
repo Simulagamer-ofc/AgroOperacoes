@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartão escuro das notificações (mesma cor da barra lateral do MercaPlant) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/agro_navy" />
+    <corners android:radius="14dp" />
+</shape>

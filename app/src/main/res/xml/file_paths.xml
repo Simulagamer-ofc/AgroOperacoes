@@ -4,4 +4,6 @@
     <cache-path name="fotos" path="fotos/" />
     <!-- Relatórios em PDF enviados pelo "Compartilhar" (WhatsApp, e-mail) -->
     <cache-path name="compartilhar" path="compartilhar/" />
+    <!-- APK da atualização, entregue ao instalador do Android -->
+    <cache-path name="atualizacao" path="atualizacao/" />
 </paths>

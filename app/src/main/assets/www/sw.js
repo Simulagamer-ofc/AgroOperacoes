@@ -1,5 +1,5 @@
 // Versão nova: baixa todos os arquivos direto do servidor (cache "reload"), sem reaproveitar cópias antigas do navegador
-const CACHE = "agro-ops-v168";
+const CACHE = "agro-ops-v169";
 const ASSETS = ["./", "index.html", "styles.css", "splash.js", "img/nexus-globo.jpg", "app.js", "lib/jspdf.umd.min.js", "relatorio-pdf.js", "grupo.js", "icones.js", "avaliador.js", "inteligencia.js", "afericao.js", "inspecao.js", "agendaaf.js", "secagem.js", "gastos.js", "estoque.js", "ubs.js", "combustivel.js", "financeiro.js", "producao.js", "orcamento.js", "lib/qrcode.js", "lib/webp/webp_enc.js", "lib/webp/webp_enc.wasm", "rastreio.js", "campo.js", "nfe.js", "sync.js", "nuvem.js", "mapa.js", "lcdpr.js", "graficos.js", "automacao.js", "alertas.js", "comparativo.js", "graos.js", "referencias.js", "fotos.js", "agronomo.js", "lavoura.js", "mapa-tempo.js", "clima.js", "implementos.js", "manutplano.js", "manutcheck.js", "manutpedido.js", "manutind.js", "produtos.js", "revisarmaq.js", "catmaq.js", "talhaomapa.js", "pecas.js", "catpdf.js", "compras.js", "agil.js", "sefaz.js", "lib/jsqr/jsqr.min.js", "conferencia.js", "inicio.js", "previas.js", "sede.js", "culturas.js", "proprietario.js", "lib/leaflet/leaflet.js", "lib/leaflet/leaflet.css", "visual.js", "catalogo.js", "maqconfig.js", "pontas.js", "dados/pontas.json", "dados/regras-afericao.json", "dados/catalogo-modelos.json", "dados/finame.json", "dados/marcas.json", "manifest.webmanifest", "icon.svg", "img/centro-operacoes.jpg", "img/logo-nexus.png", "icon-192.png", "icon-512.png", "icon-maskable-512.png"];
 self.addEventListener("install", event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS.map(a => new Request(a, {cache: "reload"})))).then(() => self.skipWaiting())));
 self.addEventListener("activate", event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim())));
@@ -17,7 +17,9 @@ self.addEventListener("fetch", event => {
 // Toque na notificação de alerta: abre (ou traz para frente) o MercaPlant na tela do aviso
 self.addEventListener("notificationclick", event => {
   event.notification.close();
-  const rota = String(event.notification.data?.rota || "inicio").replace(/[^a-z0-9/_-]/gi, "");
+  // Botão da notificação (ex.: "Ver previsão") leva à tela dele; o toque no corpo, à tela do aviso
+  const d = event.notification.data || {}, botao = /^r\d$/.test(event.action || "") ? d.rotas?.[Number(event.action.slice(1))] : "";
+  const rota = String(botao || d.rota || "inicio").replace(/[^a-z0-9/_-]/gi, "");
   const url = new URL("./#/" + rota, self.registration.scope).href;
   event.waitUntil(self.clients.matchAll({type: "window", includeUncontrolled: true}).then(lista => {
     const aberto = lista.find(c => c.url.startsWith(self.registration.scope));

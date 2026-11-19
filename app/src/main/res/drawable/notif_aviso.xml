@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Faixa amarela do impacto na fazenda (operações afetadas) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/notif_aviso_fundo" />
+    <corners android:radius="8dp" />
+</shape>
