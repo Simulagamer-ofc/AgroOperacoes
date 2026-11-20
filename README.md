@@ -4,7 +4,7 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`1.0.0-beta2` — Início: o **mapa da fazenda** ganhou o botão **Ocultar mapa / Mostrar mapa**, e o aparelho lembra a escolha. As informações do talhão tocado têm agora um botão **✕ Fechar**, e tocar de novo no mesmo talhão também fecha. **Prepare a fazenda** virou um cartão do Personalizar, ligado no padrão e só visível enquanto falta cadastro.
+`1.0.0-beta2` — Início: as informações do talhão tocado no mapa têm agora um botão **✕ Fechar**, e tocar de novo no mesmo talhão também fecha. **Prepare a fazenda** virou um cartão do Personalizar, ligado no padrão e só visível enquanto falta cadastro.
 
 Anterior: `1.0.0-beta1` — **Tela inicial personalizável** (inicio-cartoes.js). O padrão de todos os usuários passa a ser só o **Clima** e o **Mapa da fazenda**. Em **Personalizar a tela inicial**, cada pessoa liga ou desliga os cartões (Resumo do dia, Operações de hoje, Atenção, Registrar rápido e os novos **Silos**, com a temperatura, e **Próximas revisões** das máquinas) e muda a ordem com as setas. A escolha é de cada usuário: fica no aparelho e na conta (`user_metadata.inicio_cartoes`), então vale em qualquer aparelho em que ele entrar. **Voltar ao padrão** deixa a tela de novo só com clima e mapa.
 

@@ -2129,8 +2129,6 @@ body:has(.i2) .app.nx-home .content{max-width:none}
 .ini-linha-nome{grid-area:nome;font-weight:600}.ini-linha-sub{grid-area:sub;color:var(--muted);font-size:.85rem}
 .ini-selo{grid-area:selo;align-self:center;font-size:.8rem;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--line);color:var(--muted);white-space:nowrap}
 .ini-selo.ok{background:#EAF3DE;color:#27500A}.ini-selo.atencao{background:#FAEEDA;color:#633806}.ini-selo.nao{background:#FCEBEB;color:#791F1F}
-/* Mapa do início: mostrar/ocultar e fechar o talhão aberto */
-.i2-faz-ver{margin-left:auto;min-height:34px;padding:6px 12px;font-size:.85rem}
-.i2-faz.oculto .i2-tit{margin-bottom:0}
+/* Mapa do início: fechar o talhão aberto */
 .i2-pt-topo{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .i2-pt-fechar{min-height:36px;padding:6px 14px;font-weight:600}
