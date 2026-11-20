@@ -1,0 +1,45 @@
+name: MercaPlant Conecta (Windows)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths: [ 'conecta/**', '.github/workflows/conecta.yml' ]
+  pull_request:
+    paths: [ 'conecta/**', '.github/workflows/conecta.yml' ]
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compilar
+        run: dotnet build conecta/MercaPlantConecta.csproj -c Release -o saida
+      - name: Autoteste (certificado de teste, assinatura RSA-SHA1, JSON)
+        shell: pwsh
+        run: |
+          $p = Start-Process -FilePath saida/MercaPlantConecta.exe -ArgumentList '--autoteste', "$PWD/autoteste.txt" -Wait -PassThru
+          Get-Content autoteste.txt
+          if ($p.ExitCode -ne 0) { throw "Autoteste falhou" }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MercaPlantConecta
+          path: saida/MercaPlantConecta.exe
+          if-no-files-found: error
+      # Na main: link fixo para baixar (versão "conecta", não interfere no aviso de versão nova do app)
+      - name: Publicar
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          cp saida/MercaPlantConecta.exe MercaPlantConecta.exe
+          if gh release view conecta >/dev/null 2>&1; then
+            gh release upload conecta MercaPlantConecta.exe --clobber
+          else
+            gh release create conecta MercaPlantConecta.exe --target "$GITHUB_SHA" --latest=false \
+              --title "MercaPlant Conecta (Windows)" --notes "Programa do computador da fazenda: certificado A3 (token ou cartão) nas Notas da SEFAZ. Veja conecta/README.md."
+          fi

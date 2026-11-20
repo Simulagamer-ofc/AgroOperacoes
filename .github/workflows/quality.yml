@@ -30,6 +30,14 @@ jobs:
         run: |
           find referencias app/src/main/assets/www/dados -type f -name '*.json' -print0 |
           xargs -0 -r -n1 node -e "JSON.parse(require('node:fs').readFileSync(process.argv[1], 'utf8'))"
+      - name: Preparar Deno (funções do servidor)
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Testes das funções do servidor (Notas da SEFAZ A1 e A3)
+        run: |
+          deno check supabase/functions/sefaz/index.ts supabase/functions/sefaz-conecta/index.ts
+          deno test --allow-read --allow-env supabase/functions/
       - name: Conferir que APK e site usam a mesma base tecnica
         run: |
           cmp referencias/avaliador.js app/src/main/assets/www/avaliador.js

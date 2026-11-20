@@ -26,6 +26,23 @@ function docDoSan(cert: forge.pki.Certificate): {doc: string; tipo: 'CNPJ' | 'CP
   return null;
 }
 
+/** Certificado sem chave (A3: o Conecta manda só a parte pública, DER em base64). */
+export type CertPublico = {certB64: string; doc: string; tipoDoc: 'CNPJ' | 'CPF'; nome: string; validade: string; inicio: string};
+function dadosDoTitular(titular: forge.pki.Certificate): Omit<CertPublico, 'certB64'> {
+  const cn = String(titular.subject.getField('CN')?.value || '');
+  let id = docDoSan(titular);
+  if (!id) { const d = (cn.split(':').pop() || '').replace(/\D/g, ''); if (d.length === 14) id = {doc: d, tipo: 'CNPJ'}; else if (d.length === 11) id = {doc: d, tipo: 'CPF'}; }
+  if (!id) throw new Error('Não achei o CNPJ ou CPF no certificado. Confirme se é um certificado ICP-Brasil (e-CNPJ ou e-CPF).');
+  return {doc: id.doc, tipoDoc: id.tipo, nome: cn.split(':')[0].trim(), validade: titular.validity.notAfter.toISOString(), inicio: titular.validity.notBefore.toISOString()};
+}
+export function lerCertificadoPublico(certB64: string): CertPublico {
+  let c: forge.pki.Certificate;
+  try { c = forge.pki.certificateFromAsn1(forge.asn1.fromDer(forge.util.decode64(certB64.replace(/\s/g, '')))); }
+  catch { throw new Error('Certificado inválido enviado pelo MercaPlant Conecta.'); }
+  if (!(c.publicKey as forge.pki.rsa.PublicKey)?.n) throw new Error('O certificado precisa ser RSA (padrão ICP-Brasil).');
+  return {certB64: certB64.replace(/\s/g, ''), ...dadosDoTitular(c)};
+}
+
 export function lerCertificado(pfxB64: string, senha: string): Certificado {
   let p12: forge.pkcs12.Pkcs12Pfx;
   try { p12 = forge.pkcs12.pkcs12FromAsn1(forge.asn1.fromDer(forge.util.decode64(pfxB64)), false, senha); }
@@ -37,16 +54,11 @@ export function lerCertificado(pfxB64: string, senha: string): Certificado {
   // O certificado do titular é o que tem a mesma chave pública da chave privada
   const titular = certs.map((b: any) => b.cert as forge.pki.Certificate).find((c: forge.pki.Certificate) => c && (c.publicKey as forge.pki.rsa.PublicKey).n.equals(key.n));
   if (!titular) throw new Error('Não encontrei o certificado do titular dentro do arquivo.');
-  const cn = String(titular.subject.getField('CN')?.value || '');
-  let id = docDoSan(titular);
-  if (!id) { const d = (cn.split(':').pop() || '').replace(/\D/g, ''); if (d.length === 14) id = {doc: d, tipo: 'CNPJ'}; else if (d.length === 11) id = {doc: d, tipo: 'CPF'}; }
-  if (!id) throw new Error('Não achei o CNPJ ou CPF no certificado. Confirme se é um certificado ICP-Brasil (e-CNPJ ou e-CPF).');
   const der = forge.asn1.toDer(forge.pki.certificateToAsn1(titular)).getBytes();
   return {
     certPem: forge.pki.certificateToPem(titular),
     keyPem: forge.pki.privateKeyInfoToPem(forge.pki.wrapRsaPrivateKey(forge.pki.privateKeyToAsn1(key))),
-    certB64: forge.util.encode64(der), doc: id.doc, tipoDoc: id.tipo, nome: cn.split(':')[0].trim(),
-    validade: titular.validity.notAfter.toISOString(), inicio: titular.validity.notBefore.toISOString(),
+    certB64: forge.util.encode64(der), ...dadosDoTitular(titular),
   };
 }
 
@@ -116,30 +128,52 @@ export function lerDocumento(schema: string, xml: string): Documento {
 }
 
 // ---------- Evento: Ciência da Operação (210210), assinado ----------
+// A assinatura é feita em duas partes para servir aos dois tipos de certificado:
+//   A1 (arquivo no servidor): prepararCiencia → assina aqui com a chave do .pfx → montarEnvEvento
+//   A3 (token/cartão no computador da fazenda): prepararCiencia → o MercaPlant Conecta assina o SignedInfo
+//      com o token (RSA-SHA1) → montarEnvEvento com a assinatura e o certificado que ele devolve
 const C14N = 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315';
-function assinar(infEventoCanon: string, id: string, cert: Certificado): string {
-  const md = forge.md.sha1.create(); md.update(infEventoCanon, 'utf8');
-  const digest = forge.util.encode64(md.digest().getBytes());
-  const signedInfo = `<SignedInfo xmlns="${NS_DS}"><CanonicalizationMethod Algorithm="${C14N}"></CanonicalizationMethod><SignatureMethod Algorithm="${NS_DS}rsa-sha1"></SignatureMethod><Reference URI="#${id}"><Transforms><Transform Algorithm="${NS_DS}enveloped-signature"></Transform><Transform Algorithm="${C14N}"></Transform></Transforms><DigestMethod Algorithm="${NS_DS}sha1"></DigestMethod><DigestValue>${digest}</DigestValue></Reference></SignedInfo>`;
-  const key = forge.pki.privateKeyFromPem(cert.keyPem) as forge.pki.rsa.PrivateKey;
-  const mdS = forge.md.sha1.create(); mdS.update(signedInfo, 'utf8');
-  const valor = forge.util.encode64(key.sign(mdS));
-  // No documento, SignedInfo herda o namespace de Signature (o canônico acima já o inclui)
-  return `<Signature xmlns="${NS_DS}">${signedInfo.replace(` xmlns="${NS_DS}"`, '')}<SignatureValue>${valor}</SignatureValue><KeyInfo><X509Data><X509Certificate>${cert.certB64}</X509Certificate></X509Data></KeyInfo></Signature>`;
-}
+export type ItemCiencia = {id: string; corpo: string; signedInfo: string};
 
-export function envEventoCiencia(chaves: string[], cert: Certificado, tpAmb: number, quando = new Date()): string {
+export function prepararCiencia(chaves: string[], doc: string, tipoDoc: 'CNPJ' | 'CPF', tpAmb: number, quando = new Date()): ItemCiencia[] {
   if (!chaves.length || chaves.length > 20) throw new Error('De 1 a 20 notas por lote de ciência.');
   const dh = dhBrasilia(quando);
-  const eventos = chaves.map(ch => {
+  return chaves.map(ch => {
     const id = `ID210210${ch}01`;
-    const corpo = `<cOrgao>91</cOrgao><tpAmb>${tpAmb}</tpAmb><${cert.tipoDoc}>${cert.doc}</${cert.tipoDoc}><chNFe>${ch}</chNFe><dhEvento>${dh}</dhEvento><tpEvento>210210</tpEvento><nSeqEvento>1</nSeqEvento><verEvento>1.00</verEvento><detEvento versao="1.00"><descEvento>Ciencia da Operacao</descEvento></detEvento>`;
+    const corpo = `<cOrgao>91</cOrgao><tpAmb>${tpAmb}</tpAmb><${tipoDoc}>${doc}</${tipoDoc}><chNFe>${ch}</chNFe><dhEvento>${dh}</dhEvento><tpEvento>210210</tpEvento><nSeqEvento>1</nSeqEvento><verEvento>1.00</verEvento><detEvento versao="1.00"><descEvento>Ciencia da Operacao</descEvento></detEvento>`;
     // Forma canônica (C14N) do infEvento: herda o namespace da NF-e do elemento de cima
     const canon = `<infEvento xmlns="${NS_NFE}" Id="${id}">${corpo}</infEvento>`;
-    return `<evento versao="1.00"><infEvento Id="${id}">${corpo}</infEvento>${assinar(canon, id, cert)}</evento>`;
-  }).join('');
-  const lote = String(Date.now()).slice(-15);
+    const md = forge.md.sha1.create(); md.update(canon, 'utf8');
+    const digest = forge.util.encode64(md.digest().getBytes());
+    // SignedInfo canônico: é exatamente este texto (UTF-8) que a chave assina com RSA-SHA1
+    const signedInfo = `<SignedInfo xmlns="${NS_DS}"><CanonicalizationMethod Algorithm="${C14N}"></CanonicalizationMethod><SignatureMethod Algorithm="${NS_DS}rsa-sha1"></SignatureMethod><Reference URI="#${id}"><Transforms><Transform Algorithm="${NS_DS}enveloped-signature"></Transform><Transform Algorithm="${C14N}"></Transform></Transforms><DigestMethod Algorithm="${NS_DS}sha1"></DigestMethod><DigestValue>${digest}</DigestValue></Reference></SignedInfo>`;
+    return {id, corpo, signedInfo};
+  });
+}
+
+/** Junta os eventos com as assinaturas (base64, uma por item, na mesma ordem) e o certificado do titular (DER em base64). */
+export function montarEnvEvento(itens: ItemCiencia[], assinaturas: string[], certB64: string, lote = String(Date.now()).slice(-15)): string {
+  if (assinaturas.length !== itens.length) throw new Error('Faltam assinaturas no lote de ciência.');
+  const b64 = /^[A-Za-z0-9+/=\s]+$/;
+  if (!b64.test(certB64) || assinaturas.some(a => !a || !b64.test(a))) throw new Error('Assinatura ou certificado em formato inválido.');
+  const cert = certB64.replace(/\s/g, '');
+  const eventos = itens.map((it, i) =>
+    // No documento, SignedInfo herda o namespace de Signature (o canônico já o inclui)
+    `<evento versao="1.00"><infEvento Id="${it.id}">${it.corpo}</infEvento><Signature xmlns="${NS_DS}">${it.signedInfo.replace(` xmlns="${NS_DS}"`, '')}<SignatureValue>${assinaturas[i].replace(/\s/g, '')}</SignatureValue><KeyInfo><X509Data><X509Certificate>${cert}</X509Certificate></X509Data></KeyInfo></Signature></evento>`
+  ).join('');
   return `<envEvento xmlns="${NS_NFE}" versao="1.00"><idLote>${lote}</idLote>${eventos}</envEvento>`;
+}
+
+/** Assinatura RSA-SHA1 (PKCS#1 v1.5) do SignedInfo com a chave do A1. */
+export function assinarComA1(signedInfo: string, cert: Certificado): string {
+  const key = forge.pki.privateKeyFromPem(cert.keyPem) as forge.pki.rsa.PrivateKey;
+  const md = forge.md.sha1.create(); md.update(signedInfo, 'utf8');
+  return forge.util.encode64(key.sign(md));
+}
+
+export function envEventoCiencia(chaves: string[], cert: Certificado, tpAmb: number, quando = new Date(), lote?: string): string {
+  const itens = prepararCiencia(chaves, cert.doc, cert.tipoDoc, tpAmb, quando);
+  return montarEnvEvento(itens, itens.map(it => assinarComA1(it.signedInfo, cert)), cert.certB64, lote);
 }
 
 export function soapEvento(envEvento: string): string {
