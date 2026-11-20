@@ -1,9 +1,9 @@
 'use strict';
 /* MercaPlant — tela inicial personalizável (1.0).
    Padrão para todos: só o Clima e o Mapa da fazenda. Em “Personalizar a tela inicial” cada pessoa liga/desliga
-   os outros cartões e muda a ordem. A escolha vale para o usuário (guardada no aparelho e na conta, então
+   os outros cartões e muda a ordem. “Prepare a fazenda” vem ligado (só aparece enquanto falta cadastro). A escolha vale para o usuário (guardada no aparelho e na conta, então
    acompanha a pessoa em qualquer aparelho em que ela entrar). “Voltar ao padrão” deixa só clima e mapa. */
-const INI_PADRAO = ['clima', 'mapa'];
+const INI_PADRAO = ['clima', 'mapa', 'prep'];
 // [chave, nome, detalhe, novo?]
 const INI_CARTOES = [
   ['clima', 'Clima', 'hoje e hora de pulverizar'],
@@ -12,6 +12,7 @@ const INI_CARTOES = [
   ['ops', 'Operações de hoje', ''],
   ['aten', 'Atenção', 'alertas'],
   ['reg', 'Registrar rápido', ''],
+  ['prep', 'Prepare a fazenda', 'guia de cadastro; some quando estiver tudo pronto'],
   ['silos', 'Silos', 'temperatura', true],
   ['maq', 'Máquinas', 'próximas revisões', true],
 ];
@@ -88,12 +89,13 @@ function iniCartao(k) {
     case 'reg': return typeof i2Registrar === 'function' ? i2Registrar() : '';
     case 'silos': return typeof nvPodeRota === 'function' && !nvPodeRota('graos') ? '' : iniCartaoSilos();
     case 'maq': return iniCartaoMaquinas();
+    case 'prep': { const p = typeof iniPreparar === 'function' ? iniPreparar() : ''; return p ? `<div class="ini-prep">${p}</div>` : ''; }
     default: return '';
   }
 }
 const iniDepoisBase = VIEWS.inicio.after; // o que o início já fazia depois de desenhar (mapa, clima, alertas)
 VIEWS.inicio = () => {
-  const lista = iniLer().lista, prep = typeof iniPreparar === 'function' ? iniPreparar() : '';
+  const lista = iniLer().lista;
   let corpo = '';
   for (let i = 0; i < lista.length; i++) {
     // Operações e Atenção seguidas ficam lado a lado no computador (como antes)
@@ -103,7 +105,6 @@ VIEWS.inicio = () => {
   }
   return `<div class="i2 i3 ini-perso-tela ${lista.includes('clima') ? 'com-clima' : ''}">
     ${i2Cabecalho()}${corpo}
-    ${prep ? `<div class="ini-prep">${prep}</div>` : ''}
     <button type="button" class="ini-perso" data-act="ini-perso">${iconeLinha('mais', 18)} Personalizar a tela inicial</button></div>`;
 };
 VIEWS.inicio.after = (...a) => { iniDepoisBase?.(...a); iniLerConta(); };
