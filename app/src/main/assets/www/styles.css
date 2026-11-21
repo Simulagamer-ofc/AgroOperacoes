@@ -2153,3 +2153,43 @@ body:has(.i2) .app.nx-home .content{max-width:none}
 .pf-passos{padding-left:22px;margin:10px 0}.pf-passos li{margin:10px 0}.pf-passos b{display:block}.pf-passos span{color:var(--muted);font-size:.92rem}
 .sede-busca{margin-bottom:8px}
 @media(max-width:640px){.pf-bts{grid-template-columns:1fr 1fr}}
+
+/* Mapa interativo do Início */
+.ini-mapa-slot{position:absolute;inset:0}
+.ini-mapa-slot>svg{width:100%;height:100%;display:block}
+.ini-mapa-l{position:absolute!important;inset:0;background:#25391f;font:inherit;z-index:0}
+.ini-mapa-l.fundo-mapa{background:#e8e4da}
+.ini-mapa-l.cheio{position:fixed!important;inset:0;z-index:9000;border-radius:0}
+:root.ini-mapa-aberto,:root.ini-mapa-aberto body{overflow:hidden}
+.i2-faz-desenho .i2-faz-cred,.pf-mapa.vivo .i2-faz-cred,.pf-mapa.vivo>.pf-pin{display:none}
+.i2-faz-desenho:has(.ini-mapa-slot:not(.vivo)) .i2-faz-cred{display:block}
+.pf-aviso{z-index:2;pointer-events:none}
+.ini-mctrl{position:absolute;right:10px;display:flex;flex-direction:column;gap:8px;z-index:1000}
+.ini-mctrl.topo{top:10px}.ini-mctrl.baixo{bottom:26px}
+.ini-mapa-l.cheio .ini-mctrl.topo{top:calc(12px + env(safe-area-inset-top))}
+.ini-mb{width:40px;height:40px;min-height:0;padding:0;border-radius:10px;border:0;background:#fff;color:#0f2417;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.3);cursor:pointer}
+.ini-mb:active{transform:scale(.95)}
+.i2-faz-desenho .i2-faz-modos,.i2-faz-modos{position:relative;z-index:1}
+.ini-tal{transition:fill-opacity .2s}
+.ini-tal.pulsa{animation:iniPulsa 1.6s ease-in-out infinite}
+@keyframes iniPulsa{50%{stroke-opacity:.35}}
+@media(prefers-reduced-motion:reduce){.ini-tal.pulsa{animation:none}}
+.ini-tal-rot span{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;white-space:nowrap;pointer-events:none;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.9)}
+.ini-tal-rot b{font-size:.82rem;font-weight:800}.ini-tal-rot small{font-size:.72rem;font-weight:600}
+.ini-mapa-l.longe .ini-tal-rot small{display:none}
+.ini-mapa-l.longe .ini-tal-rot b{font-size:.7rem}
+.ini-maq{position:absolute;transform:translate(-100%,0);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.ini-maq i{width:30px;height:30px;border-radius:50%;background:#3c4a57;border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.ini-maq.ag i{background:#1f6fd1}
+.ini-maq b{background:rgba(15,30,40,.82);color:#fff;font-size:.74rem;padding:3px 9px;border-radius:999px;order:-1}
+.ini-mapa-l.longe .ini-maq b{display:none}
+.ini-sede{position:absolute;transform:translate(-50%,-13px);display:flex;flex-direction:column;align-items:center;gap:3px}
+.ini-sede i{width:26px;height:26px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.ini-sede b{color:#fff;font-size:.72rem;text-shadow:0 1px 3px rgba(0,0,0,.9)}
+.ini-pin-l .pf-pin{position:absolute;left:0;top:0;transform:translate(-50%,-9px)}
+.ini-pop b{display:block;font-size:.95rem}.ini-pop small{display:block;color:#5b6670;margin:2px 0 8px}
+.ini-pop-bts{display:flex;gap:6px}.ini-pop-bts button{height:auto;min-height:34px;padding:6px 10px}
+.mapa-dedos{position:absolute;inset:0;z-index:1100;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.38);color:#fff;font-weight:700;font-size:.95rem;text-align:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s}
+.mapa-dedos.on{opacity:1}
+.leaflet-container .leaflet-control-attribution{font-size:10px}
+.pf-mapa.vivo .pf-aviso{left:12px;transform:none;max-width:calc(100% - 74px)}

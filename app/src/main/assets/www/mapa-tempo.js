@@ -286,6 +286,7 @@ async function iniciarMapaTempo() {
   pararAnimacao();
   const L = window.L, mapa = L.map(el, {zoomControl: false, attributionControl: true}).setView([loc.lat, loc.lon], 7);
   L.control.zoom({position: 'bottomright'}).addTo(mapa);
+  if (typeof mapaDoisDedos === 'function') mapaDoisDedos(mapa, el); // no celular: um dedo rola a tela, dois dedos movem o mapa
   mtEstado.mapa = mapa; mtEstado.quadros = []; mtEstado.loc = loc;
   // Fundo: satélite com nomes das cidades e divisas por cima (rótulos acima do radar e da chuva), ou mapa de ruas
   mapa.createPane('mtRotulos'); mapa.getPane('mtRotulos').style.zIndex = 450; mapa.getPane('mtRotulos').style.pointerEvents = 'none';
