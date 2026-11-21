@@ -387,7 +387,7 @@ function i2MapaFazenda(fs, modo) {
 function i2PainelTalhao(f) {
   const inf = i2InfoTalhao(f), c = inf.ciclo, linha = (rot, val, cls = '') => val ? `<div class="i2-pt-l ${cls}"><small>${esc(rot)}</small><span>${val}</span></div>` : '';
   const opTxt = o => o ? `${esc(o.type)} <em>${esc(o.status === 'Em andamento' ? 'agora' : pvQuando(o))}</em>` : '';
-  return `<div class="i2-pt"><button type="button" class="link i2-pt-volta" data-act="i2-tal" data-id="">‹ Todos os talhões</button>
+  return `<div class="i2-pt"><div class="i2-pt-topo"><button type="button" class="link i2-pt-volta" data-act="i2-tal" data-id="">‹ Todos os talhões</button><button type="button" class="secondary small i2-pt-fechar" data-act="i2-tal" data-id="" aria-label="Fechar informações do talhão">✕ Fechar</button></div>
     <div class="i2-pt-tit"><i style="background:${i2CorCult(f.crop)}"></i><div><b>${esc(f.name)}</b><small>${esc([f.crop, f.cultivar].filter(Boolean).join(' • ') || 'Sem cultura')} • ${num(f.area)} ha</small></div></div>
     ${linha('Plantio', c ? `${fmtDate(f.plantingDate)} <em>${c.dap} ${c.dap === 1 ? 'dia' : 'dias'}</em>` : inf.colhido ? `Colhido em ${fmtDate(inf.colhido.date)}` : 'Ainda não plantado')}
     ${linha('Agora', inf.andamento ? opTxt(inf.andamento) + (inf.andamento.machineId ? ` <em>${esc(machineName(inf.andamento.machineId))}</em>` : '') : '', 'ok')}
@@ -428,7 +428,8 @@ function i2Fazenda() {
 }
 const i2AtualizarFazenda = () => { const el = document.querySelector('.i2-faz'); if (el) el.outerHTML = i2Fazenda(); };
 ACTIONS['i2-mapa-modo'] = m => { try { localStorage.setItem(I2_MODO_KEY, m); } catch {} i2AtualizarFazenda(); };
-ACTIONS['i2-tal'] = id => { i2TalSel = id || ''; i2AtualizarFazenda(); };
+// Tocar de novo no talhão aberto (ou em Fechar) volta à lista
+ACTIONS['i2-tal'] = id => { i2TalSel = id && id !== i2TalSel ? id : ''; i2AtualizarFazenda(); };
 // Início: cabeçalho, 4 números, mapa vivo da fazenda, Operações de hoje | Atenção, Registrar rápido; "Prepare a fazenda" enquanto
 // falta cadastro. Gastos e últimas concluídas ficam no Financeiro e em Operações.
 VIEWS.inicio = () => {

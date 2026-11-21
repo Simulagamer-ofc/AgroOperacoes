@@ -1,9 +1,9 @@
 'use strict';
 /* MercaPlant — tela inicial personalizável (1.0).
    Padrão para todos: só o Clima e o Mapa da fazenda. Em “Personalizar a tela inicial” cada pessoa liga/desliga
-   os outros cartões e muda a ordem. A escolha vale para o usuário (guardada no aparelho e na conta, então
+   os outros cartões e muda a ordem. “Prepare a fazenda” vem ligado (só aparece enquanto falta cadastro). A escolha vale para o usuário (guardada no aparelho e na conta, então
    acompanha a pessoa em qualquer aparelho em que ela entrar). “Voltar ao padrão” deixa só clima e mapa. */
-const INI_PADRAO = ['clima', 'mapa'];
+const INI_PADRAO = ['clima', 'mapa', 'prep'];
 // [chave, nome, detalhe, novo?]
 const INI_CARTOES = [
   ['clima', 'Clima', 'hoje e hora de pulverizar'],
@@ -12,6 +12,7 @@ const INI_CARTOES = [
   ['ops', 'Operações de hoje', ''],
   ['aten', 'Atenção', 'alertas'],
   ['reg', 'Registrar rápido', ''],
+  ['prep', 'Prepare a fazenda', 'guia de cadastro; some quando estiver tudo pronto'],
   ['silos', 'Silos', 'temperatura', true],
   ['maq', 'Máquinas', 'próximas revisões', true],
 ];
@@ -88,12 +89,13 @@ function iniCartao(k) {
     case 'reg': return typeof i2Registrar === 'function' ? i2Registrar() : '';
     case 'silos': return typeof nvPodeRota === 'function' && !nvPodeRota('graos') ? '' : iniCartaoSilos();
     case 'maq': return iniCartaoMaquinas();
+    case 'prep': { const p = typeof iniPreparar === 'function' ? iniPreparar() : ''; return p ? `<div class="ini-prep">${p}</div>` : ''; }
     default: return '';
   }
 }
 const iniDepoisBase = VIEWS.inicio.after; // o que o início já fazia depois de desenhar (mapa, clima, alertas)
 VIEWS.inicio = () => {
-  const lista = iniLer().lista, prep = typeof iniPreparar === 'function' ? iniPreparar() : '';
+  const lista = iniLer().lista;
   let corpo = '';
   for (let i = 0; i < lista.length; i++) {
     // Operações e Atenção seguidas ficam lado a lado no computador (como antes)
@@ -103,7 +105,6 @@ VIEWS.inicio = () => {
   }
   return `<div class="i2 i3 ini-perso-tela ${lista.includes('clima') ? 'com-clima' : ''}">
     ${i2Cabecalho()}${corpo}
-    ${prep ? `<div class="ini-prep">${prep}</div>` : ''}
     <button type="button" class="ini-perso" data-act="ini-perso">${iconeLinha('mais', 18)} Personalizar a tela inicial</button></div>`;
 };
 VIEWS.inicio.after = (...a) => { iniDepoisBase?.(...a); iniLerConta(); };
@@ -141,3 +142,67 @@ function iniPersonalizar() {
   };
 }
 ACTIONS['ini-perso'] = iniPersonalizar;
+
+// ---------- Mapa sempre na tela inicial (mesmo sem talhões desenhados) ----------
+// Sem contorno de talhão, o cartão mostra o satélite na sede (ou onde o aparelho está, se o GPS já foi liberado)
+// e os caminhos para colocar a fazenda no mapa: GPS, buscar cidade, importar do CAR ou desenhar.
+const iniFazendaBase = i2Fazenda;
+let iniPosAparelho = null, iniPosPedida = false;
+function iniLerPosicaoSilenciosa() {
+  // Só se a permissão já foi dada antes: não abre pedido de permissão sozinho na abertura do app
+  if (iniPosPedida || !navigator.geolocation || !navigator.permissions?.query) return;
+  iniPosPedida = true;
+  navigator.permissions.query({name: 'geolocation'}).then(st => {
+    if (st.state !== 'granted') return;
+    navigator.geolocation.getCurrentPosition(p => { iniPosAparelho = {lat: p.coords.latitude, lon: p.coords.longitude}; if (parseRoute().name === 'inicio') i2AtualizarFazenda(); },
+      () => {}, {enableHighAccuracy: false, timeout: 15000, maximumAge: 600000});
+  }).catch(() => {});
+}
+// Satélite em volta de um ponto (mesmas imagens do mapa dos talhões), sem precisar da biblioteca de mapas
+function iniSatelite(lat, lon, z) {
+  const W = 720, H = 400, [cx, cy] = i2Merc(lat, lon, z), n = 2 ** z;
+  let img = '';
+  for (let ty = Math.floor((cy - H) / 256); ty <= Math.floor((cy + H) / 256); ty++) for (let tx = Math.floor((cx - W) / 256); tx <= Math.floor((cx + W) / 256); tx++)
+    if (ty >= 0 && ty < n) img += `<image href="${i2Tile(z, ((tx % n) + n) % n, ty)}" x="${(tx * 256 - cx + W / 2).toFixed(1)}" y="${(ty * 256 - cy + H / 2).toFixed(1)}" width="256.6" height="256.6" preserveAspectRatio="none"/>`;
+  return `<svg class="pf-sat" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="${W}" height="${H}" fill="#243a24"/>${img}</svg>`;
+}
+function iniCartaoSemMapa(fs) {
+  const nome = db.settings.farm || (typeof nv !== 'undefined' && nv?.fazenda?.name) || 'Minha fazenda';
+  const sede = typeof localDaFazenda === 'function' ? localDaFazenda() : null, temSede = sede && Number.isFinite(sede.lat) && sede.fonte !== 'aparelho-antigo';
+  if (!temSede) iniLerPosicaoSilenciosa();
+  const ponto = temSede ? {...sede, rot: 'Sede'} : iniPosAparelho ? {...iniPosAparelho, rot: 'Você está aqui'} : null;
+  const gestor = typeof tmGestor !== 'function' || tmGestor(), podeSede = typeof sedePodeMudar !== 'function' || sedePodeMudar();
+  const area = fs.reduce((t, f) => t + (Number(f.area) || 0), 0);
+  return `<section class="card i2-card i2-faz pf-card">
+    <div class="i2-tit"><h3>${iconeLinha('talhoes', 18)} ${esc(nome)}</h3><span class="i2-faz-num">${fs.length ? `<span>${num(area)} ha</span><span>${fs.length} ${fs.length === 1 ? 'talhão' : 'talhões'} sem desenho</span>` : ''}</span></div>
+    <div class="pf-mapa ${ponto ? '' : 'sem-ponto'}">${ponto ? iniSatelite(ponto.lat, ponto.lon, 15) : iniSatelite(-15.8, -52, 4)}
+      <div class="pf-aviso">${ponto ? 'Sua fazenda ainda não está no mapa' : 'Onde fica a sua fazenda?'}</div>
+      ${ponto ? `<div class="pf-pin ${temSede ? 'sede' : ''}"><span class="pf-pulso"></span><span class="pf-ponto"></span><b>${esc(ponto.rot)}</b></div>` : ''}
+      <span class="i2-faz-cred">Imagem © Esri, Maxar</span></div>
+    <div class="pf-bts">
+      ${podeSede ? `<button type="button" class="${temSede ? 'secondary' : 'primary'} pf-b" data-act="pf-gps">📍 Estou na fazenda<small>${temSede ? 'remarcar a sede pelo GPS' : 'marca a sede pelo GPS'}</small></button>
+      <button type="button" class="secondary pf-b" data-act="pf-buscar">🔎 Buscar cidade<small>ou coordenada</small></button>` : ''}
+      ${gestor ? `<button type="button" class="secondary pf-b pf-car" data-act="pf-car">📂 Importar do CAR<small>a fazenda já desenhada</small></button>
+      <button type="button" class="secondary pf-b" data-act="nav" data-id="mapatalhoes">✏ Desenhar talhões<small>no satélite</small></button>` : ''}
+    </div>${!podeSede && !gestor ? '<p class="sub">O ADM ou o supervisor coloca a fazenda no mapa.</p>' : ''}</section>`;
+}
+i2Fazenda = function () {
+  if (!iniPode('talhoes')) return '';
+  const fs = db.fields.filter(f => !f.inactive && !f.inativo);
+  if (fs.some(f => f.contorno?.pontos?.length > 2)) return iniFazendaBase();
+  return iniCartaoSemMapa(fs);
+};
+Object.assign(ACTIONS, {
+  'pf-gps': () => { sedeVoltar = 'inicio'; go('sede'); setTimeout(() => ACTIONS['sede-gps']?.(), 300); },
+  'pf-buscar': () => { sedeVoltar = 'inicio'; go('sede'); setTimeout(() => document.getElementById('sedeBusca')?.focus(), 300); },
+  'pf-car': () => {
+    dialog.innerHTML = `<h3>Importar a fazenda do CAR</h3><p class="sub">O CAR (Cadastro Ambiental Rural) tem o contorno oficial da propriedade. Com ele, a fazenda aparece desenhada no mapa em segundos.</p>
+      <ol class="pf-passos"><li><b>Baixe o arquivo do CAR</b><span>No site do SICAR (car.gov.br) → Consultar → informe o número do CAR do imóvel → baixe o shapefile (arquivo .zip).</span></li>
+        <li><b>Escolha o arquivo no MercaPlant</b><span>Aceita o .zip do CAR, KML/KMZ do Google Earth e os arquivos do monitor da máquina. No CAR, use a camada da área do imóvel (AREA_IMOVEL).</span></li>
+        <li><b>Confira e salve</b><span>Cada contorno vira um talhão novo ou vai para um talhão que já existe. Depois dá para dividir a área nos talhões.</span></li></ol>
+      <div class="actions"><button type="button" class="secondary" data-close>Cancelar</button><button type="button" class="primary" data-act="nav" data-id="importartalhoes">📂 Escolher arquivo</button></div>`;
+    modal.classList.add('open');
+    $('[data-close]', dialog).onclick = closeModal;
+    $('[data-act="nav"]', dialog).addEventListener('click', closeModal);
+  }
+});
