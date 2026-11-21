@@ -109,10 +109,11 @@ VIEWS.sede = () => {
   const atual = s ? `<b>${num(s.lat, 5)}, ${num(s.lon, 5)}</b><small>Sede ${esc(SEDE_ORIGEM[s.origem] || 'marcada')}${s.precisao ? ` • precisão de ~${num(s.precisao, 0)} m` : ''}${s.em ? ` • ${sedeQuando(s.em)}` : ''} • vale para todos os aparelhos da fazenda</small>`
     : loc ? `<b>${num(loc.lat, 5)}, ${num(loc.lon, 5)}</b><small>${esc(loc.fonte === 'talhoes' ? 'Usando o centro dos talhões (a sede ainda não foi marcada)' : loc.fonte === 'aparelho-antigo' ? 'Posição antiga deste aparelho — pode estar errada; marque a sede' : 'Só neste aparelho')}</small>`
     : '<b>Ainda não marcado</b><small>Marque a sede para a previsão do tempo e o mapa do tempo.</small>';
-  return head('Local da fazenda', 'O ponto da sede é usado na previsão do tempo, na janela de pulverização e no mapa do tempo — para todos os aparelhos da fazenda.', btn('← MercaClima', 'nav', 'clima', 'secondary')) +
+  return head('Local da fazenda', 'O ponto da sede é usado na previsão do tempo, na janela de pulverização e no mapa do tempo — para todos os aparelhos da fazenda.', (sedeVoltar === 'inicio' ? btn('← Início', 'nav', 'inicio', 'secondary') : btn('← MercaClima', 'nav', 'clima', 'secondary'))) +
     `<section class="card panel sede-atual"><span class="sede-pino" aria-hidden="true">📍</span><div>${atual}</div></section>
     ${pode ? `<section class="card panel sede-painel">
       <div class="sede-acoes"><button type="button" class="secondary" data-act="sede-gps">📡 Usar o GPS deste aparelho</button>
+        <form class="sede-coord sede-busca" data-sede-busca><input id="sedeBusca" type="search" autocomplete="off" placeholder="Buscar cidade ou localidade (ex.: Coxilha, RS)" aria-label="Buscar cidade"><button type="submit" class="secondary">🔎 Buscar</button></form>
         <form class="sede-coord" data-sede-coord><input id="sedeCoord" inputmode="text" autocomplete="off" placeholder="Colar coordenadas (ex.: -28.15, -52.47)" aria-label="Coordenadas da sede"><button type="submit" class="secondary">Ir</button></form></div>
       <div class="sede-mapa-caixa"><div id="sedeMapa" class="sede-mapa" role="application" aria-label="Mapa de satélite: toque para marcar a sede"></div>
         <div class="sede-dica" id="sedeDica">Toque no mapa em cima da sede. Dá para arrastar o pino para ajustar.</div></div>
@@ -122,7 +123,7 @@ VIEWS.sede = () => {
     : `<section class="card panel"><p class="nota" style="margin:0">O local da fazenda é marcado pelo ADM ou pelo supervisor. Se estiver errado, peça para eles corrigirem em MercaClima → Local da fazenda.</p></section>`}`;
 };
 TITLES.sede = 'Local da fazenda';
-let sedeMapaL = null, sedePino = null;
+let sedeMapaL = null, sedePino = null, sedeVoltar = '';
 // Fecha o mapa da tela antes de sair dela (o mapa do tempo abre em seguida)
 function sedeFecharMapa() { try { sedeMapaL?.off(); sedeMapaL?.remove(); } catch { /* já fechado */ } sedeMapaL = null; sedePino = null; }
 addEventListener('hashchange', () => { if (!/^#\/sede/.test(location.hash) && sedeMapaL) sedeFecharMapa(); });
@@ -157,6 +158,20 @@ VIEWS.sede.after = async () => {
   mapa.on('click', e => sedeMostrarPonto({lat: e.latlng.lat, lon: e.latlng.lng, origem: 'mapa', precisao: null}, false));
   setTimeout(() => { if (sedeMapaL === mapa && document.body.contains(el)) mapa.invalidateSize(); }, 60);
 };
+// Buscar cidade (OpenStreetMap): só leva o mapa até lá; a sede é marcada tocando no mapa
+document.addEventListener('submit', async e => {
+  if (!e.target.matches?.('[data-sede-busca]')) return;
+  e.preventDefault();
+  const q = document.getElementById('sedeBusca')?.value.trim(); if (!q) return;
+  const coord = sedeLerCoordenadas(q);
+  if (coord) { sedeMapaL?.setView([coord.lat, coord.lon], 16); sedeMostrarPonto({...coord, origem: 'coordenadas', precisao: null}); return; }
+  try {
+    const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&accept-language=pt-BR&q=${encodeURIComponent(q)}`).then(x => x.json());
+    if (!r?.[0]) { showToast('Não encontrei esse lugar. Tente "cidade, estado".', true); return; }
+    sedeMapaL?.setView([Number(r[0].lat), Number(r[0].lon)], 14);
+    showToast(`${r[0].display_name.split(',').slice(0, 2).join(',')}: agora toque no mapa em cima da sede`);
+  } catch { showToast('Sem internet para buscar. Cole as coordenadas ou use o GPS.', true); }
+});
 document.addEventListener('submit', e => {
   if (!e.target.matches?.('[data-sede-coord]')) return;
   e.preventDefault();
@@ -176,7 +191,7 @@ Object.assign(ACTIONS, {
   'sede-salvar': async () => {
     if (!sedeEd) return;
     const b = document.querySelector('[data-act="sede-salvar"]'); if (b) { b.disabled = true; b.textContent = 'Salvando…'; }
-    try { await sedeSalvar(sedeEd.lat, sedeEd.lon, sedeEd.origem, sedeEd.precisao); sedeEd = null; sedeFecharMapa(); showToast('Local da fazenda salvo — vale para todos os aparelhos'); go('clima'); }
+    try { await sedeSalvar(sedeEd.lat, sedeEd.lon, sedeEd.origem, sedeEd.precisao); sedeEd = null; sedeFecharMapa(); showToast('Local da fazenda salvo — vale para todos os aparelhos'); const v = sedeVoltar || 'clima'; sedeVoltar = ''; go(v); }
     catch (e) { showToast(e.amigavel || e.message ? e.message : 'Não foi possível salvar. Confira a internet e tente de novo.', true); if (b) { b.disabled = false; b.textContent = 'Salvar este local'; } }
   }
 });
