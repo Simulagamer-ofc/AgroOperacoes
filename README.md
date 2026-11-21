@@ -4,6 +4,8 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`1.0.0-beta4` — Início: **clima e mapa num cartão só** (no computador, o clima fica numa coluna à esquerda e o mapa à direita; no celular, o clima em cima e o mapa embaixo). Se um dos dois for desligado no Personalizar, ou se não estiverem seguidos, cada um aparece sozinho. As opções para colocar a fazenda no mapa (GPS, buscar cidade, importar do CAR, desenhar) ficaram num botão **📍 Colocar a fazenda no mapa**, por cima do mapa.
+
 `1.0.0-beta3` — Início: **o mapa da fazenda ficou interativo**, como o do MercaClima: arrastar, aproximar e afastar, botões **⌖ Centralizar**, **+/−**, **satélite ou mapa de ruas** e **tela cheia** (no celular, o Voltar fecha a tela cheia). Tocar num talhão destaca e abre as informações; em tela cheia aparece um resumo com **+ Operação** e **Abrir talhão**. No celular, **um dedo rola a tela e dois dedos movem o mapa** (com aviso na tela), no Início e no mapa do MercaClima; em tela cheia, um dedo já move. Sem internet, fica a imagem parada de antes.
 
 `1.0.0-beta2` — Início: **o mapa aparece sempre**, mesmo antes de desenhar os talhões. Ele mostra o satélite na sede (ou onde o aparelho está, se o GPS já foi liberado) e oferece **📍 Estou na fazenda** (marca a sede pelo GPS), **🔎 Buscar cidade ou coordenada** (busca no OpenStreetMap, dentro da tela Local da fazenda), **📂 Importar do CAR** (o shapefile do SICAR, pelo importador de contornos) e **✏ Desenhar talhões**. As informações do talhão tocado no mapa têm agora um botão **✕ Fechar**, e tocar de novo no mesmo talhão também fecha. **Prepare a fazenda** virou um cartão do Personalizar, ligado no padrão e só visível enquanto falta cadastro.

@@ -99,7 +99,11 @@ VIEWS.inicio = () => {
   let corpo = '';
   for (let i = 0; i < lista.length; i++) {
     // Operações e Atenção seguidas ficam lado a lado no computador (como antes)
-    if ((lista[i] === 'ops' && lista[i + 1] === 'aten') || (lista[i] === 'aten' && lista[i + 1] === 'ops')) {
+    // Clima e mapa seguidos viram um cartão só: o tempo de hoje junto do mapa da fazenda
+    if ((lista[i] === 'clima' && lista[i + 1] === 'mapa') || (lista[i] === 'mapa' && lista[i + 1] === 'clima')) {
+      const clima = iniCartao('clima'), mapa = iniCartao('mapa');
+      corpo += clima && mapa ? `<section class="card i2-card ini-unido"><div class="ini-u-clima">${clima}</div>${mapa}</section>` : clima + mapa; i++;
+    } else if ((lista[i] === 'ops' && lista[i + 1] === 'aten') || (lista[i] === 'aten' && lista[i + 1] === 'ops')) {
       corpo += `<div class="i2-meio">${iniCartao(lista[i])}${iniCartao(lista[i + 1])}</div>`; i++;
     } else corpo += iniCartao(lista[i]);
   }
@@ -178,13 +182,14 @@ function iniCartaoSemMapa(fs) {
     <div class="pf-mapa ${ponto ? '' : 'sem-ponto'}">${ponto ? iniSatelite(ponto.lat, ponto.lon, 15) : iniSatelite(-15.8, -52, 4)}
       <div class="pf-aviso">${ponto ? 'Sua fazenda ainda não está no mapa' : 'Onde fica a sua fazenda?'}</div>
       ${ponto ? `<div class="pf-pin ${temSede ? 'sede' : ''}"><span class="pf-pulso"></span><span class="pf-ponto"></span><b>${esc(ponto.rot)}</b></div>` : ''}
-      <span class="i2-faz-cred">Imagem © Esri, Maxar</span></div>
-    <div class="pf-bts">
-      ${podeSede ? `<button type="button" class="${temSede ? 'secondary' : 'primary'} pf-b" data-act="pf-gps">📍 Estou na fazenda<small>${temSede ? 'remarcar a sede pelo GPS' : 'marca a sede pelo GPS'}</small></button>
-      <button type="button" class="secondary pf-b" data-act="pf-buscar">🔎 Buscar cidade<small>ou coordenada</small></button>` : ''}
-      ${gestor ? `<button type="button" class="secondary pf-b pf-car" data-act="pf-car">📂 Importar do CAR<small>a fazenda já desenhada</small></button>
-      <button type="button" class="secondary pf-b" data-act="nav" data-id="mapatalhoes">✏ Desenhar talhões<small>no satélite</small></button>` : ''}
-    </div>${!podeSede && !gestor ? '<p class="sub">O ADM ou o supervisor coloca a fazenda no mapa.</p>' : ''}</section>`;
+      <span class="i2-faz-cred">Imagem © Esri, Maxar</span>
+    ${podeSede || gestor ? `<button type="button" class="pf-menu-bt" data-act="pf-menu" aria-expanded="false" aria-controls="pfMenu">📍 Colocar a fazenda no mapa</button>
+      <div class="pf-menu" id="pfMenu" role="menu" hidden>
+      ${podeSede ? `<button type="button" role="menuitem" data-act="pf-gps">📍 Estou na fazenda<small>${temSede ? 'remarcar a sede pelo GPS' : 'marca a sede pelo GPS'}</small></button>
+      <button type="button" role="menuitem" data-act="pf-buscar">🔎 Buscar cidade<small>ou coordenada</small></button>` : ''}
+      ${gestor ? `<button type="button" role="menuitem" class="pf-car" data-act="pf-car">📂 Importar do CAR<small>a fazenda já desenhada</small></button>
+      <button type="button" role="menuitem" data-act="nav" data-id="mapatalhoes">✏ Desenhar talhões<small>no satélite</small></button>` : ''}</div>` : ''}</div>
+    ${!podeSede && !gestor ? '<p class="sub">O ADM ou o supervisor coloca a fazenda no mapa.</p>' : ''}</section>`;
 }
 i2Fazenda = function () {
   if (!iniPode('talhoes')) return '';
@@ -192,7 +197,12 @@ i2Fazenda = function () {
   if (fs.some(f => f.contorno?.pontos?.length > 2)) return iniFazendaBase();
   return iniCartaoSemMapa(fs);
 };
+// Menu "Colocar a fazenda no mapa": abre por cima do mapa; tocar fora ou escolher uma opção fecha
+const pfMenuFechar = () => { const m = document.getElementById('pfMenu'); if (m && !m.hidden) { m.hidden = true; document.querySelector('.pf-menu-bt')?.setAttribute('aria-expanded', 'false'); } };
+document.addEventListener('click', e => { if (!e.target.closest?.('.pf-menu, .pf-menu-bt')) pfMenuFechar(); });
+document.addEventListener('click', e => { if (e.target.closest?.('.pf-menu [data-act]')) setTimeout(pfMenuFechar, 0); });
 Object.assign(ACTIONS, {
+  'pf-menu': () => { const m = document.getElementById('pfMenu'); if (!m) return; m.hidden = !m.hidden; document.querySelector('.pf-menu-bt')?.setAttribute('aria-expanded', String(!m.hidden)); },
   'pf-gps': () => { sedeVoltar = 'inicio'; go('sede'); setTimeout(() => ACTIONS['sede-gps']?.(), 300); },
   'pf-buscar': () => { sedeVoltar = 'inicio'; go('sede'); setTimeout(() => document.getElementById('sedeBusca')?.focus(), 300); },
   'pf-car': () => {

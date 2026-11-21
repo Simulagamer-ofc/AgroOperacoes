@@ -2193,3 +2193,29 @@ body:has(.i2) .app.nx-home .content{max-width:none}
 .mapa-dedos.on{opacity:1}
 .leaflet-container .leaflet-control-attribution{font-size:10px}
 .pf-mapa.vivo .pf-aviso{left:12px;transform:none;max-width:calc(100% - 74px)}
+
+/* Clima e mapa num cartão só */
+.ini-unido{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:start}
+.ini-unido>.i2-faz{display:contents}
+.ini-unido .i2-faz>.i2-tit{order:0}
+.ini-unido .ini-u-clima{order:1;min-width:0}
+.ini-unido .i2-faz>:not(.i2-tit){order:2;min-width:0}
+.ini-unido .pf-mapa{margin-top:0}
+.ini-unido .ini-u-clima>.card{border:0!important;box-shadow:none!important;background:transparent!important;padding:0!important;margin:0!important;border-radius:0!important;outline:0}
+.ini-unido .ini-u-clima .clima-abrir{width:100%}
+@media(min-width:1000px){
+  .ini-unido{grid-template-columns:minmax(260px,330px) minmax(0,1fr);column-gap:20px}
+  .ini-unido .i2-faz>.i2-tit{grid-column:1/-1}
+  .ini-unido .ini-u-clima{grid-column:1;grid-row:2/span 3}
+  .ini-unido .i2-faz>:not(.i2-tit){grid-column:2}
+  .ini-unido .i2-faz-corpo{grid-template-columns:1fr}
+}
+/* Botão e menu "Colocar a fazenda no mapa" */
+.pf-menu-bt{position:absolute;left:10px;bottom:10px;z-index:1001;min-height:0;height:auto;padding:9px 14px;border:0;border-radius:999px;background:#18A66A;color:#fff;font-weight:700;font-size:.88rem;box-shadow:0 2px 10px rgba(0,0,0,.35);cursor:pointer}
+.pf-menu{position:absolute;left:10px;bottom:56px;z-index:1002;width:min(280px,calc(100% - 70px));background:var(--panel,#fff);border:1px solid var(--line,#d6dde3);border-radius:14px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.35);display:flex;flex-direction:column;gap:2px}
+.pf-menu[hidden]{display:none}
+.pf-menu button{display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;min-height:0;height:auto;padding:9px 10px;border:0;border-radius:10px;background:transparent;color:inherit;font-weight:700;font-size:.92rem;white-space:normal;cursor:pointer}
+.pf-menu button:hover,.pf-menu button:focus-visible{background:rgba(24,166,106,.12)}
+.pf-menu button small{font-weight:500;opacity:.75;font-size:.78rem}
+.pf-menu .pf-car{border:0;color:#0F5A38;background:rgba(24,166,106,.1)}
+:root[data-theme="dark"] .pf-menu .pf-car{color:#7fe0b0}
