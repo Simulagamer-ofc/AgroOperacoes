@@ -2219,3 +2219,8 @@ body:has(.i2) .app.nx-home .content{max-width:none}
 .pf-menu button small{font-weight:500;opacity:.75;font-size:.78rem}
 .pf-menu .pf-car{border:0;color:#0F5A38;background:rgba(24,166,106,.1)}
 :root[data-theme="dark"] .pf-menu .pf-car{color:#7fe0b0}
+
+/* O mapa do Início nunca passa do tamanho do cartão (mesmo se o estilo do mapa demorar a carregar) */
+.ini-mapa-slot{overflow:hidden;border-radius:inherit}
+.ini-mapa-l{overflow:hidden!important;contain:paint}
+.ini-mapa-l:not(.cheio){position:absolute!important;inset:0!important;width:auto!important;height:auto!important;z-index:0!important}
