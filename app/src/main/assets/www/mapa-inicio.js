@@ -99,13 +99,19 @@ function iniTelaCheia(on) {
   const m = iniMapa; if (!m) return;
   m.el.classList.toggle('cheio', on);
   // Em tela cheia o mapa vai para o corpo da página (fora do cartão), e volta ao cartão ao fechar
-  if (on) document.body.append(m.el); else document.querySelector('.ini-mapa-slot')?.append(m.el);
+  if (on) document.body.append(m.el);
+  else {
+    // Volta para o cartão; se o cartão não estiver na tela (outra página), o mapa sai da tela e é remontado ao voltar ao Início
+    const slot = document.querySelector('.ini-mapa-slot');
+    if (slot) { slot.append(m.el); slot.classList.add('vivo'); } else m.el.remove();
+  }
   document.documentElement.classList.toggle('ini-mapa-aberto', on);
   m.btCheia.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${on ? INI_IC.sair : INI_IC.cheia}</svg>`;
   m.btCheia.title = on ? 'Fechar tela cheia' : 'Tela cheia'; m.btCheia.setAttribute('aria-label', m.btCheia.title);
   if (on || !mapaToque()) m.mapa.dragging.enable(); else m.mapa.dragging.disable();
   if (!on) m.mapa.closePopup();
-  setTimeout(() => m.mapa.invalidateSize(), 60);
+  // O aparelho pode demorar a refazer o tamanho: acerta o mapa algumas vezes e, ao voltar, reenquadra a fazenda
+  [60, 250, 700].forEach(ms => setTimeout(() => { if (!m.el.isConnected) return; m.mapa.invalidateSize(); if (!on && ms === 250) iniCentralizar(false); }, ms));
 }
 
 function iniCentralizar(animar) {
@@ -191,6 +197,10 @@ function iniTocarTalhao(f, pt, pol) {
   }
   ACTIONS['i2-tal']?.(f.id);
 }
+
+// Saindo do Início com o mapa em tela cheia (menu, atalho, link), a tela cheia fecha sozinha
+window.addEventListener('hashchange', () => { if (iniMapa?.el.classList.contains('cheio') && parseRoute().name !== 'inicio') iniTelaCheia(false); });
+window.addEventListener('resize', () => { if (iniMapa?.el.isConnected) setTimeout(() => iniMapa.mapa.invalidateSize(), 120); });
 
 // O botão Voltar do Android fecha a tela cheia antes de sair do Início
 const iniVoltarBase = window.voltarApp;
