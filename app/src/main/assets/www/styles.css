@@ -2262,4 +2262,23 @@ body .nv-portao{padding-top:calc(20px + var(--topo))}
 .clima-selo.red{background:#d64545}
 .clima-selo.yellow{background:#b98a00}
 .clima-risco small.clima-extra{margin-top:4px;padding-top:4px;border-top:1px dashed color-mix(in srgb,var(--muted) 35%,transparent);font-size:.8rem}
-.clima-risco[hidden]{display:none!important}
+/* Início: alertas recolhidos numa linha (o mais grave + quantos mais); tocar abre a lista com os detalhes */
+.clima-resumo{margin:6px 0;border-radius:12px;border-left:4px solid var(--orange);background:color-mix(in srgb,var(--orange) 12%,transparent)}
+.clima-resumo.red{border-left-color:var(--red);background:color-mix(in srgb,var(--red) 14%,transparent)}
+.clima-resumo.yellow{border-left-color:#d4a106;background:color-mix(in srgb,#e8b10c 14%,transparent)}
+.clima-resumo[hidden]{display:none}
+.clima-resumo>summary{list-style:none;display:flex;gap:10px;align-items:center;padding:9px 10px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.clima-resumo>summary::-webkit-details-marker{display:none}
+.clima-resumo .cr-fechado{display:flex;gap:10px;align-items:flex-start;flex:1;min-width:0}
+.clima-resumo .cr-aberto{display:none;flex:1;min-width:0;font-size:.92rem}
+.clima-resumo[open] .cr-fechado{display:none}.clima-resumo[open] .cr-aberto{display:block}
+.clima-resumo .cr-ic{font-size:1.2rem;line-height:1.2}
+.clima-resumo .cr-txt{min-width:0}.clima-resumo .cr-txt strong{display:block;font-size:.92rem}
+.clima-resumo .cr-txt small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--muted);font-size:.82rem;margin-top:2px}
+.clima-resumo .cr-acao{display:flex;align-items:center;gap:4px;flex:none;font-size:.8rem;font-weight:600;color:var(--blue)}
+.clima-resumo .cr-fechar,.clima-resumo[open] .cr-ver{display:none}.clima-resumo[open] .cr-fechar{display:inline}
+.clima-resumo .cr-seta{display:inline-block;transition:transform .2s}.clima-resumo[open] .cr-seta{transform:rotate(180deg)}
+.clima-resumo #climaRiscos{padding:0 8px 8px}
+.clima-resumo .clima-risco{margin:0 0 6px;background:var(--panel)}
+.clima-resumo .clima-risco:last-child{margin-bottom:0}
+.clima-curto .clima-resumo .clima-risco small{display:block}

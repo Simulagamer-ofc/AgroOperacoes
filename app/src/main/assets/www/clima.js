@@ -126,14 +126,23 @@ function agruparInmet(avisos) {
   return [...g.values()];
 }
 async function riscosInmet(loc, completo = false) { return agruparInmet(await avisosInmet(loc)).map(l => riscoInmet(l, completo)); }
-// Início: no máximo 3 alertas no cartão; o resto fica no MercaClima (o botão diz quantos)
-const MAX_RISCOS_INICIO = 3;
-function limitarRiscosInicio() {
-  const card = document.querySelector('.clima-curto'), box = card?.querySelector('#climaRiscos'); if (!box) return;
-  const rs = [...box.querySelectorAll('.clima-risco')], mais = Math.max(0, rs.length - MAX_RISCOS_INICIO);
-  rs.forEach((el, i) => { el.hidden = i >= MAX_RISCOS_INICIO; });
-  const bt = card.querySelector('.clima-abrir');
-  if (bt) bt.textContent = mais ? `Ver mais ${mais} ${mais === 1 ? 'alerta' : 'alertas'} no MercaClima ›` : 'Detalhar no MercaClima ›';
+// Início: os alertas ficam recolhidos numa linha só (o mais grave + quantos mais há); tocando, abre a lista com os detalhes.
+// Fechado: ícone, título e selo do mais grave e "+ 1 alerta: Chuva amanhã…". Aberto: "N alertas de tempo" e a lista completa.
+const NIVEIS_RISCO = ['red', 'orange', 'yellow'];
+function htmlResumoRiscos(ic, tituloHtml, outros) {
+  const n = outros.length + 1;
+  return `<span class="cr-fechado"><span class="cr-ic" aria-hidden="true">${esc(ic)}</span><span class="cr-txt"><strong>${tituloHtml}</strong>`
+    + `<small>${outros.length ? `+ ${outros.length} ${outros.length === 1 ? 'alerta' : 'alertas'}: ${esc(outros.join(' · '))}` : 'Toque para ver os detalhes'}</small></span></span>`
+    + `<span class="cr-aberto"><strong>${n} ${n === 1 ? 'alerta' : 'alertas'} de tempo</strong></span>`
+    + `<span class="cr-acao"><span class="cr-ver">Detalhes</span><span class="cr-fechar">Fechar</span><span class="cr-seta" aria-hidden="true">▾</span></span>`;
+}
+function resumoRiscosInicio() {
+  const det = document.querySelector('.clima-curto .clima-resumo'), box = det?.querySelector('#climaRiscos'); if (!det || !box) return;
+  const rs = [...box.querySelectorAll('.clima-risco')]; det.hidden = !rs.length; if (!rs.length) return;
+  const p = rs[0], tit = p.querySelector('strong');
+  NIVEIS_RISCO.forEach(c => det.classList.toggle(c, p.classList.contains(c)));
+  const outros = rs.slice(1).map(el => el.querySelector('strong')?.firstChild?.textContent.trim()).filter(Boolean);
+  det.querySelector('summary').innerHTML = htmlResumoRiscos(p.firstElementChild?.textContent || '⚠', tit ? tit.innerHTML : '', outros);
 }
 // Coloca os avisos que chegaram depois (INMET, tempestade) no topo da caixa de alertas, sem repetir, e some o "Tudo em dia"
 function juntarRiscos(box, rs) {
@@ -144,7 +153,7 @@ function juntarRiscos(box, rs) {
   [...t.children].forEach((el, i) => { el.dataset.chave = novos[i].chave; });
   box.prepend(...t.children);
   box.closest('.ini-atencao')?.querySelectorAll('.ini-ok').forEach(ok => { ok.hidden = true; });
-  limitarRiscosInicio();
+  resumoRiscosInicio();
 }
 
 // ---------- Início: só a previsão do dia + alertas de uma linha; o resto fica no MercaClima ----------
@@ -158,20 +167,21 @@ function cartaoClimaCurto() {
   return `<article class="card panel hoje-clima clima-curto" id="hojeClima">
     <button type="button" class="clima-linha" data-act="nav" data-id="clima"><span class="clima-ic" aria-hidden="true">${iconeDia(c.dados, i0)}</span>
       <span class="clima-txt"><strong>Hoje ${Math.round(d.temperature_2m_max[i0])}° / ${Math.round(d.temperature_2m_min[i0])}°</strong><small class="${jan.janelas.length ? 'ok' : 'nao'}">${jan.janelas.length ? 'Pulverizar ' + jan.janelas.map(([a, b]) => `${hh(a)}–${hh(b)}`).join(', ') : 'Sem janela para pulverizar'} • ${esc(proxChuva)}</small></span><span class="clima-seta" aria-hidden="true">›</span></button>
-    <div id="climaRiscos">${htmlRiscos(rs)}</div>
+    <details class="clima-resumo ${rs[0]?.nivel || ''}" ${rs.length ? '' : 'hidden'}><summary>${rs.length ? htmlResumoRiscos(rs[0].icone, esc(rs[0].titulo), rs.slice(1).map(r => r.titulo)) : ''}</summary>
+      <div id="climaRiscos">${htmlRiscos(rs)}</div></details>
     <button type="button" class="secondary clima-abrir" data-act="nav" data-id="clima">Detalhar no MercaClima ›</button></article>`;
 }
 // eslint-disable-next-line no-global-assign
 cartaoClima = () => (parseRoute().name === 'clima' ? cartaoClimaCompleto() : cartaoClimaCurto());
 async function completarAlertasInicio() {
   const loc = localDaFazenda?.(), box = document.getElementById('climaRiscos'); if (!loc || !box) return;
-  limitarRiscosInicio();
+  resumoRiscosInicio();
   const [tp, inmet] = await Promise.all([tempestadePerto(loc), riscosInmet(loc)]);
   const r = riscoTempestade(tp), rs = [...(r ? [r] : []), ...inmet];
   // vermelho primeiro, depois laranja e amarelo
   const ordem = {red: 0, orange: 1, yellow: 2};
   juntarRiscos(document.getElementById('climaRiscos'), rs.sort((a, b) => ordem[a.nivel] - ordem[b.nivel]));
-  limitarRiscosInicio();
+  resumoRiscosInicio();
 }
 if (VIEWS.inicio) {
   const depoisSemAlertas = VIEWS.inicio.after;
