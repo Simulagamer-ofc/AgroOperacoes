@@ -1413,19 +1413,27 @@ function versaoMaior(a, b) {
 }
 // Versão das telas em uso (a que aparece no menu); pode ser mais nova que a do APK
 const versaoTelas = () => (document.querySelector('.versao')?.textContent || '').trim().replace(/^v/i, '');
+// "Adiar": o aviso de versão nova some por 4 horas (vale para as telas e para o APK)
+const ADIAR_HORAS = 4;
+const atualizacaoAdiada = () => Number(safeStorage.get('mp-atualizar-adiado-ate') || 0) > Date.now();
+function adiarAtualizacao() {
+  safeStorage.set('mp-atualizar-adiado-ate', String(Date.now() + ADIAR_HORAS * 3600000));
+  document.querySelectorAll('#novaVersaoTelas, #novaVersaoApk').forEach(b => b.remove());
+  showToast(`Combinado: lembro de novo em ${ADIAR_HORAS} horas.`);
+  setTimeout(() => { avisoTelas(window.otaEstado); const v = window.AndroidBridge?.appVersion?.(); if (v) avisoApk(v); }, ADIAR_HORAS * 3600000 + 1000);
+}
 function avisoApk(instalada) {
   let nova = null; try { nova = JSON.parse(safeStorage.get('agro-apk-nova') || 'null'); } catch { nova = null; }
-  if (!nova || !versaoMaior(nova.versao, instalada) || safeStorage.get('agro-apk-dispensado') === nova.versao) return;
+  if (!nova || !versaoMaior(nova.versao, instalada) || atualizacaoAdiada()) return;
   const antiga = document.getElementById('novaVersaoApk');
   if (antiga) { if (antiga.querySelector('button:disabled')) return; antiga.remove(); }
   const bar = Object.assign(document.createElement('div'), {id: 'novaVersaoApk', className: 'nova-versao', role: 'status'});
   // App com atualizador: baixa e instala por cima; app antigo: link para baixar
   const porDentro = !!window.AndroidBridge?.atualizarApp && /\.apk$/i.test(nova.url || '');
   const e = window.otaEstado, baixado = !!(e?.apkBaixado && e?.silencioso);
-  const txt = baixado ? `Atualização do app baixada: <b>${esc(nova.versao)}</b>. Instala sozinha quando você sair do MercaPlant.`
-    : `Nova versão do app: <b>${esc(nova.versao)}</b> (você tem ${esc(instalada)}).${e?.silencioso ? ' Instala sem precisar confirmar.' : ''}`;
-  bar.innerHTML = `<span class="nova-versao-txt">${txt}</span>${porDentro ? `<button type="button" class="nova-versao-baixar nova-versao-atualizar">${baixado ? 'Instalar agora' : 'Atualizar'}</button>` : `<a class="nova-versao-baixar" href="${esc(nova.url)}">Baixar</a>`}<button type="button" class="nova-versao-fechar" aria-label="Depois">✕</button>`;
-  bar.querySelector('.nova-versao-fechar').onclick = () => { safeStorage.set('agro-apk-dispensado', nova.versao); bar.remove(); };
+  const txt = `Nova versão disponível${baixado ? '<small>Se preferir, instala sozinha quando você sair do app.</small>' : ''}`;
+  bar.innerHTML = `<span class="nova-versao-txt">${txt}</span>${porDentro ? '<button type="button" class="nova-versao-baixar nova-versao-atualizar">Atualizar agora</button>' : `<a class="nova-versao-baixar" href="${esc(nova.url)}">Baixar</a>`}<button type="button" class="nova-versao-adiar">Adiar</button>`;
+  bar.querySelector('.nova-versao-adiar').onclick = adiarAtualizacao;
   const at = bar.querySelector('.nova-versao-atualizar');
   if (at) at.onclick = () => apkAtualizar(nova.url, at);
   bar.dataset.url = nova.url || '';
@@ -1447,7 +1455,7 @@ window.onAtualizacao = ({etapa, pct, msg} = {}) => {
   // Troca de chave (só uma vez): precisa desinstalar; o botão vira o link para baixar o APK
   if (etapa === 'chave' && bt) { const a = Object.assign(document.createElement('a'), {className: 'nova-versao-baixar', href: bar.dataset.url, textContent: 'Baixar'}); bt.replaceWith(a); }
   // erro ou permissão negada: mostra o motivo e libera o botão
-  else if (bt) { bt.disabled = false; bt.textContent = 'Atualizar'; }
+  else if (bt) { bt.disabled = false; bt.textContent = 'Atualizar agora'; }
   if (txt) txt.textContent = msg; else if (msg) showToast(msg, true);
 };
 // Sem o pacote das telas no site (ou sem internet para ele): confere a página de versões do GitHub
@@ -1464,7 +1472,7 @@ function conferirApkGithub(instalada) {
   }).catch(() => {});
 }
 // ---- Telas novas sem reinstalar
-let otaDispensada = false, otaGithubFeito = false;
+let otaGithubFeito = false;
 function otaAplicarAgora() {
   const v = window.otaEstado?.pronta?.versao || '';
   try { sessionStorage.setItem('mp-ota-aplicada', v || '-'); } catch { /* sem sessionStorage: só não mostra o aviso depois */ }
@@ -1472,13 +1480,12 @@ function otaAplicarAgora() {
 }
 function avisoTelas(e) {
   let bar = document.getElementById('novaVersaoTelas');
-  if (!e?.pronta || otaDispensada) { bar?.remove(); return; }
+  if (!e?.pronta || atualizacaoAdiada()) { bar?.remove(); return; }
   if (bar) return;
-  const v = e.pronta.versao, mesma = !v || v === versaoTelas();
   bar = Object.assign(document.createElement('div'), {id: 'novaVersaoTelas', className: 'nova-versao', role: 'status'});
-  bar.innerHTML = `<span class="nova-versao-txt">${mesma ? 'Atualização do MercaPlant pronta.' : `Versão nova pronta: <b>${esc(v)}</b>.`} <small>Atualiza em segundos, sem sair do app.</small></span><button type="button" class="nova-versao-atualizar">Atualizar agora</button><button type="button" class="nova-versao-fechar" aria-label="Depois">✕</button>`;
+  bar.innerHTML = '<span class="nova-versao-txt">Nova versão disponível</span><button type="button" class="nova-versao-atualizar">Atualizar agora</button><button type="button" class="nova-versao-adiar">Adiar</button>';
   bar.querySelector('.nova-versao-atualizar').onclick = ev => { ev.currentTarget.disabled = true; ev.currentTarget.textContent = 'Atualizando…'; otaAplicarAgora(); };
-  bar.querySelector('.nova-versao-fechar').onclick = () => { otaDispensada = true; bar.remove(); showToast('A versão nova entra sozinha na próxima vez que você abrir o app.'); };
+  bar.querySelector('.nova-versao-adiar').onclick = adiarAtualizacao;
   document.body.append(bar);
 }
 function cartaoAtualizacoes() {
@@ -1511,7 +1518,7 @@ window.onOta = e => {
 };
 // Voltou para o app depois de um tempo fora (o Android avisa): com tudo fechado, entra a versão nova pronta
 window.onVoltouAoApp = ms => {
-  if (window.otaEstado?.pronta && ms > 5 * 60000 && !document.querySelector('.modal.open')) otaAplicarAgora();
+  if (window.otaEstado?.pronta && ms > 5 * 60000 && !atualizacaoAdiada() && !document.querySelector('.modal.open')) otaAplicarAgora();
 };
 ACTIONS['ota-verificar'] = () => { window.AndroidBridge?.otaVerificar?.(); showToast('Procurando atualização…'); };
 ACTIONS['ota-aplicar'] = () => otaAplicarAgora();

@@ -566,8 +566,9 @@ body{background:var(--bg)}
 .nova-versao .nova-versao-fechar{background:transparent;color:#cfe3ee;padding:6px 8px;font-weight:400}
 /* Faixas de atualização: largura boa no celular (texto não fica espremido) */
 .nova-versao{width:min(560px,calc(100% - 24px));box-sizing:border-box}
-.nova-versao-txt{flex:1;min-width:0;line-height:1.35}
-.nova-versao-txt small{display:block;opacity:.85;margin-top:2px}
+.nova-versao-txt{flex:1;min-width:0;line-height:1.35;font-weight:600}
+.nova-versao-txt small{display:block;opacity:.85;margin-top:2px;font-weight:400}
+.nova-versao .nova-versao-adiar{background:transparent;color:#e3f0f6;border:1px solid #4d8aa8;font-weight:600}
 .ota-sit{margin:.5rem 0}
 .nova-versao button{background:var(--green);color:#fff;border:0;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer;white-space:nowrap}
 /* Visão geral: Hoje (o que fazer) e clima */
