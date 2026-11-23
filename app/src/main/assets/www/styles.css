@@ -2246,3 +2246,12 @@ body{padding-top:var(--topo)}
 body .nv-portao{padding-top:calc(20px + var(--topo))}
 /* Botões do mapa do Início ficam dentro do cartão: não passam por cima de janelas, menu e barra de baixo */
 .pf-mapa{isolation:isolate}
+
+/* Avisos oficiais do INMET: nível amarelo (perigo potencial) e link para o aviso no site do INMET */
+.clima-risco.yellow{border-left-color:#d4a106;background:color-mix(in srgb,#e8b10c 14%,transparent)}
+.clima-risco.yellow>span{background:color-mix(in srgb,#e8b10c 28%,transparent)}
+.ini-atencao .clima-risco.yellow,.i2-tempestade .clima-risco.yellow{border-color:color-mix(in srgb,#d4a106 50%,var(--line));background:color-mix(in srgb,#e8b10c 12%,var(--panel))}
+.clima-risco .clima-fonte{display:inline-block;margin-top:4px;font-size:.8rem;font-weight:600;color:var(--blue);text-decoration:none}
+.clima-risco .clima-fonte:hover{text-decoration:underline}
+.inmet-avisos h3{margin:0 0 8px}
+@media(max-width:760px){.clima-risco.fonte-inmet small{display:block}}
