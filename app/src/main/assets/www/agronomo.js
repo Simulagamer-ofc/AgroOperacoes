@@ -95,7 +95,7 @@ function resumoAgronomico(f) {
   const caixa = (titulo, valor, detalhe = '') => `<div class="ag-caixa"><small>${titulo}</small><b>${valor}</b>${detalhe ? `<small>${detalhe}</small>` : ''}</div>`;
   return `<section class="card panel ag-resumo"><div class="ag-topo"><span class="chip sit-${s.cor}">${esc(s.rotulo)}</span><span class="nota">${esc(s.texto)}</span></div>
     <div class="ag-grade">
-      ${caixa('Cultura e estágio', esc(f.crop || '—'), c ? `${c.dap} dias após o plantio${c.colheita ? ` • colheita ~${fmtDate(c.colheita)}` : ''}` : f.plantingDate ? 'Plantio em ' + fmtDate(f.plantingDate) : 'Sem plantio informado')}
+      ${caixa('Cultura e estádio', esc(f.crop || '—'), c ? `${c.dap} dias após o plantio${c.colheita ? ` • colheita ~${fmtDate(c.colheita)}` : ''}` : f.plantingDate ? 'Plantio em ' + fmtDate(f.plantingDate) : 'Sem plantio informado')}
       ${caixa('Última aplicação', ap ? esc(ap.produto) : '—', ap ? `${fmtDate(ap.date)}${lib && lib.libera > today() ? ` • carência até ${fmtDate(lib.libera)}` : ' • colheita liberada'}` : 'Nenhuma registrada')}
       ${caixa('Último monitoramento', mon ? esc(mon.alvo) : '—', mon ? `${num(mon.valor, 2)} ${esc(mon.unidade || '')} • ${fmtDate(mon.date)}${typeof atingiuNivel === 'function' && atingiuNivel(mon) ? ' • <b class="txt-red">nível de ação</b>' : ''}` : 'Nenhum registrado')}
       ${caixa('Chuva desde o plantio', c ? `${num(c.mm, 0)} mm` : '—', c ? 'Pluviômetro do talhão ou da sede' : '')}
