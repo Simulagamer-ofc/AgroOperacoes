@@ -2282,3 +2282,17 @@ body .nv-portao{padding-top:calc(20px + var(--topo))}
 .clima-resumo .clima-risco{margin:0 0 6px;background:var(--panel)}
 .clima-resumo .clima-risco:last-child{margin-bottom:0}
 .clima-curto .clima-resumo .clima-risco small{display:block}
+
+/* Alertas com a identidade do MercaPlant: hexágono com brilho (como os do menu), borda na cor do nível */
+.cr-hex{--cr:var(--orange);flex:none;display:block;overflow:visible;filter:drop-shadow(0 0 3px color-mix(in srgb,var(--cr) 55%,transparent))}
+.cr-hex.n-red{--cr:var(--red)}.cr-hex.n-yellow{--cr:#e5b400}
+.cr-hex .cr-hex-borda{fill:color-mix(in srgb,var(--cr) 14%,transparent);stroke:var(--cr);stroke-width:1.7;stroke-linejoin:round}
+.cr-hex .cr-hex-glifo{fill:none;stroke:var(--text);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+:root[data-theme="light"] .cr-hex{filter:none}
+:root.modo-campo .cr-hex{filter:none}:root.modo-campo .cr-hex .cr-hex-glifo{stroke:#000}
+.clima-risco>.cr-icone,.clima-resumo .cr-ic{font-size:0;line-height:0;align-self:flex-start}
+.ini-atencao #climaRiscos .clima-risco>.cr-icone{width:auto;height:auto;border-radius:0;background:none!important}
+.i2-av-ic:has(.cr-hex){background:none!important;width:auto;height:auto}
+.clima-resumo .cr-seta{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transform:rotate(90deg)}
+.clima-resumo[open] .cr-seta{transform:rotate(-90deg)}
+.clima-selo.orange{background:#d9822b}

@@ -266,6 +266,6 @@ VIEWS.avisos.after = async () => {
   const loc = typeof localDaFazenda === 'function' ? localDaFazenda() : null; if (!loc || typeof riscosInmet !== 'function') return;
   const rs = await riscosInmet(loc, true), head = document.querySelector('#view > .view-head');
   if (!rs.length || !head || parseRoute().name !== 'avisos' || document.querySelector('#view .inmet-avisos')) return;
-  head.insertAdjacentHTML('afterend', `<section class="card panel inmet-avisos"><h3>Avisos oficiais do INMET para a fazenda</h3>${htmlRiscos(rs)}</section>`);
+  head.insertAdjacentHTML('afterend', `<section class="card panel inmet-avisos"><h3>Alertas de tempo para a fazenda</h3>${htmlRiscos(rs)}</section>`);
 };
 $('#bellBtn').onclick = () => go('avisos');
