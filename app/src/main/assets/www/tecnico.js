@@ -155,10 +155,10 @@ const tecEstadioTxt = r => !r ? '' : r.observado ? `${r.observado.estadio} (vist
 function tecEstadioDetalhe(r, f) {
   if (!r) return '';
   const l = [];
-  if (r.metodo === 'graus-dia') l.push(`Soma térmica desde o plantio: <b>${num(r.gdd)} °C·dia</b> (base ${r.base} °C), ${r.dap} dias.${r.estimados ? ` ${r.estimados} dias sem dado foram estimados pela média.` : ''}`);
+  if (r.metodo === 'graus-dia') l.push(`Soma térmica desde o plantio: <b>${num(r.gdd)} graus-dia (GD)</b>, base ${r.base} °C, ${r.dap} dias.${r.estimados ? ` ${r.estimados} dias sem dado foram estimados pela média.` : ''}`);
   if (r.metodo === 'ciclo') l.push(`Pelo ciclo ${r.cicloInformado ? `de ${r.ciclo} dias da cultivar` : `padrão de ${r.ciclo} dias (informe o ciclo da cultivar no talhão para acertar)`}: ${r.dap} dias, ${Math.round(r.frac * 100)}% do ciclo. Na soja o fotoperíodo pesa mais que a temperatura.`);
   if (r.metodo === 'sem-dados') l.push('Sem o histórico do tempo neste aparelho ainda; aparece quando a internet voltar.');
-  if (r.prox) l.push(`Próximo: <b>${esc(r.prox.cod)}</b>${r.prox.desc ? ` (${esc(r.prox.desc)})` : ''}${r.prox.emDias ? ` em ~${r.prox.emDias} ${r.prox.emDias === 1 ? 'dia' : 'dias'}` : ''}${r.prox.gdd ? ` — aos ${num(r.prox.gdd)} °C·dia` : ''}.`);
+  if (r.prox) l.push(`Próximo: <b>${esc(r.prox.cod)}</b>${r.prox.desc ? ` (${esc(r.prox.desc)})` : ''}${r.prox.emDias ? ` em ~${r.prox.emDias} ${r.prox.emDias === 1 ? 'dia' : 'dias'}` : ''}${r.prox.gdd ? ` — aos ${num(r.prox.gdd)} GD` : ''}.`);
   if (r.observado && r.cod) l.push(`A conta indicava ${esc(r.cod)}; vale o que foi visto no monitoramento.`);
   l.push('Estimativa para cultivares de ciclo médio. Confirme no campo e registre o estádio no monitoramento.');
   return l.map(x => `<p>${x}</p>`).join('');
@@ -200,15 +200,15 @@ function balancoHidrico(f = null, h = tecLerHist()) {
   return {cad, arm: Math.round(arm), pct, nivel, diasDeficit: def, chuva7: tecR1(chuva7), etc7: tecR1(etc7), chuva30: Math.round(chuva30), lidos7,
     kcHoje: f && plantio ? tecR1(tecKc(est?.frac ?? null) * 100) / 100 : 0.5, serie: serie.slice(-14)};
 }
-const TEC_NIVEL_AGUA = {boa: ['Boa umidade', 'ok'], secando: ['Secando', 'atencao'], deficit: ['Déficit de água', 'ruim']};
+const TEC_NIVEL_AGUA = {boa: ['Boa umidade', 'ok'], secando: ['Secando', 'atencao'], deficit: ['Déficit hídrico', 'ruim']};
 const tecAguaTxt = b => !b ? '' : `${TEC_NIVEL_AGUA[b.nivel][0]} (${Math.round(b.pct * 100)}%)${b.nivel === 'deficit' && b.diasDeficit > 1 ? ` há ${b.diasDeficit} dias` : ''}`;
 function tecAguaDetalhe(b) {
   if (!b) return '';
   const max = Math.max(1, ...b.serie.map(s => Math.max(s.p, s.etc)));
-  const barras = `<div class="tec-barras" role="img" aria-label="Chuva e consumo de água nos últimos 14 dias">${b.serie.map(s => `<span title="${fmtDate(s.d).slice(0, 5)}: chuva ${num(tecR1(s.p), 1)} mm${s.lida ? ' (pluviômetro)' : ' (≈ estimada)'} • consumo ${num(tecR1(s.etc), 1)} mm"><i class="ch ${s.lida ? '' : 'est'}" style="height:${Math.round(s.p / max * 100)}%"></i><i class="et" style="height:${Math.round(s.etc / max * 100)}%"></i></span>`).join('')}</div>
-    <div class="tec-leg"><span><i class="ch"></i>Chuva</span><span><i class="ch est"></i>Chuva ≈ estimada</span><span><i class="et"></i>Consumo da lavoura</span></div>`;
-  return `${barras}<p>Água no solo: <b>${num(b.arm)} de ${num(b.cad)} mm</b> disponíveis. Últimos 7 dias: chuva ${num(b.chuva7, 1)} mm × consumo ${num(b.etc7, 1)} mm (coeficiente da cultura hoje ${num(b.kcHoje, 2)}). Chuva em 30 dias: ${num(b.chuva30)} mm.</p>
-    <p>${b.lidos7 ? `${b.lidos7} dos últimos 7 dias com leitura do pluviômetro; os outros, chuva ≈ estimada.` : 'Chuva dos últimos dias ≈ estimada pela previsão; registrar o pluviômetro deixa a conta mais certa.'} Capacidade de água do solo: ${num(b.cad)} mm (Ajustes → Agronomia).</p>`;
+  const barras = `<div class="tec-barras" role="img" aria-label="Chuva e evapotranspiração da lavoura nos últimos 14 dias">${b.serie.map(s => `<span title="${fmtDate(s.d).slice(0, 5)}: chuva ${num(tecR1(s.p), 1)} mm${s.lida ? ' (pluviômetro)' : ' (≈ estimada)'} • ETc ${num(tecR1(s.etc), 1)} mm"><i class="ch ${s.lida ? '' : 'est'}" style="height:${Math.round(s.p / max * 100)}%"></i><i class="et" style="height:${Math.round(s.etc / max * 100)}%"></i></span>`).join('')}</div>
+    <div class="tec-leg"><span><i class="ch"></i>Chuva</span><span><i class="ch est"></i>Chuva ≈ estimada</span><span><i class="et"></i>Consumo da lavoura (ETc)</span></div>`;
+  return `${barras}<p><b>Balanço hídrico:</b> água no solo <b>${num(b.arm)} de ${num(b.cad)} mm</b> disponíveis. Últimos 7 dias: chuva ${num(b.chuva7, 1)} mm × consumo da lavoura (evapotranspiração, ETc) ${num(b.etc7, 1)} mm; coeficiente da cultura (Kc) hoje ${num(b.kcHoje, 2)}. Chuva em 30 dias: ${num(b.chuva30)} mm.</p>
+    <p>${b.lidos7 ? `${b.lidos7} dos últimos 7 dias com leitura do pluviômetro; os outros, chuva ≈ estimada.` : 'Chuva dos últimos dias ≈ estimada pela previsão; registrar o pluviômetro deixa a conta mais certa.'} Capacidade de água disponível (CAD): ${num(b.cad)} mm (Ajustes → Agronomia).</p>`;
 }
 
 // ======================= 4. Análise de solo (CQFS-RS/SC, 2016) =======================
@@ -440,16 +440,16 @@ function tabelaAduboForm(cult) {
     }});
 }
 ACTIONS['tec-tabela'] = c => tabelaAduboForm(c === 'Milho' ? 'Milho' : 'Soja');
-ACTIONS['tec-cad'] = v => { db.settings.cadSolo = Number(v) || 75; save(); showToast('Capacidade de água do solo salva'); };
+ACTIONS['tec-cad'] = v => { db.settings.cadSolo = Number(v) || 75; save(); showToast('Capacidade de água disponível (CAD) salva'); };
 if (typeof CFG_GRUPOS !== 'undefined' && !CFG_GRUPOS.some(([id]) => id === 'agronomia')) {
-  CFG_GRUPOS.splice(CFG_GRUPOS.findIndex(([id]) => id === 'dados'), 0, ['agronomia', 'Agronomia', 'Água do solo e tabela de adubação', /^Agronomia$/]);
+  CFG_GRUPOS.splice(CFG_GRUPOS.findIndex(([id]) => id === 'dados'), 0, ['agronomia', 'Agronomia', 'Balanço hídrico e tabela de adubação', /^Agronomia$/]);
   if (typeof CFG_ICONE !== 'undefined') CFG_ICONE.agronomia = TEC_IC.estadio;
 }
 tecEmbrulhar('cadastros', ajustesSemAgro => (...a) => {
     const html = ajustesSemAgro(...a), i = html.lastIndexOf('</section>'); if (i < 0 || !tecGestor()) return html;
     const preenchida = c => { const t = tecTabela(c); return TEC_ADUBO_CAMPOS.every(([k]) => (t[k] || []).some(x => x !== '' && x != null)); };
-    const card = `<article class="card panel"><h3>Agronomia</h3><p>Usado no balanço de água do solo e na recomendação das análises de solo.</p>
-      <div class="field"><label for="tecCad">Capacidade de água do solo</label><select id="tecCad" data-change="tec-cad">${TEC_SOLOS.map(([v, r]) => `<option value="${v}" ${String(tecCad()) === v ? 'selected' : ''}>${r}</option>`).join('')}</select></div>
+    const card = `<article class="card panel"><h3>Agronomia</h3><p>Usado no balanço hídrico e na recomendação das análises de solo.</p>
+      <div class="field"><label for="tecCad">Capacidade de água disponível (CAD)</label><select id="tecCad" data-change="tec-cad">${TEC_SOLOS.map(([v, r]) => `<option value="${v}" ${String(tecCad()) === v ? 'selected' : ''}>${r}</option>`).join('')}</select></div>
       <p class="nota">Trigo e triticale já vêm com a tabela do manual RS/SC (2016). Soja e milho: preencha uma vez com as doses do manual.</p>
       <div class="btn-row">${btn(`Tabela da soja${preenchida('Soja') ? ' ✓' : ''}`, 'tec-tabela', 'Soja', 'secondary')}${btn(`Tabela do milho${preenchida('Milho') ? ' ✓' : ''}`, 'tec-tabela', 'Milho', 'secondary')}</div></article>`;
     return html.slice(0, i) + card + html.slice(i);
