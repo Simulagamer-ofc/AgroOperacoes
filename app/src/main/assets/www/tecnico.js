@@ -322,7 +322,7 @@ let tecNdviPedido = null;
 function tecNdvi(forcar = false) {
   const fs = tecContornos(), atual = tecLerNdvi(), chave = tecChaveNdvi(fs);
   if (!fs.length || typeof NUVEM === 'undefined' || navigator.onLine === false) return Promise.resolve(atual);
-  if (!forcar && atual?.chave === chave && Date.now() - atual.em < 12 * 3600000) return Promise.resolve(atual);
+  if (!forcar && atual?.chave === chave && Date.now() - atual.em < 6 * 3600000) return Promise.resolve(atual);
   if (tecNdviPedido) return tecNdviPedido;
   tecNdviPedido = fetch(`${NUVEM.url}/functions/v1/satelite?acao=ndvi`, {method: 'POST', headers: {'Content-Type': 'application/json', apikey: NUVEM.chave},
     body: JSON.stringify({talhoes: fs.slice(0, 80).map(f => ({id: f.id, pontos: f.contorno.pontos.map(p => [Number(p[0]), Number(p[1])])}))})})
@@ -335,13 +335,14 @@ const TEC_VIGOR = [[0.7, 'Alto', '#1a9850'], [0.5, 'Bom', '#66bd63'], [0.3, 'Mé
 const tecVigorDe = v => TEC_VIGOR.find(([min]) => v >= min);
 function vigorTalhao(f, n = tecLerNdvi()) {
   const t = n?.talhoes?.find(x => x.id === f.id); if (!t || t.ndvi == null) return null;
-  const [, rot, cor] = tecVigorDe(t.ndvi); return {ndvi: t.ndvi, desvio: t.desvio, rot, cor, data: n.data, nuvens: n.nuvens};
+  const [, rot, cor] = tecVigorDe(t.ndvi); return {ndvi: t.ndvi, desvio: t.desvio, rot, cor, data: n.data, nuvens: n.nuvens, detalhe: n.detalhe || 10};
 }
 const tecVigorTxt = v => !v ? '' : `${v.rot} (${num(v.ndvi, 2)}) • imagem de ${fmtDate(String(v.data).slice(0, 10)).slice(0, 5)}`;
 function tecVigorDetalhe(v, f) {
   if (!v) return '';
   const est = estadioTalhao(f), cedo = est?.frac != null && est.frac < 0.25;
-  return `<p>Índice de vegetação (NDVI) médio do talhão: <b>${num(v.ndvi, 2)}</b>${v.desvio != null ? `, variação ±${num(v.desvio, 2)}` : ''} na imagem de ${fmtDate(String(v.data).slice(0, 10))} (${num(v.nuvens)}% de nuvens na cena).</p>
+  return `<p>Índice de vegetação (NDVI) médio do talhão: <b>${num(v.ndvi, 2)}</b>${v.desvio != null ? `, variação ±${num(v.desvio, 2)}` : ''} na imagem de ${fmtDate(String(v.data).slice(0, 10))} (${v.nuvens ? `${num(v.nuvens)}% de nuvem sobre a fazenda` : 'sem nuvem sobre a fazenda'}; detalhe de ${num(v.detalhe)} m).</p>
+    <p>Dois satélites gratuitos: o app procura a cada 6 horas e usa a imagem mais recente em que a fazenda está limpa — muitas vezes a cena tem nuvem em volta e a fazenda está aberta.</p>
     <p>Quanto mais perto de 1, mais folha verde. Variação alta indica manchas: veja no mapa (modo Vigor) onde a lavoura está mais fraca.${cedo ? ' No começo do ciclo o índice é baixo mesmo: compare entre talhões da mesma idade.' : ''}</p>`;
 }
 // Mapa do Início: modo "Vigor" (talhões pela média e o mapa colorido por cima)
