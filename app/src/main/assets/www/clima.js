@@ -18,7 +18,7 @@ const maxDia = (h, campo, dia, ini = 0, fim = 24) => { let m = null; h.time.forE
 // Lista de riscos de tempo (sem a tempestade, que chega depois pela REDEMET)
 function riscosClima(agora = new Date()) {
   const c = typeof lerClima === 'function' ? lerClima() : null, d = c?.dados?.daily, h = c?.dados?.hourly; if (!d || !h) return [];
-  const hoje = today(), amanha = addDias(hoje, 1), lista = [], add = (nivel, icone, titulo, texto, chave) => lista.push({nivel, icone, titulo, texto, chave});
+  const hoje = today(), amanha = addDias(hoje, 1), lista = [], chuvas = [], add = (nivel, icone, titulo, texto, chave) => { const r = {nivel, icone, titulo, texto, chave}; lista.push(r); return r; };
   // Chuva hoje e amanhã, com as operações que ela atrapalha
   [hoje, amanha].forEach(dia => {
     const fx = typeof horariosChuva === 'function' ? horariosChuva(c.dados, dia, dia === hoje ? agora : undefined) : [];
@@ -27,7 +27,7 @@ function riscosClima(agora = new Date()) {
     const patio = dia === hoje && typeof noPatio === 'function' ? noPatio().length : 0, secando = db.lotesSecagem?.some(l => l.status === 'Em andamento');
     const extras = [ops.length ? `Atrapalha: ${listaOps(ops)}.` : '', patio || secando ? 'Moega e secador: cubra o pátio e as cargas expostas.' : ''].filter(Boolean).join(' ');
     if (!ops.length && mm < LIM.chuvaForte && dia === amanha) return; // amanhã sem operação e chuva fraca: fica só no cartão
-    add(mm >= LIM.chuvaForte ? 'red' : 'orange', '🌧', `Chuva ${nomeDiaCurto(dia)} ${typeof txtHorariosChuva === 'function' ? txtHorariosChuva(fx) : ''}`.trim(), extras || 'Programe aplicações, plantio e colheita fora desse horário.', 'chuva-' + dia);
+    chuvas.push({mm, r: add(mm >= LIM.chuvaForte ? 'red' : 'orange', '🌧', `Chuva ${nomeDiaCurto(dia)} ${typeof txtHorariosChuva === 'function' ? txtHorariosChuva(fx) : ''}`.trim(), extras || 'Programe aplicações, plantio e colheita fora desse horário.', 'chuva-' + dia)});
   });
   // Pulverização programada sem condição boa
   [hoje, amanha].forEach(dia => {
@@ -45,7 +45,11 @@ function riscosClima(agora = new Date()) {
   }
   // Muita chuva em 48 h: solo encharcado
   const i0 = d.time.indexOf(hoje), mm48 = i0 >= 0 ? (d.precipitation_sum[i0] || 0) + (d.precipitation_sum[i0 + 1] || 0) : 0;
-  if (mm48 >= LIM.encharcado) add('orange', '🚜', `${num(Math.round(mm48))} mm previstos até amanhã`, 'Solo encharcado pode impedir a entrada de máquinas e causar compactação; reprograme operações pesadas.', 'encharcado');
+  // Se já há o alerta de chuva, o solo encharcado entra nele (mesma chuva, um alerta só)
+  const txtEnch = 'Solo encharcado pode impedir a entrada de máquinas e causar compactação; reprograme operações pesadas.';
+  const daChuva = chuvas.sort((a, b) => b.mm - a.mm)[0]?.r;
+  if (mm48 >= LIM.encharcado && daChuva) { daChuva.titulo += ' · solo encharcado'; daChuva.texto += ` ${num(Math.round(mm48))} mm até amanhã: ${txtEnch.charAt(0).toLowerCase()}${txtEnch.slice(1)}`; }
+  else if (mm48 >= LIM.encharcado) add('orange', '🚜', `${num(Math.round(mm48))} mm previstos até amanhã`, txtEnch, 'encharcado');
   const ordem = {red: 0, orange: 1}; return lista.sort((a, b) => ordem[a.nivel] - ordem[b.nivel]);
 }
 // Tempestade perto (STSC/REDEMET), guardada 5 min neste aparelho
@@ -60,7 +64,8 @@ async function tempestadePerto(loc) {
 }
 const riscoTempestade = tp => !tp || tp.nenhuma || tp.d > LIM.tempAtencao ? null : {nivel: tp.d <= LIM.tempPerto ? 'red' : 'orange', icone: '⚡', chave: 'tempestade',
   titulo: `Tempestade a ${Math.round(tp.d)} km ${tp.rumo} da fazenda${tp.chegando === true ? ' — se aproximando' : ''}`, texto: `Detectada às ${hhmm(tp.t)} (REDEMET). Raios: suspenda trabalho em campo aberto e em silos e secadores; recolha a equipe.`};
-const htmlRiscos = rs => rs.map(r => `<div class="clima-risco ${r.nivel}${r.fonte ? ' fonte-' + r.fonte.toLowerCase() : ''}"><span aria-hidden="true">${r.icone}</span><div><strong>${esc(r.titulo)}</strong><small>${esc(r.texto)}</small>${r.link ? `<a class="clima-fonte" href="${esc(r.link)}" target="_blank" rel="noopener">${esc(r.linkTxt || 'Ver mais')} ›</a>` : ''}</div></div>`).join('');
+// Selo (ex.: "INMET · vermelho") ao lado do título; linhas extras (ex.: outros períodos do mesmo aviso) logo abaixo do texto
+const htmlRiscos = rs => rs.map(r => `<div class="clima-risco ${r.nivel}${r.fonte ? ' fonte-' + r.fonte.toLowerCase() : ''}"><span aria-hidden="true">${r.icone}</span><div><strong>${esc(r.titulo)}${r.selo ? ` <em class="clima-selo ${r.nivel}">${esc(r.selo)}</em>` : ''}</strong><small>${esc(r.texto)}</small>${(r.extras || []).map(x => `<small class="clima-extra">${esc(x)}</small>`).join('')}${r.link ? `<a class="clima-fonte" href="${esc(r.link)}" target="_blank" rel="noopener">${esc(r.linkTxt || 'Ver mais')} ›</a>` : ''}</div></div>`).join('');
 
 // ---------- Avisos oficiais do INMET (Alert-AS) para o ponto da fazenda, pela função do servidor ----------
 // Somam-se aos alertas do app (previsão do Open-Meteo e tempestade da REDEMET); não substituem nada.
@@ -102,13 +107,34 @@ function periodoInmet(a, agora = Date.now()) {
 const descInmet = a => String(a.descricao || '').replace(/\s+/g, ' ').replace(/^INMET publica aviso iniciando em:?\s*[\d/]+\s*[\d:]*\.?\s*/i, '').trim();
 // Primeira frase: o que vem (chuva, vento, granizo); o resto (riscos) fica para "Ver aviso no INMET"
 const resumoInmet = a => { const d = descInmet(a), k = d.search(/\.\s+[A-ZÁÉÍÓÚ]/); return k > 0 ? d.slice(0, k + 1) : d; };
-function riscoInmet(a, completo = false) {
+// Um alerta por evento: o INMET publica o mesmo evento em vários avisos (ex.: tempestade amarela hoje e vermelha amanhã).
+// O mais grave vira o título; os outros períodos entram como linhas curtas no mesmo alerta.
+const ORD_INMET = {vermelho: 0, laranja: 1, amarelo: 2};
+const maiuscula = s => s.charAt(0).toUpperCase() + s.slice(1);
+function riscoInmet(lista, completo = false) {
+  lista = [].concat(lista).sort((x, y) => (ORD_INMET[x.nivel] ?? 2) - (ORD_INMET[y.nivel] ?? 2) || String(x.inicio).localeCompare(String(y.inicio)));
+  const a = lista[0], outros = lista.slice(1).sort((x, y) => String(x.inicio).localeCompare(String(y.inicio)));
   return {nivel: NIVEL_INMET[a.nivel] || 'yellow', icone: iconeInmet(a.evento), chave: 'inmet-' + a.id, fonte: 'INMET',
-    titulo: `Aviso ${COR_INMET[a.nivel] || 'amarelo'} do INMET: ${a.evento} ${periodoInmet(a)}`,
+    titulo: `${a.evento} ${periodoInmet(a)}`, selo: `INMET · ${COR_INMET[a.nivel] || 'amarelo'}`,
     texto: (completo ? descInmet(a) : resumoInmet(a)) || a.severidade || '',
+    extras: outros.map(o => `${maiuscula(periodoInmet(o))}: aviso ${COR_INMET[o.nivel] || 'amarelo'}.${completo && resumoInmet(o) ? ' ' + resumoInmet(o) : ''}`),
     link: /^https:\/\/[a-z0-9.-]*inmet\.gov\.br\//.test(a.web || '') ? a.web : `https://avisos.inmet.gov.br/${encodeURIComponent(a.id)}`, linkTxt: 'Ver aviso no INMET'};
 }
-async function riscosInmet(loc, completo = false) { return (await avisosInmet(loc)).map(a => riscoInmet(a, completo)); }
+function agruparInmet(avisos) {
+  const g = new Map();
+  avisos.forEach(a => { const k = String(a.evento || '').trim().toLowerCase(); g.set(k, [...(g.get(k) || []), a]); });
+  return [...g.values()];
+}
+async function riscosInmet(loc, completo = false) { return agruparInmet(await avisosInmet(loc)).map(l => riscoInmet(l, completo)); }
+// Início: no máximo 3 alertas no cartão; o resto fica no MercaClima (o botão diz quantos)
+const MAX_RISCOS_INICIO = 3;
+function limitarRiscosInicio() {
+  const card = document.querySelector('.clima-curto'), box = card?.querySelector('#climaRiscos'); if (!box) return;
+  const rs = [...box.querySelectorAll('.clima-risco')], mais = Math.max(0, rs.length - MAX_RISCOS_INICIO);
+  rs.forEach((el, i) => { el.hidden = i >= MAX_RISCOS_INICIO; });
+  const bt = card.querySelector('.clima-abrir');
+  if (bt) bt.textContent = mais ? `Ver mais ${mais} ${mais === 1 ? 'alerta' : 'alertas'} no MercaClima ›` : 'Detalhar no MercaClima ›';
+}
 // Coloca os avisos que chegaram depois (INMET, tempestade) no topo da caixa de alertas, sem repetir, e some o "Tudo em dia"
 function juntarRiscos(box, rs) {
   if (!box || !rs.length) return;
@@ -118,6 +144,7 @@ function juntarRiscos(box, rs) {
   [...t.children].forEach((el, i) => { el.dataset.chave = novos[i].chave; });
   box.prepend(...t.children);
   box.closest('.ini-atencao')?.querySelectorAll('.ini-ok').forEach(ok => { ok.hidden = true; });
+  limitarRiscosInicio();
 }
 
 // ---------- Início: só a previsão do dia + alertas de uma linha; o resto fica no MercaClima ----------
@@ -138,11 +165,13 @@ function cartaoClimaCurto() {
 cartaoClima = () => (parseRoute().name === 'clima' ? cartaoClimaCompleto() : cartaoClimaCurto());
 async function completarAlertasInicio() {
   const loc = localDaFazenda?.(), box = document.getElementById('climaRiscos'); if (!loc || !box) return;
+  limitarRiscosInicio();
   const [tp, inmet] = await Promise.all([tempestadePerto(loc), riscosInmet(loc)]);
   const r = riscoTempestade(tp), rs = [...(r ? [r] : []), ...inmet];
   // vermelho primeiro, depois laranja e amarelo
   const ordem = {red: 0, orange: 1, yellow: 2};
   juntarRiscos(document.getElementById('climaRiscos'), rs.sort((a, b) => ordem[a.nivel] - ordem[b.nivel]));
+  limitarRiscosInicio();
 }
 if (VIEWS.inicio) {
   const depoisSemAlertas = VIEWS.inicio.after;

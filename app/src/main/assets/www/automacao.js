@@ -365,7 +365,7 @@ function horariosChuva(dados, data, agoraArg) {
   return faixas;
 }
 const hh2 = n => String(n).padStart(2, '0') + 'h';
-const txtFaixa = f => `${f.ini === 0 && f.fim === 23 ? 'o dia todo' : `${f.agora ? 'agora' : 'das ' + hh2(f.ini)} ${f.fim > f.ini || f.agora ? 'até ' + (f.fim === 23 ? 'o fim do dia' : hh2(f.fim + 1)) : '(cerca de 1 h)'}`}${f.mm >= 0.5 ? `, ${num(f.mm, f.mm < 10 ? 1 : 0)} mm` : ''}${f.prob ? `, ${Math.round(f.prob)}%` : ''}`;
+const txtFaixa = f => `${f.ini === 0 && f.fim === 23 ? 'o dia todo' : `${f.agora ? 'agora' : 'das ' + hh2(f.ini)} ${f.fim > f.ini || f.agora ? 'até ' + (f.fim === 23 ? 'o fim do dia' : hh2(f.fim + 1)) : '(cerca de 1 h)'}`}${f.mm >= 0.5 ? `, ${num(f.mm < 10 ? Math.round(f.mm * 10) / 10 : Math.round(f.mm))} mm` : ''}${f.prob ? `, ${Math.round(f.prob)}%` : ''}`;
 function txtHorariosChuva(faixas) {
   if (!faixas.length) return '';
   return faixas.slice(0, 3).map(txtFaixa).join('; ') + (faixas.length > 3 ? '…' : '');

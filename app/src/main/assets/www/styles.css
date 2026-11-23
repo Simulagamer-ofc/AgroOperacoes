@@ -2249,9 +2249,17 @@ body .nv-portao{padding-top:calc(20px + var(--topo))}
 
 /* Avisos oficiais do INMET: nível amarelo (perigo potencial) e link para o aviso no site do INMET */
 .clima-risco.yellow{border-left-color:#d4a106;background:color-mix(in srgb,#e8b10c 14%,transparent)}
-.clima-risco.yellow>span{background:color-mix(in srgb,#e8b10c 28%,transparent)}
+.ini-atencao #climaRiscos .clima-risco.yellow>span{background:color-mix(in srgb,#e8b10c 28%,transparent)}
 .ini-atencao .clima-risco.yellow,.i2-tempestade .clima-risco.yellow{border-color:color-mix(in srgb,#d4a106 50%,var(--line));background:color-mix(in srgb,#e8b10c 12%,var(--panel))}
 .clima-risco .clima-fonte{display:inline-block;margin-top:4px;font-size:.8rem;font-weight:600;color:var(--blue);text-decoration:none}
 .clima-risco .clima-fonte:hover{text-decoration:underline}
 .inmet-avisos h3{margin:0 0 8px}
 @media(max-width:760px){.clima-risco.fonte-inmet small{display:block}}
+
+/* Alertas organizados: um por evento, selo da fonte oficial ao lado do título, outros períodos em linha curta */
+.clima-curto .clima-risco.fonte-inmet small{display:block}
+.clima-selo{display:inline-block;vertical-align:2px;margin-left:4px;padding:1px 7px;border-radius:999px;font-style:normal;font-size:.7rem;font-weight:700;letter-spacing:.02em;white-space:nowrap;color:#fff;background:var(--orange)}
+.clima-selo.red{background:#d64545}
+.clima-selo.yellow{background:#b98a00}
+.clima-risco small.clima-extra{margin-top:4px;padding-top:4px;border-top:1px dashed color-mix(in srgb,var(--muted) 35%,transparent);font-size:.8rem}
+.clima-risco[hidden]{display:none!important}
