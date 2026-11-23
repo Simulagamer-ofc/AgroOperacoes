@@ -5,8 +5,11 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- Alertas da fazenda (Android 13+ pede autorização ao ligar os alertas) -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <!-- Atualizar o app por dentro (o Android ainda pede a confirmação de instalar) -->
+    <!-- Atualizar o app por dentro: no Android 12+, depois da 1ª vez, instala sem perguntar -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION" />
+    <!-- Baixar o APK novo sozinho só no Wi-Fi (rede não cobrada) -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,6 +31,17 @@
         <receiver
             android:name=".AlertaAcaoReceiver"
             android:exported="false" />
+        <!-- Atualização do app: resultado da instalação e reabrir depois de atualizado -->
+        <receiver
+            android:name=".InstalacaoReceiver"
+            android:exported="false" />
+        <receiver
+            android:name=".AtualizadoReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
         <!-- Câmera: a foto é gravada num arquivo do cache do app e entregue à página -->
         <provider
             android:name="androidx.core.content.FileProvider"

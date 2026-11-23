@@ -6,6 +6,8 @@ on:
     branches: [ main ]
     paths:
       - 'app/src/main/assets/www/**'
+      - 'app/src/main/java/**'
+      - 'app/build.gradle.kts'
       - 'referencias/**'
       - '.github/workflows/pages.yml'
       - '.github/workflows/quality.yml'
@@ -31,9 +33,35 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
       - uses: actions/configure-pages@v5
+      # Site + pacote das telas para o APK atualizar sem reinstalar (ota/), assinado com a mesma chave do APK.
+      # Sem a chave nos segredos, publica só o site (o app continua avisando para instalar o APK novo).
+      - name: Montar o site e o pacote das telas
+        env:
+          KEYSTORE_B64: ${{ secrets.MERCAPLANT_KEYSTORE_B64 }}
+          MERCAPLANT_KEYSTORE_PASS: ${{ secrets.MERCAPLANT_KEYSTORE_PASS }}
+          MERCAPLANT_KEY_ALIAS: ${{ secrets.MERCAPLANT_KEY_ALIAS }}
+          MERCAPLANT_KEY_PASS: ${{ secrets.MERCAPLANT_KEY_PASS }}
+        run: |
+          cp -r app/src/main/assets/www _site
+          if [ -z "$KEYSTORE_B64" ]; then
+            echo "::warning::Sem a chave de assinatura nos segredos: o APK não recebe as telas novas sem reinstalar."
+            exit 0
+          fi
+          printf '%s' "$KEYSTORE_B64" | sed 's/MERCAPLANT_KEYSTORE_B64://' | tr -d '[:space:]' | base64 -d > "$RUNNER_TEMP/mercaplant.jks"
+          export MERCAPLANT_KEYSTORE="$RUNNER_TEMP/mercaplant.jks"
+          VER=$(sed -n 's/.*versionName = "\(.*\)".*/\1/p' app/build.gradle.kts)
+          NIVEL=$(sed -n 's/.*const val NIVEL = \([0-9]*\).*/\1/p' app/src/main/java/com/simulagamer/agrooperacoes/Nativo.kt)
+          CARIMBO=$(git log -1 --format=%ct)
+          java referencias/ota/GerarOta.java app/src/main/assets/www _site/ota "$VER" "$CARIMBO" "$NIVEL" \
+            "https://github.com/Simulagamer-ofc/AgroOperacoes/releases/download/v$VER/MercaPlant-$VER.apk"
+          rm -f "$RUNNER_TEMP/mercaplant.jks"
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: app/src/main/assets/www
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4

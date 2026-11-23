@@ -38,6 +38,15 @@ jobs:
         run: |
           deno check supabase/functions/sefaz/index.ts supabase/functions/sefaz-conecta/index.ts
           deno test --allow-read --allow-env supabase/functions/
+      - name: Preparar Java (atualização sem reinstalar)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Atualização das telas sem reinstalar (assinatura, download por SHA-256, voltar se não abrir)
+        run: |
+          javac -d "$RUNNER_TEMP/ota" app/src/main/java/com/simulagamer/agrooperacoes/OtaNucleo.java referencias/ota/*.java
+          java -Dstdout.encoding=UTF-8 -cp "$RUNNER_TEMP/ota" TesteOta app/src/main/assets/www
       - name: Conferir que APK e site usam a mesma base tecnica
         run: |
           cmp referencias/avaliador.js app/src/main/assets/www/avaliador.js

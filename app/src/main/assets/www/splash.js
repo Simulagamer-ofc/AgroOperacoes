@@ -1,7 +1,10 @@
 'use strict';
 // Abertura da MercaPlant: uma vez por carregamento do documento, nunca por rota.
 (() => {
-  const root = document.documentElement, inicio = performance.now(), DURACAO = 5000;
+  // Depois de "Atualizar agora" (telas novas sem reinstalar) a página recarrega direto, sem a abertura
+  let depoisDeAtualizar = false;
+  try { depoisDeAtualizar = !!sessionStorage.getItem('mp-ota-aplicada'); } catch { /* sem sessionStorage */ }
+  const root = document.documentElement, inicio = performance.now(), DURACAO = depoisDeAtualizar ? 0 : 5000;
   root.classList.add('nexus-booting');
   let encerrado = false;
   const encerrar = () => {

@@ -3,6 +3,16 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+// Carimbo das telas que vão dentro do APK (hora do commit): a atualização sem reinstalar só troca por telas mais novas
+val carimboTelas: Long = try {
+    val p = ProcessBuilder("git", "log", "-1", "--format=%ct").directory(rootDir).redirectErrorStream(true).start()
+    val txt = p.inputStream.bufferedReader().readText().trim()
+    p.waitFor()
+    txt.toLong()
+} catch (e: Exception) {
+    System.currentTimeMillis() / 1000
+}
+
 android {
     namespace = "com.simulagamer.agrooperacoes"
     compileSdk = 35
@@ -11,9 +21,12 @@ android {
         applicationId = "com.simulagamer.agrooperacoes"
         minSdk = 26
         targetSdk = 35
-        versionCode = 163
-        versionName = "1.0.0-beta5"
+        versionCode = 164
+        versionName = "1.1.0-beta1"
+        buildConfigField("long", "CARIMBO", "${carimboTelas}L")
     }
+
+    buildFeatures { buildConfig = true }
 
     // Assinatura fixa (opcional): com a chave nos segredos do GitHub, cada APK novo instala POR CIMA do anterior
     // sem desinstalar. Sem os segredos, usa a chave de depuração do próprio servidor (muda a cada compilação).

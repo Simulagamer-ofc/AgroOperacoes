@@ -1089,6 +1089,7 @@ VIEWS.cadastros = () => {
       ${backupVisivel() ? `<article class="card panel"><h3>Backup</h3><p>${typeof nvVinculado === 'function' && nvVinculado() ? 'Os dados ficam na nuvem da fazenda. O backup é uma cópia extra, para o administrador guardar fora do sistema.' : 'Sem conta na nuvem, os dados ficam somente neste aparelho. Exporte um backup regularmente e guarde em local seguro (Drive, e-mail, computador).'}</p>
         <div class="btn-row">${btn('⬇ Exportar backup', 'backup')}${btn('⬆ Restaurar backup', 'restore', '', 'secondary')}</div><input type="file" id="restoreInput" accept="application/json,.json" hidden></article>` : ''}
       ${typeof cartaoSincronizacao === 'function' ? cartaoSincronizacao() : ''}
+      ${typeof cartaoAtualizacoes === 'function' ? cartaoAtualizacoes() : ''}
       ${typeof cartaoAlertas === 'function' ? cartaoAlertas() : ''}
       <article class="card panel"><h3>Dados de exemplo e limpeza</h3><p>Carregue exemplos para treinar a equipe, ou apague todos os registros deste dispositivo.</p>
         <div class="btn-row">${btn('Carregar exemplos', 'seed', '', 'secondary')}<button class="danger" data-act="wipe">Apagar todos os dados</button></div></article>
@@ -1106,7 +1107,7 @@ const CFG_ICONE = {
 const CFG_GRUPOS = [
   ['fazenda', 'Fazenda', 'Nome, responsáveis e proprietário', /^(Propriedade|Proprietário)$/],
   ['equipe', 'Equipe e acesso', 'Pedidos de acesso, nível e telas de cada pessoa', /^Usuários da fazenda$/],
-  ['conta', 'Minha conta', 'Senha, conexão com a nuvem e troca de fazenda', /^(Minha conta|Nuvem da equipe|Dados guardados neste aparelho)$/],
+  ['conta', 'Minha conta', 'Senha, conexão com a nuvem e troca de fazenda', /^(Minha conta|Nuvem da equipe|Dados guardados neste aparelho|Atualizações do app)$/],
   ['alertas', 'Alertas', 'Avisos de chuva, pulverização, revisão e estoque', /Alerta|Aviso/],
   ['dados', 'Dados e backup', 'Backup, registros no aparelho e limpeza', /.*/],
   ['sistema', 'Administração do sistema', 'Todas as fazendas e criar fazenda', /^Administração do sistema$/]];
@@ -1400,7 +1401,9 @@ if ('serviceWorker' in navigator && !window.AndroidBridge) addEventListener('loa
     document.body.append(bar);
   });
 });
-// App Android (APK): confere no GitHub se há versão mais nova publicada e oferece o download
+// App Android (APK). As telas novas chegam SEM REINSTALAR: o app confere o site, baixa só o que mudou e avisa
+// "Versão nova pronta" (entra na hora, sem sair do app). O APK novo só é pedido quando muda a parte Android;
+// então ele instala por cima — sem perguntar no Android 12+ depois da 1ª vez (já baixado no Wi-Fi, instala ao sair do app).
 const APK_RELEASES = 'https://api.github.com/repos/Simulagamer-ofc/AgroOperacoes/releases/latest';
 const versaoNums = v => (String(v).match(/\d+/g) || []).map(Number);
 function versaoMaior(a, b) {
@@ -1408,42 +1411,132 @@ function versaoMaior(a, b) {
   for (let i = 0; i < Math.max(x.length, y.length); i++) { const d = (x[i] || 0) - (y[i] || 0); if (d) return d > 0; }
   return false;
 }
+// Versão das telas em uso (a que aparece no menu); pode ser mais nova que a do APK
+const versaoTelas = () => (document.querySelector('.versao')?.textContent || '').trim().replace(/^v/i, '');
+// "Adiar": o aviso de versão nova some por 4 horas (vale para as telas e para o APK)
+const ADIAR_HORAS = 4;
+const atualizacaoAdiada = () => Number(safeStorage.get('mp-atualizar-adiado-ate') || 0) > Date.now();
+function adiarAtualizacao() {
+  safeStorage.set('mp-atualizar-adiado-ate', String(Date.now() + ADIAR_HORAS * 3600000));
+  document.querySelectorAll('#novaVersaoTelas, #novaVersaoApk').forEach(b => b.remove());
+  showToast(`Combinado: lembro de novo em ${ADIAR_HORAS} horas.`);
+  setTimeout(() => { avisoTelas(window.otaEstado); const v = window.AndroidBridge?.appVersion?.(); if (v) avisoApk(v); }, ADIAR_HORAS * 3600000 + 1000);
+}
 function avisoApk(instalada) {
   let nova = null; try { nova = JSON.parse(safeStorage.get('agro-apk-nova') || 'null'); } catch { nova = null; }
-  if (!nova || !versaoMaior(nova.versao, instalada) || safeStorage.get('agro-apk-dispensado') === nova.versao || document.getElementById('novaVersaoApk')) return;
+  if (!nova || !versaoMaior(nova.versao, instalada) || atualizacaoAdiada()) return;
+  const antiga = document.getElementById('novaVersaoApk');
+  if (antiga) { if (antiga.querySelector('button:disabled')) return; antiga.remove(); }
   const bar = Object.assign(document.createElement('div'), {id: 'novaVersaoApk', className: 'nova-versao', role: 'status'});
-  // App com atualizador: baixa e abre o instalador do Android (instala por cima); app antigo: link para baixar
+  // App com atualizador: baixa e instala por cima; app antigo: link para baixar
   const porDentro = !!window.AndroidBridge?.atualizarApp && /\.apk$/i.test(nova.url || '');
-  bar.innerHTML = `<span class="nova-versao-txt">Nova versão do app: <b>${esc(nova.versao)}</b> (você tem ${esc(instalada)}).</span>${porDentro ? '<button type="button" class="nova-versao-baixar nova-versao-atualizar">Atualizar</button>' : `<a class="nova-versao-baixar" href="${esc(nova.url)}">Baixar</a>`}<button type="button" class="nova-versao-fechar" aria-label="Depois">✕</button>`;
-  bar.querySelector('.nova-versao-fechar').onclick = () => { safeStorage.set('agro-apk-dispensado', nova.versao); bar.remove(); };
+  const e = window.otaEstado, baixado = !!(e?.apkBaixado && e?.silencioso);
+  const txt = `Nova versão disponível${baixado ? '<small>Se preferir, instala sozinha quando você sair do app.</small>' : ''}`;
+  bar.innerHTML = `<span class="nova-versao-txt">${txt}</span>${porDentro ? '<button type="button" class="nova-versao-baixar nova-versao-atualizar">Atualizar agora</button>' : `<a class="nova-versao-baixar" href="${esc(nova.url)}">Baixar</a>`}<button type="button" class="nova-versao-adiar">Adiar</button>`;
+  bar.querySelector('.nova-versao-adiar').onclick = adiarAtualizacao;
   const at = bar.querySelector('.nova-versao-atualizar');
-  if (at) at.onclick = () => { at.disabled = true; at.textContent = 'Baixando…'; window.AndroidBridge.atualizarApp(nova.url); };
+  if (at) at.onclick = () => apkAtualizar(nova.url, at);
   bar.dataset.url = nova.url || '';
   document.body.append(bar);
 }
-// Andamento da atualização por dentro (chamado pelo Android)
+function apkAtualizar(url, bt) {
+  const e = window.otaEstado;
+  if (bt) { bt.disabled = true; bt.textContent = e?.apkBaixado ? 'Instalando…' : 'Baixando…'; }
+  if (e?.apkBaixado && window.AndroidBridge?.apkInstalarAgora) window.AndroidBridge.apkInstalarAgora();
+  else window.AndroidBridge.atualizarApp(url);
+}
+// Andamento da atualização do APK (chamado pelo Android)
 window.onAtualizacao = ({etapa, pct, msg} = {}) => {
+  if (etapa === 'baixado') { try { window.onOta?.(JSON.parse(window.AndroidBridge.otaEstado())); } catch { /* sem estado */ } return; }
   const bar = document.getElementById('novaVersaoApk'), bt = bar?.querySelector('.nova-versao-atualizar'), txt = bar?.querySelector('.nova-versao-txt');
   if (etapa === 'baixando') { if (bt) bt.textContent = pct >= 0 ? `Baixando ${pct}%` : 'Baixando…'; return; }
-  if (etapa === 'instalando') { if (bt) bt.textContent = 'Instalando…'; if (txt) txt.innerHTML = 'Confirme <b>Atualizar</b> na tela do Android. Seus dados continuam no app.'; return; }
+  if (etapa === 'instalando') { if (bt) bt.textContent = 'Instalando…'; if (txt) txt.innerHTML = msg || 'Confirme <b>Atualizar</b> na tela do Android. Seus dados continuam no app.'; return; }
   if (etapa === 'permissao') { if (bt) bt.textContent = 'Aguardando…'; if (txt) txt.textContent = msg; return; }
   // Troca de chave (só uma vez): precisa desinstalar; o botão vira o link para baixar o APK
   if (etapa === 'chave' && bt) { const a = Object.assign(document.createElement('a'), {className: 'nova-versao-baixar', href: bar.dataset.url, textContent: 'Baixar'}); bt.replaceWith(a); }
   // erro ou permissão negada: mostra o motivo e libera o botão
-  else if (bt) { bt.disabled = false; bt.textContent = 'Atualizar'; }
+  else if (bt) { bt.disabled = false; bt.textContent = 'Atualizar agora'; }
   if (txt) txt.textContent = msg; else if (msg) showToast(msg, true);
 };
-if (window.AndroidBridge?.appVersion) addEventListener('load', () => {
-  const instalada = window.AndroidBridge.appVersion(); if (!instalada) return;
-  avisoApk(instalada);
+// Sem o pacote das telas no site (ou sem internet para ele): confere a página de versões do GitHub
+function conferirApkGithub(instalada) {
   if (navigator.onLine === false || Date.now() - Number(safeStorage.get('agro-apk-conferido') || 0) < 6 * 3600000) return;
   fetch(APK_RELEASES, {headers: {Accept: 'application/vnd.github+json'}}).then(r => r.ok ? r.json() : null).then(rel => {
     if (!rel?.tag_name) return;
-    const apk = (rel.assets || []).find(a => /\.apk$/i.test(a.name));
-    safeStorage.set('agro-apk-nova', JSON.stringify({versao: rel.tag_name.replace(/^v/i, ''), url: apk?.browser_download_url || rel.html_url}));
+    const apk = (rel.assets || []).find(a => /\.apk$/i.test(a.name)), versao = rel.tag_name.replace(/^v/i, '');
     safeStorage.set('agro-apk-conferido', String(Date.now()));
+    // Telas já atualizadas sem reinstalar até essa versão: não precisa do APK
+    if (window.otaEstado?.suporta && !versaoMaior(versao, versaoTelas())) return;
+    safeStorage.set('agro-apk-nova', JSON.stringify({versao, url: apk?.browser_download_url || rel.html_url}));
     avisoApk(instalada);
   }).catch(() => {});
+}
+// ---- Telas novas sem reinstalar
+let otaGithubFeito = false;
+function otaAplicarAgora() {
+  const v = window.otaEstado?.pronta?.versao || '';
+  try { sessionStorage.setItem('mp-ota-aplicada', v || '-'); } catch { /* sem sessionStorage: só não mostra o aviso depois */ }
+  window.AndroidBridge?.otaAplicar?.();
+}
+function avisoTelas(e) {
+  let bar = document.getElementById('novaVersaoTelas');
+  if (!e?.pronta || atualizacaoAdiada()) { bar?.remove(); return; }
+  if (bar) return;
+  bar = Object.assign(document.createElement('div'), {id: 'novaVersaoTelas', className: 'nova-versao', role: 'status'});
+  bar.innerHTML = '<span class="nova-versao-txt">Nova versão disponível</span><button type="button" class="nova-versao-atualizar">Atualizar agora</button><button type="button" class="nova-versao-adiar">Adiar</button>';
+  bar.querySelector('.nova-versao-atualizar').onclick = ev => { ev.currentTarget.disabled = true; ev.currentTarget.textContent = 'Atualizando…'; otaAplicarAgora(); };
+  bar.querySelector('.nova-versao-adiar').onclick = adiarAtualizacao;
+  document.body.append(bar);
+}
+function cartaoAtualizacoes() {
+  const e = window.otaEstado; if (!e?.suporta) return '';
+  const hora = e.verificadoEm ? new Date(e.verificadoEm).toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'}) : '';
+  let sit, bt = '';
+  if (e.verificando) sit = `Procurando atualização…${e.progresso >= 0 ? ` baixando ${e.progresso}%` : ''}`;
+  else if (e.pronta) { sit = `<b>Versão nova pronta${e.pronta.versao ? `: ${esc(e.pronta.versao)}` : ''}.</b> Atualiza em segundos, sem sair do app.`; bt = btn('Atualizar agora', 'ota-aplicar'); }
+  else if (e.precisaApk) { sit = `<b>Versão nova do app: ${esc(e.precisaApk.versao)}.</b> Esta muda a parte do Android, então instala o app por cima${e.silencioso ? ', sem precisar confirmar' : ''}.`; bt = btn(e.apkBaixado ? 'Instalar agora' : 'Atualizar o app', 'apk-atualizar'); }
+  else if (e.situacao === 'atual') sit = 'Você está com a versão mais nova.';
+  else if (e.situacao === 'erro') sit = `Não foi possível conferir agora${e.erro ? ` (${esc(e.erro)})` : ''}. O app tenta de novo sozinho.`;
+  else sit = 'O app confere sozinho a cada abertura.';
+  return `<article class="card panel"><h3>Atualizações do app</h3>
+    <p>Telas novas chegam <b>sem reinstalar</b>: o app baixa só o que mudou e atualiza em segundos, sem sair. Quando muda a parte do Android, o app avisa e instala por cima${e.silencioso ? ' sem perguntar' : ''}.</p>
+    <p class="ota-sit">${sit}</p>
+    <p class="muted">Versão das telas: <b>${esc(versaoTelas() || e.telas || '—')}</b> · App Android: <b>${esc(e.apk || '—')}</b>${hora ? ` · conferido às ${hora}` : ''}</p>
+    <div class="btn-row">${bt}${btn(e.verificando ? 'Procurando…' : 'Procurar atualização', 'ota-verificar', '', 'secondary')}</div></article>`;
+}
+window.onOta = e => {
+  if (!e?.suporta) return;
+  const antes = window.otaEstado; window.otaEstado = e;
+  const instalada = e.apk || window.AndroidBridge?.appVersion?.() || '';
+  avisoTelas(e);
+  if (e.precisaApk?.url) { safeStorage.set('agro-apk-nova', JSON.stringify({versao: e.precisaApk.versao, url: e.precisaApk.url})); avisoApk(instalada); }
+  else if (antes?.apkBaixado !== e.apkBaixado) avisoApk(instalada);
+  if (e.situacao === 'erro' && !otaGithubFeito) { otaGithubFeito = true; conferirApkGithub(instalada); }
+  // Cartão em Ajustes → Minha conta: atualiza no lugar
+  const c = [...document.querySelectorAll('.settings > .card')].find(x => x.querySelector(':scope > h3')?.textContent === 'Atualizações do app');
+  if (c) { const t = document.createElement('div'); t.innerHTML = cartaoAtualizacoes(); const n = t.firstElementChild; if (n) { n.dataset.cfgSec = c.dataset.cfgSec || ''; n.hidden = c.hidden; c.replaceWith(n); } }
+};
+// Voltou para o app depois de um tempo fora (o Android avisa): com tudo fechado, entra a versão nova pronta
+window.onVoltouAoApp = ms => {
+  if (window.otaEstado?.pronta && ms > 5 * 60000 && !atualizacaoAdiada() && !document.querySelector('.modal.open')) otaAplicarAgora();
+};
+ACTIONS['ota-verificar'] = () => { window.AndroidBridge?.otaVerificar?.(); showToast('Procurando atualização…'); };
+ACTIONS['ota-aplicar'] = () => otaAplicarAgora();
+ACTIONS['apk-atualizar'] = () => { const u = window.otaEstado?.precisaApk?.url; if (u) { apkAtualizar(u); showToast(window.otaEstado?.apkBaixado ? 'Instalando a atualização…' : 'Baixando a atualização do app…'); } };
+if (window.AndroidBridge?.appVersion) addEventListener('load', () => {
+  const instalada = window.AndroidBridge.appVersion(); if (!instalada) return;
+  let e = null; try { e = JSON.parse(window.AndroidBridge.otaEstado?.() || 'null'); } catch { e = null; }
+  if (!e?.suporta) { avisoApk(instalada); conferirApkGithub(instalada); return; }
+  window.onOta(e);
+  try {
+    const v = sessionStorage.getItem('mp-ota-aplicada');
+    if (v) { sessionStorage.removeItem('mp-ota-aplicada'); showToast(`MercaPlant atualizado${v !== '-' ? ` para a versão ${v}` : ''}. Seus dados continuam aqui.`); }
+  } catch { /* sem sessionStorage */ }
 });
+// Confirma ao Android que esta versão das telas abriu direitinho (senão ele volta para a anterior em 30 s).
+// Logo depois de montar a tela, sem esperar imagens e mapas (internet lenta não pode desfazer uma versão boa).
+if (window.AndroidBridge?.otaOk) addEventListener('DOMContentLoaded', () => setTimeout(() => {
+  if (document.getElementById('view')?.children.length || document.getElementById('nvPortao')) window.AndroidBridge.otaOk();
+}, 1500));
 // Ajustes: abrir uma seção (no celular, vazio volta para a lista)
 ACTIONS['cfg-sec'] = id => { go(id ? 'cadastros/' + id : 'cadastros'); window.scrollTo(0, 0); };
