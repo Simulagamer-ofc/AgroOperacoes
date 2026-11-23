@@ -20,6 +20,17 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+      # As telas chegam ao APK sem reinstalar só se o nível da parte Android for compatível (Nativo.kt)
+      - name: Conferir o nível da parte Android
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+          if git diff --name-only FETCH_HEAD HEAD -- app/src/main/java app/src/main/AndroidManifest.xml | grep -q .; then
+            if ! git diff FETCH_HEAD HEAD -- app/src/main/java/com/simulagamer/agrooperacoes/Nativo.kt | grep -q '^+.*const val NIVEL'; then
+              echo "::error::A parte Android (Kotlin/Java ou AndroidManifest) mudou: suba Nativo.NIVEL em Nativo.kt para quem tem o APK antigo receber o aviso de atualizar o app."
+              exit 1
+            fi
+          fi
       - uses: actions/setup-java@v4
         with:
           distribution: temurin

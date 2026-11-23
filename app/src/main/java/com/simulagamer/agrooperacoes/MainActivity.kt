@@ -9,6 +9,8 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.print.PrintAttributes
 import android.print.PrintManager
 import android.webkit.GeolocationPermissions
@@ -22,6 +24,7 @@ import android.webkit.WebViewClient
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import android.provider.MediaStore
@@ -32,7 +35,21 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_ROTA = "rota"
         private val ROTA_SEGURA = Regex("^[a-z0-9/_-]{1,60}$")
+        private const val URL_INICIO = "https://appassets.androidplatform.net/assets/www/index.html"
+
+        /** App na tela (para não instalar a atualização com a pessoa usando). */
+        @Volatile var visivel = false
+            private set
     }
+
+    private val principal = Handler(Looper.getMainLooper())
+
+    // Telas novas em teste: se a página não confirmar que abriu em 30 s, volta para a versão anterior
+    private val vigia = Runnable {
+        if (Ota.emTeste(this) && Ota.reverter(this)) recarregar()
+    }
+    private val conferirSite = Runnable { Ota.verificar(this, false, ::avisarOta) }
+    private val ouvinteAtualizacao: (String, Int, String) -> Unit = { etapa, pct, msg -> avisarAtualizacao(etapa, pct, msg) }
 
     private lateinit var webView: WebView
 
@@ -172,9 +189,34 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        /** Atualização dentro do app: baixa o APK da versão nova e abre o instalador do Android (instala por cima). */
+        /** Atualização dentro do app: baixa o APK da versão nova e instala por cima (sem perguntar, quando o Android deixa). */
         @JavascriptInterface
         fun atualizarApp(url: String) { Atualizador.baixar(this@MainActivity, url, this@MainActivity::avisarAtualizacao) }
+
+        /** APK já baixado em segundo plano: instala agora. */
+        @JavascriptInterface
+        fun apkInstalarAgora() { Atualizador.instalarBaixado(this@MainActivity, this@MainActivity::avisarAtualizacao) }
+
+        /** Telas atualizadas sem reinstalar: situação (JSON) para a página. */
+        @JavascriptInterface
+        fun otaEstado(): String = Ota.estado(this@MainActivity).toString()
+
+        /** "Procurar atualização" em Ajustes. */
+        @JavascriptInterface
+        fun otaVerificar() { Ota.verificar(this@MainActivity, true, this@MainActivity::avisarOta) }
+
+        /** "Atualizar agora": passa a usar as telas novas já baixadas e recarrega na mesma tela. */
+        @JavascriptInterface
+        fun otaAplicar() {
+            runOnUiThread { if (Ota.aplicarPronta(this@MainActivity)) { recarregar(); vigiar() } }
+        }
+
+        /** A página abriu direitinho (confirma a versão nova das telas). */
+        @JavascriptInterface
+        fun otaOk() {
+            principal.removeCallbacks(vigia)
+            Ota.confirmar(this@MainActivity)
+        }
 
         /** Versão instalada do APK (para avisar quando houver uma mais nova). */
         @JavascriptInterface
@@ -197,9 +239,13 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Atualizador.ouvinte = ouvinteAtualizacao
+        runCatching { NotificationManagerCompat.from(this).cancel(Atualizador.NOTIF_ID) }
 
+        // Telas: as baixadas pela atualização sem reinstalar (se houver) ou as que vieram no APK
+        Ota.abrir(this)
         val assetLoader = WebViewAssetLoader.Builder()
-            .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(this))
+            .addPathHandler("/assets/", Ota.Telas(this))
             .build()
 
         webView = WebView(this).apply {
@@ -270,8 +316,9 @@ class MainActivity : AppCompatActivity() {
         if (webView.url == null) {
             // Aberto pelo toque num alerta: já entra na tela do aviso
             val rota = intent?.getStringExtra(EXTRA_ROTA)?.takeIf { ROTA_SEGURA.matches(it) }
-            webView.loadUrl("https://appassets.androidplatform.net/assets/www/index.html" + (rota?.let { "#/$it" } ?: ""))
+            webView.loadUrl(URL_INICIO + (rota?.let { "#/$it" } ?: ""))
         }
+        if (Ota.emTeste(this)) vigiar()
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -291,10 +338,63 @@ class MainActivity : AppCompatActivity() {
         runOnUiThread { webView.evaluateJavascript(js, null) }
     }
 
+    /** Situação da atualização das telas para a página. */
+    private fun avisarOta() {
+        val js = "window.onOta && onOta(${Ota.estado(this)})"
+        runOnUiThread { webView.evaluateJavascript(js, null) }
+    }
+
+    private fun vigiar() {
+        principal.removeCallbacks(vigia)
+        principal.postDelayed(vigia, 30_000)
+    }
+
+    /** Recarrega na mesma tela (mesmo endereço, mesmos dados), já com as telas em uso agora. */
+    private fun recarregar() {
+        webView.clearCache(false)
+        webView.reload()
+    }
+
+    // Quando saiu do app (para a página aplicar as telas novas ao voltar depois de um tempo)
+    private var foraDesde = 0L
+
+    override fun onStart() {
+        super.onStart()
+        visivel = true
+        Atualizador.cancelarAoSair(this)
+        if (foraDesde > 0L) {
+            val ms = System.currentTimeMillis() - foraDesde
+            foraDesde = 0L
+            webView.evaluateJavascript("window.onVoltouAoApp && onVoltouAoApp($ms)", null)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        visivel = false
+        if (isChangingConfigurations) return
+        foraDesde = System.currentTimeMillis()
+        // APK novo baixado e instalação silenciosa liberada: instala se a pessoa não voltar em 1 minuto,
+        // a não ser que algo esteja em andamento (câmera, arquivo, formulário aberto)
+        if (fileChooserCallback != null || pendingFileContent != null || geoCallback != null || Atualizador.pendente != null) return
+        webView.evaluateJavascript("!!document.querySelector('.modal.open')") { ocupado ->
+            if (ocupado != "true" && !visivel) Atualizador.agendarAoSair(applicationContext)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         // Voltou da tela "instalar apps desconhecidos": segue com a instalação
         if (Atualizador.pendente != null) Atualizador.continuar(this, ::avisarAtualizacao)
+        // Confere o site alguns segundos depois de abrir/voltar (sem disputar a internet com a sincronização)
+        principal.removeCallbacks(conferirSite)
+        principal.postDelayed(conferirSite, 8_000)
+    }
+
+    override fun onDestroy() {
+        principal.removeCallbacksAndMessages(null)
+        if (Atualizador.ouvinte === ouvinteAtualizacao) Atualizador.ouvinte = null
+        super.onDestroy()
     }
 
     override fun onNewIntent(intent: Intent) {
