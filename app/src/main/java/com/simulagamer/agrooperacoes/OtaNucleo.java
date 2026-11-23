@@ -375,7 +375,8 @@ public final class OtaNucleo {
         } else if (e.ativa > 0 && e.testando == 1) {
             e.testando = 2;
         }
-        promover(raiz, e);
+        // A versão pronta NÃO entra sozinha ao abrir: a página mostra "Nova versão disponível" e quem decide é a pessoa
+        if (e.pronta > 0 && (e.pronta <= e.ativa || e.ruins.contains(e.pronta) || !completa(raiz, e.pronta))) e.pronta = 0;
         limpar(raiz, e);
         gravarSemFalhar(e, raiz);
         return e.ativa > 0 ? arquivos(raiz, e.ativa) : null;

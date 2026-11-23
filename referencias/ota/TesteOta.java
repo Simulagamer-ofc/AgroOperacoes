@@ -85,8 +85,9 @@ public class TesteOta {
         checar(r.arquivosBaixados == 2 && pedidosF.get() == 2, "só baixou os 2 arquivos que mudaram (" + r.arquivosBaixados + ")");
         checar(OtaNucleo.estado(raiz).pronta == 2_000 && OtaNucleo.estado(raiz).ativa == 0, "pronta = v2, ainda usando as telas do APK");
 
-        System.out.println("2. Abrir o app coloca a v2 em uso (em teste até a página confirmar)");
-        File pasta = OtaNucleo.abrir(raiz, carimboApk);
+        System.out.println("2. Abrir o app NÃO troca sozinho; \"Atualizar agora\" coloca a v2 em uso (em teste até a página confirmar)");
+        checar(OtaNucleo.abrir(raiz, carimboApk) == null && OtaNucleo.estado(raiz).pronta == 2_000, "ao abrir continua nas telas do APK, com a v2 pronta para o aviso");
+        File pasta = OtaNucleo.aplicarPronta(raiz, carimboApk);
         checar(pasta != null && ler(new File(pasta, "app.js")).equals("console.log('v2')"), "app.js da v2");
         checar(ler(new File(pasta, "lib/grande.bin")).length() == 200_000, "arquivo grande copiado do APK");
         checar(OtaNucleo.estado(raiz).testando == 1, "em teste");
@@ -97,7 +98,7 @@ public class TesteOta {
         r = OtaNucleo.verificar(raiz, List.of(base), carimboApk, 1, chaves, fonteApk, rede, null);
         checar("atual".equals(r.situacao) && OtaNucleo.estado(raiz).vista == 2_500, "publicação nova com as mesmas telas: não oferece nada");
 
-        System.out.println("3. v3 quebrada: não confirma, na 3ª abertura volta para a v2");
+        System.out.println("3. v3 quebrada: não confirma, na 2ª abertura depois de atualizar volta para a v2");
         File w3 = copia(w2, "w3");
         escrever(w3, "app.js", "erro de sintaxe(");
         publicar(w3, "1.2.0", 3_000, 1, ksRsa);
@@ -105,10 +106,12 @@ public class TesteOta {
         r = OtaNucleo.verificar(raiz, List.of(base), carimboApk, 1, chaves, fonteApk, rede, null);
         checar("pronta".equals(r.situacao) && pedidosF.get() == 1, "v3 pronta baixando só 1 arquivo (o resto copiado da v2)");
         pasta = OtaNucleo.abrir(raiz, carimboApk);
-        checar(ler(new File(pasta, "app.js")).startsWith("erro"), "abre a v3");
+        checar(ler(new File(pasta, "app.js")).equals("console.log('v2')") && OtaNucleo.estado(raiz).pronta == 3_000, "ao abrir segue na v2, v3 esperando o aviso");
+        pasta = OtaNucleo.aplicarPronta(raiz, carimboApk);
+        checar(ler(new File(pasta, "app.js")).startsWith("erro"), "Atualizar agora abre a v3");
         checar(OtaNucleo.estado(raiz).anterior == 2_000, "guarda a v2 para voltar");
         OtaNucleo.abrir(raiz, carimboApk);
-        checar(OtaNucleo.estado(raiz).testando == 2, "2ª chance");
+        checar(OtaNucleo.estado(raiz).testando == 2, "abriu de novo sem confirmar: 2ª chance");
         pasta = OtaNucleo.abrir(raiz, carimboApk);
         checar(pasta != null && ler(new File(pasta, "app.js")).equals("console.log('v2')"), "voltou sozinho para a v2");
         checar(OtaNucleo.estado(raiz).ruins.contains(3_000L), "v3 marcada como ruim");

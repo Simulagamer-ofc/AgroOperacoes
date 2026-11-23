@@ -1413,13 +1413,15 @@ function versaoMaior(a, b) {
 }
 // Versão das telas em uso (a que aparece no menu); pode ser mais nova que a do APK
 const versaoTelas = () => (document.querySelector('.versao')?.textContent || '').trim().replace(/^v/i, '');
-// "Adiar": o aviso de versão nova some por 4 horas (vale para as telas e para o APK)
+// "Adiar": o aviso some agora e volta na próxima vez que o app for aberto (ou em 4 horas, se o app ficar aberto).
+// Vale para as telas e para o APK. Ao abrir, o app sempre procura versão nova e mostra o aviso se houver.
 const ADIAR_HORAS = 4;
+const VOLTA_CONTA_COMO_ABRIR = 5 * 60000; // voltar para o app depois de 5 min fora conta como abrir de novo
 const atualizacaoAdiada = () => Number(safeStorage.get('mp-atualizar-adiado-ate') || 0) > Date.now();
 function adiarAtualizacao() {
   safeStorage.set('mp-atualizar-adiado-ate', String(Date.now() + ADIAR_HORAS * 3600000));
   document.querySelectorAll('#novaVersaoTelas, #novaVersaoApk').forEach(b => b.remove());
-  showToast(`Combinado: lembro de novo em ${ADIAR_HORAS} horas.`);
+  showToast('Combinado. Aviso de novo na próxima vez que você abrir o app.');
   setTimeout(() => { avisoTelas(window.otaEstado); const v = window.AndroidBridge?.appVersion?.(); if (v) avisoApk(v); }, ADIAR_HORAS * 3600000 + 1000);
 }
 function avisoApk(instalada) {
@@ -1516,9 +1518,18 @@ window.onOta = e => {
   const c = [...document.querySelectorAll('.settings > .card')].find(x => x.querySelector(':scope > h3')?.textContent === 'Atualizações do app');
   if (c) { const t = document.createElement('div'); t.innerHTML = cartaoAtualizacoes(); const n = t.firstElementChild; if (n) { n.dataset.cfgSec = c.dataset.cfgSec || ''; n.hidden = c.hidden; c.replaceWith(n); } }
 };
-// Voltou para o app depois de um tempo fora (o Android avisa): com tudo fechado, entra a versão nova pronta
+// Abrir o app: procura versão nova na hora (sem esperar o intervalo) e, se houver, mostra o aviso — mesmo que antes tenha adiado
+function aoAbrirApp() {
+  safeStorage.del('mp-atualizar-adiado-ate');
+  if (navigator.onLine !== false) window.AndroidBridge?.otaVerificar?.();
+  const e = window.otaEstado; if (!e) return;
+  avisoTelas(e);
+  const v = e.apk || window.AndroidBridge?.appVersion?.(); if (v) avisoApk(v);
+}
+// Voltou para o app (o Android avisa quanto tempo ficou fora): depois de um tempo fora, é como abrir de novo
 window.onVoltouAoApp = ms => {
-  if (window.otaEstado?.pronta && ms > 5 * 60000 && !atualizacaoAdiada() && !document.querySelector('.modal.open')) otaAplicarAgora();
+  if (ms >= VOLTA_CONTA_COMO_ABRIR) aoAbrirApp();
+  else if (navigator.onLine !== false) window.AndroidBridge?.otaVerificar?.();
 };
 ACTIONS['ota-verificar'] = () => { window.AndroidBridge?.otaVerificar?.(); showToast('Procurando atualização…'); };
 ACTIONS['ota-aplicar'] = () => otaAplicarAgora();
@@ -1528,6 +1539,7 @@ if (window.AndroidBridge?.appVersion) addEventListener('load', () => {
   let e = null; try { e = JSON.parse(window.AndroidBridge.otaEstado?.() || 'null'); } catch { e = null; }
   if (!e?.suporta) { avisoApk(instalada); conferirApkGithub(instalada); return; }
   window.onOta(e);
+  aoAbrirApp();
   try {
     const v = sessionStorage.getItem('mp-ota-aplicada');
     if (v) { sessionStorage.removeItem('mp-ota-aplicada'); showToast(`MercaPlant atualizado${v !== '-' ? ` para a versão ${v}` : ''}. Seus dados continuam aqui.`); }
