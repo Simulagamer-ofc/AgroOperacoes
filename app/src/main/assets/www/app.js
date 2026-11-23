@@ -1525,8 +1525,11 @@ if (window.AndroidBridge?.appVersion) addEventListener('load', () => {
     const v = sessionStorage.getItem('mp-ota-aplicada');
     if (v) { sessionStorage.removeItem('mp-ota-aplicada'); showToast(`MercaPlant atualizado${v !== '-' ? ` para a versão ${v}` : ''}. Seus dados continuam aqui.`); }
   } catch { /* sem sessionStorage */ }
-  // Confirma ao Android que esta versão das telas abriu direitinho (senão ele volta para a anterior em 30 s)
-  setTimeout(() => { if (document.getElementById('view')?.children.length || document.getElementById('nvPortao')) window.AndroidBridge.otaOk?.(); }, 1500);
 });
+// Confirma ao Android que esta versão das telas abriu direitinho (senão ele volta para a anterior em 30 s).
+// Logo depois de montar a tela, sem esperar imagens e mapas (internet lenta não pode desfazer uma versão boa).
+if (window.AndroidBridge?.otaOk) addEventListener('DOMContentLoaded', () => setTimeout(() => {
+  if (document.getElementById('view')?.children.length || document.getElementById('nvPortao')) window.AndroidBridge.otaOk();
+}, 1500));
 // Ajustes: abrir uma seção (no celular, vazio volta para a lista)
 ACTIONS['cfg-sec'] = id => { go(id ? 'cadastros/' + id : 'cadastros'); window.scrollTo(0, 0); };
