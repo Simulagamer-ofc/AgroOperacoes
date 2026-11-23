@@ -328,6 +328,23 @@ function iconeTempo({prob = 0, mm = 0, nuvens = 50, trov = 0, noite = false}) {
   if (nuvens >= 15) return noite ? '🌙' : '🌤️';
   return noite ? '🌙' : '☀️';
 }
+// Mesmo tempo, desenhado no hexágono azul da marca (o do MercaClima no menu). O emoji continua sendo o "nome" do tempo.
+const GLIFOS_TEMPO = {
+  sol: '<circle cx="12" cy="12" r="4"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/>',
+  lua: '<path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z"/>',
+  nuvem: '<path d="M7 18a4.5 4.5 0 0 1 .7-9 5.8 5.8 0 0 1 11 1.9A3.6 3.6 0 0 1 18.2 18z"/>',
+  solNuvem: '<circle cx="8.5" cy="8.5" r="3"/><path d="M8.5 2.8v1.4M2.8 8.5h1.4M4.5 4.5l1 1M12.5 4.5l-1 1"/><path d="M10 20a3.8 3.8 0 0 1 .4-7.6 4.9 4.9 0 0 1 9.3 1.6A3 3 0 0 1 19 20z"/>',
+  pancadas: '<circle cx="8" cy="7.5" r="2.8"/><path d="M8 2.5v1.3M3 7.5h1.3M4.5 4l.9.9M11.5 4l-.9.9"/><path d="M9.5 17a3.6 3.6 0 0 1 .4-7.2 4.7 4.7 0 0 1 8.9 1.5A2.9 2.9 0 0 1 18.5 17z"/><path d="M11 19.5l-.7 1.8M14.5 19.5l-.7 1.8"/>',
+  chuva: '<path d="M7 15a4 4 0 0 1 .6-8 5.2 5.2 0 0 1 9.9 1.7A3.4 3.4 0 0 1 17 15z"/><path d="M8.5 18 7.5 20.5M12.5 18l-1 2.5M16.5 18l-1 2.5"/>',
+  trovoada: '<path d="M7 15a4 4 0 0 1 .6-8 5.2 5.2 0 0 1 9.9 1.7A3.4 3.4 0 0 1 17 15z"/><path d="M12.5 12.5l-2 3.5h3l-2 4"/>'
+};
+const GLIFO_TEMPO = {'⛈': 'trovoada', '🌧': 'chuva', '🌦': 'pancadas', '☁': 'nuvem', '⛅': 'solNuvem', '🌤': 'solNuvem', '☀': 'sol', '🌙': 'lua'};
+// Desenho de linha no hexágono da marca (verde ou azul, com o brilho dos ícones do menu)
+const hexGlifo = (d, cor = 'azul', tam = 40) => `<svg class="hex-icone ${cor} tempo-hex" width="${tam}" height="${tam}" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><polygon class="hex" points="9,3 23,3 30,16 23,29 9,29 2,16"/><g class="glifo" transform="translate(6.4 6.4) scale(.8)">${d}</g></svg>`;
+function hexTempo(emoji, tam = 40) {
+  const d = GLIFOS_TEMPO[GLIFO_TEMPO[String(emoji).replace(/\uFE0F/g, '')]];
+  return d ? hexGlifo(d, 'azul', tam) : emoji;
+}
 const maxDe = xs => xs.length ? Math.max(...xs) : null, minDe = xs => xs.length ? Math.min(...xs) : null;
 // Próximos 4 períodos a partir de agora
 function periodosClima(dados) {
@@ -447,12 +464,12 @@ function cartaoClima() {
   const resumo = jan.janelas.length ? `Pulverizar: ${jan.janelas.map(([a, b]) => `${hh(a)}–${hh(b)}`).join(', ')}` : 'Sem janela boa para pulverizar hoje';
   return `<article class="card panel hoje-clima ${aberto ? 'aberto' : ''}" id="hojeClima">
     <button type="button" class="clima-linha" data-act="clima-expandir" aria-expanded="${aberto}" aria-controls="climaCorpo">
-      <span class="clima-ic" aria-hidden="true">${iconeDia(c.dados, i0)}</span>
+      <span class="clima-ic" aria-hidden="true">${hexTempo(iconeDia(c.dados, i0), 42)}</span>
       <span class="clima-txt"><strong>Hoje ${hj}</strong><small class="${jan.janelas.length ? 'ok' : 'nao'}">${esc(resumo)}${chuvaHojeCurto || (chuvaProx ? ` • chuva ${chuvaProx.t === hoje ? 'hoje' : fmtDate(chuvaProx.t).slice(0, 5)}` : '')}${incertaHoje ? ' • previsão incerta' : ''}</small></span>
       <span class="clima-seta" aria-hidden="true">${aberto ? '▴' : '▾'}</span><span class="sr-only">${aberto ? 'Recolher' : 'Ver'} a previsão</span></button>
     ${aberto ? `<div id="climaCorpo">
-    ${tituloSel}<div class="clima-periodos">${periodos.map(p => `<div class="clima-per"><small>${p.nome}</small><b class="clima-t">${Math.round(p.temp)}°</b><span class="clima-icone" aria-hidden="true">${p.icone}</span><small>💧 ${Math.round(p.prob)}%</small></div>`).join('')}</div>
-    <div class="clima-dias" role="group" aria-label="Previsão dos próximos dias: toque em um dia para ver os detalhes">${d.time.slice(i0, i0 + 7).map((t, k) => { const i = i0 + k, sol = d.sunshine_duration?.[i]; return `<button type="button" class="clima-dia ${k === 0 ? 'hoje' : ''} ${k === sel ? 'sel' : ''}" data-act="clima-dia" data-id="${k}" aria-pressed="${k === sel}"><small><b>${nomeDia(k)}</b><br>${fmtDate(t).slice(0, 5)}</small><b class="clima-max">${Math.round(d.temperature_2m_max[i])}°</b><b class="clima-min">${Math.round(d.temperature_2m_min[i])}°</b><span class="clima-icone" aria-hidden="true">${iconeDia(c.dados, i)}</span>${sol != null ? `<small>☀ ${Math.round(sol / 3600)} h</small>` : ''}<small>💧 ${Math.round(d.precipitation_probability_max[i] ?? 0)}%</small>${d.precipitation_sum[i] >= 1 ? `<small>${num(d.precipitation_sum[i], 0)} mm</small>` : ''}<small>💨 ${Math.round(d.wind_speed_10m_max[i])} km/h</small>${conf[i] ? `<small class="clima-conf ${conf[i].firme ? 'firme' : 'incerta'}" title="${esc(txtConf(i) || 'Os modelos concordam')}">${conf[i].firme ? '✓ firme' : '⚠ incerta'}</small>` : ''}</button>`; }).join('')}</div>
+    ${tituloSel}<div class="clima-periodos">${periodos.map(p => `<div class="clima-per"><small>${p.nome}</small><b class="clima-t">${Math.round(p.temp)}°</b><span class="clima-icone" aria-hidden="true">${hexTempo(p.icone, 34)}</span><small>💧 ${Math.round(p.prob)}%</small></div>`).join('')}</div>
+    <div class="clima-dias" role="group" aria-label="Previsão dos próximos dias: toque em um dia para ver os detalhes">${d.time.slice(i0, i0 + 7).map((t, k) => { const i = i0 + k, sol = d.sunshine_duration?.[i]; return `<button type="button" class="clima-dia ${k === 0 ? 'hoje' : ''} ${k === sel ? 'sel' : ''}" data-act="clima-dia" data-id="${k}" aria-pressed="${k === sel}"><small><b>${nomeDia(k)}</b><br>${fmtDate(t).slice(0, 5)}</small><b class="clima-max">${Math.round(d.temperature_2m_max[i])}°</b><b class="clima-min">${Math.round(d.temperature_2m_min[i])}°</b><span class="clima-icone" aria-hidden="true">${hexTempo(iconeDia(c.dados, i), 32)}</span>${sol != null ? `<small>☀ ${Math.round(sol / 3600)} h</small>` : ''}<small>💧 ${Math.round(d.precipitation_probability_max[i] ?? 0)}%</small>${d.precipitation_sum[i] >= 1 ? `<small>${num(d.precipitation_sum[i], 0)} mm</small>` : ''}<small>💨 ${Math.round(d.wind_speed_10m_max[i])} km/h</small>${conf[i] ? `<small class="clima-conf ${conf[i].firme ? 'firme' : 'incerta'}" title="${esc(txtConf(i) || 'Os modelos concordam')}">${conf[i].firme ? '✓ firme' : '⚠ incerta'}</small>` : ''}</button>`; }).join('')}</div>
     ${sel === 0 && chHoje.length ? `<p class="hoje-chuva">🌧 <strong>Chuva hoje:</strong> ${esc(txtHorariosChuva(chHoje))}</p>` : ''}
     ${sel === 0 ? `<p class="hoje-jan ${jan.janelas.length ? 'ok' : 'nao'}">${txtJan(jan, 'hoje')}</p>${amanha ? `<p class="hoje-jan ${amanha.janelas.length ? 'ok' : 'nao'}">${txtJan(amanha, 'amanhã')}</p>` : ''}` : `<p class="hoje-jan ${janSel.janelas.length ? 'ok' : 'nao'}">${txtJan(janSel, sel === 1 ? 'amanhã' : 'neste dia')}</p>${chSel.length ? `<p class="hoje-chuva">🌧 <strong>Chuva ${sel === 1 ? 'amanhã' : 'neste dia'}:</strong> ${esc(txtHorariosChuva(chSel))}${d.precipitation_sum[iS] >= 1 ? ` <small class="nota">(total do dia ${num(d.precipitation_sum[iS], 0)} mm)</small>` : ''}</p>` : d.precipitation_sum[iS] >= 1 ? `<p class="nota">🌧 ${num(d.precipitation_sum[iS], 0)} mm previstos neste dia (chance de ${Math.round(d.precipitation_probability_max[iS] ?? 0)}%).</p>` : ''}${conf[iS] && !conf[iS].firme ? `<p class="nota clima-aviso">⚠ Previsão incerta para este dia (${esc(txtConf(iS))}).</p>` : ''}`}
     ${incertaHoje ? `<p class="nota clima-aviso">⚠ Previsão de hoje incerta (${esc(txtConf(i0))}): confira de novo mais tarde antes de pulverizar ou plantar.</p>` : ''}

@@ -2296,3 +2296,10 @@ body .nv-portao{padding-top:calc(20px + var(--topo))}
 .clima-resumo .cr-seta{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transform:rotate(90deg)}
 .clima-resumo[open] .cr-seta{transform:rotate(-90deg)}
 .clima-selo.orange{background:#d9822b}
+
+/* Tempo do dia no hexágono azul da marca (Início, MercaClima e detalhes do dia) */
+.tempo-hex{display:block;overflow:visible}
+.clima-ic:has(.tempo-hex),.clima-icone:has(.tempo-hex),.cd-icone:has(.tempo-hex),.cd-d-ic:has(.tempo-hex){font-size:0;line-height:0;display:inline-grid;place-items:center}
+.cd-d-ic:has(.tempo-hex),.clima-icone:has(.tempo-hex){margin:4px auto}
+.cd-j-ic:has(.tempo-hex,.cr-hex),.cd-m-ic:has(.tempo-hex){font-size:0;line-height:0;display:grid;place-items:center}
+@media(max-width:760px){.cd-icone .tempo-hex{width:60px;height:60px}}

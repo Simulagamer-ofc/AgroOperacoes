@@ -185,7 +185,7 @@ function cartaoClimaCurto() {
   const proxChuva = ch.length ? (ch[0].agora ? 'chovendo agora' : `chuva às ${hh2(ch[0].ini)}`) : (() => { const k = d.precipitation_sum.findIndex((mm, i) => i > i0 && mm >= 1); return k > 0 ? `chuva ${nomeDiaCurto(d.time[k])}` : 'sem chuva prevista'; })();
   const rs = riscosClima();
   return `<article class="card panel hoje-clima clima-curto" id="hojeClima">
-    <button type="button" class="clima-linha" data-act="nav" data-id="clima"><span class="clima-ic" aria-hidden="true">${iconeDia(c.dados, i0)}</span>
+    <button type="button" class="clima-linha" data-act="nav" data-id="clima"><span class="clima-ic" aria-hidden="true">${hexTempo(iconeDia(c.dados, i0), 42)}</span>
       <span class="clima-txt"><strong>Hoje ${Math.round(d.temperature_2m_max[i0])}° / ${Math.round(d.temperature_2m_min[i0])}°</strong><small class="${jan.janelas.length ? 'ok' : 'nao'}">${jan.janelas.length ? 'Pulverizar ' + jan.janelas.map(([a, b]) => `${hh(a)}–${hh(b)}`).join(', ') : 'Sem janela para pulverizar'} • ${esc(proxChuva)}</small></span><span class="clima-seta" aria-hidden="true">›</span></button>
     <details class="clima-resumo ${rs[0]?.nivel || ''}" ${rs.length ? '' : 'hidden'}><summary>${rs.length ? htmlResumoRiscos(hexRisco(rs[0].icone, rs[0].nivel), `${esc(rs[0].titulo)} <em class="clima-selo ${rs[0].nivel}">${SELO_RISCO[rs[0].nivel] || 'Alerta'}</em>`, rs.slice(1).map(r => r.titulo)) : ''}</summary>
       <div id="climaRiscos">${htmlRiscos(rs)}</div></details>
@@ -231,15 +231,15 @@ function climaDestaque() {
   const medida = (ic, rot, val, pct, ok, ideal, extra) => `<article class="card cd-medida"><span class="cd-m-ic" aria-hidden="true">${ic}</span><div><small>${rot}</small><b>${val}</b>
     <div class="cd-barra"><span class="${ok ? 'ok' : 'nao'}" style="width:${Math.max(3, Math.min(100, pct))}%"></span></div><small class="cd-ideal">${ideal}${extra ? ' • ' + extra : ''}</small></div></article>`;
   return `<section class="clima-destaque">
-    <article class="card cd-agora"><span class="cd-icone" aria-hidden="true">${a.icone}</span>
+    <article class="card cd-agora"><span class="cd-icone" aria-hidden="true">${hexTempo(a.icone, 76)}</span>
       <div><div class="cd-temp">${Math.round(a.t)} °C</div><div class="cd-cond">${esc(a.texto)}</div><small class="cd-sub">Agora • atualizado ${hhmm(new Date(c.em))}</small></div>
       <div class="cd-lado"><div><small>Máx. hoje</small><b>${Math.round(d.temperature_2m_max[i0])} °C</b></div><div><small>Mín. hoje</small><b>${Math.round(d.temperature_2m_min[i0])} °C</b></div><div><small>Chuva hoje</small><b>${num(Math.round((d.precipitation_sum[i0] || 0) * 10) / 10)} mm • ${Math.round(d.precipitation_probability_max[i0] || 0)}%</b></div></div></article>
-    <button type="button" class="cd-janela ${jCls}" data-act="clima-dia" data-id="${jDia}"><span class="cd-j-ic" aria-hidden="true">${jCls === 'ok' ? '⚠️' : '⛔'}</span><span><strong>${esc(jTit)}</strong><small>${esc(jTxt)}</small></span><span class="cd-seta" aria-hidden="true">›</span></button>
+    <button type="button" class="cd-janela ${jCls}" data-act="clima-dia" data-id="${jDia}"><span class="cd-j-ic" aria-hidden="true">${jCls === 'ok' ? hexGlifo(GLIFOS_RISCO.pulverizar, 'verde', 52) : hexRisco('⚠', 'orange', 52)}</span><span><strong>${esc(jTit)}</strong><small>${esc(jTxt)}</small></span><span class="cd-seta" aria-hidden="true">›</span></button>
     <article class="card cd-semana"><h3>Previsão para os próximos ${nDias} dias</h3>
-      <div class="cd-dias" role="group" aria-label="Toque em um dia para ver os detalhes e o mapa daquele dia">${d.time.slice(i0, i0 + nDias).map((t, k) => { const i = i0 + k; return `<button type="button" class="cd-dia ${k === sel ? 'sel' : ''}" data-act="clima-dia" data-id="${k}" aria-pressed="${k === sel}"><b>${nomeD(k)}</b><small>${fmtDate(t).slice(0, 5)}</small><span class="cd-d-ic" aria-hidden="true">${iconeDia(c.dados, i)}</span><b class="cd-max">${Math.round(d.temperature_2m_max[i])}°</b><span class="cd-min">${Math.round(d.temperature_2m_min[i])}°</span><small class="cd-prob">💧 ${Math.round(d.precipitation_probability_max[i] || 0)}%</small></button>`; }).join('')}</div></article>
+      <div class="cd-dias" role="group" aria-label="Toque em um dia para ver os detalhes e o mapa daquele dia">${d.time.slice(i0, i0 + nDias).map((t, k) => { const i = i0 + k; return `<button type="button" class="cd-dia ${k === sel ? 'sel' : ''}" data-act="clima-dia" data-id="${k}" aria-pressed="${k === sel}"><b>${nomeD(k)}</b><small>${fmtDate(t).slice(0, 5)}</small><span class="cd-d-ic" aria-hidden="true">${hexTempo(iconeDia(c.dados, i), 32)}</span><b class="cd-max">${Math.round(d.temperature_2m_max[i])}°</b><span class="cd-min">${Math.round(d.temperature_2m_min[i])}°</span><small class="cd-prob">💧 ${Math.round(d.precipitation_probability_max[i] || 0)}%</small></button>`; }).join('')}</div></article>
     <div class="cd-medidas">
-      ${medida('💧', 'Umidade do ar', `${Math.round(a.ur)} %`, a.ur, urOk, 'Ideal para aplicação: acima de 50%', urOk ? 'boa agora' : 'baixa agora')}
-      ${medida('🌬️', 'Vento', `${Math.round(a.v)} km/h`, a.v / 30 * 100, vOk, 'Ideal para aplicação: 3 a 10 km/h', a.raj != null ? `rajadas de ${Math.round(a.raj)} km/h` : '')}
+      ${medida(hexGlifo(GLIFOS_RISCO.gota, 'azul', 46), 'Umidade do ar', `${Math.round(a.ur)} %`, a.ur, urOk, 'Ideal para aplicação: acima de 50%', urOk ? 'boa agora' : 'baixa agora')}
+      ${medida(hexGlifo(GLIFOS_RISCO.vento, 'azul', 46), 'Vento', `${Math.round(a.v)} km/h`, a.v / 30 * 100, vOk, 'Ideal para aplicação: 3 a 10 km/h', a.raj != null ? `rajadas de ${Math.round(a.raj)} km/h` : '')}
     </div>
   </section>`;
 }
