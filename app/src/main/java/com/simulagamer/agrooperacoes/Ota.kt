@@ -13,7 +13,7 @@ import java.util.concurrent.Executors
 
 /**
  * Telas atualizadas sem reinstalar: o app confere o site (ota/manifest.txt, assinado com a chave do APK),
- * baixa só os arquivos que mudaram e, ao tocar "Atualizar agora" (ou ao abrir o app), passa a servir as telas
+ * baixa só os arquivos que mudaram e, ao tocar "Atualizar agora" no aviso, passa a servir as telas
  * novas no mesmo endereço interno — os dados guardados no aparelho continuam os mesmos.
  * A regra toda (assinatura, SHA-256, voltar sozinho se a versão nova não abrir) fica no OtaNucleo.java.
  */
