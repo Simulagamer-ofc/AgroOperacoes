@@ -2303,3 +2303,8 @@ body .nv-portao{padding-top:calc(20px + var(--topo))}
 .cd-d-ic:has(.tempo-hex),.clima-icone:has(.tempo-hex){margin:4px auto}
 .cd-j-ic:has(.tempo-hex,.cr-hex),.cd-m-ic:has(.tempo-hex){font-size:0;line-height:0;display:grid;place-items:center}
 @media(max-width:760px){.cd-icone .tempo-hex{width:60px;height:60px}}
+
+/* Início: o mapa da fazenda ocupa o cartão; os detalhes do talhão só aparecem ao tocar nele (com Fechar) */
+.i2-faz.so-mapa .i2-faz-corpo{grid-template-columns:1fr}
+.i2-faz .i2-pt-topo{justify-content:flex-end}
+.i2-faz-dica{margin:8px 2px 0;color:var(--muted);font-size:.82rem}
