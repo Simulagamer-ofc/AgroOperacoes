@@ -2308,3 +2308,42 @@ body .nv-portao{padding-top:calc(20px + var(--topo))}
 .i2-faz.so-mapa .i2-faz-corpo{grid-template-columns:1fr}
 .i2-faz .i2-pt-topo{justify-content:flex-end}
 .i2-faz-dica{margin:8px 2px 0;color:var(--muted);font-size:.82rem}
+
+/* Camada técnica: uma linha simples por assunto; "Detalhes" abre a conta */
+.tec-bloco{display:grid;gap:6px;margin:10px 0}
+.tec-linha{border:1px solid var(--line);border-radius:12px;background:color-mix(in srgb,var(--panel) 92%,var(--text) 3%)}
+.tec-linha>summary{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 10px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.tec-linha>summary::-webkit-details-marker{display:none}
+.tec-ic{flex:none;line-height:0}
+.tec-txt{flex:1;min-width:0;display:flex;flex-direction:column}
+.tec-txt small{color:var(--muted);font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+.tec-txt b{font-size:.95rem}
+.tec-mais{flex:none;font-size:.78rem;font-weight:600;color:var(--blue)}
+.tec-linha[open] .tec-mais{opacity:.6}
+.tec-det{padding:0 12px 10px 54px;font-size:.86rem;color:var(--muted)}
+.tec-det p{margin:6px 0}.tec-det b{color:var(--text)}
+.tec-det .btn-row{margin-top:8px}
+.tec-linha.agua-boa{border-left:4px solid #3fa45b}.tec-linha.agua-secando{border-left:4px solid #e5a50a}.tec-linha.agua-deficit{border-left:4px solid var(--red)}
+.tec-add{margin:2px 0 0;font-weight:600}
+.tec-card h3{margin:0 0 4px}
+@media(max-width:560px){.tec-det{padding-left:12px}}
+/* Chuva × consumo, últimos 14 dias */
+.tec-barras{display:grid;grid-template-columns:repeat(14,1fr);gap:3px;height:64px;align-items:end;margin:8px 0 4px}
+.tec-barras span{display:flex;gap:1px;align-items:end;height:100%}
+.tec-barras i,.tec-leg i{display:block;flex:1;border-radius:2px 2px 0 0;min-height:1px}
+.tec-barras i.ch,.tec-leg i.ch{background:#3b82f6}.tec-barras i.ch.est,.tec-leg i.ch.est{background:repeating-linear-gradient(45deg,#3b82f6 0 3px,color-mix(in srgb,#3b82f6 35%,transparent) 3px 6px)}
+.tec-barras i.et,.tec-leg i.et{background:#e5a50a}
+.tec-leg{display:flex;flex-wrap:wrap;gap:10px;font-size:.74rem}.tec-leg span{display:flex;align-items:center;gap:4px}.tec-leg i{width:10px;height:10px;flex:none}
+/* MercaClima: água no solo por talhão */
+.tec-agua h3{margin:0 0 8px}
+.tec-agua-lista{display:grid;gap:4px;margin-top:8px}
+.tec-agua-l{display:flex;justify-content:space-between;gap:10px;padding:6px 10px;border-radius:10px;border-left:4px solid #3fa45b;background:color-mix(in srgb,var(--panel) 90%,var(--text) 4%)}
+.tec-agua-l.agua-secando{border-left-color:#e5a50a}.tec-agua-l.agua-deficit{border-left-color:var(--red)}
+.tec-agua-l span{display:flex;flex-direction:column}.tec-agua-l small{color:var(--muted);font-size:.76rem}.tec-agua-l b{font-size:.88rem;text-align:right}
+/* Aplicações: condições na hora */
+.tec-cond{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.76rem;font-weight:700;white-space:nowrap}
+.tec-cond.ok{background:color-mix(in srgb,#3fa45b 18%,transparent);color:#2f8a48}.tec-cond.ruim{background:color-mix(in srgb,#e5a50a 22%,transparent);color:#a86d00}
+.tec-cond-txt{display:block;color:var(--muted);font-size:.74rem;margin-top:2px;max-width:340px}
+:root[data-theme="dark"] .tec-cond.ok{color:#7fe0a0}:root[data-theme="dark"] .tec-cond.ruim{color:#f5c451}
+/* Mapa: mosaico de vigor por baixo dos contornos */
+.tec-ndvi{mix-blend-mode:normal}

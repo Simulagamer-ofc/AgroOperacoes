@@ -331,8 +331,12 @@
 
     P.secao('Aplicações de defensivos', `${aps.length} no período`);
     if (!aps.length) P.nada('Nenhuma aplicação no período.');
-    else P.tabela([{t: 'Data', w: 1.1}, {t: 'Produto e dose', w: 2.4, negrito: true}, {t: 'Receituário', w: 1.3}, {t: 'Resp. técnico', w: 1.5}, {t: 'Carência', w: 1.5}],
-      aps.map(a => [fmtDate(a.date), [a.produto, a.dose].filter(Boolean).join(' - '), a.receituario || '-', a.responsavel || '-', `${num(a.carencia)} d (até ${fmtDate(addDias(a.date, Number(a.carencia) || 0))})`]));
+    else {
+      // Condições na hora da aplicação (tempo gravado ao iniciar e ao concluir a pulverização)
+      const cond = a => { const c = typeof tecCondicoesAplicacao === 'function' ? tecCondicoesAplicacao(a) : null; return !c ? '-' : c.ok ? 'Na janela' : `Fora: ${c.motivos.join(', ')}`; };
+      P.tabela([{t: 'Data', w: 1.1}, {t: 'Produto e dose', w: 2.3, negrito: true}, {t: 'Receituário', w: 1.2}, {t: 'Resp. técnico', w: 1.3}, {t: 'Carência', w: 1.4}, {t: 'Condições', w: 1.6}],
+        aps.map(a => [fmtDate(a.date), [a.produto, a.dose].filter(Boolean).join(' - '), a.receituario || '-', a.responsavel || '-', `${num(a.carencia)} d (até ${fmtDate(addDias(a.date, Number(a.carencia) || 0))})`, cond(a)]));
+    }
 
     P.secao('Monitoramento de pragas e doenças', `${mon.length} no período`);
     if (!mon.length) P.nada('Nenhum monitoramento no período.');
