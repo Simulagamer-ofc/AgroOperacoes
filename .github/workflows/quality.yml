@@ -34,9 +34,9 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - name: Testes das funções do servidor (Notas da SEFAZ A1 e A3)
+      - name: Testes das funções do servidor (Notas da SEFAZ A1 e A3, avisos do INMET)
         run: |
-          deno check supabase/functions/sefaz/index.ts supabase/functions/sefaz-conecta/index.ts
+          deno check supabase/functions/sefaz/index.ts supabase/functions/sefaz-conecta/index.ts supabase/functions/inmet/index.ts
           deno test --allow-read --allow-env supabase/functions/
       - name: Preparar Java (atualização sem reinstalar)
         uses: actions/setup-java@v4

@@ -60,7 +60,65 @@ async function tempestadePerto(loc) {
 }
 const riscoTempestade = tp => !tp || tp.nenhuma || tp.d > LIM.tempAtencao ? null : {nivel: tp.d <= LIM.tempPerto ? 'red' : 'orange', icone: '⚡', chave: 'tempestade',
   titulo: `Tempestade a ${Math.round(tp.d)} km ${tp.rumo} da fazenda${tp.chegando === true ? ' — se aproximando' : ''}`, texto: `Detectada às ${hhmm(tp.t)} (REDEMET). Raios: suspenda trabalho em campo aberto e em silos e secadores; recolha a equipe.`};
-const htmlRiscos = rs => rs.map(r => `<div class="clima-risco ${r.nivel}"><span aria-hidden="true">${r.icone}</span><div><strong>${esc(r.titulo)}</strong><small>${esc(r.texto)}</small></div></div>`).join('');
+const htmlRiscos = rs => rs.map(r => `<div class="clima-risco ${r.nivel}${r.fonte ? ' fonte-' + r.fonte.toLowerCase() : ''}"><span aria-hidden="true">${r.icone}</span><div><strong>${esc(r.titulo)}</strong><small>${esc(r.texto)}</small>${r.link ? `<a class="clima-fonte" href="${esc(r.link)}" target="_blank" rel="noopener">${esc(r.linkTxt || 'Ver mais')} ›</a>` : ''}</div></div>`).join('');
+
+// ---------- Avisos oficiais do INMET (Alert-AS) para o ponto da fazenda, pela função do servidor ----------
+// Somam-se aos alertas do app (previsão do Open-Meteo e tempestade da REDEMET); não substituem nada.
+const INMET_VALIDADE = 10 * 60000;
+let inmetCache = null;
+async function avisosInmet(loc) {
+  const k = `${loc.lat.toFixed(3)},${loc.lon.toFixed(3)}`;
+  if (inmetCache?.k === k && Date.now() - inmetCache.em < INMET_VALIDADE) return inmetCache.avisos;
+  const base = typeof NUVEM !== 'undefined' ? NUVEM : null; if (!base || navigator.onLine === false) return inmetCache?.k === k ? inmetCache.avisos : [];
+  try {
+    const r = await fetch(`${base.url}/functions/v1/inmet?${new URLSearchParams({lat: loc.lat.toFixed(4), lon: loc.lon.toFixed(4)})}`, {headers: {apikey: base.chave}});
+    if (!r.ok) throw new Error('inmet ' + r.status);
+    const d = await r.json(), avisos = Array.isArray(d?.avisos) ? d.avisos : [];
+    inmetCache = {k, em: Date.now(), avisos};
+    return avisos;
+  } catch { return inmetCache?.k === k ? inmetCache.avisos : []; }
+}
+const NIVEL_INMET = {vermelho: 'red', laranja: 'orange', amarelo: 'yellow'}, COR_INMET = {vermelho: 'vermelho', laranja: 'laranja', amarelo: 'amarelo'};
+function iconeInmet(evento) {
+  const e = String(evento).toLowerCase();
+  return /granizo/.test(e) ? '🧊' : /geada|frio|declínio de temperatura|declinio/.test(e) ? '❄' : /calor|temperatura/.test(e) ? '🌡'
+    : /umidade/.test(e) ? '💧' : /vendaval|vento/.test(e) ? '🌬' : /tempestade|trovo/.test(e) ? '⛈' : /chuva|acumulado/.test(e) ? '🌧' : '⚠';
+}
+// Data/hora curtas: "hoje", "amanhã", "sábado" + "14h"
+const diaInmet = d => nomeDiaCurto(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'));
+const horaInmet = d => `${d.getHours()}h${d.getMinutes() ? String(d.getMinutes()).padStart(2, '0') : ''}`;
+// "amanhã (o dia todo)", "hoje até 18h", "sábado, das 6h às 18h", "de hoje 14h até amanhã 10h"
+function periodoInmet(a, agora = Date.now()) {
+  const i = a.inicio ? new Date(a.inicio) : null, f = a.fim ? new Date(a.fim) : null;
+  if (!f || Number.isNaN(f.getTime())) return 'em vigor';
+  const comecou = !i || i.getTime() <= agora, mesmoDia = i && i.toDateString() === f.toDateString();
+  const diaTodo = i && mesmoDia && i.getHours() === 0 && i.getMinutes() === 0 && f.getHours() === 23 && f.getMinutes() >= 59;
+  if (diaTodo) return `${diaInmet(f)} (o dia todo)`;
+  if (comecou) return `${diaInmet(f)} até ${horaInmet(f)}`;
+  if (mesmoDia) return `${diaInmet(i)}, das ${horaInmet(i)} às ${horaInmet(f)}`;
+  return `de ${diaInmet(i)} ${horaInmet(i)} até ${diaInmet(f)} ${horaInmet(f)}`;
+}
+// Tira o "INMET publica aviso iniciando em: 25/11/2026 00:00." (o período já aparece no título)
+const descInmet = a => String(a.descricao || '').replace(/\s+/g, ' ').replace(/^INMET publica aviso iniciando em:?\s*[\d/]+\s*[\d:]*\.?\s*/i, '').trim();
+// Primeira frase: o que vem (chuva, vento, granizo); o resto (riscos) fica para "Ver aviso no INMET"
+const resumoInmet = a => { const d = descInmet(a), k = d.search(/\.\s+[A-ZÁÉÍÓÚ]/); return k > 0 ? d.slice(0, k + 1) : d; };
+function riscoInmet(a, completo = false) {
+  return {nivel: NIVEL_INMET[a.nivel] || 'yellow', icone: iconeInmet(a.evento), chave: 'inmet-' + a.id, fonte: 'INMET',
+    titulo: `Aviso ${COR_INMET[a.nivel] || 'amarelo'} do INMET: ${a.evento} ${periodoInmet(a)}`,
+    texto: (completo ? descInmet(a) : resumoInmet(a)) || a.severidade || '',
+    link: /^https:\/\/[a-z0-9.-]*inmet\.gov\.br\//.test(a.web || '') ? a.web : `https://avisos.inmet.gov.br/${encodeURIComponent(a.id)}`, linkTxt: 'Ver aviso no INMET'};
+}
+async function riscosInmet(loc, completo = false) { return (await avisosInmet(loc)).map(a => riscoInmet(a, completo)); }
+// Coloca os avisos que chegaram depois (INMET, tempestade) no topo da caixa de alertas, sem repetir, e some o "Tudo em dia"
+function juntarRiscos(box, rs) {
+  if (!box || !rs.length) return;
+  const novos = rs.filter(r => !box.querySelector(`[data-chave="${CSS.escape(r.chave)}"]`)); if (!novos.length) return;
+  if (!box.querySelector('.clima-risco')) box.innerHTML = '';
+  const t = document.createElement('div'); t.innerHTML = htmlRiscos(novos);
+  [...t.children].forEach((el, i) => { el.dataset.chave = novos[i].chave; });
+  box.prepend(...t.children);
+  box.closest('.ini-atencao')?.querySelectorAll('.ini-ok').forEach(ok => { ok.hidden = true; });
+}
 
 // ---------- Início: só a previsão do dia + alertas de uma linha; o resto fica no MercaClima ----------
 const cartaoClimaCompleto = cartaoClima;
@@ -80,8 +138,11 @@ function cartaoClimaCurto() {
 cartaoClima = () => (parseRoute().name === 'clima' ? cartaoClimaCompleto() : cartaoClimaCurto());
 async function completarAlertasInicio() {
   const loc = localDaFazenda?.(), box = document.getElementById('climaRiscos'); if (!loc || !box) return;
-  const r = riscoTempestade(await tempestadePerto(loc)); if (!r || !document.getElementById('climaRiscos')) return;
-  document.getElementById('climaRiscos').insertAdjacentHTML('afterbegin', htmlRiscos([r]));
+  const [tp, inmet] = await Promise.all([tempestadePerto(loc), riscosInmet(loc)]);
+  const r = riscoTempestade(tp), rs = [...(r ? [r] : []), ...inmet];
+  // vermelho primeiro, depois laranja e amarelo
+  const ordem = {red: 0, orange: 1, yellow: 2};
+  juntarRiscos(document.getElementById('climaRiscos'), rs.sort((a, b) => ordem[a.nivel] - ordem[b.nivel]));
 }
 if (VIEWS.inicio) {
   const depoisSemAlertas = VIEWS.inicio.after;
@@ -151,6 +212,7 @@ VIEWS.clima.after = async () => {
   iniciarMapaTempo();
   const loc = localDaFazenda?.(); if (!loc) return;
   if (typeof buscarClima === 'function') buscarClima();
-  const r = riscoTempestade(await tempestadePerto(loc)), box = document.getElementById('climaRiscos');
-  if (r && box) { if (!box.querySelector('.clima-risco')) box.innerHTML = ''; box.insertAdjacentHTML('afterbegin', htmlRiscos([r])); }
+  const [tp, inmet] = await Promise.all([tempestadePerto(loc), riscosInmet(loc)]);
+  const r = riscoTempestade(tp), ordem = {red: 0, orange: 1, yellow: 2};
+  juntarRiscos(document.getElementById('climaRiscos'), [...(r ? [r] : []), ...inmet].sort((a, b) => ordem[a.nivel] - ordem[b.nivel]));
 };
