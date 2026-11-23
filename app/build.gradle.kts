@@ -21,8 +21,8 @@ android {
         applicationId = "com.simulagamer.agrooperacoes"
         minSdk = 26
         targetSdk = 35
-        versionCode = 167
-        versionName = "1.1.3-beta1"
+        versionCode = 168
+        versionName = "1.1.4-beta1"
         buildConfigField("long", "CARIMBO", "${carimboTelas}L")
     }
 
