@@ -63,9 +63,30 @@ async function tempestadePerto(loc) {
   } catch { return null; }
 }
 const riscoTempestade = tp => !tp || tp.nenhuma || tp.d > LIM.tempAtencao ? null : {nivel: tp.d <= LIM.tempPerto ? 'red' : 'orange', icone: '⚡', chave: 'tempestade',
-  titulo: `Tempestade a ${Math.round(tp.d)} km ${tp.rumo} da fazenda${tp.chegando === true ? ' — se aproximando' : ''}`, texto: `Detectada às ${hhmm(tp.t)} (REDEMET). Raios: suspenda trabalho em campo aberto e em silos e secadores; recolha a equipe.`};
-// Selo (ex.: "INMET · vermelho") ao lado do título; linhas extras (ex.: outros períodos do mesmo aviso) logo abaixo do texto
-const htmlRiscos = rs => rs.map(r => `<div class="clima-risco ${r.nivel}${r.fonte ? ' fonte-' + r.fonte.toLowerCase() : ''}"><span aria-hidden="true">${r.icone}</span><div><strong>${esc(r.titulo)}${r.selo ? ` <em class="clima-selo ${r.nivel}">${esc(r.selo)}</em>` : ''}</strong><small>${esc(r.texto)}</small>${(r.extras || []).map(x => `<small class="clima-extra">${esc(x)}</small>`).join('')}${r.link ? `<a class="clima-fonte" href="${esc(r.link)}" target="_blank" rel="noopener">${esc(r.linkTxt || 'Ver mais')} ›</a>` : ''}</div></div>`).join('');
+  titulo: `Tempestade a ${Math.round(tp.d)} km ${tp.rumo} da fazenda${tp.chegando === true ? ' — se aproximando' : ''}`, texto: `Detectada às ${hhmm(tp.t)}. Raios: suspenda trabalho em campo aberto e em silos e secadores; recolha a equipe.`};
+// Alertas com a identidade do MercaPlant: ícone de linha no hexágono (borda na cor do nível) e selo "Alerta vermelho/laranja/amarelo".
+// Não mostram de onde veio o dado (previsão, radar, avisos oficiais): para quem usa, é tudo alerta do MercaPlant.
+const GLIFOS_RISCO = {
+  tempestade: '<path d="M7 15a4 4 0 0 1 .6-8 5.2 5.2 0 0 1 9.9 1.7A3.4 3.4 0 0 1 17 15z"/><path d="M12.5 12.5l-2 3.5h3l-2 4"/>',
+  raio: '<path d="M13.5 3 6 13.5h5.2L10 21l8-11.2h-5.3z"/>',
+  chuva: '<path d="M7 15a4 4 0 0 1 .6-8 5.2 5.2 0 0 1 9.9 1.7A3.4 3.4 0 0 1 17 15z"/><path d="M8.5 18 7.5 20.5M12.5 18l-1 2.5M16.5 18l-1 2.5"/>',
+  granizo: '<path d="M7 15a4 4 0 0 1 .6-8 5.2 5.2 0 0 1 9.9 1.7A3.4 3.4 0 0 1 17 15z"/><circle cx="8.5" cy="19" r="1"/><circle cx="12.5" cy="20.3" r="1"/><circle cx="16" cy="18.6" r="1"/>',
+  vento: '<path d="M3 9h11.5a3 3 0 1 0-3-3M3 13.5h15a3 3 0 1 1-3 3M3 18h6"/>',
+  geada: '<path d="M12 3v18M4.2 7.5l15.6 9M4.2 16.5l15.6-9M9.5 4.6 12 7l2.5-2.4M9.5 19.4 12 17l2.5 2.4"/>',
+  calor: '<path d="M10 14.3V5a2 2 0 0 1 4 0v9.3a4 4 0 1 1-4 0z"/><path d="M12 9.5v6.5M17 6h2.5M17 9.5h2.5"/>',
+  gota: '<path d="M12 3.5s6 6.8 6 10.8a6 6 0 0 1-12 0c0-4 6-10.8 6-10.8z"/><path d="M9.5 15a2.6 2.6 0 0 0 2.5 2.5"/>',
+  pulverizar: '<path d="M9 3h6v4l-1.2 3h-3.6L9 7zM12 10v2.5M8.5 15.5 6.5 20M12 15.5V21M15.5 15.5l2 4.5"/>',
+  solo: '<circle cx="7.5" cy="16" r="3.5"/><circle cx="18" cy="17.5" r="2"/><path d="M11 16h5M4 12.5V8h6.5l1.8 4.5M12 8V4.5h3V8M4 12.5h12.5a2.5 2.5 0 0 1 2.5 2.5"/>',
+  alerta: '<path d="M12 3.8 21 19.5H3z"/><path d="M12 10v4.2M12 16.9v.2"/>'
+};
+const GLIFO_DO_ICONE = {'⛈': 'tempestade', '⚡': 'raio', '🌧': 'chuva', '🧊': 'granizo', '🌬': 'vento', '💨': 'pulverizar', '❄': 'geada', '🌡': 'calor', '💧': 'gota', '🚜': 'solo', '⚠': 'alerta'};
+const SELO_RISCO = {red: 'Alerta vermelho', orange: 'Alerta laranja', yellow: 'Alerta amarelo'};
+function hexRisco(icone, nivel, tam = 38) {
+  const d = GLIFOS_RISCO[GLIFO_DO_ICONE[String(icone).replace(/\uFE0F/g, '')]] || GLIFOS_RISCO.alerta;
+  return `<svg class="cr-hex n-${nivel || 'orange'}" width="${tam}" height="${tam}" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><polygon class="cr-hex-borda" points="9,3 23,3 30,16 23,29 9,29 2,16"/><g class="cr-hex-glifo" transform="translate(6.4 6.4) scale(.8)">${d}</g></svg>`;
+}
+// Selo ao lado do título; linhas extras (ex.: outros períodos do mesmo alerta) logo abaixo do texto
+const htmlRiscos = rs => rs.map(r => `<div class="clima-risco ${r.nivel}${r.fonte ? ' fonte-' + r.fonte.toLowerCase() : ''}"><span class="cr-icone" aria-hidden="true">${hexRisco(r.icone, r.nivel)}</span><div><strong>${esc(r.titulo)} <em class="clima-selo ${r.nivel}">${esc(r.selo || SELO_RISCO[r.nivel] || 'Alerta')}</em></strong><small>${esc(r.texto)}</small>${(r.extras || []).map(x => `<small class="clima-extra">${esc(x)}</small>`).join('')}${r.link ? `<a class="clima-fonte" href="${esc(r.link)}" target="_blank" rel="noopener">${esc(r.linkTxt || 'Ver mais')} ›</a>` : ''}</div></div>`).join('');
 
 // ---------- Avisos oficiais do INMET (Alert-AS) para o ponto da fazenda, pela função do servidor ----------
 // Somam-se aos alertas do app (previsão do Open-Meteo e tempestade da REDEMET); não substituem nada.
@@ -105,7 +126,7 @@ function periodoInmet(a, agora = Date.now()) {
 }
 // Tira o "INMET publica aviso iniciando em: 25/11/2026 00:00." (o período já aparece no título)
 const descInmet = a => String(a.descricao || '').replace(/\s+/g, ' ').replace(/^INMET publica aviso iniciando em:?\s*[\d/]+\s*[\d:]*\.?\s*/i, '').trim();
-// Primeira frase: o que vem (chuva, vento, granizo); o resto (riscos) fica para "Ver aviso no INMET"
+// Primeira frase: o que vem (chuva, vento, granizo); a descrição completa aparece nos detalhes
 const resumoInmet = a => { const d = descInmet(a), k = d.search(/\.\s+[A-ZÁÉÍÓÚ]/); return k > 0 ? d.slice(0, k + 1) : d; };
 // Um alerta por evento: o INMET publica o mesmo evento em vários avisos (ex.: tempestade amarela hoje e vermelha amanhã).
 // O mais grave vira o título; os outros períodos entram como linhas curtas no mesmo alerta.
@@ -115,10 +136,9 @@ function riscoInmet(lista, completo = false) {
   lista = [].concat(lista).sort((x, y) => (ORD_INMET[x.nivel] ?? 2) - (ORD_INMET[y.nivel] ?? 2) || String(x.inicio).localeCompare(String(y.inicio)));
   const a = lista[0], outros = lista.slice(1).sort((x, y) => String(x.inicio).localeCompare(String(y.inicio)));
   return {nivel: NIVEL_INMET[a.nivel] || 'yellow', icone: iconeInmet(a.evento), chave: 'inmet-' + a.id, fonte: 'INMET',
-    titulo: `${a.evento} ${periodoInmet(a)}`, selo: `INMET · ${COR_INMET[a.nivel] || 'amarelo'}`,
+    titulo: `${a.evento} ${periodoInmet(a)}`,
     texto: (completo ? descInmet(a) : resumoInmet(a)) || a.severidade || '',
-    extras: outros.map(o => `${maiuscula(periodoInmet(o))}: aviso ${COR_INMET[o.nivel] || 'amarelo'}.${completo && resumoInmet(o) ? ' ' + resumoInmet(o) : ''}`),
-    link: /^https:\/\/[a-z0-9.-]*inmet\.gov\.br\//.test(a.web || '') ? a.web : `https://avisos.inmet.gov.br/${encodeURIComponent(a.id)}`, linkTxt: 'Ver aviso no INMET'};
+    extras: outros.map(o => `${maiuscula(periodoInmet(o))}: alerta ${COR_INMET[o.nivel] || 'amarelo'}.${completo && resumoInmet(o) ? ' ' + resumoInmet(o) : ''}`)};
 }
 function agruparInmet(avisos) {
   const g = new Map();
@@ -129,12 +149,12 @@ async function riscosInmet(loc, completo = false) { return agruparInmet(await av
 // Início: os alertas ficam recolhidos numa linha só (o mais grave + quantos mais há); tocando, abre a lista com os detalhes.
 // Fechado: ícone, título e selo do mais grave e "+ 1 alerta: Chuva amanhã…". Aberto: "N alertas de tempo" e a lista completa.
 const NIVEIS_RISCO = ['red', 'orange', 'yellow'];
-function htmlResumoRiscos(ic, tituloHtml, outros) {
+function htmlResumoRiscos(icHtml, tituloHtml, outros) {
   const n = outros.length + 1;
-  return `<span class="cr-fechado"><span class="cr-ic" aria-hidden="true">${esc(ic)}</span><span class="cr-txt"><strong>${tituloHtml}</strong>`
+  return `<span class="cr-fechado"><span class="cr-ic" aria-hidden="true">${icHtml}</span><span class="cr-txt"><strong>${tituloHtml}</strong>`
     + `<small>${outros.length ? `+ ${outros.length} ${outros.length === 1 ? 'alerta' : 'alertas'}: ${esc(outros.join(' · '))}` : 'Toque para ver os detalhes'}</small></span></span>`
-    + `<span class="cr-aberto"><strong>${n} ${n === 1 ? 'alerta' : 'alertas'} de tempo</strong></span>`
-    + `<span class="cr-acao"><span class="cr-ver">Detalhes</span><span class="cr-fechar">Fechar</span><span class="cr-seta" aria-hidden="true">▾</span></span>`;
+    + `<span class="cr-aberto"><strong>${n} ${n === 1 ? 'alerta' : 'alertas'} de tempo na fazenda</strong></span>`
+    + `<span class="cr-acao"><span class="cr-ver">Detalhes</span><span class="cr-fechar">Fechar</span><svg class="cr-seta" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 5.5 15.5 12 9 18.5"/></svg></span>`;
 }
 function resumoRiscosInicio() {
   const det = document.querySelector('.clima-curto .clima-resumo'), box = det?.querySelector('#climaRiscos'); if (!det || !box) return;
@@ -142,7 +162,7 @@ function resumoRiscosInicio() {
   const p = rs[0], tit = p.querySelector('strong');
   NIVEIS_RISCO.forEach(c => det.classList.toggle(c, p.classList.contains(c)));
   const outros = rs.slice(1).map(el => el.querySelector('strong')?.firstChild?.textContent.trim()).filter(Boolean);
-  det.querySelector('summary').innerHTML = htmlResumoRiscos(p.firstElementChild?.textContent || '⚠', tit ? tit.innerHTML : '', outros);
+  det.querySelector('summary').innerHTML = htmlResumoRiscos(p.firstElementChild?.innerHTML || hexRisco('⚠', 'orange'), tit ? tit.innerHTML : '', outros);
 }
 // Coloca os avisos que chegaram depois (INMET, tempestade) no topo da caixa de alertas, sem repetir, e some o "Tudo em dia"
 function juntarRiscos(box, rs) {
@@ -167,7 +187,7 @@ function cartaoClimaCurto() {
   return `<article class="card panel hoje-clima clima-curto" id="hojeClima">
     <button type="button" class="clima-linha" data-act="nav" data-id="clima"><span class="clima-ic" aria-hidden="true">${iconeDia(c.dados, i0)}</span>
       <span class="clima-txt"><strong>Hoje ${Math.round(d.temperature_2m_max[i0])}° / ${Math.round(d.temperature_2m_min[i0])}°</strong><small class="${jan.janelas.length ? 'ok' : 'nao'}">${jan.janelas.length ? 'Pulverizar ' + jan.janelas.map(([a, b]) => `${hh(a)}–${hh(b)}`).join(', ') : 'Sem janela para pulverizar'} • ${esc(proxChuva)}</small></span><span class="clima-seta" aria-hidden="true">›</span></button>
-    <details class="clima-resumo ${rs[0]?.nivel || ''}" ${rs.length ? '' : 'hidden'}><summary>${rs.length ? htmlResumoRiscos(rs[0].icone, esc(rs[0].titulo), rs.slice(1).map(r => r.titulo)) : ''}</summary>
+    <details class="clima-resumo ${rs[0]?.nivel || ''}" ${rs.length ? '' : 'hidden'}><summary>${rs.length ? htmlResumoRiscos(hexRisco(rs[0].icone, rs[0].nivel), `${esc(rs[0].titulo)} <em class="clima-selo ${rs[0].nivel}">${SELO_RISCO[rs[0].nivel] || 'Alerta'}</em>`, rs.slice(1).map(r => r.titulo)) : ''}</summary>
       <div id="climaRiscos">${htmlRiscos(rs)}</div></details>
     <button type="button" class="secondary clima-abrir" data-act="nav" data-id="clima">Detalhar no MercaClima ›</button></article>`;
 }

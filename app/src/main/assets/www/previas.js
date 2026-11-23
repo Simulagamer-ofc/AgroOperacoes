@@ -267,7 +267,7 @@ function i2Operacoes() {
 // Avisos: os 3 mais importantes, curtos (o título longo da chuva vira “Chuva amanhã: 16,5 mm” + horários embaixo)
 function i2Aviso(a) {
   const cor = a.color === 'red' || a.nivel === 'red' ? 'red' : 'orange';
-  return `<button type="button" class="i2-av ${cor}" data-act="nav" data-id="${esc(a.route || 'avisos')}"><span class="i2-av-ic" aria-hidden="true">${a.icon && a.icon.length <= 2 ? esc(a.icon) : iconeLinha('alerta', 18)}</span><span><strong>${esc(a.title)}</strong><small>${esc(a.text || '')}</small></span>${pvSeta()}</button>`;
+  return `<button type="button" class="i2-av ${cor}" data-act="nav" data-id="${esc(a.route || 'avisos')}"><span class="i2-av-ic" aria-hidden="true">${typeof GLIFO_DO_ICONE !== 'undefined' && GLIFO_DO_ICONE[String(a.icon || '').replace(/\uFE0F/g, '')] ? hexRisco(a.icon, a.color === 'red' ? 'red' : a.color === 'yellow' ? 'yellow' : 'orange', 34) : a.icon && a.icon.length <= 2 ? esc(a.icon) : iconeLinha('alerta', 18)}</span><span><strong>${esc(a.title)}</strong><small>${esc(a.text || '')}</small></span>${pvSeta()}</button>`;
 }
 function i2RiscoCurto(r) {
   if (!/^chuva-/.test(r.chave || '')) return {title: r.titulo, text: r.texto, color: r.nivel, icon: r.icone, route: 'clima'};
