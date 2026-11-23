@@ -2230,3 +2230,19 @@ body:has(.i2) .app.nx-home .content{max-width:none}
 .ini-mapa-slot{overflow:hidden;border-radius:inherit}
 .ini-mapa-l{overflow:hidden!important;contain:paint}
 .ini-mapa-l:not(.cheio){position:absolute!important;inset:0!important;width:auto!important;height:auto!important;z-index:0!important}
+
+/* Android 15+ desenha o app por baixo da barra de status (hora, bateria): reserva o espaço dela.
+   --topo = altura da barra (0 no navegador do computador); a faixa escura fica sempre atrás dos ícones brancos. */
+:root{--topo:env(safe-area-inset-top,0px)}
+html::before{content:'';position:fixed;left:0;right:0;top:0;height:var(--topo);background:#08182b;z-index:2147483000;pointer-events:none}
+body{padding-top:var(--topo)}
+.topbar{top:var(--topo)}
+.sidebar.open,.app.nx-home .sidebar.open{padding-top:calc(16px + var(--topo))}
+.modal{padding-top:calc(18px + var(--topo))}
+@media(max-width:760px){.modal{padding-top:calc(8px + var(--topo))}.dialog{max-height:calc(100dvh - 16px - var(--topo))}}
+.foto-tela{padding-top:calc(16px + var(--topo))}
+.ctp-tela{padding-top:var(--topo)}
+.fab-camada{padding-top:var(--topo)}
+body .nv-portao{padding-top:calc(20px + var(--topo))}
+/* Botões do mapa do Início ficam dentro do cartão: não passam por cima de janelas, menu e barra de baixo */
+.pf-mapa{isolation:isolate}
