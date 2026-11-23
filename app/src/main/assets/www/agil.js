@@ -154,7 +154,7 @@ function chuvaVarios() {
 }
 
 // ---------------- QR code na máquina ----------------
-const AG_URL_APP = 'https://simulagamer-ofc.github.io/AgroOperacoes/';
+const AG_URL_APP = 'https://mercaplant.com.br/';
 const agUrlMaquina = id => `${AG_URL_APP}#/m/${id}`;
 VIEWS.etiquetasmaq = id => {
   const l = (id ? [find('machines', id)] : db.machines.filter(m => !isInactive(m))).filter(Boolean)
