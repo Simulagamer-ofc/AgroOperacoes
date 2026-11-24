@@ -86,8 +86,11 @@ TITLES.mapatalhoes = 'Talhões';
 
 // ---------------- Desenhar no satélite ----------------
 let tmd = null; // {fieldId, pontos: [[lat, lon]]}
+// Contorno salvo fica trancado (trava.js): só olha; para mudar, alguém autorizado libera com a senha
+const tmdTrancado = () => !!tmd && typeof trvTrancado === 'function' && trvTrancado(tmd.fieldId);
 function tmdPainel() {
   const f = find('fields', tmd.fieldId), p = tmd.pontos, area = tmAreaHa(p), per = perimetroM(p);
+  if (tmdTrancado()) return `<div class="ctn-num"><div><span>Pontos</span><b>${p.length}</b></div><div><span>Área</span><b>${um1(area)} ha</b></div><div><span>Perímetro</span><b>${num(Math.round(per))} m</b></div></div>${trvCartao(tmd.fieldId)}`;
   return `<div class="ctn-num"><div><span>Pontos</span><b>${p.length}</b></div><div><span>Área</span><b>${p.length > 2 ? um1(area) + ' ha' : '—'}</b></div><div><span>Perímetro</span><b>${p.length > 1 ? num(Math.round(per)) + ' m' : '—'}</b></div><div><span>No cadastro</span><b>${f ? num(f.area) + ' ha' : '—'}</b></div></div>
     ${tmd.auto ? '<p class="tmd-auto-dica">✨ Toque no <b>meio do talhão</b> no mapa: o MercaPlant desenha o contorno pela imagem de satélite.</p>' : tmd.msg ? `<p class="tmd-auto-msg">${tmd.msg}</p>` : ''}
     ${!tmd.auto && tmd.opcoes?.length > 1 ? `<div class="tmd-opcoes"><button class="secondary" data-act="tmd-op" data-id="1" ${tmd.op >= tmd.opcoes.length - 1 ? 'disabled' : ''}>− Menor</button><span>Opção ${tmd.op + 1} de ${tmd.opcoes.length}<small>${tmd.opcoes.map((o, i) => `<i class="${i === tmd.op ? 'on' : ''}">${um1(o.ha)} ha</i>`).join('')}</small></span><button class="secondary" data-act="tmd-op" data-id="-1" ${tmd.op <= 0 ? 'disabled' : ''}>+ Maior</button></div>` : ''}
@@ -101,6 +104,7 @@ function tmdRedesenhar(soLinha = false) {
   const pn = $('#tmdPainel'); if (pn) pn.innerHTML = tmdPainel();
   if (soLinha) return;
   (tmd.marcas || []).forEach(m => m.remove()); tmd.marcas = [];
+  if (tmdTrancado()) return; // trancado: sem cantos para arrastar
   // Contorno com muitos cantos (GPS ou desenho automático): cantos menores para não cobrir a imagem
   const muitos = tmd.pontos.length > 150, varios = tmd.pontos.length > 30, lado = muitos ? 10 : varios ? 14 : 20;
   tmd.pontos.forEach((pt, i) => {
@@ -139,7 +143,7 @@ VIEWS.desenhar = id => {
   const f = find('fields', id); if (!f) return empty('Talhão não encontrado', '');
   if (!tmGestor()) return head('Desenhar no satélite', 'Só para o ADM e o supervisor.', btn('← Talhão', 'nav', 'talhao/' + id, 'secondary')) + `<section class="card">${empty('Sem acesso', 'Seu nível de acesso é Usuário comum.')}</section>`;
   if (!tmd || tmd.fieldId !== id) tmd = {fieldId: id, pontos: (f.contorno?.pontos || []).map(([la, lo]) => [la, lo])};
-  return head(`Desenhar no satélite — ${f.name}`, 'Toque nos cantos do talhão. Depois do terceiro, cada toque entra no lado mais perto. Arraste um canto para ajustar; toque no ponto do meio de um lado para criar outro canto; toque num canto para tirar.',
+  return head(`Desenhar no satélite — ${f.name}`, tmdTrancado() ? '🔒 Contorno trancado: aqui só dá para ver. Para mudar, toque em “Liberar para mudar” embaixo do mapa.' : 'Toque nos cantos do talhão. Depois do terceiro, cada toque entra no lado mais perto. Arraste um canto para ajustar; toque no ponto do meio de um lado para criar outro canto; toque num canto para tirar.',
     btn('← Talhão', 'nav', 'talhao/' + id, 'secondary') + btn('⌖ Caminhar (GPS)', 'nav', 'contorno/' + id, 'secondary')) +
     `<div class="tm-desenho"><section class="card tm-caixa"><div class="tm-mapa" id="tmMapa" aria-label="Mapa de satélite para desenhar o talhão"></div>${tmAvisoSemImagem}</section>
      <section class="card panel" id="tmdPainel">${tmdPainel()}</section></div>
@@ -155,6 +159,7 @@ VIEWS.desenhar.after = () => {
       .bindTooltip(esc(f.name), {permanent: true, direction: 'center', className: 'tm-rot fraco'}).addTo(mapa));
     tmEnquadrar(mapa, tmd.pontos.length ? [tmd.pontos] : outros.map(f => f.contorno.pontos));
     mapa.on('click', e => {
+      if (tmdTrancado()) { trvPedir(tmd.fieldId, () => { render(); }); return; }
       if (tmd.auto) { tmdAuto(e.latlng); return; }
       tmdGuardar(); tmd.msg = '';
       const novo = [e.latlng.lat, e.latlng.lng];
@@ -442,14 +447,15 @@ Object.assign(ACTIONS, {
     const sel = tmi.itens.filter(o => o.destino); if (!sel.length) { showToast('Escolha pelo menos um contorno para importar', true); return; }
     const repetidos = sel.filter(o => o.destino !== 'novo').map(o => o.destino).filter((id, i, l) => l.indexOf(id) !== i);
     if (repetidos.length) { showToast(`Dois contornos foram para o mesmo talhão (${fieldName(repetidos[0])}). Escolha um só.`, true); return; }
-    let novos = 0, atual = 0;
+    let novos = 0, atual = 0, trancados = 0;
     sel.forEach(o => {
+      if (o.destino !== 'novo' && typeof trvTrancado === 'function' && trvTrancado(o.destino)) { trancados++; return; }
       const contorno = {pontos: o.pontos.map(([la, lo]) => [la, lo, 0]), areaHa: o.areaHa, perimetroM: Math.round(perimetroM(o.pontos)), data: today(), origem: 'arquivo'};
       if (o.destino === 'novo') { db.fields.push({id: uid(), name: o.nome.slice(0, 60), area: o.areaHa, contorno}); novos++; }
       else { const f = find('fields', o.destino); if (!f) return; f.contorno = contorno; if (tmi.usarArea) f.area = o.areaHa; atual++; }
     });
     save(); tmi = null;
-    showToast(`${[novos ? `${novos} ${novos === 1 ? 'talhão novo' : 'talhões novos'}` : '', atual ? `${atual} ${atual === 1 ? 'contorno atualizado' : 'contornos atualizados'}` : ''].filter(Boolean).join(' e ')}`);
+    showToast(`${[novos ? `${novos} ${novos === 1 ? 'talhão novo' : 'talhões novos'}` : '', atual ? `${atual} ${atual === 1 ? 'contorno atualizado' : 'contornos atualizados'}` : ''].filter(Boolean).join(' e ') || 'Nada importado'}${trancados ? ` • 🔒 ${trancados} ${trancados === 1 ? 'talhão trancado ficou' : 'talhões trancados ficaram'} como ${trancados === 1 ? 'estava' : 'estavam'} (libere no Desenhar no satélite)` : ''}`, !!trancados);
     go('mapatalhoes');
   }
 });

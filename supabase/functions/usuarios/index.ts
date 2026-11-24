@@ -1,6 +1,6 @@
 // Usuários das fazendas do Nexus Agro.
 // A pessoa PEDE o acesso (nome, usuário, a senha que ela escolhe e o código da fazenda) e o ADM autoriza ou recusa.
-// O ADM também define função e nível, desativa/reativa, gera senha provisória (a pessoa troca no próximo login) e remove.
+// O ADM também define função e nível, quem libera contornos trancados, desativa/reativa, gera senha provisória (a pessoa troca no próximo login) e remove.
 // Cada pessoa troca a própria senha em "Minha conta".
 // Publicar com verify_jwt = false: "solicitar" é feito antes do login; as outras ações conferem o login aqui dentro.
 import { createClient } from "npm:@supabase/supabase-js@2";
@@ -164,6 +164,13 @@ Deno.serve(async (req) => {
         if (modulos === undefined) return erro(400, "Marque pelo menos uma tela válida.");
         if (!(await membroAlvo())) return erro(404, "Usuário não encontrado nesta fazenda.");
         const { error } = await adm.from("farm_members").update({ funcao, modulos }).eq("farm_id", fazenda).eq("user_id", alvo);
+        if (error) return erro(400, error.message);
+        return resposta(200, { ok: true });
+      }
+      case "contorno": {
+        // Quem pode liberar a mudança de um contorno de talhão trancado (o ADM sempre pode)
+        if (!(await membroAlvo())) return erro(404, "Usuário não encontrado nesta fazenda.");
+        const { error } = await adm.from("farm_members").update({ libera_contorno: b.libera === true }).eq("farm_id", fazenda).eq("user_id", alvo);
         if (error) return erro(400, error.message);
         return resposta(200, { ok: true });
       }
