@@ -89,7 +89,9 @@ let tmd = null; // {fieldId, pontos: [[lat, lon]]}
 function tmdPainel() {
   const f = find('fields', tmd.fieldId), p = tmd.pontos, area = tmAreaHa(p), per = perimetroM(p);
   return `<div class="ctn-num"><div><span>Pontos</span><b>${p.length}</b></div><div><span>Área</span><b>${p.length > 2 ? um1(area) + ' ha' : '—'}</b></div><div><span>Perímetro</span><b>${p.length > 1 ? num(Math.round(per)) + ' m' : '—'}</b></div><div><span>No cadastro</span><b>${f ? num(f.area) + ' ha' : '—'}</b></div></div>
-    <div class="btn-row">${btn('📍 Minha localização', 'tm-eu', '', 'secondary')}${p.length ? btn('Desfazer', 'tmd-desfazer', '', 'secondary') + btn('Limpar', 'tmd-limpar', '', 'secondary') : ''}${p.length > 2 ? btn('Salvar contorno', 'tmd-salvar') : ''}</div>`;
+    ${tmd.auto ? '<p class="tmd-auto-dica">✨ Toque no <b>meio do talhão</b> no mapa: o MercaPlant desenha o contorno pela imagem de satélite.</p>' : tmd.msg ? `<p class="tmd-auto-msg">${tmd.msg}</p>` : ''}
+    ${!tmd.auto && tmd.opcoes?.length > 1 ? `<div class="tmd-opcoes"><button class="secondary" data-act="tmd-op" data-id="1" ${tmd.op >= tmd.opcoes.length - 1 ? 'disabled' : ''}>− Menor</button><span>Opção ${tmd.op + 1} de ${tmd.opcoes.length}<small>${tmd.opcoes.map((o, i) => `<i class="${i === tmd.op ? 'on' : ''}">${um1(o.ha)} ha</i>`).join('')}</small></span><button class="secondary" data-act="tmd-op" data-id="-1" ${tmd.op <= 0 ? 'disabled' : ''}>+ Maior</button></div>` : ''}
+    <div class="btn-row">${btn(tmd.auto ? 'Cancelar desenho automático' : '✨ Toque e o MercaPlant desenha', 'tmd-auto', '', tmd.auto ? 'secondary' : 'secondary tmd-auto-btn')}${btn('📍 Minha localização', 'tm-eu', '', 'secondary')}${p.length ? btn('Desfazer', 'tmd-desfazer', '', 'secondary') + btn('Limpar', 'tmd-limpar', '', 'secondary') : ''}${p.length > 2 ? btn('Salvar contorno', 'tmd-salvar') : ''}</div>`;
 }
 function tmdRedesenhar(soLinha = false) {
   const L = window.L, mapa = tm.mapa; if (!mapa || !tmd) return;
@@ -99,16 +101,17 @@ function tmdRedesenhar(soLinha = false) {
   const pn = $('#tmdPainel'); if (pn) pn.innerHTML = tmdPainel();
   if (soLinha) return;
   (tmd.marcas || []).forEach(m => m.remove()); tmd.marcas = [];
-  const muitos = tmd.pontos.length > 150;
+  // Contorno com muitos cantos (GPS ou desenho automático): cantos menores para não cobrir a imagem
+  const muitos = tmd.pontos.length > 150, varios = tmd.pontos.length > 30, lado = muitos ? 10 : varios ? 14 : 20;
   tmd.pontos.forEach((pt, i) => {
-    const m = L.marker(pt, {draggable: true, icon: L.divIcon({className: `tm-vert${i === 0 ? ' prim' : ''}${muitos ? ' peq' : ''}`, iconSize: muitos ? [10, 10] : [20, 20]}), keyboard: false}).addTo(mapa);
+    const m = L.marker(pt, {draggable: true, icon: L.divIcon({className: `tm-vert${i === 0 ? ' prim' : ''}${varios ? ' peq' : ''}`, iconSize: [lado, lado]}), keyboard: false}).addTo(mapa);
     m.on('drag', e => { const q = e.target.getLatLng(); tmd.pontos[i] = [q.lat, q.lng]; tmdRedesenhar(true); });
     m.on('dragend', () => tmdRedesenhar());
     m.on('click', () => { tmd.pontos.splice(i, 1); tmdRedesenhar(); });
     tmd.marcas.push(m);
   });
   // Ponto no meio de cada lado: toque para criar um canto ali
-  if (tmd.pontos.length > 1 && !muitos) tmd.pontos.forEach((a, i) => {
+  if (tmd.pontos.length > 1 && !varios) tmd.pontos.forEach((a, i) => {
     if (tmd.pontos.length < 3 && i === tmd.pontos.length - 1) return;
     const b = tmd.pontos[(i + 1) % tmd.pontos.length], meio = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
     const m = L.marker(meio, {icon: L.divIcon({className: 'tm-meio', iconSize: [14, 14]}), keyboard: false}).addTo(mapa);
@@ -135,17 +138,51 @@ VIEWS.desenhar.after = () => {
     outros.forEach(f => L.polygon(f.contorno.pontos.map(([la, lo]) => [la, lo]), {color: '#fff', weight: 1.5, dashArray: '4 4', fillOpacity: 0.06, interactive: false})
       .bindTooltip(esc(f.name), {permanent: true, direction: 'center', className: 'tm-rot fraco'}).addTo(mapa));
     tmEnquadrar(mapa, tmd.pontos.length ? [tmd.pontos] : outros.map(f => f.contorno.pontos));
-    mapa.on('click', e => { tmd.pontos.push([e.latlng.lat, e.latlng.lng]); tmdRedesenhar(); });
+    mapa.on('click', e => { if (tmd.auto) { tmdAuto(e.latlng); return; } tmd.msg = ''; tmd.pontos.push([e.latlng.lat, e.latlng.lng]); tmdRedesenhar(); });
     tmdRedesenhar();
     setTimeout(() => mapa.invalidateSize(), 50);
   }).catch(() => { el.innerHTML = '<p class="viz-vazio">Não foi possível abrir o mapa.</p>'; });
 };
 TITLES.desenhar = 'Talhões';
 
+// Desenho automático: o servidor pega até 4 imagens limpas (Sentinel-2, 10 m) em volta do toque e cresce a região
+// parecida com o ponto tocado, parando nas divisas. Quando a divisa com o vizinho é fraca, vêm opções (menor / maior).
+// O contorno entra aqui como pontos ajustáveis (dá para arrastar e corrigir).
+async function tmdAuto(ll) {
+  if (!tmd || tmd.ocupado) return;
+  if (navigator.onLine === false || typeof NUVEM === 'undefined') { showToast('O desenho automático precisa de internet', true); return; }
+  tmd.auto = false; tmd.ocupado = true; tmd.opcoes = null; tmd.msg = '⏳ Desenhando pelo satélite… (alguns segundos)'; tmdRedesenhar(true);
+  const L = window.L, alvo = tm.mapa ? L.circleMarker(ll, {radius: 9, color: '#fff', weight: 3, fillColor: '#24a672', fillOpacity: 1, className: 'tmd-alvo'}).addTo(tm.mapa) : null;
+  try {
+    const r = await fetch(`${NUVEM.url}/functions/v1/satelite?acao=desenhar&lat=${ll.lat.toFixed(6)}&lon=${ll.lng.toFixed(6)}`, {headers: {apikey: NUVEM.chave}})
+      .then(x => x.ok ? x.json() : Promise.reject(new Error('servidor ' + x.status)));
+    const lista = (Array.isArray(r.opcoes) && r.opcoes.length ? r.opcoes : [r]).map(o => {
+      let pts = (o.pontos || []).map(([la, lo]) => [Number(la), Number(lo)]).filter(([la, lo]) => Number.isFinite(la) && Number.isFinite(lo));
+      if (pts.length > 45) pts = tmSimplificar(pts, 45); // ~10 m de tolerância: o mesmo detalhe da imagem
+      return {pontos: pts, ha: tmAreaHa(pts)};
+    }).filter(o => o.pontos.length > 2);
+    if (!lista.length) { tmd.msg = `⚠ ${esc(r.aviso || 'Não deu para desenhar este ponto.')}`; tmdRedesenhar(true); return; }
+    tmd.opcoes = lista; tmd.op = Math.min(Math.max(0, Number(r.padrao) || 0), lista.length - 1);
+    tmd.datas = (r.datas || []).map(d => fmtDate(d).slice(0, 5)); tmd.avisoAuto = r.aviso || '';
+    tmdOpcao();
+    if (tm.mapa) tm.mapa.fitBounds(L.latLngBounds(lista[0].pontos), {padding: [30, 30], maxZoom: 17});
+  } catch {
+    tmd.msg = '⚠ Não foi possível desenhar agora (sem resposta do servidor de imagens). Tente de novo ou desenhe tocando nos cantos.'; tmdRedesenhar(true);
+  } finally { tmd.ocupado = false; alvo?.remove(); }
+}
+function tmdOpcao() {
+  const o = tmd.opcoes[tmd.op]; tmd.pontos = o.pontos.map(([la, lo]) => [la, lo]);
+  const outras = tmd.opcoes.length > 1 ? ' Se pegou o vizinho junto (ou ficou faltando um pedaço), use <b>Menor / Maior</b>.' : '';
+  tmd.msg = `✓ Desenhado pela imagem de satélite${tmd.datas?.length ? ` (${tmd.datas.join(', ')})` : ''}: <b>${um1(o.ha)} ha</b>.${outras} Confira a divisa e arraste os cantos se precisar; depois salve.${tmd.avisoAuto ? `<br>⚠ ${esc(tmd.avisoAuto)}` : ''}`;
+  tmdRedesenhar();
+}
+
 Object.assign(ACTIONS, {
+  'tmd-auto': () => { if (!tmd) return; tmd.auto = !tmd.auto; tmd.msg = ''; tmd.opcoes = null; tmdRedesenhar(true); if (tmd.auto) showToast('Toque no meio do talhão'); },
+  'tmd-op': passo => { if (!tmd?.opcoes) return; tmd.op = Math.min(Math.max(0, tmd.op + Number(passo)), tmd.opcoes.length - 1); tmdOpcao(); },
   'tm-eu': () => { if (tm.mapa) tmMinhaPosicao(tm.mapa); },
   'tmd-desfazer': () => { tmd?.pontos.pop(); tmdRedesenhar(); },
-  'tmd-limpar': () => confirmDialog('Apagar os pontos desenhados?', () => { tmd.pontos = []; setTimeout(tmdRedesenhar, 0); }, 'Limpar'),
+  'tmd-limpar': () => confirmDialog('Apagar os pontos desenhados?', () => { tmd.pontos = []; tmd.opcoes = null; tmd.msg = ''; setTimeout(tmdRedesenhar, 0); }, 'Limpar'),
   'tmd-salvar': () => {
     if (!tmd || tmd.pontos.length < 3 || !tmGestor()) return;
     // Mesmo caminho do contorno por GPS: grava e pergunta se a área medida vai para o cadastro

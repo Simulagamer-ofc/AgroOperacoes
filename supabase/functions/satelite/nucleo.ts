@@ -74,3 +74,19 @@ export const NDVI_DE: Record<Col, string> = {s2: '(B08-B04)/(B08+B04)', ls: '(ni
 export const NDVI = NDVI_DE.s2;
 // Fração com nuvem ou sombra: Sentinel pela classificação da cena (SCL 3, 8, 9, 10); Landsat pelo que NÃO é "limpo" no QA_PIXEL
 export const NUVEM_DE: Record<Col, string> = {s2: '((SCL==3)|(SCL==8)|(SCL==9)|(SCL==10))*1.0', ls: '1-((qa_pixel==21824)|(qa_pixel==21952))*1.0'};
+
+/** Caixa de `meio` metros para cada lado em volta de um ponto: [oeste, sul, leste, norte]. */
+export function caixaDoPonto(lat: number, lon: number, meio = 1200): [number, number, number, number] {
+  const dLat = meio / 111320, dLon = meio / (111320 * Math.cos(lat * Math.PI / 180));
+  const r = (v: number) => Math.round(v * 1e6) / 1e6;
+  return [r(lon - dLon), r(lat - dLat), r(lon + dLon), r(lat + dLat)];
+}
+/** Até `max` datas limpas, afastadas pelo menos `dias` entre si (cada talhão muda numa época: separa vizinhos). */
+export function datasEspacadas<T extends {data: string}>(limpas: T[], max = 3, dias = 12): T[] {
+  const out: T[] = [];
+  for (const i of limpas.slice().sort((a, b) => b.data.localeCompare(a.data))) {
+    if (out.every(o => Math.abs(Date.parse(o.data) - Date.parse(i.data)) >= dias * 86400000)) out.push(i);
+    if (out.length >= max) break;
+  }
+  return out;
+}

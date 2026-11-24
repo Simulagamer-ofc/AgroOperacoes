@@ -2347,3 +2347,17 @@ body .nv-portao{padding-top:calc(20px + var(--topo))}
 :root[data-theme="dark"] .tec-cond.ok{color:#7fe0a0}:root[data-theme="dark"] .tec-cond.ruim{color:#f5c451}
 /* Mapa: mosaico de vigor por baixo dos contornos */
 .tec-ndvi{mix-blend-mode:normal}
+
+/* Desenho automático do talhão */
+.tmd-auto-dica,.tmd-auto-msg{margin:8px 0 0;padding:8px 10px;border-radius:10px;font-size:.88rem;background:color-mix(in srgb,#24a672 14%,transparent);border-left:4px solid #24a672}
+.tmd-auto-msg{background:color-mix(in srgb,var(--panel) 85%,var(--text) 6%);border-left-color:var(--blue)}
+.tmd-alvo{animation:tmdPulso 1s ease-in-out infinite}
+@keyframes tmdPulso{50%{opacity:.35}}
+.tmd-opcoes{display:flex;align-items:center;gap:8px;margin:8px 0 0}
+.tmd-opcoes>span{flex:1;text-align:center;font-weight:600;font-size:.88rem;display:flex;flex-direction:column;gap:2px}
+.tmd-opcoes small{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-weight:400}
+.tmd-opcoes small i{font-style:normal;padding:1px 6px;border-radius:999px;background:color-mix(in srgb,var(--text) 8%,transparent);color:var(--muted)}
+.tmd-opcoes small i.on{background:#ffd400;color:#3a3000;font-weight:700}
+.tmd-opcoes button[disabled]{opacity:.45}
+.content button.tmd-auto-btn{border-color:#24a672;color:#1d8a5e;font-weight:750;background:color-mix(in srgb,#24a672 8%,transparent)}
+[data-theme="dark"] .content button.tmd-auto-btn{color:#4fd39b}
