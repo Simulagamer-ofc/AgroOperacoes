@@ -105,25 +105,41 @@ function tmdRedesenhar(soLinha = false) {
   const muitos = tmd.pontos.length > 150, varios = tmd.pontos.length > 30, lado = muitos ? 10 : varios ? 14 : 20;
   tmd.pontos.forEach((pt, i) => {
     const m = L.marker(pt, {draggable: true, icon: L.divIcon({className: `tm-vert${i === 0 ? ' prim' : ''}${varios ? ' peq' : ''}`, iconSize: [lado, lado]}), keyboard: false}).addTo(mapa);
+    m.on('dragstart', () => tmdGuardar());
     m.on('drag', e => { const q = e.target.getLatLng(); tmd.pontos[i] = [q.lat, q.lng]; tmdRedesenhar(true); });
     m.on('dragend', () => tmdRedesenhar());
-    m.on('click', () => { tmd.pontos.splice(i, 1); tmdRedesenhar(); });
+    m.on('click', () => { tmdGuardar(); tmd.pontos.splice(i, 1); tmdRedesenhar(); });
     tmd.marcas.push(m);
   });
-  // Ponto no meio de cada lado: toque para criar um canto ali
-  if (tmd.pontos.length > 1 && !varios) tmd.pontos.forEach((a, i) => {
+  // Ponto no meio de cada lado: toque para criar um canto ali. Só nos lados com espaço na tela
+  // (em contorno com muitos cantos, os lados curtinhos ficam sem, para não amontoar; aproxime o mapa para ver mais).
+  if (tmd.pontos.length > 1 && !muitos) tmd.pontos.forEach((a, i) => {
     if (tmd.pontos.length < 3 && i === tmd.pontos.length - 1) return;
     const b = tmd.pontos[(i + 1) % tmd.pontos.length], meio = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-    const m = L.marker(meio, {icon: L.divIcon({className: 'tm-meio', iconSize: [14, 14]}), keyboard: false}).addTo(mapa);
-    m.on('click', () => { tmd.pontos.splice(i + 1, 0, meio); tmdRedesenhar(); });
+    if (mapa.latLngToLayerPoint(a).distanceTo(mapa.latLngToLayerPoint(b)) < lado * 2.5) return;
+    const m = L.marker(meio, {icon: L.divIcon({className: 'tm-meio', iconSize: varios ? [10, 10] : [14, 14]}), keyboard: false}).addTo(mapa);
+    m.on('click', () => { tmdGuardar(); tmd.pontos.splice(i + 1, 0, meio); tmdRedesenhar(); });
     tmd.marcas.push(m);
   });
+}
+// Desfazer volta o último passo, qualquer que seja (canto posto, arrastado, tirado, opção do desenho automático)
+function tmdGuardar() { tmd.hist = [...(tmd.hist || []).slice(-29), tmd.pontos.map(([la, lo]) => [la, lo])]; }
+/** Lado do contorno (fechado) mais perto do ponto tocado: o canto novo entra nele, e não no fim da lista. */
+function tmdLadoMaisPerto(mapa, ll) {
+  const p = mapa.latLngToLayerPoint(ll), n = tmd.pontos.length; let melhor = n - 1, dmin = Infinity;
+  for (let i = 0; i < n; i++) {
+    const a = mapa.latLngToLayerPoint(tmd.pontos[i]), b = mapa.latLngToLayerPoint(tmd.pontos[(i + 1) % n]);
+    const dx = b.x - a.x, dy = b.y - a.y, l2 = dx * dx + dy * dy, t = l2 ? Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / l2)) : 0;
+    const d = Math.hypot(p.x - a.x - t * dx, p.y - a.y - t * dy);
+    if (d <= dmin + 0.5) { dmin = Math.min(d, dmin); melhor = i; } // empate: fica com o último lado (o que fecha), como quem desenha em volta
+  }
+  return melhor + 1;
 }
 VIEWS.desenhar = id => {
   const f = find('fields', id); if (!f) return empty('Talhão não encontrado', '');
   if (!tmGestor()) return head('Desenhar no satélite', 'Só para o ADM e o supervisor.', btn('← Talhão', 'nav', 'talhao/' + id, 'secondary')) + `<section class="card">${empty('Sem acesso', 'Seu nível de acesso é Usuário comum.')}</section>`;
   if (!tmd || tmd.fieldId !== id) tmd = {fieldId: id, pontos: (f.contorno?.pontos || []).map(([la, lo]) => [la, lo])};
-  return head(`Desenhar no satélite — ${f.name}`, 'Toque nos cantos do talhão. Arraste um canto para ajustar; toque no ponto do meio de um lado para criar outro canto; toque num canto para tirar.',
+  return head(`Desenhar no satélite — ${f.name}`, 'Toque nos cantos do talhão. Depois do terceiro, cada toque entra no lado mais perto. Arraste um canto para ajustar; toque no ponto do meio de um lado para criar outro canto; toque num canto para tirar.',
     btn('← Talhão', 'nav', 'talhao/' + id, 'secondary') + btn('⌖ Caminhar (GPS)', 'nav', 'contorno/' + id, 'secondary')) +
     `<div class="tm-desenho"><section class="card tm-caixa"><div class="tm-mapa" id="tmMapa" aria-label="Mapa de satélite para desenhar o talhão"></div>${tmAvisoSemImagem}</section>
      <section class="card panel" id="tmdPainel">${tmdPainel()}</section></div>
@@ -138,7 +154,14 @@ VIEWS.desenhar.after = () => {
     outros.forEach(f => L.polygon(f.contorno.pontos.map(([la, lo]) => [la, lo]), {color: '#fff', weight: 1.5, dashArray: '4 4', fillOpacity: 0.06, interactive: false})
       .bindTooltip(esc(f.name), {permanent: true, direction: 'center', className: 'tm-rot fraco'}).addTo(mapa));
     tmEnquadrar(mapa, tmd.pontos.length ? [tmd.pontos] : outros.map(f => f.contorno.pontos));
-    mapa.on('click', e => { if (tmd.auto) { tmdAuto(e.latlng); return; } tmd.msg = ''; tmd.pontos.push([e.latlng.lat, e.latlng.lng]); tmdRedesenhar(); });
+    mapa.on('click', e => {
+      if (tmd.auto) { tmdAuto(e.latlng); return; }
+      tmdGuardar(); tmd.msg = '';
+      const novo = [e.latlng.lat, e.latlng.lng];
+      if (tmd.pontos.length < 3) tmd.pontos.push(novo); else tmd.pontos.splice(tmdLadoMaisPerto(mapa, e.latlng), 0, novo);
+      tmdRedesenhar();
+    });
+    mapa.on('zoomend', () => tmdRedesenhar());
     tmdRedesenhar();
     setTimeout(() => mapa.invalidateSize(), 50);
   }).catch(() => { el.innerHTML = '<p class="viz-vazio">Não foi possível abrir o mapa.</p>'; });
@@ -171,7 +194,7 @@ async function tmdAuto(ll) {
   } finally { tmd.ocupado = false; alvo?.remove(); }
 }
 function tmdOpcao() {
-  const o = tmd.opcoes[tmd.op]; tmd.pontos = o.pontos.map(([la, lo]) => [la, lo]);
+  const o = tmd.opcoes[tmd.op]; tmdGuardar(); tmd.pontos = o.pontos.map(([la, lo]) => [la, lo]);
   const outras = tmd.opcoes.length > 1 ? ' Se pegou o vizinho junto (ou ficou faltando um pedaço), use <b>Menor / Maior</b>.' : '';
   tmd.msg = `✓ Desenhado pela imagem de satélite${tmd.datas?.length ? ` (${tmd.datas.join(', ')})` : ''}: <b>${um1(o.ha)} ha</b>.${outras} Confira a divisa e arraste os cantos se precisar; depois salve.${tmd.avisoAuto ? `<br>⚠ ${esc(tmd.avisoAuto)}` : ''}`;
   tmdRedesenhar();
@@ -181,8 +204,8 @@ Object.assign(ACTIONS, {
   'tmd-auto': () => { if (!tmd) return; tmd.auto = !tmd.auto; tmd.msg = ''; tmd.opcoes = null; tmdRedesenhar(true); if (tmd.auto) showToast('Toque no meio do talhão'); },
   'tmd-op': passo => { if (!tmd?.opcoes) return; tmd.op = Math.min(Math.max(0, tmd.op + Number(passo)), tmd.opcoes.length - 1); tmdOpcao(); },
   'tm-eu': () => { if (tm.mapa) tmMinhaPosicao(tm.mapa); },
-  'tmd-desfazer': () => { tmd?.pontos.pop(); tmdRedesenhar(); },
-  'tmd-limpar': () => confirmDialog('Apagar os pontos desenhados?', () => { tmd.pontos = []; tmd.opcoes = null; tmd.msg = ''; setTimeout(tmdRedesenhar, 0); }, 'Limpar'),
+  'tmd-desfazer': () => { if (!tmd) return; if (tmd.hist?.length) tmd.pontos = tmd.hist.pop(); else tmd.pontos.pop(); tmdRedesenhar(); },
+  'tmd-limpar': () => confirmDialog('Apagar os pontos desenhados?', () => { tmdGuardar(); tmd.pontos = []; tmd.opcoes = null; tmd.msg = ''; setTimeout(tmdRedesenhar, 0); }, 'Limpar'),
   'tmd-salvar': () => {
     if (!tmd || tmd.pontos.length < 3 || !tmGestor()) return;
     // Mesmo caminho do contorno por GPS: grava e pergunta se a área medida vai para o cadastro
