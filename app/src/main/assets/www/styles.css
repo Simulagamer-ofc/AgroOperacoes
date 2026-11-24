@@ -2369,3 +2369,19 @@ body .nv-portao{padding-top:calc(20px + var(--topo))}
 .trv-pessoa input{width:20px;height:20px;accent-color:var(--green)}.trv-pessoa small{display:block;color:var(--muted);font-weight:400}
 input.trv-so-ler{opacity:.7;background:color-mix(in srgb,var(--line) 40%,transparent)}.trv-dica button.link{padding:0 2px;min-height:0;font-size:inherit}
 .trv-topo{padding:10px 14px 12px}.trv-topo .trv-linha{display:block;font-size:.88rem;font-weight:600}.trv-topo button.link{padding:0 2px;min-height:0;font-weight:600;font-size:inherit}
+.lab-ver{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:14px;margin:6px 0 10px;border:1px solid var(--line)}
+.lab-ver b{font-size:1.08rem}.lab-ver span{color:var(--muted)}.lab-ver small.lab-prov{display:block;margin-top:6px;color:var(--text)}
+.lab-ver.ok{border-color:color-mix(in srgb,var(--green) 50%,transparent);background:color-mix(in srgb,var(--green) 10%,transparent)}.lab-ver.ok b{color:var(--green)}
+.lab-ver.alerta{border-color:color-mix(in srgb,var(--orange) 60%,transparent);background:color-mix(in srgb,var(--orange) 12%,transparent)}
+.lab-ver.ruim{border-color:color-mix(in srgb,var(--red) 55%,transparent);background:color-mix(in srgb,var(--red) 10%,transparent)}.lab-ver.ruim b{color:var(--red)}
+.lab-tab table{font-size:.85rem}.lab-tab th,.lab-tab td{text-align:center;padding:6px 5px;white-space:nowrap}.lab-tab tbody th{text-align:left;font-weight:600}
+.lab-tab td small{display:block;color:var(--muted);font-size:.72rem}.lab-tab td.ok{color:var(--green);font-weight:700}.lab-tab td.nao{color:var(--red);font-weight:700}.lab-tab td.pend{color:var(--muted)}
+.lab-tab .alvo{background:color-mix(in srgb,var(--blue) 9%,transparent)}.lab-tab td.lab-val{font-weight:700}
+.lab-outras{display:grid;gap:6px;margin-bottom:6px}.lab-linha{display:grid;grid-template-columns:1fr 1.45fr .55fr auto;gap:6px;align-items:center}
+.lab-linha input,.lab-linha select{min-width:0}.lab-linha .lab-tira{min-height:36px;padding:0 6px;color:var(--muted)}
+.lab-cab{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}.lab-cab small{display:block;color:var(--muted)}
+.lab-sem{padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--orange) 12%,transparent);margin:0 0 10px}.lab-sem button.link{padding:0 2px;min-height:0;font-size:inherit;font-weight:700}
+.lab-outros summary{cursor:pointer;font-weight:600;padding:6px 0}.lab-outros .form-grid{margin-top:6px}
+.lab-tab th small{display:block;font-weight:400;color:var(--muted);font-size:.7rem;text-transform:none}
+.lab-padroes{display:grid;gap:6px;margin:8px 0}.lab-padroes .row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:12px}.lab-padroes small{display:block;color:var(--muted)}
+.lab-edita input{width:46px;text-align:center;padding:6px 2px}.lab-edita td{padding:3px}.lab-edita th{white-space:normal;font-size:.75rem}
