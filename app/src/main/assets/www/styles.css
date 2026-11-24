@@ -2380,3 +2380,8 @@ input.trv-so-ler{opacity:.7;background:color-mix(in srgb,var(--line) 40%,transpa
 .lab-outras{display:grid;gap:6px;margin-bottom:6px}.lab-linha{display:grid;grid-template-columns:1fr 1.45fr .55fr auto;gap:6px;align-items:center}
 .lab-linha input,.lab-linha select{min-width:0}.lab-linha .lab-tira{min-height:36px;padding:0 6px;color:var(--muted)}
 .lab-cab{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}.lab-cab small{display:block;color:var(--muted)}
+.lab-sem{padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--orange) 12%,transparent);margin:0 0 10px}.lab-sem button.link{padding:0 2px;min-height:0;font-size:inherit;font-weight:700}
+.lab-outros summary{cursor:pointer;font-weight:600;padding:6px 0}.lab-outros .form-grid{margin-top:6px}
+.lab-tab th small{display:block;font-weight:400;color:var(--muted);font-size:.7rem;text-transform:none}
+.lab-padroes{display:grid;gap:6px;margin:8px 0}.lab-padroes .row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:12px}.lab-padroes small{display:block;color:var(--muted)}
+.lab-edita input{width:46px;text-align:center;padding:6px 2px}.lab-edita td{padding:3px}.lab-edita th{white-space:normal;font-size:.75rem}
