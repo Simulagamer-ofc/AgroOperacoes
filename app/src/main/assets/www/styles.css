@@ -2361,3 +2361,11 @@ body .nv-portao{padding-top:calc(20px + var(--topo))}
 .tmd-opcoes button[disabled]{opacity:.45}
 .content button.tmd-auto-btn{border-color:#24a672;color:#1d8a5e;font-weight:750;background:color-mix(in srgb,#24a672 8%,transparent)}
 [data-theme="dark"] .content button.tmd-auto-btn{color:#4fd39b}
+.trv-cartao{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center;margin-top:12px;padding:12px 14px;border-radius:14px;border:1px solid color-mix(in srgb,var(--orange) 55%,transparent);background:color-mix(in srgb,var(--orange) 10%,transparent)}
+.trv-cartao .trv-cad{font-size:1.6rem;line-height:1}.trv-cartao b{display:block}.trv-cartao small{display:block;color:var(--muted);margin-top:2px}
+.trv-cartao>button{grid-column:1/-1;justify-self:start}
+.ctn-resumo small.trv-linha{color:var(--text);font-weight:600}.ctn-resumo .trv-linha button.link{padding:0 2px;min-height:0;font-weight:600}
+.trv-pessoas{display:grid;gap:6px;margin-top:8px}.trv-pessoa{display:flex;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:12px}
+.trv-pessoa input{width:20px;height:20px;accent-color:var(--green)}.trv-pessoa small{display:block;color:var(--muted);font-weight:400}
+input.trv-so-ler{opacity:.7;background:color-mix(in srgb,var(--line) 40%,transparent)}.trv-dica button.link{padding:0 2px;min-height:0;font-size:inherit}
+.trv-topo{padding:10px 14px 12px}.trv-topo .trv-linha{display:block;font-size:.88rem;font-weight:600}.trv-topo button.link{padding:0 2px;min-height:0;font-weight:600;font-size:inherit}

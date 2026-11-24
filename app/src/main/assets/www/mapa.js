@@ -56,6 +56,9 @@ function erroGps(e) {
 
 function painelCtn() {
   const f = find('fields', ctn.fieldId), p = ctn.pontos, area = areaGeodesicaM2(p) / 1e4, per = perimetroM(p);
+  // Contorno salvo fica trancado (trava.js): mostra o desenho e o botão para liberar com senha
+  if (typeof trvTrancado === 'function' && trvTrancado(ctn.fieldId) && ctn.watch == null) return `<div class="ctn-grid"><div class="card panel ctn-desenho">${svgContorno(p, {tam: 300})}</div>
+    <div class="card panel"><div class="ctn-num"><div><span>Pontos</span><b>${p.length}</b></div><div><span>Área</span><b>${um1(area)} ha</b></div><div><span>Perímetro</span><b>${num(per)} m</b></div></div>${trvCartao(ctn.fieldId)}</div></div>`;
   const prec = p.length ? p.reduce((s, x) => s + (x[2] || 0), 0) / p.length : null;
   return `<div class="ctn-grid"><div class="card panel ctn-desenho">${p.length ? svgContorno(p, {tam: 300}) : '<p class="viz-vazio">Nenhum ponto ainda.</p>'}</div>
     <div class="card panel"><div class="ctn-num"><div><span>Pontos</span><b>${p.length}</b></div><div><span>Área</span><b>${p.length > 2 ? um1(area) + ' ha' : '—'}</b></div><div><span>Perímetro</span><b>${p.length > 1 ? num(per) + ' m' : '—'}</b></div><div><span>Precisão média</span><b>${prec != null ? '± ' + num(prec) + ' m' : '—'}</b></div></div>
