@@ -1,86 +1,103 @@
 // MercaPlant — análise de sementes do lote (boletim) e classificação automática pela categoria
 // A classificação sai da CONTAGEM de outras sementes encontradas na amostra, separada por grupo
-// (outra cultivada, silvestre, nociva tolerada, nociva proibida): ex.: 3 de azevém em 500 g de aveia preta.
-// O app compara com o limite de cada categoria e mostra se o lote mantém a categoria, se cabe rebaixar
-// (C1 → C2 → S1 → S2) ou se não atende como semente. Nada muda sozinho: quem confirma é a pessoa.
-// Pureza, germinação e vigor ficam registrados (germinação dá a validade do teste), mas não entram na classificação.
-// Amostra menor que a da norma: a contagem vai à proporção do peso da norma e o resultado fica "provisório".
-// Padrões por espécie: tabela editável e sincronizada (coleção padroesSementes); aveia preta já vem pela IN MAPA 44/2016.
+// (outra cultivada — e as cultivadas que a norma lista à parte, como aveia no trigo —, silvestre, nociva tolerada,
+// nociva proibida). Ex.: 3 de azevém em 500 g de aveia preta. O app compara com o limite de cada categoria e mostra se
+// o lote mantém a categoria, se cabe rebaixar (C1 → C2 → S1 → S2) ou se não atende como semente. Nada muda sozinho.
+// Cada grupo tem o peso de amostra da norma: nas forrageiras de clima temperado, outras cultivadas e silvestres são
+// contadas numa amostra menor (ex.: 50 g na aveia preta) e as nocivas na maior (500 g). Amostra examinada menor que a
+// da norma: a contagem vai à proporção e o resultado fica "provisório".
+// Pureza, germinação e vigor ficam registrados (a germinação dá a validade do teste), mas não entram na classificação.
+// Padrões: os que vêm no app (padroes-sementes.js: IN 45/2013 e IN 44/2016 com a IN 31/2025) e os da fazenda
+// (coleção padroesSementes, editável por ADM/supervisor), que têm prioridade.
 
 const CAT_ORDEM = ['Básica', 'C1', 'C2', 'S1', 'S2'];
-const CAT_COLUNAS = [['Básica', ['Básica']], ['C1/C2', ['C1', 'C2']], ['S1', ['S1']], ['S2', ['S2']]];
-const GRUPOS_BASE = [['cultivada', 'Outra cultivada'], ['silvestre', 'Silvestre'], ['tolerada', 'Nociva tolerada'], ['proibida', 'Nociva proibida']];
-const labLim = (b, c, s1, s2) => ({'Básica': b, C1: c, C2: c, S1: s1, S2: s2});
-// Padrões que já vêm no app (conferir com a norma vigente). Contagem máxima por amostra da norma (amostraG).
-const PADROES_BASE = {
-  'aveia preta': {especie: 'Aveia preta', norma: 'IN MAPA 44/2016 (Anexos III e IV)', amostraG: 500, validadeMeses: 8,
-    lim: {cultivada: labLim(0, 1, 2, 10), silvestre: labLim(0, 1, 2, 4), tolerada: labLim(1, 3, 6, 12), proibida: labLim(0, 0, 0, 0), extra: labLim(0, 2, 5, 10)},
-    extra: 'Outra espécie de aveia',
-    grupos: {'azevem': 'tolerada', 'aveia branca': 'extra', 'aveia amarela': 'extra', 'nabo': 'cultivada', 'nabica': 'silvestre', 'trigo': 'cultivada', 'centeio': 'cultivada', 'cevada': 'cultivada', 'ervilhaca': 'cultivada'}}
-};
-const labChave = s => semAcentoApp(String(s || '')).replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim();
-const LAB_SINONIMOS = {'avena strigosa': 'aveia preta', 'aveia': 'aveia preta'};
-const labBase = k => PADROES_BASE[LAB_SINONIMOS[k] || k] || null;
+const labChave = s => semAcentoApp(String(s || '')).replace(/[-_()]+/g, ' ').replace(/\s+/g, ' ').trim();
+const labVazio = v => v === '' || v == null || !Number.isFinite(Number(v));
+const labGestor = () => typeof mcpGestor !== 'function' || mcpGestor();
+const labGrupoBase = () => [{id: 'cultivada', rot: 'Outra espécie cultivada', tipo: 'cs', lim: {}}, {id: 'silvestre', rot: 'Silvestre', tipo: 'cs', lim: {}},
+  {id: 'tolerada', rot: 'Nociva tolerada', tipo: 'noc', lim: {}}, {id: 'proibida', rot: 'Nociva proibida', tipo: 'noc', lim: {Básica: 0, C1: 0, C2: 0, S1: 0, S2: 0}}];
+
+// Padrão salvo na versão 1.2.5 (lim por grupo, um peso de amostra) → formato atual
+function labNormalizar(p) {
+  if (!p || Array.isArray(p.grupos)) return p;
+  const rot = {cultivada: 'Outra espécie cultivada', silvestre: 'Silvestre', tolerada: 'Nociva tolerada', proibida: 'Nociva proibida', extra: p.extra || 'Outra'};
+  const grupos = Object.entries(p.lim || {}).map(([id, lim]) => ({id, rot: rot[id] || id, tipo: ['tolerada', 'proibida'].includes(id) ? 'noc' : 'cs', lim}));
+  return {...p, amostraCS: p.amostraCS || p.amostraG, cats: CAT_ORDEM, grupos, sugestoes: p.grupos && !Array.isArray(p.grupos) ? p.grupos : (p.sugestoes || {})};
+}
+const labDoApp = k => (typeof PADROES_SEMENTES_APP !== 'undefined' ? PADROES_SEMENTES_APP : []).find(p => [p.especie, p.cientifico, ...(p.sinonimos || [])].some(n => labChave(n) === k)) || null;
 /** Padrão da espécie: o da fazenda (editado) ou o que vem no app. */
 function labPadrao(especie) {
   const k = labChave(especie); if (!k) return null;
-  const k2 = LAB_SINONIMOS[k] || k;
-  return (db.padroesSementes || []).find(p => labChave(p.especie) === k2 || labChave(p.especie) === k) || labBase(k);
+  const app = labDoApp(k), nomes = new Set([k, app && labChave(app.especie)].filter(Boolean));
+  const daFazenda = (db.padroesSementes || []).find(p => nomes.has(labChave(p.especie)));
+  return labNormalizar(daFazenda) || app;
 }
-const labGrupos = p => [...GRUPOS_BASE, ...(p?.extra ? [['extra', p.extra]] : [])];
-const labVazio = v => v === '' || v == null || !Number.isFinite(Number(v));
-const labGestor = () => typeof mcpGestor !== 'function' || mcpGestor();
+const labCats = p => (p.cats || CAT_ORDEM).filter(c => CAT_ORDEM.includes(c));
+const labAmostraNorma = (p, tipo) => tipo === 'cs' ? (Number(p.amostraCS) || Number(p.amostraG)) : Number(p.amostraG);
+const labDuasAmostras = p => !!p && Number(p.amostraCS) > 0 && Number(p.amostraCS) !== Number(p.amostraG);
 
-/** Classificação: para cada categoria, o grupo atende (≤ limite), não atende, ou fica pendente (sem amostra). */
+/** Classificação: para cada categoria, cada grupo atende (≤ limite), não atende, ou fica pendente (sem amostra). */
 function labClassificar(a, especie) {
   const p = labPadrao(especie); if (!p) return null;
-  const amostra = Number(a.amostraG) || 0, fator = amostra > 0 && p.amostraG > 0 ? p.amostraG / amostra : 1;
+  const examinada = tipo => Number(tipo === 'cs' && labDuasAmostras(p) ? a.amostraCS || a.amostraG : a.amostraG) || 0;
   const conta = {}; (a.encontradas || []).forEach(e => { if (e.grupo && Number(e.n) > 0) conta[e.grupo] = (conta[e.grupo] || 0) + Number(e.n); });
-  const prop = Object.fromEntries(Object.entries(conta).map(([g, n]) => [g, Math.round(n * fator * 10) / 10]));
-  const grupos = labGrupos(p).filter(([g]) => p.lim[g] && (g !== 'extra' || conta.extra));
-  const porCat = CAT_ORDEM.map(cat => {
-    const itens = grupos.map(([g, rot]) => { const limite = p.lim[g][cat], valor = amostra ? prop[g] || 0 : null;
-      return {g, rotulo: rot, valor, limite, ok: valor === null ? null : labVazio(limite) ? true : valor <= Number(limite)}; });
+  const grupos = p.grupos.filter(g => !g.id.startsWith('x') || conta[g.id]); // cultivadas listadas à parte só aparecem se achadas
+  const info = grupos.map(g => { const ex = examinada(g.tipo), norma = labAmostraNorma(p, g.tipo), fator = ex > 0 && norma > 0 ? norma / ex : 1;
+    return {g, ex, norma, fator, valor: ex ? Math.round((conta[g.id] || 0) * fator * 10) / 10 : null}; });
+  const porCat = labCats(p).map(cat => {
+    const itens = info.map(({g, valor}) => { const limite = g.lim?.[cat];
+      return {g: g.id, rotulo: g.rot, valor, limite, ok: valor === null ? null : labVazio(limite) ? true : valor <= Number(limite)}; });
     return {cat, itens, atende: itens.every(i => i.ok !== false), pendente: itens.some(i => i.ok === null)};
   });
+  const abaixo = info.filter(i => i.ex > 0 && i.ex < i.norma);
   // Só com a contagem como veio (sem proporção), para mostrar a diferença quando a amostra é menor
-  const semProp = fator !== 1 ? CAT_ORDEM.find(cat => Object.entries(conta).every(([g, n]) => !p.lim[g] || labVazio(p.lim[g][cat]) || n <= Number(p.lim[g][cat]))) : null;
-  return {p, amostra, fator, conta, prop, porCat, semProp, abaixo: amostra > 0 && amostra < p.amostraG};
+  const semProp = abaixo.length ? labCats(p).find(cat => info.every(({g}) => labVazio(g.lim?.[cat]) || (conta[g.id] || 0) <= Number(g.lim[cat]))) : null;
+  return {p, conta, info, porCat, semProp, abaixo, duas: labDuasAmostras(p)};
 }
 /** Veredito para a categoria do lote: mantém, rebaixa para qual, ou não atende como semente. */
 function labVeredito(cl, catLote) {
   if (!cl) return null;
-  const temCat = CAT_ORDEM.includes(catLote), daqui = cl.porCat.slice(temCat ? CAT_ORDEM.indexOf(catLote) : 0);
+  const cats = labCats(cl.p), i0 = CAT_ORDEM.indexOf(catLote);
+  const daqui = cl.porCat.filter(c => i0 < 0 || CAT_ORDEM.indexOf(c.cat) >= i0); // não sobe de categoria
   const primeira = daqui.find(c => c.atende);
   if (!primeira) return {tipo: 'reprovado', cat: null, pendente: daqui.some(c => c.pendente)};
-  if (temCat && primeira.cat === catLote) return {tipo: 'mantem', cat: catLote, pendente: primeira.pendente};
-  return {tipo: temCat ? 'rebaixa' : 'atende', cat: primeira.cat, pendente: primeira.pendente};
+  if (cats.includes(catLote) && primeira.cat === catLote) return {tipo: 'mantem', cat: catLote, pendente: primeira.pendente};
+  return {tipo: CAT_ORDEM.includes(catLote) ? 'rebaixa' : 'atende', cat: primeira.cat, pendente: primeira.pendente};
 }
 function labTextoVeredito(v, cl, catLote) {
   if (!v) return '';
-  if (v.pendente) return `<div class="lab-ver"><b>Informe a amostra examinada (g)</b><span>A classificação sai da contagem de outras sementes no peso da amostra${cl.p.amostraG ? ` (norma: ${num(cl.p.amostraG)} g)` : ''}.</span></div>`;
-  const prov = cl.abaixo ? `<small class="lab-prov">⚠ Provisório: amostra de ${num(cl.amostra)} g, a norma pede ${num(cl.p.amostraG)} g. A contagem foi levada à proporção de ${num(cl.p.amostraG)} g${cl.semProp && cl.semProp !== v.cat ? ` (sem a proporção daria ${cl.semProp})` : ''}. Refaça com ${num(cl.p.amostraG)} g para valer.</small>` : '';
+  if (v.pendente) return `<div class="lab-ver"><b>Informe a amostra examinada (g)</b><span>A classificação sai da contagem de outras sementes no peso da amostra (norma: ${labTextoNorma(cl.p)}).</span></div>`;
+  const prov = cl.abaixo.length ? `<small class="lab-prov">⚠ Provisório: ${cl.abaixo.map(i => `amostra de ${num(i.ex)} g para ${i.g.tipo === 'cs' ? 'cultivadas e silvestres' : 'nocivas'} (a norma pede ${num(i.norma)} g)`).filter((t, k, l) => l.indexOf(t) === k).join('; ')}. A contagem foi levada à proporção${cl.semProp && cl.semProp !== v.cat ? ` (sem a proporção daria ${cl.semProp})` : ''}. Refaça no peso da norma para valer.</small>` : '';
   if (v.tipo === 'mantem') return `<div class="lab-ver ok"><b>✓ Fica ${esc(v.cat)}</b><span>A contagem de outras sementes está dentro do limite da categoria do lote.</span>${prov}</div>`;
   if (v.tipo === 'atende') return `<div class="lab-ver ok"><b>✓ Atende ${esc(v.cat)}</b><span>Maior categoria atendida pela contagem.</span>${prov}</div>`;
   if (v.tipo === 'rebaixa') return `<div class="lab-ver alerta"><b>↓ Não atende ${esc(catLote)}: atende ${esc(v.cat)}</b><span>O lote pode ser rebaixado para ${esc(v.cat)} (você confirma ao salvar).</span>${prov}</div>`;
-  return `<div class="lab-ver ruim"><b>✗ Não atende como semente</b><span>A contagem passa até do limite de S2. O lote pode ser reprovado e ir para grão.</span>${prov}</div>`;
+  return `<div class="lab-ver ruim"><b>✗ Não atende como semente</b><span>A contagem passa do limite da última categoria. O lote pode ser reprovado e ir para grão.</span>${prov}</div>`;
 }
-// Colunas: da categoria do lote para baixo (não sobe de categoria); C1 e C2 juntas (mesmo limite)
+const labTextoNorma = p => labDuasAmostras(p) ? `${num(p.amostraCS)} g para cultivadas e silvestres, ${num(p.amostraG)} g para nocivas` : `${num(p.amostraG)} g`;
+// Colunas: da categoria do lote para baixo (não sobe de categoria); C1 e C2 juntas quando o limite é o mesmo em todos os grupos
+function labColunas(cl, catLote) {
+  const i0 = Math.max(0, CAT_ORDEM.indexOf(catLote));
+  const cs = cl.porCat.filter(c => CAT_ORDEM.indexOf(c.cat) >= i0), mesmo = (a, b) => cl.p.grupos.every(g => String(g.lim?.[a] ?? '') === String(g.lim?.[b] ?? ''));
+  const out = [];
+  cs.forEach(c => { const ant = out[out.length - 1]; if (ant && ant.cat === 'C1' && c.cat === 'C2' && mesmo('C1', 'C2')) ant.rot = 'C1/C2'; else out.push({cat: c.cat, rot: c.cat, c}); });
+  return out;
+}
 function labTabela(cl, destaque, catLote) {
-  const i0 = CAT_ORDEM.includes(catLote) ? CAT_ORDEM.indexOf(catLote) : 0;
-  const cols = CAT_COLUNAS.filter(([, cs]) => cs.some(c => CAT_ORDEM.indexOf(c) >= i0)).map(([rot, cs]) => ({rot, c: cl.porCat.find(x => x.cat === cs.find(c => CAT_ORDEM.indexOf(c) >= i0))}));
-  const alvo = col => col.c.cat === destaque || (col.rot === 'C1/C2' && ['C1', 'C2'].includes(destaque));
-  const linhas = cl.porCat[0].itens.map((it, k) => `<tr><th>${esc(it.rotulo)}</th><td class="lab-val">${it.valor === null ? '—' : num(it.valor, it.valor % 1 ? 1 : 0)}</td>${cols.map(col => { const x = col.c.itens[k]; return `<td class="${x.ok === null ? 'pend' : x.ok ? 'ok' : 'nao'}${alvo(col) ? ' alvo' : ''}">${x.ok === null ? '·' : x.ok ? '✓' : '✗'}<small>${labVazio(x.limite) ? 'sem limite' : '≤' + num(x.limite)}</small></td>`; }).join('')}</tr>`).join('');
-  return `<div class="tbl-wrap lab-tab"><table class="tbl"><thead><tr><th>Outras sementes (nº)</th><th>Achado${cl.fator !== 1 && cl.amostra ? `<small>em ${num(cl.p.amostraG)} g</small>` : ''}</th>${cols.map(col => `<th class="${alvo(col) ? 'alvo' : ''}">${col.rot}</th>`).join('')}</tr></thead><tbody>${linhas}</tbody></table></div>`;
+  const cols = labColunas(cl, catLote), alvo = col => col.cat === destaque || (col.rot === 'C1/C2' && destaque === 'C2');
+  const linhas = cl.porCat[0].itens.map((it, k) => { const inf = cl.info[k];
+    return `<tr><th>${esc(it.rotulo)}${cl.duas ? `<small>em ${num(inf.norma)} g</small>` : ''}</th><td class="lab-val">${it.valor === null ? '—' : num(it.valor, it.valor % 1 ? 1 : 0)}</td>${cols.map(col => { const x = col.c.itens[k];
+      return `<td class="${x.ok === null ? 'pend' : x.ok ? 'ok' : 'nao'}${alvo(col) ? ' alvo' : ''}">${x.ok === null ? '·' : x.ok ? '✓' : '✗'}<small>${labVazio(x.limite) ? 'sem limite' : '≤' + num(x.limite)}</small></td>`; }).join('')}</tr>`; }).join('');
+  return `<div class="tbl-wrap lab-tab"><table class="tbl"><thead><tr><th>Outras sementes (nº)</th><th>Achado${!cl.duas && cl.info[0]?.fator !== 1 && cl.info[0]?.ex ? `<small>em ${num(cl.info[0].norma)} g</small>` : ''}</th>${cols.map(col => `<th class="${alvo(col) ? 'alvo' : ''}">${col.rot}</th>`).join('')}</tr></thead><tbody>${linhas}</tbody></table></div>`;
 }
 
 // ---------- Registrar análise (boletim) ----------
 function labForm(lotId, a0) {
   const l = find('lots', lotId); if (!l) return;
-  const p = labPadrao(l.species), a = a0 ? JSON.parse(JSON.stringify(a0)) : {data: today(), amostraG: p?.amostraG || '', encontradas: []};
+  const p = labPadrao(l.species), duas = labDuasAmostras(p);
+  const a = a0 ? JSON.parse(JSON.stringify(a0)) : {data: today(), amostraG: p?.amostraG || '', amostraCS: duas ? p.amostraCS : '', encontradas: []};
   if (!a.encontradas.length) a.encontradas.push({nome: '', grupo: '', n: ''});
   const campo = (k, rot, extra = '') => `<div class="field"><label for="lab_${k}">${rot}</label><input id="lab_${k}" data-lab="${k}" inputmode="decimal" value="${esc(a[k] ?? '')}" ${extra}></div>`;
-  const nomes = p ? Object.keys(p.grupos || {}) : [];
+  const nomes = p ? Object.keys(p.sugestoes || {}) : [];
   const temOutros = ['pureza', 'outrasPct', 'germinacao', 'vigor', 'pms', 'umidade'].some(k => !labVazio(a[k]));
   dialog.innerHTML = `<h3>Análise de sementes — lote ${esc(l.code)}</h3>
     <p class="sub">${esc([l.species, l.cultivar, l.category].filter(Boolean).join(' • '))}${p ? ` • padrão: ${esc(p.norma || 'da fazenda')}` : ''}</p>
@@ -88,12 +105,13 @@ function labForm(lotId, a0) {
     <form class="form-grid lab-form" autocomplete="off">
       <div class="field"><label for="lab_data">Data do resultado</label><input id="lab_data" data-lab="data" type="date" value="${esc(a.data || today())}"></div>
       <div class="field"><label for="lab_boletim">Nº do boletim</label><input id="lab_boletim" data-lab="boletim" value="${esc(a.boletim || '')}"></div>
-      ${campo('amostraG', `Amostra examinada (g)${p?.amostraG ? ` — norma: ${num(p.amostraG)} g` : ''}`, p ? `placeholder="${p.amostraG}"` : '')}
+      ${duas ? campo('amostraCS', `Amostra para outras cultivadas e silvestres (g) — norma: ${num(p.amostraCS)} g`, `placeholder="${p.amostraCS}"`) + campo('amostraG', `Amostra para nocivas (g) — norma: ${num(p.amostraG)} g`, `placeholder="${p.amostraG}"`)
+        : campo('amostraG', `Amostra examinada (g)${p?.amostraG ? ` — norma: ${num(p.amostraG)} g` : ''}`, p ? `placeholder="${p.amostraG}"` : '')}
       <div class="field"><label for="lab_laboratorio">Laboratório</label><input id="lab_laboratorio" data-lab="laboratorio" value="${esc(a.laboratorio || '')}" placeholder="Ex.: laboratório próprio"></div>
       <div class="field full"><label>Sementes de outras espécies encontradas na amostra</label>
         <div id="labOutras" class="lab-outras"></div>
         <button type="button" class="secondary lab-mais">+ Outra espécie</button>
-        ${nomes.length ? `<datalist id="labNomes">${nomes.map(n => `<option value="${esc({azevem: 'azevém', nabica: 'nabiça'}[n] || n)}">`).join('')}</datalist>` : ''}</div>
+        ${nomes.length ? `<datalist id="labNomes">${nomes.map(n => `<option value="${esc({azevem: 'azevém', nabica: 'nabiça', 'feijao caupi': 'feijão-caupi'}[n] || n)}">`).join('')}</datalist>` : ''}</div>
       <div class="field full" id="labResultado" aria-live="polite"></div>
       <details class="field full lab-outros" ${temOutros ? 'open' : ''}><summary>Outros resultados do boletim (opcional)</summary>
         <div class="form-grid">${campo('germinacao', 'Germinação (%)')}${campo('vigor', 'Vigor (%)')}${campo('pureza', 'Pureza (%)')}${campo('outrasPct', 'Outras sementes (%)')}${campo('pms', 'Peso de mil sementes (g)')}${campo('umidade', 'Umidade (%)')}</div>
@@ -107,10 +125,11 @@ function labForm(lotId, a0) {
     $$('[data-lab]', dialog).forEach(el => { const k = el.dataset.lab; a[k] = ['data', 'laboratorio', 'boletim', 'obs'].includes(k) ? el.value.trim() : lerNum(el.value); });
     a.encontradas = $$('.lab-linha', dialog).map(r => ({nome: $('[data-o=nome]', r).value.trim(), grupo: $('[data-o=grupo]', r).value, n: lerNum($('[data-o=n]', r).value)}));
   };
+  const opcoesGrupo = sel => (p ? p.grupos : labGrupoBase()).map(g => `<option value="${g.id}" ${sel === g.id ? 'selected' : ''}>${esc(g.rot)}</option>`).join('');
   const linhas = () => {
     $('#labOutras', dialog).innerHTML = a.encontradas.map((e, i) => `<div class="lab-linha" data-i="${i}">
       <input data-o="nome" list="labNomes" placeholder="Espécie (ex.: azevém)" value="${esc(e.nome || '')}" aria-label="Espécie">
-      <select data-o="grupo" aria-label="Grupo"><option value="">Grupo…</option>${labGrupos(p).filter(([g]) => !p || p.lim[g]).map(([g, r]) => `<option value="${g}" ${e.grupo === g ? 'selected' : ''}>${r}</option>`).join('')}</select>
+      <select data-o="grupo" aria-label="Grupo"><option value="">Grupo…</option>${opcoesGrupo(e.grupo)}</select>
       <input data-o="n" inputmode="numeric" placeholder="Nº" value="${esc(e.n ?? '')}" aria-label="Quantidade">
       <button type="button" class="link lab-tira" aria-label="Tirar">✕</button></div>`).join('');
   };
@@ -125,8 +144,9 @@ function labForm(lotId, a0) {
   linhas(); resultado();
   const caixa = $('.lab-form', dialog);
   caixa.addEventListener('input', e => {
-    if (e.target.matches('[data-o=nome]') && p) { // sugere o grupo pela espécie (o que a fazenda já usou)
-      const r = e.target.closest('.lab-linha'), g = (p.grupos || {})[labChave(e.target.value)], s = $('[data-o=grupo]', r);
+    if (e.target.matches('[data-o=nome]') && p) { // sugere o grupo pela espécie (a norma ou o que a fazenda já usou)
+      const r = e.target.closest('.lab-linha'), k = labChave(e.target.value), s = $('[data-o=grupo]', r);
+      const g = (p.sugestoes || {})[k] || p.grupos.find(x => x.id.startsWith('x') && labChave(x.rot).startsWith(k) && k.length > 3)?.id;
       if (g && !s.value && [...s.options].some(o => o.value === g)) s.value = g;
     }
     resultado();
@@ -144,20 +164,20 @@ function labForm(lotId, a0) {
     if (a.encontradas.some(x => x.n !== '' && (x.n < 0 || !Number.isInteger(x.n)))) { showToast('A quantidade de sementes é um número inteiro', true); return; }
     a.encontradas = a.encontradas.filter(x => x.nome || Number(x.n) > 0);
     const cl = labClassificar(a, l.species), v = labVeredito(cl, l.category);
-    const reg = {...a, id: a.id || uid(), lotId, especie: l.species || '', categoriaLote: l.category || '', resultado: v ? {tipo: v.tipo, cat: v.cat, provisorio: !!cl.abaixo || !!v.pendente} : null,
+    const reg = {...a, id: a.id || uid(), lotId, especie: l.species || '', categoriaLote: l.category || '', resultado: v ? {tipo: v.tipo, cat: v.cat, provisorio: !!cl.abaixo.length || !!v.pendente} : null,
       validade: p?.validadeMeses && a.germinacao !== '' ? labValidade(a.data, p.validadeMeses) : ''};
     upsert('analisesSementes', reg);
     labAprenderGrupos(l.species, a.encontradas);
     if (a.germinacao !== '') l.germination = a.germinacao;
     if (a.vigor !== '') l.vigor = a.vigor;
     const resumo = v ? {mantem: `fica ${v.cat}`, atende: `atende ${v.cat}`, rebaixa: `não atende ${l.category}, atende ${v.cat}`, reprovado: 'não atende como semente'}[v.tipo] + (reg.resultado.provisorio ? ' (provisório)' : '') : 'sem classificação';
-    db.lotEvents.push({id: uid(), lotId, date: a.data, title: `Análise de sementes${a.boletim ? ' nº ' + a.boletim : ''}`, text: [resumo, ...a.encontradas.filter(x => Number(x.n) > 0).map(x => `${x.nome || 'outra'}: ${num(x.n)}`), a.amostraG ? `amostra ${num(a.amostraG)} g` : '', a.germinacao !== '' ? `germinação ${num(a.germinacao)}%` : ''].filter(Boolean).join(' • ')});
+    db.lotEvents.push({id: uid(), lotId, date: a.data, title: `Análise de sementes${a.boletim ? ' nº ' + a.boletim : ''}`, text: [resumo, ...a.encontradas.filter(x => Number(x.n) > 0).map(x => `${x.nome || 'outra'}: ${num(x.n)}`), a.amostraG ? `amostra ${duas && a.amostraCS ? num(a.amostraCS) + ' g / ' : ''}${num(a.amostraG)} g` : '', a.germinacao !== '' ? `germinação ${num(a.germinacao)}%` : ''].filter(Boolean).join(' • ')});
     save(); closeModal();
     // Decisão sobre o lote: sempre perguntando
     if (v && !reg.resultado.provisorio) {
       if (v.tipo === 'mantem' && l.status === 'Aguardando análise') confirmDialog(`Lote ${l.code} atende ${v.cat}. Marcar como Aprovado?`, () => labSituacao(l, 'Aprovado', a.data), 'Aprovar');
       else if (v.tipo === 'rebaixa') confirmDialog(`Lote ${l.code} não atende ${l.category}, mas atende ${v.cat}. Rebaixar para ${v.cat}?`, () => { const de = l.category; l.category = v.cat; db.lotEvents.push({id: uid(), lotId, date: a.data, title: `Categoria: ${v.cat}`, text: `Rebaixado de ${de} pela análise`}); labSituacao(l, 'Aprovado', a.data); }, `Rebaixar para ${v.cat}`);
-      else if (v.tipo === 'reprovado') confirmDialog(`Lote ${l.code} passa do limite até de S2. Marcar como Reprovado (vai para grão)?`, () => labSituacao(l, 'Reprovado', a.data), 'Reprovar');
+      else if (v.tipo === 'reprovado') confirmDialog(`Lote ${l.code} passa do limite da última categoria. Marcar como Reprovado (vai para grão)?`, () => labSituacao(l, 'Reprovado', a.data), 'Reprovar');
       else render();
     } else { showToast(reg.resultado?.provisorio ? 'Análise salva (classificação provisória)' : 'Análise salva'); render(); }
   };
@@ -168,55 +188,63 @@ function labValidade(data, meses) { const d = new Date(data + 'T12:00:00'); d.se
 // O grupo escolhido para cada espécie encontrada vira a sugestão das próximas análises (só ADM/supervisor grava)
 function labAprenderGrupos(especie, encontradas) {
   const p = labPadrao(especie); if (!p || !labGestor()) return;
-  const novos = encontradas.filter(x => x.nome && x.grupo && (p.grupos || {})[labChave(x.nome)] !== x.grupo);
+  const novos = encontradas.filter(x => x.nome && x.grupo && (p.sugestoes || {})[labChave(x.nome)] !== x.grupo);
   if (!novos.length) return;
-  const reg = p.id ? p : {...JSON.parse(JSON.stringify(p)), id: uid()};
-  reg.grupos = {...(reg.grupos || {})}; novos.forEach(x => { reg.grupos[labChave(x.nome)] = x.grupo; });
+  const reg = p.id ? {...p} : {...JSON.parse(JSON.stringify(p)), id: uid()};
+  reg.sugestoes = {...(reg.sugestoes || {})}; novos.forEach(x => { reg.sugestoes[labChave(x.nome)] = x.grupo; });
   upsert('padroesSementes', reg);
 }
 
 // ---------- Padrões de sementes (tabela por espécie, editável) ----------
-function labListaPadroes() {
-  const fazenda = db.padroesSementes || [], chaves = new Set(fazenda.map(p => labChave(p.especie)));
-  const todos = [...fazenda, ...Object.values(PADROES_BASE).filter(p => !chaves.has(labChave(p.especie)))].sort((a, b) => a.especie.localeCompare(b.especie, 'pt-BR'));
-  const resumo = p => `amostra ${num(p.amostraG)} g • C1/C2 aceita: ${GRUPOS_BASE.map(([g, r]) => labVazio(p.lim[g]?.C1) ? '' : `${num(p.lim[g].C1)} ${r.toLowerCase()}`).filter(Boolean).join(', ')}`;
-  dialog.innerHTML = `<h3>Padrões de sementes</h3><p class="sub">Limite de sementes de outras espécies por categoria, na amostra da norma. Valem para a classificação automática das análises.</p>
-    <div class="lab-padroes">${todos.map(p => `<div class="row"><div><strong>${esc(p.especie)}</strong><small>${esc(resumo(p))}</small><small>${esc(p.norma || 'Padrão da fazenda')}${p.id ? ' • ajustado pela fazenda' : ' • vem no app'}</small></div>${labGestor() ? `<button class="secondary" data-act="lab-padrao" data-id="${esc(p.especie)}">Editar</button>` : ''}</div>`).join('') || '<p class="nota">Nenhum padrão ainda.</p>'}</div>
+function labTodosPadroes() {
+  const fazenda = (db.padroesSementes || []).map(labNormalizar), app = typeof PADROES_SEMENTES_APP !== 'undefined' ? PADROES_SEMENTES_APP : [];
+  const chaves = new Set(fazenda.map(p => labChave(p.especie)));
+  return [...fazenda, ...app.filter(p => !chaves.has(labChave(p.especie)))].sort((a, b) => a.especie.localeCompare(b.especie, 'pt-BR'));
+}
+function labListaPadroes(filtro = '') {
+  const todos = labTodosPadroes(), k = labChave(filtro);
+  const lista = k ? todos.filter(p => [p.especie, p.cientifico, ...(p.sinonimos || [])].some(n => labChave(n).includes(k))) : todos;
+  const lim = (p, id) => p.grupos.find(g => g.id === id)?.lim?.C1;
+  const resumo = p => `amostra ${labTextoNorma(p)} • C1 aceita: ${[['cultivada', 'cultivada'], ['silvestre', 'silvestre'], ['tolerada', 'nociva tolerada']].map(([id, r]) => labVazio(lim(p, id)) ? '' : `${num(lim(p, id))} ${r}`).filter(Boolean).join(', ')}`;
+  dialog.innerHTML = `<h3>Padrões de sementes</h3><p class="sub">${todos.length} espécies. Limite de sementes de outras espécies por categoria, na amostra da norma. Valem para a classificação automática das análises.</p>
+    <div class="field"><input id="labBusca" placeholder="Buscar espécie (ex.: trigo, azevém, Lolium)" value="${esc(filtro)}" aria-label="Buscar espécie"></div>
+    <div class="lab-padroes">${lista.map(p => `<div class="row"><div><strong>${esc(p.especie)}</strong> <em>${esc(p.cientifico || '')}</em><small>${esc(resumo(p))}</small><small>${esc(p.norma || 'Padrão da fazenda')}${p.id ? ' • ajustado pela fazenda' : ''}</small></div>${labGestor() ? `<button class="secondary" data-act="lab-padrao" data-id="${esc(p.especie)}">${p.id ? 'Editar' : 'Ver'}</button>` : ''}</div>`).join('') || '<p class="nota">Nenhuma espécie com esse nome.</p>'}</div>
     <div class="actions"><button type="button" class="secondary" data-close>Fechar</button>${labGestor() ? '<button type="button" class="primary" data-act="lab-padrao" data-id="">+ Espécie</button>' : ''}</div>`;
   $('[data-close]', dialog).onclick = closeModal;
+  const b = $('#labBusca', dialog); b.oninput = () => { const pos = b.value; labListaPadroes(pos); const n = $('#labBusca', dialog); n.focus(); n.setSelectionRange(pos.length, pos.length); };
   modal.classList.add('open');
 }
 function labEditarPadrao(especie) {
   if (!labGestor()) { showToast('Só o ADM ou o supervisor muda os padrões', true); return; }
-  const atual = especie ? labPadrao(especie) : null, base = especie ? labBase(labChave(especie)) : null;
-  const p = atual ? JSON.parse(JSON.stringify(atual)) : {especie: especie || '', norma: '', amostraG: '', validadeMeses: '', lim: Object.fromEntries(GRUPOS_BASE.map(([g]) => [g, labLim('', '', '', '')])), grupos: {}};
+  const atual = especie ? labPadrao(especie) : null, doApp = especie ? labDoApp(labChave(especie)) : null;
+  const p = atual ? JSON.parse(JSON.stringify(atual)) : {especie: especie || '', norma: '', amostraG: '', amostraCS: '', validadeMeses: '', cats: CAT_ORDEM, grupos: labGrupoBase(), sugestoes: {}};
   const val = v => labVazio(v) ? '' : v;
-  const celula = (g, col) => `<td><input inputmode="numeric" data-lim="${g}" data-col="${col}" value="${esc(val(p.lim[g]?.[col === 'C1/C2' ? 'C1' : col]))}" aria-label="${esc(g)} ${col}"></td>`;
+  const cats = labCats(p);
+  const celula = (g, c) => cats.includes(c) ? `<td><input inputmode="numeric" data-lim="${esc(g.id)}" data-col="${c}" value="${esc(val(g.lim?.[c]))}" aria-label="${esc(g.rot)} ${c}"></td>` : '<td class="pend">—</td>';
   dialog.innerHTML = `<h3>${atual ? 'Padrão — ' + esc(p.especie) : 'Novo padrão de sementes'}</h3>
-    <p class="sub">Número máximo de sementes de outras espécies na amostra da norma, por categoria. Em branco = sem limite. Copie da norma do MAPA da espécie.</p>
+    <p class="sub">Número máximo de sementes de outras espécies na amostra da norma, por categoria. Em branco = sem limite. ${atual?.id ? 'Ajustado pela fazenda.' : atual ? 'Vem no app: ao salvar, vira o padrão da fazenda.' : 'Copie da norma do MAPA da espécie.'}</p>
     <form class="form-grid" autocomplete="off">
       <div class="field"><label for="lp_esp">Espécie do lote</label><input id="lp_esp" value="${esc(p.especie)}" ${atual ? 'readonly' : 'required'} placeholder="Ex.: Trigo"></div>
-      <div class="field"><label for="lp_am">Amostra da norma (g)</label><input id="lp_am" inputmode="numeric" value="${esc(val(p.amostraG))}" required></div>
-      <div class="field"><label for="lp_val">Validade do teste de germinação (meses)</label><input id="lp_val" inputmode="numeric" value="${esc(val(p.validadeMeses))}"></div>
       <div class="field"><label for="lp_norma">Norma</label><input id="lp_norma" value="${esc(p.norma || '')}" placeholder="Ex.: IN MAPA 45/2013"></div>
-      <div class="field full"><div class="tbl-wrap lab-tab lab-edita"><table class="tbl"><thead><tr><th>Grupo</th>${CAT_COLUNAS.map(([r]) => `<th>${r}</th>`).join('')}</tr></thead>
-        <tbody>${labGrupos(p).map(([g, rot]) => `<tr><th>${esc(rot)}</th>${CAT_COLUNAS.map(([r]) => celula(g, r)).join('')}</tr>`).join('')}</tbody></table></div></div>
-      <div class="actions full">${atual?.id && base ? '<button type="button" class="secondary" data-lp-volta>Voltar ao do app</button>' : ''}<button type="button" class="secondary" data-close>Cancelar</button><button type="submit" class="primary">Salvar padrão</button></div>
+      <div class="field"><label for="lp_cs">Amostra para outras cultivadas e silvestres (g)</label><input id="lp_cs" inputmode="decimal" value="${esc(val(p.amostraCS || p.amostraG))}" required></div>
+      <div class="field"><label for="lp_am">Amostra para nocivas (g)</label><input id="lp_am" inputmode="decimal" value="${esc(val(p.amostraG))}" required></div>
+      <div class="field"><label for="lp_val">Validade do teste de germinação (meses)</label><input id="lp_val" inputmode="numeric" value="${esc(val(p.validadeMeses))}"></div>
+      <div class="field full"><div class="tbl-wrap lab-tab lab-edita"><table class="tbl"><thead><tr><th>Grupo</th>${CAT_ORDEM.map(c => `<th>${c}</th>`).join('')}</tr></thead>
+        <tbody>${p.grupos.map(g => `<tr><th>${esc(g.rot)}</th>${CAT_ORDEM.map(c => celula(g, c)).join('')}</tr>`).join('')}</tbody></table></div></div>
+      <div class="actions full">${atual?.id && doApp ? '<button type="button" class="secondary" data-lp-volta>Voltar ao do app</button>' : ''}<button type="button" class="secondary" data-close>Cancelar</button><button type="submit" class="primary">Salvar padrão</button></div>
     </form>`;
   $('[data-close]', dialog).onclick = closeModal;
-  $('[data-lp-volta]', dialog)?.addEventListener('click', () => confirmDialog(`Voltar ${p.especie} ao padrão que vem no app (${base.norma})?`, () => { remove('padroesSementes', atual.id); showToast('Padrão do app restaurado'); }, 'Voltar ao do app'));
+  $('[data-lp-volta]', dialog)?.addEventListener('click', () => confirmDialog(`Voltar ${p.especie} ao padrão que vem no app (${doApp.norma})?`, () => { remove('padroesSementes', atual.id); showToast('Padrão do app restaurado'); }, 'Voltar ao do app'));
   $('form', dialog).onsubmit = e => {
     e.preventDefault();
-    const nome = $('#lp_esp', dialog).value.trim(), am = numeroBR($('#lp_am', dialog).value), vm = numeroBR($('#lp_val', dialog).value);
+    const nome = $('#lp_esp', dialog).value.trim(), am = numeroBR($('#lp_am', dialog).value), cs = numeroBR($('#lp_cs', dialog).value), vm = numeroBR($('#lp_val', dialog).value);
     if (!nome) { showToast('Informe a espécie', true); return; }
-    if (!(am > 0)) { showToast('Informe o peso da amostra da norma (g)', true); return; }
+    if (!(am > 0) || !(cs > 0)) { showToast('Informe o peso das amostras da norma (g)', true); return; }
     if (!atual && labPadrao(nome)) { showToast(`Já existe padrão para ${nome}: edite o existente`, true); return; }
-    const lim = {};
-    $$('[data-lim]', dialog).forEach(i => {
-      const g = i.dataset.lim, col = i.dataset.col, x = i.value.trim() === '' ? '' : numeroBR(i.value);
-      lim[g] ||= {}; (col === 'C1/C2' ? ['C1', 'C2'] : [col]).forEach(c => { lim[g][c] = Number.isFinite(x) ? x : ''; });
-    });
-    const reg = {...p, id: p.id || uid(), especie: atual ? p.especie : nome, amostraG: am, validadeMeses: Number.isFinite(vm) && vm > 0 ? vm : '', norma: $('#lp_norma', dialog).value.trim(), lim};
+    const grupos = p.grupos.map(g => ({...g, lim: {...g.lim}}));
+    $$('[data-lim]', dialog).forEach(i => { const g = grupos.find(x => x.id === i.dataset.lim), x = i.value.trim() === '' ? '' : numeroBR(i.value); if (g) g.lim[i.dataset.col] = Number.isFinite(x) ? x : ''; });
+    const reg = {...p, id: p.id || uid(), especie: atual ? p.especie : nome, amostraG: am, amostraCS: cs, validadeMeses: Number.isFinite(vm) && vm > 0 ? vm : '', norma: $('#lp_norma', dialog).value.trim(), grupos};
+    delete reg.lim; delete reg.extra;
     upsert('padroesSementes', reg); closeModal(); showToast(`Padrão de ${reg.especie} salvo`); render();
   };
   modal.classList.add('open');
@@ -228,14 +256,16 @@ function labCartaoLote(l) {
   const a = lista[0], p = labPadrao(l.species);
   const botao = `<button class="primary" data-act="lab-nova" data-id="${esc(l.id)}">+ Registrar análise</button>`;
   const semPadrao = p ? '' : `<p class="lab-sem">Sem padrão para ${esc(l.species || 'esta espécie')}: a análise fica registrada, mas não classifica.${labGestor() ? ` <button type="button" class="link" data-act="lab-padrao" data-id="${esc(l.species || '')}">Criar o padrão</button>` : ''}</p>`;
-  if (!a) return `<div class="section-title"><h3>Análise de sementes</h3>${botao}</div><section class="card panel">${semPadrao}<p class="nota">Nenhuma análise registrada.${p ? ` Ao lançar a contagem de outras sementes na amostra (norma: ${num(p.amostraG)} g), o MercaPlant mostra na hora se o lote fica ${esc(l.category || 'na categoria')} ou se precisa rebaixar.` : ''}</p></section>`;
+  const lote = p?.loteMaxKg && Number(l.weight) > p.loteMaxKg ? `<p class="lab-sem">⚠ Lote de ${num(l.weight)} kg: a norma de ${esc(p.especie.toLowerCase())} admite até ${num(p.loteMaxKg)} kg por lote (uma amostra para cada lote).</p>` : '';
+  if (!a) return `<div class="section-title"><h3>Análise de sementes</h3>${botao}</div><section class="card panel">${semPadrao}${lote}<p class="nota">Nenhuma análise registrada.${p ? ` Ao lançar a contagem de outras sementes na amostra (norma: ${labTextoNorma(p)}), o MercaPlant mostra na hora se o lote fica ${esc(l.category || 'na categoria')} ou se precisa rebaixar.` : ''}</p></section>`;
   const cl = labClassificar(a, l.species), v = labVeredito(cl, a.categoriaLote || l.category);
   const venc = a.validade && a.validade < today(), perto = a.validade && !venc && a.validade <= addDias(today(), 30);
   const info = [a.germinacao !== '' && a.germinacao != null ? `germinação ${num(a.germinacao)}%` : '', a.vigor !== '' && a.vigor != null ? `vigor ${num(a.vigor)}%` : '', a.pureza !== '' && a.pureza != null ? `pureza ${num(a.pureza, 1)}%` : '', a.pms !== '' && a.pms != null ? `PMS ${num(a.pms, 1)} g` : ''].filter(Boolean).join(' • ');
-  const grupoNome = g => ((p ? labGrupos(p) : GRUPOS_BASE).find(([x]) => x === g) || ['', g])[1].toLowerCase();
+  const grupoNome = g => ((p?.grupos || labGrupoBase()).find(x => x.id === g)?.rot || g).toLowerCase();
+  const amostra = a.amostraG ? ` • amostra ${a.amostraCS && labDuasAmostras(p) ? num(a.amostraCS) + ' g / ' : ''}${num(a.amostraG)} g` : '';
   return `<div class="section-title"><h3>Análise de sementes</h3>${botao}</div>
-    <section class="card panel lab-lote">${semPadrao}
-      <div class="lab-cab"><div><strong>Boletim${a.boletim ? ' nº ' + esc(a.boletim) : ''}</strong><small>${fmtDate(a.data)}${a.laboratorio ? ' • ' + esc(a.laboratorio) : ''}${a.amostraG ? ` • amostra ${num(a.amostraG)} g` : ''}</small></div>
+    <section class="card panel lab-lote">${semPadrao}${lote}
+      <div class="lab-cab"><div><strong>Boletim${a.boletim ? ' nº ' + esc(a.boletim) : ''}</strong><small>${fmtDate(a.data)}${a.laboratorio ? ' • ' + esc(a.laboratorio) : ''}${amostra}</small></div>
         ${a.validade ? `<span class="chip ${venc ? 'red' : perto ? 'orange' : 'green'}">${venc ? 'Teste vencido' : 'Válido até'} ${fmtDate(a.validade)}</span>` : ''}</div>
       ${cl ? labTextoVeredito(v, cl, a.categoriaLote || l.category) + labTabela(cl, v?.cat, a.categoriaLote || l.category) : ''}
       ${(a.encontradas || []).filter(x => Number(x.n) > 0).length ? `<p class="nota">Encontradas: ${a.encontradas.filter(x => Number(x.n) > 0).map(x => `${esc(x.nome || 'outra')} ${num(x.n)} (${esc(grupoNome(x.grupo))})`).join(' • ')}</p>` : ''}
@@ -262,6 +292,6 @@ Object.assign(ACTIONS, {
 if (typeof tecEmbrulhar === 'function') tecEmbrulhar('cadastros', ajustesSemLab => (...a) => {
   const html = ajustesSemLab(...a), i = html.indexOf('<h3>Agronomia</h3>'); if (i < 0) return html;
   const fim = html.indexOf('</article>', i); if (fim < 0) return html;
-  const n = (db.padroesSementes || []).length + Object.keys(PADROES_BASE).filter(k => !(db.padroesSementes || []).some(p => labChave(p.especie) === k)).length;
-  return html.slice(0, fim) + `<div class="field"><label>Padrões de sementes</label><p class="nota">Limites de outras sementes por categoria (C1, C2, S1, S2) usados na classificação automática das análises de lote. ${n} ${n === 1 ? 'espécie' : 'espécies'}.</p><div class="btn-row">${btn('Ver e editar padrões', 'lab-padroes', '', 'secondary')}</div></div>` + html.slice(fim);
+  const n = labTodosPadroes().length;
+  return html.slice(0, fim) + `<div class="field"><label>Padrões de sementes</label><p class="nota">Limites de outras sementes por categoria (C1, C2, S1, S2) usados na classificação automática das análises de lote: ${n} espécies (grandes culturas e forrageiras de clima temperado).</p><div class="btn-row">${btn('Ver e editar padrões', 'lab-padroes', '', 'secondary')}</div></div>` + html.slice(fim);
 });
