@@ -18,7 +18,54 @@ const etapaUbs = id => ETAPAS_UBS.find(e => e.id === id) || {id, nome: id, tipo:
 const etapasConfiguradas = () => Array.isArray(db.settings.ubsEtapas) && db.settings.ubsEtapas.length
   ? ETAPAS_UBS.filter(e => e.fixa || db.settings.ubsEtapas.includes(e.id)).map(e => e.id)
   : ETAPAS_UBS.filter(e => !e.padraoDesligada).map(e => e.id);
-let ubsFiltro = 'todas';
+let ubsFiltro = 'todas', ubsSafra = '';
+
+// Rendimento por cultivar: ordens concluídas, somando pesos (média ponderada pelo peso recebido)
+function rendimentoPorCultivar(safra = '') {
+  const grupos = new Map();
+  db.ubs.filter(o => o.status === 'Concluída').forEach(o => {
+    const c = calcOrdem(o), l = loteDaOrdem(o); if (!c.concluida || !(c.entrada > 0)) return;
+    if (safra && (l.season || '') !== safra) return;
+    const k = semAcentoApp([l.species, l.cultivar].filter(Boolean).join(' ')).trim() || '—';
+    const g = grupos.get(k) || {especie: l.species || '', cultivar: l.cultivar || '', ordens: [], entrada: 0, saida: 0, sacas: 0, etapas: {}};
+    g.ordens.push({id: o.id, lote: l.code, rend: c.rendimento}); g.entrada += c.entrada; g.saida += c.pesoFinal; g.sacas += c.sacas || 0;
+    c.passos.filter(p => !p.secagem).forEach(p => { g.etapas[p.nome] = (g.etapas[p.nome] || 0) + p.perdaKg; });
+    grupos.set(k, g);
+  });
+  return [...grupos.values()].map(g => {
+    const rs = g.ordens.map(x => x.rend), maior = Object.entries(g.etapas).sort((a, b) => b[1] - a[1])[0];
+    return {...g, rendimento: g.saida / g.entrada * 100, min: Math.min(...rs), max: Math.max(...rs), maiorEtapa: maior && maior[1] > 0 ? {nome: maior[0], pct: maior[1] / g.entrada * 100} : null};
+  }).sort((a, b) => b.entrada - a.entrada);
+}
+// Descarte de cada etapa somado em todas as ordens concluídas (da safra escolhida)
+function descartePorEtapa(safra = '') {
+  const t = {}; let entrada = 0;
+  db.ubs.filter(o => o.status === 'Concluída' && (!safra || (loteDaOrdem(o).season || '') === safra)).forEach(o => {
+    const c = calcOrdem(o); if (!c.concluida || !(c.entrada > 0)) return; entrada += c.entrada;
+    c.passos.forEach(p => { t[p.id] = t[p.id] || {nome: p.nome, kg: 0, secagem: !!p.secagem}; t[p.id].kg += p.perdaKg; });
+  });
+  return {entrada, etapas: ETAPAS_UBS.map(e => t[e.id]).filter(Boolean)};
+}
+function secaoRendimentoCultivar() {
+  const safras = [...new Set(db.ubs.filter(o => o.status === 'Concluída').map(o => loteDaOrdem(o).season).filter(Boolean))].sort().reverse();
+  if (ubsSafra && !safras.includes(ubsSafra)) ubsSafra = '';
+  const lista = rendimentoPorCultivar(ubsSafra), d = descartePorEtapa(ubsSafra);
+  if (!lista.length) return '';
+  // Melhor cultivar dentro da mesma espécie (comparar trigo com aveia não diz nada)
+  const melhores = new Set(Object.values(lista.reduce((m, g) => { (m[g.especie] ||= []).push(g); return m; }, {})).filter(gs => gs.length > 1).map(gs => gs.reduce((a, b) => b.rendimento > a.rendimento ? b : a)));
+  const maxEt = Math.max(1e-9, ...d.etapas.map(e => e.kg));
+  return `<div class="section-title"><h3>Rendimento por cultivar</h3></div>
+    ${safras.length > 1 ? `<div class="filters">${['', ...safras].map(sf => `<button class="${sf === ubsSafra ? 'active' : ''}" data-act="ubs-safra" data-id="${esc(sf)}">${sf ? 'Safra ' + esc(sf) : 'Todas as safras'}</button>`).join('')}</div>` : ''}
+    <section class="ubs-rc">
+      <article class="card panel"><div class="ubs-rc-lista">
+        ${lista.map(g => `<div class="ubs-rc-item"><div class="ubs-rc-cab"><div><strong>${esc(g.cultivar || '—')}</strong>${melhores.has(g) ? ` <span class="chip green" title="Maior rendimento entre as cultivares de ${esc(g.especie.toLowerCase())}">melhor</span>` : ''}<small>${esc(g.especie)} • ${g.ordens.length === 1 ? 'lote ' + esc(g.ordens[0].lote) : g.ordens.length + ' lotes'}</small></div><b>${um1(g.rendimento)}%</b></div>
+          <div class="tr"><span style="width:${Math.min(100, g.rendimento)}%"></span></div>
+          <small>${num(g.entrada / 1000, 1)} t recebidas → ${num(g.saida / 1000, 1)} t ensacadas (${num(g.sacas)} sc)${g.ordens.length > 1 ? ` • de ${um1(g.min)}% a ${um1(g.max)}%` : ''}${g.maiorEtapa ? ` • maior descarte: ${esc(g.maiorEtapa.nome.toLowerCase())} (${um1(g.maiorEtapa.pct)}%)` : ''}</small></div>`).join('')}
+      </div><p class="nota">Rendimento = ensacado ÷ recebido, somando os pesos das ordens concluídas${ubsSafra ? ` da safra ${esc(ubsSafra)}` : ''}.</p></article>
+      <article class="card panel"><h3>Onde sai o peso</h3><p class="nota">Descarte e quebra de cada etapa, em % do total recebido (${num(d.entrada / 1000, 1)} t).</p>
+        <div class="ubs-fluxo">${d.etapas.map(e => `<div class="ln"><span>${esc(e.nome)}${e.secagem ? ' (quebra)' : ''}</span><div class="tr"><span style="width:${e.kg / maxEt * 100}%;${e.secagem ? 'background:var(--blue)' : 'background:var(--orange)'}"></span></div><b>${pctDe(e.kg, d.entrada)}</b></div>`).join('') || '<p class="nota">Sem descarte registrado.</p>'}</div></article>
+    </section>`;
+}
 
 // Pesos ao longo das etapas registradas. Rendimento final = peso ensacado ÷ peso recebido.
 function calcOrdem(o) {
@@ -188,7 +235,8 @@ function listaUbs() {
       <article class="card kpi"><div class="label">Aguardando laboratório</div><div class="value">${aguard.length}</div><div class="hint">${esc(aguard.map(l => l.code).join(', ') || 'nenhum lote')}</div></article>
     </section>
     <div class="filters">${Object.entries(filtros).map(([k, [r, f]]) => `<button class="${k === ubsFiltro ? 'active' : ''}" data-act="ubs-filtro" data-id="${k}">${r} (${db.ubs.filter(f).length})</button>`).join('')}</div>
-    ${lista.length ? `<section class="ubs-lista">${lista.map(cartaoOrdem).join('')}</section>` : `<section class="card">${empty('Nenhuma ordem de beneficiamento', 'Abra uma ordem quando um lote de sementes entrar na UBS.', {act: 'ubs-nova', label: '+ Nova ordem'})}</section>`}`;
+    ${lista.length ? `<section class="ubs-lista">${lista.map(cartaoOrdem).join('')}</section>` : `<section class="card">${empty('Nenhuma ordem de beneficiamento', 'Abra uma ordem quando um lote de sementes entrar na UBS.', {act: 'ubs-nova', label: '+ Nova ordem'})}</section>`}
+    ${secaoRendimentoCultivar()}`;
 }
 
 function detalheOrdemUbs(id) {
@@ -218,6 +266,9 @@ function detalheOrdemUbs(id) {
       <article class="card panel viz-root"><h3>Rendimento do beneficiamento</h3>
         ${c.entrada ? `<div class="ubs-rend"><b>${c.concluida ? um1(c.rendimento) + '%' : '—'}</b><span>${c.concluida ? `${kgFmt(c.pesoFinal)} ensacados (${num(c.sacas)} sacas) de ${kgFmt(c.entrada)} recebidos` : `parcial: restam ${kgFmt(c.restante)} (${pctDe(c.restante, c.entrada)}) pelas etapas registradas`}</span></div>
         <div class="ubs-fluxo">${fluxo.map(([n, v], i) => `<div class="ln ${i === fluxo.length - 1 && c.concluida ? 'final' : ''}" ${tip(n, kgFmt(v))}><span>${esc(n)}</span><div class="tr"><span style="width:${Math.max(0, v / c.entrada * 100)}%"></span></div><b>${kgFmt(v)}</b></div>`).join('')}</div>
+        ${(() => { if (!c.concluida) return ''; const g = rendimentoPorCultivar().find(x => x.ordens.some(y => y.id === o.id)); const outras = g ? g.ordens.filter(y => y.id !== o.id) : [];
+          if (!outras.length) return ''; const ent = g.entrada - c.entrada, med = ent > 0 ? (g.saida - c.pesoFinal) / ent * 100 : null; if (med == null) return '';
+          const dif = c.rendimento - med; return `<p class="ubs-comp ${dif >= 0 ? 'ok' : 'nao'}">${dif >= 0 ? '▲' : '▼'} ${um1(Math.abs(dif))} ponto${Math.abs(dif) >= 2 ? 's' : ''} ${dif >= 0 ? 'acima' : 'abaixo'} ${outras.length === 1 ? 'do outro lote' : `da média dos outros ${outras.length} lotes`} de ${esc(l.cultivar || 'mesma cultivar')} (${um1(med)}%).</p>`; })()}
         ${maior && maior.perdaKg > 0 ? `<p class="ubs-maior">Maior descarte: <strong>${esc(maior.nome)}</strong> — ${kgFmt(maior.perdaKg)} (${pctDe(maior.perdaKg, c.entrada)} da entrada).</p>` : ''}
         ${c.concluida && Math.abs(c.diferencaKg) >= 0.5 ? `<p class="nota">Diferença entre o peso esperado pelas etapas (${kgFmt(c.restante)}) e o ensacado: ${c.diferencaKg > 0 ? '' : '+'}${kgFmt(Math.abs(c.diferencaKg))} ${c.diferencaKg > 0 ? 'não registrados como descarte (perdas de manuseio, sobras ou diferença de balança)' : 'a mais que o esperado — confira as pesagens'}.</p>` : ''}
         ${tabela(['Etapa', 'Descarte (kg)', 'Após (kg)'], [['Entrada', '—', num(c.entrada)], ...c.passos.map(p => [p.nome, num(p.perdaKg, 1), num(p.aposKg, 1)]), ...(c.concluida ? [['Ensacado', '—', num(c.pesoFinal, 1)]] : [])])}`
@@ -230,6 +281,7 @@ Object.assign(ACTIONS, {
   'ubs-nova': novaOrdemUbs,
   'ubs-cfg': configurarEtapasUbs,
   'ubs-filtro': id => { ubsFiltro = id; render(); },
+  'ubs-safra': id => { ubsSafra = id || ''; render(); },
   'ubs-etapa': id => registrarEtapaUbs(id),
   'ubs-pular': id => { const o = find('ubs', id), p = proximaEtapa(o); if (!p || etapaUbs(p).fixa) return; confirmDialog(`Pular a etapa “${etapaUbs(p).nome}” neste lote?`, () => { (o.pulos ||= []).push(p); save(); }, 'Pular'); },
   'ubs-desfazer': id => {

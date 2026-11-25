@@ -82,6 +82,28 @@ function labTextoSemContagem(p, cat) {
   const c = labCats(p).includes(cat) ? cat : 'C1', g = p.germ?.[c], pz = p.pureza;
   return `A norma (${esc(p.norma || '')}) não pede contagem de outras sementes por número para ${esc(String(p.especie).toLowerCase())}: a análise fica registrada, sem classificação automática.${!labVazio(g) ? ` Mínimos ${esc(c)}: germinação ${num(g)}%${!labVazio(pz) ? `, pureza ${num(pz)}%` : ''}.` : ''}`;
 }
+// ---------- Germinação e pureza x mínimo da norma (só aviso: a classificação segue pela contagem) ----------
+/** Mínimo da norma para a categoria (germ ou pureza): número único ou por categoria. */
+function labMin(p, campo, cat) {
+  const v = p?.[campo]; if (v == null || v === '') return null;
+  const x = typeof v === 'object' ? v[cat] : v;
+  return labVazio(x) ? null : Number(x);
+}
+/** Confere germinação e pureza do boletim com o mínimo da categoria do lote; se não atinge, diz a categoria que atinge. */
+function labConfere(a, p, cat) {
+  if (!p || !a) return [];
+  const cats = labCats(p), i0 = cats.indexOf(cat); if (i0 < 0) return [];
+  return [['germ', 'germinacao', 'Germinação'], ['pureza', 'pureza', 'Pureza']].map(([campo, k, rot]) => {
+    if (labVazio(a[k])) return null;
+    const valor = Number(a[k]), min = labMin(p, campo, cat); if (min == null) return null;
+    const ok = valor >= min, atende = ok ? cat : cats.slice(i0 + 1).find(c => { const m = labMin(p, campo, c); return m != null && valor >= m; }) || null;
+    return {campo: k, rot, valor, min, ok, atende};
+  }).filter(Boolean);
+}
+function labTextoConfere(lista, cat) {
+  if (!lista.length) return '';
+  return `<div class="lab-conf">${lista.map(c => `<p class="${c.ok ? 'ok' : 'nao'}"><b>${c.ok ? '✓' : '⚠'} ${esc(c.rot)} ${num(c.valor, c.valor % 1 ? 1 : 0)}%</b> ${c.ok ? `atinge o mínimo do ${esc(cat)} (${num(c.min)}%)` : `abaixo do mínimo do ${esc(cat)} (${num(c.min)}%)${c.atende ? ` — atinge o do ${esc(c.atende)}` : ' — não atinge nenhuma categoria'}`}</p>`).join('')}<small>Aviso pela norma; a classificação continua pela contagem de outras sementes.</small></div>`;
+}
 const labTextoNorma = p => labDuasAmostras(p) ? `${num(p.amostraCS)} g para cultivadas e silvestres, ${num(p.amostraG)} g para nocivas` : `${num(p.amostraG)} g`;
 // Colunas: da categoria do lote para baixo (não sobe de categoria); C1 e C2 juntas quando o limite é o mesmo em todos os grupos
 function labColunas(cl, catLote) {
@@ -125,7 +147,8 @@ function labForm(lotId, a0) {
       <div class="field full" id="labResultado" aria-live="polite" ${semConta ? 'hidden' : ''}></div>
       <details class="field full lab-outros" ${temOutros ? 'open' : ''}><summary>Outros resultados do boletim (opcional)</summary>
         <div class="form-grid">${campo('germinacao', 'Germinação (%)')}${campo('vigor', 'Vigor (%)')}${campo('pureza', 'Pureza (%)')}${campo('outrasPct', 'Outras sementes (%)')}${campo('pms', 'Peso de mil sementes (g)')}${campo('umidade', 'Umidade (%)')}</div>
-        <small class="nota">Ficam no histórico do lote; a germinação dá a validade do teste. Não entram na classificação.</small></details>
+        <small class="nota">Ficam no histórico do lote; a germinação dá a validade do teste e é conferida com o mínimo da norma.</small></details>
+      <div class="field full" id="labConf" aria-live="polite"></div>
       <div class="field full"><label for="lab_obs">Observações</label><textarea id="lab_obs" data-lab="obs" rows="2">${esc(a.obs || '')}</textarea></div>
       <div class="actions full"><button type="button" class="secondary" data-close>Cancelar</button><button type="submit" class="primary">Salvar análise</button></div>
     </form>`;
@@ -145,6 +168,7 @@ function labForm(lotId, a0) {
   };
   const resultado = () => {
     ler();
+    const cf = $('#labConf', dialog); if (cf) cf.innerHTML = labTextoConfere(labConfere(a, p, l.category), l.category);
     const el = $('#labResultado', dialog); if (!el) return;
     const cl = labClassificar(a, l.species);
     if (!cl) { el.innerHTML = ''; return; }
@@ -175,13 +199,13 @@ function labForm(lotId, a0) {
     a.encontradas = a.encontradas.filter(x => x.nome || Number(x.n) > 0);
     const cl = labClassificar(a, l.species), v = labVeredito(cl, l.category);
     const reg = {...a, id: a.id || uid(), lotId, especie: l.species || '', categoriaLote: l.category || '', resultado: v ? {tipo: v.tipo, cat: v.cat, provisorio: !!cl.abaixo.length || !!v.pendente} : null,
-      validade: p?.validadeMeses && a.germinacao !== '' ? labValidade(a.data, p.validadeMeses) : ''};
+      validade: p?.validadeMeses && a.germinacao !== '' ? labValidade(a.data, p.validadeMeses) : '', confere: labConfere(a, p, l.category)};
     upsert('analisesSementes', reg);
     labAprenderGrupos(l.species, a.encontradas);
     if (a.germinacao !== '') l.germination = a.germinacao;
     if (a.vigor !== '') l.vigor = a.vigor;
     const resumo = v ? {mantem: `fica ${v.cat}`, atende: `atende ${v.cat}`, rebaixa: `não atende ${l.category}, atende ${v.cat}`, reprovado: 'não atende como semente'}[v.tipo] + (reg.resultado.provisorio ? ' (provisório)' : '') : 'sem classificação';
-    db.lotEvents.push({id: uid(), lotId, date: a.data, title: `Análise de sementes${a.boletim ? ' nº ' + a.boletim : ''}`, text: [resumo, ...a.encontradas.filter(x => Number(x.n) > 0).map(x => `${x.nome || 'outra'}: ${num(x.n)}`), a.amostraG ? `amostra ${duas && a.amostraCS ? num(a.amostraCS) + ' g / ' : ''}${num(a.amostraG)} g` : '', a.germinacao !== '' ? `germinação ${num(a.germinacao)}%` : ''].filter(Boolean).join(' • ')});
+    db.lotEvents.push({id: uid(), lotId, date: a.data, title: `Análise de sementes${a.boletim ? ' nº ' + a.boletim : ''}`, text: [resumo, ...a.encontradas.filter(x => Number(x.n) > 0).map(x => `${x.nome || 'outra'}: ${num(x.n)}`), a.amostraG ? `amostra ${duas && a.amostraCS ? num(a.amostraCS) + ' g / ' : ''}${num(a.amostraG)} g` : '', a.germinacao !== '' ? `germinação ${num(a.germinacao)}%` : '', ...reg.confere.filter(c => !c.ok).map(c => `${c.rot.toLowerCase()} abaixo do mínimo do ${l.category} (${num(c.min)}%)`)].filter(Boolean).join(' • ')});
     save(); closeModal();
     // Decisão sobre o lote: sempre perguntando
     if (v && !reg.resultado.provisorio) {
@@ -194,6 +218,47 @@ function labForm(lotId, a0) {
   modal.classList.add('open');
 }
 function labSituacao(l, st, data) { if (l.status !== st) { db.lotEvents.push({id: uid(), lotId: l.id, date: data, title: `Situação: ${st}`, text: `Anterior: ${l.status}`}); l.status = st; } save(); }
+// ---------- Validade do teste de germinação e reanálise ----------
+// Portaria MAPA 538/2022: teste vale até 12 meses e a reanálise 6 (acondicionamento ordinário); a norma da espécie pode
+// fixar prazos menores (padrão: validadeMeses e validadeReanaliseMeses). Validade conta até o fim do mês, excluído o mês do teste.
+const labMesesReanalise = p => Number(p?.validadeReanaliseMeses) > 0 ? Number(p.validadeReanaliseMeses) : Number(p?.validadeMeses) > 0 ? Math.min(6, Number(p.validadeMeses)) : null;
+const labDiasAte = iso => Math.round((new Date(iso + 'T12:00:00') - new Date(today() + 'T12:00:00')) / 864e5);
+const labLoteAtivo = l => !['Expedido', 'Reprovado'].includes(l.status);
+const labAnalisesLote = lotId => (db.analisesSementes || []).filter(a => a.lotId === lotId).sort((a, b) => (b.data || '').localeCompare(a.data || '') || (b.tipo === 'reanalise') - (a.tipo === 'reanalise'));
+/** Situação do teste de germinação: pela análise ou reanálise mais recente com validade. */
+function labValidadeLote(l) {
+  const a = labAnalisesLote(l.id).find(x => x.validade); if (!a) return null;
+  const dias = labDiasAte(a.validade);
+  return {a, validade: a.validade, dias, estado: dias < 0 ? 'vencido' : dias <= 30 ? 'vence' : 'ok'};
+}
+const labPodeVender = l => labValidadeLote(l)?.estado !== 'vencido';
+function labChipValidade(l) {
+  if (!labLoteAtivo(l)) return '';
+  const v = labValidadeLote(l); if (!v || v.estado === 'ok') return '';
+  return v.estado === 'vencido' ? chip('Teste vencido: não vender', 'red') : chip(`Teste vence em ${v.dias} ${v.dias === 1 ? 'dia' : 'dias'}`, 'orange');
+}
+/** Reanálise da germinação: renova a validade do teste (nova análise só de germinação/vigor). */
+function labReanalise(lotId, r0) {
+  const l = find('lots', lotId); if (!l) return;
+  const p = labPadrao(l.species), meses = labMesesReanalise(p), min = labMin(p, 'germ', l.category), v0 = labValidadeLote(l);
+  openForm({title: `Reanálise da germinação — lote ${l.code}`, submit: 'Salvar reanálise',
+    sub: [v0 ? `Teste atual: ${v0.estado === 'vencido' ? 'venceu' : 'vale até'} ${fmtDate(v0.validade)}.` : '', meses ? `A reanálise vale ${meses} meses (até o fim do mês).` : 'Sem prazo de validade no padrão desta espécie.'].filter(Boolean).join(' '),
+    values: r0 ? {...r0} : {data: today()},
+    fields: [{k: 'data', label: 'Data do resultado', type: 'date', required: true}, {k: 'boletim', label: 'Nº do boletim'}, {k: 'laboratorio', label: 'Laboratório', placeholder: 'Ex.: laboratório próprio'},
+      {k: 'germinacao', label: 'Germinação (%)', type: 'number', min: 0, required: true, hint: min != null ? `Mínimo do ${l.category}: ${num(min)}%` : ''}, {k: 'vigor', label: 'Vigor (%)', type: 'number', min: 0},
+      {k: 'obs', label: 'Observações', type: 'textarea'}],
+    onSubmit: v => {
+      if (!(v.germinacao >= 0 && v.germinacao <= 100)) return 'Germinação vai de 0 a 100%';
+      if (v.vigor !== '' && v.vigor != null && (v.vigor < 0 || v.vigor > 100)) return 'Vigor vai de 0 a 100%';
+      const reg = {...(r0 || {}), ...v, id: r0?.id || uid(), lotId, tipo: 'reanalise', especie: l.species || '', categoriaLote: l.category || '', encontradas: [],
+        validade: meses ? labValidade(v.data, meses) : ''};
+      reg.confere = labConfere(reg, p, l.category);
+      upsert('analisesSementes', reg);
+      l.germination = v.germinacao; if (v.vigor !== '' && v.vigor != null) l.vigor = v.vigor;
+      if (!r0) db.lotEvents.push({id: uid(), lotId, date: v.data, title: `Reanálise da germinação${v.boletim ? ' nº ' + v.boletim : ''}`, text: [`germinação ${num(v.germinacao)}%`, reg.validade ? `válida até ${fmtDate(reg.validade)}` : '', ...reg.confere.filter(c => !c.ok).map(c => `abaixo do mínimo do ${l.category} (${num(c.min)}%)`)].filter(Boolean).join(' • ')});
+      save(); showToast(reg.validade ? `Reanálise salva: teste válido até ${fmtDate(reg.validade)}` : 'Reanálise salva');
+    }});
+}
 function labValidade(data, meses) { const d = new Date(data + 'T12:00:00'); d.setMonth(d.getMonth() + meses + 1, 0); return isoLocal(d); } // excluído o mês da conclusão: até o fim do mês
 // O grupo escolhido para cada espécie encontrada vira a sugestão das próximas análises (só ADM/supervisor grava)
 function labAprenderGrupos(especie, encontradas) {
@@ -239,6 +304,7 @@ function labEditarPadrao(especie) {
       <div class="field"><label for="lp_cs">Amostra para outras cultivadas e silvestres (g)</label><input id="lp_cs" inputmode="decimal" value="${esc(val(p.amostraCS || p.amostraG))}" required></div>
       <div class="field"><label for="lp_am">Amostra para nocivas (g)</label><input id="lp_am" inputmode="decimal" value="${esc(val(p.amostraG))}" required></div>
       <div class="field"><label for="lp_val">Validade do teste de germinação (meses)</label><input id="lp_val" inputmode="numeric" value="${esc(val(p.validadeMeses))}"></div>
+      <div class="field"><label for="lp_vre">Validade da reanálise (meses)</label><input id="lp_vre" inputmode="numeric" value="${esc(val(p.validadeReanaliseMeses))}" placeholder="${labMesesReanalise(p) || 6}"></div>
       <div class="field full"><div class="tbl-wrap lab-tab lab-edita"><table class="tbl"><thead><tr><th>Grupo</th>${CAT_ORDEM.map(c => `<th>${c}</th>`).join('')}</tr></thead>
         <tbody>${p.grupos.map(g => `<tr><th>${esc(g.rot)}</th>${CAT_ORDEM.map(c => celula(g, c)).join('')}</tr>`).join('')}</tbody></table></div></div>
       <div class="actions full">${atual?.id && doApp ? '<button type="button" class="secondary" data-lp-volta>Voltar ao do app</button>' : ''}<button type="button" class="secondary" data-close>Cancelar</button><button type="submit" class="primary">Salvar padrão</button></div>
@@ -247,13 +313,13 @@ function labEditarPadrao(especie) {
   $('[data-lp-volta]', dialog)?.addEventListener('click', () => confirmDialog(`Voltar ${p.especie} ao padrão que vem no app (${doApp.norma})?`, () => { remove('padroesSementes', atual.id); showToast('Padrão do app restaurado'); }, 'Voltar ao do app'));
   $('form', dialog).onsubmit = e => {
     e.preventDefault();
-    const nome = $('#lp_esp', dialog).value.trim(), am = numeroBR($('#lp_am', dialog).value), cs = numeroBR($('#lp_cs', dialog).value), vm = numeroBR($('#lp_val', dialog).value);
+    const nome = $('#lp_esp', dialog).value.trim(), am = numeroBR($('#lp_am', dialog).value), cs = numeroBR($('#lp_cs', dialog).value), vm = numeroBR($('#lp_val', dialog).value), vre = numeroBR($('#lp_vre', dialog).value);
     if (!nome) { showToast('Informe a espécie', true); return; }
     if (!(am > 0) || !(cs > 0)) { showToast('Informe o peso das amostras da norma (g)', true); return; }
     if (!atual && labPadrao(nome)) { showToast(`Já existe padrão para ${nome}: edite o existente`, true); return; }
     const grupos = p.grupos.map(g => ({...g, lim: {...g.lim}}));
     $$('[data-lim]', dialog).forEach(i => { const g = grupos.find(x => x.id === i.dataset.lim), x = i.value.trim() === '' ? '' : numeroBR(i.value); if (g) g.lim[i.dataset.col] = Number.isFinite(x) ? x : ''; });
-    const reg = {...p, id: p.id || uid(), especie: atual ? p.especie : nome, amostraG: am, amostraCS: cs, validadeMeses: Number.isFinite(vm) && vm > 0 ? vm : '', norma: $('#lp_norma', dialog).value.trim(), grupos};
+    const reg = {...p, id: p.id || uid(), especie: atual ? p.especie : nome, amostraG: am, amostraCS: cs, validadeMeses: Number.isFinite(vm) && vm > 0 ? vm : '', validadeReanaliseMeses: Number.isFinite(vre) && vre > 0 ? vre : '', norma: $('#lp_norma', dialog).value.trim(), grupos};
     delete reg.lim; delete reg.extra;
     upsert('padroesSementes', reg); closeModal(); showToast(`Padrão de ${reg.especie} salvo`); render();
   };
@@ -262,25 +328,30 @@ function labEditarPadrao(especie) {
 
 // ---------- Página do lote: última análise e classificação ----------
 function labCartaoLote(l) {
-  const lista = (db.analisesSementes || []).filter(a => a.lotId === l.id).sort((a, b) => (b.data || '').localeCompare(a.data || ''));
-  const a = lista[0], p = labPadrao(l.species);
+  const todas = labAnalisesLote(l.id), lista = todas.filter(x => x.tipo !== 'reanalise');
+  const a = lista[0], p = labPadrao(l.species), re = todas.find(x => x.tipo === 'reanalise' && (!a || (x.data || '') >= (a.data || '')));
   const botao = `<button class="primary" data-act="lab-nova" data-id="${esc(l.id)}">+ Registrar análise</button>`;
   const semPadrao = p ? '' : `<p class="lab-sem">Sem padrão para ${esc(l.species || 'esta espécie')}: a análise fica registrada, mas não classifica.${labGestor() ? ` <button type="button" class="link" data-act="lab-padrao" data-id="${esc(l.species || '')}">Criar o padrão</button>` : ''}</p>`;
   const lote = p?.loteMaxKg && Number(l.weight) > p.loteMaxKg ? `<p class="lab-sem">⚠ Lote de ${num(l.weight)} kg: a norma de ${esc(p.especie.toLowerCase())} admite até ${num(p.loteMaxKg)} kg por lote (uma amostra para cada lote).</p>` : '';
   if (!a) return `<div class="section-title"><h3>Análise de sementes</h3>${botao}</div><section class="card panel">${semPadrao}${lote}<p class="nota">Nenhuma análise registrada.${p ? ` Ao lançar a contagem de outras sementes na amostra (norma: ${labTextoNorma(p)}), o MercaPlant mostra na hora se o lote fica ${esc(l.category || 'na categoria')} ou se precisa rebaixar.` : ''}</p></section>`;
   const cl = labClassificar(a, l.species), v = labVeredito(cl, a.categoriaLote || l.category);
-  const venc = a.validade && a.validade < today(), perto = a.validade && !venc && a.validade <= addDias(today(), 30);
+  const vl = labValidadeLote(l), venc = vl?.estado === 'vencido', perto = vl?.estado === 'vence', ativo = labLoteAtivo(l);
+  const aviso = !vl || !ativo || vl.estado === 'ok' ? '' : `<div class="lab-ver ${venc ? 'ruim' : 'alerta'}"><b>${venc ? `✗ Teste de germinação vencido em ${fmtDate(vl.validade)}: não pode vender` : `⏳ Teste de germinação vence em ${vl.dias} ${vl.dias === 1 ? 'dia' : 'dias'} (${fmtDate(vl.validade)})`}</b><span>${venc ? 'Faça a reanálise da germinação para renovar a validade.' : 'Faça a reanálise antes de vencer para continuar vendendo o lote.'}${labMesesReanalise(p) ? ` A reanálise vale ${labMesesReanalise(p)} meses.` : ''}</span></div>`;
+  const conf = labConfere(re ? {...a, germinacao: re.germinacao} : a, p, a.categoriaLote || l.category);
   const info = [a.germinacao !== '' && a.germinacao != null ? `germinação ${num(a.germinacao)}%` : '', a.vigor !== '' && a.vigor != null ? `vigor ${num(a.vigor)}%` : '', a.pureza !== '' && a.pureza != null ? `pureza ${num(a.pureza, 1)}%` : '', a.pms !== '' && a.pms != null ? `PMS ${num(a.pms, 1)} g` : ''].filter(Boolean).join(' • ');
   const grupoNome = g => ((p?.grupos || labGrupoBase()).find(x => x.id === g)?.rot || g).toLowerCase();
   const amostra = a.amostraG ? ` • amostra ${a.amostraCS && labDuasAmostras(p) ? num(a.amostraCS) + ' g / ' : ''}${num(a.amostraG)} g` : '';
   return `<div class="section-title"><h3>Análise de sementes</h3>${botao}</div>
     <section class="card panel lab-lote">${semPadrao}${lote}
       <div class="lab-cab"><div><strong>Boletim${a.boletim ? ' nº ' + esc(a.boletim) : ''}</strong><small>${fmtDate(a.data)}${a.laboratorio ? ' • ' + esc(a.laboratorio) : ''}${amostra}</small></div>
-        ${a.validade ? `<span class="chip ${venc ? 'red' : perto ? 'orange' : 'green'}">${venc ? 'Teste vencido' : 'Válido até'} ${fmtDate(a.validade)}</span>` : ''}</div>
+        ${vl ? `<span class="chip ${venc ? 'red' : perto ? 'orange' : 'green'}">${venc ? 'Teste vencido' : 'Válido até'} ${fmtDate(vl.validade)}</span>` : ''}</div>
+      ${aviso}
       ${cl ? labTextoVeredito(v, cl, a.categoriaLote || l.category) + labTabela(cl, v?.cat, a.categoriaLote || l.category) : ''}
       ${(a.encontradas || []).filter(x => Number(x.n) > 0).length ? `<p class="nota">Encontradas: ${a.encontradas.filter(x => Number(x.n) > 0).map(x => `${esc(x.nome || 'outra')} ${num(x.n)} (${esc(grupoNome(x.grupo))})`).join(' • ')}</p>` : ''}
       ${info ? `<p class="nota">Boletim: ${esc(info)}</p>` : ''}
-      <div class="btn-row">${btn('Editar análise', 'lab-editar', a.id, 'secondary')}${btn('Padrões de sementes', 'lab-padroes', '', 'secondary')}${lista.length > 1 ? `<small class="nota">${lista.length - 1} ${lista.length === 2 ? 'análise anterior' : 'análises anteriores'} na linha do tempo</small>` : ''}</div>
+      ${re ? `<p class="nota lab-re">Reanálise em ${fmtDate(re.data)}${re.boletim ? ` (boletim ${esc(re.boletim)})` : ''}: germinação ${num(re.germinacao)}%${re.vigor !== '' && re.vigor != null ? ` • vigor ${num(re.vigor)}%` : ''}${re.validade ? ` • válida até ${fmtDate(re.validade)}` : ''} <button type="button" class="link" data-act="lab-reanalise-editar" data-id="${esc(re.id)}">editar</button></p>` : ''}
+      ${labTextoConfere(conf, a.categoriaLote || l.category)}
+      <div class="btn-row">${venc ? '' : btn(['Básica', 'C1', 'C2'].includes(l.category) ? 'Certificado (PDF)' : 'Termo de conformidade (PDF)', 'lab-termo', l.id) + btn('Enviar', 'lab-termo-enviar', l.id, 'secondary')}${a.germinacao !== '' && a.germinacao != null || re ? btn('+ Reanálise da germinação', 'lab-reanalise', l.id, 'secondary') : ''}${btn('Editar análise', 'lab-editar', a.id, 'secondary')}${btn('Padrões de sementes', 'lab-padroes', '', 'secondary')}</div>${lista.length > 1 ? `<small class="nota">${lista.length - 1} ${lista.length === 2 ? 'análise anterior' : 'análises anteriores'} na linha do tempo</small>` : ''}
       ${p ? `<p class="nota">Padrão de ${esc(p.especie.toLowerCase())}: ${esc(p.norma || 'da fazenda')}. Confira com a norma vigente.</p>` : ''}
     </section>`;
 }
@@ -296,12 +367,27 @@ Object.assign(ACTIONS, {
   'lab-nova': id => labForm(id),
   'lab-editar': id => { const a = find('analisesSementes', id); if (a) labForm(a.lotId, a); },
   'lab-padroes': () => labListaPadroes(),
-  'lab-padrao': esp => labEditarPadrao(esp)
+  'lab-padrao': esp => labEditarPadrao(esp),
+  'lab-reanalise': id => labReanalise(id),
+  'lab-reanalise-editar': id => { const r = find('analisesSementes', id); if (r) labReanalise(r.lotId, r); },
+  'lab-dados-termo': () => labDadosTermo()
 });
+// Dados do produtor para o termo de conformidade / certificado (Ajustes → Agronomia)
+function labDadosTermo(depois) {
+  const s = db.settings;
+  openForm({title: 'Dados do termo de conformidade', submit: 'Salvar',
+    sub: 'Saem no termo de conformidade (S1 e S2) e no certificado (Básica, C1 e C2) dos lotes. Nome, CPF/CNPJ e endereço vêm do cadastro do proprietário.',
+    values: {renasemProdutor: s.renasemProdutor || '', respTecnico: s.respTecnico || '', respRegistro: s.respRegistro || '', renasemRT: s.renasemRT || '', certificador: s.certificador || ''},
+    fields: [{k: 'renasemProdutor', label: 'RENASEM do produtor', placeholder: 'Ex.: RS-01234/2020', required: true},
+      {k: 'respTecnico', label: 'Responsável técnico', required: true}, {k: 'respRegistro', label: 'CREA / CFTA do responsável técnico'},
+      {k: 'renasemRT', label: 'RENASEM do responsável técnico', required: true},
+      {k: 'certificador', label: 'Certificador (Básica, C1 e C2)', full: true, placeholder: 'Ex.: produção própria — credenciamento RS-00000/2021, ou a entidade certificadora'}],
+    onSubmit: v => { Object.assign(db.settings, v); save(); showToast('Dados do termo salvos'); if (depois) setTimeout(depois, 50); }});
+}
 // Ajustes → Agronomia: atalho para os padrões de sementes
 if (typeof tecEmbrulhar === 'function') tecEmbrulhar('cadastros', ajustesSemLab => (...a) => {
   const html = ajustesSemLab(...a), i = html.indexOf('<h3>Agronomia</h3>'); if (i < 0) return html;
   const fim = html.indexOf('</article>', i); if (fim < 0) return html;
   const n = labTodosPadroes().length;
-  return html.slice(0, fim) + `<div class="field"><label>Padrões de sementes</label><p class="nota">Limites de outras sementes por categoria (C1, C2, S1, S2) usados na classificação automática das análises de lote: ${n} espécies (grandes culturas e forrageiras de clima temperado).</p><div class="btn-row">${btn('Ver e editar padrões', 'lab-padroes', '', 'secondary')}</div></div>` + html.slice(fim);
+  return html.slice(0, fim) + `<div class="field"><label>Padrões de sementes</label><p class="nota">Limites de outras sementes por categoria (C1, C2, S1, S2) usados na classificação automática das análises de lote: ${n} espécies (grandes culturas, forrageiras e hortaliças).</p><div class="btn-row">${btn('Ver e editar padrões', 'lab-padroes', '', 'secondary')}${btn('Dados do termo de conformidade', 'lab-dados-termo', '', 'secondary')}</div></div>` + html.slice(fim);
 });
