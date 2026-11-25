@@ -61,3 +61,14 @@ test('padrão da fazenda tem prioridade e o formato antigo (1.2.5) ainda funcion
   assert.equal(classe(c, 'Aveia preta', 'C1', {amostraG: 500, encontradas: [{grupo: 'tolerada', n: 5}]}).tipo, 'mantem');
   assert.equal(c.pad('Avena strigosa').id, 'p1');
 });
+
+test('forrageiras tropicais: braquiária pelo nome da cultivar; 7 outras cultivadas em 180 g tira do C1; milheto existe', () => {
+  const c = app();
+  assert.equal(c.pad('Marandu').especie, 'Braquiária brizantha');
+  assert.equal(c.pad('mombaça').especie, 'Capim-colonião (Panicum)');
+  assert.equal(c.pad('Milheto').amostraG, 75);
+  assert.equal(classe(c, 'Braquiária brizantha', 'C1', {amostraG: 180, encontradas: [{grupo: 'cultivada', n: 6}]}).tipo, 'mantem');
+  assert.equal(classe(c, 'Braquiária brizantha', 'C1', {amostraG: 180, encontradas: [{grupo: 'cultivada', n: 7}]}).cat, 'C2');
+  assert.equal(classe(c, 'Crotalária juncea', 'S1', {amostraG: 350, encontradas: [{grupo: 'proibida', n: 1}]}).tipo, 'reprovado');
+  assert.equal(new Set(c.P.map(p => p.especie)).size, c.P.length);
+});
