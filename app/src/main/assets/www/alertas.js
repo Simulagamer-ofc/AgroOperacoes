@@ -14,7 +14,7 @@ const ALERTA_TIPOS = [
   ['revisao', 'Revisão de máquina', 'chegando ou vencida'],
   ['maqpend', 'Checklist e aferição', 'vencidos ou atrasados'],
   ['estoque', 'Estoque', 'abaixo do mínimo ou acabando em até 7 dias'],
-  ['validade', 'Validade de lotes', 'lote vencendo em até 30 dias ou vencido'],
+  ['validade', 'Validade de lotes', 'lote do estoque ou teste de germinação da semente vencendo em até 30 dias ou vencido'],
   ['silos', 'Silos', 'temperatura subindo e boa hora para aerar'],
   ['carencia', 'Carência cumprida', 'colheita do talhão liberada'],
   ['atrasadas', 'Operações atrasadas', 'programadas para dias que já passaram'],
@@ -180,6 +180,18 @@ function calcularAlertas(cfg = alertaCfg(), agora = Date.now()) {
       curto: `${venceu ? 'Lote vencido' : 'Lote vencendo'} — ${x.s.name}`, sub: `Lote ${x.lote} · ${num(x.saldo)} ${x.s.unit} em estoque`,
       valor: String(Math.abs(x.dias)), unid: venceu ? (Math.abs(x.dias) === 1 ? 'dia vencido' : 'dias vencido') : x.dias === 1 ? 'dia' : 'dias',
       acoes: [{t: 'Ver estoque', rota: 'estoque'}]}, horaBoa(agora));
+  });
+
+  // Teste de germinação dos lotes de semente: vencendo (até 30 dias) ou vencido — não vender sem reanálise
+  if (tiposOk.validade && typeof labValidadeLote === 'function') db.lots.filter(labLoteAtivo).forEach(l => {
+    const v = labValidadeLote(l); if (!v || v.estado === 'ok') return;
+    const venceu = v.estado === 'vencido', nome = [l.species, l.cultivar].filter(Boolean).join(' '), d = Math.abs(v.dias);
+    add('estoque', {id: `germ-${l.id}-${v.validade}-${venceu ? 'vencido' : 'vence'}`, tipo: 'validade', rota: 'lotes/' + l.id, icone: 'calendario', ...(venceu ? {cor: COR_VERMELHO} : {}),
+      titulo: venceu ? `Teste de germinação vencido: lote ${l.code}` : `Teste de germinação vencendo: lote ${l.code}`,
+      texto: `${nome ? nome + ' — ' : ''}${venceu ? 'não pode vender até a reanálise' : 'faça a reanálise antes de vencer'} (validade ${fmtDate(v.validade)}).`,
+      curto: `${venceu ? 'Teste vencido' : 'Teste vencendo'} — lote ${l.code}`, sub: `${nome || 'Semente'} · validade ${fmtDate(v.validade)}`,
+      valor: String(d), unid: venceu ? (d === 1 ? 'dia vencido' : 'dias vencido') : d === 1 ? 'dia' : 'dias',
+      acoes: [{t: 'Ver lote', rota: 'lotes/' + l.id}]}, horaBoa(agora));
   });
 
   // ---------- Silos: temperatura subindo e boa hora para aerar ----------

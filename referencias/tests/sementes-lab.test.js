@@ -10,12 +10,12 @@ const ler = f => fs.readFileSync(path.join(www, f), 'utf8');
 function app(padroesFazenda = []) {
   const ctx = vm.createContext({
     ACTIONS: {}, Math, JSON, Number, String, Object, Array, Set, Map, console, Date,
-    db: {padroesSementes: padroesFazenda, analisesSementes: [], lots: [], lotEvents: []},
+    db: {padroesSementes: padroesFazenda, analisesSementes: [], lots: [], lotEvents: [], ubs: [], settings: {}}, window: {}, chip: (t, c) => `[${c}:${t}]`,
     semAcentoApp: s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(),
     num: (v, c = 0) => Number(v).toFixed(c), esc: s => String(s), btn: (l, a) => `<button data-act="${a}">${l}</button>`,
     today: () => '2026-11-25', addDias: (d, n) => d, isoLocal: d => d.toISOString().slice(0, 10), fmtDate: d => d, find: () => null
   });
-  vm.runInContext(ler('padroes-sementes.js') + '\n' + ler('laboratorio.js') + '\nthis.P = PADROES_SEMENTES_APP; this.cl = labClassificar; this.ve = labVeredito; this.pad = labPadrao;', ctx);
+  vm.runInContext(ler('padroes-sementes.js') + '\n' + ler('laboratorio.js') + '\n' + ler('termo-sementes.js') + '\nthis.P = PADROES_SEMENTES_APP; this.cl = labClassificar; this.ve = labVeredito; this.pad = labPadrao; this.lab = {labMesesReanalise, labValidadeLote, labConfere, labChipValidade, labPodeVender, labValidade};', ctx);
   return ctx;
 }
 const classe = (c, especie, cat, a) => { const cl = c.cl(a, especie); return c.ve(cl, cat); };
@@ -85,4 +85,49 @@ test('hortaliças (IN 42/2019): alface conta cultivadas em 3 g e nocivas em 30 g
   assert.equal(c.cl({amostraG: 7, encontradas: [{grupo: 'cultivada', n: 5}]}, 'Tomate'), null);
   assert.equal(c.pad('Chicória').cientifico, 'Cichorium endivia');
   assert.equal(c.pad('pimentão').especie, 'Pimentão');
+});
+
+test('validade do teste: reanálise pelo padrão (ou 6 meses), vencendo/vencido e reanálise renovando', () => {
+  const c = app(), {labMesesReanalise: mr, labValidadeLote: vl, labChipValidade: chipV, labPodeVender: pode, labValidade} = c.lab;
+  assert.deepEqual(['Trigo', 'Soja', 'Braquiária brizantha', 'Crotalária juncea', 'Alface'].map(e => mr(c.pad(e))), [6, 6, 6, 4, 12]);
+  assert.deepEqual([c.pad('Aveia preta').validadeMeses, mr(c.pad('Aveia preta')), c.pad('Ervilhaca').validadeMeses, mr(c.pad('Ervilhaca'))], [8, 6, 6, 4]); // IN 44/2016, art. 7º
+  assert.equal(labValidade('2026-03-10', 8), '2026-11-30'); // excluído o mês do teste: até o fim do mês
+  const l = {id: 'L1', code: 'TR-1', species: 'Trigo', category: 'C1', status: 'Aprovado'};
+  c.db.lots.push(l);
+  c.db.analisesSementes.push({id: 'a1', lotId: 'L1', data: '2026-03-10', germinacao: 90, validade: '2026-11-30', encontradas: []});
+  assert.equal(vl(l).estado, 'vence'); assert.equal(vl(l).dias, 5); assert.match(chipV(l), /vence em 5 dias/);
+  c.db.analisesSementes[0].validade = '2026-10-31';
+  assert.equal(vl(l).estado, 'vencido'); assert.equal(pode(l), false); assert.match(chipV(l), /red/);
+  assert.equal(chipV({...l, status: 'Expedido'}), '');
+  c.db.analisesSementes.push({id: 'r1', lotId: 'L1', tipo: 'reanalise', data: '2026-11-20', germinacao: 86, validade: '2027-05-31', encontradas: []});
+  assert.equal(vl(l).estado, 'ok'); assert.equal(pode(l), true); assert.equal(chipV(l), '');
+});
+
+test('germinação e pureza x mínimo da norma: aviso com a categoria que atinge', () => {
+  const c = app(), {labConfere: cf} = c.lab;
+  const g = cf({germinacao: 72}, c.pad('Girassol'), 'C1')[0];
+  assert.deepEqual([g.ok, g.min, g.atende], [false, 75, 'S1']);
+  assert.equal(cf({germinacao: 90}, c.pad('Trigo'), 'C1')[0].ok, true);
+  const al = cf({germinacao: 85, pureza: 97}, c.pad('Alface'), 'C1');
+  assert.deepEqual([...al].map(x => x.ok), [true, false]);
+  assert.equal(cf({germinacao: 50}, c.pad('Braquiária brizantha'), 'S1')[0].atende, null);
+  assert.equal(cf({pureza: 70}, c.pad('Braquiária brizantha'), 'S1')[0].ok, true); // pureza S1 60% nas braquiárias
+  assert.equal(cf({germinacao: 90}, c.pad('Trigo'), 'Genética').length, 0);
+});
+
+test('termo de conformidade: só emite com análise que sustenta a declaração', () => {
+  const c = app(), t = c.window.dadosTermo;
+  const l = {id: 'L2', code: 'AP-1', species: 'Aveia preta', category: 'S1', status: 'Aprovado', weight: 20000};
+  c.db.lots.push(l);
+  assert.match(t(l).erro, /Registre a análise/);
+  c.db.analisesSementes.push({id: 'a2', lotId: 'L2', data: '2026-11-10', amostraG: 500, amostraCS: 50, germinacao: 85, encontradas: [{grupo: 'tolerada', n: 4}]});
+  assert.deepEqual([...t(l).faltaDados], ['RENASEM do produtor', 'responsável técnico', 'RENASEM do responsável técnico']);
+  Object.assign(c.db.settings, {renasemProdutor: 'RS-1', respTecnico: 'Fulano', renasemRT: 'RS-2'});
+  assert.equal(t(l).cat, 'S1');
+  assert.match(t({...l, category: 'C1'}).erro, /não atende C1/);
+  assert.match(t({...l, category: 'Genética'}).erro, /categoria/);
+  c.db.analisesSementes[0].germinacao = 60;
+  assert.match(t(l).erro, /Germinação 60% abaixo do mínimo do S1/);
+  c.db.analisesSementes[0].germinacao = 85; c.db.analisesSementes[0].amostraG = 300;
+  assert.match(t(l).erro, /provisória/);
 });

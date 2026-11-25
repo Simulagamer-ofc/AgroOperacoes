@@ -2385,3 +2385,12 @@ input.trv-so-ler{opacity:.7;background:color-mix(in srgb,var(--line) 40%,transpa
 .lab-tab th small{display:block;font-weight:400;color:var(--muted);font-size:.7rem;text-transform:none}
 .lab-padroes{display:grid;gap:6px;margin:8px 0}.lab-padroes .row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:12px}.lab-padroes small{display:block;color:var(--muted)}
 .lab-edita input{width:46px;text-align:center;padding:6px 2px}.lab-edita td{padding:3px}.lab-edita th{white-space:normal;font-size:.75rem}
+.lab-conf{display:grid;gap:4px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;margin:4px 0 8px}.lab-conf p{margin:0}.lab-conf p.ok b{color:var(--green)}.lab-conf p.nao b{color:var(--orange)}.lab-conf small{color:var(--muted)}
+#labConf:empty{display:none}.lab-re button.link{padding:0 2px;min-height:0;font-size:inherit}
+.ubs-rc{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:14px;align-items:start}.ubs-rc .tbl td small{display:block;color:var(--muted);font-size:.75rem}
+.ubs-rc>*{min-width:0}.ubs-rc-lista{display:grid;gap:12px}.ubs-rc-item{display:grid;gap:4px;padding-bottom:12px;border-bottom:1px solid var(--line)}.ubs-rc-item:last-child{border-bottom:0;padding-bottom:0}
+.ubs-rc-cab{display:flex;justify-content:space-between;gap:10px;align-items:flex-end}.ubs-rc-cab small,.ubs-rc-item>small{display:block;color:var(--muted);font-size:.8rem}.ubs-rc-cab b{font-size:1.35rem;color:var(--s3,var(--green))}
+.ubs-rc-item .tr{height:8px;background:var(--trilho);border-radius:4px;position:relative}.ubs-rc-item .tr span{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--s3,var(--green))}
+.ubs-rc .chip{font-size:.68rem;padding:1px 6px}.ubs-rc .ubs-fluxo .ln{grid-template-columns:130px minmax(0,1fr) 54px}
+.ubs-comp{margin:6px 0;font-weight:600}.ubs-comp.ok{color:var(--green)}.ubs-comp.nao{color:var(--orange)}
+@media (max-width:760px){.ubs-rc{grid-template-columns:1fr}.ubs-rc .ubs-fluxo .ln{grid-template-columns:110px minmax(0,1fr) 50px}}

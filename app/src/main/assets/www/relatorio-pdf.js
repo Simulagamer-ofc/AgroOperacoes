@@ -174,6 +174,23 @@
         cor(COR.linha, 'draw'); doc.setLineWidth(.3); doc.line(M, y, A4.l - M, y);
         y += 5;
       },
+      // Pares rótulo/valor em colunas (ficha compacta: termo, certificado)
+      pares(lista, colunas = 2) {
+        const itens = lista.filter(([, v]) => v !== '' && v != null), gap = 6, w = (LARG - gap * (colunas - 1)) / colunas;
+        for (let i = 0; i < itens.length; i += colunas) {
+          fonte(9.5, true);
+          const linha = itens.slice(i, i + colunas).map(([r, v]) => [r, doc.splitTextToSize(texto(v), w - 2)]);
+          const alt = 5 + Math.max(...linha.map(([, l]) => l.length)) * 4.2 + 1.5;
+          garantir(alt);
+          linha.forEach(([r, l], k) => {
+            const x = M + k * (w + gap);
+            fonte(7, true); cor(COR.suave); doc.setCharSpace(.2); escrever(String(r).toUpperCase(), x, y + 3); doc.setCharSpace(0);
+            fonte(9.5, true); cor(COR.texto); l.forEach((t, j) => doc.text(t, x, y + 7.6 + j * 4.2));
+          });
+          y += alt;
+        }
+        cor(COR.linha, 'draw'); doc.setLineWidth(.3); doc.line(M, y, A4.l - M, y); y += 3;
+      },
       // Pares rótulo → valor (ficha), sem cabeçalho
       ficha(pares) { api.tabela([{t: 'Item', w: 2}, {t: 'Informação', w: 3}], pares.filter(([, v]) => v !== '' && v != null)); },
       assinaturas(lista) {
