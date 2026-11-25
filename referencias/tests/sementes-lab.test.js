@@ -24,6 +24,7 @@ test('padrões do app: limites não diminuem de Básica para S2 e toda categoria
   const {P} = app();
   assert.ok(P.length >= 60, `só ${P.length} espécies`);
   for (const p of P) {
+    if (p.semContagem) { assert.ok(p.grupos.every(g => !Object.keys(g.lim).length) && p.germ.C1 > 0, p.especie); continue; }
     assert.ok(p.amostraG > 0 && p.amostraCS > 0, p.especie);
     for (const g of p.grupos) {
       const v = p.cats.map(c => g.lim[c]);
@@ -71,4 +72,17 @@ test('forrageiras tropicais: braquiária pelo nome da cultivar; 7 outras cultiva
   assert.equal(classe(c, 'Braquiária brizantha', 'C1', {amostraG: 180, encontradas: [{grupo: 'cultivada', n: 7}]}).cat, 'C2');
   assert.equal(classe(c, 'Crotalária juncea', 'S1', {amostraG: 350, encontradas: [{grupo: 'proibida', n: 1}]}).tipo, 'reprovado');
   assert.equal(new Set(c.P.map(p => p.especie)).size, c.P.length);
+});
+
+test('hortaliças (IN 42/2019): alface conta cultivadas em 3 g e nocivas em 30 g; tomate não tem contagem', () => {
+  const c = app();
+  const alface = c.pad('Alface');
+  assert.deepEqual([alface.amostraCS, alface.amostraG, alface.validadeMeses], [3, 30, 12]);
+  assert.equal(classe(c, 'Alface', 'C1', {amostraCS: 3, amostraG: 30, encontradas: [{grupo: 'cultivada', n: 2}, {grupo: 'tolerada', n: 3}]}).tipo, 'mantem');
+  assert.equal(classe(c, 'Alface', 'C1', {amostraCS: 3, amostraG: 30, encontradas: [{grupo: 'cultivada', n: 3}]}).cat, 'C2');
+  assert.equal(classe(c, 'Cenoura', 'S1', {amostraCS: 3, amostraG: 30, encontradas: [{grupo: 'tolerada', n: 16}]}).tipo, 'reprovado');
+  assert.equal(c.pad('Tomate').semContagem, true);
+  assert.equal(c.cl({amostraG: 7, encontradas: [{grupo: 'cultivada', n: 5}]}, 'Tomate'), null);
+  assert.equal(c.pad('Chicória').cientifico, 'Cichorium endivia');
+  assert.equal(c.pad('pimentão').especie, 'Pimentão');
 });

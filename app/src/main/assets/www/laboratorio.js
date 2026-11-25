@@ -7,8 +7,10 @@
 // contadas numa amostra menor (ex.: 50 g na aveia preta) e as nocivas na maior (500 g). Amostra examinada menor que a
 // da norma: a contagem vai à proporção e o resultado fica "provisório".
 // Pureza, germinação e vigor ficam registrados (a germinação dá a validade do teste), mas não entram na classificação.
-// Padrões: os que vêm no app (padroes-sementes.js: IN 45/2013 e IN 44/2016 com a IN 31/2025) e os da fazenda
-// (coleção padroesSementes, editável por ADM/supervisor), que têm prioridade.
+// Padrões: os que vêm no app (padroes-sementes.js: IN 45/2013, IN 44/2016 com a IN 31/2025, IN 30/2008 e IN 42/2019) e os da fazenda
+// (coleção padroesSementes, editável por ADM/supervisor), que têm prioridade. Espécies em que a norma não pede contagem
+// de outras sementes por número (ex.: tomate, pimentão, cucurbitáceas) não classificam: a análise fica registrada e o
+// formulário mostra os mínimos de germinação e pureza da norma.
 
 const CAT_ORDEM = ['Básica', 'C1', 'C2', 'S1', 'S2'];
 const labChave = s => semAcentoApp(String(s || '')).replace(/[-_()]+/g, ' ').replace(/\s+/g, ' ').trim();
@@ -34,11 +36,13 @@ function labPadrao(especie) {
 }
 const labCats = p => (p.cats || CAT_ORDEM).filter(c => CAT_ORDEM.includes(c));
 const labAmostraNorma = (p, tipo) => tipo === 'cs' ? (Number(p.amostraCS) || Number(p.amostraG)) : Number(p.amostraG);
+// Sem nenhum limite de contagem (a norma não pede: "-" na IN 42/2019) → não classifica
+const labSemContagem = p => !!p && p.grupos.every(g => Object.values(g.lim || {}).every(labVazio));
 const labDuasAmostras = p => !!p && Number(p.amostraCS) > 0 && Number(p.amostraCS) !== Number(p.amostraG);
 
 /** Classificação: para cada categoria, cada grupo atende (≤ limite), não atende, ou fica pendente (sem amostra). */
 function labClassificar(a, especie) {
-  const p = labPadrao(especie); if (!p) return null;
+  const p = labPadrao(especie); if (!p || labSemContagem(p)) return null;
   const examinada = tipo => Number(tipo === 'cs' && labDuasAmostras(p) ? a.amostraCS || a.amostraG : a.amostraG) || 0;
   const conta = {}; (a.encontradas || []).forEach(e => { if (e.grupo && Number(e.n) > 0) conta[e.grupo] = (conta[e.grupo] || 0) + Number(e.n); });
   const grupos = p.grupos.filter(g => !g.id.startsWith('x') || conta[g.id]); // cultivadas listadas à parte só aparecem se achadas
@@ -73,6 +77,11 @@ function labTextoVeredito(v, cl, catLote) {
   if (v.tipo === 'rebaixa') return `<div class="lab-ver alerta"><b>↓ Não atende ${esc(catLote)}: atende ${esc(v.cat)}</b><span>O lote pode ser rebaixado para ${esc(v.cat)} (você confirma ao salvar).</span>${prov}</div>`;
   return `<div class="lab-ver ruim"><b>✗ Não atende como semente</b><span>A contagem passa do limite da última categoria. O lote pode ser reprovado e ir para grão.</span>${prov}</div>`;
 }
+/** Espécie sem contagem por número: o que a norma pede (germinação e pureza mínimas da categoria do lote). */
+function labTextoSemContagem(p, cat) {
+  const c = labCats(p).includes(cat) ? cat : 'C1', g = p.germ?.[c], pz = p.pureza;
+  return `A norma (${esc(p.norma || '')}) não pede contagem de outras sementes por número para ${esc(String(p.especie).toLowerCase())}: a análise fica registrada, sem classificação automática.${!labVazio(g) ? ` Mínimos ${esc(c)}: germinação ${num(g)}%${!labVazio(pz) ? `, pureza ${num(pz)}%` : ''}.` : ''}`;
+}
 const labTextoNorma = p => labDuasAmostras(p) ? `${num(p.amostraCS)} g para cultivadas e silvestres, ${num(p.amostraG)} g para nocivas` : `${num(p.amostraG)} g`;
 // Colunas: da categoria do lote para baixo (não sobe de categoria); C1 e C2 juntas quando o limite é o mesmo em todos os grupos
 function labColunas(cl, catLote) {
@@ -93,26 +102,27 @@ function labTabela(cl, destaque, catLote) {
 // ---------- Registrar análise (boletim) ----------
 function labForm(lotId, a0) {
   const l = find('lots', lotId); if (!l) return;
-  const p = labPadrao(l.species), duas = labDuasAmostras(p);
+  const p = labPadrao(l.species), duas = labDuasAmostras(p), semConta = labSemContagem(p);
   const a = a0 ? JSON.parse(JSON.stringify(a0)) : {data: today(), amostraG: p?.amostraG || '', amostraCS: duas ? p.amostraCS : '', encontradas: []};
   if (!a.encontradas.length) a.encontradas.push({nome: '', grupo: '', n: ''});
   const campo = (k, rot, extra = '') => `<div class="field"><label for="lab_${k}">${rot}</label><input id="lab_${k}" data-lab="${k}" inputmode="decimal" value="${esc(a[k] ?? '')}" ${extra}></div>`;
   const nomes = p ? Object.keys(p.sugestoes || {}) : [];
-  const temOutros = ['pureza', 'outrasPct', 'germinacao', 'vigor', 'pms', 'umidade'].some(k => !labVazio(a[k]));
+  const temOutros = semConta || ['pureza', 'outrasPct', 'germinacao', 'vigor', 'pms', 'umidade'].some(k => !labVazio(a[k]));
   dialog.innerHTML = `<h3>Análise de sementes — lote ${esc(l.code)}</h3>
     <p class="sub">${esc([l.species, l.cultivar, l.category].filter(Boolean).join(' • '))}${p ? ` • padrão: ${esc(p.norma || 'da fazenda')}` : ''}</p>
     ${p ? '' : `<p class="lab-sem">Ainda não há padrão para ${esc(l.species || 'esta espécie')}: a análise fica registrada, mas não classifica.${labGestor() ? ` <button type="button" class="link" data-act="lab-padrao" data-id="${esc(l.species || '')}">Criar o padrão</button>` : ' Peça ao ADM ou supervisor para criar o padrão.'}</p>`}
+    ${semConta ? `<p class="lab-sem">${labTextoSemContagem(p, l.category)}</p>` : ''}
     <form class="form-grid lab-form" autocomplete="off">
       <div class="field"><label for="lab_data">Data do resultado</label><input id="lab_data" data-lab="data" type="date" value="${esc(a.data || today())}"></div>
       <div class="field"><label for="lab_boletim">Nº do boletim</label><input id="lab_boletim" data-lab="boletim" value="${esc(a.boletim || '')}"></div>
       ${duas ? campo('amostraCS', `Amostra para outras cultivadas e silvestres (g) — norma: ${num(p.amostraCS)} g`, `placeholder="${p.amostraCS}"`) + campo('amostraG', `Amostra para nocivas (g) — norma: ${num(p.amostraG)} g`, `placeholder="${p.amostraG}"`)
         : campo('amostraG', `Amostra examinada (g)${p?.amostraG ? ` — norma: ${num(p.amostraG)} g` : ''}`, p ? `placeholder="${p.amostraG}"` : '')}
       <div class="field"><label for="lab_laboratorio">Laboratório</label><input id="lab_laboratorio" data-lab="laboratorio" value="${esc(a.laboratorio || '')}" placeholder="Ex.: laboratório próprio"></div>
-      <div class="field full"><label>Sementes de outras espécies encontradas na amostra</label>
+      <div class="field full" ${semConta ? 'hidden' : ''}><label>Sementes de outras espécies encontradas na amostra</label>
         <div id="labOutras" class="lab-outras"></div>
         <button type="button" class="secondary lab-mais">+ Outra espécie</button>
         ${nomes.length ? `<datalist id="labNomes">${nomes.map(n => `<option value="${esc({azevem: 'azevém', nabica: 'nabiça', 'feijao caupi': 'feijão-caupi'}[n] || n)}">`).join('')}</datalist>` : ''}</div>
-      <div class="field full" id="labResultado" aria-live="polite"></div>
+      <div class="field full" id="labResultado" aria-live="polite" ${semConta ? 'hidden' : ''}></div>
       <details class="field full lab-outros" ${temOutros ? 'open' : ''}><summary>Outros resultados do boletim (opcional)</summary>
         <div class="form-grid">${campo('germinacao', 'Germinação (%)')}${campo('vigor', 'Vigor (%)')}${campo('pureza', 'Pureza (%)')}${campo('outrasPct', 'Outras sementes (%)')}${campo('pms', 'Peso de mil sementes (g)')}${campo('umidade', 'Umidade (%)')}</div>
         <small class="nota">Ficam no histórico do lote; a germinação dá a validade do teste. Não entram na classificação.</small></details>
@@ -203,9 +213,9 @@ function labTodosPadroes() {
 }
 function labListaPadroes(filtro = '') {
   const todos = labTodosPadroes(), k = labChave(filtro);
-  const lista = k ? todos.filter(p => [p.especie, p.cientifico, ...(p.sinonimos || [])].some(n => labChave(n).includes(k))) : todos;
+  const lista = k ? todos.filter(p => [p.especie, p.cientifico, ...(p.sinonimos || [])].some(n => (' ' + labChave(n)).includes(' ' + k))) : todos; // pelo começo das palavras ("pim" não acha "capim")
   const lim = (p, id) => p.grupos.find(g => g.id === id)?.lim?.C1;
-  const resumo = p => `amostra ${labTextoNorma(p)} • C1 aceita: ${[['cultivada', 'cultivada'], ['silvestre', 'silvestre'], ['tolerada', 'nociva tolerada']].map(([id, r]) => labVazio(lim(p, id)) ? '' : `${num(lim(p, id))} ${r}`).filter(Boolean).join(', ')}`;
+  const resumo = p => labSemContagem(p) ? `sem contagem de outras sementes por número • mínimo C1: germinação ${num(p.germ?.C1 ?? '')}%${labVazio(p.pureza) ? '' : `, pureza ${num(p.pureza)}%`}` : `amostra ${labTextoNorma(p)} • C1 aceita: ${[['cultivada', 'cultivada'], ['silvestre', 'silvestre'], ['tolerada', 'nociva tolerada']].map(([id, r]) => labVazio(lim(p, id)) ? '' : `${num(lim(p, id))} ${r}`).filter(Boolean).join(', ')}`;
   dialog.innerHTML = `<h3>Padrões de sementes</h3><p class="sub">${todos.length} espécies. Limite de sementes de outras espécies por categoria, na amostra da norma. Valem para a classificação automática das análises.</p>
     <div class="field"><input id="labBusca" placeholder="Buscar espécie (ex.: trigo, azevém, Lolium)" value="${esc(filtro)}" aria-label="Buscar espécie"></div>
     <div class="lab-padroes">${lista.map(p => `<div class="row"><div><strong>${esc(p.especie)}</strong> <em>${esc(p.cientifico || '')}</em><small>${esc(resumo(p))}</small><small>${esc(p.norma || 'Padrão da fazenda')}${p.id ? ' • ajustado pela fazenda' : ''}</small></div>${labGestor() ? `<button class="secondary" data-act="lab-padrao" data-id="${esc(p.especie)}">${p.id ? 'Editar' : 'Ver'}</button>` : ''}</div>`).join('') || '<p class="nota">Nenhuma espécie com esse nome.</p>'}</div>
