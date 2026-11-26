@@ -1384,6 +1384,15 @@ function render(anchor = pendingAnchor) {
 const semAcentoApp = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 // Menus "⋯ Mais": fecham ao tocar fora ou ao escolher uma opção
 document.addEventListener('click', e => $$('.menu-mais[open]').forEach(d => { if (!d.contains(e.target) || e.target.closest('.menu-lista button')) d.open = false; }));
+// Menu ⋯ abre para o lado que cabe na tela: perto da borda esquerda, abre para a direita (o texto não fica cortado)
+function menuNaTela(d) {
+  const m = d.querySelector(':scope > .menu-lista'); if (!m) return;
+  Object.assign(m.style, {left: '', right: '', maxWidth: `${Math.max(200, innerWidth - 16)}px`});
+  const r = m.getBoundingClientRect(), s = d.getBoundingClientRect();
+  if (r.left < 8) Object.assign(m.style, {right: 'auto', left: `${Math.max(8, Math.min(s.left, innerWidth - 8 - r.width)) - s.left}px`});
+  else if (r.right > innerWidth - 8) Object.assign(m.style, {left: 'auto', right: `${r.right - (innerWidth - 8)}px`});
+}
+document.addEventListener('toggle', e => { if (e.target?.matches?.('details.menu-mais') && e.target.open) menuNaTela(e.target); }, true);
 let lastRoute = '';
 addEventListener('hashchange', () => { const r = location.hash; if (r !== lastRoute) { lastRoute = r; if (modal.classList.contains('open')) closeModal(); render(); scrollTo(0, 0); } });
 lastRoute = location.hash;
