@@ -361,6 +361,34 @@ async () => {
   T('VOL-04', 'Volume', 'Balanço de cada silo: entradas − saídas = saldo', '4/4 silos fechando', `${silosChk.filter(x => x.ok).length}/4 silos fechando • ${silosChk.map(s => `${s.nome.split(' —')[0]}: ${br(s.saldo / 1000, 1)} t`).join(' • ')}`, silosChk.every(x => x.ok));
   const tVol = Math.round(t1 - t0);
   T('VOL-05', 'Volume', 'Desempenho: lançar as 140 cargas pelo formulário no navegador', 'menos de 1 s por carga', `${br(tVol / 140 / 1000, 2)} s por carga (${br(tVol / 1000, 1)} s no total)`, tVol / 140 < 1000);
+  // ================= TARA: caminhão com tara cadastrada (uma pesagem só) =================
+  const PLT = 'JTA2B34', SEC_T = db.machines.find(m => m.type === 'Secador')?.id;
+  await F('gr-chegada', undefined, {dono: 'proprio', produto: 'soja', season: '2025/26', date: today(), time: '05:10', placa: PLT, motorista: 'Ana Lima', pesoBruto: '48200', umidade: '15,0', impureza: '0,8', destino: 'secador|' + SEC_T, usarTara: 'pesar'});
+  const pzT = noPatio().find(p => p.placa === 'JTA2B34');
+  r = await F('gr-tara', pzT?.id, {tara: '16050'});
+  const camT = caminhaoDaPlaca(PLT);
+  T('TAR-01', 'Tara', 'Pesagem do caminhão vazio cadastra o caminhão pela placa com a tara e a data', 'JTA-2B34 • 16.050 kg • hoje • Ana Lima', camT ? `${camT.placa} • ${br(camT.tara, 0)} kg • ${camT.taraEm === today() ? 'hoje' : camT.taraEm} • ${camT.motorista}` : (r.msgs || []).join(' / ') || 'não cadastrou',
+    camT?.placa === 'JTA-2B34' && camT.tara === 16050 && camT.taraEm === today() && camT.motorista === 'Ana Lima');
+  const nRomT = db.romaneios.length;
+  await F('gr-chegada', undefined, {dono: 'proprio', produto: 'soja', season: '2025/26', date: today(), time: '06:25', placa: 'jta-2b34', pesoBruto: '47900', umidade: '14,8', impureza: '0,7', destino: 'secador|' + SEC_T});
+  await espera(150);
+  const fT = document.querySelector('#dialog form'), taraNoFormT = fT?.elements.tara?.value;
+  if (fT) { fT.requestSubmit(); await espera(40); if (aberto()) { fT.requestSubmit(); await espera(40); } if (aberto()) closeModal(); }
+  const rT = db.romaneios.at(-1), opT = oraculoRomaneio({bruto: 47900, tara: 16050, u: 14.8, up: Number(rT?.umidadePadrao), imp: 0.7, ip: Number(rT?.impurezaPadrao), quebra: Number(rT?.quebraTecnica) || 0});
+  T('TAR-02', 'Tara', 'Segunda viagem da mesma placa: a chegada já abre o romaneio com a tara cadastrada (uma pesagem só) e fecha sem pátio', `tara 16.050 kg no formulário • líquido ${br(opT.liq, 0)} kg • final ${br(opT.final)} kg • pátio sem a placa`,
+    `tara ${br(Number(taraNoFormT), 0)} kg no formulário • líquido ${br(rT?.calc?.liquido || 0, 0)} kg • final ${br(rT?.calc?.pesoFinal || 0)} kg • ${noPatio().some(p => chavePlaca(p.placa) === PLT) ? 'placa ficou no pátio' : 'pátio sem a placa'}`,
+    db.romaneios.length === nRomT + 1 && Number(taraNoFormT) === 16050 && rT.taraCadastrada?.kg === 16050 && perto(rT.calc.pesoFinal, opT.final) && !noPatio().some(p => chavePlaca(p.placa) === PLT));
+  const htmlT = comprovanteRomaneio(rT.id) || '';
+  T('TAR-03', 'Tara', 'Romaneio, histórico e comprovante dizem que a tara é a cadastrada e de quando ela é', 'histórico e comprovante com "tara cadastrada do caminhão" e a data',
+    `${/Tara cadastrada do caminhão/.test(rT.historico.at(-1)?.acao || '') ? 'histórico ok' : 'histórico sem'} • ${/tara cadastrada do caminhão, pesado vazio em/.test(htmlT) ? 'comprovante ok' : 'comprovante sem'}`,
+    /Tara cadastrada do caminhão/.test(rT.historico.at(-1)?.acao || '') && /tara cadastrada do caminhão, pesado vazio em/.test(htmlT));
+  upsert('caminhoes', {...caminhaoDaPlaca(PLT), taraEm: addDias(today(), -31)});
+  await F('gr-chegada', undefined, {dono: 'proprio', produto: 'soja', season: '2025/26', date: today(), time: '07:40', placa: PLT, pesoBruto: '48000', umidade: '14,5', destino: 'secador|' + SEC_T});
+  await espera(150);
+  const ficouT = noPatio().find(p => chavePlaca(p.placa) === PLT);
+  T('TAR-04', 'Tara', `Tara cadastrada há mais de ${TARA_VALIDADE_DIAS} dias não vale: o caminhão fica no pátio para pesar vazio`, 'no pátio aguardando a tara', ficouT ? 'no pátio aguardando a tara' : aberto() ? 'abriu o romaneio com a tara vencida' : 'não entrou', !!ficouT && !aberto());
+  if (aberto()) closeModal();
+  if (ficouT) upsert('pesagens', {...ficouT, status: 'cancelada', motivo: 'teste'});
   // Relatório da safra de grãos e telas
   let telasOk = 0; const telas = ['', 'moega', 'secador', 'silos', 'terceiros', 'relatorio'];
   for (const a of telas) { try { const h = VIEWS.graos(a || undefined); if (h && h.length > 200) telasOk++; } catch { /* conta como falha */ } }

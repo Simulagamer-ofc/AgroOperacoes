@@ -393,7 +393,7 @@
       ['Talhão de origem', fieldName(r.fieldId) || ''], ['Placa', r.placa || ''], ['Motorista', r.motorista || ''], ['Destino', nomeEquip(r.destinoId)], ['Amostra de contraprova', r.amostraRetida || '']]);
     P.secao('Pesagem');
     P.tabela([{t: 'Pesagem', w: 2}, {t: 'Data e hora', w: 1.6}, {t: 'Peso (kg)', w: 1.4, dir: true}],
-      [['Bruto (caminhão cheio)', r.entrada ? fmtDH(r.entrada) : `${fmtDate(r.date)} ${r.time || ''}`, num(r.pesoBruto)], ['Tara (caminhão vazio)', r.saida ? fmtDH(r.saida) : '', num(r.tara)], ['Líquido', '', num(c.liquido)]]);
+      [['Bruto (caminhão cheio)', r.entrada ? fmtDH(r.entrada) : `${fmtDate(r.date)} ${r.time || ''}`, num(r.pesoBruto)], [r.taraCadastrada ? 'Tara cadastrada do caminhão' : 'Tara (caminhão vazio)', r.taraCadastrada ? `pesado vazio em ${fmtDate(r.taraCadastrada.em)}` : r.saida ? fmtDH(r.saida) : '', num(r.tara)], ['Líquido', '', num(c.liquido)]]);
     P.secao('Amostra e descontos', r.metodoDesc === 'tabela' ? `Tabela: ${num(r.fatorUmid, 2)}% por ponto de umidade, ${num(r.fatorImp ?? 1, 2)}% por ponto de impureza` : 'Balanço de massa: desconta só o excesso de água e impureza sobre o padrão');
     P.tabela([{t: 'Item', w: 2.4}, {t: 'Medido', w: 1, dir: true}, {t: 'Padrão', w: 1, dir: true}, {t: 'Desconto (kg)', w: 1.3, dir: true}],
       [['Umidade', `${num(r.umidade, 1)}%`, `${num(r.umidadePadrao, 1)}%`, num(c.linhas.find(l => l.id === 'umidade')?.descontoKg || 0)],
