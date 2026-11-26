@@ -688,7 +688,7 @@ function lotForm(l = {}) {
     values: {status: 'Em campo', ...l},
     fields: [
       {k: 'code', label: 'Código do lote', required: true, placeholder: 'Ex.: SM-027'},
-      {k: 'species', label: 'Espécie', placeholder: 'Ex.: Soja'},
+      {k: 'species', label: 'Espécie', placeholder: 'Ex.: Soja', sugestoes: () => typeof labTodosPadroes === 'function' ? labTodosPadroes().map(p => p.especie) : [], canon: true, hint: 'Pelo nome do padrão de sementes: a análise do lote classifica sozinha.'},
       {k: 'cultivar', label: 'Cultivar', required: true},
       {k: 'category', label: 'Categoria', type: 'select', options: ['Genética', 'Básica', 'C1', 'C2', 'S1', 'S2']},
       {k: 'fieldId', label: 'Talhão de origem', type: 'select', options: fieldOptions},

@@ -9,7 +9,8 @@ const ETAPAS = [['recebimento', 'Recebimento (moega)'], ['pre_limpeza', 'Pré-li
 const PONTOS = [['massa_graos', 'Massa de grãos / sementes'], ['ar_entrada', 'Ar de entrada (ar de secagem)'], ['ar_saida', 'Ar de saída'], ['grao_descarga', 'Grão na descarga'], ['ambiente_armazem', 'Ambiente do armazém']];
 const REGIOES = [['sul', 'RS, SC e centro-sul do PR'], ['transicao', 'Norte e oeste do PR, sul do MS e SP'], ['cerrados', 'Demais regiões dos Cerrados']];
 const EMBALAGENS = [['sacaria', 'Sacaria'], ['big_bag', 'Big-bag']];
-const PRODUTOS_SEC = [['soja', 'Soja'], ['milho', 'Milho'], ['trigo', 'Trigo'], ['feijao', 'Feijão'], ['arroz', 'Arroz'], ['sorgo', 'Sorgo'], ['outro', 'Outro']];
+const PRODUTOS_SEC = [['soja', 'Soja'], ['milho', 'Milho'], ['trigo', 'Trigo'], ['feijao', 'Feijão'], ['arroz', 'Arroz'], ['sorgo', 'Sorgo'], ['aveia', 'Aveia'], ['aveia_preta', 'Aveia preta'],
+  ['cevada', 'Cevada'], ['canola', 'Canola'], ['ervilhaca', 'Ervilhaca'], ['azevem', 'Azevém'], ['nabo_forrageiro', 'Nabo forrageiro'], ['outro', 'Outro']];
 const VARIAVEL = {temperatura: 'Temperatura', umidade_graos: 'Umidade dos grãos', umidade_relativa_ar: 'Umidade relativa do ar',
   graos_avariados: 'Grãos avariados', graos_quebrados_amassados: 'Partidos, quebrados e amassados', impurezas_materias_estranhas: 'Matérias estranhas e impurezas'};
 // Versão 0.5.0 gravava estes defeitos como leituras simples (registros antigos continuam exibidos)

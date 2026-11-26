@@ -4,7 +4,8 @@
      safra e cultivar opcionais para os marcados; salva tudo de uma vez.
    • Histórico: ao mudar a safra de um talhão, a cultura anterior fica guardada (rotação: Soja 25/26 → Trigo 2026 → Soja 26/27). */
 const CULTURAS = [['Soja', '#3fa45b'], ['Milho', '#e0b23a'], ['Trigo', '#c98a3c'], ['Aveia', '#9cbf5a'], ['Feijão', '#a0623a'], ['Canola', '#e3d24a'],
-  ['Cevada', '#d6a85c'], ['Trigo mourisco', '#b07ab8'], ['Arroz', '#5fb7c9'], ['Sorgo', '#c45a3a'], ['Azevém', '#7fbf8f'], ['Nabo forrageiro', '#8f7fd1'], ['Pousio', '#9aa4ad']];
+  ['Cevada', '#d6a85c'], ['Trigo mourisco', '#b07ab8'], ['Arroz', '#5fb7c9'], ['Sorgo', '#c45a3a'], ['Azevém', '#7fbf8f'], ['Nabo forrageiro', '#8f7fd1'],
+  ['Aveia preta', '#6f8f3a'], ['Ervilhaca', '#9b6fb8'], ['Pousio', '#9aa4ad']];
 if (typeof I2_COR_CULT !== 'undefined') CULTURAS.forEach(([c, cor]) => { I2_COR_CULT[c] = cor; });
 // Uma cor por cultura em todo o sistema (mapa do início, mapa de talhões, desenho e lista de talhões)
 const CULTURAS_EXTRA = ['#4d8fd6', '#d16b8a', '#7a6fd1', '#4fb3a0', '#c77d2e', '#5c9e3a'];
