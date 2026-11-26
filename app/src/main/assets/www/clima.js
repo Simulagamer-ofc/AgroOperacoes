@@ -4,11 +4,12 @@
    • Início: cartão curto do tempo; quando alguma condição atrapalha uma operação, aparecem os alertas e o mapa pequeno.
    Critérios do app (orientação; confirmar no campo): chuva por hora ≥ 0,2 mm ou chance ≥ 60%; chuva forte ≥ 10 mm no dia;
    rajadas ≥ 50 km/h (≥ 70 vermelho); geada provável com mínima ≤ 3 °C (≤ 0 vermelho); calor ≥ 35 °C;
-   solo encharcado com ≥ 30 mm em 48 h; tempestade (STSC/REDEMET) até 40 km vermelho, até 100 km laranja. */
+   solo encharcado com ≥ 30 mm em 48 h; tempestade (radar STSC) até 10 km do limite dos talhões (sobre a fazenda ou chegando:
+   vermelho). Avisos para a região só viram alerta se a previsão da fazenda ou o radar confirmarem (clima-fazenda.js). */
 
 const OPS_CAMPO = ['Plantio', 'Aplicação', 'Adubação', 'Colheita', 'Preparo de solo', 'Transporte'];
 const OPS_PULVERIZAR = ['Aplicação'];
-const LIM = {rajada: 50, rajadaForte: 70, geada: 3, geadaForte: 0, calor: 35, encharcado: 30, chuvaForte: 10, tempPerto: 40, tempAtencao: 100};
+const LIM = {rajada: 50, rajadaForte: 70, geada: 3, geadaForte: 0, calor: 35, encharcado: 30, chuvaForte: 10};
 const opsDoDia = dia => db.operations.filter(o => o.date === dia && ['Programada', 'Em andamento'].includes(o.status));
 const nomeOp = o => `${o.type}${o.fieldId ? ' — ' + (typeof fieldName === 'function' ? fieldName(o.fieldId) : '') : o.place ? ' — ' + o.place : ''}${o.time ? ' (' + o.time + ')' : ''}`;
 const listaOps = ops => ops.slice(0, 3).map(nomeOp).join('; ') + (ops.length > 3 ? ` e mais ${ops.length - 3}` : '');
@@ -59,11 +60,13 @@ async function tempestadePerto(loc) {
   if (typeof redemet !== 'function' || typeof horariosStsc !== 'function' || navigator.onLine === false) return null;
   try {
     const s = await redemet({produto: 'stsc', anima: 6, lat: loc.lat.toFixed(2), lon: loc.lon.toFixed(2), graus: 3});
-    const r = tempestadeMaisPerto(horariosStsc(s), loc.lat, loc.lon); tempestadeCache = {em: Date.now(), r}; return r;
+    const T = horariosStsc(s), r = typeof tempestadeDaFazenda === 'function' ? tempestadeDaFazenda(T, loc) : tempestadeMaisPerto(T, loc.lat, loc.lon); tempestadeCache = {em: Date.now(), r}; return r;
   } catch { return null; }
 }
-const riscoTempestade = tp => !tp || tp.nenhuma || tp.d > LIM.tempAtencao ? null : {nivel: tp.d <= LIM.tempPerto ? 'red' : 'orange', icone: '⚡', chave: 'tempestade',
-  titulo: `Tempestade a ${Math.round(tp.d)} km ${tp.rumo} da fazenda${tp.chegando === true ? ' — se aproximando' : ''}`, texto: `Detectada às ${hhmm(tp.t)}. Raios: suspenda trabalho em campo aberto e em silos e secadores; recolha a equipe.`};
+// Só a tempestade sobre os talhões ou a até 10 km do limite deles (sem contorno: do ponto da fazenda)
+const riscoTempestade = tp => !tp || tp.nenhuma || tp.d > (typeof CF !== 'undefined' ? CF.tempPerimetro : 10) ? null : {nivel: tp.d === 0 || tp.chegando === true ? 'red' : 'orange', icone: '⚡', chave: 'tempestade',
+  titulo: tp.d === 0 ? 'Tempestade sobre a fazenda' : `Tempestade a ${Math.max(1, Math.round(tp.d))} km ${tp.rumo} ${tp.perimetro ? 'dos talhões' : 'da fazenda'}${tp.chegando === true ? ' — se aproximando' : ''}`,
+  texto: `Detectada no radar às ${hhmm(tp.t)}. Raios: suspenda trabalho em campo aberto e em silos e secadores; recolha a equipe.`};
 // Alertas com a identidade do MercaPlant: ícone de linha no hexágono (borda na cor do nível) e selo "Alerta vermelho/laranja/amarelo".
 // Não mostram de onde veio o dado (previsão, radar, avisos oficiais): para quem usa, é tudo alerta do MercaPlant.
 const GLIFOS_RISCO = {
@@ -136,8 +139,9 @@ function riscoInmet(lista, completo = false) {
   lista = [].concat(lista).sort((x, y) => (ORD_INMET[x.nivel] ?? 2) - (ORD_INMET[y.nivel] ?? 2) || String(x.inicio).localeCompare(String(y.inicio)));
   const a = lista[0], outros = lista.slice(1).sort((x, y) => String(x.inicio).localeCompare(String(y.inicio)));
   return {nivel: NIVEL_INMET[a.nivel] || 'yellow', icone: iconeInmet(a.evento), chave: 'inmet-' + a.id, fonte: 'INMET',
-    titulo: `${a.evento} ${periodoInmet(a)}`,
-    texto: (completo ? descInmet(a) : resumoInmet(a)) || a.severidade || '',
+    titulo: `${a.evento} ${periodoInmet(a)}${a.conf ? (a.conf.ok ? ' na fazenda' : ' na região') : ''}`,
+    texto: [a.conf?.txt ? maiuscula(a.conf.txt) + '.' : '', (completo ? descInmet(a) : resumoInmet(a)) || a.severidade || ''].filter(Boolean).join(' '),
+    ...(a.conf && !a.conf.ok ? {selo: 'Aviso da região'} : {}),
     extras: outros.map(o => `${maiuscula(periodoInmet(o))}: alerta ${COR_INMET[o.nivel] || 'amarelo'}.${completo && resumoInmet(o) ? ' ' + resumoInmet(o) : ''}`)};
 }
 function agruparInmet(avisos) {
@@ -145,7 +149,13 @@ function agruparInmet(avisos) {
   avisos.forEach(a => { const k = String(a.evento || '').trim().toLowerCase(); g.set(k, [...(g.get(k) || []), a]); });
   return [...g.values()];
 }
-async function riscosInmet(loc, completo = false) { return agruparInmet(await avisosInmet(loc)).map(l => riscoInmet(l, completo)); }
+// Avisos para a região divididos pela previsão e pelo radar da fazenda: só os confirmados viram alerta (Início, MercaClima, Avisos)
+async function inmetDividido(loc) {
+  const [avisos, tp] = await Promise.all([avisosInmet(loc), tempestadePerto(loc)]), h = (typeof lerClima === 'function' ? lerClima() : null)?.dados?.hourly;
+  return typeof dividirAvisos === 'function' ? dividirAvisos(avisos, h, tp) : {fazenda: avisos, regiao: []};
+}
+async function riscosInmet(loc, completo = false) { return agruparInmet((await inmetDividido(loc)).fazenda).map(l => riscoInmet(l, completo)); }
+async function regiaoInmet(loc) { return agruparInmet((await inmetDividido(loc)).regiao).map(l => riscoInmet(l, true)); }
 // Início: os alertas ficam recolhidos numa linha só (o mais grave + quantos mais há); tocando, abre a lista com os detalhes.
 // Fechado: ícone, título e selo do mais grave e "+ 1 alerta: Chuva amanhã…". Aberto: "N alertas de tempo" e a lista completa.
 const NIVEIS_RISCO = ['red', 'orange', 'yellow'];
@@ -254,6 +264,8 @@ VIEWS.clima = () => {
     <div class="clima-col-dest">${climaDestaque()}</div>
     <div class="clima-col-prev">
       <section class="card panel"><h3 style="margin:0 0 8px">Alertas para as operações</h3><div id="climaRiscos">${rs.length ? htmlRiscos(rs) : '<p class="nota" style="margin:0">Nenhuma condição de tempo atrapalhando as operações programadas.</p>'}</div></section>
+      <details class="card panel cd-regiao" id="climaRegiao" hidden><summary><span><strong>Avisos da região</strong><small></small></span></summary>
+        <p class="nota">Avisos oficiais para uma área grande que inclui a fazenda. Não viram alerta porque a previsão do ponto da fazenda e o radar não mostram o fenômeno aqui. Se mudar, o alerta aparece sozinho.</p><div class="cd-regiao-lista"></div></details>
       <section class="card panel cd-chuva-card"><div class="section-title" style="margin:0 0 8px"><h3>Chuva registrada</h3><button data-act="nav" data-id="chuva">Ver todas</button></div>
         <div class="lote-nums"><span><small>Últimos 7 dias</small><b>${num(soma(7))} mm</b></span><span><small>Últimos 30 dias</small><b>${num(soma(30))} mm</b></span><span><small>Último registro</small><b>${chuvas[0] ? `${num(chuvas[0].mm)} mm` : '—'}</b><small>${chuvas[0] ? fmtDate(chuvas[0].date) : 'nenhum'}</small></span></div>${chuvas.length ? `<div class="cd-chuvas"><small class="nota">Últimos registros</small>${chuvas.slice(0, 5).map(c => `<div class="cd-chuva"><span>${fmtDate(c.date).slice(0, 5)}${c.hora ? ' ' + esc(c.hora) : ''}</span><span>${esc(c.fieldId ? (typeof fieldName === 'function' ? fieldName(c.fieldId) : '') : 'Sede')}${c.fonte === 'estimativa' ? ' ≈' : ''}</span><b>${num(c.mm)} mm</b></div>`).join('')}</div>` : ''}</section>
     </div></section>
@@ -271,7 +283,13 @@ VIEWS.clima.after = async () => {
   iniciarMapaTempo();
   const loc = localDaFazenda?.(); if (!loc) return;
   if (typeof buscarClima === 'function') buscarClima();
-  const [tp, inmet] = await Promise.all([tempestadePerto(loc), riscosInmet(loc)]);
+  const [tp, inmet, regiao] = await Promise.all([tempestadePerto(loc), riscosInmet(loc), regiaoInmet(loc)]);
   const r = riscoTempestade(tp), ordem = {red: 0, orange: 1, yellow: 2};
   juntarRiscos(document.getElementById('climaRiscos'), [...(r ? [r] : []), ...inmet].sort((a, b) => ordem[a.nivel] - ordem[b.nivel]));
+  const caixa = document.getElementById('climaRegiao');
+  if (caixa && regiao.length) {
+    caixa.querySelector('.cd-regiao-lista').innerHTML = htmlRiscos(regiao);
+    caixa.querySelector('summary small').textContent = `${regiao.length} ${regiao.length === 1 ? 'aviso' : 'avisos'}: ${regiao.map(x => x.titulo.replace(/ na região$/, '')).join(' · ')}`;
+    caixa.hidden = false;
+  }
 };
