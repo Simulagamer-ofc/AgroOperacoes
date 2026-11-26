@@ -59,15 +59,18 @@ function taraAtualizar(reg) {
 
 // ---------- Cadastro e lista ----------
 function caminhaoForm(c = {}) {
-  openForm({title: c.id ? `Caminhão ${c.placa}` : 'Novo caminhão', submit: 'Salvar',
-    sub: `A tara vale ${TARA_VALIDADE_DIAS} dias a partir da pesagem do caminhão vazio. Toda pesagem vazia na moega atualiza sozinha.`,
+  openForm({title: c.id ? `Caminhão ${c.placa}` : 'Tara do caminhão (vazio)', submit: c.id ? 'Salvar' : 'Salvar tara',
+    sub: c.id ? `A tara vale ${TARA_VALIDADE_DIAS} dias a partir da pesagem do caminhão vazio. Toda pesagem vazia na moega atualiza sozinha.`
+      : `Pese o caminhão vazio (antes de ir para a lavoura). Quando ele voltar cheio, a Chegada do caminhão fecha o romaneio com esta tara. Vale ${TARA_VALIDADE_DIAS} dias.`,
     values: {placa: c.placa || '', motorista: c.motorista || '', transportadora: c.transportadora || '', tara: c.tara ?? '', taraEm: c.taraEm ? String(c.taraEm).slice(0, 10) : today(), obs: c.obs || ''},
     fields: [{k: 'placa', label: 'Placa', required: true, placeholder: 'ABC1D23'}, {k: 'motorista', label: 'Motorista'}, {k: 'transportadora', label: 'Transportadora / dono do caminhão', full: true},
-      {k: 'tara', label: 'Tara — caminhão vazio (kg)', type: 'number', min: 0, required: true}, {k: 'taraEm', label: 'Data da pesagem vazia', type: 'date', required: true, hint: 'Na balança, com tanque e lona como o caminhão costuma vir.'},
+      {k: 'tara', label: 'Tara — peso do caminhão vazio (kg)', type: 'number', min: 0, required: true}, {k: 'taraEm', label: 'Data da pesagem vazia', type: 'date', required: true, hint: 'Na balança, com tanque e lona como o caminhão costuma vir.'},
       {k: 'obs', label: 'Observações', type: 'textarea', full: true}],
     onSubmit: v => {
       const k = chavePlaca(v.placa); if (k.length < 6) return 'Placa inválida';
-      const outro = (db.caminhoes || []).find(x => x.id !== c.id && chavePlaca(x.placa) === k); if (outro) return `A placa ${outro.placa} já está cadastrada`;
+      const outro = (db.caminhoes || []).find(x => x.id !== c.id && chavePlaca(x.placa) === k);
+      if (outro && c.id) return `A placa ${outro.placa} já está cadastrada`;
+      if (outro) { c = outro; v.motorista = v.motorista || outro.motorista || ''; v.transportadora = v.transportadora || outro.transportadora || ''; } // placa já cadastrada: atualiza a tara dela
       if (!(v.tara > 0)) return 'Informe a tara do caminhão vazio';
       if (v.taraEm > today()) return 'A data da pesagem não pode ser no futuro';
       const mudou = Number(c.tara) !== Number(v.tara) || String(c.taraEm || '').slice(0, 10) !== v.taraEm;

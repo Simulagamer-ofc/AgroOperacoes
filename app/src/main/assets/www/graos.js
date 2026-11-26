@@ -250,7 +250,7 @@ function chegadaForm() {
       {k: 'produto', label: 'Produto', type: 'select', options: PRODUTOS_GRAO.map(([v, l]) => ({value: v, label: l})), required: true}, {k: 'produtoNome', label: 'Qual cultura', mostrarSe: ['produto', 'outro']},
       {k: 'season', label: 'Safra', mais: true}, {k: 'date', label: 'Data', type: 'date', required: true}, {k: 'time', label: 'Hora', type: 'time', required: true},
       {k: 'placa', label: 'Placa', required: true, placeholder: 'ABC1D23'}, {k: 'motorista', label: 'Motorista'},
-      {k: 'pesoBruto', label: 'Peso bruto — caminhão cheio (kg)', type: 'number', min: 0, required: true},
+      {k: 'pesoBruto', label: 'Peso bruto — caminhão cheio (kg)', type: 'number', min: 0, required: true, hint: 'Para pesar o caminhão vazio antes de carregar, use “Tara do caminhão (vazio)” na Moega.'},
       {k: 'umidade', label: 'Umidade da amostra (%)', type: 'number', min: 0, hint: 'Pode medir agora ou na pesagem de saída.'}, {k: 'impureza', label: 'Impureza (%)', type: 'number', min: 0},
       {k: 'destino', label: 'Descarregar em', type: 'select', options: destinos, full: true},
       {k: 'usarTara', label: 'Tara do caminhão', type: 'select', full: true, options: [{value: 'auto', label: 'Usar a tara cadastrada, se a placa tiver (uma pesagem só)'}, {value: 'pesar', label: 'Pesar o caminhão vazio depois da descarga'}], hint: `Tara cadastrada vale ${typeof TARA_VALIDADE_DIAS !== 'undefined' ? TARA_VALIDADE_DIAS : 30} dias; o romaneio e o ticket mostram a data dela.`},
@@ -589,7 +589,7 @@ VIEWS.graos = arg => {
   const rel = btn('Relatório da safra', 'nav', 'graos/relatorio', 'secondary');
   const topos = {
     '': ['Painel de grãos', 'Resumo do dia e da safra: recebimento, secagem e armazenagem.', btn('+ Carga na moega', 'gr-romaneio') + btn('Iniciar secagem', 'gr-secar', '', 'secondary') + btn('Saída do silo', 'gr-saida', '', 'secondary') + rel],
-    moega: ['Moega', 'Pesagem, amostra e descontos. Cada carga segue para o secador ou direto ao silo e vira colheita do talhão.', btn('+ Chegada do caminhão', 'gr-chegada') + btn('+ Carga na moega', 'gr-romaneio', '', 'secondary') + rel],
+    moega: ['Moega', 'Pesagem, amostra e descontos. Cada carga segue para o secador ou direto ao silo e vira colheita do talhão.', btn('+ Chegada do caminhão', 'gr-chegada') + btn('Tara do caminhão (vazio)', 'tara-novo', '', 'secondary') + btn('+ Carga na moega', 'gr-romaneio', '', 'secondary') + rel],
     secador: ['Secador', 'Seca as cargas que a moega mandou. Ao finalizar, o grão seco entra no silo escolhido.', btn('Iniciar secagem', 'gr-secar') + btn('Leituras avulsas', 'nav', 'secagem', 'secondary') + rel],
     silos: ['Silos e armazém', 'Saldo, qualidade e expedição. As entradas vêm da moega (grão seco) e do secador.', btn('Saída do silo', 'gr-saida') + btn('Grão de terceiros', 'nav', 'graos/terceiros', 'secondary') + rel],
     terceiros: ['Grão de terceiros', 'Saldo e cobrança de cada produtor que deixou grão na unidade.', btn('← Silos', 'nav', 'graos/silos', 'secondary') + btn('Tarifas', 'gr-tarifas', '', 'secondary')]};
