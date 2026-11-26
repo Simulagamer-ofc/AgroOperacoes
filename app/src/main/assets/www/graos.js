@@ -16,6 +16,12 @@ const PRODUTOS_GRAO = [['soja', 'Soja'], ['milho', 'Milho'], ['trigo', 'Trigo'],
 const slugCultura = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
 // Digitado em “Outro” com o nome de um produto da lista (ex.: “Ervilhaca” antes de ela entrar na lista): usa a chave da lista
 const chaveProduto = (p, nome) => { if (p !== 'outro' || !nome) return p; const sl = slugCultura(nome), k = PRODUTOS_GRAO.find(([c, n]) => c !== 'outro' && (c === sl || slugCultura(n) === sl)); return k ? k[0] : 'outro:' + sl; };
+// Produto pela cultura do talhão (talhão dividido: cada parte com a sua cultura). Pousio ou sem cultura: não muda
+function produtoDoTalhao(id) {
+  const c = String(find('fields', id)?.crop || '').trim(), sl = slugCultura(c); if (!c || sl === 'pousio') return null;
+  const k = PRODUTOS_GRAO.find(([v, n]) => v !== 'outro' && (v === sl || slugCultura(n) === sl));
+  return k ? {produto: k[0], nome: ''} : {produto: 'outro', nome: c};
+}
 const DESTINOS_GRAO = [['comercializacao', 'Grão — venda'], ['armazenamento_graos', 'Grão — armazenagem'], ['racao_animal', 'Grão — ração animal'], ['moagem_alimentacao_humana', 'Grão — moagem / alimentação humana'], ['agroindustria', 'Grão — agroindústria'], ['semente', 'Semente para plantio']];
 const COMBUSTIVEIS = [['lenha', 'Lenha', 'm³ st'], ['cavaco', 'Cavaco', 't'], ['glp', 'GLP', 'kg'], ['gas', 'Gás natural', 'm³'], ['diesel', 'Diesel', 'L'], ['outro', 'Outro', 'un']];
 const n0 = v => Math.round(Number(v) || 0).toLocaleString('pt-BR'), n1 = v => (Number(v) || 0).toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1});
@@ -294,6 +300,13 @@ function chegadaForm() {
       showToast(`Placa ${placa} no pátio: ${n0(v.pesoBruto)} kg bruto. Depois da descarga, pese o caminhão vazio.`); go('graos/moega');
     }});
   if (typeof chegadaLigar === 'function') chegadaLigar();
+  // Ao escolher o talhão, o produto vem da cultura dele
+  const fm = $('#dialog form'), sf = fm?.elements.fieldId, sp = fm?.elements.produto;
+  sf?.addEventListener('change', () => {
+    const pr = produtoDoTalhao(sf.value); if (!pr || !sp) return;
+    sp.value = pr.produto; sp.dispatchEvent(new Event('change', {bubbles: true}));
+    if (fm.elements.produtoNome) fm.elements.produtoNome.value = pr.nome;
+  });
 }
 function fecharPesagem(id, usarTaraCad = false) {
   const p = find('pesagens', id); if (!p || p.status !== 'patio') return;

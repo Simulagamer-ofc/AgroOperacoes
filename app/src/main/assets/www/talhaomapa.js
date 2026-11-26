@@ -464,4 +464,4 @@ Object.assign(ACTIONS, {
 ABAS.talhoes = [['talhoes', 'Lista'], ['mapatalhoes', 'Mapa']];
 GRUPO_DA_ROTA.talhoes = 'talhoes'; GRUPO_DA_ROTA.mapatalhoes = 'talhoes'; GRUPO_DA_ROTA.desenhar = 'talhoes';
 if (typeof NV_ROTA_TELA === 'object') Object.assign(NV_ROTA_TELA, {mapatalhoes: 'talhoes', desenhar: 'talhoes', importartalhoes: 'talhoes', contorno: 'talhoes'});
-addEventListener('hashchange', () => { if (!/^#\/(mapatalhoes|desenhar|importartalhoes)/.test(location.hash) && tm.mapa) { try { tm.mapa.remove(); } catch { /* ok */ } tm.mapa = null; } });
+addEventListener('hashchange', () => { if (!/^#\/(mapatalhoes|desenhar|importartalhoes|dividir)/.test(location.hash) && tm.mapa) { try { tm.mapa.remove(); } catch { /* ok */ } tm.mapa = null; } });
