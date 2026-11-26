@@ -428,6 +428,16 @@ async () => {
   const prodB = escolher(fB.id), prodA = escolher(fDiv.id), fA = find('fields', fDiv.id); closeModal();
   T('DIV-01', 'Talhão dividido', 'Talhão de 50 ha dividido em 30 ha de aveia preta (A) e 20 ha de ervilhaca (B): na chegada, escolher a parte traz o produto da cultura dela', 'Talhão 30 A 30 ha aveia_preta • Talhão 30 B 20 ha ervilhaca',
     `${fA.name} ${fA.area} ha ${prodA} • ${fB.name} ${fB.area} ha ${prodB}`, fA.area === 30 && fB.area === 20 && prodA === 'aveia_preta' && prodB === 'ervilhaca' && fA.name === 'Talhão 30 A' && fB.parteDe?.nome === 'Talhão 30');
+  // Juntar as partes: volta a ser um talhão só; o que foi lançado na parte B passa para ele (a colheita mantém a cultura)
+  db.colheitas.push({id: 'colB', fieldId: fB.id, cultura: 'Ervilhaca', season: '2026', date: today(), kg: 1800});
+  db.operations.push({id: 'opB', fieldId: fB.id, type: 'Colheita', status: 'Concluída', date: today(), area: 20});
+  ACTIONS['tdv-juntar'](fB.id);
+  document.querySelector('#dialog form').requestSubmit();
+  const fJ = find('fields', fDiv.id), semB = !find('fields', fB.id), colB = find('colheitas', 'colB'), opB = find('operations', 'opB');
+  T('JUN-01', 'Talhão dividido', 'Juntar as partes: o talhão volta inteiro (50 ha) e a colheita e a operação da parte B passam para ele; a colheita continua como ervilhaca', 'Talhão 30 50 ha • parte B removida • colheita e operação no Talhão 30 (Ervilhaca)',
+    `${fJ?.name} ${fJ?.area} ha • ${semB ? 'parte B removida' : 'parte B ainda existe'} • colheita ${fieldName(colB.fieldId)} (${colB.cultura}) • operação ${fieldName(opB.fieldId)}`,
+    fJ?.name === 'Talhão 30' && fJ.area === 50 && !fJ.parteDe && semB && colB.fieldId === fDiv.id && opB.fieldId === fDiv.id && colB.cultura === 'Ervilhaca');
+  db.colheitas = db.colheitas.filter(x => x.id !== 'colB'); db.operations = db.operations.filter(x => x.id !== 'opB'); db.fields = db.fields.filter(x => x.id !== fDiv.id); save();
   // Relatório da safra de grãos e telas
   let telasOk = 0; const telas = ['', 'moega', 'secador', 'silos', 'terceiros', 'relatorio'];
   for (const a of telas) { try { const h = VIEWS.graos(a || undefined); if (h && h.length > 200) telasOk++; } catch { /* conta como falha */ } }

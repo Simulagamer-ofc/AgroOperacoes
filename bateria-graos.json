@@ -308,8 +308,8 @@
    "id": "SEC-13",
    "mod": "Secador",
    "desc": "Leitura anotada após a meia-noite para um horário \"à frente\" do relógio fica no dia anterior",
-   "esperado": "2026-11-25 19:00",
-   "obtido": "2026-11-25 19:00",
+   "esperado": "2026-11-25 20:00",
+   "obtido": "2026-11-25 20:00",
    "ok": true
   },
   {
@@ -485,7 +485,7 @@
    "mod": "Silos",
    "desc": "Silo em expurgo (120 h de exposição): movimentação pede confirmação de liberação",
    "esperado": "bloqueia e avisa",
-   "obtido": "[!] Silo em expurgo até 01/12/2026 16:00 (Fosfina (fosfeto de alumínio)): não abrir nem movimentar antes do fim da exposição. Toque em registrar de novo só se a liberação já foi feita.",
+   "obtido": "[!] Silo em expurgo até 01/12/2026 17:00 (Fosfina (fosfeto de alumínio)): não abrir nem movimentar antes do fim da exposição. Toque em registrar de novo só se a liberação já foi feita.",
    "ok": true
   },
   {
@@ -741,7 +741,7 @@
    "mod": "Volume",
    "desc": "Desempenho: lançar as 140 cargas pelo formulário no navegador",
    "esperado": "menos de 1 s por carga",
-   "obtido": "0,07 s por carga (9,6 s no total)",
+   "obtido": "0,07 s por carga (9,3 s no total)",
    "ok": true
   },
   {
@@ -814,6 +814,14 @@
    "desc": "Talhão de 50 ha dividido em 30 ha de aveia preta (A) e 20 ha de ervilhaca (B): na chegada, escolher a parte traz o produto da cultura dela",
    "esperado": "Talhão 30 A 30 ha aveia_preta • Talhão 30 B 20 ha ervilhaca",
    "obtido": "Talhão 30 A 30 ha aveia_preta • Talhão 30 B 20 ha ervilhaca",
+   "ok": true
+  },
+  {
+   "id": "JUN-01",
+   "mod": "Talhão dividido",
+   "desc": "Juntar as partes: o talhão volta inteiro (50 ha) e a colheita e a operação da parte B passam para ele; a colheita continua como ervilhaca",
+   "esperado": "Talhão 30 50 ha • parte B removida • colheita e operação no Talhão 30 (Ervilhaca)",
+   "obtido": "Talhão 30 50 ha • parte B removida • colheita Talhão 30 (Ervilhaca) • operação Talhão 30",
    "ok": true
   },
   {

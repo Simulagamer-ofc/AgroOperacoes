@@ -8,7 +8,7 @@ const vm = require('node:vm');
 const www = path.join(__dirname, '../../app/src/main/assets/www');
 function app() {
   const ctx = vm.createContext({Math, Number, String, Array, Object, JSON, Infinity, document: {addEventListener() {}}, VIEWS: {}, TITLES: {}, ACTIONS: {}});
-  vm.runInContext(fs.readFileSync(path.join(www, 'divisao.js'), 'utf8') + '\nthis.f = {tdvCortar};', ctx);
+  vm.runInContext(fs.readFileSync(path.join(www, 'divisao.js'), 'utf8') + '\nthis.f = {tdvCortar, tdvTrocarTalhao};', ctx);
   return ctx.f;
 }
 // Área plana aproximada (m²) só para comparar as partes
@@ -61,4 +61,14 @@ test('talhão em U (com recorte): a linha vai só até a borda mais perto, sem a
   // Um ponto fora (a oeste) e outro dentro: começa onde a linha entra
   const r2 = tdvCortar(U, [[-28.152, -52.310], [-28.152, -52.300]]);
   assert.ok(r2.partes, r2.erro); const [a2, b2] = r2.partes.map(area); assert.ok(Math.abs(a2 + b2 - tot) / tot < 1e-6);
+});
+
+test('juntar as partes: troca o talhão em todas as coleções (também dentro de listas), menos nos próprios talhões', () => {
+  const {tdvTrocarTalhao} = app();
+  const dados = {fields: [{id: 'B', fieldId: 'B'}], operations: [{id: 1, fieldId: 'B'}, {id: 2, fieldId: 'X'}], colheitas: [{id: 3, fieldId: 'B', cultura: 'Ervilhaca'}],
+    orcamentos: [{id: 4, linhas: [{fieldId: 'B'}, {fieldId: 'A'}]}], settings: {fieldId: 'B'}};
+  assert.equal(tdvTrocarTalhao(dados, 'B', 'A'), 3);
+  assert.equal(dados.operations[0].fieldId, 'A'); assert.equal(dados.operations[1].fieldId, 'X');
+  assert.equal(dados.colheitas[0].fieldId, 'A'); assert.equal(dados.colheitas[0].cultura, 'Ervilhaca');
+  assert.equal(dados.orcamentos[0].linhas[0].fieldId, 'A'); assert.equal(dados.fields[0].fieldId, 'B');
 });
