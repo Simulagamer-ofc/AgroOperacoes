@@ -10,10 +10,12 @@ const PRODUTOS_GRAO = [['soja', 'Soja'], ['milho', 'Milho'], ['trigo', 'Trigo'],
   ['amendoim', 'Amendoim'], ['girassol', 'Girassol'], ['aveia', 'Aveia'], ['cevada', 'Cevada'], ['centeio', 'Centeio'], ['triticale', 'Triticale'], ['gergelim', 'Gergelim'],
   ['ervilha', 'Ervilha'], ['cafe', 'Café'], ['canola', 'Canola'], ['milheto', 'Milheto'], ['grao_de_bico', 'Grão-de-bico'], ['lentilha', 'Lentilha'], ['chia', 'Chia'], ['crambe', 'Crambe'],
   ['trigo_mourisco', 'Trigo mourisco (sarraceno)'], ['linho', 'Linho (linhaça)'],
+  ['aveia_preta', 'Aveia preta'], ['ervilhaca', 'Ervilhaca'], ['azevem', 'Azevém'], ['nabo_forrageiro', 'Nabo forrageiro'],
   ['outro', 'Outro (digitar)']];
 // Cultura digitada em “Outro”: vira uma chave própria (ex.: outro:quinoa), para ter referência da fazenda só dela
 const slugCultura = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
-const chaveProduto = (p, nome) => p === 'outro' && nome ? 'outro:' + slugCultura(nome) : p;
+// Digitado em “Outro” com o nome de um produto da lista (ex.: “Ervilhaca” antes de ela entrar na lista): usa a chave da lista
+const chaveProduto = (p, nome) => { if (p !== 'outro' || !nome) return p; const sl = slugCultura(nome), k = PRODUTOS_GRAO.find(([c, n]) => c !== 'outro' && (c === sl || slugCultura(n) === sl)); return k ? k[0] : 'outro:' + sl; };
 const DESTINOS_GRAO = [['comercializacao', 'Grão — venda'], ['armazenamento_graos', 'Grão — armazenagem'], ['racao_animal', 'Grão — ração animal'], ['moagem_alimentacao_humana', 'Grão — moagem / alimentação humana'], ['agroindustria', 'Grão — agroindústria'], ['semente', 'Semente para plantio']];
 const COMBUSTIVEIS = [['lenha', 'Lenha', 'm³ st'], ['cavaco', 'Cavaco', 't'], ['glp', 'GLP', 'kg'], ['gas', 'Gás natural', 'm³'], ['diesel', 'Diesel', 'L'], ['outro', 'Outro', 'un']];
 const n0 = v => Math.round(Number(v) || 0).toLocaleString('pt-BR'), n1 = v => (Number(v) || 0).toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1});
