@@ -18,12 +18,50 @@ function taraSituacao(c, hoje = today()) {
 const taraValida = placa => { const c = caminhaoDaPlaca(placa), s = taraSituacao(c); return s?.valida ? {...s, caminhaoId: c.id} : null; };
 const placaFmt = p => { const k = chavePlaca(p); return k.length === 7 ? k.slice(0, 3) + '-' + k.slice(3) : k; };
 
+// ---------- No formulário: escolher o caminhão cadastrado → placa, motorista e tara ----------
+/** Campo “Caminhão cadastrado” (lista de placas com motorista e tara) para a chegada e a carga na moega. */
+function camposCaminhao() {
+  const lista = (db.caminhoes || []).slice().sort((a, b) => String(a.placa).localeCompare(String(b.placa)));
+  if (!lista.length) return [];
+  return [{k: 'caminhao', label: 'Caminhão cadastrado', type: 'select', full: true, hint: 'Escolha a placa: o motorista e a tara vêm do cadastro do caminhão.',
+    options: [{value: '', label: 'Outro caminhão — digitar a placa'}, ...lista.map(c => { const t = taraSituacao(c);
+      return {value: c.id, label: `${c.placa}${c.motorista ? ' • ' + c.motorista : ''} • ${t ? `tara ${n0(t.kg)} kg${t.valida ? '' : ' (vencida)'}` : 'sem tara'}`}; })]}];
+}
+function ligarCaminhao(f) {
+  const sel = f?.elements.caminhao, pl = f?.elements.placa, mo = f?.elements.motorista; if (!sel || !pl) return;
+  let motAuto = '';
+  sel.addEventListener('change', () => {
+    const c = find('caminhoes', sel.value); if (!c) return;
+    pl.value = c.placa;
+    if (mo && (!mo.value || mo.value === motAuto)) { mo.value = c.motorista || ''; motAuto = mo.value; }
+    pl.dispatchEvent(new Event('input', {bubbles: true}));
+  });
+  pl.addEventListener('input', () => { const c = caminhaoDaPlaca(pl.value); if ((c?.id || '') !== sel.value) sel.value = c?.id || ''; });
+}
+/** Chegada: mostra a tara do caminhão escolhido e a carga (bruto − tara) enquanto digita o peso bruto. */
+function chegadaLigar() {
+  const f = document.querySelector('#dialog form'), pl = f?.elements.placa, pb = f?.elements.pesoBruto, ut = f?.elements.usarTara; if (!pl || !pb) return;
+  ligarCaminhao(f);
+  const aviso = document.createElement('small'); aviso.className = 'tara-cad'; aviso.setAttribute('aria-live', 'polite');
+  (pb.closest('.field') || pb.parentElement).appendChild(aviso);
+  const atualizar = () => {
+    const s = taraSituacao(caminhaoDaPlaca(pl.value)), bruto = typeof numeroBR === 'function' ? numeroBR(pb.value) : Number(pb.value);
+    if (!s || ut?.value === 'pesar') { aviso.textContent = ''; aviso.className = 'tara-cad'; return; }
+    if (!s.valida) { aviso.className = 'tara-cad vencida'; aviso.textContent = `Tara cadastrada vencida (${n0(s.kg)} kg, pesada em ${fmtDate(s.em)}): o caminhão fica no pátio para pesar vazio.`; return; }
+    aviso.className = 'tara-cad ok';
+    aviso.textContent = `Tara cadastrada: ${n0(s.kg)} kg (pesada em ${fmtDate(s.em)})${bruto > s.kg ? ` → carga: ${n0(bruto - s.kg)} kg` : ''}. Ao registrar, o romaneio abre com essa tara.`;
+  };
+  [pl, pb].forEach(el => el.addEventListener('input', atualizar)); ut?.addEventListener('change', atualizar); f.elements.caminhao?.addEventListener('change', () => setTimeout(atualizar, 0));
+  atualizar();
+}
+
 // ---------- No formulário: placa → tara ----------
 let taraNoForm = null; // {caminhaoId, kg, em} quando a tara foi preenchida pela cadastrada
 /** Liga a placa à tara no formulário aberto (romaneio da moega). preencher: já coloca a tara da placa ao abrir. */
 function taraLigarForm(preencher = false) {
   taraNoForm = null;
   const f = document.querySelector('#dialog form'), pl = f?.elements.placa, ta = f?.elements.tara; if (!pl || !ta) return;
+  ligarCaminhao(f);
   const aviso = document.createElement('small'); aviso.className = 'tara-cad'; aviso.setAttribute('aria-live', 'polite');
   (ta.closest('.field') || ta.parentElement).appendChild(aviso);
   const atualizar = (forcar = false) => {
@@ -59,15 +97,18 @@ function taraAtualizar(reg) {
 
 // ---------- Cadastro e lista ----------
 function caminhaoForm(c = {}) {
-  openForm({title: c.id ? `Caminhão ${c.placa}` : 'Novo caminhão', submit: 'Salvar',
-    sub: `A tara vale ${TARA_VALIDADE_DIAS} dias a partir da pesagem do caminhão vazio. Toda pesagem vazia na moega atualiza sozinha.`,
+  openForm({title: c.id ? `Caminhão ${c.placa}` : 'Tara do caminhão (vazio)', submit: c.id ? 'Salvar' : 'Salvar tara',
+    sub: c.id ? `A tara vale ${TARA_VALIDADE_DIAS} dias a partir da pesagem do caminhão vazio. Toda pesagem vazia na moega atualiza sozinha.`
+      : `Pese o caminhão vazio (antes de ir para a lavoura). Quando ele voltar cheio, a Chegada do caminhão fecha o romaneio com esta tara. Vale ${TARA_VALIDADE_DIAS} dias.`,
     values: {placa: c.placa || '', motorista: c.motorista || '', transportadora: c.transportadora || '', tara: c.tara ?? '', taraEm: c.taraEm ? String(c.taraEm).slice(0, 10) : today(), obs: c.obs || ''},
     fields: [{k: 'placa', label: 'Placa', required: true, placeholder: 'ABC1D23'}, {k: 'motorista', label: 'Motorista'}, {k: 'transportadora', label: 'Transportadora / dono do caminhão', full: true},
-      {k: 'tara', label: 'Tara — caminhão vazio (kg)', type: 'number', min: 0, required: true}, {k: 'taraEm', label: 'Data da pesagem vazia', type: 'date', required: true, hint: 'Na balança, com tanque e lona como o caminhão costuma vir.'},
+      {k: 'tara', label: 'Tara — peso do caminhão vazio (kg)', type: 'number', min: 0, required: true}, {k: 'taraEm', label: 'Data da pesagem vazia', type: 'date', required: true, hint: 'Na balança, com tanque e lona como o caminhão costuma vir.'},
       {k: 'obs', label: 'Observações', type: 'textarea', full: true}],
     onSubmit: v => {
       const k = chavePlaca(v.placa); if (k.length < 6) return 'Placa inválida';
-      const outro = (db.caminhoes || []).find(x => x.id !== c.id && chavePlaca(x.placa) === k); if (outro) return `A placa ${outro.placa} já está cadastrada`;
+      const outro = (db.caminhoes || []).find(x => x.id !== c.id && chavePlaca(x.placa) === k);
+      if (outro && c.id) return `A placa ${outro.placa} já está cadastrada`;
+      if (outro) { c = outro; v.motorista = v.motorista || outro.motorista || ''; v.transportadora = v.transportadora || outro.transportadora || ''; } // placa já cadastrada: atualiza a tara dela
       if (!(v.tara > 0)) return 'Informe a tara do caminhão vazio';
       if (v.taraEm > today()) return 'A data da pesagem não pode ser no futuro';
       const mudou = Number(c.tara) !== Number(v.tara) || String(c.taraEm || '').slice(0, 10) !== v.taraEm;

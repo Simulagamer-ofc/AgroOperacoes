@@ -370,8 +370,10 @@ async () => {
   T('TAR-01', 'Tara', 'Pesagem do caminhão vazio cadastra o caminhão pela placa com a tara e a data', 'JTA-2B34 • 16.050 kg • hoje • Ana Lima', camT ? `${camT.placa} • ${br(camT.tara, 0)} kg • ${camT.taraEm === today() ? 'hoje' : camT.taraEm} • ${camT.motorista}` : (r.msgs || []).join(' / ') || 'não cadastrou',
     camT?.placa === 'JTA-2B34' && camT.tara === 16050 && camT.taraEm === today() && camT.motorista === 'Ana Lima');
   const nRomT = db.romaneios.length;
-  await F('gr-chegada', undefined, {dono: 'proprio', produto: 'soja', season: '2025/26', date: today(), time: '06:25', placa: 'jta-2b34', pesoBruto: '47900', umidade: '14,8', impureza: '0,7', destino: 'secador|' + SEC_T});
-  await espera(150);
+  // Chegada preenchida à mão (o F fecharia o romaneio que abre logo em seguida)
+  closeModal(); ACTIONS['gr-chegada'](); await espera(20);
+  { const fc = document.querySelector('#dialog form'); for (const [k, v] of Object.entries({dono: 'proprio', produto: 'soja', season: '2025/26', date: today(), time: '06:25', placa: 'jta-2b34', pesoBruto: '47900', umidade: '14,8', impureza: '0,7', destino: 'secador|' + SEC_T})) { fc.elements[k].value = v; fc.elements[k].dispatchEvent(new Event('change', {bubbles: true})); } fc.requestSubmit(); }
+  for (let i = 0; i < 40 && !document.querySelector('#dialog form')?.elements.tara; i++) await espera(25); // o romaneio abre logo depois da chegada
   const fT = document.querySelector('#dialog form'), taraNoFormT = fT?.elements.tara?.value;
   if (fT) { fT.requestSubmit(); await espera(40); if (aberto()) { fT.requestSubmit(); await espera(40); } if (aberto()) closeModal(); }
   const rT = db.romaneios.at(-1), opT = oraculoRomaneio({bruto: 47900, tara: 16050, u: 14.8, up: Number(rT?.umidadePadrao), imp: 0.7, ip: Number(rT?.impurezaPadrao), quebra: Number(rT?.quebraTecnica) || 0});
@@ -389,6 +391,33 @@ async () => {
   T('TAR-04', 'Tara', `Tara cadastrada há mais de ${TARA_VALIDADE_DIAS} dias não vale: o caminhão fica no pátio para pesar vazio`, 'no pátio aguardando a tara', ficouT ? 'no pátio aguardando a tara' : aberto() ? 'abriu o romaneio com a tara vencida' : 'não entrou', !!ficouT && !aberto());
   if (aberto()) closeModal();
   if (ficouT) upsert('pesagens', {...ficouT, status: 'cancelada', motivo: 'teste'});
+  // Escolher o caminhão cadastrado na lista: placa, motorista e tara vêm do cadastro; destino da moega sugerido pela umidade
+  upsert('caminhoes', {...caminhaoDaPlaca(PLT), taraEm: today()});
+  closeModal(); ACTIONS['gr-chegada'](); await espera(40);
+  const fC = document.querySelector('#dialog form'), camId = caminhaoDaPlaca(PLT).id;
+  fC.elements.caminhao.value = camId; fC.elements.caminhao.dispatchEvent(new Event('change', {bubbles: true})); await espera(20);
+  fC.elements.pesoBruto.value = '47000'; fC.elements.pesoBruto.dispatchEvent(new Event('input', {bubbles: true})); await espera(20);
+  const avisoC = document.querySelector('.tara-cad')?.textContent || '';
+  T('TAR-05', 'Tara', 'Na chegada, escolher o caminhão cadastrado preenche placa e motorista e mostra a tara e a carga (bruto − tara)', 'JTA-2B34 • Ana Lima • carga 30.950 kg',
+    `${fC.elements.placa.value} • ${fC.elements.motorista.value} • ${(avisoC.match(/carga: ([\d.]+) kg/) || [])[1] ? 'carga ' + avisoC.match(/carga: ([\d.]+) kg/)[1] + ' kg' : avisoC}`,
+    fC.elements.placa.value === 'JTA-2B34' && fC.elements.motorista.value === 'Ana Lima' && /carga: 30\.950 kg/.test(avisoC));
+  closeModal();
+  romaneioForm({placa: 'XYZ9A87', pesoBruto: 40000, produto: 'soja', date: today(), time: '08:10', pesagemId: 'teste-umidade'}); await espera(40);
+  const fD = document.querySelector('#dialog form'), dD = fD.elements.destino, uD = fD.elements.umidade;
+  const v0 = dD.value; uD.value = '16,5'; uD.dispatchEvent(new Event('input', {bubbles: true})); const vU = dD.value; uD.value = '13,2'; uD.dispatchEvent(new Event('input', {bubbles: true})); const vS = dD.value;
+  T('DES-01', 'Moega', 'Fechamento: o destino da moega começa em branco e é sugerido pela umidade (acima do padrão: secador; no padrão: silo)', 'vazio → secador (16,5%) → silo (13,2%)',
+    `${v0 || 'vazio'} → ${vU.split('|')[0]} (16,5%) → ${vS.split('|')[0]} (13,2%)`, v0 === '' && vU.startsWith('secador|') && vS.startsWith('silo|'));
+  closeModal();
+  // Relatório de pesagem: cada carga com bruto, tara e líquido e a soma de tudo
+  Object.assign(relPes, {de: '', ate: '', produto: '', dono: '', iniciado: true});
+  const tP = totaisPesagem(cargasPesagem()), somaB = db.romaneios.reduce((s, x) => s + Number(x.pesoBruto), 0), somaT = db.romaneios.reduce((s, x) => s + Number(x.tara), 0);
+  const htmlP = VIEWS.graos('pesagens'), linhasP = (htmlP.match(/<tr data-act="nav" data-id="graos\/romaneio\//g) || []).length;
+  T('REL-01', 'Relatório', 'Relatório de pesagem: uma linha por carga e total = soma do bruto, da tara e do líquido (bruto − tara)', `${db.romaneios.length} linhas • bruto ${br(somaB, 0)} • tara ${br(somaT, 0)} • líquido ${br(somaB - somaT, 0)}`,
+    `${linhasP} linhas • bruto ${br(tP.bruto, 0)} • tara ${br(tP.tara, 0)} • líquido ${br(tP.liq, 0)}`, linhasP === db.romaneios.length && tP.bruto === somaB && tP.tara === somaT && tP.liq === somaB - somaT && /class="pes-total"/.test(htmlP));
+  Object.assign(relPes, {produto: 'soja'});
+  const tSoja = totaisPesagem(cargasPesagem()), nSoja = db.romaneios.filter(x => x.produto === 'soja').length;
+  T('REL-02', 'Relatório', 'Filtro por produto: só as cargas de soja entram na soma', `${nSoja} cargas de soja`, `${tSoja.cargas} cargas`, tSoja.cargas === nSoja && nSoja > 0);
+  Object.assign(relPes, {produto: ''});
   // Relatório da safra de grãos e telas
   let telasOk = 0; const telas = ['', 'moega', 'secador', 'silos', 'terceiros', 'relatorio'];
   for (const a of telas) { try { const h = VIEWS.graos(a || undefined); if (h && h.length > 200) telasOk++; } catch { /* conta como falha */ } }

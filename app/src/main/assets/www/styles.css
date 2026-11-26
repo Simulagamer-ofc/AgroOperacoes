@@ -2402,3 +2402,8 @@ input.trv-so-ler{opacity:.7;background:color-mix(in srgb,var(--line) 40%,transpa
 .tara-bloco summary{cursor:pointer;list-style:none}.tara-bloco summary::-webkit-details-marker{display:none}.tara-bloco summary span{display:grid;gap:2px}.tara-bloco summary small{color:var(--muted);font-weight:400}
 .tara-bloco .hoje-item strong .chip{font-size:.7rem;padding:1px 7px;vertical-align:middle;white-space:nowrap}
 .patio-item{grid-template-columns:auto 1fr}.patio-item>.btn-row{grid-column:1/-1;justify-content:flex-end;flex-wrap:wrap}
+.pes-filtro{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:end}.pes-filtro label{display:grid;gap:4px;font-size:.8rem;color:var(--muted);flex:1 1 140px}.pes-filtro input,.pes-filtro select{min-height:40px}
+.pes-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:6px 0 14px}.pes-kpis>div{display:grid;gap:2px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2,transparent)}
+.pes-kpis small{color:var(--muted);font-size:.75rem}.pes-kpis b{font-size:1.05rem}.pes-tab td,.pes-tab th{white-space:nowrap}.pes-tab tbody tr[data-act]{cursor:pointer}.pes-tab .pes-total td{border-top:2px solid var(--text,currentColor);background:var(--surface-2,transparent)}
+@media print{.pes-tab td,.pes-tab th{font-size:9pt;padding:3px 4px}}
+.pes-hora{display:block;color:var(--muted);font-size:.72rem;font-weight:400}
