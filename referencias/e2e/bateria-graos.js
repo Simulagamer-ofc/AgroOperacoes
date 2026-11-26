@@ -419,6 +419,15 @@ async () => {
   const tSoja = totaisPesagem(cargasPesagem()), nSoja = db.romaneios.filter(x => x.produto === 'soja').length;
   T('REL-02', 'Relatório', 'Filtro por produto: só as cargas de soja entram na soma', `${nSoja} cargas de soja`, `${tSoja.cargas} cargas`, tSoja.cargas === nSoja && nSoja > 0);
   Object.assign(relPes, {produto: ''});
+  // Talhão dividido: cada parte com a sua cultura; na chegada, escolher a parte traz o produto da cultura dela
+  const fDiv = {id: uid(), name: 'Talhão 30', area: 50, crop: 'Aveia preta', season: '2026'}; db.fields.push(fDiv);
+  tdv = {fieldId: fDiv.id, corte: [], troca: false, A: {name: 'Talhão 30 A', crop: 'Aveia preta', cultivar: '', area: '30'}, B: {name: 'Talhão 30 B', crop: 'Ervilhaca', cultivar: '', area: ''}};
+  const {B: fB} = tdvAplicar(fDiv, tdvPartes()); tdv = null;
+  chegadaForm();
+  const fmD = document.querySelector('#dialog form'), escolher = id => { fmD.elements.fieldId.value = id; fmD.elements.fieldId.dispatchEvent(new Event('change', {bubbles: true})); return fmD.elements.produto.value; };
+  const prodB = escolher(fB.id), prodA = escolher(fDiv.id), fA = find('fields', fDiv.id); closeModal();
+  T('DIV-01', 'Talhão dividido', 'Talhão de 50 ha dividido em 30 ha de aveia preta (A) e 20 ha de ervilhaca (B): na chegada, escolher a parte traz o produto da cultura dela', 'Talhão 30 A 30 ha aveia_preta • Talhão 30 B 20 ha ervilhaca',
+    `${fA.name} ${fA.area} ha ${prodA} • ${fB.name} ${fB.area} ha ${prodB}`, fA.area === 30 && fB.area === 20 && prodA === 'aveia_preta' && prodB === 'ervilhaca' && fA.name === 'Talhão 30 A' && fB.parteDe?.nome === 'Talhão 30');
   // Relatório da safra de grãos e telas
   let telasOk = 0; const telas = ['', 'moega', 'secador', 'silos', 'terceiros', 'relatorio'];
   for (const a of telas) { try { const h = VIEWS.graos(a || undefined); if (h && h.length > 200) telasOk++; } catch { /* conta como falha */ } }

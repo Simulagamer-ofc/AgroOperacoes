@@ -2407,3 +2407,14 @@ input.trv-so-ler{opacity:.7;background:color-mix(in srgb,var(--line) 40%,transpa
 .pes-kpis small{color:var(--muted);font-size:.75rem}.pes-kpis b{font-size:1.05rem}.pes-tab td,.pes-tab th{white-space:nowrap}.pes-tab tbody tr[data-act]{cursor:pointer}.pes-tab .pes-total td{border-top:2px solid var(--text,currentColor);background:var(--surface-2,transparent)}
 @media print{.pes-tab td,.pes-tab th{font-size:9pt;padding:3px 4px}}
 .pes-hora{display:block;color:var(--muted);font-size:.72rem;font-weight:400}
+/* Talhão dividido (divisao.js) */
+.tdv-painel{display:grid;gap:12px;margin:0}
+.tdv-res-l{display:grid;grid-template-columns:14px minmax(0,1fr) auto;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin-bottom:6px}
+.tdv-res-l i,.tdv-parte legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
+.tdv-res-l b{display:block;font-size:.92rem}.tdv-res-l small{display:block;color:var(--muted);font-size:.76rem}
+.tdv-res-l em{font-style:normal;font-weight:700;white-space:nowrap}
+.tdv-erro{color:var(--orange);font-size:.84rem;margin:4px 0}
+.tdv-parte{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:0;display:grid;gap:8px}
+.tdv-parte legend{display:flex;align-items:center;gap:8px;font-weight:700;padding:0 4px}
+.tdv-parte legend small{font-weight:400;color:var(--muted);font-size:.76rem}
+.tdv-selo{display:inline-block;width:max-content;justify-self:start;margin-left:6px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);font-size:.74rem;color:var(--muted);white-space:nowrap}

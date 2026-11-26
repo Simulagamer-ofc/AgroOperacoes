@@ -109,7 +109,7 @@
    "mod": "Moega",
    "desc": "Secador desativado não aparece como destino",
    "esperado": "só equipamentos ativos",
-   "obtido": "Secador — Secador contínuo 60 t/h • Silo direto — Silo 01 — soja • Silo direto — Silo 02 — soja • Silo direto — Silo 03 — milho • Silo direto — Silo 04 — pulmão",
+   "obtido": "Escolha (sugerido pela umidade) • Secador — Secador contínuo 60 t/h • Silo direto — Silo 01 — soja • Silo direto — Silo 02 — soja • Silo direto — Silo 03 — milho • Silo direto — Silo 04 — pulmão",
    "ok": true
   },
   {
@@ -308,8 +308,8 @@
    "id": "SEC-13",
    "mod": "Secador",
    "desc": "Leitura anotada após a meia-noite para um horário \"à frente\" do relógio fica no dia anterior",
-   "esperado": "2026-11-17 10:00",
-   "obtido": "2026-11-17 10:00",
+   "esperado": "2026-11-25 18:00",
+   "obtido": "2026-11-25 18:00",
    "ok": true
   },
   {
@@ -485,7 +485,7 @@
    "mod": "Silos",
    "desc": "Silo em expurgo (120 h de exposição): movimentação pede confirmação de liberação",
    "esperado": "bloqueia e avisa",
-   "obtido": "[!] Silo em expurgo até 23/11/2026 07:00 (Fosfina (fosfeto de alumínio)): não abrir nem movimentar antes do fim da exposição. Toque em registrar de novo só se a liberação já foi feita.",
+   "obtido": "[!] Silo em expurgo até 01/12/2026 15:00 (Fosfina (fosfeto de alumínio)): não abrir nem movimentar antes do fim da exposição. Toque em registrar de novo só se a liberação já foi feita.",
    "ok": true
   },
   {
@@ -589,7 +589,7 @@
    "mod": "Pátio",
    "desc": "Mesma placa não pode chegar de novo enquanto está no pátio",
    "esperado": "bloqueia e avisa",
-   "obtido": "[!] A placa IXB4F10 já está no pátio desde 18/11/2026 07:15 (51.340 kg). Feche a pesagem dela antes.",
+   "obtido": "[!] A placa IXB4F10 já está no pátio desde 26/11/2026 07:15 (51.340 kg). Feche a pesagem dela antes.",
    "ok": true
   },
   {
@@ -741,7 +741,79 @@
    "mod": "Volume",
    "desc": "Desempenho: lançar as 140 cargas pelo formulário no navegador",
    "esperado": "menos de 1 s por carga",
-   "obtido": "0,06 s por carga (8,4 s no total)",
+   "obtido": "0,07 s por carga (9,8 s no total)",
+   "ok": true
+  },
+  {
+   "id": "TAR-01",
+   "mod": "Tara",
+   "desc": "Pesagem do caminhão vazio cadastra o caminhão pela placa com a tara e a data",
+   "esperado": "JTA-2B34 • 16.050 kg • hoje • Ana Lima",
+   "obtido": "JTA-2B34 • 16.050 kg • hoje • Ana Lima",
+   "ok": true
+  },
+  {
+   "id": "TAR-02",
+   "mod": "Tara",
+   "desc": "Segunda viagem da mesma placa: a chegada já abre o romaneio com a tara cadastrada (uma pesagem só) e fecha sem pátio",
+   "esperado": "tara 16.050 kg no formulário • líquido 31.850 kg • final 31.553,72 kg • pátio sem a placa",
+   "obtido": "tara 16.050 kg no formulário • líquido 31.850 kg • final 31.553,72 kg • pátio sem a placa",
+   "ok": true
+  },
+  {
+   "id": "TAR-03",
+   "mod": "Tara",
+   "desc": "Romaneio, histórico e comprovante dizem que a tara é a cadastrada e de quando ela é",
+   "esperado": "histórico e comprovante com \"tara cadastrada do caminhão\" e a data",
+   "obtido": "histórico ok • comprovante ok",
+   "ok": true
+  },
+  {
+   "id": "TAR-04",
+   "mod": "Tara",
+   "desc": "A tara do cadastro não vence (200 dias) e outra pesagem vazia (16.310 kg) não troca a tara do cadastro (16.050 kg)",
+   "esperado": "romaneio com 16.310 kg • cadastro continua 16.050 kg • valendo",
+   "obtido": "romaneio com 16.310 kg • cadastro 16.050 kg • valendo",
+   "ok": true
+  },
+  {
+   "id": "TAR-05",
+   "mod": "Tara",
+   "desc": "Na chegada, escolher o caminhão cadastrado preenche placa e motorista e mostra a tara e a carga (bruto − tara)",
+   "esperado": "JTA-2B34 • Ana Lima • carga 30.950 kg",
+   "obtido": "JTA-2B34 • Ana Lima • carga 30.950 kg",
+   "ok": true
+  },
+  {
+   "id": "DES-01",
+   "mod": "Moega",
+   "desc": "Fechamento: o destino da moega começa em branco e é sugerido pela umidade (acima do padrão: secador; no padrão: silo)",
+   "esperado": "vazio → secador (16,5%) → silo (13,2%)",
+   "obtido": "vazio → secador (16,5%) → silo (13,2%)",
+   "ok": true
+  },
+  {
+   "id": "REL-01",
+   "mod": "Relatório",
+   "desc": "Relatório de pesagem: uma linha por carga e total = soma do bruto, da tara e do líquido (bruto − tara)",
+   "esperado": "152 linhas • bruto 7.922.211 • tara 2.464.463 • líquido 5.457.748",
+   "obtido": "152 linhas • bruto 7.922.211 • tara 2.464.463 • líquido 5.457.748",
+   "ok": true
+  },
+  {
+   "id": "REL-02",
+   "mod": "Relatório",
+   "desc": "Filtro por produto: só as cargas de soja entram na soma",
+   "esperado": "115 cargas de soja",
+   "obtido": "115 cargas",
+   "ok": true
+  },
+  {
+   "id": "DIV-01",
+   "mod": "Talhão dividido",
+   "desc": "Talhão de 50 ha dividido em 30 ha de aveia preta (A) e 20 ha de ervilhaca (B): na chegada, escolher a parte traz o produto da cultura dela",
+   "esperado": "Talhão 30 A 30 ha aveia_preta • Talhão 30 B 20 ha ervilhaca",
+   "obtido": "Talhão 30 A 30 ha aveia_preta • Talhão 30 B 20 ha ervilhaca",
    "ok": true
   },
   {
@@ -754,9 +826,9 @@
   }
  ],
  "resumoSafra": {
-  "cargas": 149,
-  "liquidoT": 5362.058,
-  "finalT": 5050.446544000003,
+  "cargas": 152,
+  "liquidoT": 5457.748,
+  "finalT": 5145.282184000003,
   "lotes": 22,
   "secoT": 4822.6764367816095,
   "aguaT": 333.52356321839096,
@@ -792,6 +864,6 @@
    }
   ]
  },
- "versao": "v0.96.0-beta1",
+ "versao": "v1.2.14-beta1",
  "errosJs": []
 }
