@@ -160,7 +160,8 @@ function romaneioForm(r = {}) {
   openForm({title: r.id ? `Romaneio nº ${r.numero}` : doPatio ? `Fechar pesagem — placa ${r.placa}` : 'Nova carga na moega',
     sub: r.id ? 'Toda alteração fica no histórico do romaneio, com quem alterou, quando e o motivo.' : doPatio ? `Peso bruto de ${n0(r.pesoBruto)} kg na chegada (${fmtDate(r.date)} ${r.time || ''}). Pese o caminhão vazio e confira a amostra.` : `Pesagem e amostra. Desconto pelo padrão em uso: umidade ${n1(r.umidadePadrao ?? pad.umidade)}%, impureza ${n1(r.impurezaPadrao ?? pad.impureza)}% (${(r.metodoDesc || pad.metodoDesc) === 'tabela' ? 'tabela da cooperativa' : 'balanço de massa'}${numOuU(r.quebraTecnica ?? pad.quebraTecnica) ? ', quebra técnica ' + n1(r.quebraTecnica ?? pad.quebraTecnica) + '%' : ''}). Para mudar, abra “Contrato e descontos”.`,
     values: {date: today(), time: nowTime(), produto: prod0, season: f0?.season || safrasConhecidas?.()[0] || '', metodoDesc: pad.metodoDesc, fatorUmid: pad.fatorUmid, fatorImp: pad.fatorImp, quebraTecnica: pad.quebraTecnica, dono: 'proprio', umidadePadrao: pad.umidade, impurezaPadrao: pad.impureza,
-      destino: r.destinoTipo ? r.destinoTipo + '|' + r.destinoId : destinos[0]?.value || '', ...r},
+      destino: r.destinoTipo ? r.destinoTipo + '|' + r.destinoId : r.id ? destinos[0]?.value || '' : '', ...r,
+      caminhao: !r.id && typeof caminhaoDaPlaca === 'function' ? caminhaoDaPlaca(r.placa)?.id || '' : ''},
     fields: [
       {k: 'dono', label: 'Dono do grão', type: 'select', options: [{value: 'proprio', label: 'Próprio (da fazenda)'}, {value: 'terceiro', label: 'Terceiro (secagem / armazenagem para outro produtor)'}], required: true},
       {k: 'depositante', label: 'Nome do terceiro', mostrarSe: ['dono', 'terceiro'], placeholder: 'Produtor dono da carga', hint: depositantes().length ? 'Já cadastrados: ' + depositantes().join(', ') : ''},
@@ -169,6 +170,7 @@ function romaneioForm(r = {}) {
       {k: 'produtoNome', label: 'Qual cultura', mostrarSe: ['produto', 'outro'], placeholder: 'Ex.: quinoa'},
       {k: 'season', label: 'Safra', mais: true, placeholder: 'Ex.: 2026/27'},
       {k: 'date', label: 'Data', type: 'date', required: true}, {k: 'time', label: 'Hora', type: 'time'},
+      ...(!r.id && typeof camposCaminhao === 'function' ? camposCaminhao() : []),
       {k: 'placa', label: 'Placa', placeholder: 'ABC1D23'}, {k: 'motorista', label: 'Motorista'},
       {k: 'pesoBruto', label: 'Peso bruto (kg)', type: 'number', min: 0, required: true}, {k: 'tara', label: 'Tara (kg)', type: 'number', min: 0, required: true, hint: 'Peso do caminhão vazio. Placa com tara cadastrada preenche sozinha.'},
       {k: 'umidade', label: 'Umidade da amostra (%)', type: 'number', min: 0, required: true}, {k: 'impureza', label: 'Impureza e matérias estranhas (%)', type: 'number', min: 0},
@@ -179,14 +181,15 @@ function romaneioForm(r = {}) {
       {k: 'fatorImp', label: 'Tabela: desconto por ponto de impureza (%)', mais: true, mostrarSe: ['metodoDesc', 'tabela'], type: 'number', min: 0, hint: 'Normalmente 1 (1% por ponto).'},
       {k: 'quebraTecnica', label: 'Quebra técnica (%)', mais: true, type: 'number', min: 0, hint: 'Fixa por carga, se o contrato prevê. Vale nos dois métodos.'},
       {k: 'outrosDesc', label: 'Outros descontos (%)', mais: true, type: 'number', min: 0, hint: 'Ex.: avariados acima da tolerância do comprador.'},
-      {k: 'destino', label: 'Para onde vai a carga', type: 'select', options: destinos, required: true, full: true, hint: destinos.length ? 'Úmida acima do padrão: secador. Já seca: silo direto.' : 'Cadastre o secador e os silos em Máquinas (tipo Secador e Silo/Armazém).'},
+      {k: 'destino', label: 'Da moega vai para', type: 'select', options: r.id ? destinos : [{value: '', label: 'Escolha (sugerido pela umidade)'}, ...destinos], required: true, full: true, hint: destinos.length ? 'O caminhão descarrega na moega. Úmido acima do padrão: secador; já seco: silo direto. O sistema sugere pela umidade da amostra.' : 'Cadastre o secador e os silos em Máquinas (tipo Secador e Silo/Armazém).'},
       {k: 'amostraRetida', label: 'Amostra de contraprova (nº / lacre)', mais: true, placeholder: 'Guardada para contestação', hint: 'Opcional.'},
       {k: 'notes', label: 'Observações', type: 'textarea', mais: true},
       ...(r.id ? [{k: 'motivoAlteracao', label: 'Motivo da alteração', required: false, full: true, placeholder: 'Ex.: tara digitada errada; reamostragem da umidade', hint: 'Obrigatório se mudar peso, amostra, desconto ou destino. Fica no histórico.'}] : [])],
     submit: r.id ? 'Salvar romaneio' : doPatio ? 'Fechar pesagem' : 'Registrar carga', maisRotulo: 'Contrato e descontos, safra, contraprova e observações',
     onSubmit: v => {
       if (!(v.pesoBruto > 0) || !(v.tara >= 0) || v.pesoBruto <= v.tara) return 'O peso bruto precisa ser maior que a tara';
-      if (!v.destino) return 'Escolha o secador ou o silo de destino';
+      if (!v.destino) return 'Escolha para onde o grão vai da moega: secador ou silo';
+      delete v.caminhao;
       if (v.dono === 'terceiro' && !v.depositante) return 'Informe o nome do terceiro dono da carga';
       if (v.produto === 'outro' && !v.produtoNome) return 'Escreva qual é a cultura';
       if (v.produto !== 'outro') v.produtoNome = '';
@@ -234,30 +237,49 @@ function romaneioForm(r = {}) {
       showToast(`Romaneio nº ${reg.numero}: ${kgT(reg.calc.pesoFinal)} (${sacas(reg.calc.pesoFinal)}) líquidos e limpos → ${nomeEquip(destinoId)}`);
     }});
   if (!r.id && typeof taraLigarForm === 'function') taraLigarForm(!!r.usarTaraCad); // placa → tara cadastrada
+  if (!r.id) destinoPelaUmidade(destinos);
 }
 // ---------- Pátio: pesagem em duas etapas (cheio na chegada, vazio depois da descarga) ----------
 const noPatio = () => db.pesagens.filter(p => p.status === 'patio').sort((a, b) => ((a.date || '') + (a.time || '')).localeCompare((b.date || '') + (b.time || '')));
 const minutosPatio = p => Math.max(0, Math.round((Date.now() - new Date(`${p.date}T${p.time || '00:00'}`)) / 60000));
+// Destino da moega sugerido pela umidade da amostra (acima do padrão: secador; no padrão: silo). Só troca se ninguém escolheu.
+function destinoPelaUmidade(destinos) {
+  const f = document.querySelector('#dialog form'), d = f?.elements.destino, u = f?.elements.umidade; if (!d || !u) return;
+  let auto = d.value === '';
+  const sugerir = () => {
+    if (!auto) return;
+    const nb = x => String(x ?? '').trim() === '' ? NaN : typeof numeroBR === 'function' ? numeroBR(x) : Number(String(x).replace(',', '.'));
+    const um = nb(u.value); if (!Number.isFinite(um)) return;
+    const pu = nb(f.elements.umidadePadrao?.value), pad = Number.isFinite(pu) ? pu : padroesGrao(f.elements.produto?.value).umidade;
+    const alvo = destinos.find(x => x.value.startsWith(um > pad ? 'secador|' : 'silo|')) || destinos[0];
+    if (alvo) d.value = alvo.value;
+  };
+  d.addEventListener('change', () => { auto = false; });
+  u.addEventListener('input', sugerir); u.addEventListener('change', sugerir); f.elements.produto?.addEventListener('change', sugerir);
+  sugerir();
+}
 function chegadaForm() {
   const prod0 = db.romaneios.slice().sort(byDateDesc)[0]?.produto || 'soja';
   const destinos = [...equipDoTipo('Secador').map(m => ({value: 'secador|' + m.id, label: 'Secador — ' + m.name})), ...equipDoTipo('Silo/Armazém').map(m => ({value: 'silo|' + m.id, label: 'Silo direto — ' + m.name}))];
   openForm({title: 'Chegada do caminhão', sub: '1ª pesagem: caminhão cheio. A carga fica no pátio até a pesagem do caminhão vazio, depois da descarga.',
-    values: {date: today(), time: nowTime(), produto: prod0, season: safrasConhecidas?.()[0] || '', dono: 'proprio', destino: destinos[0]?.value || '', usarTara: 'auto'},
+    values: {date: today(), time: nowTime(), produto: prod0, season: safrasConhecidas?.()[0] || '', dono: 'proprio', destino: '', usarTara: 'auto', caminhao: ''},
     fields: [
       {k: 'dono', label: 'Dono do grão', type: 'select', options: [{value: 'proprio', label: 'Próprio (da fazenda)'}, {value: 'terceiro', label: 'Terceiro'}], required: true},
       {k: 'depositante', label: 'Nome do terceiro', mostrarSe: ['dono', 'terceiro'], hint: depositantes().length ? 'Já cadastrados: ' + depositantes().join(', ') : ''},
       {k: 'fieldId', label: 'Talhão de origem', type: 'select', options: fieldOptions, mostrarSe: ['dono', 'proprio'], full: true},
       {k: 'produto', label: 'Produto', type: 'select', options: PRODUTOS_GRAO.map(([v, l]) => ({value: v, label: l})), required: true}, {k: 'produtoNome', label: 'Qual cultura', mostrarSe: ['produto', 'outro']},
       {k: 'season', label: 'Safra', mais: true}, {k: 'date', label: 'Data', type: 'date', required: true}, {k: 'time', label: 'Hora', type: 'time', required: true},
+      ...(typeof camposCaminhao === 'function' ? camposCaminhao() : []),
       {k: 'placa', label: 'Placa', required: true, placeholder: 'ABC1D23'}, {k: 'motorista', label: 'Motorista'},
       {k: 'pesoBruto', label: 'Peso bruto — caminhão cheio (kg)', type: 'number', min: 0, required: true, hint: 'Para pesar o caminhão vazio antes de carregar, use “Tara do caminhão (vazio)” na Moega.'},
       {k: 'umidade', label: 'Umidade da amostra (%)', type: 'number', min: 0, hint: 'Pode medir agora ou na pesagem de saída.'}, {k: 'impureza', label: 'Impureza (%)', type: 'number', min: 0},
-      {k: 'destino', label: 'Descarregar em', type: 'select', options: destinos, full: true},
+      {k: 'destino', label: 'Da moega vai para', type: 'select', options: [{value: '', label: 'Decidir pela umidade, no fechamento'}, ...destinos], full: true, hint: 'O caminhão descarrega na moega; daqui o grão vai para o secador (úmido) ou direto para o silo (seco).'},
       {k: 'usarTara', label: 'Tara do caminhão', type: 'select', full: true, options: [{value: 'auto', label: 'Usar a tara cadastrada, se a placa tiver (uma pesagem só)'}, {value: 'pesar', label: 'Pesar o caminhão vazio depois da descarga'}], hint: `Tara cadastrada vale ${typeof TARA_VALIDADE_DIAS !== 'undefined' ? TARA_VALIDADE_DIAS : 30} dias; o romaneio e o ticket mostram a data dela.`},
       {k: 'amostraRetida', label: 'Amostra de contraprova (nº / lacre)', mais: true}, {k: 'notes', label: 'Observações', type: 'textarea', mais: true}],
     submit: 'Registrar chegada',
     onSubmit: v => {
       if (!(v.pesoBruto > 0)) return 'Informe o peso bruto';
+      delete v.caminhao;
       if (v.dono === 'terceiro' && !v.depositante) return 'Informe o nome do terceiro dono da carga';
       if (v.produto === 'outro' && !v.produtoNome) return 'Escreva qual é a cultura';
       const placa = String(v.placa).trim().toUpperCase(), chave = placa.replace(/\W/g, '');
@@ -271,6 +293,7 @@ function chegadaForm() {
       if (tv) { showToast(`Placa ${placa}: tara cadastrada ${n0(tv.kg)} kg (${fmtDate(tv.em)}). Confira a amostra e feche o romaneio.`); setTimeout(() => fecharPesagem(idP, true), 60); return; }
       showToast(`Placa ${placa} no pátio: ${n0(v.pesoBruto)} kg bruto. Depois da descarga, pese o caminhão vazio.`); go('graos/moega');
     }});
+  if (typeof chegadaLigar === 'function') chegadaLigar();
 }
 function fecharPesagem(id, usarTaraCad = false) {
   const p = find('pesagens', id); if (!p || p.status !== 'patio') return;
@@ -832,7 +855,7 @@ function comprovanteRomaneio(id) {
   const c = r.calc || calcRomaneio(r), cl = r.classif?.resultado;
   return `<div class="no-print">${head(`Comprovante — romaneio nº ${r.numero}`, `${fmtDate(r.date)} ${r.time || ''} • ${nomeProd(r.produto, r.produtoNome)}`, btn('← Moega', 'nav', 'graos/moega', 'secondary') + btn('Classificar', 'gr-classif', r.id, 'secondary') + btn('Editar', 'gr-rom-edit', r.id, 'secondary') + `<button class="danger" data-act="gr-rom-del" data-id="${esc(r.id)}">Excluir</button>` + btn('Ticket PDF', 'gr-ticket', r.id, 'secondary') + btn('Enviar ticket', 'gr-ticket-enviar', r.id, 'secondary') + btn('Imprimir', 'af-imprimir'))}</div>
   <article class="card panel relatorio"><header class="rel-head"><div><strong>Romaneio de recebimento nº ${r.numero}</strong><br><small>${esc(db.settings.farm || '')}</small></div><small>${fmtDate(r.date)} ${esc(r.time || '')}</small></header>
-    <h3>1. Carga</h3><table class="tbl"><tbody>${linhaC('Produto', esc(nomeProd(r.produto, r.produtoNome)))}${linhaC('Safra', esc(r.season || ''))}${linhaC('Dono do grão', esc(r.dono === 'terceiro' ? 'Terceiro — ' + r.depositante : 'Próprio'))}${linhaC('Talhão de origem', esc(fieldName(r.fieldId) || ''))}${linhaC('Placa', esc(r.placa || ''))}${linhaC('Motorista', esc(r.motorista || ''))}${linhaC('Destino', esc(nomeEquip(r.destinoId)))}${linhaC('Amostra de contraprova', esc(r.amostraRetida || ''))}</tbody></table>
+    <h3>1. Carga</h3><table class="tbl"><tbody>${linhaC('Produto', esc(nomeProd(r.produto, r.produtoNome)))}${linhaC('Safra', esc(r.season || ''))}${linhaC('Dono do grão', esc(r.dono === 'terceiro' ? 'Terceiro — ' + r.depositante : 'Próprio'))}${linhaC('Talhão de origem', esc(fieldName(r.fieldId) || ''))}${linhaC('Placa', esc(r.placa || ''))}${linhaC('Motorista', esc(r.motorista || ''))}${linhaC('Descarga', 'Moega → ' + esc(nomeEquip(r.destinoId)))}${linhaC('Amostra de contraprova', esc(r.amostraRetida || ''))}</tbody></table>
     <h3>2. Pesagem</h3><table class="tbl"><tbody>${linhaC('Peso bruto', n0(r.pesoBruto) + ' kg' + (r.entrada ? ` <small class="nota">(entrada ${fmtDH(r.entrada)})</small>` : ''))}${linhaC('Tara', n0(r.tara) + ' kg' + (r.taraCadastrada ? ` <small class="nota">(tara cadastrada do caminhão, pesado vazio em ${fmtDate(r.taraCadastrada.em)})</small>` : r.saida ? ` <small class="nota">(saída ${fmtDH(r.saida)})</small>` : ''))}${linhaC('<b>Peso líquido</b>', '<b>' + n0(c.liquido) + ' kg</b>')}</tbody></table>
     <h3>3. Amostra e descontos</h3><table class="tbl"><tbody>${linhaC('Umidade', n1(r.umidade) + `% (padrão ${n1(r.umidadePadrao)}%)`)}${r.impureza !== '' && r.impureza != null ? linhaC('Impureza e matérias estranhas', n1(r.impureza) + `% (padrão ${n1(r.impurezaPadrao)}%)`) : ''}${linhaC('Método', r.metodoDesc === 'tabela' ? `Tabela: ${num(r.fatorUmid, 2)}% por ponto de umidade, ${num(r.fatorImp ?? 1, 2)}% por ponto de impureza` : 'Balanço de massa')}
       ${c.linhas.map(l => linhaC(esc('Desconto — ' + l.rotulo.toLowerCase()), `${num(l.percentual, 2)}% → − ${n0(l.descontoKg)} kg`)).join('')}${linhaC('<b>Peso final (líquido e limpo)</b>', `<b>${n0(c.pesoFinal)} kg = ${sacas(c.pesoFinal)}</b>`)}</tbody></table>

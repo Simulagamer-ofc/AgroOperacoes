@@ -390,7 +390,7 @@
     P.cartoes([['Peso líquido', `${num(c.liquido)} kg`, 'bruto - tara'], ['Descontos', `${num(c.descontoKg)} kg`, `${num(c.descontoPct, 2)}% do líquido`, COR.laranja], ['Peso final', `${num(c.pesoFinal)} kg`, sc(c.pesoFinal) + ' de 60 kg', COR.verdeEsc]]);
     P.secao('Carga');
     P.ficha([['Produto', nomeProd(r.produto, r.produtoNome)], ['Safra', r.season || ''], ['Dono do grão', r.dono === 'terceiro' ? `Terceiro - ${r.depositante}` : (db.settings.farm || 'Próprio')],
-      ['Talhão de origem', fieldName(r.fieldId) || ''], ['Placa', r.placa || ''], ['Motorista', r.motorista || ''], ['Destino', nomeEquip(r.destinoId)], ['Amostra de contraprova', r.amostraRetida || '']]);
+      ['Talhão de origem', fieldName(r.fieldId) || ''], ['Placa', r.placa || ''], ['Motorista', r.motorista || ''], ['Descarga', 'Moega → ' + nomeEquip(r.destinoId)], ['Amostra de contraprova', r.amostraRetida || '']]);
     P.secao('Pesagem');
     P.tabela([{t: 'Pesagem', w: 2}, {t: 'Data e hora', w: 1.6}, {t: 'Peso (kg)', w: 1.4, dir: true}],
       [['Bruto (caminhão cheio)', r.entrada ? fmtDH(r.entrada) : `${fmtDate(r.date)} ${r.time || ''}`, num(r.pesoBruto)], [r.taraCadastrada ? 'Tara cadastrada do caminhão' : 'Tara (caminhão vazio)', r.taraCadastrada ? `pesado vazio em ${fmtDate(r.taraCadastrada.em)}` : r.saida ? fmtDH(r.saida) : '', num(r.tara)], ['Líquido', '', num(c.liquido)]]);
