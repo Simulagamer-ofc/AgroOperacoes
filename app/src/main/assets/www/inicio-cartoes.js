@@ -105,11 +105,34 @@ VIEWS.inicio = () => {
       corpo += `<div class="i2-meio">${iniCartao(lista[i])}${iniCartao(lista[i + 1])}</div>`; i++;
     } else corpo += iniCartao(lista[i]);
   }
-  return `<div class="i2 i3 ini-perso-tela ${lista.includes('clima') ? 'com-clima' : ''}">
+  // Só clima e mapa: no celular cabe tudo numa tela, sem rolar (o mapa ocupa o espaço que sobra)
+  const cabe = lista.length && lista.every(k => k === 'clima' || k === 'mapa');
+  return `<div class="i2 i3 ini-perso-tela ${lista.includes('clima') ? 'com-clima' : ''} ${cabe ? 'ini-cabe' : ''}">
     ${i2Cabecalho()}${corpo}
     <button type="button" class="ini-perso" data-act="ini-perso">${iconeLinha('mais', 18)} Personalizar a tela inicial</button></div>`;
 };
-VIEWS.inicio.after = (...a) => { iniDepoisBase?.(...a); iniLerConta(); };
+VIEWS.inicio.after = (...a) => { iniDepoisBase?.(...a); iniLerConta(); iniCaber(); setTimeout(iniCaber, 400); };
+
+// ---------- Celular: tela inicial inteira, sem rolar ----------
+// O mapa fica com a altura que sobra entre o topo e o menu de baixo (mínimo 220 px). No computador e no tablet, como antes.
+let iniCaberAjustando = false;
+function iniCaber() {
+  const tela = document.querySelector('.ini-cabe'), des = tela?.querySelector('.i2-faz-desenho'); if (!des || iniCaberAjustando) return;
+  if (innerWidth > 560) { if (des.style.height) { des.style.height = ''; } return; }
+  const vv = window.visualViewport, alto = vv ? vv.height : innerHeight;
+  const nav = document.querySelector('.mobile-nav'), baixo = nav && getComputedStyle(nav).display !== 'none' ? nav.getBoundingClientRect().height : 0;
+  const topo = tela.getBoundingClientRect().top + scrollY, atual = des.getBoundingClientRect().height;
+  const resto = tela.scrollHeight - atual + 10; // tudo menos o mapa (+ folga)
+  const h = Math.max(220, Math.floor(alto - topo - baixo - resto));
+  if (Math.abs(h - atual) < 2) return;
+  des.style.height = h + 'px';
+  // Ainda sobrou rolagem (margens do layout): tira a diferença do mapa
+  const sobra = document.documentElement.scrollHeight - alto;
+  if (sobra > 0 && h - sobra >= 220) des.style.height = (h - sobra) + 'px';
+  iniCaberAjustando = true; dispatchEvent(new Event('resize')); iniCaberAjustando = false; // o mapa (Leaflet) se ajusta ao tamanho novo
+}
+addEventListener('resize', () => { if (!iniCaberAjustando) iniCaber(); });
+addEventListener('orientationchange', () => setTimeout(iniCaber, 300));
 
 // ---------- Personalizar ----------
 function iniPersonalizar() {

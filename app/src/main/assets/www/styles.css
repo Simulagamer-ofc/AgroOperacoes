@@ -2432,3 +2432,37 @@ input.trv-so-ler{opacity:.7;background:color-mix(in srgb,var(--line) 40%,transpa
 @media (max-width:560px){.cha-aviso{grid-template-columns:auto minmax(0,1fr)}.cha-aviso button{grid-column:1/-1}}
 .ch-auto{color:var(--blue)}
 .ch-acoes{flex-wrap:nowrap;justify-content:flex-end;gap:6px}.ch-acoes button{min-width:40px;padding:6px 8px}
+/* Início no celular: tudo numa tela, sem rolar (só clima + mapa) */
+@media (max-width:560px){
+  .ini-cabe{gap:8px}
+  .ini-cabe>.i2-cab{display:none}
+  .ini-cabe>.ini-unido{display:flex;flex-direction:column;gap:8px;padding:12px 12px 10px;margin:0;overflow:hidden;min-width:0}
+  .ini-cabe .ini-unido>*,.ini-cabe .ini-unido .i2-faz>*,.ini-cabe .i2-faz-esq{min-width:0;max-width:100%}
+  .ini-cabe .ini-unido>.i2-faz{display:contents}
+  .ini-cabe .ini-unido>.i2-faz>*{order:3}
+  .ini-cabe .ini-unido .i2-tit{order:0;display:block;margin:0}
+  .ini-cabe .ini-unido .i2-tit h3{font-size:1.05rem;margin:0 0 4px;display:flex;align-items:center;gap:6px}
+  .ini-cabe .i2-faz-num{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;white-space:nowrap;gap:0 12px;font-size:.76rem}
+  .ini-cabe .i2-faz-num::-webkit-scrollbar{display:none}
+  .ini-cabe .i2-faz-num>*{flex:0 0 auto}
+  .ini-cabe .i2-faz-safra{padding:2px 8px}
+  .ini-cabe .i2-faz-def{min-height:0;padding:0;font-size:.76rem}
+  .ini-cabe .ini-u-clima{order:1}
+  .ini-cabe .ini-u-clima .hoje-clima{padding:0;margin:0;border:0;box-shadow:none;background:transparent}
+  .ini-cabe .clima-linha{padding:0;gap:10px}
+  .ini-cabe .clima-abrir{display:none}
+  .ini-cabe .clima-resumo{margin:6px 0 0}
+  .ini-cabe .clima-resumo:not([open])>summary{padding:6px 10px}
+  .ini-cabe .clima-resumo:not([open]) .cr-txt>small{display:none}
+  .ini-cabe .clima-resumo:not([open]) .cr-txt>strong{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.84rem;line-height:1.3}
+  .ini-cabe .clima-resumo:not([open]) .cr-ic svg{width:22px;height:22px}
+  .ini-cabe .ini-unido .i2-faz-corpo{order:2;display:flex;flex-direction:column;min-height:0}
+  .ini-cabe .i2-faz-modos{margin:0 0 6px;padding-right:0}
+  .ini-cabe .i2-faz-modos button{padding:5px 12px;min-height:34px;font-size:.84rem}
+  .ini-cabe .i2-faz-desenho{margin:0}
+  .ini-cabe .i2-faz-leg{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;white-space:nowrap;margin-top:6px;font-size:.72rem}
+  .ini-cabe .i2-faz-leg::-webkit-scrollbar{display:none}
+  .ini-cabe .i2-faz-leg>span{flex:0 0 auto}
+  .ini-cabe .i2-faz-dica{display:none}
+  .ini-cabe>.ini-perso{margin:0 0 4px;padding:8px;font-size:.84rem;border-width:1px}
+}
