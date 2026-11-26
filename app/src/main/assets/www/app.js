@@ -519,7 +519,7 @@ function machineForm(m = {}) {
       {k: 'model', label: 'Marca / modelo'},
       {k: 'tanqueL', label: 'Capacidade do tanque de calda (L)', type: 'number', min: 0, mostrarSe: ['type', ['Pulverizador', 'Drone de pulverização', 'Avião agrícola', 'Preparador de calda']], hint: 'Para o app calcular quantos tanques e quanto de cada produto vai por tanque.'},
       {k: 'placa', label: 'Placa', placeholder: 'Ex.: ABC1D23', mostrarSe: ['medidor', 'km']},
-      {k: 'taraKg', label: 'Tara — caminhão vazio (kg)', type: 'number', min: 0, mostrarSe: ['type', 'Caminhão'], hint: 'Peso do caminhão vazio na balança. Na moega, ao escolher este caminhão, a tara vem sozinha (vale 30 dias).'},
+      {k: 'taraKg', label: 'Tara — caminhão vazio (kg)', type: 'number', min: 0, mostrarSe: ['type', 'Caminhão'], hint: 'Peso do caminhão vazio na balança. Na moega, ao escolher este caminhão, a tara vem sozinha. Altere se trocar a carroceria.'},
       {k: 'taraEm', label: 'Data da pesagem vazia', type: 'date', mostrarSe: ['type', 'Caminhão']},
       {k: 'medidor', label: 'Medidor de uso', type: 'select', options: Object.entries(rotMed).map(([value, label]) => ({value, label})), required: true, hint: 'O app escolhe pelo tipo: veículo conta km, máquina conta horas. Pode trocar (ex.: caminhão com tomada de força revisado por horas).'},
       {k: 'hours', label: 'Leitura atual', type: 'number', min: 0, mostrarSe: ['medidor', '!nenhum']},
@@ -542,6 +542,9 @@ function machineForm(m = {}) {
       if (v.revMeses && !m.revDesde) v.revDesde = today();
       if (v.type !== 'Caminhão') v.carroceria = '';
       const tara = {kg: Number(v.taraKg) || 0, em: v.taraEm || today()}; delete v.taraKg; delete v.taraEm;
+      const taraAntes = m.placa && typeof caminhaoDaPlaca === 'function' ? Number(caminhaoDaPlaca(m.placa)?.tara) || 0 : 0;
+      if (m.id && v.type === 'Caminhão' && (m.carroceria || '') !== (v.carroceria || '') && taraAntes > 0 && tara.kg === taraAntes && typeof pedirConfirmacao === 'function') {
+        const c = pedirConfirmacao(`tara|${m.id}|${v.carroceria}`, `Você trocou a carroceria: confira a tara do caminhão vazio (hoje ${n0(taraAntes)} kg). Se não mudou, salve de novo.`); if (c) return c; }
       if (v.type === 'Caminhão' && tara.kg > 0 && !v.placa) return 'Informe a placa do caminhão para guardar a tara';
       if (v.type === 'Caminhão' && tara.kg > 0 && tara.em > today()) return 'A data da pesagem vazia não pode ser no futuro';
       if (v.medidor !== 'km') { v.placa = ''; v.docLicenciamento = ''; v.docIpva = ''; }
