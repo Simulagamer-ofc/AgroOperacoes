@@ -11,7 +11,7 @@
 
 // ---------- Geometria: corta o contorno com a linha da divisa ----------
 /** Corta o polígono (pontos [lat, lon]) com a linha da divisa (2 ou mais pontos [lat, lon]).
- *  A linha é esticada nas pontas até atravessar o talhão; precisa entrar e sair uma vez só.
+ *  Cada ponta vai até a borda mais perto; entre os pontos tocados a linha não pode sair do talhão.
  *  Devolve {partes: [p1, p2]} (cada uma [lat, lon]) ou {erro}. */
 function tdvCortar(pontos, corte) {
   let P = (pontos || []).map(([la, lo]) => [Number(la), Number(lo)]);
@@ -38,9 +38,15 @@ function tdvCortar(pontos, corte) {
   }
   X.sort((a, b) => a.s - b.s);
   const unicos = X.filter((x, k) => !k || Math.hypot(x.pt[0] - X[k - 1].pt[0], x.pt[1] - X[k - 1].pt[1]) > 0.01);
-  if (unicos.length < 2) return {erro: 'A linha não atravessa o talhão: toque nos dois lados da divisa, por dentro do contorno'};
-  if (unicos.length > 2) return {erro: 'A linha cruza a borda do talhão mais de duas vezes: ajuste os pontos para a divisa entrar e sair uma vez só'};
-  const [x1, x2] = unicos, meio = L.slice(Math.floor(x1.s) + 1, Math.floor(x2.s) + 1);
+  // Cada ponta vai só até a borda mais perto (e não até o fim do mundo): em talhão com recortes, a linha esticada
+  // sairia e entraria de novo. Ponta tocada por fora do talhão: a divisa começa onde a linha entra.
+  const dentro = ([x, y]) => { let d = false; for (let i = 0, j = n - 1; i < n; j = i++) { const [xi, yi] = p[i], [xj, yj] = p[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) d = !d; } return d; };
+  const a = 1, b = c.length, eps = 1e-9;
+  const x1 = dentro(c[0]) ? unicos.filter(x => x.s < a + eps).at(-1) : unicos.find(x => x.s >= a - eps);
+  const x2 = dentro(c.at(-1)) ? unicos.find(x => x.s > b - eps) : unicos.filter(x => x.s <= b + eps).at(-1);
+  if (!x1 || !x2 || x2.s <= x1.s + eps) return {erro: 'A linha não atravessa o talhão: toque nos pontos da divisa por dentro do contorno'};
+  if (unicos.some(x => x.s > x1.s + eps && x.s < x2.s - eps)) return {erro: 'A divisa sai do talhão entre os pontos tocados: toque os pontos por dentro do talhão, seguindo a divisa (mais pontos nas curvas)'};
+  const meio = L.slice(Math.floor(x1.s) + 1, Math.floor(x2.s) + 1);
   const dist = (a, b) => ((b - a) % n + n) % n;
   const cantos = (de, ate) => p.map((q, k) => [dist(de, k), q]).filter(([d]) => d > 1e-9 && d < dist(de, ate) - 1e-9).sort((a, b) => a[0] - b[0]).map(([, q]) => q);
   const p1 = [x1.pt, ...meio, x2.pt, ...cantos(x2.pos, x1.pos)], p2 = [x2.pt, ...meio.slice().reverse(), x1.pt, ...cantos(x1.pos, x2.pos)];
@@ -102,7 +108,7 @@ function tdvDesenhar() {
     add(L.polygon(pts, {color: '#fff', weight: 2, fillColor: cor, fillOpacity: 0.45, interactive: false}))
       .bindTooltip(`<b>${k}</b> • ${esc(tdv[k].crop || 'sem cultura')}<br>${um1(ha)} ha`, {permanent: true, direction: 'center', className: 'tm-rot'});
   });
-  if (tdv.corte.length > 1) add(L.polyline(tdv.corte, {color: '#ffd400', weight: 3, dashArray: '6 6', interactive: false}));
+  if (tdv.corte.length > 1) add(L.polyline(tdv.corte, {color: r.erro ? '#ff6b6b' : '#ffd400', weight: 3, dashArray: '6 6', interactive: false})); // vermelha: a divisa ainda não corta
   tdv.corte.forEach(pt => add(L.circleMarker(pt, {radius: 7, color: '#fff', weight: 2, fillColor: '#ffd400', fillOpacity: 1, interactive: false})));
   const el = $('#tdvResumo'); if (el) el.innerHTML = tdvResumo();
 }

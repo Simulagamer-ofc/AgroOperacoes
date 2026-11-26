@@ -41,10 +41,24 @@ test('linha fora do talhão, um ponto só ou talhão sem contorno: avisa', () =>
   assert.match(tdvCortar([], [[0, 0], [1, 1]]).erro, /contorno/);
 });
 
-test('talhão em L (côncavo): linha que cruza a borda quatro vezes pede ajuste', () => {
+test('talhão em L (côncavo): linha tocada que sai do talhão entre os pontos pede ajuste', () => {
   const {tdvCortar} = app();
   const L = [[-28.145, -52.305], [-28.145, -52.295], [-28.148, -52.295], [-28.148, -52.302], [-28.154, -52.302], [-28.154, -52.305]];
-  assert.match(tdvCortar(L, [[-28.150, -52.310], [-28.146, -52.290]]).erro, /mais de duas vezes/);
+  assert.match(tdvCortar(L, [[-28.150, -52.310], [-28.146, -52.290]]).erro, /sai do talhão entre os pontos/);
   const ok = tdvCortar(L, [[-28.146, -52.299], [-28.147, -52.299]]); // corta o braço de cima
   assert.ok(ok.partes, ok.erro); const tot = area(L), [a, b] = ok.partes.map(area); assert.ok(Math.abs(a + b - tot) / tot < 1e-6);
+});
+
+test('talhão em U (com recorte): a linha vai só até a borda mais perto, sem atravessar o recorte', () => {
+  const {tdvCortar} = app();
+  const U = [[-28.145, -52.305], [-28.145, -52.302], [-28.150, -52.302], [-28.150, -52.298], [-28.145, -52.298], [-28.145, -52.295], [-28.154, -52.295], [-28.154, -52.305]];
+  // Dois pontos no braço esquerdo: esticada até o fim, a linha entraria de novo no braço direito
+  const r = tdvCortar(U, [[-28.147, -52.304], [-28.147, -52.303]]);
+  assert.ok(r.partes, r.erro); const tot = area(U), [a, b] = r.partes.map(area);
+  assert.ok(Math.abs(a + b - tot) / tot < 1e-6, 'as partes somam o talhão');
+  const menor = Math.min(a, b), esperado = area([[-28.145, -52.305], [-28.145, -52.302], [-28.147, -52.302], [-28.147, -52.305]]);
+  assert.ok(Math.abs(menor - esperado) / esperado < 1e-3, `${menor} x ${esperado}`);
+  // Um ponto fora (a oeste) e outro dentro: começa onde a linha entra
+  const r2 = tdvCortar(U, [[-28.152, -52.310], [-28.152, -52.300]]);
+  assert.ok(r2.partes, r2.erro); const [a2, b2] = r2.partes.map(area); assert.ok(Math.abs(a2 + b2 - tot) / tot < 1e-6);
 });
