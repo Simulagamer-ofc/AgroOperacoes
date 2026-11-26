@@ -2418,3 +2418,9 @@ input.trv-so-ler{opacity:.7;background:color-mix(in srgb,var(--line) 40%,transpa
 .tdv-parte legend{display:flex;align-items:center;gap:8px;font-weight:700;padding:0 4px}
 .tdv-parte legend small{font-weight:400;color:var(--muted);font-size:.76rem}
 .tdv-selo{display:inline-block;width:max-content;justify-self:start;margin-left:6px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);font-size:.74rem;color:var(--muted);white-space:nowrap}
+/* Lista de sugestões ao digitar (sugestoes.js), no lugar da lista nativa */
+.sug-lista{position:fixed;z-index:1000;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.35);overflow-y:auto;overscroll-behavior:contain;padding:4px}
+.sug-lista[hidden]{display:none}
+.sug-lista button{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--text);padding:10px 12px;border-radius:8px;font-size:1rem;min-height:44px;cursor:pointer}
+.sug-lista button:hover,.sug-lista button.on{background:var(--bg)}
+.sug-lista b{color:var(--green);font-weight:800}
