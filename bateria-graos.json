@@ -741,7 +741,7 @@
    "mod": "Volume",
    "desc": "Desempenho: lançar as 140 cargas pelo formulário no navegador",
    "esperado": "menos de 1 s por carga",
-   "obtido": "0,07 s por carga (9,5 s no total)",
+   "obtido": "0,07 s por carga (9,4 s no total)",
    "ok": true
   },
   {
@@ -872,6 +872,6 @@
    }
   ]
  },
- "versao": "v1.2.20-beta1",
+ "versao": "v1.2.21-beta1",
  "errosJs": []
 }
