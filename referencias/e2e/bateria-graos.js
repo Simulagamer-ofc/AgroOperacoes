@@ -384,13 +384,14 @@ async () => {
   T('TAR-03', 'Tara', 'Romaneio, histórico e comprovante dizem que a tara é a cadastrada e de quando ela é', 'histórico e comprovante com "tara cadastrada do caminhão" e a data',
     `${/Tara cadastrada do caminhão/.test(rT.historico.at(-1)?.acao || '') ? 'histórico ok' : 'histórico sem'} • ${/tara cadastrada do caminhão, pesado vazio em/.test(htmlT) ? 'comprovante ok' : 'comprovante sem'}`,
     /Tara cadastrada do caminhão/.test(rT.historico.at(-1)?.acao || '') && /tara cadastrada do caminhão, pesado vazio em/.test(htmlT));
-  upsert('caminhoes', {...caminhaoDaPlaca(PLT), taraEm: addDias(today(), -31)});
-  await F('gr-chegada', undefined, {dono: 'proprio', produto: 'soja', season: '2025/26', date: today(), time: '07:40', placa: PLT, pesoBruto: '48000', umidade: '14,5', destino: 'secador|' + SEC_T});
-  await espera(150);
-  const ficouT = noPatio().find(p => chavePlaca(p.placa) === PLT);
-  T('TAR-04', 'Tara', `Tara cadastrada há mais de ${TARA_VALIDADE_DIAS} dias não vale: o caminhão fica no pátio para pesar vazio`, 'no pátio aguardando a tara', ficouT ? 'no pátio aguardando a tara' : aberto() ? 'abriu o romaneio com a tara vencida' : 'não entrou', !!ficouT && !aberto());
-  if (aberto()) closeModal();
-  if (ficouT) upsert('pesagens', {...ficouT, status: 'cancelada', motivo: 'teste'});
+  // A tara do cadastro não vence e uma nova pesagem vazia não muda o cadastro (só se alguém alterar, ex.: troca de carroceria)
+  upsert('caminhoes', {...caminhaoDaPlaca(PLT), taraEm: addDias(today(), -200)});
+  await F('gr-chegada', undefined, {dono: 'proprio', produto: 'soja', season: '2025/26', date: today(), time: '07:40', placa: PLT, pesoBruto: '48000', umidade: '14,5', destino: 'secador|' + SEC_T, usarTara: 'pesar'});
+  const pzV = noPatio().find(p => chavePlaca(p.placa) === PLT);
+  r = await F('gr-tara', pzV?.id, {tara: '16310'});
+  const camV = caminhaoDaPlaca(PLT), rV = db.romaneios.at(-1);
+  T('TAR-04', 'Tara', 'A tara do cadastro não vence (200 dias) e outra pesagem vazia (16.310 kg) não troca a tara do cadastro (16.050 kg)', 'romaneio com 16.310 kg • cadastro continua 16.050 kg • valendo',
+    `romaneio com ${br(Number(rV?.tara) || 0, 0)} kg • cadastro ${br(camV?.tara || 0, 0)} kg • ${taraValida(PLT) ? 'valendo' : 'não vale'}`, Number(rV?.tara) === 16310 && camV?.tara === 16050 && !!taraValida(PLT));
   // Escolher o caminhão cadastrado na lista: placa, motorista e tara vêm do cadastro; destino da moega sugerido pela umidade
   upsert('caminhoes', {...caminhaoDaPlaca(PLT), taraEm: today()});
   closeModal(); ACTIONS['gr-chegada'](); await espera(40);

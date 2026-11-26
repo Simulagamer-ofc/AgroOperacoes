@@ -274,7 +274,7 @@ function chegadaForm() {
       {k: 'pesoBruto', label: 'Peso bruto — caminhão cheio (kg)', type: 'number', min: 0, required: true, hint: 'Para pesar o caminhão vazio antes de carregar, use “Tara do caminhão (vazio)” na Moega.'},
       {k: 'umidade', label: 'Umidade da amostra (%)', type: 'number', min: 0, hint: 'Pode medir agora ou na pesagem de saída.'}, {k: 'impureza', label: 'Impureza (%)', type: 'number', min: 0},
       {k: 'destino', label: 'Da moega vai para', type: 'select', options: [{value: '', label: 'Decidir pela umidade, no fechamento'}, ...destinos], full: true, hint: 'O caminhão descarrega na moega; daqui o grão vai para o secador (úmido) ou direto para o silo (seco).'},
-      {k: 'usarTara', label: 'Tara do caminhão', type: 'select', full: true, options: [{value: 'auto', label: 'Usar a tara cadastrada, se a placa tiver (uma pesagem só)'}, {value: 'pesar', label: 'Pesar o caminhão vazio depois da descarga'}], hint: `Tara cadastrada vale ${typeof TARA_VALIDADE_DIAS !== 'undefined' ? TARA_VALIDADE_DIAS : 30} dias; o romaneio e o ticket mostram a data dela.`},
+      {k: 'usarTara', label: 'Tara do caminhão', type: 'select', full: true, options: [{value: 'auto', label: 'Usar a tara cadastrada, se a placa tiver (uma pesagem só)'}, {value: 'pesar', label: 'Pesar o caminhão vazio depois da descarga'}], hint: 'A tara vem do cadastro do caminhão; o romaneio e o ticket mostram que é a tara cadastrada.'},
       {k: 'amostraRetida', label: 'Amostra de contraprova (nº / lacre)', mais: true}, {k: 'notes', label: 'Observações', type: 'textarea', mais: true}],
     submit: 'Registrar chegada',
     onSubmit: v => {
