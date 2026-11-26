@@ -7,6 +7,7 @@
    • Sem contorno: informe a área da parte A; a parte B fica com o resto.
    • A parte A continua sendo o talhão de antes (fica com as operações, colheitas e lotes já registrados);
      a parte B é um talhão novo, com a mesma safra e o histórico de culturas. Dá para dividir uma parte de novo.
+   • "Juntar as partes": desfaz a divisão; o que foi lançado nas partes passa para o talhão inteiro.
    tdvCortar é pura (sem tela), testada em referencias/tests/divisao.test.js. */
 
 // ---------- Geometria: corta o contorno com a linha da divisa ----------
@@ -182,3 +183,57 @@ Object.assign(ACTIONS, {
   }
 });
 if (typeof NV_ROTA_TELA === 'object') NV_ROTA_TELA.dividir = 'talhoes';
+
+// ---------- Juntar as partes (desfaz a divisão) ----------
+// As partes voltam a ser um talhão só: o de antes (mesmo id), com o contorno inteiro guardado na divisão.
+// O que foi lançado nas outras partes (operações, aplicações, colheitas, lotes, cargas, gastos, chuva) passa para ele;
+// a colheita de cada parte continua com a cultura dela (fica certo no relatório da safra).
+const tdvPartesDe = f => f?.parteDe ? db.fields.filter(o => o.parteDe?.id === f.parteDe.id) : [];
+/** Troca o talhão em todos os registros (em qualquer coleção, também dentro de listas): de → para. Devolve quantos. */
+function tdvTrocarTalhao(dados, de, para) {
+  let n = 0;
+  const andar = (v, nivel) => {
+    if (!v || typeof v !== 'object' || nivel > 5) return;
+    if (Array.isArray(v)) { v.forEach(x => andar(x, nivel + 1)); return; }
+    if (v.fieldId === de) { v.fieldId = para; n++; }
+    Object.values(v).forEach(x => { if (x && typeof x === 'object') andar(x, nivel + 1); });
+  };
+  Object.entries(dados).forEach(([k, v]) => { if (k !== 'fields' && Array.isArray(v)) andar(v, 0); });
+  return n;
+}
+function tdvJuntar(id) {
+  const f = find('fields', id), partes = tdvPartesDe(f); if (!f || partes.length < 2) return showToast('Este talhão não está dividido', true);
+  if (!tdvGestor()) return showToast('Só o ADM e o supervisor juntam as partes', true);
+  const raiz = f.parteDe, base = partes.find(o => o.id === raiz.id) || partes.slice().sort((a, b) => (Number(b.area) || 0) - (Number(a.area) || 0))[0];
+  const inteiro = base.parteDe?.contornoInteiro || null;
+  if (typeof trvTrancado === 'function' && trvTrancado(base.id)) { trvPedir(base.id, () => tdvJuntar(id)); return; }
+  const area = Math.round(partes.reduce((s, o) => s + (Number(o.area) || 0), 0) * 100) / 100;
+  const pousio = c => typeof culturaNorm === 'function' ? culturaNorm(c) === 'pousio' : /^pousio$/i.test(String(c || '').trim());
+  const maior = partes.filter(o => o.crop && !pousio(o.crop)).sort((a, b) => (Number(b.area) || 0) - (Number(a.area) || 0))[0] || base;
+  openForm({title: `Juntar as partes — ${raiz.nome}`,
+    sub: `${partes.map(o => `${o.name} (${num(o.area)} ha, ${o.crop || 'sem cultura'})`).join(' + ')} voltam a ser um talhão só, com ${num(area)} ha${inteiro ? ' e o contorno de antes da divisão' : ''}. O que foi lançado nas partes (operações, aplicações, colheitas, lotes, cargas e gastos) passa para o talhão; a colheita de cada parte continua com a cultura dela.`,
+    values: {name: raiz.nome, crop: maior.crop || '', cultivar: maior.cultivar || ''},
+    fields: [{k: 'name', label: 'Nome do talhão', required: true, full: true},
+      {k: 'crop', label: 'Cultura do talhão inteiro', sugestoes: () => typeof culturasUsadas === 'function' ? culturasUsadas() : [], canon: true},
+      {k: 'cultivar', label: 'Cultivar'}],
+    submit: 'Juntar as partes',
+    onSubmit: v => {
+      const nome = String(v.name || '').trim(); if (!nome) return 'Informe o nome do talhão';
+      const dup = db.fields.find(o => !partes.some(p => p.id === o.id) && String(o.name || '').toLowerCase() === nome.toLowerCase());
+      if (dup) return `Já existe um talhão chamado ${dup.name}`;
+      const antes = base.contorno, outras = partes.filter(o => o.id !== base.id);
+      const movidos = outras.reduce((s, o) => s + tdvTrocarTalhao(db, o.id, base.id), 0);
+      const crop = typeof culturaCanon === 'function' ? culturaCanon(v.crop) : String(v.crop || '').trim();
+      const novo = {...base, name: nome, crop, cultivar: String(v.cultivar || '').trim(), area};
+      if (typeof culturaNorm === 'function' ? culturaNorm(crop) !== culturaNorm(base.crop) : crop !== base.crop) novo.ciclo = '';
+      if (inteiro) novo.contorno = {...inteiro}; else delete novo.contorno; // sem o contorno de antes guardado: desenhe de novo
+      delete novo.parteDe;
+      outras.forEach(o => remove('fields', o.id));
+      upsert('fields', novo);
+      if (inteiro && typeof trvDepoisDeSalvar === 'function') trvDepoisDeSalvar(find('fields', base.id), antes);
+      save();
+      showToast(`${nome}: partes juntas (${num(area)} ha)${movidos ? ` • ${movidos} ${movidos === 1 ? 'registro passou' : 'registros passaram'} para o talhão` : ''}`);
+      setTimeout(() => go('talhao/' + base.id), 0);
+    }});
+}
+ACTIONS['tdv-juntar'] = id => tdvJuntar(id);
