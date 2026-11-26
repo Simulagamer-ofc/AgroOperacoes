@@ -509,7 +509,9 @@ function machineForm(m = {}) {
   const rotMed = {horas: 'Horímetro (horas)', km: 'Odômetro (km)', nenhum: 'Sem medidor'};
   openForm({
     title: m.id ? 'Editar máquina' : 'Nova máquina', maisRotulo: 'Documentos e mais opções',
-    values: {state: 'Ativa', type: 'Trator', ...m, medidor: med0, interval: m.interval ?? (med0 === 'km' ? 10000 : 250)},
+    values: {state: 'Ativa', type: 'Trator', ...m, medidor: med0, interval: m.interval ?? (med0 === 'km' ? 10000 : 250),
+      // Tara do caminhão: fica no cadastro de caminhões da moega (pela placa)
+      ...(() => { const c = m.placa && typeof caminhaoDaPlaca === 'function' ? caminhaoDaPlaca(m.placa) : null; return {taraKg: c?.tara ?? '', taraEm: c?.taraEm ? String(c.taraEm).slice(0, 10) : today()}; })()},
     fields: [
       {k: 'name', label: 'Identificação', required: true, placeholder: 'Ex.: Trator 7230J, Hilux branca', full: true},
       {k: 'type', label: 'Tipo', type: 'select', options: GRUPOS_TIPO_MAQ.flatMap(([g, l]) => l.map(t => ({value: t, label: t, grupo: g}))).concat(m.type === 'Implemento' ? [{value: 'Implemento', label: 'Implemento'}] : []), required: true, hint: 'Plantadeira, grade, pulverizador de arrasto e outros implementos: cadastre em Máquinas → Implementos.'},
@@ -517,6 +519,8 @@ function machineForm(m = {}) {
       {k: 'model', label: 'Marca / modelo'},
       {k: 'tanqueL', label: 'Capacidade do tanque de calda (L)', type: 'number', min: 0, mostrarSe: ['type', ['Pulverizador', 'Drone de pulverização', 'Avião agrícola', 'Preparador de calda']], hint: 'Para o app calcular quantos tanques e quanto de cada produto vai por tanque.'},
       {k: 'placa', label: 'Placa', placeholder: 'Ex.: ABC1D23', mostrarSe: ['medidor', 'km']},
+      {k: 'taraKg', label: 'Tara — caminhão vazio (kg)', type: 'number', min: 0, mostrarSe: ['type', 'Caminhão'], hint: 'Peso do caminhão vazio na balança. Na moega, ao escolher este caminhão, a tara vem sozinha (vale 30 dias).'},
+      {k: 'taraEm', label: 'Data da pesagem vazia', type: 'date', mostrarSe: ['type', 'Caminhão']},
       {k: 'medidor', label: 'Medidor de uso', type: 'select', options: Object.entries(rotMed).map(([value, label]) => ({value, label})), required: true, hint: 'O app escolhe pelo tipo: veículo conta km, máquina conta horas. Pode trocar (ex.: caminhão com tomada de força revisado por horas).'},
       {k: 'hours', label: 'Leitura atual', type: 'number', min: 0, mostrarSe: ['medidor', '!nenhum']},
       {k: 'interval', label: 'Revisão a cada', type: 'number', min: 0, mostrarSe: ['medidor', '!nenhum']},
@@ -537,9 +541,14 @@ function machineForm(m = {}) {
       if (v.medidor !== 'nenhum' && v.nextService === '' && v.interval) v.nextService = Number(v.hours) + Number(v.interval);
       if (v.revMeses && !m.revDesde) v.revDesde = today();
       if (v.type !== 'Caminhão') v.carroceria = '';
+      const tara = {kg: Number(v.taraKg) || 0, em: v.taraEm || today()}; delete v.taraKg; delete v.taraEm;
+      if (v.type === 'Caminhão' && tara.kg > 0 && !v.placa) return 'Informe a placa do caminhão para guardar a tara';
+      if (v.type === 'Caminhão' && tara.kg > 0 && tara.em > today()) return 'A data da pesagem vazia não pode ser no futuro';
       if (v.medidor !== 'km') { v.placa = ''; v.docLicenciamento = ''; v.docIpva = ''; }
-      upsert('machines', {...m, ...v, id: m.id || uid()});
-      showToast('Máquina salva');
+      const idM = m.id || uid();
+      upsert('machines', {...m, ...v, id: idM});
+      if (v.type === 'Caminhão' && tara.kg > 0 && typeof taraDaMaquina === 'function') taraDaMaquina({...v, id: idM}, tara);
+      showToast(v.type === 'Caminhão' && tara.kg > 0 ? `Caminhão salvo com tara de ${n0(tara.kg)} kg` : 'Máquina salva');
     }
   });
   // Tipo escolhido → medidor sugerido; medidor → rótulos em horas ou km

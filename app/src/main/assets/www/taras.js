@@ -25,7 +25,7 @@ function camposCaminhao() {
   if (!lista.length) return [];
   return [{k: 'caminhao', label: 'Caminhão cadastrado', type: 'select', full: true, hint: 'Escolha a placa: o motorista e a tara vêm do cadastro do caminhão.',
     options: [{value: '', label: 'Outro caminhão — digitar a placa'}, ...lista.map(c => { const t = taraSituacao(c);
-      return {value: c.id, label: `${c.placa}${c.motorista ? ' • ' + c.motorista : ''} • ${t ? `tara ${n0(t.kg)} kg${t.valida ? '' : ' (vencida)'}` : 'sem tara'}`}; })]}];
+      const quem = c.motorista || (c.maquinaId && find('machines', c.maquinaId)?.name) || ''; return {value: c.id, label: `${c.placa}${quem ? ' • ' + quem : ''} • ${t ? `tara ${n0(t.kg)} kg${t.valida ? '' : ' (vencida)'}` : 'sem tara'}`}; })]}];
 }
 function ligarCaminhao(f) {
   const sel = f?.elements.caminhao, pl = f?.elements.placa, mo = f?.elements.motorista; if (!sel || !pl) return;
@@ -96,6 +96,13 @@ function taraAtualizar(reg) {
 }
 
 // ---------- Cadastro e lista ----------
+/** Tara digitada no cadastro do caminhão em Máquinas: grava no cadastro de caminhões da moega (mesma placa). */
+function taraDaMaquina(maq, {kg, em}) {
+  const c = caminhaoDaPlaca(maq.placa) || null;
+  if (c && Number(c.tara) === kg && String(c.taraEm || '').slice(0, 10) === em) { if (c.maquinaId !== maq.id) upsert('caminhoes', {...c, maquinaId: maq.id}); return; }
+  const hist = [...(c?.historico || []), {em, kg, origem: 'cadastro da máquina', por: quemUsa()}].slice(-20);
+  upsert('caminhoes', {...(c || {id: uid(), placa: placaFmt(maq.placa), criadoEm: Date.now(), transportadora: 'Próprio'}), maquinaId: maq.id, tara: kg, taraEm: em, taraOrigem: 'manual', historico: hist});
+}
 function caminhaoForm(c = {}) {
   openForm({title: c.id ? `Caminhão ${c.placa}` : 'Tara do caminhão (vazio)', submit: c.id ? 'Salvar' : 'Salvar tara',
     sub: c.id ? `A tara vale ${TARA_VALIDADE_DIAS} dias a partir da pesagem do caminhão vazio. Toda pesagem vazia na moega atualiza sozinha.`
