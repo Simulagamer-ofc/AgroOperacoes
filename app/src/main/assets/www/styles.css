@@ -2424,3 +2424,11 @@ input.trv-so-ler{opacity:.7;background:color-mix(in srgb,var(--line) 40%,transpa
 .sug-lista button{display:block;width:100%;text-align:left;background:transparent;border:0;color:var(--text);padding:10px 12px;border-radius:8px;font-size:1rem;min-height:44px;cursor:pointer}
 .sug-lista button:hover,.sug-lista button.on{background:var(--bg)}
 .sug-lista b{color:var(--green);font-weight:800}
+/* Chuva automática e tempo no campo (campo-auto.js) */
+.cha-aviso{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;margin-bottom:14px}
+.cha-aviso .cha-ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--bg);font-size:1.2rem}
+.cha-aviso.on .cha-ic{color:var(--blue)}
+.cha-aviso b{display:block}.cha-aviso small{display:block;color:var(--muted);font-size:.8rem;line-height:1.35}
+@media (max-width:560px){.cha-aviso{grid-template-columns:auto minmax(0,1fr)}.cha-aviso button{grid-column:1/-1}}
+.ch-auto{color:var(--blue)}
+.ch-acoes{flex-wrap:nowrap;justify-content:flex-end;gap:6px}.ch-acoes button{min-width:40px;padding:6px 8px}

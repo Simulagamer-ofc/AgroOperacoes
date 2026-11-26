@@ -27,8 +27,9 @@ function chuvaEstimada(data, hora, fieldId) {
 }
 const fmtDiaHoraChuva = iso => `${fmtDate(iso.slice(0, 10)).slice(0, 5)} ${iso.slice(11, 13)}h`;
 function chuvaForm(valores = {}) {
-  const manual = valores.mm != null && valores.mm !== '';
-  openForm({form: 'chuva', title: 'Registrar chuva', sub: 'Leitura do pluviômetro (mm): na sede da fazenda ou num talhão.', values: {date: today(), hora: valores.notes ? '' : nowTime(), ...valores},
+  const manual = valores.mm != null && valores.mm !== '' || !!valores.id;
+  const editando = !!(valores.id && find('chuvas', valores.id));
+  openForm({form: 'chuva', title: editando ? 'Editar chuva' : 'Registrar chuva', sub: editando ? (valores.fonte === 'automática' ? 'Registrada sozinha pelos dados do tempo do ponto da fazenda. Corrija se o pluviômetro marcou diferente: vira leitura do pluviômetro.' : 'Corrija a leitura.') : 'Leitura do pluviômetro (mm): na sede da fazenda ou num talhão.', values: {date: today(), hora: valores.notes ? '' : nowTime(), ...valores},
     fields: [{k: 'date', label: 'Data da leitura', type: 'date', required: true}, {k: 'hora', label: 'Hora da leitura', type: 'time', hint: 'Já vem com a hora de agora; ajuste se leu o pluviômetro antes.'},
       {k: 'mm', label: 'Chuva (mm)', type: 'number', min: 0, required: true, hint: ' '},
       {k: 'fieldId', label: 'Local do pluviômetro', type: 'select', options: fieldOptions, vazio: LOCAL_SEDE}, {k: 'notes', label: 'Observações', type: 'textarea'}],
@@ -36,10 +37,16 @@ function chuvaForm(valores = {}) {
       if (v.mm > 400) return 'Mais de 400 mm numa leitura: confira o valor';
       if (v.date > today() || (v.date === today() && v.hora && v.hora > nowTime())) return 'A leitura não pode ser no futuro: confira a data e a hora';
       // Repetido: mesmo local, mesmo dia e mesma hora (duas leituras no mesmo dia, em horas diferentes, valem)
-      const dup = typeof conferirRepetido === 'function' ? conferirRepetido('chuvas', c => c.date === v.date && (c.fieldId || '') === (v.fieldId || '') && (c.hora || '') === (v.hora || ''), `já existe chuva registrada em ${fmtDate(v.date)}${v.hora ? ' às ' + v.hora : ''} neste local`) : ''; if (dup) return dup;
+      const dup = typeof conferirRepetido === 'function' ? conferirRepetido('chuvas', c => c.id !== valores.id && c.date === v.date && (c.fieldId || '') === (v.fieldId || '') && (c.hora || '') === (v.hora || ''), `já existe chuva registrada em ${fmtDate(v.date)}${v.hora ? ' às ' + v.hora : ''} neste local`) : ''; if (dup) return dup;
       // Valor da estimativa sem mudar = registro estimado (fica marcado); mudou = leitura do pluviômetro
       if (!mmMexido && $('#f_mm', dialog).value !== ultimoPreenchido) mmMexido = true;
       const est = estAtual, estimada = !!est && !mmMexido && Math.abs(Number(v.mm) - est.mm) < 1e-9;
+      if (editando) {
+        // Editada: vira leitura da pessoa (a chuva automática não muda mais este registro)
+        const antes = find('chuvas', valores.id), reg = {...antes, ...v, fonte: 'pluviômetro', editada: true, auto: false};
+        if (antes.fonte === 'automática' && v.notes === antes.notes) reg.notes = '';
+        upsert('chuvas', reg); showToast(`Chuva corrigida: ${um1(v.mm)} mm`); return;
+      }
       const reg = {id: uid(), ...v, fonte: estimada ? 'estimativa' : (mmMexido && manual ? 'pluviômetro' : (valores.fonte || 'pluviômetro'))};
       if (estimada && !v.notes) reg.notes = 'Estimativa da previsão do tempo (média dos modelos) — conferir no pluviômetro';
       db.chuvas.push(reg); save(); showToast(`${um1(v.mm)} mm registrados${estimada ? ' (estimativa)' : ''}`);
@@ -108,7 +115,7 @@ VIEWS.chuva = () => {
     </section>
     <section class="card panel viz-root"><h3>Chuva por mês (mm)</h3><div class="fx-graf ch-graf" role="img" aria-label="Chuva por mês">${porMes.map(m => `<div class="fx-mes"><div class="fx-par"><div class="fx-barra ch" ${tip(m.rot, um1(m.mm) + ' mm')}><span class="ent" style="height:${m.mm / max * 100}%"></span></div></div><small>${m.rot.split('/')[0]}</small></div>`).join('')}</div>
       ${tabela(['Mês', 'mm'], porMes.map(m => [m.rot, um1(m.mm)]))}</section>
-    <div class="section-title"><h3>Registros</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><tbody>${lista.map(c => `<tr><td>${fmtDate(c.date)}${c.hora ? `<br><small style="color:var(--muted)">${esc(c.hora)}</small>` : ''}</td><td>${esc(talhaoOuGeral(c.fieldId))}</td><td class="num"><strong>${um1(c.mm)} mm</strong>${c.fonte === 'estimativa' ? '<br><small class="ch-est" title="Estimativa da previsão do tempo">≈ estimada</small>' : ''}</td><td><div class="row-actions">${mini('Compartilhar', 'ch-comp', c.id)}${mini('Excluir', 'ch-del', c.id, 'del')}</div></td></tr>`).join('')}</tbody></table></div></section>`
+    <div class="section-title"><h3>Registros</h3></div><section class="card panel"><div class="tbl-wrap"><table class="tbl"><tbody>${lista.map(c => `<tr><td><b>${fmtDate(c.date)}</b>${c.hora ? ` <small style="color:var(--muted)">${esc(c.hora)}</small>` : ''}<br><small style="color:var(--muted)">${esc(talhaoOuGeral(c.fieldId))}</small></td><td class="num"><strong>${um1(c.mm)} mm</strong>${c.fonte === 'estimativa' ? '<br><small class="ch-est" title="Estimativa da previsão do tempo">≈ estimada</small>' : c.fonte === 'automática' ? `<br><small class="ch-est ch-auto" title="Registrada sozinha pelos dados do tempo do ponto da fazenda${c.ate ? ', até ' + esc(c.ate) : ', dia todo'}">⚡ automática</small>` : ''}</td><td><div class="row-actions ch-acoes">${[['✎', 'Editar', 'ch-edit', ''], ['↗', 'Compartilhar', 'ch-comp', ''], ['🗑', 'Excluir', 'ch-del', 'del']].map(([ic, rot, act, cls]) => `<button class="${cls}" data-act="${act}" data-id="${esc(c.id)}" aria-label="${rot}" title="${rot}">${ic}</button>`).join('')}</div></td></tr>`).join('')}</tbody></table></div></section>`
     : `<section class="card">${empty('Nenhuma chuva registrada', 'Lance a leitura do pluviômetro de cada talhão ou da sede.', {act: 'ch-new', label: '+ Chuva'})}</section>`);
 };
 
@@ -240,7 +247,8 @@ VIEWS.maodeobra = () => {
 
 Object.assign(TITLES, {chuva: 'Chuvas', pragas: 'Pragas e doenças (MIP)', aplicacoes: 'Aplicações e carência', maodeobra: 'Mão de obra'});
 Object.assign(ACTIONS, {
-  'ch-new': () => chuvaForm(), 'ch-comp': compartilharChuva, 'ch-resumo': () => dialogoTexto('Resumo das chuvas', 'Últimos 7 dias e o mês, por pluviômetro.', textoResumoChuva()), 'ch-del': id => confirmDialog('Excluir este registro de chuva?', () => { remove('chuvas', id); showToast('Excluído'); }),
+  'ch-new': () => chuvaForm(), 'ch-comp': compartilharChuva, 'ch-resumo': () => dialogoTexto('Resumo das chuvas', 'Últimos 7 dias e o mês, por pluviômetro.', textoResumoChuva()), 'ch-edit': id => { const c = find('chuvas', id); if (c) chuvaForm({...c}); },
+  'ch-del': id => confirmDialog('Excluir este registro de chuva?', () => { const c = find('chuvas', id); if (c?.fonte === 'automática' && typeof chaIgnorar === 'function') chaIgnorar(c.date); remove('chuvas', id); showToast('Excluído'); }),
   'mip-new': () => monitoramentoForm(), 'mip-edit': id => monitoramentoForm(find('monitoramentos', id)), 'mip-del': id => confirmDialog('Excluir este monitoramento?', () => { remove('monitoramentos', id); showToast('Excluído'); }),
   'ap-new': aplicacaoForm,
   'ap-del': id => confirmDialog('Excluir esta aplicação? Se tirou produto do estoque, ele volta ao saldo.', () => {
