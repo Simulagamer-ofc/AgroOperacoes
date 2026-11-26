@@ -148,7 +148,7 @@
         y += 2;
       },
       // Tabela com cabeçalho repetido a cada página, linhas alternadas e quebra de texto por célula
-      tabela(colunas, linhas) {
+      tabela(colunas, linhas, {total: comTotal = false} = {}) { // comTotal: última linha é a soma (negrito, fundo)
         const total = colunas.reduce((s, c) => s + c.w, 0), esc = LARG / total, cols = colunas.map(c => ({...c, w: c.w * esc}));
         const cab = () => {
           cor(COR.verdeEsc, 'fill'); doc.rect(M, y, LARG, 7.5, 'F');
@@ -162,10 +162,12 @@
           const partes = ln.map((v, k) => doc.splitTextToSize(texto(v), cols[k].w - 4));
           const alt = Math.max(6.4, Math.max(...partes.map(p => p.length)) * 3.7 + 2.8);
           if (garantir(alt)) { continuacao(); cab(); }
-          if (i % 2) { cor(COR.zebra, 'fill'); doc.rect(M, y, LARG, alt, 'F'); }
+          const ehTotal = comTotal && i === linhas.length - 1;
+          if (ehTotal) { cor(COR.fundo, 'fill'); doc.rect(M, y, LARG, alt, 'F'); cor(COR.verdeEsc, 'draw'); doc.setLineWidth(.4); doc.line(M, y, A4.l - M, y); }
+          else if (i % 2) { cor(COR.zebra, 'fill'); doc.rect(M, y, LARG, alt, 'F'); }
           let x = M;
           partes.forEach((p, k) => {
-            const c = cols[k]; fonte(8.3, !!c.negrito); cor(COR.texto);
+            const c = cols[k]; fonte(8.3, !!c.negrito || ehTotal); cor(COR.texto);
             p.forEach((t, j) => doc.text(t, c.dir ? x + c.w - 2 : x + 2, y + 4.4 + j * 3.7, c.dir ? {align: 'right'} : undefined));
             x += c.w;
           });

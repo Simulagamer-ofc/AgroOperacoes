@@ -290,7 +290,7 @@ function chegadaForm() {
       if (tv && v.pesoBruto <= tv.kg) return `Peso bruto menor que a tara cadastrada da placa ${placa} (${n0(tv.kg)} kg). Confira o peso.`;
       const idP = uid();
       upsert('pesagens', {id: idP, ...v, placa, status: 'patio', chegadaPor: quemUsa(), criadoEm: Date.now()});
-      if (tv) { showToast(`Placa ${placa}: tara cadastrada ${n0(tv.kg)} kg (${fmtDate(tv.em)}). Confira a amostra e feche o romaneio.`); setTimeout(() => fecharPesagem(idP, true), 60); return; }
+      if (tv) { showToast(`Placa ${placa}: tara cadastrada ${n0(tv.kg)} kg (${fmtDate(tv.em)}). Confira a amostra e feche o romaneio.`); const abrir = (n = 0) => document.getElementById('modal')?.classList.contains('open') && n < 60 ? setTimeout(() => abrir(n + 1), 50) : fecharPesagem(idP, true); setTimeout(abrir, 30); return; } // abre o romaneio só depois que a chegada fechou
       showToast(`Placa ${placa} no pátio: ${n0(v.pesoBruto)} kg bruto. Depois da descarga, pese o caminhão vazio.`); go('graos/moega');
     }});
   if (typeof chegadaLigar === 'function') chegadaLigar();
@@ -584,7 +584,7 @@ function menuDaRota(name, arg) {
   if (name === 'secagem') return 'graos/secador';
   if (name !== 'graos') return '';
   const a = String(arg || '').split('/')[0];
-  return ['moega', 'romaneio'].includes(a) ? 'graos/moega' : ['secador', 'lote'].includes(a) ? 'graos/secador' : ['silos', 'terceiros', 'extrato', 'saida'].includes(a) ? 'graos/silos' : 'graos';
+  return ['moega', 'romaneio', 'pesagens'].includes(a) ? 'graos/moega' : ['secador', 'lote'].includes(a) ? 'graos/secador' : ['silos', 'terceiros', 'extrato', 'saida'].includes(a) ? 'graos/silos' : 'graos';
 }
 Object.assign(TITLES, {'graos/moega': 'Moega', 'graos/secador': 'Secador', 'graos/silos': 'Silos e armazém'});
 // Faixa Moega → Secador → Silos: o número principal de cada etapa e o que está passando de uma para outra
@@ -612,7 +612,7 @@ VIEWS.graos = arg => {
   const rel = btn('Relatório da safra', 'nav', 'graos/relatorio', 'secondary');
   const topos = {
     '': ['Painel de grãos', 'Resumo do dia e da safra: recebimento, secagem e armazenagem.', btn('+ Carga na moega', 'gr-romaneio') + btn('Iniciar secagem', 'gr-secar', '', 'secondary') + btn('Saída do silo', 'gr-saida', '', 'secondary') + rel],
-    moega: ['Moega', 'Pesagem, amostra e descontos. Cada carga segue para o secador ou direto ao silo e vira colheita do talhão.', btn('+ Chegada do caminhão', 'gr-chegada') + btn('Tara do caminhão (vazio)', 'tara-novo', '', 'secondary') + btn('+ Carga na moega', 'gr-romaneio', '', 'secondary') + rel],
+    moega: ['Moega', 'Pesagem, amostra e descontos. Cada carga segue para o secador ou direto ao silo e vira colheita do talhão.', btn('+ Chegada do caminhão', 'gr-chegada') + btn('Tara do caminhão (vazio)', 'tara-novo', '', 'secondary') + btn('+ Carga na moega', 'gr-romaneio', '', 'secondary') + btn('Relatório de pesagem', 'nav', 'graos/pesagens', 'secondary') + rel],
     secador: ['Secador', 'Seca as cargas que a moega mandou. Ao finalizar, o grão seco entra no silo escolhido.', btn('Iniciar secagem', 'gr-secar') + btn('Leituras avulsas', 'nav', 'secagem', 'secondary') + rel],
     silos: ['Silos e armazém', 'Saldo, qualidade e expedição. As entradas vêm da moega (grão seco) e do secador.', btn('Saída do silo', 'gr-saida') + btn('Grão de terceiros', 'nav', 'graos/terceiros', 'secondary') + rel],
     terceiros: ['Grão de terceiros', 'Saldo e cobrança de cada produtor que deixou grão na unidade.', btn('← Silos', 'nav', 'graos/silos', 'secondary') + btn('Tarifas', 'gr-tarifas', '', 'secondary')]};
