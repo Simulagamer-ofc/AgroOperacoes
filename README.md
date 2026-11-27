@@ -4,6 +4,9 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
+`1.2.26-beta2` — **Microfone do Edy funcionando no app.**
+- **Fale com o Edy.** O microfone agora usa o reconhecimento de voz do próprio Android (dentro do app, sem abrir a janela do Google): na 1ª vez o app pede a permissão do microfone; o texto aparece na caixa enquanto você fala e o botão pulsa com a sua voz. Toque de novo para parar. Se a permissão for negada ou faltar internet, o Edy explica o que fazer. **Precisa instalar o APK novo** (as telas sozinhas não bastam).
+
 `1.2.26-beta1` — **A IA agora se chama Edy, e ficou proativa, faz registros, responde com fontes e analisa.** Menu **Edy (IA)**.
 - **Edy proativo.** O Edy avisa antes de você perguntar: chuva forte num dia com operação de campo programada (e sugere o melhor dia seco), aplicação feita com chuva logo depois ("o produto pode ter sido lavado"), pulverização marcada num dia sem janela boa, colheita marcada antes de acabar a carência, máquina com revisão vencida escalada para operação e vigor do satélite que caiu num talhão. Os avisos aparecem no sino como **Edy: …**, no topo da tela do Edy e no celular (Ajustes → Alertas → **Edy (IA)**). Às **6h30**, o **resumo da manhã**: tempo, janela de pulverização, o que está programado e o que precisa de atenção. Tudo calculado no aparelho, sem gastar IA.
 - **Edy que age.** Conte o que fez ou peça: "plantei 30 ha no T07", "abasteci 180 L no 7230", "choveu 25 mm", "passa o plantio do T08 para sábado" — o Edy prepara o registro e mostra **Conferir e salvar**, que abre o formulário já preenchido. Nada é salvo sem você.

@@ -30,6 +30,7 @@
     referencias: ['azul', '<path d="M5 4.5h9.5a2.5 2.5 0 0 1 2.5 2.5v13H7.5A2.5 2.5 0 0 1 5 17.5z"/><path d="M5 17.5A2.5 2.5 0 0 1 7.5 15H17M8.5 8.5h5M8.5 11.5h5"/><path d="M19 6.5v14"/>'],
     grupo: ['verde', '<path d="M3.5 20.5h17"/><path d="M5 20.5V10l4-3 4 3v10.5"/><path d="M13 20.5V13l3.5-2.5L20 13v7.5"/><path d="M7.5 14h3M7.5 17h3M15 16h3"/>'],
     relatorios: ['verde', '<path d="M6.5 3h8l4.5 4.5V21h-12.5z"/><path d="M14.5 3v4.5H19M9.5 12.5h6M9.5 16.5h6"/>'],
+    microfone: ['verde', '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/>'],
     cadastros: ['azul', '<ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v12c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8V6M5 12c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8"/>']
   };
   // Hexágono "deitado" como os da abertura, com o desenho no meio

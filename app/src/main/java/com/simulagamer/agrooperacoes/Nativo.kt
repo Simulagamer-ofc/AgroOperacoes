@@ -9,5 +9,5 @@ package com.simulagamer.agrooperacoes
  * O build de PR (android.yml) falha se a parte Android mudar sem subir este número; o pages.yml lê daqui.
  */
 object Nativo {
-    const val NIVEL = 2
+    const val NIVEL = 3
 }

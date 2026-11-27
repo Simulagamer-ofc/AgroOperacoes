@@ -122,6 +122,35 @@ function iaBolhas() {
     return `<div class="ia-msg ia">${iaFormatar(m.texto)}${acoes ? `<div class="edy-acoes">${acoes}</div>` : ''}${fontes.length ? `<div class="ia-fontes"><span>Fontes:</span>${fontes.map(f => `<a href="${esc(iaLink(f.url))}" target="_blank" rel="noopener noreferrer">${esc(f.titulo)}</a>`).join('')}</div>` : ''}</div>`;
   }).join('');
 }
+/* Microfone do Edy */
+let iaOuvindo = '', iaVozBase = '', iaVozWeb = null;
+function iaTemMic() { return !!(window.AndroidBridge || window.SpeechRecognition || window.webkitSpeechRecognition); }
+function iaVozTexto(t) {
+  const c = $('#iaPergunta'); if (!c) return;
+  c.value = (iaVozBase ? iaVozBase + ' ' : '') + String(t || '').trim(); c.dispatchEvent(new Event('input'));
+}
+const IA_VOZ_ERRO = {
+  negado: 'O MercaPlant precisa da permissão do microfone. Libere em Configurações › Apps › MercaPlant › Permissões.',
+  nada: 'Não ouvi nada. Toque no microfone e fale perto do celular.',
+  rede: 'Sem internet para entender a voz. Tente de novo ou escreva.',
+  'sem-servico': 'Este aparelho não tem o reconhecimento de voz do Google. Instale ou ative o app Google e tente de novo.',
+  ocupado: 'O microfone está ocupado em outro app. Tente de novo.',
+  falha: 'Não deu para ouvir. Tente de novo ou escreva.'
+};
+function iaVozFim(erro) {
+  iaOuvindo = ''; iaVozWeb = null;
+  const b = $('.ia-mic'); if (b) { b.classList.remove('ouvindo'); b.style.removeProperty('--nivel'); }
+  if (erro && erro !== 'cancelado') showToast(IA_VOZ_ERRO[erro] || IA_VOZ_ERRO.falha, true);
+  else $('#iaPergunta')?.focus();
+}
+// Resposta do reconhecimento nativo (MainActivity → Voz.kt)
+window.onVoz = ({etapa, texto, nivel} = {}) => {
+  if (etapa === 'ouvindo') return;
+  if (etapa === 'nivel') { $('.ia-mic')?.style.setProperty('--nivel', String((nivel || 0) / 100)); return; }
+  if (etapa === 'parcial') return iaVozTexto(texto);
+  if (etapa === 'fim') { iaVozTexto(texto); return iaVozFim(); }
+  if (etapa === 'erro') iaVozFim(texto);
+};
 VIEWS.assistente = () => {
   const ligado = typeof nvVinculado === 'function' && nvVinculado(), tec = iaModo === 'tecnica';
   return head('✨ Edy', 'A inteligência do MercaPlant. Pergunte, peça análises ou conte o que fez: o Edy responde com os seus dados e prepara os registros para você conferir.', iaConversa.length ? btn('Nova conversa', 'ia-limpar', '', 'secondary') : '') +
@@ -131,7 +160,7 @@ VIEWS.assistente = () => {
       <div class="ia-sug">${(tec ? IA_SUG_TECNICA : IA_SUGESTOES).map(s => `<button type="button" class="chip" data-act="ia-sug" data-id="${esc(s)}">${esc(s)}</button>`).join('')}</div>
       ${ligado ? `<div class="ia-modos" role="group" aria-label="Modo"><button type="button" class="chip ${tec ? '' : 'active'}" data-act="ia-modo" data-id="" aria-pressed="${!tec}">💬 Fazenda</button><button type="button" class="chip ${tec ? 'active' : ''}" data-act="ia-modo" data-id="tecnica" aria-pressed="${tec}">🔎 Técnica (com fontes)</button></div>
         <form class="ia-form" id="iaForm"><textarea id="iaPergunta" rows="1" maxlength="800" placeholder="${tec ? 'Pergunta técnica…' : 'Pergunte ao Edy…'}" aria-label="Pergunta"></textarea>
-        ${window.SpeechRecognition || window.webkitSpeechRecognition ? '<button type="button" class="secondary ia-mic" data-act="ia-mic" aria-label="Falar a pergunta" title="Falar">🎤</button>' : ''}
+        ${iaTemMic() ? `<button type="button" class="ia-mic" data-act="ia-mic" aria-label="Falar a pergunta" title="Falar">${(typeof iconeMenu === 'function' && iconeMenu('microfone', 44)) || '🎤'}</button>` : ''}
         <button type="submit" class="primary" aria-label="Enviar">Enviar</button></form>`
       : '<p class="nota">Entre na sua conta da nuvem para usar o Edy.</p>'}
       <p class="nota ia-rodape">${tec ? 'Modo técnico: o Edy pesquisa na Embrapa, MAPA/ZARC, manual CQFS-RS/SC e Emater e mostra as fontes.' : 'O Edy pode errar: confira números importantes.'} Ele não receita defensivo nem dose (isso é com o agrônomo).</p>
@@ -140,11 +169,12 @@ VIEWS.assistente = () => {
 TITLES.assistente = 'Edy';
 VIEWS.assistente.after = () => {
   const f = $('#iaForm'), t = $('#iaPergunta'), msgs = $('#iaMsgs'); if (msgs) msgs.scrollTop = msgs.scrollHeight;
+  if (iaOuvindo) { window.AndroidBridge?.vozCancelar?.(); iaVozWeb?.abort?.(); iaOuvindo = ''; iaVozWeb = null; }
   if (!f) return;
   const ajustar = () => { t.style.height = 'auto'; t.style.height = Math.min(140, t.scrollHeight) + 'px'; };
   t.addEventListener('input', ajustar);
   t.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); f.requestSubmit(); } });
-  f.onsubmit = e => { e.preventDefault(); iaPerguntar(t.value); };
+  f.onsubmit = e => { e.preventDefault(); if (iaOuvindo) { window.AndroidBridge?.vozCancelar?.(); iaVozWeb?.abort?.(); iaVozFim(); } iaPerguntar(t.value); };
   const pend = sessionStorage.getItem('ia-pendente'); if (pend) { sessionStorage.removeItem('ia-pendente'); iaPerguntar(pend); }
 };
 let iaOcupado = false;
@@ -178,12 +208,22 @@ Object.assign(ACTIONS, {
     edyAbrirAcao(a);
   },
   'ia-mic': () => {
+    const b = $('.ia-mic');
+    if (iaOuvindo) { iaOuvindo === 'web' ? iaVozWeb?.stop() : window.AndroidBridge?.vozParar?.(); return; }
+    // App Android: a WebView não ouve sozinha, a voz passa pelo reconhecimento do próprio aparelho
+    if (window.AndroidBridge) {
+      if (!window.AndroidBridge.vozOuvir) return showToast('Atualize o app MercaPlant para falar com o Edy pelo microfone.', true);
+      iaVozBase = ($('#iaPergunta')?.value || '').trim(); iaOuvindo = 'app'; b?.classList.add('ouvindo');
+      window.AndroidBridge.vozOuvir(); return;
+    }
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SR) return;
-    const r = new SR(), b = $('.ia-mic'); r.lang = 'pt-BR'; r.interimResults = false; r.maxAlternatives = 1;
-    r.onresult = e => { const t = $('#iaPergunta'); if (t) { t.value = (t.value ? t.value + ' ' : '') + e.results[0][0].transcript; t.dispatchEvent(new Event('input')); } };
-    r.onend = () => b?.classList.remove('ouvindo'); r.onerror = () => { b?.classList.remove('ouvindo'); showToast('Não deu para ouvir. Tente de novo ou escreva.', true); };
+    const r = new SR(); iaVozWeb = r; r.lang = 'pt-BR'; r.interimResults = true; r.maxAlternatives = 1;
+    iaVozBase = ($('#iaPergunta')?.value || '').trim(); iaOuvindo = 'web';
+    r.onresult = e => { const t = Array.from(e.results).map(x => x[0].transcript).join(''); iaVozTexto(t); };
+    r.onend = () => iaVozFim(); r.onerror = e => iaVozFim(e.error === 'not-allowed' ? 'negado' : e.error === 'no-speech' ? 'nada' : 'falha');
     b?.classList.add('ouvindo'); r.start();
   },
+
 });
 if (typeof NV_ROTA_TELA === 'object') NV_ROTA_TELA.assistente = 'inicio';
 
