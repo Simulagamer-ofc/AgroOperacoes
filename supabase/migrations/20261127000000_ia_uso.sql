@@ -33,3 +33,8 @@ $$;
 revoke all on function public.ia_contar(uuid, uuid, int) from public, anon, authenticated;
 revoke all on function public.ia_tokens(uuid, bigint, bigint) from public, anon, authenticated;
 revoke all on table public.ia_uso from anon, authenticated;
+
+-- Código de teste temporário do servidor (para conferir a IA sem usuário); só o servidor lê; vence sozinho
+create table if not exists public.ia_teste (token text primary key, expira timestamptz not null);
+alter table public.ia_teste enable row level security;
+revoke all on table public.ia_teste from anon, authenticated;

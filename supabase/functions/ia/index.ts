@@ -6,7 +6,7 @@
 // A chave fica só aqui (segredo GEMINI_API_KEY); o app nunca vê. Modelo: GEMINI_MODELO (padrão gemini-2.5-flash).
 // Limite por pessoa por dia (IA_LIMITE_DIA, padrão 50), contado na tabela ia_uso (só o servidor acessa).
 // A IA só sugere: o app mostra o que leu para a pessoa conferir antes de salvar.
-// Publicar com verify_jwt = true.
+// Publicar com verify_jwt = false: a própria função confere o login (getUser + farm_role) e o teste (ia_teste).
 import {createClient} from 'npm:@supabase/supabase-js@2';
 import {erroGemini, esquemaBoletim, type Grupo, MAX_BASE64, normalizarBoletim, promptBoletim, textoDaResposta, TIPOS_ARQUIVO} from './nucleo.ts';
 
@@ -46,10 +46,20 @@ Deno.serve(async req => {
   try {
     const b = await req.json().catch(() => ({}));
     const ligada = !!(Deno.env.get('GEMINI_API_KEY') || '').trim();
-    // Teste do servidor (sem usuário): só com o segredo IA_TESTE (24+ caracteres) no cabeçalho x-ia-teste; não conta no limite
-    const teste = (Deno.env.get('IA_TESTE') || '').trim(), modoTeste = teste.length >= 24 && req.headers.get('x-ia-teste') === teste;
+    // Teste do servidor (sem usuário): código de teste temporário na tabela ia_teste (só o servidor lê; vence sozinho)
+    const codTeste = req.headers.get('x-ia-teste') || '';
+    const modoTeste = codTeste.length >= 32 && !!(await createClient(Deno.env.get('SUPABASE_URL')!, chaveSecreta(), {auth: {persistSession: false, autoRefreshToken: false}})
+      .from('ia_teste').select('token').eq('token', codTeste).gt('expira', new Date().toISOString()).maybeSingle()).data;
     if (modoTeste && b.acao === 'boletim' && ligada) {
-      const r = await gemini([{inline_data: {mime_type: String(b.arquivo?.tipo || 'image/jpeg'), data: String(b.arquivo?.dados || '')}}, {text: promptBoletim(String(b.especie || ''), String(b.cientifico || ''), b.grupos || [])}], esquemaBoletim(b.grupos || []));
+      // No teste, o arquivo pode vir por endereço do repositório do MercaPlant (boletim fictício de referencias/ia)
+      let dadosTeste = String(b.arquivo?.dados || '');
+      const urlTeste = String(b.arquivo?.url || '');
+      if (!dadosTeste && /^https:\/\/raw\.githubusercontent\.com\/Simulagamer-ofc\/AgroOperacoes\//.test(urlTeste)) {
+        const bytes = new Uint8Array(await (await fetch(urlTeste)).arrayBuffer());
+        let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+        dadosTeste = btoa(bin);
+      }
+      const r = await gemini([{inline_data: {mime_type: String(b.arquivo?.tipo || 'image/jpeg'), data: dadosTeste}}, {text: promptBoletim(String(b.especie || ''), String(b.cientifico || ''), b.grupos || [])}], esquemaBoletim(b.grupos || []));
       return resposta(200, {ok: true, teste: true, modelo: r.modelo, entrada: r.entrada, saida: r.saida, dados: normalizarBoletim(r.dados, b.grupos || [])});
     }
     const fazenda = String(b.farm_id || '');
