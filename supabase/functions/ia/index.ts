@@ -3,7 +3,7 @@
 //   status    a IA está ligada no servidor? (não gasta)
 //   boletim   lê a foto ou o PDF do boletim de análise de sementes e devolve os campos para o formulário do app
 //             {farm_id, acao, especie, cientifico, grupos:[{id, rot}], arquivo:{tipo, dados(base64)}}
-// A chave fica só aqui (segredo GEMINI_API_KEY); o app nunca vê. Modelo: GEMINI_MODELO (padrão gemini-2.5-flash).
+// A chave fica só aqui (segredo GEMINI_API_KEY); o app nunca vê. Modelo: GEMINI_MODELO (padrão gemini-3.1-flash-lite).
 // Limite por pessoa por dia (IA_LIMITE_DIA, padrão 50), contado na tabela ia_uso (só o servidor acessa).
 // A IA só sugere: o app mostra o que leu para a pessoa conferir antes de salvar.
 // Publicar com verify_jwt = false: a própria função confere o login (getUser + farm_role) e o teste (ia_teste).
@@ -21,8 +21,9 @@ function chaveSecreta() {
   return Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 }
 
-async function gemini(partes: unknown[], esquema: unknown) {
-  const chave = (Deno.env.get('GEMINI_API_KEY') || '').trim(), modelo = (Deno.env.get('GEMINI_MODELO') || 'gemini-2.5-flash').trim();
+const MODELO_PADRAO = 'gemini-3.1-flash-lite'; // leu o boletim de teste igual ao 3.5 Flash, por ~1/25 do custo
+async function gemini(partes: unknown[], esquema: unknown, outroModelo = '') {
+  const chave = (Deno.env.get('GEMINI_API_KEY') || '').trim(), modelo = (outroModelo || Deno.env.get('GEMINI_MODELO') || MODELO_PADRAO).trim();
   const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 90000);
   try {
     const r = await fetch(`${GEMINI}/${encodeURIComponent(modelo)}:generateContent`, {method: 'POST', signal: ctl.signal,
@@ -61,7 +62,7 @@ Deno.serve(async req => {
         let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
         dadosTeste = btoa(bin);
       }
-      const r = await gemini([{inline_data: {mime_type: String(b.arquivo?.tipo || 'image/jpeg'), data: dadosTeste}}, {text: promptBoletim(String(b.especie || ''), String(b.cientifico || ''), b.grupos || [])}], esquemaBoletim(b.grupos || []));
+      const r = await gemini([{inline_data: {mime_type: String(b.arquivo?.tipo || 'image/jpeg'), data: dadosTeste}}, {text: promptBoletim(String(b.especie || ''), String(b.cientifico || ''), b.grupos || [])}], esquemaBoletim(b.grupos || []), /^gemini-[\w.-]+$/.test(String(b.modelo || '')) ? String(b.modelo) : '');
       return resposta(200, {ok: true, teste: true, modelo: r.modelo, entrada: r.entrada, saida: r.saida, dados: normalizarBoletim(r.dados, b.grupos || [])});
     }
     const fazenda = String(b.farm_id || '');
@@ -70,7 +71,7 @@ Deno.serve(async req => {
     const eu = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_ANON_KEY') || CHAVE_APP, {global: {headers: {Authorization: auth}}, auth: {persistSession: false}});
     const [{data: papel}, {data: quem}] = await Promise.all([eu.rpc('farm_role', {p_farm: fazenda}), eu.auth.getUser()]);
     if (!papel || !quem?.user?.id) return erro(403, 'Sem acesso a esta fazenda.');
-    if (b.acao === 'status') return resposta(200, {ligada, modelo: (Deno.env.get('GEMINI_MODELO') || 'gemini-2.5-flash').trim()});
+    if (b.acao === 'status') return resposta(200, {ligada, modelo: (Deno.env.get('GEMINI_MODELO') || MODELO_PADRAO).trim()});
     if (!ligada) return erro(503, 'A IA ainda não foi ligada no servidor (falta a GEMINI_API_KEY).');
 
     if (b.acao === 'boletim') {
