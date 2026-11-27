@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 const assertEquals = (a: unknown, b: unknown) => assert.deepEqual(a, b);
-import {erroGemini, esquemaBoletim, esquemaChat, fontesDaResposta, instrucaoAssistente, instrucaoTecnica, lerChat, normalizarAcoes, normalizarBoletim, textoDaResposta} from './nucleo.ts';
+import {acoesQuebradas, erroGemini, esquemaBoletim, esquemaChat, fontesDaResposta, instrucaoAssistente, instrucaoTecnica, lerChat, normalizarAcoes, normalizarBoletim, textoDaResposta} from './nucleo.ts';
 
 const G = [{id: 'cultivada', rot: 'Outra espécie cultivada'}, {id: 'silvestre', rot: 'Silvestre'}, {id: 'nt', rot: 'Nociva tolerada'}];
 
@@ -66,6 +66,8 @@ Deno.test('ações da IA: só o que é possível, sem o essencial a ação cai',
   assertEquals(a[2], {tipo: 'reprogramar', operacaoId: 'o8', data: '2026-11-28', hora: '07:30'});
   assertEquals(a[3].data, '2026-11-26');
   assertEquals(a[4], {tipo: 'operacao', tipoOperacao: 'Colheita'});
+  // operação que já existe com data nova = reprogramar
+  assertEquals(normalizarAcoes([{tipo: 'operacao', operacaoId: 'o8', data: '2026-11-28'}], '2026-11-26'), [{tipo: 'reprogramar', operacaoId: 'o8', data: '2026-11-28'}]);
 });
 
 Deno.test('resposta do chat em JSON ou texto puro; fontes da busca sem repetir', () => {
@@ -73,4 +75,13 @@ Deno.test('resposta do chat em JSON ou texto puro; fontes da busca sem repetir',
   assertEquals(lerChat('Só texto', '2026-11-26'), {resposta: 'Só texto', acoes: []});
   const f = fontesDaResposta({candidates: [{groundingMetadata: {groundingChunks: [{web: {uri: 'https://x.google/1', title: 'embrapa.br'}}, {web: {uri: 'https://x.google/2', title: 'embrapa.br'}}, {web: {uri: 'http://inseguro', title: 'a'}}, {web: {uri: 'https://x.google/3', title: 'gov.br'}}]}}]});
   assertEquals(f, [{titulo: 'embrapa.br', url: 'https://x.google/1'}, {titulo: 'gov.br', url: 'https://x.google/3'}]);
+});
+
+Deno.test('registro quebrado pela IA: detecta e não deixa passar o tipo quebrado', () => {
+  const quebrado = '{"resposta":"ok","acoes":[{"tipo":"operacao","data":"2026-11-26","tipoOperacao":"Plantio,talhaoId:mwyb16aoaibsl,area:30,s"}]}';
+  assertEquals(acoesQuebradas(quebrado), true);
+  assertEquals(acoesQuebradas('{"resposta":"ok","acoes":[{"tipo":"reprogramar","operacaoId":"o8","data":"2026-11-30","hora":"08:00"}]}'), false);
+  assertEquals(acoesQuebradas('{"resposta":"ok","acoes":[{"tipo":"operacao","tipoOperacao":"Preparo de solo","data":"2026-11-26"}]}'), false);
+  assertEquals(lerChat(quebrado, '2026-11-26').acoes, []);
+  assertEquals(normalizarAcoes([{tipo: 'operacao', tipoOperacao: "Plantio',\n  \"area\": 30", data: '2026-11-26'}], '2026-11-26'), []);
 });

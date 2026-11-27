@@ -113,8 +113,10 @@ export function instrucaoAssistente(hoje: string) {
     'Defensivos: você pode falar de janela de aplicação, carência e condições do tempo, mas NÃO receite produto nem dose — isso é com o agrônomo responsável (receituário agronômico).',
     'Clima: para decisões (pulverizar, plantar, colher, entrar com máquina), use a previsão por dia e as janelas de pulverização dos dados; explique o motivo (vento, chuva, Delta T, solo encharcado) e sugira o melhor dia/horário.',
     'Análise: para produtividade use DADOS.produtividade (sc/ha por talhão e safra, média da fazenda); compare com a safra anterior e aponte o melhor e o pior talhão. Para vigor use DADOS.talhoes[].ndvi (atual, anterior e variação): aponte o talhão que caiu. Previsão de colheita: DADOS.talhoes[].colheitaPrevista e estadio. Custo por hectare só existe em DADOS.produtividade quando a pessoa pode ver o financeiro; se não vier, diga que só o administrador vê custos.',
-    'AÇÕES: quando a pessoa contar algo que FEZ ou que aconteceu (ex.: "plantei 30 ha no T3", "abasteci 180 L no 7230", "choveu 25 mm") ou pedir para marcar, programar, passar ou reprogramar uma operação, coloque em acoes o registro pronto — o app mostra para a pessoa conferir e salvar; você nunca salva nada. Use os ids exatos de DADOS (talhoes[].id, maquinas[].id, operacoes[].id); "T3", "talhão 3" e "3" são o mesmo talhão se o nome bater. Datas em AAAA-MM-DD (hoje, ontem, sábado → calcule pela data de hoje). Se faltar algo essencial (qual talhão, qual máquina, quantos litros) ou houver dois talhões possíveis, pergunte na resposta e não crie a ação. Na resposta, diga em 1 ou 2 linhas o que preparou para ela conferir.',
+    'AÇÕES: quando a pessoa contar algo que FEZ ou que aconteceu (ex.: "plantei 30 ha no T3", "abasteci 180 L no 7230", "choveu 25 mm") ou pedir para marcar, programar, passar ou reprogramar uma operação, coloque em acoes o registro pronto — o app mostra para a pessoa conferir e salvar; você nunca salva nada. Use os ids exatos de DADOS (talhoes[].id, maquinas[].id, operacoes[].id); "T3", "talhão 3" e "3" são o mesmo talhão se o nome bater. Datas em AAAA-MM-DD (hoje, ontem, sábado → calcule pela data de hoje). Para reprogramar, ache em DADOS.operacoes a operação ainda não concluída daquele talhão (e tipo, se disser) e use o id dela em operacaoId. Se faltar algo essencial (qual talhão, qual máquina, quantos litros) ou houver duas operações/talhões possíveis, pergunte na resposta e não crie a ação.',
+    'Você NÃO registra, salva nem reprograma nada: nunca diga "registrei", "salvei", "reprogramei" ou "anotado". Diga "Preparei … para você conferir e salvar" e, em 1 ou 2 linhas, o que preparou. Se não criou a ação, não diga que fez.',
     'Tipos de ação: operacao (registro de operação; status Concluída se já fez, Programada se é para fazer; tipoOperacao entre os de DADOS.tiposOperacao), reprogramar (operacaoId de uma operação existente + a nova data e, se disser, a hora), abastecimento (maquinaId, litros, horimetro se disser), chuva (mm, data, talhaoId se disser o local).',
+    'Exemplos (com hoje = quinta 26/11/2026): "passa o plantio do Talhão 08 para sábado" → uma ação reprogramar com operacaoId = id do Plantio do Talhão 08 (não concluído) em DADOS.operacoes e data 2026-11-28. "plantei 30 ha no T07" → uma ação operacao, tipoOperacao Plantio, talhaoId = id do Talhão 07, area 30, status Concluída, data 2026-11-26. "abasteci 180 L no 7230" → uma ação abastecimento, maquinaId = id do Trator 7230J, litros 180, data 2026-11-26. Cada coisa que a pessoa contar vira uma ação separada. Se você disser que preparou algo, a ação TEM de estar em acoes.',
     'Formato: texto simples; pode usar **negrito** e listas com "- ". No máximo umas 12 linhas, a não ser que peçam detalhes.',
   ].join('\n');
 }
@@ -124,7 +126,7 @@ export function instrucaoTecnica(hoje: string) {
   return [
     'Você é o Edy, a inteligência artificial do MercaPlant, respondendo como engenheiro agrônomo para produtores do Brasil (a maioria no Rio Grande do Sul). Fale no masculino.',
     `Hoje é ${hoje}. Responda em português do Brasil, curto e prático.`,
-    'Pesquise e baseie a resposta em fontes técnicas oficiais, nesta ordem: Embrapa; MAPA (Zoneamento Agrícola de Risco Climático — ZARC, Agrofit para registro de produtos, RAS para sementes); Manual de Calagem e Adubação para os Estados do RS e SC (CQFS-RS/SC, SBCS-NRS); Emater/RS-Ascar; Seapi/DDPA-RS; Conab; universidades e fundações de pesquisa (UFRGS, UFSM, UPF, Fundação Pró-Sementes, CCGL TEC). Evite blogs e lojas.',
+    'SEMPRE pesquise no Google antes de responder e baseie a resposta em fontes técnicas oficiais, nesta ordem: Embrapa; MAPA (Zoneamento Agrícola de Risco Climático — ZARC, Agrofit para registro de produtos, RAS para sementes); Manual de Calagem e Adubação para os Estados do RS e SC (CQFS-RS/SC, SBCS-NRS); Emater/RS-Ascar; Seapi/DDPA-RS; Conab; universidades e fundações de pesquisa (UFRGS, UFSM, UPF, Fundação Pró-Sementes, CCGL TEC). Evite blogs e lojas.',
     'Diga de qual fonte veio cada ponto principal (ex.: "segundo a Embrapa Soja…", "pelo ZARC do MAPA…", "pelo Manual da CQFS-RS/SC…"). Se as fontes não forem claras ou divergirem, diga isso.',
     'Temas: estádio fenológico (escala da cultura), janela de plantio pelo ZARC do município/RS, nível de controle e de ação do MIP (amostragem, quando agir), adubação e calagem pela análise de solo, cultivares, manejo.',
     'Use também os DADOS da fazenda que vierem (talhões, estádio, análise de solo e a recomendação que o app calculou pelo manual) para responder para o caso dela; confira os números com o manual e explique.',
@@ -146,9 +148,9 @@ export function esquemaChat() {
         tipo: {type: 'STRING', enum: TIPOS_ACAO},
         talhaoId: nul('STRING', 'id do talhão em DADOS.talhoes'), maquinaId: nul('STRING', 'id da máquina em DADOS.maquinas'), operacaoId: nul('STRING', 'id da operação em DADOS.operacoes (para reprogramar)'),
         tipoOperacao: nul('STRING', 'tipo da operação (um de DADOS.tiposOperacao)'), status: {type: 'STRING', nullable: true, enum: STATUS_OP},
-        data: nul('STRING', 'AAAA-MM-DD'), hora: nul('STRING', 'HH:MM'), area: nul('NUMBER', 'hectares'), litros: nul('NUMBER', 'litros abastecidos'),
+        data: {type: 'STRING', description: 'AAAA-MM-DD: o dia do registro, ou a NOVA data ao reprogramar'}, hora: nul('STRING', 'HH:MM'), area: nul('NUMBER', 'hectares'), litros: nul('NUMBER', 'litros abastecidos'),
         horimetro: nul('NUMBER', 'horímetro ou odômetro informado'), mm: nul('NUMBER', 'milímetros de chuva'), obs: nul('STRING', 'observação curta'),
-      }, required: ['tipo']}},
+      }, required: ['tipo', 'data']}},
     },
     required: ['resposta', 'acoes'],
   };
@@ -156,6 +158,7 @@ export function esquemaChat() {
 
 export type Acao = {tipo: string, talhaoId?: string, maquinaId?: string, operacaoId?: string, tipoOperacao?: string, status?: string, data?: string, hora?: string,
   area?: number, litros?: number, horimetro?: number, mm?: number, obs?: string};
+const TIPO_OK = /^[\p{L}][\p{L} /-]{1,39}$/u; // "Plantio", "Preparo de solo" (texto quebrado da IA não passa)
 const id = (v: unknown) => typeof v === 'string' && /^[\w-]{1,60}$/.test(v.trim()) ? v.trim() : undefined;
 /** Confere as ações da IA: só tipos, datas, horas e números possíveis; sem o essencial, a ação cai. */
 export function normalizarAcoes(lista: unknown, hoje: string): Acao[] {
@@ -166,10 +169,11 @@ export function normalizarAcoes(lista: unknown, hoje: string): Acao[] {
     const r: Acao = {tipo: String(a.tipo)};
     const por = (k: keyof Acao, v: unknown) => { if (v !== undefined && v !== null) (r as Record<string, unknown>)[k] = v; };
     por('talhaoId', id(a.talhaoId)); por('maquinaId', id(a.maquinaId)); por('operacaoId', id(a.operacaoId));
-    por('tipoOperacao', txt(a.tipoOperacao, 40) || undefined); por('status', STATUS_OP.includes(String(a.status)) ? String(a.status) : undefined);
+    por('tipoOperacao', TIPO_OK.test(String(a.tipoOperacao ?? '').trim()) ? String(a.tipoOperacao).trim() : undefined); por('status', STATUS_OP.includes(String(a.status)) ? String(a.status) : undefined);
     por('data', d && d >= '2000-01-01' && d <= ate ? d : undefined); por('hora', h);
     por('area', num(a.area, 0.01, 100000) ?? undefined); por('litros', num(a.litros, 0.1, 100000) ?? undefined);
     por('horimetro', num(a.horimetro, 0, 10000000) ?? undefined); por('mm', num(a.mm, 0, 400) ?? undefined); por('obs', txt(a.obs, 160) || undefined);
+    if (r.tipo === 'operacao' && r.operacaoId && r.data && r.status !== 'Concluída') r.tipo = 'reprogramar'; // mudar uma operação que já existe
     if (r.tipo === 'operacao' && !r.tipoOperacao) return null;
     if (r.tipo === 'reprogramar' && (!r.operacaoId || !r.data)) return null;
     if (r.tipo === 'abastecimento' && (!r.maquinaId || r.litros == null)) return null;
@@ -177,6 +181,14 @@ export function normalizarAcoes(lista: unknown, hoje: string): Acao[] {
     if ((r.tipo === 'chuva' || (r.tipo === 'operacao' && r.status === 'Concluída')) && r.data && r.data > hoje) r.data = hoje;
     return r;
   }).filter(Boolean).slice(0, 6) as Acao[];
+}
+
+/** A IA às vezes devolve um registro quebrado (aspas e campos dentro de um texto): vale pedir de novo. */
+export function acoesQuebradas(texto: string): boolean {
+  try {
+    const j = JSON.parse(texto), lista = Array.isArray(j?.acoes) ? j.acoes : [];
+    return lista.some((a: Record<string, unknown>) => Object.values(a || {}).some(v => typeof v === 'string' && /["{}\n]|\w:\s?\w/.test(v) && !/^\d{2}:\d{2}$/.test(v)));
+  } catch { return false; }
 }
 
 /** Texto do chat → {resposta, acoes}. Se o modelo não devolveu JSON, o texto inteiro é a resposta. */
