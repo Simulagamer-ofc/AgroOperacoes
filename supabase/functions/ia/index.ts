@@ -50,7 +50,9 @@ Deno.serve(async req => {
     const codTeste = req.headers.get('x-ia-teste') || '';
     const modoTeste = codTeste.length >= 32 && !!(await createClient(Deno.env.get('SUPABASE_URL')!, chaveSecreta(), {auth: {persistSession: false, autoRefreshToken: false}})
       .from('ia_teste').select('token').eq('token', codTeste).gt('expira', new Date().toISOString()).maybeSingle()).data;
-    if (modoTeste && b.acao === 'boletim' && ligada) {
+    if (codTeste && !modoTeste) return erro(403, 'Código de teste inválido ou vencido.');
+    if (modoTeste && !ligada) return erro(503, 'A IA ainda não foi ligada no servidor (falta a GEMINI_API_KEY).');
+    if (modoTeste && b.acao === 'boletim') {
       // No teste, o arquivo pode vir por endereço do repositório do MercaPlant (boletim fictício de referencias/ia)
       let dadosTeste = String(b.arquivo?.dados || '');
       const urlTeste = String(b.arquivo?.url || '');
