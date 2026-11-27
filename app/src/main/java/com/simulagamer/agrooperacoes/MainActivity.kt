@@ -116,6 +116,21 @@ class MainActivity : AppCompatActivity() {
         geoOrigin = null
     }
 
+    // Microfone do Edy: reconhecimento de voz nativo (a WebView não ouve sozinha)
+    private val voz by lazy {
+        Voz(this) { etapa, texto, nivel ->
+            val js = "window.onVoz && onVoz(${org.json.JSONObject().put("etapa", etapa).put("texto", texto).put("nivel", nivel)})"
+            runOnUiThread { webView.evaluateJavascript(js, null) }
+        }
+    }
+    private val requestMic = registerForActivityResult(ActivityResultContracts.RequestPermission()) { ok ->
+        if (ok) voz.ouvir()
+        else {
+            val js = "window.onVoz && onVoz(${org.json.JSONObject().put("etapa", "erro").put("texto", "negado").put("nivel", 0)})"
+            webView.evaluateJavascript(js, null)
+        }
+    }
+
     /** Ponte exposta ao JavaScript como `window.AndroidBridge`. */
     inner class AndroidBridge {
         @JavascriptInterface
@@ -217,6 +232,22 @@ class MainActivity : AppCompatActivity() {
             principal.removeCallbacks(vigia)
             Ota.confirmar(this@MainActivity)
         }
+
+        /** Edy: começa a ouvir (pede a permissão do microfone na 1ª vez). Resultado chega em window.onVoz. */
+        @JavascriptInterface
+        fun vozOuvir() {
+            runOnUiThread {
+                if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) voz.ouvir()
+                else requestMic.launch(Manifest.permission.RECORD_AUDIO)
+            }
+        }
+
+        /** Edy: para de ouvir e entrega o que já foi dito. */
+        @JavascriptInterface
+        fun vozParar() { runOnUiThread { voz.parar() } }
+
+        @JavascriptInterface
+        fun vozCancelar() { runOnUiThread { voz.cancelar() } }
 
         /** Versão instalada do APK (para avisar quando houver uma mais nova). */
         @JavascriptInterface
@@ -372,6 +403,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         visivel = false
+        voz.cancelar()
         if (isChangingConfigurations) return
         foraDesde = System.currentTimeMillis()
         // APK novo baixado e instalação silenciosa liberada: instala se a pessoa não voltar em 1 minuto,
