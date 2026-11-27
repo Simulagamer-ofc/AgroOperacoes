@@ -19,20 +19,22 @@ const ALERTA_TIPOS = [
   ['carencia', 'Carência cumprida', 'colheita do talhão liberada'],
   ['atrasadas', 'Operações atrasadas', 'programadas para dias que já passaram'],
   ['contas', 'Contas a vencer', 'vencidas ou vencendo em até 3 dias', () => podeFinanceiro()],
-  ['compras', 'Pedidos de compra', 'aguardando sua aprovação', () => typeof cprDecide !== 'function' || cprDecide()]
+  ['compras', 'Pedidos de compra', 'aguardando sua aprovação', () => typeof cprDecide !== 'function' || cprDecide()],
+  ['edy', 'Edy (IA): resumo da manhã e avisos', 'resumo às 6h30 e quando chuva, aplicação, operação e máquina se cruzam', () => typeof edyNotificacoes === 'function']
 ];
 const ALERTA_CFG = 'agro-alertas', ALERTA_ENV = 'agro-alertas-enviados', CHUVA_FORTE_MM = 20, CHUVA_SEVERA_MM = 50, GEADA_C = 3, LOTE_AVISO_DIAS = 30;
 // Cor do hexágono por área (a mesma paleta do sistema) e canal do Android (o agricultor silencia cada área separada)
 const ALERTA_CAT = {
   clima: {rotulo: 'Clima', cor: '#3D9BE9'}, pulverizacao: {rotulo: 'Pulverização', cor: '#24A672'}, maquinas: {rotulo: 'Máquinas', cor: '#F5B843'},
   estoque: {rotulo: 'Estoque', cor: '#8F7CF0'}, operacoes: {rotulo: 'Operações', cor: '#E05A5A'}, silos: {rotulo: 'Silos', cor: '#1D9E75'},
-  aplicacoes: {rotulo: 'Aplicações', cor: '#24A672'}, financeiro: {rotulo: 'Financeiro', cor: '#D4537E'}, compras: {rotulo: 'Compras', cor: '#A0C4D0'}
+  aplicacoes: {rotulo: 'Aplicações', cor: '#24A672'}, financeiro: {rotulo: 'Financeiro', cor: '#D4537E'}, compras: {rotulo: 'Compras', cor: '#A0C4D0'},
+  edy: {rotulo: 'Edy', cor: '#8B6CF6'}
 };
 const COR_LARANJA = '#F59E0B', COR_VERMELHO = '#E05A5A', COR_GELO = '#B5D4F4';
 const podeFinanceiro = () => !(typeof nvComum === 'function' && nvComum()) && (typeof nvPodeRota !== 'function' || nvPodeRota('financeiro'));
 function alertaCfg() {
   let c = null; try { c = JSON.parse(safeStorage.get(ALERTA_CFG) || 'null'); } catch { c = null; }
-  return {ativo: false, chuva: true, geada: true, pulverizar: true, revisao: true, maqpend: true, estoque: true, validade: true, silos: true, carencia: true, atrasadas: false, contas: true, compras: true, ...(c || {})};
+  return {ativo: false, chuva: true, geada: true, pulverizar: true, revisao: true, maqpend: true, estoque: true, validade: true, silos: true, carencia: true, atrasadas: false, contas: true, compras: true, edy: true, ...(c || {})};
 }
 const salvarAlertaCfg = c => safeStorage.set(ALERTA_CFG, JSON.stringify(c));
 const horaDe = (dataIso, h) => new Date(`${dataIso}T${String(h).padStart(2, '0')}:00:00`).getTime();
@@ -263,6 +265,8 @@ function calcularAlertas(cfg = alertaCfg(), agora = Date.now()) {
       curto: parada ? 'Máquina parada: aprovar compra' : 'Pedido aguardando sua aprovação', sub: `${x.por || 'Alguém'} pediu ${desc}${maq ? ' — ' + maq : ''}`,
       valor: x.numero ? `#${x.numero}` : '', unid: '', acoes: [{t: 'Ver pedido', rota: 'compras/aprovar'}]}, horaBoa(agora));
   });
+  // ---------- Edy: resumo da manhã e avisos que cruzam os dados (edy.js) ----------
+  if (tiposOk.edy) { try { edyNotificacoes(agora, horaBoa(agora)).forEach(({quando, ...a}) => add('edy', a, quando)); } catch { /* sem dados */ } }
   return lista;
 }
 

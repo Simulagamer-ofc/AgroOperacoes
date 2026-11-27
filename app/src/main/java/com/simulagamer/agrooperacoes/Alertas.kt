@@ -63,7 +63,8 @@ object Alertas {
         Canal("aplicacoes", "Aplicações", "Carência cumprida (colheita liberada)", NotificationManager.IMPORTANCE_DEFAULT),
         Canal("operacoes", "Operações", "Operações atrasadas", NotificationManager.IMPORTANCE_DEFAULT),
         Canal("financeiro", "Financeiro", "Contas vencidas e a vencer", NotificationManager.IMPORTANCE_DEFAULT),
-        Canal("compras", "Compras", "Pedidos de compra aguardando aprovação", NotificationManager.IMPORTANCE_DEFAULT)
+        Canal("compras", "Compras", "Pedidos de compra aguardando aprovação", NotificationManager.IMPORTANCE_DEFAULT),
+        Canal("edy", "Edy (IA)", "Resumo da manhã e avisos que cruzam tempo, aplicações, operações e máquinas", NotificationManager.IMPORTANCE_DEFAULT)
     )
 
     private val ICONES = mapOf(
