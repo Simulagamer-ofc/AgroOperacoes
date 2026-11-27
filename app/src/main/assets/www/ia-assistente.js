@@ -1,10 +1,10 @@
 'use strict';
-/* MercaPlant — Assistente (IA, Gemini pela função ia do servidor).
-   Tela "✨ Assistente": a pessoa pergunta em texto (ou pelo microfone, quando o aparelho deixa) e a IA responde com os dados
+/* MercaPlant — Ede, a inteligência do MercaPlant (IA Gemini pela função ia do servidor).
+   Tela "✨ Ede": a pessoa pergunta em texto (ou pelo microfone, quando o aparelho deixa) e a IA responde com os dados
    da fazenda — talhões, operações, colheitas, chuvas, estoque, máquinas, pragas, sementes, grãos e a previsão do tempo.
    O app monta um resumo só com o que a pessoa já vê no aparelho (o financeiro não vai) e manda junto com a pergunta;
    a chave da IA fica só no servidor. A IA não salva nem muda nada: só responde.
-   No MercaClima, "✨ IA do tempo" traz perguntas prontas (pulverizar, plantar, colher, entrar com máquina).
+   No MercaClima, "✨ Pergunte ao Ede sobre o tempo" traz perguntas prontas (pulverizar, plantar, colher, entrar com máquina).
    iaContexto é testada em referencias/tests/ia-assistente.test.js. */
 const IA_DIAS_OPS = 60, IA_DIAS_CHUVA = 120;
 const iaAdd = (d, n) => { const x = new Date(d + 'T12:00:00'); x.setDate(x.getDate() + n); return x.toISOString().slice(0, 10); };
@@ -73,23 +73,23 @@ function iaFormatar(t) {
   return html + (lista ? '</ul>' : '');
 }
 function iaBolhas() {
-  if (!iaConversa.length) return `<div class="ia-vazio"><span class="ia-logo" aria-hidden="true">✨</span><b>Pergunte sobre a sua fazenda</b><small>A IA responde com os dados do MercaPlant: talhões, operações, colheitas, chuva, estoque, máquinas, pragas, sementes, grãos e a previsão do tempo.</small></div>`;
+  if (!iaConversa.length) return `<div class="ia-vazio"><span class="ia-logo" aria-hidden="true">✨</span><b>Oi, eu sou o Ede, a inteligência do MercaPlant.</b><small>Pergunte sobre a sua fazenda: eu respondo com os dados do MercaPlant — talhões, operações, colheitas, chuva, estoque, máquinas, pragas, sementes, grãos e a previsão do tempo.</small></div>`;
   return iaConversa.map(m => `<div class="ia-msg ${m.de}">${m.de === 'ia' ? iaFormatar(m.texto) : `<p>${esc(m.texto)}</p>`}</div>`).join('');
 }
 VIEWS.assistente = () => {
   const ligado = typeof nvVinculado === 'function' && nvVinculado();
-  return head('✨ Assistente', 'Pergunte sobre a fazenda: a IA responde com os seus dados. Ela não salva nem muda nada.', iaConversa.length ? btn('Nova conversa', 'ia-limpar', '', 'secondary') : '') +
+  return head('✨ Ede', 'A inteligência do MercaPlant. Pergunte sobre a fazenda: o Ede responde com os seus dados e não salva nem muda nada.', iaConversa.length ? btn('Nova conversa', 'ia-limpar', '', 'secondary') : '') +
     `<section class="card ia-chat">
       <div class="ia-msgs" id="iaMsgs" aria-live="polite">${iaBolhas()}</div>
       <div class="ia-sug">${IA_SUGESTOES.map(s => `<button type="button" class="chip" data-act="ia-sug" data-id="${esc(s)}">${esc(s)}</button>`).join('')}</div>
-      ${ligado ? `<form class="ia-form" id="iaForm"><textarea id="iaPergunta" rows="1" maxlength="800" placeholder="Escreva a pergunta…" aria-label="Pergunta"></textarea>
+      ${ligado ? `<form class="ia-form" id="iaForm"><textarea id="iaPergunta" rows="1" maxlength="800" placeholder="Pergunte ao Ede…" aria-label="Pergunta"></textarea>
         ${window.SpeechRecognition || window.webkitSpeechRecognition ? '<button type="button" class="secondary ia-mic" data-act="ia-mic" aria-label="Falar a pergunta" title="Falar">🎤</button>' : ''}
         <button type="submit" class="primary" aria-label="Enviar">Enviar</button></form>`
-      : '<p class="nota">Entre na sua conta da nuvem para usar a IA.</p>'}
-      <p class="nota ia-rodape">A IA pode errar: confira números importantes. Não receita defensivo nem dose (isso é com o agrônomo).</p>
+      : '<p class="nota">Entre na sua conta da nuvem para usar o Ede.</p>'}
+      <p class="nota ia-rodape">O Ede pode errar: confira números importantes. Ele não receita defensivo nem dose (isso é com o agrônomo).</p>
     </section>`;
 };
-TITLES.assistente = 'Assistente';
+TITLES.assistente = 'Ede';
 VIEWS.assistente.after = () => {
   const f = $('#iaForm'), t = $('#iaPergunta'), msgs = $('#iaMsgs'); if (msgs) msgs.scrollTop = msgs.scrollHeight;
   if (!f) return;
@@ -102,18 +102,18 @@ VIEWS.assistente.after = () => {
 let iaOcupado = false;
 async function iaPerguntar(texto) {
   const q = String(texto || '').trim(); if (!q || iaOcupado) return;
-  if (!(typeof nvVinculado === 'function' && nvVinculado())) return showToast('Entre na sua conta da nuvem para usar a IA.', true);
+  if (!(typeof nvVinculado === 'function' && nvVinculado())) return showToast('Entre na sua conta da nuvem para usar o Ede.', true);
   iaOcupado = true;
   const historico = iaConversa.filter(m => !m.erro).slice(-8).map(({de, texto}) => ({de, texto}));
   iaConversa.push({de: 'pessoa', texto: q}); iaGuardar();
   const msgs = $('#iaMsgs'), t = $('#iaPergunta');
   if (t) { t.value = ''; t.style.height = 'auto'; }
-  if (msgs) { msgs.innerHTML = iaBolhas() + '<div class="ia-msg ia pensando"><span class="ia-roda" aria-hidden="true"></span> Pensando…</div>'; msgs.scrollTop = msgs.scrollHeight; }
+  if (msgs) { msgs.innerHTML = iaBolhas() + '<div class="ia-msg ia pensando"><span class="ia-roda" aria-hidden="true"></span> O Ede está pensando…</div>'; msgs.scrollTop = msgs.scrollHeight; }
   try {
     const r = await nvHttp('/functions/v1/ia', {method: 'POST', body: {farm_id: nv.fazenda.id, acao: 'perguntar', pergunta: q, historico, contexto: JSON.stringify(iaContexto())}});
     iaConversa.push({de: 'ia', texto: r.resposta || 'Sem resposta.'});
   } catch (e) {
-    iaConversa.push({de: 'ia', texto: `⚠️ ${e?.message || 'Não foi possível falar com a IA agora.'}`, erro: true});
+    iaConversa.push({de: 'ia', texto: `⚠️ ${e?.message || 'Não foi possível falar com o Ede agora.'}`, erro: true});
   }
   iaOcupado = false; iaGuardar();
   if (parseRoute().name === 'assistente' && !document.querySelector('.modal.open')) render();
@@ -137,7 +137,7 @@ if (VIEWS.clima) {
   VIEWS.clima = (...a) => {
     const html = _clima(...a);
     if (!(typeof nvVinculado === 'function' && nvVinculado())) return html;
-    const cx = `<section class="card panel ia-tempo"><h3>✨ IA do tempo <small>pergunte com a previsão da fazenda</small></h3><div class="ia-sug">${IA_SUG_TEMPO.map(s => `<button type="button" class="chip" data-act="ia-sug" data-id="${esc(s)}">${esc(s)}</button>`).join('')}</div></section>`;
+    const cx = `<section class="card panel ia-tempo"><h3>✨ Pergunte ao Ede sobre o tempo <small>ele responde com a previsão da fazenda</small></h3><div class="ia-sug">${IA_SUG_TEMPO.map(s => `<button type="button" class="chip" data-act="ia-sug" data-id="${esc(s)}">${esc(s)}</button>`).join('')}</div></section>`;
     const i = html.indexOf('<section', html.indexOf('class="view-head"') + 1);
     return i < 0 ? html + cx : html.slice(0, i) + cx + html.slice(i);
   };
