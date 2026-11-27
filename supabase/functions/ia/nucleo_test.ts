@@ -30,3 +30,14 @@ Deno.test('erros do Gemini viram mensagem clara', () => {
   assertEquals(erroGemini(400, 'API key not valid').status, 503);
   assertEquals(erroGemini(503, '').status, 502);
 });
+
+import {conversa, instrucaoAssistente} from './nucleo.ts';
+Deno.test('assistente: conversa começa pela pessoa, corta o histórico e leva os dados na última pergunta', () => {
+  const h = [{de: 'ia', texto: 'Olá'}, ...Array.from({length: 12}, (_, i) => ({de: i % 2 ? 'ia' : 'pessoa', texto: 't' + i}))] as {de: 'pessoa' | 'ia', texto: string}[];
+  const c = conversa(h, 'Quanto choveu?', '{"chuvas":[]}');
+  assertEquals(c[0].role, 'user');
+  assertEquals(c.at(-1)!.role, 'user');
+  assert.ok(c.at(-1)!.parts[0].text.includes('PERGUNTA: Quanto choveu?') && c.at(-1)!.parts[0].text.includes('"chuvas"'));
+  assert.ok(c.length <= 9);
+  assert.ok(instrucaoAssistente('27/11/2026').includes('NÃO receite'));
+});
