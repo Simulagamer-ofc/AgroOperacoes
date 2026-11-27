@@ -1,0 +1,32 @@
+import assert from 'node:assert/strict';
+const assertEquals = (a: unknown, b: unknown) => assert.deepEqual(a, b);
+import {erroGemini, esquemaBoletim, normalizarBoletim, textoDaResposta} from './nucleo.ts';
+
+const G = [{id: 'cultivada', rot: 'Outra espécie cultivada'}, {id: 'silvestre', rot: 'Silvestre'}, {id: 'nt', rot: 'Nociva tolerada'}];
+
+Deno.test('normaliza números com vírgula, data brasileira e grupos fora da lista', () => {
+  const b = normalizarBoletim({data: '12/11/2026', boletim: ' 1234/26 ', germinacao: '92', pureza: '98,7', outrasPct: 0.3, amostraG: '500', umidade: 130,
+    encontradas: [{nome: 'Azevém', n: 3, grupo: 'nt'}, {nome: 'Nabo', n: 1.4, grupo: 'nenhum'}, {nome: '', n: 2, grupo: 'nt'}], avisos: ['ok']}, G);
+  assertEquals(b.data, '2026-11-12'); assertEquals(b.boletim, '1234/26');
+  assertEquals(b.germinacao, 92); assertEquals(b.pureza, 98.7); assertEquals(b.outrasPct, 0.3); assertEquals(b.amostraG, 500);
+  assertEquals(b.umidade, null); // fora de 0–100
+  assertEquals(b.encontradas, [{nome: 'Azevém', n: 3, grupo: 'nt'}, {nome: 'Nabo', n: 1, grupo: ''}]);
+});
+
+Deno.test('data no futuro ou ilegível não entra; aviso de data', () => {
+  const b = normalizarBoletim({data: '31/12/2099', encontradas: [], avisos: []}, G);
+  assertEquals(b.data, null);
+  assertEquals(normalizarBoletim({data: 'ontem', encontradas: [], avisos: []}, G).avisos.length, 1);
+});
+
+Deno.test('esquema com os grupos da espécie e texto da resposta', () => {
+  const e = esquemaBoletim(G) as {properties: {encontradas: {items: {properties: {grupo: {enum: string[]}}}}}};
+  assertEquals(e.properties.encontradas.items.properties.grupo.enum, ['cultivada', 'silvestre', 'nt', 'nenhum']);
+  assertEquals(textoDaResposta({candidates: [{content: {parts: [{text: '{"a":'}, {text: '1}'}]}}]}), '{"a":1}');
+});
+
+Deno.test('erros do Gemini viram mensagem clara', () => {
+  assertEquals(erroGemini(429, '').status, 429);
+  assertEquals(erroGemini(400, 'API key not valid').status, 503);
+  assertEquals(erroGemini(503, '').status, 502);
+});
