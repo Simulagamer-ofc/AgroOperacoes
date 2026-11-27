@@ -160,7 +160,7 @@ VIEWS.assistente = () => {
       <div class="ia-sug">${(tec ? IA_SUG_TECNICA : IA_SUGESTOES).map(s => `<button type="button" class="chip" data-act="ia-sug" data-id="${esc(s)}">${esc(s)}</button>`).join('')}</div>
       ${ligado ? `<div class="ia-modos" role="group" aria-label="Modo"><button type="button" class="chip ${tec ? '' : 'active'}" data-act="ia-modo" data-id="" aria-pressed="${!tec}">💬 Fazenda</button><button type="button" class="chip ${tec ? 'active' : ''}" data-act="ia-modo" data-id="tecnica" aria-pressed="${tec}">🔎 Técnica (com fontes)</button></div>
         <form class="ia-form" id="iaForm"><textarea id="iaPergunta" rows="1" maxlength="800" placeholder="${tec ? 'Pergunta técnica…' : 'Pergunte ao Edy…'}" aria-label="Pergunta"></textarea>
-        ${iaTemMic() ? '<button type="button" class="secondary ia-mic" data-act="ia-mic" aria-label="Falar a pergunta" title="Falar">🎤</button>' : ''}
+        ${iaTemMic() ? `<button type="button" class="ia-mic" data-act="ia-mic" aria-label="Falar a pergunta" title="Falar">${(typeof iconeMenu === 'function' && iconeMenu('microfone', 44)) || '🎤'}</button>` : ''}
         <button type="submit" class="primary" aria-label="Enviar">Enviar</button></form>`
       : '<p class="nota">Entre na sua conta da nuvem para usar o Edy.</p>'}
       <p class="nota ia-rodape">${tec ? 'Modo técnico: o Edy pesquisa na Embrapa, MAPA/ZARC, manual CQFS-RS/SC e Emater e mostra as fontes.' : 'O Edy pode errar: confira números importantes.'} Ele não receita defensivo nem dose (isso é com o agrônomo).</p>

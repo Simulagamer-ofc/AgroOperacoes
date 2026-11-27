@@ -2493,7 +2493,12 @@ input.trv-so-ler{opacity:.7;background:color-mix(in srgb,var(--line) 40%,transpa
 .ia-sug .chip{flex:0 0 auto;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:999px;padding:7px 12px;font-size:.84rem;cursor:pointer;white-space:nowrap}
 .ia-form{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:end}
 .ia-form textarea{resize:none;min-height:44px;max-height:140px;line-height:1.35;width:100%;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--text);padding:10px 12px;font:inherit}
-.ia-form .ia-mic.ouvindo{background:var(--red);color:#fff;border-color:var(--red);box-shadow:0 0 0 calc(3px + var(--nivel, 0) * 9px) color-mix(in srgb, var(--red) 28%, transparent);transition:box-shadow .12s ease-out}
+.content .ia-form .ia-mic{width:48px;height:48px;min-height:48px;padding:0;border:0;background:transparent;display:grid;place-items:center;cursor:pointer;font-size:1.4rem;-webkit-tap-highlight-color:transparent}
+.ia-form .ia-mic:active .hex-icone{transform:scale(.94)}
+.ia-form .ia-mic .hex-icone{transition:transform .12s ease-out,filter .12s ease-out}
+.content .ia-form .ia-mic.ouvindo .hex-icone .hex{fill:var(--red);stroke:var(--red)}
+.content .ia-form .ia-mic.ouvindo .hex-icone .glifo{stroke:#fff}
+.content .ia-form .ia-mic.ouvindo .hex-icone{filter:drop-shadow(0 0 calc(2px + var(--nivel, 0) * 8px) color-mix(in srgb, var(--red) 70%, transparent))}
 .ia-rodape{margin:0;font-size:.76rem}
 .ia-tempo h3{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:0 0 8px}.ia-tempo h3 small{font-weight:400;color:var(--muted);font-size:.8rem}
 /* Edy: modos, registros prontos, fontes, resumo da manhã e avisos */
