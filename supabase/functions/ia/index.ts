@@ -3,14 +3,16 @@
 //   status    a IA está ligada no servidor? (não gasta)
 //   boletim   lê a foto ou o PDF do boletim de análise de sementes e devolve os campos para o formulário do app
 //             {farm_id, acao, especie, cientifico, grupos:[{id, rot}], arquivo:{tipo, dados(base64)}}
-//   perguntar assistente: responde a pergunta com os dados da fazenda que o app manda (o app só manda o que a pessoa vê)
-//             {farm_id, acao, pergunta, historico:[{de:'pessoa'|'ia', texto}], contexto(JSON em texto)}
+//   perguntar Edy, o assistente: responde a pergunta com os dados da fazenda que o app manda (o app só manda o que a pessoa vê)
+//             {farm_id, acao, pergunta, historico:[{de:'pessoa'|'ia', texto}], contexto(JSON em texto), modo?:'tecnica'}
+//             → {resposta, acoes:[registros prontos para a pessoa conferir], fontes:[{titulo, url}]}
+//             modo 'tecnica': agrônomo com busca no Google (Embrapa, MAPA/ZARC, CQFS-RS/SC…) e as fontes da resposta
 // A chave fica só aqui (segredo GEMINI_API_KEY); o app nunca vê. Modelo: GEMINI_MODELO (padrão gemini-3.1-flash-lite).
 // Limite por pessoa por dia (IA_LIMITE_DIA, padrão 50), contado na tabela ia_uso (só o servidor acessa).
 // A IA só sugere: o app mostra o que leu para a pessoa conferir antes de salvar.
 // Publicar com verify_jwt = false: a própria função confere o login (getUser + farm_role) e o teste (ia_teste).
 import {createClient} from 'npm:@supabase/supabase-js@2';
-import {conversa, erroGemini, esquemaBoletim, type Grupo, instrucaoAssistente, MAX_BASE64, MAX_CONTEXTO, MAX_PERGUNTA, normalizarBoletim, promptBoletim, textoDaResposta, TIPOS_ARQUIVO, type Turno} from './nucleo.ts';
+import {conversa, erroGemini, esquemaBoletim, esquemaChat, fontesDaResposta, type Grupo, instrucaoAssistente, instrucaoTecnica, lerChat, MAX_BASE64, MAX_CONTEXTO, MAX_PERGUNTA, normalizarBoletim, promptBoletim, textoDaResposta, TIPOS_ARQUIVO, type Turno} from './nucleo.ts';
 
 const cors = {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'authorization, apikey, content-type, x-client-info, x-ia-teste', 'Access-Control-Allow-Methods': 'POST, OPTIONS'};
 const resposta = (status: number, corpo: unknown) => new Response(JSON.stringify(corpo), {status, headers: {...cors, 'Content-Type': 'application/json'}});
@@ -40,7 +42,7 @@ async function chamarGemini(pedido: unknown, outroModelo = '') {
     const j = JSON.parse(corpo), uso = j.usageMetadata || {};
     const texto = textoDaResposta(j);
     if (!texto) throw Object.assign(new Error('A IA não devolveu resposta. Tente de novo (ou uma foto mais nítida).'), {status: 502});
-    return {texto, entrada: Number(uso.promptTokenCount) || 0, saida: (Number(uso.candidatesTokenCount) || 0) + (Number(uso.thoughtsTokenCount) || 0), modelo};
+    return {texto, fontes: fontesDaResposta(j), entrada: Number(uso.promptTokenCount) || 0, saida: (Number(uso.candidatesTokenCount) || 0) + (Number(uso.thoughtsTokenCount) || 0), modelo};
   } catch (e) {
     if ((e as Error).name === 'AbortError') throw Object.assign(new Error('A IA demorou demais para responder. Tente de novo.'), {status: 504});
     throw e;
@@ -48,13 +50,22 @@ async function chamarGemini(pedido: unknown, outroModelo = '') {
 }
 
 const hojeBR = () => new Date().toLocaleDateString('pt-BR', {timeZone: 'America/Sao_Paulo', weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'});
-function perguntar(b: Record<string, unknown>, outroModelo = '') {
-  const pergunta = String(b.pergunta || '').trim(), contexto = String(b.contexto || '{}');
+const hojeIso = () => new Date().toLocaleDateString('en-CA', {timeZone: 'America/Sao_Paulo'});
+async function perguntar(b: Record<string, unknown>, outroModelo = '') {
+  const pergunta = String(b.pergunta || '').trim(), contexto = String(b.contexto || '{}'), tecnica = b.modo === 'tecnica';
   if (!pergunta) throw Object.assign(new Error('Escreva a pergunta.'), {status: 400});
   if (pergunta.length > MAX_PERGUNTA) throw Object.assign(new Error(`Pergunta longa demais (até ${MAX_PERGUNTA} letras).`), {status: 400});
   if (contexto.length > MAX_CONTEXTO * 1.2) throw Object.assign(new Error('Dados da fazenda grandes demais para a IA.'), {status: 400});
-  return chamarGemini({systemInstruction: {parts: [{text: instrucaoAssistente(hojeBR())}]}, contents: conversa(b.historico as Turno[], pergunta, contexto),
-    generationConfig: {temperature: 0.2, maxOutputTokens: 2048}}, outroModelo || (Deno.env.get('GEMINI_MODELO_CHAT') || '').trim());
+  const modelo = outroModelo || (Deno.env.get('GEMINI_MODELO_CHAT') || '').trim(), contents = conversa(b.historico as Turno[], pergunta, contexto);
+  if (tecnica) {
+    // Agrônomo com fontes: busca no Google (a busca não combina com resposta em JSON: volta texto + fontes)
+    const r = await chamarGemini({systemInstruction: {parts: [{text: instrucaoTecnica(hojeBR())}]}, contents, tools: [{google_search: {}}],
+      generationConfig: {temperature: 0.2, maxOutputTokens: 3072}}, modelo);
+    return {...r, resposta: r.texto, acoes: []};
+  }
+  const r = await chamarGemini({systemInstruction: {parts: [{text: instrucaoAssistente(hojeBR())}]}, contents,
+    generationConfig: {temperature: 0.2, maxOutputTokens: 2048, responseMimeType: 'application/json', responseSchema: esquemaChat()}}, modelo);
+  return {...r, ...lerChat(r.texto, hojeIso()), fontes: []};
 }
 
 Deno.serve(async req => {
@@ -83,7 +94,7 @@ Deno.serve(async req => {
     }
     if (modoTeste && b.acao === 'perguntar') {
       const r = await perguntar(b, /^gemini-[\w.-]+$/.test(String(b.modelo || '')) ? String(b.modelo) : '');
-      return resposta(200, {ok: true, teste: true, modelo: r.modelo, entrada: r.entrada, saida: r.saida, resposta: r.texto});
+      return resposta(200, {ok: true, teste: true, modelo: r.modelo, entrada: r.entrada, saida: r.saida, resposta: r.resposta, acoes: r.acoes, fontes: r.fontes});
     }
     const fazenda = String(b.farm_id || '');
     if (!/^[0-9a-f-]{36}$/i.test(fazenda)) return erro(400, 'Fazenda inválida.');
@@ -117,7 +128,7 @@ Deno.serve(async req => {
       if (Number(usados) < 0) return erro(429, `Você chegou ao limite de ${limite} usos da IA hoje. Amanhã libera de novo.`);
       const r = await perguntar(b);
       await adm.rpc('ia_tokens', {p_user: quem.user.id, p_entrada: r.entrada, p_saida: r.saida}).then(() => {}, () => {});
-      return resposta(200, {ok: true, modelo: r.modelo, resposta: r.texto, usados: Number(usados), limite});
+      return resposta(200, {ok: true, modelo: r.modelo, resposta: r.resposta, acoes: r.acoes, fontes: r.fontes, usados: Number(usados), limite});
     }
     return erro(400, 'Ação desconhecida.');
   } catch (e) {

@@ -1,9 +1,9 @@
 'use strict';
 /* MercaPlant — IA: ler o boletim de análise de sementes por foto ou PDF.
-   No formulário da análise (Sementes → lote → Registrar análise), "📷 O Ede lê o boletim (foto)": tira a foto ou
+   No formulário da análise (Sementes → lote → Registrar análise), "📷 O Edy lê o boletim (foto)": tira a foto ou
    escolhe o PDF; o servidor (função ia, com o Gemini do Google) lê o boletim e o app preenche data, nº, laboratório,
    amostra, germinação, vigor, pureza, outras sementes, PMS, umidade e as espécies encontradas com a quantidade e o grupo.
-   Tudo fica marcado como "lido pelo Ede" para a pessoa conferir com o papel antes de salvar — a IA nunca salva sozinha.
+   Tudo fica marcado como "lido pelo Edy" para a pessoa conferir com o papel antes de salvar — a IA nunca salva sozinha.
    Precisa estar conectado à nuvem (a chave da IA fica só no servidor). A foto não é guardada. */
 const IA_MAX_LADO = 2000, IA_MAX_PDF = 5 * 1024 * 1024;
 
@@ -71,9 +71,9 @@ async function iaLerBoletim(lotId, arq, caixa) {
     const avisos = [...(d.avisos || [])];
     if (d.especieNoBoletim && p && labPadrao(d.especieNoBoletim) && labPadrao(d.especieNoBoletim).especie !== p.especie) avisos.unshift(`O boletim é de ${d.especieNoBoletim}, e o lote é de ${l.species}.`);
     if (d.loteNoBoletim && l.code && !String(d.loteNoBoletim).toLowerCase().replace(/\s/g, '').includes(String(l.code).toLowerCase().replace(/\s/g, ''))) avisos.push(`O boletim é do lote ${d.loteNoBoletim}: confira se é deste lote (${l.code}).`);
-    msg(n ? `<b>✨ ${n} ${n === 1 ? 'campo lido' : 'campos lidos'} pelo Ede</b> — confira cada número com o boletim antes de salvar (os campos lidos estão marcados).${avisos.length ? `<ul>${avisos.map(a => `<li>${esc(a)}</li>`).join('')}</ul>` : ''}`
-      : `O Ede não achou os resultados nesta ${arquivo.tipo === 'application/pdf' ? 'página' : 'foto'}. Tente uma foto mais nítida, de frente e com boa luz, só da parte do resultado.${avisos.length ? `<ul>${avisos.map(a => `<li>${esc(a)}</li>`).join('')}</ul>` : ''}`, n ? 'ok' : 'aviso');
-    const obs = form.querySelector('#lab_obs'); if (n && obs && !obs.value.trim()) obs.value = 'Valores lidos do boletim pelo Ede (IA) e conferidos.';
+    msg(n ? `<b>✨ ${n} ${n === 1 ? 'campo lido' : 'campos lidos'} pelo Edy</b> — confira cada número com o boletim antes de salvar (os campos lidos estão marcados).${avisos.length ? `<ul>${avisos.map(a => `<li>${esc(a)}</li>`).join('')}</ul>` : ''}`
+      : `O Edy não achou os resultados nesta ${arquivo.tipo === 'application/pdf' ? 'página' : 'foto'}. Tente uma foto mais nítida, de frente e com boa luz, só da parte do resultado.${avisos.length ? `<ul>${avisos.map(a => `<li>${esc(a)}</li>`).join('')}</ul>` : ''}`, n ? 'ok' : 'aviso');
+    const obs = form.querySelector('#lab_obs'); if (n && obs && !obs.value.trim()) obs.value = 'Valores lidos do boletim pelo Edy (IA) e conferidos.';
   } catch (e) {
     msg(esc(e?.message || 'Não foi possível ler o boletim.'), 'erro');
   } finally { botao.disabled = false; }
@@ -89,9 +89,9 @@ if (typeof labForm === 'function') {
     const ligado = typeof nvVinculado === 'function' && nvVinculado();
     const caixa = document.createElement('div'); caixa.className = 'field full ia-bol';
     caixa.innerHTML = ligado
-      ? `<button type="button" class="secondary ia-bol-btn">📷 O Ede lê o boletim (foto ou PDF)</button><input type="file" class="ia-bol-arq" accept="image/*,application/pdf" hidden>
-         <p class="ia-bol-info">Tire uma foto do boletim (ou escolha o PDF): o Ede preenche os campos e você confere antes de salvar.</p>`
-      : `<p class="ia-bol-info">📷 O Ede lê o boletim por foto: entre na sua conta da nuvem para usar.</p>`;
+      ? `<button type="button" class="secondary ia-bol-btn">📷 O Edy lê o boletim (foto ou PDF)</button><input type="file" class="ia-bol-arq" accept="image/*,application/pdf" hidden>
+         <p class="ia-bol-info">Tire uma foto do boletim (ou escolha o PDF): o Edy preenche os campos e você confere antes de salvar.</p>`
+      : `<p class="ia-bol-info">📷 O Edy lê o boletim por foto: entre na sua conta da nuvem para usar.</p>`;
     form.prepend(caixa);
     if (!ligado) return;
     const arq = caixa.querySelector('.ia-bol-arq');

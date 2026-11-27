@@ -43,3 +43,23 @@ test('o financeiro não vai para a IA', () => {
   const s = JSON.stringify(app(db).iaContexto('2026-11-27'));
   assert.ok(!s.includes('9150') && !s.includes('18900'));
 });
+
+test('Edy: ids para preparar registros, tipos de operação e produtividade (custo só para o administrador)', () => {
+  const db = base();
+  const extras = papel => ({OP_TYPES: ['Plantio', 'Colheita'], nvVinculado: () => true, nv: {papel},
+    safrasConhecidas: () => ['2025/26'], resumoSafra: s => ({s, scha: 62.4, area: 90.5, sacas: 5647, chuva: 812, custoSc: 71.2,
+      col: [{nome: 'Talhão 3 A', cultura: 'Soja', area: 90.5, sacas: 5647, scha: 62.4, custo: 402000, custoHa: 4441.99, custoSc: 71.19}]})});
+  const ctx = papel => {
+    const c = vm.createContext({Math, Date, JSON, Number, String, Array, Object, Set, Infinity, console, db, VIEWS: {}, TITLES: {}, ACTIONS: {},
+      sessionStorage: {getItem: () => null, setItem() {}}, window: {}, today: () => '2026-11-27', fieldName: () => '', machineName: () => '', ...extras(papel)});
+    vm.runInContext(fs.readFileSync(path.join(www, 'ia-assistente.js'), 'utf8') + '\nthis.c = iaContexto("2026-11-27");', c);
+    return JSON.parse(JSON.stringify(c.c));
+  };
+  const membro = ctx('member'), adm = ctx('admin');
+  assert.equal(membro.talhoes[0].id, 't1'); assert.equal(membro.maquinas[0].id, 'm1'); assert.equal(membro.operacoes[0].id, 'o3');
+  assert.deepEqual(membro.tiposOperacao, ['Plantio', 'Colheita']);
+  assert.deepEqual(membro.produtividade[0].talhoes[0], {talhao: 'Talhão 3 A', cultura: 'Soja', ha: 90.5, sacas: 5647, scHa: 62.4});
+  assert.equal(membro.produtividade[0].custoPorSaca, undefined);
+  assert.equal(adm.produtividade[0].talhoes[0].custoHa, 4441.99);
+  assert.equal(adm.produtividade[0].custoPorSaca, 71.2);
+});
