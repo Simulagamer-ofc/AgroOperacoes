@@ -4,6 +4,7 @@
 (() => {
   const ICONES = {
     inicio: ['verde', '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>'],
+    assistente: ['verde', '<path d="M12 3.5l1.8 4.7 4.7 1.8-4.7 1.8L12 16.5l-1.8-4.7L5.5 10l4.7-1.8z"/><path d="M18.5 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8zM5.5 15.5l.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6z"/>'],
     operacoes: ['verde', '<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/>'],
     talhoes: ['verde', '<path d="M3 20h18M4 20 9 5M9 20l2-15M15 20l-2-15M20 20 15 5M6.5 12.5h11"/>'],
     clima: ['azul', '<path d="M7 16a4 4 0 0 1 .6-8 5.2 5.2 0 0 1 9.9 1.7A3.4 3.4 0 0 1 17 16z"/><path d="M12 18.5 10.5 21M15.5 18.5 14 21"/><path d="M13 12.5l-2 3h3l-2 3"/>'],

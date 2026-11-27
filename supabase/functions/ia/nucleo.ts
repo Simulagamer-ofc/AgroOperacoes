@@ -99,3 +99,27 @@ export function erroGemini(status: number, corpo: string): {status: number, msg:
   if (status >= 500) return {status: 502, msg: 'A IA do Google não respondeu agora. Tente de novo em instantes.'};
   return {status: 502, msg: `A IA não conseguiu ler o arquivo (${status}).`};
 }
+
+// ---------- Assistente: responde perguntas com os dados da fazenda ----------
+export type Turno = {de: 'pessoa' | 'ia', texto: string};
+export const MAX_CONTEXTO = 80_000, MAX_PERGUNTA = 800;
+
+export function instrucaoAssistente(hoje: string) {
+  return [
+    'Você é o assistente do MercaPlant, sistema de gestão agrícola usado por produtores rurais no Brasil.',
+    `Hoje é ${hoje}. Responda sempre em português do Brasil, de forma curta e prática, como um técnico agrícola experiente falaria com o produtor.`,
+    'Use SOMENTE os dados da fazenda enviados em DADOS (JSON) e a previsão do tempo que vier neles. Some e compare com cuidado; mostre os números (com unidade) e as datas no formato dd/mm.',
+    'Se a informação não estiver nos dados, diga claramente que não encontrou no sistema e onde a pessoa pode lançar (ex.: Chuvas, Operações, Colheita). Nunca invente números, talhões, produtos ou datas.',
+    'Defensivos: você pode falar de janela de aplicação, carência e condições do tempo, mas NÃO receite produto nem dose — isso é com o agrônomo responsável (receituário agronômico).',
+    'Clima: para decisões (pulverizar, plantar, colher, entrar com máquina), use a previsão por dia e as janelas de pulverização dos dados; explique o motivo (vento, chuva, Delta T, solo encharcado) e sugira o melhor dia/horário.',
+    'Formato: texto simples; pode usar **negrito** e listas com "- ". No máximo umas 12 linhas, a não ser que peçam detalhes.',
+  ].join('\n');
+}
+
+/** Conversa no formato do Gemini: últimos turnos + a pergunta com os dados. */
+export function conversa(historico: Turno[], pergunta: string, contexto: string) {
+  const hist = (Array.isArray(historico) ? historico : []).filter(t => t && (t.de === 'pessoa' || t.de === 'ia') && typeof t.texto === 'string' && t.texto.trim())
+    .slice(-8).map(t => ({role: t.de === 'ia' ? 'model' : 'user', parts: [{text: t.texto.slice(0, 2000)}]}));
+  while (hist.length && hist[0].role === 'model') hist.shift(); // a conversa começa pela pessoa
+  return [...hist, {role: 'user', parts: [{text: `DADOS (JSON):\n${contexto.slice(0, MAX_CONTEXTO)}\n\nPERGUNTA: ${pergunta.slice(0, MAX_PERGUNTA)}`}]}];
+}

@@ -2479,3 +2479,24 @@ input.trv-so-ler{opacity:.7;background:color-mix(in srgb,var(--line) 40%,transpa
 .ia-lido{box-shadow:0 0 0 2px #e8b10c inset;background:color-mix(in srgb,#e8b10c 10%,var(--bg))!important}
 .ia-roda{width:16px;height:16px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--green);display:inline-block;animation:ia-gira .8s linear infinite}
 @keyframes ia-gira{to{transform:rotate(360deg)}}
+/* Assistente (IA) — ia-assistente.js */
+.ia-chat{display:flex;flex-direction:column;gap:10px}
+.ia-msgs{display:flex;flex-direction:column;gap:10px;max-height:min(60vh,560px);overflow-y:auto;padding:2px}
+.ia-msg{max-width:88%;padding:10px 12px;border-radius:14px;line-height:1.45;font-size:.95rem}
+.ia-msg p{margin:0 0 6px}.ia-msg p:last-child{margin:0}.ia-msg ul{margin:4px 0 6px;padding-left:18px}
+.ia-msg.pessoa{align-self:flex-end;background:var(--blue);color:#fff;border-bottom-right-radius:4px}
+.ia-msg.ia{align-self:flex-start;background:var(--bg);border:1px solid var(--line);border-bottom-left-radius:4px}
+.ia-msg.pensando{display:flex;align-items:center;gap:8px;color:var(--muted)}
+.ia-vazio{display:grid;justify-items:center;text-align:center;gap:6px;padding:18px 8px;color:var(--muted)}
+.ia-vazio .ia-logo{font-size:2rem}.ia-vazio b{color:var(--text)}.ia-vazio small{max-width:420px}
+.ia-sug{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}.ia-sug::-webkit-scrollbar{display:none}
+.ia-sug .chip{flex:0 0 auto;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:999px;padding:7px 12px;font-size:.84rem;cursor:pointer;white-space:nowrap}
+.ia-form{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:end}
+.ia-form textarea{resize:none;min-height:44px;max-height:140px;line-height:1.35;width:100%;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--text);padding:10px 12px;font:inherit}
+.ia-form .ia-mic.ouvindo{background:var(--red);color:#fff;border-color:var(--red)}
+.ia-rodape{margin:0;font-size:.76rem}
+.ia-tempo h3{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:0 0 8px}.ia-tempo h3 small{font-weight:400;color:var(--muted);font-size:.8rem}
+@media (max-width:760px){
+  .ia-msgs{max-height:none;height:calc(100dvh - 430px);min-height:220px}
+  body:has(.ia-chat) .fab{display:none}
+}
