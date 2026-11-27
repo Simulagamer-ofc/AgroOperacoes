@@ -2466,3 +2466,16 @@ input.trv-so-ler{opacity:.7;background:color-mix(in srgb,var(--line) 40%,transpa
   .ini-cabe .i2-faz-dica{display:none}
   .ini-cabe>.ini-perso{margin:0 0 4px;padding:8px;font-size:.84rem;border-width:1px}
 }
+/* IA: ler o boletim de análise por foto (ia-boletim.js) */
+.ia-bol{display:grid;gap:6px}
+.ia-bol-btn{width:100%;font-weight:700}
+.ia-bol-info{margin:0;font-size:.82rem;color:var(--muted);line-height:1.4}
+.ia-bol-info.lendo{display:flex;align-items:center;gap:8px;color:var(--text)}
+.ia-bol-info.ok,.ia-bol-info.aviso,.ia-bol-info.erro{color:var(--text);padding:8px 10px;border-radius:10px}
+.ia-bol-info.ok{background:color-mix(in srgb,var(--green) 13%,transparent)}
+.ia-bol-info.aviso{background:color-mix(in srgb,#e8b10c 16%,transparent)}
+.ia-bol-info.erro{background:color-mix(in srgb,var(--red) 14%,transparent)}
+.ia-bol-info ul{margin:6px 0 0;padding-left:18px}
+.ia-lido{box-shadow:0 0 0 2px #e8b10c inset;background:color-mix(in srgb,#e8b10c 10%,var(--bg))!important}
+.ia-roda{width:16px;height:16px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--green);display:inline-block;animation:ia-gira .8s linear infinite}
+@keyframes ia-gira{to{transform:rotate(360deg)}}
