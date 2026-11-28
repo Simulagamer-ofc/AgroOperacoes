@@ -4,7 +4,7 @@
 
 /** Minúsculas, sem acento e sem pontuação: para buscar "ferrugem-asiática" ou "Ferrugem asiatica". */
 export function normalizar(s: string): string {
-  return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
 /** Divide uma linha CSV com ; respeitando aspas ("a; b" fica num campo só). */

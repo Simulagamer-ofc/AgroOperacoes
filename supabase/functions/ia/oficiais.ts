@@ -11,7 +11,7 @@ export const URL_ZARC = 'https://www.gov.br/agricultura/pt-br/assuntos/riscos-se
 
 // (iguais às de dados-oficiais/nucleo.ts; o teste confere)
 export function normalizar(s: string): string {
-  return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
 export const CICLOS: Record<number, string> = {13: 'perene', 19: 'semiperene', 20: 'grupo I', 21: 'grupo II', 22: 'grupo III', 24: 'grupo IV', 25: 'grupo V', 26: 'grupo VI'};
 export const SOLOS: Record<number, string> = {1: 'arenoso', 2: 'textura média', 3: 'argiloso', 11: 'AD1', 12: 'AD2', 13: 'AD3', 14: 'AD4', 15: 'AD5', 16: 'AD6'};
