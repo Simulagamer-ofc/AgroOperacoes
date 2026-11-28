@@ -35,7 +35,7 @@
 </div>
 <div class="app">
   <aside class="sidebar" id="sidebar">
-    <div class="brand nexus"><strong class="marca">MERCA<span>PLANT</span></strong><small class="versao" title="Versão de teste 1.2.27-beta1">v1.2.27-beta1</small><small id="farmName">Minha fazenda</small></div>
+    <div class="brand nexus"><strong class="marca">MERCA<span>PLANT</span></strong><small class="versao" title="Versão de teste 1.2.28-beta1">v1.2.28-beta1</small><small id="farmName">Minha fazenda</small></div>
     <nav class="nav" aria-label="Menu principal">
       <button data-route="inicio"><span class="icon">▦</span>Visão geral</button>
       <button data-route="assistente"><span class="icon">✨</span>Edy (IA)</button>
@@ -78,7 +78,7 @@
     <div class="content" id="view"></div>
   </main>
 </div>
-<nav class="mobile-nav" aria-label="Atalhos"><button data-route="inicio"><span>⌂</span>Início</button><button data-route="operacoes"><span>◷</span>Operações</button><button data-route="talhoes"><span>▤</span>Talhões</button><button data-route="estoque"><span>□</span>Estoque</button><button id="moreBtn" aria-label="Mais opções do menu"><span>•••</span>Mais</button></nav>
+<nav class="mobile-nav" aria-label="Atalhos"><button data-route="inicio"><span>⌂</span>Início</button><button data-route="operacoes"><span>◷</span>Operações</button><button data-route="assistente" class="nv-edy" aria-label="Edy (IA)">Edy</button><button data-route="talhoes"><span>▤</span>Talhões</button><button id="moreBtn" aria-label="Mais opções do menu"><span>•••</span>Mais</button></nav>
 <div class="modal" id="modal"><div class="dialog" id="dialog"></div></div>
 <div class="toast" id="toast"></div>
 <script src="avaliador.js"></script>
@@ -158,5 +158,6 @@
 <script src="visual.js"></script>
 <script src="ia-assistente.js"></script>
 <script src="edy.js"></script>
+<script src="edy-globo.js"></script>
 </body>
 </html>

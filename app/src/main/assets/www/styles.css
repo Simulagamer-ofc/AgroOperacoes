@@ -2564,3 +2564,36 @@ input.trv-so-ler{opacity:.7;background:color-mix(in srgb,var(--line) 40%,transpa
   .edy-tela .ia-msgs{height:auto;min-height:200px}
   body:has(.ia-chat) .fab,body:has(.edy-tela) .fab{display:none}
 }
+/* Edy: globo da marca girando num painel tecnológico (conversa vazia) — edy-globo.js */
+.ia-vazio:has(.edy-cena){gap:4px;padding:4px 8px 10px}
+.edy-cena{--cena:min(330px,84vw,46vh);position:relative;width:var(--cena);height:var(--cena);margin-bottom:-2px}
+.edy-cena>*{position:absolute}
+.edy-cena-fundo{inset:0;border-radius:50%;background:radial-gradient(circle,#0a2236 0,#061625 62%,rgba(6,22,37,.9) 70%,rgba(6,22,37,0) 72%)}
+.edy-cena-video{left:12.12%;top:12.12%;width:75.76%;height:75.76%;border-radius:50%;overflow:hidden;background:#061625 url(img/edy-globo.jpg) center/cover;
+  -webkit-mask-image:radial-gradient(circle,#000 62%,transparent 71%);mask-image:radial-gradient(circle,#000 62%,transparent 71%)}
+.edy-cena-video video{width:100%;height:100%;object-fit:cover;display:block}
+.edy-cena svg{inset:0;width:100%;height:100%;overflow:visible}
+.edy-gira{transform-origin:50% 50%;transform-box:view-box;animation:edyGira 90s linear infinite}
+.edy-gira.medio{animation-duration:40s;animation-direction:reverse}.edy-gira.rapido{animation-duration:14s}
+@keyframes edyGira{to{transform:rotate(360deg)}}
+.edy-cena-txt{font:600 7.5px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.22em;fill:#7fd0ff;opacity:.85}.edy-cena-txt.b{fill:#7dffb0}
+.edy-cena-radar,.edy-cena-scan,.edy-cena-casca{left:28.79%;top:28.79%;width:42.42%;height:42.42%;border-radius:50%;pointer-events:none}
+.edy-cena-radar{background:conic-gradient(from 0deg,rgba(125,255,176,0) 0 300deg,rgba(125,255,176,.22) 355deg,rgba(125,255,176,0) 360deg);mix-blend-mode:screen;animation:edyGira 6s linear infinite}
+.edy-cena-scan{overflow:hidden}
+.edy-cena-scan:after{content:'';position:absolute;left:0;right:0;height:2px;top:0;background:linear-gradient(90deg,transparent,rgba(140,220,255,.85),transparent);box-shadow:0 0 10px rgba(120,210,255,.8);animation:edyScan 4.5s ease-in-out infinite}
+@keyframes edyScan{0%{top:0;opacity:0}10%,90%{opacity:1}100%{top:100%;opacity:0}}
+.edy-online{display:inline-flex;align-items:center;gap:6px;font-size:.74rem;color:#16a34a;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.edy-online:before{content:'';width:8px;height:8px;border-radius:50%;background:#22c55e;animation:edyPulso 1.8s infinite}
+@keyframes edyPulso{0%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}70%{box-shadow:0 0 0 8px rgba(34,197,94,0)}}
+.ia-vazio:has(.edy-cena) b{font-size:1.25rem;font-weight:800;color:var(--text)}
+/* Botão do Edy no centro da barra de baixo (sobe acima da barra: o fim das telas não fica embaixo dele) */
+@media(max-width:760px){.content{padding-bottom:118px}body:has(.edy-tela) .content{padding-bottom:0}.edy-tela .ia-msgs:has(.edy-cena){min-height:150px}}
+.edy-globo{position:relative;display:block;width:58px;height:58px;border-radius:50%}
+.edy-globo i{position:absolute;inset:0;border-radius:50%}
+.edy-globo:before{content:'';position:absolute;inset:-4px;border-radius:50%;background:conic-gradient(#5fe39a,#59c2ff 35%,transparent 36% 60%,#5fe39a 61% 75%,transparent 76%);-webkit-mask:radial-gradient(circle,transparent 62%,#000 64%);mask:radial-gradient(circle,transparent 62%,#000 64%);animation:edyGira 6s linear infinite}
+.edy-globo:after{content:'';position:absolute;inset:0;border-radius:50%;box-shadow:inset -6px -6px 14px rgba(0,0,0,.55),0 0 14px rgba(70,170,255,.45)}
+.mobile-nav .nv-edy{display:flex!important;flex-direction:column;align-items:center;justify-content:flex-end;gap:2px;font-weight:700;color:var(--text)}
+.mobile-nav .nv-edy .edy-globo{margin-top:-28px;box-shadow:0 0 0 5px var(--panel)}
+:root[data-theme="light"] .mobile-nav .nv-edy .edy-globo{box-shadow:0 0 0 5px #fff}
+.mobile-nav .nv-edy.active{color:var(--green)}
+@media(prefers-reduced-motion:reduce){.edy-cena *,.edy-cena *:after,.edy-globo:before,.edy-online:before{animation:none!important}}

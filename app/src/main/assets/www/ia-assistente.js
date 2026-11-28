@@ -126,7 +126,7 @@ function iaFormatar(t) {
 }
 const iaLink = u => /^https:\/\//.test(String(u || '')) ? String(u) : '';
 function iaBolhas() {
-  if (!iaConversa.length) return `<div class="ia-vazio"><span class="edy-avatar grande" aria-hidden="true">${(typeof iconeMenu === 'function' && iconeMenu('assistente', 64)) || '✨'}</span><b>Oi! Eu sou o Edy.</b><small>Pergunte, conte o que fez ou mande uma foto da lavoura.</small></div>`;
+  if (!iaConversa.length) return `<div class="ia-vazio">${typeof edyCenaHtml === 'function' ? edyCenaHtml(db.settings?.local) : ''}<span class="edy-online">Edy online</span><b>Em que posso ajudar hoje?</b></div>`;
   return iaConversa.map((m, i) => {
     if (m.de !== 'ia') return `<div class="ia-msg pessoa">${(m.fotos || []).length ? `<div class="ia-msg-fotos">${m.fotos.filter(f => /^data:image\/(jpeg|png|webp);base64,/.test(f)).map(f => `<img src="${f}" alt="Foto enviada ao Edy">`).join('')}</div>` : ''}${m.texto ? `<p>${esc(m.texto)}</p>` : ''}</div>`;
     const acoes = (m.acoes || []).map((a, k) => typeof edyCartaoAcao === 'function' ? edyCartaoAcao(a, `${i}|${k}`, (m.abertas || []).includes(k) ? 'aberto' : '') : '').join('');
@@ -181,6 +181,7 @@ TITLES.assistente = 'Edy';
 VIEWS.assistente.after = () => {
   const f = $('#iaForm'), t = $('#iaPergunta'), msgs = $('#iaMsgs');
   iaCaber(); if (msgs) msgs.scrollTop = msgs.scrollHeight;
+  if (typeof edyCenaIniciar === 'function') edyCenaIniciar();
   iaMunicipioSede();
   if (iaOuvindo) { window.AndroidBridge?.vozCancelar?.(); iaVozWeb?.abort?.(); iaOuvindo = ''; iaVozWeb = null; }
   if (!f) return;
@@ -197,12 +198,15 @@ function iaCaber() {
   const tela = $('.edy-tela'), msgs = $('#iaMsgs'); if (!tela || !msgs) return;
   if (innerWidth > 760) { msgs.style.height = ''; return; }
   const alto = window.visualViewport ? visualViewport.height : innerHeight, nav = $('.mobile-nav');
-  const baixo = nav && getComputedStyle(nav).display !== 'none' ? nav.getBoundingClientRect().height : 0;
+  const baixo = nav && getComputedStyle(nav).display !== 'none' ? nav.getBoundingClientRect().height + (typeof edyNavSobe === 'function' ? edyNavSobe() : 0) : 0;
   const resto = tela.getBoundingClientRect().height - msgs.getBoundingClientRect().height;
-  const h = Math.max(200, Math.floor(alto - tela.getBoundingClientRect().top - baixo - resto - 12));
+  const min = iaConversa.length ? 200 : 150; // conversa vazia: o globo encolhe em tela pequena
+  const h = Math.max(min, Math.floor(alto - tela.getBoundingClientRect().top - baixo - resto - 12));
   msgs.style.height = h + 'px';
   const sobra = document.documentElement.scrollHeight - alto; // margens do layout: a página não pode rolar
-  if (sobra > 0 && h - sobra >= 200) msgs.style.height = (h - sobra) + 'px';
+  if (sobra > 0 && h - sobra >= min) msgs.style.height = (h - sobra) + 'px';
+  // o globo do Edy (conversa vazia) cabe no espaço que sobrou, junto com o "Em que posso ajudar hoje?"
+  const cena = $('.edy-cena', msgs); if (cena) cena.style.setProperty('--cena', Math.round(Math.max(72, Math.min(330, msgs.clientWidth * .84, msgs.clientHeight - 78))) + 'px');
 }
 if (typeof addEventListener === 'function') addEventListener('resize', () => { if ($('.edy-tela')) iaCaber(); });
 let iaOcupado = false;
