@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import * as nucleoDados from '../dados-oficiais/nucleo.ts';
-import {janelas, normalizar, padraoBusca, resumirAgrofit, resumirZarc, textoOficiais} from './oficiais.ts';
+import {janelas, modosDeAcao, normalizar, padraoBusca, resumirAgrofit, resumirZarc, textoOficiais} from './oficiais.ts';
 const assertEquals = (a: unknown, b: unknown) => assert.deepEqual(a, b);
 
 Deno.test('as cópias batem com dados-oficiais/nucleo.ts', () => {
@@ -30,6 +30,12 @@ Deno.test('Agrofit: ingredientes registrados, sem marca e sem dose; busca pelo a
     {cultura: 'Soja', alvo_comum: 'Buva', alvo_cientifico: 'Conyza bonariensis', ingrediente: 'glifosato', classe: 'Herbicida', modo_acao: 'sistêmico, Sistêmico/Seletivo', produtos: 1},
   ], 'Soja', 'Buva')!;
   assertEquals(m.linhas[1], 'glifosato — Herbicida (sistêmico, seletivo) · 3 produtos');
+  // como vem no Agrofit de verdade
+  assertEquals(modosDeAcao('não seletivo de ação sistêmica; sistêmico; de ação total; seeltivo condicional'), ['sistêmico', 'seletivo', 'não seletivo']);
+  assertEquals(modosDeAcao('de ação não sistêmica, contato'), ['contato']);
+  assertEquals(modosDeAcao('mesostêmico; sistemico; sistêmcio'), ['sistêmico', 'mesostêmico']);
+  assertEquals(modosDeAcao('protetor; de contato'), ['contato', 'protetor']);
+  assertEquals(modosDeAcao(''), []);
 });
 
 Deno.test('ZARC: janelas por ciclo juntando solos iguais, sequeiro primeiro', () => {

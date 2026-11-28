@@ -32,6 +32,21 @@ export function janelas(decs: string): {de: string, ate: string, risco: number}[
   return out;
 }
 
+/** O Agrofit escreve o modo de ação de muitos jeitos ("não seletivo de ação sistêmica", "sistemico", "seeltivo"…): vira uma lista curta e fixa. */
+const MODOS = ['sistêmico', 'mesostêmico', 'contato', 'protetor', 'seletivo', 'não seletivo'];
+export function modosDeAcao(txt: string): string[] {
+  const achados = new Set<string>();
+  String(txt || '').split(/[;,/]/).map(normalizar).filter(Boolean).forEach(v => {
+    if (/mesos/.test(v)) achados.add('mesostêmico');
+    else if (/sist[eê]?m/.test(v) && !/nao sist/.test(v)) achados.add('sistêmico');
+    if (/contato|nao sist/.test(v)) achados.add('contato');
+    if (/protet/.test(v)) achados.add('protetor');
+    if (/nao sel|total/.test(v)) achados.add('não seletivo');
+    else if (/se+l?e+l?tiv/.test(v)) achados.add('seletivo');
+  });
+  return MODOS.filter(m => achados.has(m));
+}
+
 const PALAVRAS_VAZIAS = new Set(['de', 'da', 'do', 'das', 'dos', 'na', 'no', 'em', 'a', 'o', 'e', 'praga', 'doenca', 'planta', 'daninha', 'controle']);
 /** "Ferrugem-asiática da soja" → "%ferrugem%asiatica%" (busca no texto normalizado). */
 export function padraoBusca(t: string, cultura = ''): string {
@@ -48,7 +63,7 @@ export function resumirAgrofit(linhas: LinhaAgrofit[], cultura: string, alvo: st
   linhas.forEach(l => {
     const x = por.get(l.ingrediente) || {produtos: 0, classes: new Set(), modos: new Set(), todas: false, especifica: false, organico: false};
     x.produtos += Number(l.produtos) || 0; if (l.classe) x.classes.add(l.classe);
-    String(l.modo_acao || '').split(/[;,/]|\s+e\s+/).map(m => m.trim().toLowerCase().replace(/[.:;]+$/, '')).filter(Boolean).forEach(m => x.modos.add(m));
+    modosDeAcao(l.modo_acao).forEach(m => x.modos.add(m));
     if (/todas as culturas/i.test(l.cultura)) x.todas = true; else x.especifica = true;
     x.organico ||= !!l.organico; por.set(l.ingrediente, x);
   });
