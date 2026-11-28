@@ -38,6 +38,13 @@ test('chuva: somas prontas (um valor por dia, o maior dos locais) e desde o plan
   assert.equal(c.chuvas.desdePlantio[0].mm, 27.5);
 });
 
+test('município da sede vai pelo nome (para o ZARC); coordenadas não', () => {
+  const db = base(); db.settings.local = {lat: -28.123456, lon: -52.654321}; db.settings.municipioSede = {nome: 'Passo Fundo', uf: 'RS', lat: -28.123456, lon: -52.654321};
+  const c = app(db).iaContexto('2026-11-27');
+  assert.deepEqual({...c.municipio}, {nome: 'Passo Fundo', uf: 'RS'});
+  assert.doesNotMatch(JSON.stringify(c), /-28\.1|-52\.6/);
+});
+
 test('o financeiro não vai para a IA', () => {
   const db = base(); db.expenses = [{value: 9150}]; db.contas = [{valor: 18900}];
   const s = JSON.stringify(app(db).iaContexto('2026-11-27'));

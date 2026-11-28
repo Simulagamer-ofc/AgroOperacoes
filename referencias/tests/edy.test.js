@@ -112,3 +112,11 @@ test('registro preparado pela IA vira texto com nomes; sino recebe os avisos do 
   assert.equal(sino[0].title, 'Estoque baixo');
   assert.ok(sino.some(a => a.title.startsWith('Edy: ')));
 });
+
+test('Edy agrônomo: diagnóstico da foto vira registro de monitoramento para conferir', () => {
+  const e = app(base());
+  assert.deepEqual({...e.edyAcaoTxt({tipo: 'monitoramento', tipoAlvo: 'Planta daninha', alvo: 'Buva', talhaoId: 't7', data: HOJE})},
+    {titulo: 'Registrar no monitoramento: Buva', linha: 'Planta daninha · Talhão 07 · com a foto · hoje'});
+  assert.deepEqual({...e.edyAcaoTxt({tipo: 'monitoramento', tipoAlvo: 'Doença', alvo: 'Ferrugem-asiática'})},
+    {titulo: 'Registrar no monitoramento: Ferrugem-asiática', linha: 'Doença · escolha o talhão · com a foto · hoje'});
+});

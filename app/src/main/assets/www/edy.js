@@ -161,7 +161,8 @@ function edyResumo(dia = today(), agora = Date.now()) {
   const av = edyAvisos(dia, agora);
   if (av.length) linhas.push(`⚠️ ${av.length === 1 ? 'Atenção' : `${av.length} pontos de atenção`}: ${av[0].titulo}${av.length > 1 ? '…' : '.'}`);
   const hoje = today();
-  return {titulo: dia === hoje ? 'Bom dia! O seu dia na fazenda' : `Resumo de ${edyDiaTxt(dia, hoje)}`, linhas, avisos: av,
+  const h = new Date(agora).getHours(), saud = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+  return {titulo: dia === hoje ? `${saud}! O seu dia na fazenda` : `Resumo de ${edyDiaTxt(dia, hoje)}`, linhas, avisos: av,
     curto: `${ops.length ? `${ops.length} programada${ops.length > 1 ? 's' : ''}` : 'Nada programado'}${av.length ? ` · ${av.length} ${av.length === 1 ? 'atenção' : 'atenções'}` : ''}`};
 }
 
@@ -203,7 +204,7 @@ function edyCartaoResumo(aberto = true) {
 }
 
 // ---------- Registros prontos (IA que age) ----------
-const EDY_ACAO_IC = {operacao: '📋', reprogramar: '📅', abastecimento: '⛽', chuva: '🌧'};
+const EDY_ACAO_IC = {operacao: '📋', reprogramar: '📅', abastecimento: '⛽', chuva: '🌧', monitoramento: '🔍'};
 /** Texto de um registro proposto pela IA, com os nomes no lugar dos códigos. */
 function edyAcaoTxt(a, hoje = today()) {
   const t = a.talhaoId && edyLista('fields').find(f => f.id === a.talhaoId), m = a.maquinaId && edyLista('machines').find(x => x.id === a.maquinaId);
@@ -216,17 +217,39 @@ function edyAcaoTxt(a, hoje = today()) {
   }
   if (a.tipo === 'abastecimento') return {titulo: `Abastecimento — ${nomeM || 'máquina'}`, linha: [`${edyN(a.litros, 1)} L`, a.horimetro != null ? `horímetro ${edyN(a.horimetro, 1)}` : '', quando].filter(Boolean).join(' · ')};
   if (a.tipo === 'chuva') return {titulo: `Chuva de ${edyN(a.mm, 1)} mm`, linha: [nomeT || 'Sede/geral', quando || 'hoje'].join(' · ')};
+  if (a.tipo === 'monitoramento') return {titulo: `Registrar no monitoramento: ${a.alvo}`, linha: [a.tipoAlvo, nomeT || 'escolha o talhão', 'com a foto', quando || 'hoje'].join(' · ')};
   return {titulo: 'Registro', linha: ''};
 }
 /** Abre o formulário do registro já preenchido (a pessoa confere e salva). */
-function edyAbrirAcao(a) {
+function edyAbrirAcao(a, arquivos = []) {
   const campo = (k, v) => { const el = document.querySelector(`#dialog #f_${k}`); if (el && v != null && v !== '') { el.value = String(v); el.dispatchEvent(new Event('input', {bubbles: true})); el.dispatchEvent(new Event('change', {bubbles: true})); el.classList.add('ia-lido'); } };
   const t = a.talhaoId && edyLista('fields').some(f => f.id === a.talhaoId) ? a.talhaoId : '', m = a.maquinaId && edyLista('machines').some(x => x.id === a.maquinaId) ? a.maquinaId : '';
   if (a.tipo === 'operacao') operationForm({type: OP_TYPES.includes(a.tipoOperacao) ? a.tipoOperacao : 'Outra', fieldId: t, machineId: m, area: a.area ?? '', date: a.data || today(), time: a.hora || nowTime(), status: a.status || 'Programada', notes: a.obs || ''});
   else if (a.tipo === 'reprogramar') { const o = find('operations', a.operacaoId); if (!o) return showToast('Operação não encontrada', true); operationForm({...o, date: a.data || o.date, time: a.hora || o.time}); }
   else if (a.tipo === 'abastecimento') { abastecimentoForm(m); campo('date', a.data); campo('liters', a.litros); campo('hours', a.horimetro); }
   else if (a.tipo === 'chuva') chuvaForm({date: a.data || today(), hora: a.hora || nowTime(), mm: a.mm, fieldId: t, notes: a.obs || ''});
+  else if (a.tipo === 'monitoramento') {
+    const f = t && find('fields', t), est = f && typeof estadioTalhao === 'function' ? (() => { try { return estadioTalhao(f)?.cod || ''; } catch { return ''; } })() : '';
+    monitoramentoForm({tipo: ['Praga', 'Doença', 'Planta daninha'].includes(a.tipoAlvo) ? a.tipoAlvo : 'Praga', alvo: a.alvo || '', fieldId: t, date: a.data || today(), estadio: est,
+      notes: 'Identificado pela foto pelo Edy (IA). Conferir no campo.'});
+    edyAnexarFotos(arquivos);
+  }
   showToast('Preparado pelo Edy: confira e salve');
+}
+/** Põe no formulário aberto as fotos que foram ao Edy (ficam no registro como as outras fotos). */
+async function edyAnexarFotos(arquivos) {
+  const box = document.querySelector('#dialog .fotos-campo'); if (!box || !arquivos.length || typeof reduzirFoto !== 'function') return;
+  const [colecao, recordId] = box.dataset.fotos.split('|');
+  for (const arq of arquivos.slice(0, typeof FOTOS_MAX === 'number' ? FOTOS_MAX : 6)) {
+    try {
+      const red = await reduzirFoto(arq), id = uid();
+      await guardarFotoLocal({id, colecao, recordId, blob: red.blob, mini: red.mini, tipo: red.tipo, ext: red.ext, fazendaId: nv?.fazenda?.id || null, enviada: false, miniEnviada: !red.mini, criadaEm: Date.now()});
+      if (!fotosDoForm.has(recordId)) fotosDoForm.set(recordId, []);
+      fotosDoForm.get(recordId).push({id, em: new Date().toISOString(), por: nv?.sessao?.usuario || '', ext: red.ext, ...(red.mini ? {mini: true} : {})});
+      box.querySelector('.fotos-lista')?.insertAdjacentHTML('beforeend', `<span class="foto-mini nova" data-foto-id="${esc(id)}"></span>`);
+    } catch { /* foto fica só na conversa */ }
+  }
+  if (typeof carregarMiniaturas === 'function') carregarMiniaturas(box, colecao, recordId);
 }
 function edyCartaoAcao(a, ref, estado = '') {
   const x = edyAcaoTxt(a);
