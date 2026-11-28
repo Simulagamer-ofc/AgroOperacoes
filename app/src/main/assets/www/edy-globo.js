@@ -2,7 +2,7 @@
 /* Edy — globo da marca na tela do Edy e no botão do centro da barra de baixo.
    Tela do Edy (conversa vazia): o vídeo do logo girando (img/edy-globo.mp4, uma volta a cada 16 s) dentro de um painel
    tecnológico (anel com marcações, segmentos girando, textos curvos, grade holográfica, radar e linha de varredura).
-   Se o aparelho não deixar o vídeo começar sozinho, fica a imagem parada; com "reduzir movimento", tudo parado. */
+   Se o aparelho não deixar o vídeo começar (sem toque), fica a imagem parada até o primeiro toque; com "reduzir movimento", tudo parado. */
 
 /** Recorte redondo do globo da imagem da tela de entrada (img/nexus-globo.jpg: centro 1240×407, raio 238). */
 function edyGloboFoto(d) {
@@ -51,7 +51,10 @@ function edyCenaIniciar() {
   cena.dataset.ok = '1';
   const parado = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
   const v = cena.querySelector('video');
-  if (v && !parado) { v.muted = true; const p = v.play(); if (p && p.catch) p.catch(() => { /* o aparelho não deixou: fica a imagem parada */ }); }
+  // No app, o Android só deixa o vídeo começar junto com um toque: abrir o Edy pelo botão já é esse toque.
+  // Se abriu sem toque (ex.: o app voltou direto nesta tela), fica a imagem parada até o primeiro toque na tela.
+  const tocar = () => { if (!v.isConnected) return; const p = v.play(); if (p && p.catch) p.catch(() => document.addEventListener('pointerdown', tocar, {once: true})); };
+  if (v && !parado) { v.muted = true; tocar(); }
   const cv = cena.querySelector('canvas'); if (!cv || !cv.getContext) return;
   const W = cv.clientWidth || 140, R = W * 69 / 140, dpr = window.devicePixelRatio || 1, rad = Math.PI / 180, tilt = -18 * rad;
   cv.width = W * dpr; cv.height = W * dpr;
