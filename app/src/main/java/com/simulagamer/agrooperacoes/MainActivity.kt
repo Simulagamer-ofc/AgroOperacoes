@@ -287,6 +287,7 @@ class MainActivity : AppCompatActivity() {
             // Não carrega URLs content:// (o <input type="file"> funciona sem isso)
             settings.allowContentAccess = false
             settings.setGeolocationEnabled(true)
+            settings.mediaPlaybackRequiresUserGesture = false // globo do Edy (vídeo mudo) começa sozinho
             addJavascriptInterface(AndroidBridge(), "AndroidBridge")
             webChromeClient = object : WebChromeClient() {
                 override fun onGeolocationPermissionsShowPrompt(origin: String, callback: GeolocationPermissions.Callback) {

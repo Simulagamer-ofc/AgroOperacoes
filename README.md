@@ -4,13 +4,18 @@ Aplicativo Android offline para operações agrícolas, máquinas, manutenção,
 
 ## Versão atual
 
-`1.2.27-beta1` — **Edy agrônomo: identifica pela foto e pesquisa em fontes técnicas.**
+`1.2.28-beta1` — **Edy com o globo da marca girando e atalho na barra de baixo.**
+- **Globo no centro da barra de baixo.** Em qualquer tela, o globo do MercaPlant (com um anel de luz girando) abre o Edy. O **Estoque** saiu da barra de baixo e continua no menu ☰ (Estoque e insumos).
+- **Tela do Edy nova.** Com a conversa vazia, aparece o logo com o globo girando devagar (uma volta a cada 16 s) dentro de um painel tecnológico: anel com marcações, grade holográfica, radar, a linha de varredura e as coordenadas da sede. No lugar do "Oi! Eu sou o Edy", **Edy online — Em que posso ajudar hoje?**
+- Vídeo leve (0,9 MB, guardado no aparelho para funcionar sem internet). Se o aparelho não deixar o vídeo começar sozinho, ou com **reduzir movimento** ligado, fica a imagem parada. No app instalado, o vídeo começa sozinho a partir deste APK.
+
+Anterior: `1.2.27-beta1` — **Edy agrônomo: identifica pela foto e pesquisa em fontes técnicas.**
 - **📷 Foto da lavoura.** Na conversa do Edy, toque na câmera (até 3 fotos: de perto, de longe, verso da folha) e, se quiser, conte o que viu. O Edy identifica **praga, doença, planta daninha, deficiência ou dano**, diz a **confiança** (alta, média ou baixa), com o que pode ser confundido e **como confirmar no campo**, o **nível de ação** (com a fonte) e **como combater** pelo manejo integrado: cultural, biológico e químico pelo **mecanismo de ação** (HRAC, IRAC, FRAC) com rotação contra resistência. Usa a cultura, o estádio, os monitoramentos e o tempo da fazenda para decidir. Embaixo, **Registrar no monitoramento**: abre o formulário com o alvo, o tipo, o talhão citado e **a foto já anexada**.
 - **Um só Edy.** Saíram os botões Fazenda/Técnica: o Edy decide sozinho — pergunta sobre a fazenda ele responde com os seus dados; dúvida agronômica (praga, doença, manejo, adubação, ZARC…) ele pesquisa antes, na ordem Embrapa, MAPA (ZARC, Agrofit), manual CQFS-RS/SC, Emater/RS, Seapi, Conab, universidades e HRAC/IRAC/FRAC; números só com a fonte, e diz quando não achou em vez de inventar. As fontes técnicas/oficiais aparecem primeiro, com **✔**.
 - **Tela nova, mais limpa.** Conversa ocupando a tela, como app de mensagens; resumo do dia numa linha no topo (toque para abrir); barra única com 📷, texto, 🎤 e enviar; sugestões só na conversa vazia; sem textos explicativos.
 - Continua sem marca comercial e sem dose: o produto e a dose saem do receituário do agrônomo responsável, só com produto registrado no Agrofit para a cultura e o alvo.
 
-Anterior: `1.2.26-beta2` — **Microfone do Edy funcionando no app.**
+`1.2.26-beta2` — **Microfone do Edy funcionando no app.**
 - **Fale com o Edy.** O microfone agora usa o reconhecimento de voz do próprio Android (dentro do app, sem abrir a janela do Google): na 1ª vez o app pede a permissão do microfone; o texto aparece na caixa enquanto você fala e o botão pulsa com a sua voz. Toque de novo para parar. Se a permissão for negada ou faltar internet, o Edy explica o que fazer. **Precisa instalar o APK novo** (as telas sozinhas não bastam).
 
 `1.2.26-beta1` — **A IA agora se chama Edy, e ficou proativa, faz registros, responde com fontes e analisa.** Menu **Edy (IA)**.

@@ -50,7 +50,7 @@
     b.innerHTML = icone(b.dataset.route) + `<span class="nav-txt">${nome}</span>`;
   });
   // Barra inferior do celular
-  document.querySelectorAll('.mobile-nav button[data-route]').forEach(b => {
+  document.querySelectorAll('.mobile-nav button[data-route]:not(.nv-edy)').forEach(b => {
     const s = b.querySelector('span'); if (s && ICONES[b.dataset.route]) s.innerHTML = icone(b.dataset.route, 26);
   });
 })();
