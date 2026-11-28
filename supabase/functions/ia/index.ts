@@ -16,7 +16,8 @@
 // Limite por pessoa por dia (IA_LIMITE_DIA, padrão 50), contado na tabela ia_uso (só o servidor acessa).
 // A IA só sugere: o app mostra o que leu para a pessoa conferir antes de salvar.
 // Publicar com verify_jwt = false: a própria função confere o login (getUser + farm_role) e o teste (ia_teste).
-import {createClient} from 'npm:@supabase/supabase-js@2';
+import {createClient, type SupabaseClient} from 'npm:@supabase/supabase-js@2';
+import {buscarOficiais, type Oficial, textoOficiais, URL_AGROFIT, URL_ZARC} from './oficiais.ts';
 import {acoesQuebradas, conversa, erroGemini, esquemaBoletim, esquemaChat, fontesDaResposta, type Grupo, instrucaoAssistente, instrucaoFoto, instrucaoTecnica, lerChat, lerDiagnostico, MAX_FOTOS, TIPOS_FOTO, MAX_BASE64, MAX_CONTEXTO, MAX_PERGUNTA, normalizarBoletim, promptBoletim, textoDaResposta, TIPOS_ARQUIVO, type Turno} from './nucleo.ts';
 
 const cors = {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'authorization, apikey, content-type, x-client-info, x-ia-teste', 'Access-Control-Allow-Methods': 'POST, OPTIONS'};
@@ -25,6 +26,7 @@ const erro = (status: number, message: string) => resposta(status, {message});
 const CHAVE_APP = 'sb_publishable_BxbOeMIvyAlyTkCMy3sUWg__PpRKnYK'; // chave pública do app (mesma do nuvem.js)
 const GEMINI = 'https://generativelanguage.googleapis.com/v1beta/models';
 
+const admin = () => createClient(Deno.env.get('SUPABASE_URL')!, chaveSecreta(), {auth: {persistSession: false, autoRefreshToken: false}});
 function chaveSecreta() {
   try { const k = JSON.parse(Deno.env.get('SUPABASE_SECRET_KEYS') || '{}').default; if (k) return k; } catch { /* chave antiga */ }
   return Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -60,19 +62,24 @@ async function chamarGemini(pedido: unknown, outroModelo = '', espera = 90000) {
 
 const hojeBR = () => new Date().toLocaleDateString('pt-BR', {timeZone: 'America/Sao_Paulo', weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'});
 const hojeIso = () => new Date().toLocaleDateString('en-CA', {timeZone: 'America/Sao_Paulo'});
-async function perguntar(b: Record<string, unknown>, outroModelo = '') {
+/** Município da sede (o app descobre pelo ponto da sede, no aparelho, e manda o nome): para o ZARC. */
+const municipioDe = (contexto: string) => { try { const m = JSON.parse(contexto)?.municipio; return m && typeof m.nome === 'string' ? {nome: m.nome, uf: String(m.uf || '')} : undefined; } catch { return undefined; } };
+/** Fontes: as bases oficiais consultadas entram primeiro. */
+const fontesCom = (o: Oficial[], f: {titulo: string, url: string, oficial?: boolean}[] = []) =>
+  [...o.map(x => ({titulo: x.url === URL_ZARC ? 'ZARC/MAPA' : x.url === URL_AGROFIT ? 'Agrofit/MAPA' : x.fonte, url: x.url, oficial: true})), ...f].slice(0, 7);
+async function perguntar(b: Record<string, unknown>, outroModelo = '', adm?: SupabaseClient) {
   const pergunta = String(b.pergunta || '').trim(), contexto = String(b.contexto || '{}'), tecnica = b.modo === 'tecnica';
   if (!pergunta) throw Object.assign(new Error('Escreva a pergunta.'), {status: 400});
   if (pergunta.length > MAX_PERGUNTA) throw Object.assign(new Error(`Pergunta longa demais (até ${MAX_PERGUNTA} letras).`), {status: 400});
   if (contexto.length > MAX_CONTEXTO * 1.2) throw Object.assign(new Error('Dados da fazenda grandes demais para a IA.'), {status: 400});
-  const modelo = outroModelo || (Deno.env.get('GEMINI_MODELO_CHAT') || '').trim(), contents = conversa(b.historico as Turno[], pergunta, contexto);
+  const modelo = outroModelo || (Deno.env.get('GEMINI_MODELO_CHAT') || '').trim(), contexto2 = contexto, contents = conversa(b.historico as Turno[], pergunta, contexto2);
   const comBusca = (instrucao: string, conteudo: unknown, mod: string) => chamarGemini({systemInstruction: {parts: [{text: instrucao}]}, contents: conteudo, tools: [{google_search: {}}],
     generationConfig: {temperature: 0.2, maxOutputTokens: 3072}}, mod, 120000);
   const modTec = outroModelo || (Deno.env.get('GEMINI_MODELO_TECNICA') || '').trim() || MODELO_TECNICA;
   if (tecnica) {
     // Agrônomo com fontes: busca no Google (a busca não combina com resposta em JSON: volta texto + fontes)
     const r = await comBusca(instrucaoTecnica(hojeBR()), contents, modTec);
-    return {...r, resposta: r.texto, acoes: [], modo: 'tecnica'};
+    return {...r, resposta: r.texto, acoes: [], modo: 'tecnica', oficiais: [] as Oficial[]};
   }
   const pedido = (temperature: number) => ({systemInstruction: {parts: [{text: instrucaoAssistente(hojeBR())}]}, contents,
     generationConfig: {temperature, maxOutputTokens: 2048, responseMimeType: 'application/json', responseSchema: esquemaChat()}});
@@ -82,15 +89,17 @@ async function perguntar(b: Record<string, unknown>, outroModelo = '') {
     if (r2) r = {...r2, entrada: r.entrada + r2.entrada, saida: r.saida + r2.saida};
   }
   const lido = lerChat(r.texto, hojeIso());
-  if (lido.tecnica) { // dúvida agronômica: o agrônomo pesquisa e responde com as fontes
-    const t = await comBusca(instrucaoTecnica(hojeBR()), contents, modTec);
-    return {...t, entrada: r.entrada + t.entrada, saida: r.saida + t.saida, resposta: t.texto, acoes: [], modo: 'tecnica'};
+  if (lido.tecnica) { // dúvida agronômica: o agrônomo pesquisa (com as bases oficiais do MAPA, se a pergunta pedir) e responde com as fontes
+    const oficiais = adm && lido.consulta ? await buscarOficiais(adm, lido.consulta, municipioDe(contexto)) : [];
+    const cont = oficiais.length ? conversa(b.historico as Turno[], pergunta, contexto2 + textoOficiais(oficiais)) : contents;
+    const t = await comBusca(instrucaoTecnica(hojeBR()), cont, modTec);
+    return {...t, entrada: r.entrada + t.entrada, saida: r.saida + t.saida, resposta: t.texto, acoes: [], modo: 'tecnica', oficiais, fontes: fontesCom(oficiais, t.fontes), consulta: lido.consulta};
   }
-  return {...r, ...lido, fontes: [], modo: ''};
+  return {...r, ...lido, fontes: [], modo: '', oficiais: [] as Oficial[]};
 }
 
 /** Edy agrônomo pela foto. */
-async function diagnosticar(b: Record<string, unknown>, outroModelo = '') {
+async function diagnosticar(b: Record<string, unknown>, outroModelo = '', adm?: SupabaseClient) {
   const fotos = (Array.isArray(b.fotos) ? b.fotos : []) as {tipo?: string, dados?: string}[];
   if (!fotos.length || fotos.length > MAX_FOTOS) throw Object.assign(new Error(`Envie de 1 a ${MAX_FOTOS} fotos.`), {status: 400});
   for (const f of fotos) {
@@ -110,7 +119,10 @@ async function diagnosticar(b: Record<string, unknown>, outroModelo = '') {
     if (outroModelo || ![429, 502, 504].includes(st)) throw e;
     r = await chamarGemini(pedido, (Deno.env.get('GEMINI_MODELO_TECNICA') || '').trim() || MODELO_TECNICA, 110000);
   }
-  return {...r, ...lerDiagnostico(r.texto)};
+  const lido = lerDiagnostico(r.texto), d = lido.diagnostico;
+  // O que está registrado no MAPA para esse alvo na cultura (Agrofit): vem junto, embaixo do diagnóstico
+  const oficiais = adm && d && ['Praga', 'Doença', 'Planta daninha'].includes(d.tipo) && d.cultura ? await buscarOficiais(adm, {agrofitCultura: d.cultura, agrofitAlvo: d.alvo}) : [];
+  return {...r, ...lido, oficiais, fontes: fontesCom(oficiais, r.fontes)};
 }
 
 Deno.serve(async req => {
@@ -138,8 +150,8 @@ Deno.serve(async req => {
       return resposta(200, {ok: true, teste: true, modelo: r.modelo, entrada: r.entrada, saida: r.saida, dados: normalizarBoletim(r.dados, b.grupos || [])});
     }
     if (modoTeste && b.acao === 'perguntar') {
-      const r = await perguntar(b, /^gemini-[\w.-]+$/.test(String(b.modelo || '')) ? String(b.modelo) : '');
-      return resposta(200, {ok: true, teste: true, modelo: r.modelo, entrada: r.entrada, saida: r.saida, resposta: r.resposta, acoes: r.acoes, fontes: r.fontes, modo: r.modo, busca: r.busca, bruto: r.texto.slice(0, 1500)});
+      const r = await perguntar(b, /^gemini-[\w.-]+$/.test(String(b.modelo || '')) ? String(b.modelo) : '', admin());
+      return resposta(200, {ok: true, teste: true, modelo: r.modelo, entrada: r.entrada, saida: r.saida, resposta: r.resposta, acoes: r.acoes, fontes: r.fontes, modo: r.modo, oficiais: r.oficiais, consulta: (r as {consulta?: unknown}).consulta, busca: r.busca, bruto: r.texto.slice(0, 1500)});
     }
     if (modoTeste && b.acao === 'foto') {
       // No teste, as fotos podem vir por endereço (repositório do MercaPlant ou Wikimedia Commons)
@@ -151,8 +163,8 @@ Deno.serve(async req => {
         let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
         fotos.push({tipo: (resp.headers.get('content-type') || 'image/jpeg').split(';')[0], dados: btoa(bin)});
       }
-      const r = await diagnosticar({...b, fotos}, /^gemini-[\w.-]+$/.test(String(b.modelo || '')) ? String(b.modelo) : '');
-      return resposta(200, {ok: true, teste: true, modelo: r.modelo, entrada: r.entrada, saida: r.saida, resposta: r.resposta, diagnostico: r.diagnostico, fontes: r.fontes, busca: r.busca});
+      const r = await diagnosticar({...b, fotos}, /^gemini-[\w.-]+$/.test(String(b.modelo || '')) ? String(b.modelo) : '', admin());
+      return resposta(200, {ok: true, teste: true, modelo: r.modelo, entrada: r.entrada, saida: r.saida, resposta: r.resposta, diagnostico: r.diagnostico, oficiais: r.oficiais, fontes: r.fontes, busca: r.busca});
     }
     const fazenda = String(b.farm_id || '');
     if (!/^[0-9a-f-]{36}$/i.test(fazenda)) return erro(400, 'Fazenda inválida.');
@@ -184,9 +196,9 @@ Deno.serve(async req => {
       const {data: usados, error: eUso} = await adm.rpc('ia_contar', {p_user: quem.user.id, p_farm: fazenda, p_limite: limite});
       if (eUso) { console.warn('ia_contar', eUso.message); return erro(500, 'Não foi possível conferir o limite de uso da IA.'); }
       if (Number(usados) < 0) return erro(429, `Você chegou ao limite de ${limite} usos da IA hoje. Amanhã libera de novo.`);
-      const r = await perguntar(b);
+      const r = await perguntar(b, '', adm);
       await adm.rpc('ia_tokens', {p_user: quem.user.id, p_entrada: r.entrada, p_saida: r.saida}).then(() => {}, () => {});
-      return resposta(200, {ok: true, modelo: r.modelo, resposta: r.resposta, acoes: r.acoes, fontes: r.fontes, modo: r.modo, usados: Number(usados), limite});
+      return resposta(200, {ok: true, modelo: r.modelo, resposta: r.resposta, acoes: r.acoes, fontes: r.fontes, modo: r.modo, oficiais: r.oficiais, usados: Number(usados), limite});
     }
     if (b.acao === 'foto') {
       const adm = createClient(Deno.env.get('SUPABASE_URL')!, chaveSecreta(), {auth: {persistSession: false, autoRefreshToken: false}});
@@ -194,9 +206,9 @@ Deno.serve(async req => {
       const {data: usados, error: eUso} = await adm.rpc('ia_contar', {p_user: quem.user.id, p_farm: fazenda, p_limite: limite});
       if (eUso) { console.warn('ia_contar', eUso.message); return erro(500, 'Não foi possível conferir o limite de uso da IA.'); }
       if (Number(usados) < 0) return erro(429, `Você chegou ao limite de ${limite} usos da IA hoje. Amanhã libera de novo.`);
-      const r = await diagnosticar(b);
+      const r = await diagnosticar(b, '', adm);
       await adm.rpc('ia_tokens', {p_user: quem.user.id, p_entrada: r.entrada, p_saida: r.saida}).then(() => {}, () => {});
-      return resposta(200, {ok: true, modelo: r.modelo, resposta: r.resposta, diagnostico: r.diagnostico, fontes: r.fontes, usados: Number(usados), limite});
+      return resposta(200, {ok: true, modelo: r.modelo, resposta: r.resposta, diagnostico: r.diagnostico, oficiais: r.oficiais, fontes: r.fontes, usados: Number(usados), limite});
     }
     return erro(400, 'Ação desconhecida.');
   } catch (e) {

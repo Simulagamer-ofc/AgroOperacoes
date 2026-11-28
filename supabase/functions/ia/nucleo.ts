@@ -119,7 +119,7 @@ export function instrucaoAssistente(hoje: string) {
     'Você NÃO registra, salva nem reprograma nada: nunca diga "registrei", "salvei", "reprogramei" ou "anotado". Diga "Preparei … para você conferir e salvar" e, em 1 ou 2 linhas, o que preparou. Se não criou a ação, não diga que fez.',
     'Tipos de ação: operacao (registro de operação; status Concluída se já fez, Programada se é para fazer; tipoOperacao entre os de DADOS.tiposOperacao), reprogramar (operacaoId de uma operação existente + a nova data e, se disser, a hora), abastecimento (maquinaId, litros, horimetro se disser), chuva (mm, data, talhaoId se disser o local).',
     'Exemplos (com hoje = quinta 26/11/2026): "passa o plantio do Talhão 08 para sábado" → uma ação reprogramar com operacaoId = id do Plantio do Talhão 08 (não concluído) em DADOS.operacoes e data 2026-11-28. "plantei 30 ha no T07" → uma ação operacao, tipoOperacao Plantio, talhaoId = id do Talhão 07, area 30, status Concluída, data 2026-11-26. "abasteci 180 L no 7230" → uma ação abastecimento, maquinaId = id do Trator 7230J, litros 180, data 2026-11-26. Cada coisa que a pessoa contar vira uma ação separada. Se você disser que preparou algo, a ação TEM de estar em acoes.',
-    'DÚVIDA TÉCNICA: se a pergunta for uma dúvida agronômica geral que os DADOS não respondem (identificar ou manejar praga, doença ou planta daninha, nível de controle, adubação, cultivar, ZARC, estádio, tecnologia de aplicação), marque tecnica = true e responda só "Vou pesquisar nas fontes técnicas." — o agrônomo do Edy pesquisa e responde com as fontes.',
+    'DÚVIDA TÉCNICA: se a pergunta for uma dúvida agronômica geral que os DADOS não respondem (identificar ou manejar praga, doença ou planta daninha, nível de controle, adubação, cultivar, ZARC, estádio, tecnologia de aplicação), marque tecnica = true e responda só "Vou pesquisar nas fontes técnicas." — o agrônomo do Edy pesquisa e responde com as fontes. Se for sobre controlar um alvo ou produto registrado, preencha agrofitCultura e agrofitAlvo; se for sobre época/janela de plantio, preencha zarcCultura (e zarcMunicipio se citar outro município). Use a cultura do talhão citado se a pessoa não disser.',
     'Formato: texto simples; pode usar **negrito** e listas com "- ". No máximo umas 12 linhas, a não ser que peçam detalhes.',
   ].join('\n');
 }
@@ -145,6 +145,7 @@ const REGRAS_FONTES = [
 /** Como combater, sem receita: o que o agrônomo responsável assina não é a IA que decide. */
 const REGRAS_MANEJO = [
   'Como combater: explique o manejo integrado — cultural (rotação, época, cultivar resistente/tolerante, palhada, cobertura), mecânico, biológico (agentes e produtos biológicos pelo tipo, ex.: Bacillus thuringiensis, Trichoderma, baculovírus, parasitoides) e químico pelo GRUPO/MECANISMO DE AÇÃO (HRAC, IRAC ou FRAC, ex.: "inibidores da ALS — HRAC grupo 2"), com rotação de mecanismos para evitar resistência, momento certo (estádio da planta daninha/praga, nível de ação) e tecnologia de aplicação.',
+  'Registrados: se vierem DADOS OFICIAIS do Agrofit, você pode citar os INGREDIENTES ATIVOS registrados para a cultura e o alvo (com a classe), dizendo que a fonte é o Agrofit/MAPA. Se vier ZARC, use a janela e o risco dele e cite a portaria.',
   'Defensivos: NÃO indique marca comercial, NÃO dê dose nem monte receita. Diga que o produto e a dose saem do receituário agronômico do agrônomo responsável, usando só produto registrado no Agrofit/MAPA para a cultura e o alvo.',
 ];
 
@@ -164,11 +165,11 @@ export function instrucaoFoto(hoje: string) {
     '**Confirme no campo:** como olhar/amostrar',
     '**Nível de ação ou dano:** (com a fonte; se não houver nível definido, diga)',
     '**Como combater:** manejo integrado (cultural, biológico, químico pelo mecanismo de ação), sem marca e sem dose',
-    'No máximo umas 22 linhas. Na ÚLTIMA linha, sozinha, escreva exatamente: ALVO: <nome comum> | TIPO: <Praga, Doença, Planta daninha, Deficiência, Outro ou Nenhum> | CONFIANCA: <alta, media ou baixa>',
+    'No máximo umas 22 linhas. Na ÚLTIMA linha, sozinha, escreva exatamente: ALVO: <nome comum> | TIPO: <Praga, Doença, Planta daninha, Deficiência, Outro ou Nenhum> | CONFIANCA: <alta, media ou baixa> | CULTURA: <cultura da lavoura na foto ou do talhão>',
   ].join('\n');
 }
 
-export type Diagnostico = {alvo: string, tipo: string, confianca: string};
+export type Diagnostico = {alvo: string, tipo: string, confianca: string, cultura?: string};
 const TIPOS_DIAG = ['Praga', 'Doença', 'Planta daninha', 'Deficiência', 'Outro', 'Nenhum'];
 /** Separa a última linha "ALVO: … | TIPO: … | CONFIANCA: …" do texto do diagnóstico. */
 export function lerDiagnostico(texto: string): {resposta: string, diagnostico: Diagnostico | null} {
@@ -179,9 +180,9 @@ export function lerDiagnostico(texto: string): {resposta: string, diagnostico: D
   const sem = (x: string) => x.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   const tipo = TIPOS_DIAG.find(t => sem(t) === sem(campo('TIPO'))) || 'Outro';
   const conf = ['alta', 'media', 'baixa'].find(c => sem(campo('CONFIAN[CÇ]A')) === c) || 'baixa';
-  const alvo = campo('ALVO').replace(/[<>]/g, '').slice(0, 80);
+  const alvo = campo('ALVO').replace(/[<>]/g, '').slice(0, 80), cultura = campo('CULTURA').replace(/[<>]/g, '').slice(0, 40);
   linhas.splice(i, 1);
-  return {resposta: linhas.join('\n').trim(), diagnostico: alvo && tipo !== 'Nenhum' ? {alvo, tipo, confianca: conf} : null};
+  return {resposta: linhas.join('\n').trim(), diagnostico: alvo && tipo !== 'Nenhum' ? {alvo, tipo, confianca: conf, ...(cultura && !/^(-|nenhum|desconhecid)/i.test(cultura) ? {cultura} : {})} : null};
 }
 
 export const TIPOS_ACAO = ['operacao', 'reprogramar', 'abastecimento', 'chuva'];
@@ -194,6 +195,10 @@ export function esquemaChat() {
     properties: {
       resposta: {type: 'STRING', description: 'Resposta para a pessoa (texto simples, pode usar **negrito** e listas com "- ")'},
       tecnica: {type: 'BOOLEAN', nullable: true, description: 'true se é dúvida agronômica geral que precisa de pesquisa em fontes técnicas (os DADOS não respondem)'},
+      agrofitCultura: {type: 'STRING', nullable: true, description: 'Se a dúvida é sobre controlar/produto para um alvo: a cultura (ex.: Soja, Milho, Trigo)'},
+      agrofitAlvo: {type: 'STRING', nullable: true, description: 'O alvo (praga, doença ou planta daninha) pelo nome comum ou científico (ex.: Ferrugem-asiática, Buva)'},
+      zarcCultura: {type: 'STRING', nullable: true, description: 'Se a dúvida é sobre época/janela de plantio ou ZARC: a cultura'},
+      zarcMunicipio: {type: 'STRING', nullable: true, description: 'Município citado na pergunta para o ZARC (vazio = o da fazenda)'},
       acoes: {type: 'ARRAY', description: 'Registros prontos para a pessoa conferir e salvar (vazio se a pergunta não pede registro)', items: {type: 'OBJECT', properties: {
         tipo: {type: 'STRING', enum: TIPOS_ACAO},
         talhaoId: nul('STRING', 'id do talhão em DADOS.talhoes'), maquinaId: nul('STRING', 'id da máquina em DADOS.maquinas'), operacaoId: nul('STRING', 'id da operação em DADOS.operacoes (para reprogramar)'),
@@ -242,12 +247,14 @@ export function acoesQuebradas(texto: string): boolean {
 }
 
 /** Texto do chat → {resposta, acoes}. Se o modelo não devolveu JSON, o texto inteiro é a resposta. */
-export function lerChat(texto: string, hoje: string): {resposta: string, acoes: Acao[], tecnica?: boolean} {
+export type ConsultaOficial = {agrofitCultura?: string, agrofitAlvo?: string, zarcCultura?: string, zarcMunicipio?: string};
+export function lerChat(texto: string, hoje: string): {resposta: string, acoes: Acao[], tecnica?: boolean, consulta?: ConsultaOficial} {
   try {
     const j = JSON.parse(texto);
     if (j && typeof j.resposta === 'string') {
       const acoes = normalizarAcoes(j.acoes, hoje);
-      return {resposta: j.resposta.trim(), acoes, ...(j.tecnica === true && !acoes.length ? {tecnica: true} : {})};
+      const consulta = Object.fromEntries(['agrofitCultura', 'agrofitAlvo', 'zarcCultura', 'zarcMunicipio'].map(k => [k, txt(j[k], 80)]).filter(([, v]) => v)) as ConsultaOficial;
+      return {resposta: j.resposta.trim(), acoes, ...(j.tecnica === true && !acoes.length ? {tecnica: true, ...(Object.keys(consulta).length ? {consulta} : {})} : {})};
     }
   } catch { /* texto puro */ }
   return {resposta: texto.trim(), acoes: []};

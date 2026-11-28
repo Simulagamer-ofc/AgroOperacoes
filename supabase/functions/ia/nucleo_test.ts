@@ -102,3 +102,9 @@ Deno.test('fontes técnicas/oficiais primeiro e marcadas; dúvida técnica no ch
   assertEquals(lerChat('{"resposta":"Vou pesquisar nas fontes técnicas.","tecnica":true,"acoes":[]}', '2026-11-28').tecnica, true);
   assertEquals(lerChat('{"resposta":"Preparei","tecnica":true,"acoes":[{"tipo":"chuva","mm":3,"data":"2026-11-28"}]}', '2026-11-28').tecnica, undefined);
 });
+
+Deno.test('bases oficiais: o chat diz o que consultar; a foto diz a cultura', () => {
+  const c = lerChat('{"resposta":"Vou pesquisar nas fontes técnicas.","tecnica":true,"acoes":[],"agrofitCultura":"Soja","agrofitAlvo":"Buva","zarcCultura":null}', '2026-11-28');
+  assertEquals(c.consulta, {agrofitCultura: 'Soja', agrofitAlvo: 'Buva'});
+  assertEquals(lerDiagnostico('x\nALVO: Buva | TIPO: Planta daninha | CONFIANCA: alta | CULTURA: Soja').diagnostico, {alvo: 'Buva', tipo: 'Planta daninha', confianca: 'alta', cultura: 'Soja'});
+});

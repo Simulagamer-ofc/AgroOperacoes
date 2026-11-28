@@ -48,6 +48,17 @@ function iaSolo() {
   }).filter(Boolean);
 }
 
+/** Município da sede pelo ponto (OpenStreetMap, aqui no aparelho; só o nome vai para o servidor): para o ZARC. */
+async function iaMunicipioSede() {
+  const l = db.settings?.local; if (!l || !Number.isFinite(l.lat) || !Number.isFinite(l.lon) || !navigator.onLine) return;
+  const m = db.settings.municipioSede; if (m && Math.abs(m.lat - l.lat) < 0.005 && Math.abs(m.lon - l.lon) < 0.005) return;
+  try {
+    const j = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&accept-language=pt-BR&lat=${l.lat}&lon=${l.lon}`).then(r => r.json());
+    const a = j?.address || {}, nome = a.city || a.town || a.municipality || a.village;
+    if (nome) { db.settings.municipioSede = {nome, uf: String(a['ISO3166-2-lvl4'] || '').replace(/^BR-/, ''), lat: l.lat, lon: l.lon}; save(); }
+  } catch { /* sem internet: tenta na próxima */ }
+}
+
 /** Resumo da fazenda para a IA (objeto; o app manda em JSON). hoje = AAAA-MM-DD. */
 function iaContexto(hoje = today()) {
   const nomeT = id => (typeof fieldName === 'function' ? fieldName(id) : '') || (id ? 'talhão removido' : 'Sede/geral');
@@ -91,7 +102,8 @@ function iaContexto(hoje = today()) {
       } catch { /* opcional */ } }
     }
   } catch { /* sem tempo */ }
-  return {fazenda: db.settings?.farm || '', hoje, tiposOperacao: typeof OP_TYPES !== 'undefined' ? OP_TYPES : [], talhoes, operacoes: ops, produtividade: iaProdutividade(), analisesSolo: iaSolo(), colheitas, chuvas, estoque, maquinas, manutencoes, pragas, aplicacoes, sementes,
+  const ms = db.settings?.municipioSede, municipio = ms?.nome ? {nome: ms.nome, uf: ms.uf || ''} : undefined; // para o ZARC do município
+  return {fazenda: db.settings?.farm || '', hoje, ...(municipio ? {municipio} : {}), tiposOperacao: typeof OP_TYPES !== 'undefined' ? OP_TYPES : [], talhoes, operacoes: ops, produtividade: iaProdutividade(), analisesSolo: iaSolo(), colheitas, chuvas, estoque, maquinas, manutencoes, pragas, aplicacoes, sementes,
     graos: {recebidoUltimos120dias: Object.entries(porProd).map(([k, v]) => ({produto: k, cargas: v.cargas, liquidoKg: Math.round(v.liquidoKg), pesoFinalKg: Math.round(v.pesoFinalKg)})), silos}, tempo};
 }
 
@@ -120,7 +132,8 @@ function iaBolhas() {
     const acoes = (m.acoes || []).map((a, k) => typeof edyCartaoAcao === 'function' ? edyCartaoAcao(a, `${i}|${k}`, (m.abertas || []).includes(k) ? 'aberto' : '') : '').join('');
     const fontes = (m.fontes || []).filter(f => iaLink(f.url)), d = m.diagnostico;
     const diag = d ? `<div class="edy-diag conf-${esc(d.confianca)}"><span>🔍 ${esc(d.tipo)}</span><b>${esc(d.alvo)}</b><small>confiança ${esc({alta: 'alta', media: 'média', baixa: 'baixa'}[d.confianca] || d.confianca)}</small></div>` : '';
-    return `<div class="ia-msg ia">${diag}${iaFormatar(m.texto)}${acoes ? `<div class="edy-acoes">${acoes}</div>` : ''}${fontes.length ? `<div class="ia-fontes"><span>Fontes:</span>${fontes.map(f => `<a class="${f.oficial ? 'oficial' : ''}" href="${esc(iaLink(f.url))}" target="_blank" rel="noopener noreferrer" title="${f.oficial ? 'Fonte técnica/oficial' : 'Outra fonte: confira'}">${f.oficial ? '✔ ' : ''}${esc(f.titulo)}</a>`).join('')}</div>` : ''}</div>`;
+    const ofi = (m.oficiais || []).map(o => `<details class="edy-oficial"><summary>📋 ${esc(o.titulo)}</summary><ul>${(o.linhas || []).map(l => `<li>${esc(l)}</li>`).join('')}</ul><small>Fonte: ${iaLink(o.url) ? `<a href="${esc(o.url)}" target="_blank" rel="noopener noreferrer">${esc(o.fonte)}</a>` : esc(o.fonte)}</small></details>`).join('');
+    return `<div class="ia-msg ia">${diag}${iaFormatar(m.texto)}${ofi}${acoes ? `<div class="edy-acoes">${acoes}</div>` : ''}${fontes.length ? `<div class="ia-fontes"><span>Fontes:</span>${fontes.map(f => `<a class="${f.oficial ? 'oficial' : ''}" href="${esc(iaLink(f.url))}" target="_blank" rel="noopener noreferrer" title="${f.oficial ? 'Fonte técnica/oficial' : 'Outra fonte: confira'}">${f.oficial ? '✔ ' : ''}${esc(f.titulo)}</a>`).join('')}</div>` : ''}</div>`;
   }).join('');
 }
 /* Microfone do Edy */
@@ -168,6 +181,7 @@ TITLES.assistente = 'Edy';
 VIEWS.assistente.after = () => {
   const f = $('#iaForm'), t = $('#iaPergunta'), msgs = $('#iaMsgs');
   iaCaber(); if (msgs) msgs.scrollTop = msgs.scrollHeight;
+  iaMunicipioSede();
   if (iaOuvindo) { window.AndroidBridge?.vozCancelar?.(); iaVozWeb?.abort?.(); iaOuvindo = ''; iaVozWeb = null; }
   if (!f) return;
   const ajustar = () => { t.style.height = 'auto'; t.style.height = Math.min(140, t.scrollHeight) + 'px'; };
@@ -203,7 +217,7 @@ async function iaPerguntar(texto) {
   if (msgs) { msgs.innerHTML = iaBolhas() + `<div class="ia-msg ia pensando"><span class="ia-roda" aria-hidden="true"></span> Edy está pensando…</div>`; msgs.scrollTop = msgs.scrollHeight; }
   try {
     const r = await nvHttp('/functions/v1/ia', {method: 'POST', body: {farm_id: nv.fazenda.id, acao: 'perguntar', pergunta: q, historico, contexto: JSON.stringify(iaContexto())}});
-    iaConversa.push({de: 'ia', texto: r.resposta || 'Sem resposta.', ...(Array.isArray(r.acoes) && r.acoes.length ? {acoes: r.acoes.slice(0, 6)} : {}), ...(Array.isArray(r.fontes) && r.fontes.length ? {fontes: r.fontes.slice(0, 6)} : {})});
+    iaConversa.push({de: 'ia', texto: r.resposta || 'Sem resposta.', ...(Array.isArray(r.oficiais) && r.oficiais.length ? {oficiais: r.oficiais.slice(0, 3)} : {}), ...(Array.isArray(r.acoes) && r.acoes.length ? {acoes: r.acoes.slice(0, 6)} : {}), ...(Array.isArray(r.fontes) && r.fontes.length ? {fontes: r.fontes.slice(0, 6)} : {})});
   } catch (e) {
     iaConversa.push({de: 'ia', texto: `⚠️ ${e?.message || 'Não foi possível falar com o Edy agora.'}`, erro: true});
   }
@@ -245,7 +259,7 @@ function iaTalhaoNoTexto(q) {
 /** O que o agrônomo precisa saber para a foto: cultura, estádio, monitoramentos, aplicações e tempo. */
 function iaContextoFoto() {
   const c = iaContexto(), s = db.settings || {};
-  return {hoje: c.hoje, regiao: [s.cidade || s.municipio, s.uf || s.estado].filter(Boolean).join(' / ') || 'Rio Grande do Sul',
+  return {hoje: c.hoje, ...(c.municipio ? {municipio: c.municipio} : {}), regiao: c.municipio ? `${c.municipio.nome}/${c.municipio.uf}` : 'Rio Grande do Sul',
     talhoes: c.talhoes.map(({nome, cultura, cultivar, safra, plantio, estadio, diasAposPlantio}) => ({nome, cultura, cultivar, safra, plantio, estadio, diasAposPlantio})),
     monitoramentos: c.pragas, aplicacoes: c.aplicacoes, chuva: c.chuvas?.somas, tempo: (c.tempo?.dias || []).slice(0, 5)};
 }
@@ -262,7 +276,7 @@ async function iaDiagnosticar(texto) {
     const r = await nvHttp('/functions/v1/ia', {method: 'POST', body: {farm_id: nv.fazenda.id, acao: 'foto', pergunta: q, fotos: fotos.map(({tipo, dados}) => ({tipo, dados})), contexto: JSON.stringify(iaContextoFoto())}});
     const d = r.diagnostico && r.diagnostico.alvo ? r.diagnostico : null;
     const registra = d && ['Praga', 'Doença', 'Planta daninha'].includes(d.tipo);
-    iaConversa.push({de: 'ia', texto: r.resposta || 'Sem resposta.', ...(d ? {diagnostico: d} : {}),
+    iaConversa.push({de: 'ia', texto: r.resposta || 'Sem resposta.', ...(d ? {diagnostico: d} : {}), ...(Array.isArray(r.oficiais) && r.oficiais.length ? {oficiais: r.oficiais.slice(0, 3)} : {}),
       ...(registra ? {acoes: [{tipo: 'monitoramento', tipoAlvo: d.tipo, alvo: d.alvo, talhaoId: iaTalhaoNoTexto(q), data: today()}]} : {}),
       ...(Array.isArray(r.fontes) && r.fontes.length ? {fontes: r.fontes.slice(0, 6)} : {})});
     iaArqDiag.set(iaConversa.length - 1, fotos.map(f => f.arq).filter(Boolean));
