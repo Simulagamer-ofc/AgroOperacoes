@@ -161,7 +161,8 @@ function edyResumo(dia = today(), agora = Date.now()) {
   const av = edyAvisos(dia, agora);
   if (av.length) linhas.push(`⚠️ ${av.length === 1 ? 'Atenção' : `${av.length} pontos de atenção`}: ${av[0].titulo}${av.length > 1 ? '…' : '.'}`);
   const hoje = today();
-  return {titulo: dia === hoje ? 'Bom dia! O seu dia na fazenda' : `Resumo de ${edyDiaTxt(dia, hoje)}`, linhas, avisos: av,
+  const h = new Date(agora).getHours(), saud = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+  return {titulo: dia === hoje ? `${saud}! O seu dia na fazenda` : `Resumo de ${edyDiaTxt(dia, hoje)}`, linhas, avisos: av,
     curto: `${ops.length ? `${ops.length} programada${ops.length > 1 ? 's' : ''}` : 'Nada programado'}${av.length ? ` · ${av.length} ${av.length === 1 ? 'atenção' : 'atenções'}` : ''}`};
 }
 
