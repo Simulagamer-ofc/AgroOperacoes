@@ -38,6 +38,13 @@ Deno.test('Agrofit: ingredientes registrados, sem marca e sem dose; busca pelo a
   assertEquals(modosDeAcao(''), []);
 });
 
+Deno.test('ZARC: janelas na ordem da safra (outubro antes de janeiro)', () => {
+  // AD1 grupo III de Passo Fundo (safra 2026/2027): 01/10–30/11 30%, 01/12–10/12 40%, 11/01–20/01 40%, 21/01–31/01 30%
+  const d = '043' + '0'.repeat(24) + '333333' + '400';
+  assertEquals(janelas(d).map(j => j.de), ['01/10', '01/12', '11/01', '21/01']);
+  assertEquals(nucleoDados.janelas(d), janelas(d));
+});
+
 Deno.test('ZARC: janelas por ciclo juntando solos iguais, sequeiro primeiro', () => {
   const base = {cultura: 'Soja', safra: '2026/2027', municipio: 'Passo Fundo', uf: 'RS', clima: 'Não se aplica', portaria: 'Port.300_de_01-07-2026'};
   const d1 = '0'.repeat(27) + '222222222', d2 = '0'.repeat(28) + '22222223';
