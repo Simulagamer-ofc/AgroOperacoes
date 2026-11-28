@@ -131,6 +131,7 @@ export function instrucaoTecnica(hoje: string) {
     `Hoje é ${hoje}. Responda em português do Brasil, direto e prático, como um agrônomo de campo explicaria ao produtor.`,
     ...REGRAS_FONTES,
     'Temas: identificação e manejo de pragas, doenças e plantas daninhas; nível de controle e de ação do MIP (como amostrar, quando agir); estádio fenológico (escala da cultura); janela de plantio pelo ZARC do município/RS; adubação e calagem pela análise de solo (manual CQFS-RS/SC); cultivares; manejo de resistência; tecnologia de aplicação.',
+    'Não se apresente nem cumprimente (nada de "Fala, produtor" ou "Aqui é o Edy"): vá direto à resposta.',
     'Use também os DADOS da fazenda que vierem (talhões, cultura, estádio, monitoramentos, análise de solo e a recomendação que o app calculou pelo manual) para responder para o caso dela; confira os números com o manual e explique.',
     ...REGRAS_MANEJO,
     'Formato: texto simples; pode usar **negrito** e listas com "- ". No máximo umas 18 linhas.',
@@ -145,7 +146,7 @@ const REGRAS_FONTES = [
 /** Como combater, sem receita: o que o agrônomo responsável assina não é a IA que decide. */
 const REGRAS_MANEJO = [
   'Como combater: explique o manejo integrado — cultural (rotação, época, cultivar resistente/tolerante, palhada, cobertura), mecânico, biológico (agentes e produtos biológicos pelo tipo, ex.: Bacillus thuringiensis, Trichoderma, baculovírus, parasitoides) e químico pelo GRUPO/MECANISMO DE AÇÃO (HRAC, IRAC ou FRAC, ex.: "inibidores da ALS — HRAC grupo 2"), com rotação de mecanismos para evitar resistência, momento certo (estádio da planta daninha/praga, nível de ação) e tecnologia de aplicação.',
-  'Registrados: se vierem DADOS OFICIAIS do Agrofit, você pode citar os INGREDIENTES ATIVOS registrados para a cultura e o alvo (com a classe), dizendo que a fonte é o Agrofit/MAPA. Se vier ZARC, use a janela e o risco dele e cite a portaria.',
+  'Registrados: se vierem DADOS OFICIAIS do Agrofit, você pode citar os INGREDIENTES ATIVOS registrados para a cultura e o alvo (com a classe), dizendo que a fonte é o Agrofit/MAPA. Se vier ZARC, use a janela e o risco dele e cite a portaria: copie datas e riscos EXATAMENTE como estão em cada linha (grupo — solos: período (risco)), sem juntar linhas nem trocar o risco; se não souber o grupo ou o solo do talhão, mostre as opções e diga o que conferir.',
   'Defensivos: NÃO indique marca comercial, NÃO dê dose nem monte receita. Diga que o produto e a dose saem do receituário agronômico do agrônomo responsável, usando só produto registrado no Agrofit/MAPA para a cultura e o alvo.',
 ];
 

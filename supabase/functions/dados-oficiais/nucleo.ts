@@ -95,8 +95,8 @@ export function decendio(n: number): {ini: string, fim: string} {
 export function janelas(decs: string): {de: string, ate: string, risco: number}[] {
   const out: {de: string, ate: string, risco: number}[] = [];
   let i0 = -1;
-  // começa num decêndio fora da janela para juntar dez/jan
-  const inicio = Math.max(0, decs.indexOf('0'));
+  // na ordem da safra: começa no primeiro decêndio fora da janela a partir de julho (out → jan, não jan → out)
+  const inicio = [...Array(36).keys()].map(k => (18 + k) % 36).find(i => decs[i] === '0') ?? 0;
   for (let k = 0; k <= 36; k++) {
     const i = (inicio + k) % 36, r = k < 36 ? decs[i] : '0', ant = i0 >= 0 ? decs[i0] : '0';
     if (i0 >= 0 && r !== ant) { out.push({de: decendio(i0 + 1).ini, ate: decendio(((i - 1 + 36) % 36) + 1).fim, risco: {'1': 10, '2': 20, '3': 30, '4': 40}[ant] || 0}); i0 = -1; }

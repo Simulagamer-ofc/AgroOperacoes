@@ -23,13 +23,29 @@ export function decendio(n: number): {ini: string, fim: string} {
 export function janelas(decs: string): {de: string, ate: string, risco: number}[] {
   const out: {de: string, ate: string, risco: number}[] = [];
   let i0 = -1;
-  const inicio = Math.max(0, decs.indexOf('0'));
+  // na ordem da safra: começa no primeiro decêndio fora da janela a partir de julho (out → jan, não jan → out)
+  const inicio = [...Array(36).keys()].map(k => (18 + k) % 36).find(i => decs[i] === '0') ?? 0;
   for (let k = 0; k <= 36; k++) {
     const i = (inicio + k) % 36, r = k < 36 ? decs[i] : '0', ant = i0 >= 0 ? decs[i0] : '0';
     if (i0 >= 0 && r !== ant) { out.push({de: decendio(i0 + 1).ini, ate: decendio(((i - 1 + 36) % 36) + 1).fim, risco: {'1': 10, '2': 20, '3': 30, '4': 40}[ant] || 0}); i0 = -1; }
     if (i0 < 0 && r !== '0' && k < 36) i0 = i;
   }
   return out;
+}
+
+/** O Agrofit escreve o modo de ação de muitos jeitos ("não seletivo de ação sistêmica", "sistemico", "seeltivo"…): vira uma lista curta e fixa. */
+const MODOS = ['sistêmico', 'mesostêmico', 'contato', 'protetor', 'seletivo', 'não seletivo'];
+export function modosDeAcao(txt: string): string[] {
+  const achados = new Set<string>();
+  String(txt || '').split(/[;,/]/).map(normalizar).filter(Boolean).forEach(v => {
+    if (/mesos/.test(v)) achados.add('mesostêmico');
+    else if (/sist[eê]?m/.test(v) && !/nao sist/.test(v)) achados.add('sistêmico');
+    if (/contato|nao sist/.test(v)) achados.add('contato');
+    if (/protet/.test(v)) achados.add('protetor');
+    if (/nao sel|total/.test(v)) achados.add('não seletivo');
+    else if (/se+l?e+l?tiv/.test(v)) achados.add('seletivo');
+  });
+  return MODOS.filter(m => achados.has(m));
 }
 
 const PALAVRAS_VAZIAS = new Set(['de', 'da', 'do', 'das', 'dos', 'na', 'no', 'em', 'a', 'o', 'e', 'praga', 'doenca', 'planta', 'daninha', 'controle']);
@@ -48,7 +64,7 @@ export function resumirAgrofit(linhas: LinhaAgrofit[], cultura: string, alvo: st
   linhas.forEach(l => {
     const x = por.get(l.ingrediente) || {produtos: 0, classes: new Set(), modos: new Set(), todas: false, especifica: false, organico: false};
     x.produtos += Number(l.produtos) || 0; if (l.classe) x.classes.add(l.classe);
-    String(l.modo_acao || '').split(/[;,/]|\s+e\s+/).map(m => m.trim().toLowerCase().replace(/[.:;]+$/, '')).filter(Boolean).forEach(m => x.modos.add(m));
+    modosDeAcao(l.modo_acao).forEach(m => x.modos.add(m));
     if (/todas as culturas/i.test(l.cultura)) x.todas = true; else x.especifica = true;
     x.organico ||= !!l.organico; por.set(l.ingrediente, x);
   });
