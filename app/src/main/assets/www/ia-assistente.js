@@ -100,12 +100,13 @@ let iaConversa = [];
 try { iaConversa = JSON.parse(sessionStorage.getItem('ia-conversa') || '[]'); } catch { iaConversa = []; }
 const iaGuardar = () => { try { sessionStorage.setItem('ia-conversa', JSON.stringify(iaConversa.slice(-30))); } catch { /* sem armazenamento */ } };
 let iaModo = ''; try { iaModo = sessionStorage.getItem('ia-modo') || ''; } catch { iaModo = ''; }
-const IA_SUGESTOES = ['O que tenho para hoje?', 'Quanto choveu nos últimos 30 dias?', 'Posso pulverizar amanhã?', 'Compare os talhões com a safra passada (sc/ha)', 'Qual talhão caiu de vigor no satélite?', 'Quando colho cada talhão?', 'Quais insumos estão abaixo do mínimo?'];
-const IA_SUG_TECNICA = ['Qual o nível de controle de percevejo na soja?', 'Qual a janela de plantio da soja no RS pelo ZARC?', 'Explique a adubação pela minha análise de solo', 'Em que estádio está cada talhão e o que vem agora?', 'Como amostrar lagarta no milho (MIP)?'];
+const IA_SUG_FOTO = '📷 Foto de praga, doença ou planta daninha';
+const IA_SUGESTOES = [IA_SUG_FOTO, 'O que tenho para hoje?', 'Quanto choveu nos últimos 30 dias?', 'Posso pulverizar amanhã?', 'Compare os talhões com a safra passada (sc/ha)', 'Qual talhão caiu de vigor no satélite?', 'Quando colho cada talhão?', 'Quais insumos estão abaixo do mínimo?'];
+const IA_SUG_TECNICA = [IA_SUG_FOTO, 'Como controlar buva resistente ao glifosato?', 'Qual o nível de ação de percevejo na soja?', 'Como identificar ferrugem-asiática no começo?', 'Qual a janela de plantio da soja no RS pelo ZARC?', 'Explique a adubação pela minha análise de solo', 'Em que estádio está cada talhão e o que vem agora?'];
 const IA_SUG_TEMPO = ['Posso pulverizar amanhã? Qual o melhor horário?', 'Qual o melhor dia desta semana para plantar?', 'Dá para colher nos próximos dias ou vem chuva?', 'O solo aguenta entrar com máquina pesada amanhã?', 'Resumo do tempo da semana para a fazenda'];
 /** Texto da IA → HTML seguro (negrito e listas). */
 function iaFormatar(t) {
-  const linhas = esc(String(t || '')).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').split('\n');
+  const linhas = esc(String(t || '')).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/(^|[^*\w])\*(?!\s)([^*\n]+?)\*(?!\w)/g, '$1<i>$2</i>').split('\n');
   let html = '', lista = false;
   linhas.forEach(l => { const m = l.match(/^\s*(?:[-*•]|\d+[.)])\s+(.*)/);
     if (m) { if (!lista) { html += '<ul>'; lista = true; } html += `<li>${m[1]}</li>`; }
@@ -114,12 +115,13 @@ function iaFormatar(t) {
 }
 const iaLink = u => /^https:\/\//.test(String(u || '')) ? String(u) : '';
 function iaBolhas() {
-  if (!iaConversa.length) return `<div class="ia-vazio"><span class="ia-logo" aria-hidden="true">✨</span><b>Oi, eu sou o Edy, a inteligência do MercaPlant.</b><small>Pergunte sobre a sua fazenda ou me conte o que fez: <i>"plantei 30 ha no Talhão 07"</i>, <i>"abasteci 180 L no 7230"</i>, <i>"passa a colheita do T08 para sábado"</i> — eu preparo o registro e você confere antes de salvar.</small></div>`;
+  if (!iaConversa.length) return `<div class="ia-vazio"><span class="ia-logo" aria-hidden="true">✨</span><b>Oi, eu sou o Edy, a inteligência do MercaPlant.</b><small>Pergunte sobre a sua fazenda ou me conte o que fez: <i>"plantei 30 ha no Talhão 07"</i>, <i>"abasteci 180 L no 7230"</i>, <i>"passa a colheita do T08 para sábado"</i> — eu preparo o registro e você confere antes de salvar.</small><small>Sou também o seu agrônomo: mande a <b>📷 foto</b> de uma praga, doença ou planta daninha, ou tire uma dúvida técnica — eu pesquiso na Embrapa, MAPA e Emater e mostro as fontes.</small></div>`;
   return iaConversa.map((m, i) => {
-    if (m.de !== 'ia') return `<div class="ia-msg pessoa">${m.tecnica ? '<span class="ia-selo">🔎 técnica</span>' : ''}<p>${esc(m.texto)}</p></div>`;
+    if (m.de !== 'ia') return `<div class="ia-msg pessoa">${m.tecnica ? '<span class="ia-selo">🌱 agrônomo</span>' : ''}${(m.fotos || []).length ? `<div class="ia-msg-fotos">${m.fotos.filter(f => /^data:image\/(jpeg|png|webp);base64,/.test(f)).map(f => `<img src="${f}" alt="Foto enviada ao Edy">`).join('')}</div>` : ''}${m.texto ? `<p>${esc(m.texto)}</p>` : ''}</div>`;
     const acoes = (m.acoes || []).map((a, k) => typeof edyCartaoAcao === 'function' ? edyCartaoAcao(a, `${i}|${k}`, (m.abertas || []).includes(k) ? 'aberto' : '') : '').join('');
-    const fontes = (m.fontes || []).filter(f => iaLink(f.url));
-    return `<div class="ia-msg ia">${iaFormatar(m.texto)}${acoes ? `<div class="edy-acoes">${acoes}</div>` : ''}${fontes.length ? `<div class="ia-fontes"><span>Fontes:</span>${fontes.map(f => `<a href="${esc(iaLink(f.url))}" target="_blank" rel="noopener noreferrer">${esc(f.titulo)}</a>`).join('')}</div>` : ''}</div>`;
+    const fontes = (m.fontes || []).filter(f => iaLink(f.url)), d = m.diagnostico;
+    const diag = d ? `<div class="edy-diag conf-${esc(d.confianca)}"><span>🔍 ${esc(d.tipo)}</span><b>${esc(d.alvo)}</b><small>confiança ${esc({alta: 'alta', media: 'média', baixa: 'baixa'}[d.confianca] || d.confianca)}</small></div>` : '';
+    return `<div class="ia-msg ia">${m.agronomo ? '<span class="ia-selo">🌱 agrônomo do Edy · com fontes</span>' : ''}${diag}${iaFormatar(m.texto)}${acoes ? `<div class="edy-acoes">${acoes}</div>` : ''}${fontes.length ? `<div class="ia-fontes"><span>Fontes:</span>${fontes.map(f => `<a class="${f.oficial ? 'oficial' : ''}" href="${esc(iaLink(f.url))}" target="_blank" rel="noopener noreferrer" title="${f.oficial ? 'Fonte técnica/oficial' : 'Outra fonte: confira'}">${f.oficial ? '✔ ' : ''}${esc(f.titulo)}</a>`).join('')}</div>` : ''}</div>`;
   }).join('');
 }
 /* Microfone do Edy */
@@ -158,12 +160,13 @@ VIEWS.assistente = () => {
     `<section class="card ia-chat${tec ? ' ia-tecnica' : ''}">
       <div class="ia-msgs" id="iaMsgs" aria-live="polite">${iaBolhas()}</div>
       <div class="ia-sug">${(tec ? IA_SUG_TECNICA : IA_SUGESTOES).map(s => `<button type="button" class="chip" data-act="ia-sug" data-id="${esc(s)}">${esc(s)}</button>`).join('')}</div>
-      ${ligado ? `<div class="ia-modos" role="group" aria-label="Modo"><button type="button" class="chip ${tec ? '' : 'active'}" data-act="ia-modo" data-id="" aria-pressed="${!tec}">💬 Fazenda</button><button type="button" class="chip ${tec ? 'active' : ''}" data-act="ia-modo" data-id="tecnica" aria-pressed="${tec}">🔎 Técnica (com fontes)</button></div>
-        <form class="ia-form" id="iaForm"><textarea id="iaPergunta" rows="1" maxlength="800" placeholder="${tec ? 'Pergunta técnica…' : 'Pergunte ao Edy…'}" aria-label="Pergunta"></textarea>
+      ${ligado ? `<div class="ia-modos" role="group" aria-label="Modo"><button type="button" class="chip ${tec ? '' : 'active'}" data-act="ia-modo" data-id="" aria-pressed="${!tec}">💬 Fazenda</button><button type="button" class="chip ${tec ? 'active' : ''}" data-act="ia-modo" data-id="tecnica" aria-pressed="${tec}">🌱 Agrônomo (com fontes)</button></div>
+        <div class="ia-fotos" id="iaFotos">${iaFotosHtml()}</div>
+        <form class="ia-form" id="iaForm"><label class="ia-foto-btn" title="Foto da lavoura: praga, doença ou planta daninha"><input type="file" accept="image/*" hidden data-ia-foto aria-label="Mandar foto da lavoura ao Edy">${(typeof iconeMenu === 'function' && iconeMenu('camera', 44)) || '📷'}</label><textarea id="iaPergunta" rows="1" maxlength="800" placeholder="${iaFotos.length ? 'Conte o que viu (opcional)…' : tec ? 'Dúvida técnica…' : 'Pergunte ao Edy…'}" aria-label="Pergunta"></textarea>
         ${iaTemMic() ? `<button type="button" class="ia-mic" data-act="ia-mic" aria-label="Falar a pergunta" title="Falar">${(typeof iconeMenu === 'function' && iconeMenu('microfone', 44)) || '🎤'}</button>` : ''}
         <button type="submit" class="primary" aria-label="Enviar">Enviar</button></form>`
       : '<p class="nota">Entre na sua conta da nuvem para usar o Edy.</p>'}
-      <p class="nota ia-rodape">${tec ? 'Modo técnico: o Edy pesquisa na Embrapa, MAPA/ZARC, manual CQFS-RS/SC e Emater e mostra as fontes.' : 'O Edy pode errar: confira números importantes.'} Ele não receita defensivo nem dose (isso é com o agrônomo).</p>
+      <p class="nota ia-rodape">${tec ? 'Agrônomo: o Edy pesquisa na Embrapa, MAPA/ZARC, manual CQFS-RS/SC e Emater e mostra as fontes (✔ = fonte técnica/oficial).' : 'O Edy pode errar: confira números importantes.'} Explica o manejo, mas não receita produto nem dose — isso é do receituário do seu agrônomo.</p>
     </section>`;
 };
 TITLES.assistente = 'Edy';
@@ -174,7 +177,9 @@ VIEWS.assistente.after = () => {
   const ajustar = () => { t.style.height = 'auto'; t.style.height = Math.min(140, t.scrollHeight) + 'px'; };
   t.addEventListener('input', ajustar);
   t.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); f.requestSubmit(); } });
-  f.onsubmit = e => { e.preventDefault(); if (iaOuvindo) { window.AndroidBridge?.vozCancelar?.(); iaVozWeb?.abort?.(); iaVozFim(); } iaPerguntar(t.value); };
+  f.onsubmit = e => { e.preventDefault(); if (iaOuvindo) { window.AndroidBridge?.vozCancelar?.(); iaVozWeb?.abort?.(); iaVozFim(); } iaFotos.length ? iaDiagnosticar(t.value) : iaPerguntar(t.value); };
+  const arq = $('[data-ia-foto]', f);
+  if (arq) arq.onchange = async () => { const a = arq.files?.[0]; arq.value = ''; if (a) await iaAddFoto(a); };
   const pend = sessionStorage.getItem('ia-pendente'); if (pend) { sessionStorage.removeItem('ia-pendente'); iaPerguntar(pend); }
 };
 let iaOcupado = false;
@@ -187,25 +192,90 @@ async function iaPerguntar(texto) {
   iaConversa.push({de: 'pessoa', texto: q, ...(tec ? {tecnica: true} : {})}); iaGuardar();
   const msgs = $('#iaMsgs'), t = $('#iaPergunta');
   if (t) { t.value = ''; t.style.height = 'auto'; }
-  if (msgs) { msgs.innerHTML = iaBolhas() + `<div class="ia-msg ia pensando"><span class="ia-roda" aria-hidden="true"></span> ${tec ? 'O Edy está pesquisando nas fontes técnicas…' : 'O Edy está pensando…'}</div>`; msgs.scrollTop = msgs.scrollHeight; }
+  if (msgs) { msgs.innerHTML = iaBolhas() + `<div class="ia-msg ia pensando"><span class="ia-roda" aria-hidden="true"></span> ${tec ? 'O Edy está pesquisando nas fontes técnicas…' : 'O Edy está pensando… (dúvida técnica: ele pesquisa nas fontes, pode levar uns segundos)'}</div>`; msgs.scrollTop = msgs.scrollHeight; }
   try {
     const r = await nvHttp('/functions/v1/ia', {method: 'POST', body: {farm_id: nv.fazenda.id, acao: 'perguntar', pergunta: q, historico, contexto: JSON.stringify(iaContexto()), ...(tec ? {modo: 'tecnica'} : {})}});
-    iaConversa.push({de: 'ia', texto: r.resposta || 'Sem resposta.', ...(Array.isArray(r.acoes) && r.acoes.length ? {acoes: r.acoes.slice(0, 6)} : {}), ...(Array.isArray(r.fontes) && r.fontes.length ? {fontes: r.fontes.slice(0, 6)} : {})});
+    iaConversa.push({de: 'ia', texto: r.resposta || 'Sem resposta.', ...(r.modo === 'tecnica' ? {agronomo: true} : {}), ...(Array.isArray(r.acoes) && r.acoes.length ? {acoes: r.acoes.slice(0, 6)} : {}), ...(Array.isArray(r.fontes) && r.fontes.length ? {fontes: r.fontes.slice(0, 6)} : {})});
   } catch (e) {
     iaConversa.push({de: 'ia', texto: `⚠️ ${e?.message || 'Não foi possível falar com o Edy agora.'}`, erro: true});
   }
   iaOcupado = false; iaGuardar();
   if (parseRoute().name === 'assistente' && !document.querySelector('.modal.open')) render();
 }
+// ---------- Edy agrônomo pela foto ----------
+let iaFotos = []; // fotos escolhidas para a próxima pergunta: [{tipo, dados, mini, arq}]
+const iaArqDiag = new Map(); // mensagem do Edy → arquivos da foto (para anexar ao monitoramento; só nesta sessão)
+const IA_MAX_FOTOS = 3;
+function iaFotosHtml() {
+  return iaFotos.map((f, i) => `<span class="ia-foto-mini"><img src="${f.mini}" alt="Foto ${i + 1}"><button type="button" data-act="ia-foto-tirar" data-id="${i}" aria-label="Tirar a foto ${i + 1}">×</button></span>`).join('') +
+    (iaFotos.length ? `<small>${iaFotos.length < IA_MAX_FOTOS ? 'Pode mandar até 3 fotos (ex.: perto, de longe, verso da folha). ' : ''}Conte o que viu, se quiser, e toque em Enviar.</small>` : '');
+}
+/** Miniatura pequena para mostrar na conversa. */
+function iaMiniatura(arq, lado = 240) {
+  return new Promise(ok => {
+    const u = URL.createObjectURL(arq), img = new Image();
+    img.onload = () => { const k = Math.min(1, lado / Math.max(img.naturalWidth, img.naturalHeight)), c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(u); ok(c.toDataURL('image/jpeg', 0.7)); };
+    img.onerror = () => { URL.revokeObjectURL(u); ok(''); }; img.src = u;
+  });
+}
+async function iaAddFoto(arq) {
+  if (iaFotos.length >= IA_MAX_FOTOS) return showToast(`No máximo ${IA_MAX_FOTOS} fotos por pergunta`, true);
+  if (!/^image\//.test(arq.type)) return showToast('Escolha uma foto', true);
+  try {
+    const [f, mini] = await Promise.all([iaArquivo(arq), iaMiniatura(arq)]);
+    iaFotos.push({...f, mini, arq});
+  } catch (e) { return showToast(e?.message || 'Não foi possível usar esta foto', true); }
+  const box = $('#iaFotos'); if (box) box.innerHTML = iaFotosHtml();
+  const t = $('#iaPergunta'); if (t) { t.placeholder = 'Conte o que viu (opcional)…'; t.focus(); }
+}
+/** Talhão citado no texto ("talhão 07", "T7", nome do talhão). */
+function iaTalhaoNoTexto(q) {
+  const t = String(q || '').toLowerCase(), nums = [...t.matchAll(/\b(?:t|talh[aã]o\s*)0*(\d+)\b/g)].map(m => Number(m[1]));
+  return (db.fields || []).find(f => t.includes(String(f.name || '').toLowerCase()) || nums.includes(Number(String(f.name || '').match(/(\d+)\s*$/)?.[1])))?.id || '';
+}
+/** O que o agrônomo precisa saber para a foto: cultura, estádio, monitoramentos, aplicações e tempo. */
+function iaContextoFoto() {
+  const c = iaContexto(), s = db.settings || {};
+  return {hoje: c.hoje, regiao: [s.cidade || s.municipio, s.uf || s.estado].filter(Boolean).join(' / ') || 'Rio Grande do Sul',
+    talhoes: c.talhoes.map(({nome, cultura, cultivar, safra, plantio, estadio, diasAposPlantio}) => ({nome, cultura, cultivar, safra, plantio, estadio, diasAposPlantio})),
+    monitoramentos: c.pragas, aplicacoes: c.aplicacoes, chuva: c.chuvas?.somas, tempo: (c.tempo?.dias || []).slice(0, 5)};
+}
+async function iaDiagnosticar(texto) {
+  if (iaOcupado || !iaFotos.length) return;
+  if (!(typeof nvVinculado === 'function' && nvVinculado())) return showToast('Entre na sua conta da nuvem para usar o Edy.', true);
+  iaOcupado = true;
+  const q = String(texto || '').trim(), fotos = iaFotos; iaFotos = [];
+  iaConversa.push({de: 'pessoa', texto: q, fotos: fotos.map(f => f.mini).filter(Boolean), tecnica: true}); iaGuardar();
+  const msgs = $('#iaMsgs'), t = $('#iaPergunta'), box = $('#iaFotos');
+  if (t) { t.value = ''; t.style.height = 'auto'; } if (box) box.innerHTML = '';
+  if (msgs) { msgs.innerHTML = iaBolhas() + '<div class="ia-msg ia pensando"><span class="ia-roda" aria-hidden="true"></span> O Edy está olhando a foto e pesquisando nas fontes técnicas… (até 1 minuto)</div>'; msgs.scrollTop = msgs.scrollHeight; }
+  try {
+    const r = await nvHttp('/functions/v1/ia', {method: 'POST', body: {farm_id: nv.fazenda.id, acao: 'foto', pergunta: q, fotos: fotos.map(({tipo, dados}) => ({tipo, dados})), contexto: JSON.stringify(iaContextoFoto())}});
+    const d = r.diagnostico && r.diagnostico.alvo ? r.diagnostico : null;
+    const registra = d && ['Praga', 'Doença', 'Planta daninha'].includes(d.tipo);
+    iaConversa.push({de: 'ia', texto: r.resposta || 'Sem resposta.', agronomo: true, ...(d ? {diagnostico: d} : {}),
+      ...(registra ? {acoes: [{tipo: 'monitoramento', tipoAlvo: d.tipo, alvo: d.alvo, talhaoId: iaTalhaoNoTexto(q), data: today()}]} : {}),
+      ...(Array.isArray(r.fontes) && r.fontes.length ? {fontes: r.fontes.slice(0, 6)} : {})});
+    iaArqDiag.set(iaConversa.length - 1, fotos.map(f => f.arq).filter(Boolean));
+  } catch (e) {
+    iaConversa.push({de: 'ia', texto: `⚠️ ${e?.message || 'Não foi possível falar com o Edy agora.'}`, erro: true});
+  }
+  iaOcupado = false; iaGuardar();
+  if (parseRoute().name === 'assistente' && !document.querySelector('.modal.open')) render();
+}
+
 Object.assign(ACTIONS, {
-  'ia-sug': q => { if (parseRoute().name !== 'assistente') { try { sessionStorage.setItem('ia-pendente', q); } catch { /* */ } go('assistente'); } else iaPerguntar(q); },
-  'ia-limpar': () => { iaConversa = []; iaGuardar(); render(); },
+  'ia-foto-tirar': i => { iaFotos.splice(Number(i), 1); const box = $('#iaFotos'); if (box) box.innerHTML = iaFotosHtml(); },
+  'ia-sug': q => { if (q === IA_SUG_FOTO) { if (parseRoute().name !== 'assistente') go('assistente'); return setTimeout(() => $('[data-ia-foto]')?.click(), 50); }
+    if (parseRoute().name !== 'assistente') { try { sessionStorage.setItem('ia-pendente', q); } catch { /* */ } go('assistente'); } else iaPerguntar(q); },
+  'ia-limpar': () => { iaConversa = []; iaFotos = []; iaArqDiag.clear(); iaGuardar(); render(); },
   'ia-modo': m => { iaModo = m === 'tecnica' ? 'tecnica' : ''; try { sessionStorage.setItem('ia-modo', iaModo); } catch { /* */ } render(); },
   // Registro preparado pelo Edy: abre o formulário preenchido
   'edy-acao': ref => {
     const [i, k] = String(ref).split('|').map(Number), m = iaConversa[i], a = m?.acoes?.[k]; if (!a || typeof edyAbrirAcao !== 'function') return;
     (m.abertas ||= []).includes(k) || m.abertas.push(k); iaGuardar();
-    edyAbrirAcao(a);
+    edyAbrirAcao(a, iaArqDiag.get(i) || []);
   },
   'ia-mic': () => {
     const b = $('.ia-mic');

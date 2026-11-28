@@ -6,14 +6,18 @@
 //   perguntar Edy, o assistente: responde a pergunta com os dados da fazenda que o app manda (o app só manda o que a pessoa vê)
 //             {farm_id, acao, pergunta, historico:[{de:'pessoa'|'ia', texto}], contexto(JSON em texto), modo?:'tecnica'}
 //             → {resposta, acoes:[registros prontos para a pessoa conferir], fontes:[{titulo, url}]}
-//             modo 'tecnica': agrônomo com busca no Google (Embrapa, MAPA/ZARC, CQFS-RS/SC…) e as fontes da resposta
+//             modo 'tecnica': agrônomo com busca no Google (Embrapa, MAPA/ZARC, CQFS-RS/SC…) e as fontes da resposta;
+//             no modo normal, se a pergunta for dúvida agronômica geral, o chat marca e o agrônomo responde na mesma hora
+//   foto      Edy agrônomo pela foto: identifica praga, doença, planta daninha ou deficiência e diz como manejar (com fontes)
+//             {farm_id, acao, fotos:[{tipo, dados(base64)}] (1 a 3), pergunta?, contexto} → {resposta, diagnostico:{alvo, tipo, confianca}, fontes}
 // A chave fica só aqui (segredo GEMINI_API_KEY); o app nunca vê. Modelo: GEMINI_MODELO (padrão gemini-3.1-flash-lite);
-// GEMINI_MODELO_CHAT troca o modelo só da conversa; GEMINI_MODELO_TECNICA, o do modo técnico (padrão gemini-3.5-flash-lite, que faz a busca).
+// GEMINI_MODELO_CHAT troca o modelo só da conversa; GEMINI_MODELO_TECNICA, o do modo técnico (padrão gemini-3.5-flash-lite, que faz a busca);
+// GEMINI_MODELO_FOTO, o da foto (padrão gemini-3.5-flash, que enxerga melhor; se estiver ocupado, usa o técnico).
 // Limite por pessoa por dia (IA_LIMITE_DIA, padrão 50), contado na tabela ia_uso (só o servidor acessa).
 // A IA só sugere: o app mostra o que leu para a pessoa conferir antes de salvar.
 // Publicar com verify_jwt = false: a própria função confere o login (getUser + farm_role) e o teste (ia_teste).
 import {createClient} from 'npm:@supabase/supabase-js@2';
-import {acoesQuebradas, conversa, erroGemini, esquemaBoletim, esquemaChat, fontesDaResposta, type Grupo, instrucaoAssistente, instrucaoTecnica, lerChat, MAX_BASE64, MAX_CONTEXTO, MAX_PERGUNTA, normalizarBoletim, promptBoletim, textoDaResposta, TIPOS_ARQUIVO, type Turno} from './nucleo.ts';
+import {acoesQuebradas, conversa, erroGemini, esquemaBoletim, esquemaChat, fontesDaResposta, type Grupo, instrucaoAssistente, instrucaoFoto, instrucaoTecnica, lerChat, lerDiagnostico, MAX_FOTOS, TIPOS_FOTO, MAX_BASE64, MAX_CONTEXTO, MAX_PERGUNTA, normalizarBoletim, promptBoletim, textoDaResposta, TIPOS_ARQUIVO, type Turno} from './nucleo.ts';
 
 const cors = {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'authorization, apikey, content-type, x-client-info, x-ia-teste', 'Access-Control-Allow-Methods': 'POST, OPTIONS'};
 const resposta = (status: number, corpo: unknown) => new Response(JSON.stringify(corpo), {status, headers: {...cors, 'Content-Type': 'application/json'}});
@@ -28,6 +32,7 @@ function chaveSecreta() {
 
 const MODELO_PADRAO = 'gemini-3.1-flash-lite'; // leu o boletim de teste igual ao 3.5 Flash, por ~1/25 do custo
 const MODELO_TECNICA = 'gemini-3.5-flash-lite'; // o 3.1 Flash-Lite não faz a busca no Google; o 3.5 Flash-Lite faz e cita as fontes
+const MODELO_FOTO = 'gemini-3.5-flash'; // identifica melhor praga, doença e planta daninha na foto
 async function gemini(partes: unknown[], esquema: unknown, outroModelo = '') {
   const r = await chamarGemini({contents: [{role: 'user', parts: partes}], generationConfig: {temperature: 0, responseMimeType: 'application/json', responseSchema: esquema}}, outroModelo);
   return {...r, dados: JSON.parse(r.texto) as Record<string, unknown>};
@@ -61,11 +66,13 @@ async function perguntar(b: Record<string, unknown>, outroModelo = '') {
   if (pergunta.length > MAX_PERGUNTA) throw Object.assign(new Error(`Pergunta longa demais (até ${MAX_PERGUNTA} letras).`), {status: 400});
   if (contexto.length > MAX_CONTEXTO * 1.2) throw Object.assign(new Error('Dados da fazenda grandes demais para a IA.'), {status: 400});
   const modelo = outroModelo || (Deno.env.get('GEMINI_MODELO_CHAT') || '').trim(), contents = conversa(b.historico as Turno[], pergunta, contexto);
+  const comBusca = (instrucao: string, conteudo: unknown, mod: string) => chamarGemini({systemInstruction: {parts: [{text: instrucao}]}, contents: conteudo, tools: [{google_search: {}}],
+    generationConfig: {temperature: 0.2, maxOutputTokens: 3072}}, mod, 120000);
+  const modTec = outroModelo || (Deno.env.get('GEMINI_MODELO_TECNICA') || '').trim() || MODELO_TECNICA;
   if (tecnica) {
     // Agrônomo com fontes: busca no Google (a busca não combina com resposta em JSON: volta texto + fontes)
-    const r = await chamarGemini({systemInstruction: {parts: [{text: instrucaoTecnica(hojeBR())}]}, contents, tools: [{google_search: {}}],
-      generationConfig: {temperature: 0.2, maxOutputTokens: 3072}}, outroModelo || (Deno.env.get('GEMINI_MODELO_TECNICA') || '').trim() || MODELO_TECNICA, 120000);
-    return {...r, resposta: r.texto, acoes: []};
+    const r = await comBusca(instrucaoTecnica(hojeBR()), contents, modTec);
+    return {...r, resposta: r.texto, acoes: [], modo: 'tecnica'};
   }
   const pedido = (temperature: number) => ({systemInstruction: {parts: [{text: instrucaoAssistente(hojeBR())}]}, contents,
     generationConfig: {temperature, maxOutputTokens: 2048, responseMimeType: 'application/json', responseSchema: esquemaChat()}});
@@ -74,7 +81,36 @@ async function perguntar(b: Record<string, unknown>, outroModelo = '') {
     const r2 = await chamarGemini(pedido(0), modelo).catch(() => null);
     if (r2) r = {...r2, entrada: r.entrada + r2.entrada, saida: r.saida + r2.saida};
   }
-  return {...r, ...lerChat(r.texto, hojeIso()), fontes: []};
+  const lido = lerChat(r.texto, hojeIso());
+  if (lido.tecnica) { // dúvida agronômica: o agrônomo pesquisa e responde com as fontes
+    const t = await comBusca(instrucaoTecnica(hojeBR()), contents, modTec);
+    return {...t, entrada: r.entrada + t.entrada, saida: r.saida + t.saida, resposta: t.texto, acoes: [], modo: 'tecnica'};
+  }
+  return {...r, ...lido, fontes: [], modo: ''};
+}
+
+/** Edy agrônomo pela foto. */
+async function diagnosticar(b: Record<string, unknown>, outroModelo = '') {
+  const fotos = (Array.isArray(b.fotos) ? b.fotos : []) as {tipo?: string, dados?: string}[];
+  if (!fotos.length || fotos.length > MAX_FOTOS) throw Object.assign(new Error(`Envie de 1 a ${MAX_FOTOS} fotos.`), {status: 400});
+  for (const f of fotos) {
+    if (!TIPOS_FOTO.includes(String(f?.tipo))) throw Object.assign(new Error('Envie foto (JPG, PNG ou WebP).'), {status: 400});
+    if (!f.dados || f.dados.length > MAX_BASE64 || !/^[A-Za-z0-9+/=]+$/.test(f.dados.slice(0, 200))) throw Object.assign(new Error('Foto grande demais ou inválida.'), {status: 400});
+  }
+  const pergunta = String(b.pergunta || '').trim().slice(0, MAX_PERGUNTA), contexto = String(b.contexto || '{}').slice(0, MAX_CONTEXTO);
+  const partes = [...fotos.map(f => ({inline_data: {mime_type: f.tipo, data: f.dados}})),
+    {text: `DADOS (JSON):\n${contexto}\n\n${pergunta ? `O PRODUTOR DIZ: ${pergunta}` : 'O que é isto na lavoura e como manejar?'}`}];
+  const pedido = {systemInstruction: {parts: [{text: instrucaoFoto(hojeBR())}]}, contents: [{role: 'user', parts: partes}], tools: [{google_search: {}}],
+    generationConfig: {temperature: 0.2, maxOutputTokens: 3072}};
+  const principal = outroModelo || (Deno.env.get('GEMINI_MODELO_FOTO') || '').trim() || MODELO_FOTO;
+  let r;
+  try { r = await chamarGemini(pedido, principal, 110000); }
+  catch (e) { // modelo ocupado ou fora: tenta o mais leve uma vez
+    const st = (e as {status?: number}).status || 0;
+    if (outroModelo || ![429, 502, 504].includes(st)) throw e;
+    r = await chamarGemini(pedido, (Deno.env.get('GEMINI_MODELO_TECNICA') || '').trim() || MODELO_TECNICA, 110000);
+  }
+  return {...r, ...lerDiagnostico(r.texto)};
 }
 
 Deno.serve(async req => {
@@ -103,7 +139,20 @@ Deno.serve(async req => {
     }
     if (modoTeste && b.acao === 'perguntar') {
       const r = await perguntar(b, /^gemini-[\w.-]+$/.test(String(b.modelo || '')) ? String(b.modelo) : '');
-      return resposta(200, {ok: true, teste: true, modelo: r.modelo, entrada: r.entrada, saida: r.saida, resposta: r.resposta, acoes: r.acoes, fontes: r.fontes, busca: r.busca, bruto: r.texto.slice(0, 1500)});
+      return resposta(200, {ok: true, teste: true, modelo: r.modelo, entrada: r.entrada, saida: r.saida, resposta: r.resposta, acoes: r.acoes, fontes: r.fontes, modo: r.modo, busca: r.busca, bruto: r.texto.slice(0, 1500)});
+    }
+    if (modoTeste && b.acao === 'foto') {
+      // No teste, as fotos podem vir por endereço (repositório do MercaPlant ou Wikimedia Commons)
+      const fotos = [];
+      for (const f of (Array.isArray(b.fotos) ? b.fotos : []).slice(0, MAX_FOTOS)) {
+        if (f?.dados || !/^https:\/\/(raw\.githubusercontent\.com\/Simulagamer-ofc\/AgroOperacoes\/|upload\.wikimedia\.org\/)/.test(String(f?.url || ''))) { fotos.push(f); continue; }
+        const resp = await fetch(String(f.url), {headers: {'User-Agent': 'MercaPlant-teste/1.0 (https://github.com/Simulagamer-ofc/AgroOperacoes)'}});
+        const bytes = new Uint8Array(await resp.arrayBuffer());
+        let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+        fotos.push({tipo: (resp.headers.get('content-type') || 'image/jpeg').split(';')[0], dados: btoa(bin)});
+      }
+      const r = await diagnosticar({...b, fotos}, /^gemini-[\w.-]+$/.test(String(b.modelo || '')) ? String(b.modelo) : '');
+      return resposta(200, {ok: true, teste: true, modelo: r.modelo, entrada: r.entrada, saida: r.saida, resposta: r.resposta, diagnostico: r.diagnostico, fontes: r.fontes, busca: r.busca});
     }
     const fazenda = String(b.farm_id || '');
     if (!/^[0-9a-f-]{36}$/i.test(fazenda)) return erro(400, 'Fazenda inválida.');
@@ -137,7 +186,17 @@ Deno.serve(async req => {
       if (Number(usados) < 0) return erro(429, `Você chegou ao limite de ${limite} usos da IA hoje. Amanhã libera de novo.`);
       const r = await perguntar(b);
       await adm.rpc('ia_tokens', {p_user: quem.user.id, p_entrada: r.entrada, p_saida: r.saida}).then(() => {}, () => {});
-      return resposta(200, {ok: true, modelo: r.modelo, resposta: r.resposta, acoes: r.acoes, fontes: r.fontes, usados: Number(usados), limite});
+      return resposta(200, {ok: true, modelo: r.modelo, resposta: r.resposta, acoes: r.acoes, fontes: r.fontes, modo: r.modo, usados: Number(usados), limite});
+    }
+    if (b.acao === 'foto') {
+      const adm = createClient(Deno.env.get('SUPABASE_URL')!, chaveSecreta(), {auth: {persistSession: false, autoRefreshToken: false}});
+      const limite = Number(Deno.env.get('IA_LIMITE_DIA')) || 50;
+      const {data: usados, error: eUso} = await adm.rpc('ia_contar', {p_user: quem.user.id, p_farm: fazenda, p_limite: limite});
+      if (eUso) { console.warn('ia_contar', eUso.message); return erro(500, 'Não foi possível conferir o limite de uso da IA.'); }
+      if (Number(usados) < 0) return erro(429, `Você chegou ao limite de ${limite} usos da IA hoje. Amanhã libera de novo.`);
+      const r = await diagnosticar(b);
+      await adm.rpc('ia_tokens', {p_user: quem.user.id, p_entrada: r.entrada, p_saida: r.saida}).then(() => {}, () => {});
+      return resposta(200, {ok: true, modelo: r.modelo, resposta: r.resposta, diagnostico: r.diagnostico, fontes: r.fontes, usados: Number(usados), limite});
     }
     return erro(400, 'Ação desconhecida.');
   } catch (e) {

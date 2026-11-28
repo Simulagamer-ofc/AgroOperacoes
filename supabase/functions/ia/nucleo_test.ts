@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 const assertEquals = (a: unknown, b: unknown) => assert.deepEqual(a, b);
-import {acoesQuebradas, erroGemini, esquemaBoletim, esquemaChat, fontesDaResposta, instrucaoAssistente, instrucaoTecnica, lerChat, normalizarAcoes, normalizarBoletim, textoDaResposta} from './nucleo.ts';
+import {acoesQuebradas, erroGemini, instrucaoFoto, lerDiagnostico, esquemaBoletim, esquemaChat, fontesDaResposta, instrucaoAssistente, instrucaoTecnica, lerChat, normalizarAcoes, normalizarBoletim, textoDaResposta} from './nucleo.ts';
 
 const G = [{id: 'cultivada', rot: 'Outra espécie cultivada'}, {id: 'silvestre', rot: 'Silvestre'}, {id: 'nt', rot: 'Nociva tolerada'}];
 
@@ -45,7 +45,7 @@ Deno.test('assistente: conversa começa pela pessoa, corta o histórico e leva o
 Deno.test('Edy: nome nas instruções, sem receitar defensivo, fontes oficiais no modo técnico', () => {
   const a = instrucaoAssistente('quinta-feira, 26/11/2026'), t = instrucaoTecnica('quinta-feira, 26/11/2026');
   assert.ok(a.includes('Edy') && !/\bEde\b/.test(a) && a.includes('NÃO receite'));
-  assert.ok(t.includes('Embrapa') && t.includes('ZARC') && t.includes('CQFS-RS/SC') && t.includes('NÃO indique produto'));
+  assert.ok(t.includes('Embrapa') && t.includes('ZARC') && t.includes('CQFS-RS/SC') && t.includes('NÃO indique marca comercial') && t.includes('NÃO dê dose') && t.includes('NÃO invente'));
   assertEquals((esquemaChat() as {required: string[]}).required, ['resposta', 'acoes']);
 });
 
@@ -74,7 +74,7 @@ Deno.test('resposta do chat em JSON ou texto puro; fontes da busca sem repetir',
   assertEquals(lerChat('{"resposta":" Preparei o plantio. ","acoes":[{"tipo":"chuva","mm":12}]}', '2026-11-26'), {resposta: 'Preparei o plantio.', acoes: [{tipo: 'chuva', mm: 12}]});
   assertEquals(lerChat('Só texto', '2026-11-26'), {resposta: 'Só texto', acoes: []});
   const f = fontesDaResposta({candidates: [{groundingMetadata: {groundingChunks: [{web: {uri: 'https://x.google/1', title: 'embrapa.br'}}, {web: {uri: 'https://x.google/2', title: 'embrapa.br'}}, {web: {uri: 'http://inseguro', title: 'a'}}, {web: {uri: 'https://x.google/3', title: 'gov.br'}}]}}]});
-  assertEquals(f, [{titulo: 'embrapa.br', url: 'https://x.google/1'}, {titulo: 'gov.br', url: 'https://x.google/3'}]);
+  assertEquals(f, [{titulo: 'embrapa.br', url: 'https://x.google/1', oficial: true}, {titulo: 'gov.br', url: 'https://x.google/3', oficial: true}]);
 });
 
 Deno.test('registro quebrado pela IA: detecta e não deixa passar o tipo quebrado', () => {
@@ -84,4 +84,21 @@ Deno.test('registro quebrado pela IA: detecta e não deixa passar o tipo quebrad
   assertEquals(acoesQuebradas('{"resposta":"ok","acoes":[{"tipo":"operacao","tipoOperacao":"Preparo de solo","data":"2026-11-26"}]}'), false);
   assertEquals(lerChat(quebrado, '2026-11-26').acoes, []);
   assertEquals(normalizarAcoes([{tipo: 'operacao', tipoOperacao: "Plantio',\n  \"area\": 30", data: '2026-11-26'}], '2026-11-26'), []);
+});
+
+Deno.test('Edy agrônomo pela foto: instruções e leitura do diagnóstico', () => {
+  const f = instrucaoFoto('sábado, 28/11/2026');
+  assert.ok(f.includes('Edy') && f.includes('confiança') && f.includes('NÃO indique marca comercial') && f.includes('HRAC') && f.includes('ALVO:'));
+  const t = 'Linha 1\n**Provável:** Buva (Conyza bonariensis) — confiança alta\n\nALVO: Buva | TIPO: Planta daninha | CONFIANÇA: alta';
+  assertEquals(lerDiagnostico(t), {resposta: 'Linha 1\n**Provável:** Buva (Conyza bonariensis) — confiança alta', diagnostico: {alvo: 'Buva', tipo: 'Planta daninha', confianca: 'alta'}});
+  assertEquals(lerDiagnostico('texto\n**ALVO:** Ferrugem-asiática | TIPO: doenca | CONFIANCA: média').diagnostico, {alvo: 'Ferrugem-asiática', tipo: 'Doença', confianca: 'media'});
+  assertEquals(lerDiagnostico('Não é lavoura.\nALVO: - | TIPO: Nenhum | CONFIANCA: baixa').diagnostico, null);
+  assertEquals(lerDiagnostico('sem a linha'), {resposta: 'sem a linha', diagnostico: null});
+});
+
+Deno.test('fontes técnicas/oficiais primeiro e marcadas; dúvida técnica no chat', () => {
+  const f = fontesDaResposta({candidates: [{groundingMetadata: {groundingChunks: [{web: {uri: 'https://x/1', title: 'agrolink.com.br'}}, {web: {uri: 'https://x/2', title: 'www.embrapa.br'}}, {web: {uri: 'https://x/3', title: 'ufsm.br'}}]}}]});
+  assertEquals(f.map(x => [x.titulo, !!x.oficial]), [['www.embrapa.br', true], ['ufsm.br', true], ['agrolink.com.br', false]]);
+  assertEquals(lerChat('{"resposta":"Vou pesquisar nas fontes técnicas.","tecnica":true,"acoes":[]}', '2026-11-28').tecnica, true);
+  assertEquals(lerChat('{"resposta":"Preparei","tecnica":true,"acoes":[{"tipo":"chuva","mm":3,"data":"2026-11-28"}]}', '2026-11-28').tecnica, undefined);
 });
